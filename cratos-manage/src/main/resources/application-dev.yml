@@ -1,0 +1,34 @@
+logging:
+  level:
+    # swagger 警告日志忽略
+    io.swagger.models.parameters.AbstractSerializableParameter: error
+    org.springframework: warn
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+  datasource:
+    url: jdbc:mysql://172.19.0.128:3306/cratos-prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useInformationSchema=true&tinyInt1isBit=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: cratos
+    password: 'IYMt^6h*yiD1u47*lwrtUy1v++87T!Pl'
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  data:
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
+#      password: 123456
+#      jedis:
+#        pool:
+#          max-wait: 5000
+#          max-idle: 20
+#          max-active: 100
+#          min-idle: 0
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: 'org.jasypt.iv.NoIvGenerator'
+
