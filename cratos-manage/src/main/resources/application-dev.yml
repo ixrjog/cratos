@@ -15,18 +15,6 @@ spring:
     password: 'IYMt^6h*yiD1u47*lwrtUy1v++87T!Pl'
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-#  data:
-#    redis:
-#      host: 127.0.0.1
-#      port: 6379
-#      password: 123456
-#      jedis:
-#        pool:
-#          max-wait: 5000
-#          max-idle: 20
-#          max-active: 100
-#          min-idle: 0
-
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES

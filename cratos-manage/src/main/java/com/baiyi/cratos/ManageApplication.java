@@ -36,7 +36,7 @@ public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
         log.info("Cratos <Spring Boot {}>", SpringBootVersion.getVersion());
-        System.setProperty("druid.mysql.usePingMethod", "false");
+      //  System.setProperty("druid.mysql.usePingMethod", "false");
     }
 
 }

@@ -46,3 +46,24 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+ssh:
+  shell:
+    version: 1.0.0
+    authentication: security
+    commands:
+      actuator:
+        excludes:
+          - audit
+      history:
+        enable: off
+    display-banner: on
+    host: 0.0.0.0
+    port: 2222
+    shared-history: off
+    history-directory: ${home}/cratos-data/ssh-server/history-log/
+    host-key-file: ${home}/cratos-data/ssh-server/hostKey.ser
+    prompt:
+      # white|cyan
+      color: cyan
+      text: 'cratos>'
