@@ -9,7 +9,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-<!--    <groupId>com.baiyi.cratos.domain</groupId>-->
     <artifactId>cratos-domain</artifactId>
 
     <properties>
