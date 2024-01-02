@@ -8,6 +8,10 @@ spring:
     active: '@env@'
   thymeleaf:
     cache: off
+  # 关闭控制台
+  shell:
+    interactive:
+      enabled: false
 
 # 开发环境配置
 server:
@@ -37,15 +41,15 @@ mapper:
 
 pagehelper:
   helper-dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
+  reasonable: on
+  support-methods-arguments: on
   params: count=countSql
 
 mybatis:
   type-aliases-package: com.baiyi.cratos.domain
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:/mapper/*.xml
   configuration:
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: on
 
 ssh:
   shell:
