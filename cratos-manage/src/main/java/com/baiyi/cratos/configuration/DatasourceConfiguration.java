@@ -1,4 +1,4 @@
-package com.baiyi.cratos.config;
+package com.baiyi.cratos.configuration;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,14 +20,6 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(basePackages = {"com.baiyi.cratos.mapper"}, sqlSessionTemplateRef = "sqlSessionTemplate")
 public class DatasourceConfiguration {
-
-//    @Bean
-//    @Primary
-//    @ConfigurationProperties("spring.datasource")
-//    public DataSource dataSource() {
-//        return DruidDataSourceBuilder.create()
-//                        .build();
-//    }
 
     @Bean
     @Primary

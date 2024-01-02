@@ -6,9 +6,6 @@ import com.baiyi.cratos.service.SysTagService;
 import com.baiyi.cratos.service.base.AbstractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @Author baiyi
@@ -17,7 +14,7 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public class SysTagServiceImpl extends AbstractService<SysTag,SysTagMapper> {
+public class SysTagServiceImpl extends AbstractService<SysTag,SysTagMapper> implements SysTagService {
 
     private final SysTagMapper sysTagMapper;
 

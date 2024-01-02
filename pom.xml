@@ -13,12 +13,15 @@
         <module>cratos-domain</module>
         <module>cratos-service</module>
         <module>cratos-shell</module>
+        <module>cratos-common</module>
     </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
     </properties>
 
     <parent>
@@ -156,6 +159,19 @@
             <version>6.0.3</version>
         </dependency>
 
+        <!-- https://springdoc.org/v2/ -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>${springdoc-openapi-starter-webmvc.version}</version>
+        </dependency>
+
         <!-- yaml工具-->
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <!-- https://github.com/snakeyaml/snakeyaml -->
@@ -192,6 +208,12 @@
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-shell</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
