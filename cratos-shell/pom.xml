@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.baiyi.cratos.shell</groupId>
+<!--    <groupId>com.baiyi.cratos.shell</groupId>-->
     <artifactId>cratos-shell</artifactId>
 
     <properties>

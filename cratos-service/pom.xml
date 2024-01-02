@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.baiyi.cratos.service</groupId>
+<!--    <groupId>com.baiyi.cratos.service</groupId>-->
     <artifactId>cratos-service</artifactId>
 
 <!--    <properties>-->

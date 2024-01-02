@@ -25,5 +25,5 @@ public class SysTagServiceImpl extends AbstractService<SysTag,SysTagMapper> {
     protected SysTagMapper getMapper() {
         return sysTagMapper;
     }
-    
+
 }
