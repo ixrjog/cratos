@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.SysTag;
 import com.baiyi.cratos.mapper.SysTagMapper;
 import com.baiyi.cratos.service.SysTagService;
+import com.baiyi.cratos.service.base.AbstractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -16,33 +17,13 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public class SysTagServiceImpl implements SysTagService {
+public class SysTagServiceImpl extends AbstractService<SysTag,SysTagMapper> {
 
     private final SysTagMapper sysTagMapper;
 
     @Override
-    public void add(SysTag sysTag) {
-        sysTagMapper.insert(sysTag);
+    protected SysTagMapper getMapper() {
+        return sysTagMapper;
     }
-
-    @Override
-    public void updateByPrimaryKey(SysTag sysTag) {
-        sysTagMapper.updateByPrimaryKey(sysTag);
-    }
-
-    @Override
-    public void updateByPrimaryKeySelective(SysTag sysTag) {
-        sysTagMapper.updateByPrimaryKeySelective(sysTag);
-    }
-
-    @Override
-    public void deleteById(int id) {
-        sysTagMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public List<SysTag> selectAll() {
-       return sysTagMapper.selectAll();
-    }
-
+    
 }
