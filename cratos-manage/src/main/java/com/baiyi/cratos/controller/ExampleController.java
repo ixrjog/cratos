@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/example")
-@Tag(name = "接口例子")
+@Tag(name = "Example")
 @RequiredArgsConstructor
 public class ExampleController {
 

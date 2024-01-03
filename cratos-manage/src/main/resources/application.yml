@@ -1,5 +1,6 @@
 spring:
   application:
+    name: cratos
     version: 1.0.0
   jackson:
     time-zone: GMT+8

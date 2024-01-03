@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * {@code @Version} 1.0
  */
 @EnableTransactionManagement
-@SpringBootApplication(exclude = { SecurityFilterAutoConfiguration.class})
+@SpringBootApplication(exclude = {SecurityFilterAutoConfiguration.class})
 @EnableAspectJAutoProxy(exposeProxy = true)
 @EnableScheduling
 //@EnableSchedulerLock(defaultLockAtMostFor = "10m")
@@ -36,6 +36,7 @@ public class ManageApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
         log.info("Cratos <Spring Boot {}>", SpringBootVersion.getVersion());
+        log.info("Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html");
     }
 
 }
