@@ -45,4 +45,18 @@ public class CertificateController {
         return new HttpResult<>(certificateFacade.queryCertificatePage(pageQuery));
     }
 
+    @Operation(summary = "Delete certificate by certificateId")
+    @DeleteMapping(value = "/del/by/certificateId", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteCertificateByCertificateId(@RequestParam @Valid String certificateId) {
+        certificateFacade.deleteByCertificateId(certificateId);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete certificate by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteCertificateById(@RequestParam @Valid int id) {
+        certificateFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

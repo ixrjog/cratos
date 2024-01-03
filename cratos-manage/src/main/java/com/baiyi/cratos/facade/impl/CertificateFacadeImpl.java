@@ -40,8 +40,18 @@ public class CertificateFacadeImpl implements CertificateFacade {
 
     @Override
     public DataTable<CertificateVO.Certificate> queryCertificatePage(CertificateParam.CertificatePageQuery pageQuery) {
-        DataTable<Certificate> table =  certificateService.queryCertificatePage(pageQuery);
+        DataTable<Certificate> table = certificateService.queryCertificatePage(pageQuery);
         return certificateWrapper.wrap(table, CertificateVO.Certificate.class);
+    }
+
+    @Override
+    public void deleteByCertificateId(String certificateId) {
+        certificateService.deleteByCertificateId(certificateId);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        certificateService.deleteById(id);
     }
 
 }

@@ -17,4 +17,8 @@ public interface CertificateFacade {
 
     DataTable<CertificateVO.Certificate> queryCertificatePage(CertificateParam.CertificatePageQuery pageQuery);
 
+    void deleteByCertificateId(String certificateId);
+
+    void deleteById(int id);
+
 }
