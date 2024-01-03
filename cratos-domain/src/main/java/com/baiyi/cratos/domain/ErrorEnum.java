@@ -13,7 +13,10 @@ public enum ErrorEnum {
     /**
      * 错误
      */
-    OK(0, "成功");
+    OK(0, "成功"),
+    SYSTEM_ERROR(10001, "系统错误！"),
+    ENCRYPTION_AND_DECRYPTION_ERROR(10002, "Encryption and decryption errors."),
+    ;
 
     private final int code;
     private final String message;
