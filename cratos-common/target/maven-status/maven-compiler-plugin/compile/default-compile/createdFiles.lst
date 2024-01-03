@@ -1,8 +1,0 @@
-com/baiyi/cratos/common/exception/BaseException.class
-com/baiyi/cratos/common/HttpResult.class
-com/baiyi/cratos/common/HttpResult$HttpResultBuilder.class
-com/baiyi/cratos/common/Converter.class
-com/baiyi/cratos/common/util/StringFormatter.class
-com/baiyi/cratos/common/exception/ErrorCode.class
-com/baiyi/cratos/common/util/BeanCopierUtil.class
-com/baiyi/cratos/common/exception/BusinessErrorCodeEnum.class
