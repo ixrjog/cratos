@@ -34,7 +34,7 @@ public class TagController {
 
     @Operation(summary = "Update tag")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addTag(@RequestBody @Valid TagParam.UpdateTag updateTag) {
+    public HttpResult<Boolean> updateTag(@RequestBody @Valid TagParam.UpdateTag updateTag) {
         tagFacade.updateTag(updateTag);
         return HttpResult.SUCCESS;
     }

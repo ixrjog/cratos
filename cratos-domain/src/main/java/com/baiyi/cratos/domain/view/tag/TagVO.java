@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author baiyi
@@ -48,10 +47,6 @@ public class TagVO {
         private Boolean isActive;
 
         private String comment;
-
-        private Date createTime;
-
-        private Date updateTime;
 
     }
 

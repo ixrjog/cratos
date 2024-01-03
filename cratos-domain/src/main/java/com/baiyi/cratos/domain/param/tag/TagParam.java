@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 
 /**
  * @Author baiyi
@@ -15,45 +13,6 @@ import java.util.Date;
  * @Version 1.0
  */
 public class TagParam {
-
-    @Data
-    @Schema
-    public static class Tag  {
-
-        private Integer id;
-
-
-        private Integer tagType;
-
-        private String tagKey;
-
-
-        private String tagValue;
-
-        /**
-         * 颜色
-         */
-        private String color;
-
-
-        private Integer promptColor;
-
-        /**
-         * 顺序
-         */
-        private Integer seq;
-
-
-        private Boolean isActive;
-
-        private String comment;
-
-
-        private Date createTime;
-
-
-        private Date updateTime;
-    }
 
     @Data
     @Schema

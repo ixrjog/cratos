@@ -9,7 +9,7 @@ import com.baiyi.cratos.service.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * @Date 2024/1/2 13:28
  * @Version 1.0
  */
-@Component
+@Service
 @RequiredArgsConstructor
 public class SysTagServiceImpl extends AbstractService<SysTag, SysTagMapper> implements SysTagService {
 
