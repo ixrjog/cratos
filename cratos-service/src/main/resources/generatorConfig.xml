@@ -94,7 +94,7 @@
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
 
-        <table tableName="certificate">
+        <table tableName="business_tag">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

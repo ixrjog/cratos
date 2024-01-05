@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.certificate;
 
-import com.baiyi.cratos.domain.param.CUP;
+import com.baiyi.cratos.domain.generator.Certificate;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class CertificateParam {
 
     @Data
     @Schema
-    public static class AddCertificate implements CUP {
+    public static class AddCertificate implements IToTarget<Certificate> {
 
         private String certificateId;
 
@@ -45,11 +46,15 @@ public class CertificateParam {
 
         private String comment;
 
+        @Override
+        public Class<Certificate> getTargetClazz() {
+            return Certificate.class;
+        }
     }
 
     @Data
     @Schema
-    public static class UpdateCertificate implements CUP {
+    public static class UpdateCertificate implements IToTarget<Certificate> {
 
         private Integer id;
 
@@ -76,6 +81,11 @@ public class CertificateParam {
         private Date notAfter;
 
         private String comment;
+
+        @Override
+        public Class<Certificate> getTargetClazz() {
+            return Certificate.class;
+        }
 
     }
 

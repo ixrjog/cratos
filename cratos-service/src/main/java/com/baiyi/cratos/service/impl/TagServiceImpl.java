@@ -1,10 +1,10 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.SysTag;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.tag.TagParam;
-import com.baiyi.cratos.mapper.SysTagMapper;
-import com.baiyi.cratos.service.SysTagService;
+import com.baiyi.cratos.mapper.TagMapper;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -21,22 +21,22 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class SysTagServiceImpl extends AbstractService<SysTag, SysTagMapper> implements SysTagService {
+public class TagServiceImpl extends AbstractService<Tag, TagMapper> implements TagService {
 
-    private final SysTagMapper sysTagMapper;
+    private final TagMapper tagMapper;
 
     @Override
-    protected SysTagMapper getMapper() {
-        return sysTagMapper;
+    protected TagMapper getMapper() {
+        return tagMapper;
     }
 
     @Override
-    public DataTable<SysTag> queryPageByParam(TagParam.TagPageQuery pageQuery) {
+    public DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery) {
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        Example example = new Example(SysTag.class);
+        Example example = new Example(Tag.class);
         Example.Criteria criteria = example.createCriteria();
         example.setOrderByClause("create_time");
-        List<SysTag> data = sysTagMapper.selectByExample(example);
+        List<Tag> data = tagMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }
 

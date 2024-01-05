@@ -1,6 +1,9 @@
 package com.baiyi.cratos.domain.view.certificate;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -19,7 +23,7 @@ public class CertificateVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Certificate extends BaseVO implements Serializable {
+    public static class Certificate extends BaseVO implements BaseBusiness.IBusiness, BusinessTagVO.IBusinessTags, Serializable {
 
         @Serial
         private static final long serialVersionUID = -799350802297993186L;
@@ -49,6 +53,20 @@ public class CertificateVO {
         private Date notAfter;
 
         private String comment;
+
+        private final BusinessTypeEnum businessTypeEnum = BusinessTypeEnum.CERTIFICATE;
+
+        @Override
+        public String getBusinessType() {
+            return businessTypeEnum.name();
+        }
+
+        @Override
+        public Integer getBusinessId() {
+            return id;
+        }
+
+        List<BusinessTagVO.BusinessTag> businessTags;
 
     }
 

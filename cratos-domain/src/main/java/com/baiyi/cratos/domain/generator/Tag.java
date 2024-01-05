@@ -1,12 +1,13 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
 
+import javax.persistence.*;
+import java.util.Date;
+
 @Data
-@Table(name = "sys_tag")
-public class SysTag {
+@Table(name = "tag")
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.tag;
 
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -16,7 +18,7 @@ public class TagParam {
 
     @Data
     @Schema
-    public static class AddTag  {
+    public static class AddTag implements IToTarget<Tag> {
 
         private Integer tagType;
 
@@ -34,11 +36,15 @@ public class TagParam {
 
         private String comment;
 
+        @Override
+        public Class<Tag> getTargetClazz() {
+            return Tag.class;
+        }
     }
 
     @Data
     @Schema
-    public static class UpdateTag  {
+    public static class UpdateTag implements IToTarget<Tag>  {
 
         private Integer id;
 
@@ -57,6 +63,11 @@ public class TagParam {
         private Boolean isActive;
 
         private String comment;
+
+        @Override
+        public Class<Tag> getTargetClazz() {
+            return Tag.class;
+        }
 
     }
 

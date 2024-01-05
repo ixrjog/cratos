@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.util;
+package com.baiyi.cratos.domain.util;
 
 import com.google.common.collect.MapMaker;
 import org.springframework.cglib.beans.BeanCopier;
@@ -24,17 +24,17 @@ public class BeanCopierUtil {
      * bean 对象copy
      *
      * @param source
-     * @param targetClass
+     * @param targetClazz
      */
-    public static <T> T copyProperties(Object source, Class<T> targetClass) {
+    public static <T> T copyProperties(Object source, Class<T> targetClazz) {
         if (source == null) {
             return null;
         }
 
-        String beanKey = generateKey(source.getClass(), targetClass);
+        String beanKey = generateKey(source.getClass(), targetClazz);
         BeanCopier copier;
         if (!BEAN_COPIER_MAP.containsKey(beanKey)) {
-            copier = BeanCopier.create(source.getClass(), targetClass, false);
+            copier = BeanCopier.create(source.getClass(), targetClazz, false);
             BEAN_COPIER_MAP.put(beanKey, copier);
         } else {
             copier = BEAN_COPIER_MAP.get(beanKey);
@@ -43,7 +43,7 @@ public class BeanCopierUtil {
         T targetObject;
         try {
             // targetObject = targetClass.newInstance();
-            targetObject = targetClass.getDeclaredConstructor().newInstance();
+            targetObject = targetClazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

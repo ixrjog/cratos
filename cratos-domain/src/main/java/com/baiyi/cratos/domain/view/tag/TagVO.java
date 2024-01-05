@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view.tag;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,6 +15,16 @@ import java.io.Serializable;
  * @Version 1.0
  */
 public class TagVO {
+
+    public interface ITag extends BaseBusiness.IBusiness {
+
+        Integer getTagId();
+
+        void setTag(Tag businessTags);
+
+        Tag getTag();
+
+    }
 
     @EqualsAndHashCode(callSuper = true)
     @Data

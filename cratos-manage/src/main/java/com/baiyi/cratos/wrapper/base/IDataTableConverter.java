@@ -10,8 +10,8 @@ import com.baiyi.cratos.domain.DataTable;
  */
 public interface IDataTableConverter<T, S> extends IBaseWrapper<T>, Converter<S, T> {
 
-    default DataTable<T> wrap(DataTable<S> dataTable, Class<T> targetClass) {
-        return new DataTable<>(dataTable.getData().stream().map(d -> wrap(d, targetClass)).toList(), dataTable.getTotalNum());
+    default DataTable<T> wrapToTarget(DataTable<S> dataTable) {
+        return new DataTable<>(dataTable.getData().stream().map(this::wrapToTarget).toList(), dataTable.getTotalNum());
     }
 
     /**
@@ -21,10 +21,13 @@ public interface IDataTableConverter<T, S> extends IBaseWrapper<T>, Converter<S,
      * @param targetClass
      * @return
      */
-    default T wrap(S s, Class<T> targetClass) {
-        T t = convert(s, targetClass);
-        wrap(t);
+    default T wrapToTarget(S s) {
+        T t = convert(s);
+        getBean().wrap(t);
+        //wrap(t);
         return t;
     }
+
+    IBaseWrapper<T> getBean();
 
 }

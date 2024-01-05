@@ -1,7 +1,5 @@
 package com.baiyi.cratos.service.base;
 
-import com.baiyi.cratos.domain.generator.SysTag;
-
 import java.util.List;
 
 /**
