@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
@@ -28,13 +29,36 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
     private final BusinessTagWrapper businessTagWrapper;
 
     @Override
-    public List<BusinessTagVO.BusinessTag> getBusinessTagByBusiness(BusinessTagParam.GetByBusiness getByBusiness) {
+    public List<BusinessTagVO.BusinessTag> getBusinessTagByBusiness(BusinessParam.GetByBusiness getByBusiness) {
         List<BusinessTag> tags = businessTagService.selectByBusiness(getByBusiness);
-        return tags.stream().map(t -> {
-            BusinessTagVO.BusinessTag tag = businessTagWrapper.convert(t);
-            businessTagWrapper.wrap(tag);
-            return tag;
-        }).collect(Collectors.toList());
+        return tags.stream()
+                .map(t -> {
+                    BusinessTagVO.BusinessTag tag = businessTagWrapper.convert(t);
+                    businessTagWrapper.wrap(tag);
+                    return tag;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addBusinessTag(BusinessTagParam.AddBusinessTag addBusinessTag) {
+        BusinessTag businessTag = addBusinessTag.toTarget();
+        if (businessTagService.getByUniqueKey(businessTag) == null) {
+            businessTagService.add(businessTag);
+        }
+    }
+
+    @Override
+    public void updateBusinessTag(BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
+        BusinessTag businessTag = updateBusinessTag.toTarget();
+        if (businessTagService.getByUniqueKey(businessTag) != null) {
+            businessTagService.updateByPrimaryKey(businessTag);
+        }
+    }
+
+    @Override
+    public void deleteById(int id) {
+        businessTagService.deleteById(id);
     }
 
 }

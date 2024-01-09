@@ -1,7 +1,9 @@
 package com.baiyi.cratos.wrapper.base;
 
+import com.baiyi.cratos.common.annotation.BusinessType;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.wrapper.factory.BusinessWrapperFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -15,6 +17,15 @@ public interface IBusinessWrapper<B, T> extends IBaseWrapper<T>, BaseBusiness.IB
 
     default void afterPropertiesSet() {
         BusinessWrapperFactory.register(this);
+    }
+
+    @Override
+    default String getBusinessType() {
+        // 从注解@BusinessType中获取业务类型
+        return AopUtils.getTargetClass(this)
+                .getAnnotation(BusinessType.class)
+                .type()
+                .name();
     }
 
 }

@@ -36,18 +36,16 @@ public class BusinessTagServiceImpl extends AbstractService<BusinessTag, Busines
         criteria.andEqualTo("businessType", business.getBusinessType())
                 .andEqualTo("businessId", business.getBusinessId());
         return businessTagMapper.selectByExample(example);
-
     }
 
-//    @Override
-//    public void deleteByBusinessId(Integer businessId) {
-//        List<BusinessTag> businessTags = selectByBusinessId(businessId);
-//        if (!CollectionUtils.isEmpty(businessTags)) {
-//            businessTags.forEach(e -> {
-//                log.debug("Delete businessTag: {}", e);
-//                deleteById(e.getId());
-//            });
-//        }
-//    }
+    @Override
+    public BusinessTag getByUniqueKey(BusinessTag businessTag){
+        Example example = new Example(BusinessTag.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", businessTag.getBusinessType())
+                .andEqualTo("businessId", businessTag.getBusinessId())
+                .andEqualTo("tagId",businessTag.getTagId());
+        return businessTagMapper.selectOneByExample(example);
+    }
 
 }

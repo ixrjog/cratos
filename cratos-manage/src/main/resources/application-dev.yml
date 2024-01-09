@@ -4,6 +4,12 @@ logging:
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.springframework: warn
 
+# 关闭视图层脱敏
+#cratos:
+#  sensitive:
+#    mask:
+#      enabled: off
+
 spring:
   config:
     activate:

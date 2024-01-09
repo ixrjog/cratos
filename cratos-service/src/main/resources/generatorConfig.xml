@@ -25,9 +25,9 @@
         <!--jdbc的数据库连接 -->
         <jdbcConnection
                 driverClass="com.mysql.cj.jdbc.Driver"
-                connectionURL="${db.example.url}"
-                userId="${db.example.username}"
-                password="${db.example.password}">
+                connectionURL="${db.cratos.url}"
+                userId="${db.cratos.username}"
+                password="${db.cratos.password}">
         </jdbcConnection>
 
         <!-- java类型处理器
@@ -94,7 +94,7 @@
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
 
-        <table tableName="business_tag">
+        <table tableName="business_document">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

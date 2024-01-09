@@ -1,8 +1,8 @@
 package com.baiyi.cratos.domain.param.tag;
 
-import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -14,13 +14,41 @@ public class BusinessTagParam {
 
     @Data
     @Schema
-    public static class GetByBusiness implements BaseBusiness.IBusiness {
+    public static class AddBusinessTag implements IToTarget<BusinessTag> {
 
-        @NotNull
         private String businessType;
 
-        @NotNull
         private Integer businessId;
+
+        private Integer tagId;
+
+        private String tagValue;
+
+        @Override
+        public Class<BusinessTag> getTargetClazz() {
+            return BusinessTag.class;
+        }
+
+    }
+
+    @Data
+    @Schema
+    public static class UpdateBusinessTag implements IToTarget<BusinessTag> {
+
+        private Integer id;
+
+        private String businessType;
+
+        private Integer businessId;
+
+        private Integer tagId;
+
+        private String tagValue;
+
+        @Override
+        public Class<BusinessTag> getTargetClazz() {
+            return BusinessTag.class;
+        }
 
     }
 

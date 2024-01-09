@@ -8,6 +8,7 @@ package com.baiyi.cratos.domain.enums;
 public enum BusinessTypeEnum {
 
     TAG,
+    DOC,
     CERTIFICATE,
     BUSINESS_TAG
 

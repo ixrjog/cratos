@@ -1,6 +1,7 @@
 package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.common.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import com.baiyi.cratos.wrapper.factory.BusinessWrapperFactory;
@@ -9,7 +10,10 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 /**
  * @Author baiyi
@@ -29,13 +33,17 @@ public class BusinessWrapperAspect {
     @After(value = "@annotation(businessWrapper)")
     public void afterAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
         Object business = joinPoint.getArgs()[0];
-        for (BusinessTypeEnum businessTypeEnum : businessWrapper.businessEnums()) {
-            log.debug("BusinessWrapper: {}", businessTypeEnum.name());
-            IBusinessWrapper businessWrapperBean = BusinessWrapperFactory.getWrapper(businessTypeEnum.name());
-            if (businessWrapperBean != null) {
-                businessWrapperBean.businessWrap(business);
-            }
-        }
+        // 未指定types则从类注解中获取BusinessType
+        BusinessTypeEnum[] types = businessWrapper.types().length != 0 ? businessWrapper.types() : new BusinessTypeEnum[]{AopUtils.getTargetClass(joinPoint.getTarget())
+                .getAnnotation(BusinessType.class).type()};
+        Arrays.stream(types)
+                .forEachOrdered(businessTypeEnum -> {
+                    log.debug("BusinessWrapper: {}", businessTypeEnum.name());
+                    IBusinessWrapper businessWrapperBean = BusinessWrapperFactory.getWrapper(businessTypeEnum.name());
+                    if (businessWrapperBean != null) {
+                        businessWrapperBean.businessWrap(business);
+                    }
+                });
     }
 
 }

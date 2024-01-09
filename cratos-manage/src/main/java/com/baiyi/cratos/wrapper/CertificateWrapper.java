@@ -4,11 +4,10 @@ import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
+import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
-import com.baiyi.cratos.wrapper.base.IDataTableConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,25 +17,13 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor(onConstructor_ = {@Lazy})
-public class CertificateWrapper implements IDataTableConverter<CertificateVO.Certificate, Certificate>, IBaseWrapper<CertificateVO.Certificate> {
-
-    private final CertificateWrapper certificateWrapper;
+@RequiredArgsConstructor
+public class CertificateWrapper extends BaseDataTableConverter<CertificateVO.Certificate, Certificate> implements IBaseWrapper<CertificateVO.Certificate> {
 
     @Override
-    @BusinessWrapper(businessEnums = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(CertificateVO.Certificate certificate) {
-        // TODO
-    }
-
-    @Override
-    public Class<CertificateVO.Certificate> getTargetClazz() {
-        return CertificateVO.Certificate.class;
-    }
-
-    @Override
-    public IBaseWrapper<CertificateVO.Certificate> getBean() {
-        return certificateWrapper;
+        // This is a good idea
     }
 
 }

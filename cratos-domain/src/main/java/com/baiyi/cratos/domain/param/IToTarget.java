@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param;
 
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.Generics;
 
 /**
  * @Author baiyi
@@ -13,6 +14,10 @@ public interface IToTarget<T> {
         return BeanCopierUtil.copyProperties(this, getTargetClazz());
     }
 
-    Class<T> getTargetClazz();
+    default Class<T> getTargetClazz() {
+        //  return (Class<T>) AopUtils.getTargetClass(this).getAnnotation(TargetClazz.class).clazz();
+        // 反射获取范型T的具体类型
+        return Generics.find(this.getClass(), IToTarget.class, 0);
+    }
 
 }

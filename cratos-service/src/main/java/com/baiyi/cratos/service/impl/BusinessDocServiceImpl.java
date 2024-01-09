@@ -1,0 +1,41 @@
+package com.baiyi.cratos.service.impl;
+
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.generator.BusinessDocument;
+import com.baiyi.cratos.mapper.BusinessDocumentMapper;
+import com.baiyi.cratos.service.BusinessDocService;
+import com.baiyi.cratos.service.base.AbstractService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
+
+/**
+ * @Author baiyi
+ * @Date 2024/1/9 10:11
+ * @Version 1.0
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class BusinessDocServiceImpl extends AbstractService<BusinessDocument, BusinessDocumentMapper> implements BusinessDocService {
+
+    private final BusinessDocumentMapper businessDocumentMapper;
+
+    @Override
+    protected BusinessDocumentMapper getMapper() {
+        return businessDocumentMapper;
+    }
+
+    @Override
+    public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
+        Example example = new Example(BusinessDocument.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", business.getBusinessType())
+                .andEqualTo("businessId", business.getBusinessId());
+        return businessDocumentMapper.selectByExample(example);
+    }
+
+}

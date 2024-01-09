@@ -1,6 +1,7 @@
 package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
@@ -9,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,10 +27,31 @@ public class BusinessTagController {
 
     private final BusinessTagFacade businessTagFacade;
 
-    @Operation(summary = "Get businessTag by business")
-    @PostMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<BusinessTagVO.BusinessTag>> getBusinessTagByBusiness(@RequestBody @Valid BusinessTagParam.GetByBusiness getByBusiness) {
+    @Operation(summary = "Query businessTag by business")
+    @PostMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<BusinessTagVO.BusinessTag>> queryBusinessTagByBusiness(@RequestBody @Valid BusinessParam.GetByBusiness getByBusiness) {
         return new HttpResult<>(businessTagFacade.getBusinessTagByBusiness(getByBusiness));
+    }
+
+    @Operation(summary = "Add businessTag")
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addBusinessTag(@RequestBody @Valid BusinessTagParam.AddBusinessTag addBusinessTag) {
+        businessTagFacade.addBusinessTag(addBusinessTag);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update businessTag")
+    @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateBusinessTag(@RequestBody @Valid BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
+        businessTagFacade.updateBusinessTag(updateBusinessTag);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete businessTag by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteBusinessTagById(@RequestParam @Valid int id) {
+        businessTagFacade.deleteById(id);
+        return HttpResult.SUCCESS;
     }
 
 }

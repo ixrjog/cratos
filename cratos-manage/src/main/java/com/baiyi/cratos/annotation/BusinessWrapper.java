@@ -17,6 +17,10 @@ public @interface BusinessWrapper {
 
     boolean atBefore() default false;
 
-    BusinessTypeEnum[] businessEnums() default {};
+    /**
+     * 不指定，则从类注解@BusinessType中获取类型
+     * @return
+     */
+    BusinessTypeEnum[] types() default {};
 
 }
