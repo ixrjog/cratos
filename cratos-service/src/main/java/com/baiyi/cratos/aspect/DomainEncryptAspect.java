@@ -42,26 +42,21 @@ public class DomainEncryptAspect {
 
     @Before(value = "@annotation(domainEncrypt)")
     public void beforeAdvice(JoinPoint joinPoint, DomainEncrypt domainEncrypt) {
-        if (joinPoint.getArgs().length == 1) {
-            if (AopUtils.getTargetClass(joinPoint.getArgs()[0])
-                    .isAnnotationPresent(EncryptedDomain.class)) {
-                log.info("Skip domain encrypt.");
-                return;
-            }
-            operationDomain(joinPoint.getArgs()[0], ENCRYPT);
+        if (AopUtils.getTargetClass(joinPoint.getArgs()[0])
+                .isAnnotationPresent(EncryptedDomain.class)) {
+            return;
         }
+        operationDomain(joinPoint.getArgs()[0], ENCRYPT);
+
     }
 
     @After(value = "@annotation(domainEncrypt)")
     public void afterAdvice(JoinPoint joinPoint, DomainEncrypt domainEncrypt) {
-        if (joinPoint.getArgs().length == 1) {
-            if (AopUtils.getTargetClass(joinPoint.getArgs()[0])
-                    .isAnnotationPresent(EncryptedDomain.class)) {
-                log.info("Skip domain encrypt.");
-                return;
-            }
-            operationDomain(joinPoint.getArgs()[0], ERASE);
+        if (AopUtils.getTargetClass(joinPoint.getArgs()[0])
+                .isAnnotationPresent(EncryptedDomain.class)) {
+            return;
         }
+        operationDomain(joinPoint.getArgs()[0], ERASE);
     }
 
     private void operationDomain(Object domain, boolean action) {

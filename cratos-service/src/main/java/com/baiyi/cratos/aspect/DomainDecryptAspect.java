@@ -38,7 +38,7 @@ public class DomainDecryptAspect {
     @AfterReturning(value = "@annotation(domainDecrypt)",returning="domain")
     public void afterAdvice(JoinPoint joinPoint, DomainDecrypt domainDecrypt, Object domain) {
         if (AopUtils.getTargetClass(domain).isAnnotationPresent(EncryptedDomain.class)) {
-            log.info("Skip domain decrypt.");
+            return;
         }
         operationDomain(domain);
     }

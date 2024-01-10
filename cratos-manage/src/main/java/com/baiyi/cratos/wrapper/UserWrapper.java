@@ -1,6 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.user.UserVO;
@@ -22,6 +23,7 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
 
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @Sensitive
     public void wrap(UserVO.User user) {
         // This is a good idea
     }
