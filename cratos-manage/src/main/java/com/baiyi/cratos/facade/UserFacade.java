@@ -11,6 +11,8 @@ import com.baiyi.cratos.domain.view.user.UserVO;
  */
 public interface UserFacade {
 
-    DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) ;
+    DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery);
+
+    void addUser(UserParam.AddUser addUser);
 
 }

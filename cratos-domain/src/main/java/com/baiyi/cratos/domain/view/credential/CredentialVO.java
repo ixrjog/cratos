@@ -26,7 +26,7 @@ public class CredentialVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
-    public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags,  Serializable {
+    public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
 
         @Serial
         private static final long serialVersionUID = -1000477517427403355L;

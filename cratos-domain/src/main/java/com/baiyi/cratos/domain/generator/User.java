@@ -1,7 +1,11 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.annotation.EncryptedDomain;
+import com.baiyi.cratos.domain.annotation.FieldEncrypt;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -11,6 +15,9 @@ import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EncryptedDomain
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,6 +92,7 @@ public class User {
     @Column(name = "update_time")
     private Date updateTime;
 
+    @FieldEncrypt
     private String password;
 
     private String comment;

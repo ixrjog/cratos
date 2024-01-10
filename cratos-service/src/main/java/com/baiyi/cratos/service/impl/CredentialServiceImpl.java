@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.Credential;
@@ -35,5 +36,23 @@ public class CredentialServiceImpl implements CredentialService {
         List<Credential> data = credentialMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
     }
+
+    @Override
+    @DomainEncrypt
+    public void updateByPrimaryKey(Credential credential) {
+        credentialMapper.updateByPrimaryKey(credential);
+    }
+
+    @Override
+    @DomainEncrypt
+    public void updateByPrimaryKeySelective(Credential credential) {
+        credentialMapper.updateByPrimaryKeySelective(credential);
+    }
+
+//    @Override
+//    @DomainEncrypt
+//    public void add(Credential credential){
+//        credentialMapper.insert(credential);
+//    }
 
 }

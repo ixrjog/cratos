@@ -1,6 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
@@ -22,6 +23,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
 
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @Sensitive
     public void wrap(CredentialVO.Credential credential) {
         // This is a good idea
     }

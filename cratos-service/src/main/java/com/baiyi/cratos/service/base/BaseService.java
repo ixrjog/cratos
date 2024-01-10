@@ -1,5 +1,7 @@
 package com.baiyi.cratos.service.base;
 
+import com.baiyi.cratos.annotation.DomainDecrypt;
+import com.baiyi.cratos.annotation.DomainEncrypt;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -13,10 +15,12 @@ public interface BaseService<T, M extends Mapper<T>> {
 
     M getMapper();
 
+    @DomainEncrypt
     default void add(T t) {
         getMapper().insert(t);
     }
 
+    @DomainDecrypt
     default T getById(int id) {
         return getMapper().selectByPrimaryKey(id);
     }

@@ -36,28 +36,35 @@ public class SensitiveAspect {
     @After(value = "annotationPoint()")
     public void doAfter(JoinPoint joinPoint) {
         if (enabled) {
-            Arrays.stream(joinPoint.getArgs()).filter(arg -> AopUtils.getTargetClass(arg).getAnnotation(FieldSensitive.class) != null).forEach(this::eraseSensitiveInfo);
+            Arrays.stream(joinPoint.getArgs())
+                    .filter(arg -> AopUtils.getTargetClass(arg)
+                            .getSuperclass()
+                            .isAnnotationPresent(FieldSensitive.class))
+                    .forEach(this::eraseSensitiveInfo);
         }
     }
 
     private void eraseSensitiveInfo(Object view) {
         // 获取视图中所有字段
-        Field[] fields = view.getClass().getDeclaredFields();
-        Arrays.stream(fields).filter(field -> field.isAnnotationPresent(FieldSensitive.class)).forEach(field -> {
-            // 获取字段注解
-            FieldSensitive fieldSensitive = field.getAnnotation(FieldSensitive.class);
-            // 获取脱敏类型
-            SensitiveType sensitiveType = fieldSensitive.type();
-            SensitiveFormatter sensitiveFormatter = SensitiveFormatterFactory.getFormatter(sensitiveType.name());
-            if (sensitiveFormatter != null) {
-                try {
-                    field.setAccessible(true);
-                    // 字段脱敏
-                    field.set(view, sensitiveFormatter.format(fieldSensitive, (String) field.get(view)));
-                } catch (IllegalAccessException ignored) {
-                }
-            }
-        });
+        Field[] fields = view.getClass()
+                .getDeclaredFields();
+        Arrays.stream(fields)
+                .filter(field -> field.isAnnotationPresent(FieldSensitive.class))
+                .forEach(field -> {
+                    // 获取字段注解
+                    FieldSensitive fieldSensitive = field.getAnnotation(FieldSensitive.class);
+                    // 获取脱敏类型
+                    SensitiveType sensitiveType = fieldSensitive.type();
+                    SensitiveFormatter sensitiveFormatter = SensitiveFormatterFactory.getFormatter(sensitiveType.name());
+                    if (sensitiveFormatter != null) {
+                        try {
+                            field.setAccessible(true);
+                            // 字段脱敏
+                            field.set(view, sensitiveFormatter.format(fieldSensitive, (String) field.get(view)));
+                        } catch (IllegalAccessException ignored) {
+                        }
+                    }
+                });
     }
 
 }

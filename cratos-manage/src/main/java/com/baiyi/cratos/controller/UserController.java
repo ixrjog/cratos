@@ -30,8 +30,15 @@ public class UserController {
 
     @Operation(summary = "Pagination query user")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserVO.User>> queryTagPage(@RequestBody @Valid UserParam.UserPageQuery pageQuery) {
+    public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserParam.UserPageQuery pageQuery) {
         return new HttpResult<>(userFacade.queryUserPage(pageQuery));
+    }
+
+    @Operation(summary = "Add user")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addUser(@RequestBody @Valid UserParam.AddUser addUser) {
+        userFacade.addUser(addUser);
+        return HttpResult.SUCCESS;
     }
 
 }

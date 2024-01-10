@@ -29,4 +29,9 @@ public class UserFacadeImpl implements UserFacade {
         return userWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void addUser(UserParam.AddUser addUser) {
+        userService.add(addUser.toTarget());
+    }
+
 }

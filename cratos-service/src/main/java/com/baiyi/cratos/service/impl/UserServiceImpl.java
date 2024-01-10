@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DomainDecrypt;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.user.UserParam;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @DomainDecrypt
     public User getByUsername(String username) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
@@ -44,4 +46,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectOneByExample(example);
     }
 
+    @Override
+    public User getByUniqueKey(User user) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", user.getUsername());
+        return userMapper.selectOneByExample(example);
+    }
 }

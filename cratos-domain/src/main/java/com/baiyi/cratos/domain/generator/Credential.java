@@ -1,10 +1,17 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
+import com.baiyi.cratos.domain.annotation.EncryptedDomain;
+import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
+
 @Data
+@EncryptedDomain
 public class Credential {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,17 +44,20 @@ public class Credential {
     /**
      * 凭据内容
      */
+    @FieldEncrypt
     private String credential;
 
     /**
      * 凭据补充内容
      */
     @Column(name = "credential_2")
+    @FieldEncrypt
     private String credential2;
 
     /**
      * 密码短语
      */
+    @FieldEncrypt
     private String passphrase;
 
     private String comment;
