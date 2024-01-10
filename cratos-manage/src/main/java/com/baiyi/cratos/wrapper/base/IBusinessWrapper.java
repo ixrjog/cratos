@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.base;
 
-import com.baiyi.cratos.common.annotation.BusinessType;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.wrapper.factory.BusinessWrapperFactory;
 import org.springframework.aop.support.AopUtils;

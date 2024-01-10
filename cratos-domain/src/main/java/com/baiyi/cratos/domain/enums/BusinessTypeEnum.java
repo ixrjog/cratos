@@ -10,6 +10,8 @@ public enum BusinessTypeEnum {
     TAG,
     DOC,
     CERTIFICATE,
-    BUSINESS_TAG
+    BUSINESS_TAG,
+    CREDENTIAL,
+    USER
 
 }

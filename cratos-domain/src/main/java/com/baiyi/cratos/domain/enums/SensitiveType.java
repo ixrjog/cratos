@@ -11,6 +11,7 @@ public enum SensitiveType {
     PASSWORD,
     MOBILE_PHONE,
     ID_CARD,
-    EMAIL
+    EMAIL,
+    ERASE
 
 }

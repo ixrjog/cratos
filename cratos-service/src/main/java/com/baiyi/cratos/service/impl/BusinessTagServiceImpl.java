@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
-import com.baiyi.cratos.service.base.AbstractService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BusinessTagServiceImpl extends AbstractService<BusinessTag, BusinessTagMapper> implements BusinessTagService {
+public class BusinessTagServiceImpl implements BusinessTagService {
 
     private final BusinessTagMapper businessTagMapper;
 
     @Override
-    protected BusinessTagMapper getMapper() {
+    public BusinessTagMapper getMapper() {
         return businessTagMapper;
     }
 

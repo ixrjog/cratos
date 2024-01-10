@@ -10,6 +10,10 @@ logging:
 #    mask:
 #      enabled: off
 
+cratos:
+  auth:
+    provider: LOCAL
+
 spring:
   config:
     activate:

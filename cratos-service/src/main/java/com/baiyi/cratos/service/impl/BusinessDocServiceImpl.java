@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.mapper.BusinessDocumentMapper;
 import com.baiyi.cratos.service.BusinessDocService;
-import com.baiyi.cratos.service.base.AbstractService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BusinessDocServiceImpl extends AbstractService<BusinessDocument, BusinessDocumentMapper> implements BusinessDocService {
+public class BusinessDocServiceImpl implements BusinessDocService {
 
     private final BusinessDocumentMapper businessDocumentMapper;
 
     @Override
-    protected BusinessDocumentMapper getMapper() {
+    public BusinessDocumentMapper getMapper() {
         return businessDocumentMapper;
     }
 

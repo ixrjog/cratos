@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.annotation;
+package com.baiyi.cratos.domain.annotation;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 

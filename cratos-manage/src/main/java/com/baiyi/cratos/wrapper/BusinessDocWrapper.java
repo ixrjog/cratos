@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
-import com.baiyi.cratos.common.annotation.BusinessType;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;

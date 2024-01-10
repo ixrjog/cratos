@@ -16,6 +16,10 @@ public enum ErrorEnum {
     OK(0, "成功"),
     SYSTEM_ERROR(10001, "系统错误！"),
     ENCRYPTION_AND_DECRYPTION_ERROR(10002, "Encryption and decryption errors."),
+
+    // authentication
+    INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION(9999,"Invalid identity authentication provider configuration.")
+
     ;
 
     private final int code;

@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.certificate.CertificateParam;
 import com.baiyi.cratos.mapper.CertificateMapper;
 import com.baiyi.cratos.service.CertificateService;
-import com.baiyi.cratos.service.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,12 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CertificateServiceImpl extends AbstractService<Certificate, CertificateMapper> implements CertificateService {
+public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateMapper certificateMapper;
 
     @Override
-    protected CertificateMapper getMapper() {
+    public CertificateMapper getMapper() {
         return certificateMapper;
     }
 

@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.mapper.TagMapper;
 import com.baiyi.cratos.service.TagService;
-import com.baiyi.cratos.service.base.AbstractService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,12 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class TagServiceImpl extends AbstractService<Tag, TagMapper> implements TagService {
+public class TagServiceImpl implements TagService {
 
     private final TagMapper tagMapper;
 
     @Override
-    protected TagMapper getMapper() {
+    public TagMapper getMapper() {
         return tagMapper;
     }
 
