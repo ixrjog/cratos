@@ -1,6 +1,5 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
@@ -24,13 +23,12 @@ import java.util.stream.Collectors;
 // 懒加载防止循环依赖
 //@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 @RequiredArgsConstructor
-@BusinessType(type = BusinessTypeEnum.DOC)
+@BusinessType(type = BusinessTypeEnum.BUSINESS_DOC)
 public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.BusinessDoc, BusinessDocument> implements IBusinessWrapper<BusinessDocVO.IBusinessDocs, BusinessDocVO.BusinessDoc> {
 
     private final BusinessDocService businessDocService;
 
     @Override
-    @BusinessWrapper
     public void wrap(BusinessDocVO.BusinessDoc businessDoc) {
         // This is a good idea
     }

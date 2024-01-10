@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements IBaseWrapper<UserVO.User> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     @Sensitive
     public void wrap(UserVO.User user) {
         // This is a good idea

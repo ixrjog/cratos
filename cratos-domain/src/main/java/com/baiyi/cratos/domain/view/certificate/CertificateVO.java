@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -25,7 +26,9 @@ public class CertificateVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
-    public static class Certificate extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
+    public static class Certificate extends BaseVO implements BaseBusiness.IBusinessAnnotate,
+            BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs,
+            Serializable {
 
         @Serial
         private static final long serialVersionUID = -799350802297993186L;
@@ -61,7 +64,11 @@ public class CertificateVO {
             return id;
         }
 
+        @Schema(description = "Business Tags")
         List<BusinessTagVO.BusinessTag> businessTags;
+
+        @Schema(description = "Business Docs")
+        List<BusinessDocVO.BusinessDoc> businessDocs;
 
     }
 

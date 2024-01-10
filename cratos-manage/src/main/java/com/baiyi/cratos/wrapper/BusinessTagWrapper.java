@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * 实现类上本不需要太多代码
+ *
  * @Author baiyi
  * @Date 2024/1/5 10:23
  * @Version 1.0
@@ -29,7 +30,7 @@ public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.Bus
     private final BusinessTagService businessTagService;
 
     @Override
-    @BusinessWrapper(types = BusinessTypeEnum.TAG )
+    @BusinessWrapper(types = BusinessTypeEnum.TAG)
     public void wrap(BusinessTagVO.BusinessTag businessTag) {
         // This is a good idea
     }
