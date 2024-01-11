@@ -1,8 +1,8 @@
 package com.baiyi.cratos.wrapper.base;
 
 import com.baiyi.cratos.common.Converter;
-import com.baiyi.cratos.common.util.SpringContextUtil;
 import com.baiyi.cratos.domain.DataTable;
+import org.springframework.aop.framework.AopContext;
 
 /**
  * @Author baiyi
@@ -27,14 +27,14 @@ public abstract class BaseDataTableConverter<T, S> implements IBaseWrapper<T>, C
      */
     public T wrapToTarget(S s) {
         T t = convert(s);
-        proxyWrap(t);
+        wrapFromProxy(t);
         return t;
     }
 
     @SuppressWarnings("unchecked")
-    protected void proxyWrap(T t) {
-        IBaseWrapper<T> w = SpringContextUtil.getBean(this.getClass());
-        w.wrap(t);
+    protected void wrapFromProxy(T t) {
+        BaseDataTableConverter<T, S> bean = (BaseDataTableConverter<T, S>) AopContext.currentProxy();
+        bean.wrap(t);
     }
 
 }

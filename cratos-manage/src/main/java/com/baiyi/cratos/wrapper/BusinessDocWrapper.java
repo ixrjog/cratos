@@ -40,7 +40,7 @@ public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.Bus
                 .map(bizDoc -> {
                     BusinessDocVO.BusinessDoc businessDoc = this.convert(bizDoc);
                     // AOP增强
-                    proxyWrap(businessDoc);
+                    wrapFromProxy(businessDoc);
                     return businessDoc;
                 })
                 .collect(Collectors.toList()));

@@ -42,7 +42,7 @@ public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.Bus
                 .map(bizTag -> {
                     BusinessTagVO.BusinessTag businessTag = this.convert(bizTag);
                     // AOP增强
-                    proxyWrap(businessTag);
+                    wrapFromProxy(businessTag);
                     return businessTag;
                 })
                 .collect(Collectors.toList()));
