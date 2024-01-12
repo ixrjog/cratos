@@ -52,6 +52,8 @@ public class CredentialVO {
 
         private Boolean privateCredential;
 
+        private Boolean isActive;
+
         private String comment;
 
         @Override

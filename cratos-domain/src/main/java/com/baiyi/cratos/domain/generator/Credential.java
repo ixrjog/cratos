@@ -63,5 +63,11 @@ public class Credential {
     @Column(name = "private_credential")
     private Boolean privateCredential;
 
+    /**
+     * 有效
+     */
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     private String comment;
 }
