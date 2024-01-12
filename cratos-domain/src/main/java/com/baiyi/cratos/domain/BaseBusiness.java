@@ -9,14 +9,16 @@ import org.springframework.aop.support.AopUtils;
  */
 public interface BaseBusiness {
 
-    interface IBusinessAnnotate extends IBusiness {
+    /**
+     * 从注解获取BusinessType
+     */
+    interface IBusinessAnnotate extends IBusiness, IBusinessTypeAnnotate {
         default String getBusinessType() {
             return AopUtils.getTargetClass(this)
                     .getAnnotation(com.baiyi.cratos.domain.annotation.BusinessType.class)
                     .type()
                     .name();
         }
-
     }
 
     interface IBusiness extends IBusinessType {
@@ -25,6 +27,15 @@ public interface BaseBusiness {
 
     interface IBusinessType {
         String getBusinessType();
+    }
+
+    interface IBusinessTypeAnnotate {
+        default String getBusinessType() {
+            return AopUtils.getTargetClass(this)
+                    .getAnnotation(com.baiyi.cratos.domain.annotation.BusinessType.class)
+                    .type()
+                    .name();
+        }
     }
 
 }

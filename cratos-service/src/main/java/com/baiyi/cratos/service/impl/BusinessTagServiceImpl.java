@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -19,6 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.BUSINESS_TAG)
 public class BusinessTagServiceImpl implements BusinessTagService {
 
     private final BusinessTagMapper businessTagMapper;
@@ -35,6 +38,11 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         criteria.andEqualTo("businessType", business.getBusinessType())
                 .andEqualTo("businessId", business.getBusinessId());
         return businessTagMapper.selectByExample(example);
+    }
+
+    @Override
+    public void delete(BusinessTag businessTag) {
+        deleteById(businessTag.getId());
     }
 
     @Override

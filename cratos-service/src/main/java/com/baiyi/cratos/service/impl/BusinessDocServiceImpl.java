@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.mapper.BusinessDocumentMapper;
 import com.baiyi.cratos.service.BusinessDocService;
@@ -19,6 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.BUSINESS_DOC)
 public class BusinessDocServiceImpl implements BusinessDocService {
 
     private final BusinessDocumentMapper businessDocumentMapper;
@@ -35,6 +38,11 @@ public class BusinessDocServiceImpl implements BusinessDocService {
         criteria.andEqualTo("businessType", business.getBusinessType())
                 .andEqualTo("businessId", business.getBusinessId());
         return businessDocumentMapper.selectByExample(example);
+    }
+
+    @Override
+    public void delete(BusinessDocument businessDocument) {
+        deleteById(businessDocument.getId());
     }
 
 }

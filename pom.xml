@@ -110,12 +110,6 @@
             <version>1.10.0</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.xiaoymin</groupId>-->
-        <!--            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>-->
-        <!--            <version>4.0.0</version>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
@@ -144,13 +138,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>6.0.2</version>
+            <version>6.0.5</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>6.0.2</version>
+            <version>6.0.5</version>
         </dependency>
 
         <dependency>

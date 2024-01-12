@@ -7,11 +7,14 @@ package com.baiyi.cratos.domain.enums;
  */
 public enum BusinessTypeEnum {
 
-    TAG,
     BUSINESS_DOC,
+    // 证书
     CERTIFICATE,
+    TAG,
     BUSINESS_TAG,
+    // 凭据
     CREDENTIAL,
+    BUSINESS_CREDENTIAL,
     USER
 
 }

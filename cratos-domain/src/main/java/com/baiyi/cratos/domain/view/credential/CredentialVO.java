@@ -50,6 +50,8 @@ public class CredentialVO {
         @FieldSensitive(type = SensitiveType.ERASE)
         private String passphrase;
 
+        private Boolean privateCredential;
+
         private String comment;
 
         @Override

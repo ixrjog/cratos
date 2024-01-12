@@ -1,7 +1,10 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.annotation.DomainDecrypt;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.user.UserParam;
 import com.baiyi.cratos.mapper.UserMapper;
@@ -21,6 +24,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.USER)
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
@@ -53,4 +57,12 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("username", user.getUsername());
         return userMapper.selectOneByExample(example);
     }
+
+    @Override
+    // 删除用户关联的业务标签、凭据
+    @DeleteBoundBusiness(businessId = "#id", types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL})
+    public void deleteById(int id) {
+        userMapper.deleteByPrimaryKey(id);
+    }
+
 }

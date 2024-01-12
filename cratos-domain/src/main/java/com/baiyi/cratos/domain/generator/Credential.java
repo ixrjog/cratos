@@ -60,5 +60,8 @@ public class Credential {
     @FieldEncrypt
     private String passphrase;
 
+    @Column(name = "private_credential")
+    private Boolean privateCredential;
+
     private String comment;
 }

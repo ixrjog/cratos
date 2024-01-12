@@ -49,10 +49,4 @@ public class CredentialServiceImpl implements CredentialService {
         credentialMapper.updateByPrimaryKeySelective(credential);
     }
 
-//    @Override
-//    @DomainEncrypt
-//    public void add(Credential credential){
-//        credentialMapper.insert(credential);
-//    }
-
 }

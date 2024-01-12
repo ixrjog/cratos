@@ -32,4 +32,10 @@ public class UserServiceTest extends BaseUnit {
         System.out.println(userService.getById(1));
     }
 
+
+    @Test
+    void test2() {
+        userService.deleteById(100);
+    }
+
 }
