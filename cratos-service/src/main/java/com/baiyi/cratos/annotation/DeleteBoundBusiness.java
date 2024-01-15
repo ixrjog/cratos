@@ -10,14 +10,13 @@ import java.lang.annotation.*;
  * @Date 2024/1/12 10:16
  * @Version 1.0
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
 public @interface DeleteBoundBusiness {
 
-    @Schema(description = "SpEL")
-    String businessId();
+    @Schema(description = "SpEL") String businessId();
 
     BusinessTypeEnum[] types();
 

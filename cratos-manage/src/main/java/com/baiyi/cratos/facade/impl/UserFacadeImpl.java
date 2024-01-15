@@ -30,6 +30,11 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
+    public UserVO.User getUserByUsername(String username) {
+        return null;
+    }
+
+    @Override
     public void addUser(UserParam.AddUser addUser) {
         userService.add(addUser.toTarget());
     }

@@ -21,6 +21,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="password" jdbcType="LONGVARCHAR" property="password" />
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
+    <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime" />
   </resultMap>
 
   <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.user.UserParam$UserPageQuery"

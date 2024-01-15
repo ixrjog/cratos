@@ -35,9 +35,10 @@ public class DomainDecryptAspect {
     public void annotationPoint() {
     }
 
-    @AfterReturning(value = "@annotation(domainDecrypt)",returning="domain")
+    @AfterReturning(value = "@annotation(domainDecrypt)", returning = "domain")
     public void afterAdvice(JoinPoint joinPoint, DomainDecrypt domainDecrypt, Object domain) {
-        if (AopUtils.getTargetClass(domain).isAnnotationPresent(EncryptedDomain.class)) {
+        if (domain == null || !AopUtils.getTargetClass(domain)
+                .isAnnotationPresent(EncryptedDomain.class)) {
             return;
         }
         operationDomain(domain);

@@ -17,6 +17,8 @@ public enum ErrorEnum {
     SYSTEM_ERROR(10001, "系统错误！"),
     ENCRYPTION_AND_DECRYPTION_ERROR(10002, "Encryption and decryption errors."),
 
+    AUTHENTICATION_FAILED(401,"Authentication failed."),
+
     // authentication
     INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION(9999,"Invalid identity authentication provider configuration.")
 

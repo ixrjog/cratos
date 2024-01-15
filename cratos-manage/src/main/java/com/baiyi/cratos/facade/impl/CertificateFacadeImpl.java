@@ -37,7 +37,6 @@ public class CertificateFacadeImpl implements CertificateFacade {
 
     @Override
     public DataTable<CertificateVO.Certificate> queryCertificatePage(CertificateParam.CertificatePageQuery pageQuery) {
-        log.debug("pageQuery: {}", pageQuery);
         DataTable<Certificate> table = certificateService.queryCertificatePage(pageQuery);
         return certificateWrapper.wrapToTarget(table);
     }

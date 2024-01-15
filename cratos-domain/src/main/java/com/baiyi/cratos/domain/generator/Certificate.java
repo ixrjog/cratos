@@ -1,8 +1,12 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
 
 @Data
 public class Certificate {
@@ -57,11 +61,14 @@ public class Certificate {
     @Column(name = "not_after")
     private Date notAfter;
 
+    @Column(name = "expired_time")
+    private Date expiredTime;
+
     private String comment;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 }

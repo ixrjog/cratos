@@ -22,6 +22,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -68,9 +69,8 @@ public class DeleteBoundBusinessAspect {
         Expression expression = expressionParser.parseExpression(deleteBoundBusiness.businessId());
         Object businessIdSpEL = expression.getValue(context);
         if (businessIdSpEL instanceof Integer businessId) {
-            for (BusinessTypeEnum type : deleteBoundBusiness.types()) {
-                doDelete(businessId, type);
-            }
+            Arrays.stream(deleteBoundBusiness.types())
+                    .forEach(type -> doDelete(businessId, type));
         }
     }
 
@@ -81,6 +81,8 @@ public class DeleteBoundBusinessAspect {
                     .businessId(businessId)
                     .businessType(businessTypeEnum.name())
                     .build();
+            log.info("Service delete by business: service={}, businessTyp{}, businessId={}", baseBusinessService.getClass()
+                    .getSimpleName(), businessTypeEnum.name(), businessId);
             baseBusinessService.deleteByBusiness(simpleBusiness);
         }
     }

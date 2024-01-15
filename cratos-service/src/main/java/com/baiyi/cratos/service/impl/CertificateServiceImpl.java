@@ -1,6 +1,9 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.certificate.CertificateParam;
 import com.baiyi.cratos.mapper.CertificateMapper;
@@ -20,6 +23,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.CERTIFICATE)
 public class CertificateServiceImpl implements CertificateService {
 
     private final CertificateMapper certificateMapper;
@@ -42,6 +46,13 @@ public class CertificateServiceImpl implements CertificateService {
         Page<Certificate> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<Certificate> data = certificateMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    // 删除用证书关联的业务标签、凭据
+    @DeleteBoundBusiness(businessId = "#id", types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL})
+    public void deleteById(int id) {
+        certificateMapper.deleteByPrimaryKey(id);
     }
 
 }

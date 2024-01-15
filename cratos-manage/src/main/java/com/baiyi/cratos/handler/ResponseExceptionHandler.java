@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -25,6 +26,12 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(value = {EncryptionOperationNotPossibleException.class})
     public HttpResult<?> handleRuntimeException(EncryptionOperationNotPossibleException exception) {
         return new HttpResult<>(ErrorEnum.ENCRYPTION_AND_DECRYPTION_ERROR);
+    }
+
+    // 认证
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    public HttpResult<?> handleRuntimeException(BadCredentialsException exception) {
+        return new HttpResult<>(ErrorEnum.AUTHENTICATION_FAILED.getCode(), exception.getMessage());
     }
 
 }

@@ -22,6 +22,7 @@ public class BusinessTagVO {
         void setBusinessTags(List<BusinessTagVO.BusinessTag> businessTags);
 
         List<BusinessTagVO.BusinessTag> getBusinessTags();
+
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -42,6 +43,7 @@ public class BusinessTagVO {
 
         private String tagValue;
 
+        @Schema(description = "ITag")
         private TagVO.Tag tag;
 
     }

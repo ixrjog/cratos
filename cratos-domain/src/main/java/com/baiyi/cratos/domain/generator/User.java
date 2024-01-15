@@ -3,9 +3,9 @@ package com.baiyi.cratos.domain.generator;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Data
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @EncryptedDomain
@@ -83,14 +83,17 @@ public class User {
     /**
      * 创建时间
      */
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
+
+    @Column(name = "expired_time")
+    private Date expiredTime;
 
     @FieldEncrypt
     private String password;

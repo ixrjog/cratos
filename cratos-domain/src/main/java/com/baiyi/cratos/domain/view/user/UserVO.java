@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.enums.SensitiveType;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -67,6 +68,10 @@ public class UserVO {
         private String password;
 
         private String comment;
+
+        @Schema(description = "Expired time")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date expiredTime;
 
         @Override
         public Integer getBusinessId() {

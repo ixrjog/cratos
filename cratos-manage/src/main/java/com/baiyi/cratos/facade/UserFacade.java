@@ -15,4 +15,6 @@ public interface UserFacade {
 
     void addUser(UserParam.AddUser addUser);
 
+    UserVO.User getUserByUsername(String username);
+
 }

@@ -9,6 +9,7 @@ import java.io.Serial;
 
 /**
  * 身份认证
+ *
  * @Author baiyi
  * @Date 2021/5/13 4:05 下午
  * @Version 1.0
@@ -23,12 +24,12 @@ public class AuthenticationException extends BaseException {
 
     public AuthenticationException(String message) {
         super(message);
-        this.code = 999;
+        this.code = 401;
     }
 
     public AuthenticationException(Integer code, String message) {
         super(message);
-        this.code = code;
+        this.code = 401;
     }
 
     public AuthenticationException(ErrorEnum errorEnum) {
