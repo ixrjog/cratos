@@ -55,7 +55,7 @@ public class TagVO {
         private Integer seq;
 
 
-        private Boolean isActive;
+        private Boolean valid;
 
         private String comment;
 

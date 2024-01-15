@@ -49,8 +49,7 @@ public class Tag {
     /**
      * 有效
      */
-    @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean valid;
 
     private String comment;
 

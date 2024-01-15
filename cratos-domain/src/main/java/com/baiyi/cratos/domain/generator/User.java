@@ -52,8 +52,7 @@ public class User {
     /**
      * 有效
      */
-    @Column(name = "is_active")
-    private Boolean isActive;
+    private Boolean valid;
 
     /**
      * 最后登录时间

@@ -10,7 +10,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="domain_name" jdbcType="VARCHAR" property="domainName" />
     <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
-    <result column="is_active" jdbcType="BIT" property="isActive" />
+    <result column="valid" jdbcType="BIT" property="valid" />
     <result column="key_algorithm" jdbcType="VARCHAR" property="keyAlgorithm" />
     <result column="not_before" jdbcType="TIMESTAMP" property="notBefore" />
     <result column="not_after" jdbcType="TIMESTAMP" property="notAfter" />

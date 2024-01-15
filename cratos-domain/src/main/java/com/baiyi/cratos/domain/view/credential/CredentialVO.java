@@ -54,7 +54,7 @@ public class CredentialVO {
 
         private Boolean privateCredential;
 
-        private Boolean isActive;
+        private Boolean valid;
 
         private String comment;
 

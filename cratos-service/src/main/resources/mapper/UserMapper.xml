@@ -11,7 +11,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="display_name" jdbcType="VARCHAR" property="displayName" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="is_active" jdbcType="BIT" property="isActive" />
+    <result column="valid" jdbcType="BIT" property="valid" />
     <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
     <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone" />
     <result column="otp" jdbcType="INTEGER" property="otp" />

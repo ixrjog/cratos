@@ -50,7 +50,7 @@ public class UserVO {
         @FieldSensitive(type = SensitiveType.EMAIL)
         private String email;
 
-        private Boolean isActive;
+        private Boolean valid;
 
         @Schema(description = "最后登录时间")
         private Date lastLogin;
