@@ -1,0 +1,37 @@
+package com.baiyi.cratos.domain.generator;
+
+import java.util.Date;
+import javax.persistence.*;
+import lombok.Data;
+
+@Data
+@Table(name = "user_token")
+public class UserToken {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    /**
+     * 用户登录名
+     */
+    private String username;
+
+    /**
+     * 登录唯一标识
+     */
+    private String token;
+
+    /**
+     * 是否有效
+     */
+    private Boolean valid;
+
+    @Column(name = "expired_time")
+    private Date expiredTime;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "update_time")
+    private Date updateTime;
+}

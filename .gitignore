@@ -15,7 +15,7 @@ static/
 
 ### 含隐私
 JasyptUtilsTest.java
-EncryptorTest.java
+# EncryptorTest.java
 application-local.yml
 
 ### STS ###
