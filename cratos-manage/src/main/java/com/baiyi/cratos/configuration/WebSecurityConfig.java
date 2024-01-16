@@ -1,7 +1,11 @@
 package com.baiyi.cratos.configuration;
 
+import com.baiyi.cratos.secutity.JasyptPasswordEncoder;
+import jakarta.annotation.Resource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @Author baiyi
@@ -11,7 +15,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-//
+
+    @Resource
+    private JasyptPasswordEncoder jasyptPasswordEncoder;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return jasyptPasswordEncoder;
+    }
+
 //    @Bean
 //    public UserDetailsService userDetailsService() {
 //        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();

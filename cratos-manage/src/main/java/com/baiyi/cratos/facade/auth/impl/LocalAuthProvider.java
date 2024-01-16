@@ -3,18 +3,16 @@ package com.baiyi.cratos.facade.auth.impl;
 import com.baiyi.cratos.common.constants.AuthProviderEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.domain.param.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.facade.auth.BaseAuthProvider;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
 
@@ -30,8 +28,7 @@ import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
 @RequiredArgsConstructor
 public class LocalAuthProvider extends BaseAuthProvider {
 
-    @Resource
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public String getName() {
@@ -45,12 +42,11 @@ public class LocalAuthProvider extends BaseAuthProvider {
         if (authentication == null) {
             throw new AuthenticationException(AUTHENTICATION_FAILED);
         }
-        // (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-        String token = UUID.randomUUID().toString();
+        UserToken userToken = revokeAndIssueNewToken(loginParam);
         if (authentication.isAuthenticated()) {
             return LoginVO.Login.builder()
                     .name(user.getDisplayName())
-                    .token(token)
+                    .token(userToken.getToken())
                     .uuid(user.getUuid())
                     .build();
         }

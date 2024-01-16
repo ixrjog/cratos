@@ -8,6 +8,7 @@ import com.baiyi.cratos.facade.TagFacade;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.TagWrapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  * @Date 2024/1/2 17:40
  * @Version 1.0
  */
+@Slf4j
 @Component
 @AllArgsConstructor
 public class TagFacadeImpl implements TagFacade {

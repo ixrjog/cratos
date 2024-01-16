@@ -7,6 +7,9 @@ import com.baiyi.cratos.mapper.UserTokenMapper;
 import com.baiyi.cratos.service.UserTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -22,17 +25,29 @@ public class UserTokenServiceImpl implements UserTokenService {
 
     @Override
     public UserToken getByToken(String token) {
-       // return userTokenMapper.selectByPrimaryKey();
-        return null;
+        Example example = new Example(UserToken.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("token", token);
+        return userTokenMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<UserToken> queryValidTokenByUsername(String username) {
+        Example example = new Example(UserToken.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", username)
+                .andEqualTo("valid", true);
+        return userTokenMapper.selectByExample(example);
     }
 
     @Override
     public UserTokenMapper getMapper() {
-        return null;
+        return userTokenMapper;
     }
 
     @Override
     public UserToken getByUniqueKey(UserToken userToken) {
-        return null;
+        return getByToken(userToken.getToken());
     }
+
 }

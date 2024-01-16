@@ -1,5 +1,6 @@
 package com.baiyi.cratos.secutity;
 
+import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.facade.UserFacade;
@@ -29,7 +30,7 @@ public class CratosUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
 
-    private final CratosPasswordEncoder cratosPasswordEncoder;
+    private final JasyptPasswordEncoder cratosPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -37,26 +38,17 @@ public class CratosUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(StringFormatter.format("username {} is not found.", username));
         }
-       // PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456");
-        return   org.springframework.security.core.userdetails.User.withUsername(username)
+        // PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456");
+        return org.springframework.security.core.userdetails.User.withUsername(username)
                 .username(username)
-                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456"))
-                .accountLocked(false)
-                .accountExpired(false)
+                .password(PasswordEncoderFactories.createDelegatingPasswordEncoder()
+                        .encode("123456"))
+                .accountLocked(!user.getValid())
+                .accountExpired(ExpiredUtil.isExpired(user.getExpiredTime()))
                 .credentialsExpired(false)
                 //.passwordEncoder(null)
                 .authorities(getUserAuthorities(username))
                 .build();
-
-//        return CratosUserDetails.builder()
-//                .username(username)
-//                .password("123456")
-//                .enabled(user.getIsActive())
-//                .accountNonLocked(true)
-//                .accountNonExpired(true)
-//                .credentialsNonExpired(false)
-//                .authorities(getUserAuthorities(username))
-//                .build();
     }
 
     private List<GrantedAuthority> getUserAuthorities(String username) {
@@ -65,5 +57,5 @@ public class CratosUserDetailsService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("DEV"));
         return authorities;
     }
-    
+
 }

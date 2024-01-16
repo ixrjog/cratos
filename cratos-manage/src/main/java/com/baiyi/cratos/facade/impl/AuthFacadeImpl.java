@@ -40,14 +40,13 @@ public class AuthFacadeImpl implements AuthFacade {
         }
         User user = userService.getByUsername(loginParam.getUsername());
         LoginVO.Login login = authProvider.login(loginParam, user);
-
         // 更新用户登录信息
         User updateUser = User.builder()
                 .id(user.getId())
                 .lastLogin(new Date())
                 .build();
         userService.updateByPrimaryKeySelective(updateUser);
-        return login ;
+        return login;
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @AllArgsConstructor
-public class CratosPasswordEncoder implements PasswordEncoder {
+public class JasyptPasswordEncoder implements PasswordEncoder {
 
     private final StringEncryptor stringEncryptor;
 
@@ -22,15 +22,14 @@ public class CratosPasswordEncoder implements PasswordEncoder {
     }
 
     /**
-     *
-     * @param rawPassword 明文密码
+     * @param rawPassword     明文密码
      * @param encodedPassword 加密后密码
      * @return
      */
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
-       String pw = stringEncryptor.decrypt(encodedPassword);
-       return rawPassword.equals(pw);
+        String pw = stringEncryptor.decrypt(encodedPassword);
+        return rawPassword.equals(pw);
     }
-
+    
 }

@@ -1,7 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
-import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -94,7 +93,6 @@ public class User {
     @Column(name = "expired_time")
     private Date expiredTime;
 
-    @FieldEncrypt
     private String password;
 
     private String comment;

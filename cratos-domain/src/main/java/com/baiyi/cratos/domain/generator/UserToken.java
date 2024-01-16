@@ -1,10 +1,13 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.*;
+import java.util.Date;
+
 @Data
+@Builder
 @Table(name = "user_token")
 public class UserToken {
     @Id
