@@ -4,8 +4,13 @@ import com.baiyi.cratos.secutity.JasyptPasswordEncoder;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * @Author baiyi
@@ -24,11 +29,15 @@ public class WebSecurityConfig {
         return jasyptPasswordEncoder;
     }
 
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build());
-//        return manager;
-//    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(new AntPathRequestMatcher("**"))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .cors(Customizer.withDefaults())
+                .authenticationManager(authManager);
+        return http.build();
+    }
 
 }

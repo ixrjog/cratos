@@ -32,7 +32,7 @@ public class TagParam {
 
         private Integer seq;
 
-        private Boolean isActive;
+        private Boolean valid;
 
         private String comment;
 
@@ -60,7 +60,7 @@ public class TagParam {
 
         private Integer seq;
 
-        private Boolean isActive;
+        private Boolean valid;
 
         private String comment;
 

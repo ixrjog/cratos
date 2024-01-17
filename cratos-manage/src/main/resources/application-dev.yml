@@ -12,6 +12,7 @@ logging:
 
 cratos:
   auth:
+    enabled: off
     provider: LOCAL
 
 spring:

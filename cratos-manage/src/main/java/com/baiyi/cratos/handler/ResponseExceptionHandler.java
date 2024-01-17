@@ -2,6 +2,8 @@ package com.baiyi.cratos.handler;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.exception.BaseException;
+import com.baiyi.cratos.common.exception.auth.AuthenticationException;
+import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
@@ -32,6 +34,17 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(value = {BadCredentialsException.class})
     public HttpResult<?> handleRuntimeException(BadCredentialsException exception) {
         return new HttpResult<>(ErrorEnum.AUTHENTICATION_FAILED.getCode(), exception.getMessage());
+    }
+
+
+    @ExceptionHandler(value = {AuthenticationException.class})
+    public HttpResult<?> handleRuntimeException(AuthenticationException exception) {
+        return new HttpResult<>(exception.getCode(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {AuthorizationException.class})
+    public HttpResult<?> handleRuntimeException(AuthorizationException exception) {
+        return new HttpResult<>(exception.getCode(), exception.getMessage());
     }
 
 }

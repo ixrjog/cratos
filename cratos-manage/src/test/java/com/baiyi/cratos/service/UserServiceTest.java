@@ -22,7 +22,7 @@ public class UserServiceTest extends BaseUnit {
                 .username("baiyi-test")
                 .email("xxx@qq.com")
                 .displayName("白衣")
-                .isActive(true)
+                .valid(true)
                 .otp(0)
                 .name("白衣")
                 .password("123456")

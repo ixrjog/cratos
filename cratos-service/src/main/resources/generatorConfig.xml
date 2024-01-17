@@ -93,8 +93,27 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
+        <table tableName="rbac_group">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
 
-        <table tableName="user_token">
+        <table tableName="rbac_resource">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="rbac_role">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="rbac_role_menu">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="rbac_role_resource">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+        <table tableName="rbac_user_role">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
 

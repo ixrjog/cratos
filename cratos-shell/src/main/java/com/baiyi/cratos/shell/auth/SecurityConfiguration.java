@@ -24,7 +24,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * Security configuration
@@ -33,16 +32,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = false)
 public class SecurityConfiguration {
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.cors().disable().authorizeHttpRequests()
-                .requestMatchers("**")
-                .permitAll()
-                .and()
-                .authenticationManager(authManager);
-        return http.build();
-    }
 
     /**
      * 过滤掉所有请求，不使用SpringSecurity认证

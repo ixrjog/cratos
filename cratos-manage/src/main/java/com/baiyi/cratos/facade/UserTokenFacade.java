@@ -13,4 +13,13 @@ public interface UserTokenFacade {
 
     UserToken getByToken(String token);
 
+    /**
+     * 验证令牌，如果令牌过期会将令牌置为无效
+     * @param token
+     * @return
+     */
+    UserToken verifyToken(String token);
+
+    boolean verifyResourceAuthorizedToToken(String token, String resource);
+
 }

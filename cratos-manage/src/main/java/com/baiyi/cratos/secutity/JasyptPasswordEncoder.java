@@ -31,5 +31,5 @@ public class JasyptPasswordEncoder implements PasswordEncoder {
         String pw = stringEncryptor.decrypt(encodedPassword);
         return rawPassword.equals(pw);
     }
-    
+
 }

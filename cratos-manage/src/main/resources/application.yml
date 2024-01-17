@@ -4,12 +4,12 @@ spring:
     version: 1.0.0
   threads:
     virtual:
-      enabled: true
+      enabled: on
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   jmx:
-    enabled: false
+    enabled: off
   profiles:
     active: '@env@'
   thymeleaf:
@@ -17,7 +17,7 @@ spring:
   # 关闭控制台
   shell:
     interactive:
-      enabled: false
+      enabled: off
 
 # 开发环境配置
 server:
@@ -29,21 +29,34 @@ server:
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
-    accept-count: 200
-    max-connections: 400
+    accept-count: 100
+    max-connections: 200
     max-http-form-post-size: 209715200
     threads:
       # tomcat最大线程数，默认为200
-      max: 400
+      max: 200
       # Tomcat启动初始化的线程数，默认值25
       min-spare: 25
+
+cratos:
+  auth:
+    white:
+      resources:
+        - /*.js
+        - /*.css
+        - /*.jpg
+        - /*.ico
+        - /swagger-resources
+        - /swagger-ui.html
+        - /v3/api-docs
+        - /doc.html
 
 mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
-  not-empty: true
+  not-empty: on
   identity: MYSQL
-  before: false
+  before: off
 
 pagehelper:
   helper-dialect: mysql

@@ -33,7 +33,7 @@ public class CertificateParam {
         private String certificateType;
 
         @Schema(description = "有效")
-        private Boolean isActive;
+        private Boolean valid;
 
         @Schema(description = "算法")
         private String keyAlgorithm;
@@ -69,7 +69,7 @@ public class CertificateParam {
         private String certificateType;
 
         @Schema(description = "有效")
-        private Boolean isActive;
+        private Boolean valid;
 
         @Schema(description = "算法")
         private String keyAlgorithm;

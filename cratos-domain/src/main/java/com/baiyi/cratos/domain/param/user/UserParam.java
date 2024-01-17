@@ -45,7 +45,7 @@ public class UserParam {
 
         private String email;
 
-        private Boolean isActive;
+        private Boolean valid;
 
         private Date lastLogin;
 

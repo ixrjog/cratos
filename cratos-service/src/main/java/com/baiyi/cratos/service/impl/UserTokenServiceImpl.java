@@ -41,6 +41,11 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
+    public int countResourcesAuthorizedByToken(String token, String resource) {
+        return userTokenMapper.countResourcesAuthorizedByToken(token, resource);
+    }
+
+    @Override
     public UserTokenMapper getMapper() {
         return userTokenMapper;
     }

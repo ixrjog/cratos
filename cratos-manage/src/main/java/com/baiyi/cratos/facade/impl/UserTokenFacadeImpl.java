@@ -1,7 +1,9 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.TokenGenerator;
+import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.service.UserTokenService;
@@ -32,7 +34,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
         return issueNewToken(username);
     }
 
-    private void revokeToken(String username){
+    private void revokeToken(String username) {
         List<UserToken> userTokens = userTokenService.queryValidTokenByUsername(username);
         if (!CollectionUtils.isEmpty(userTokens)) {
             userTokens.forEach(t -> {
@@ -57,8 +59,34 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
     }
 
     @Override
-    public UserToken getByToken(String token){
-       return userTokenService.getByToken(token);
+    public UserToken getByToken(String token) {
+        return userTokenService.getByToken(token);
+    }
+
+    @Override
+    public UserToken verifyToken(String token) {
+        UserToken userToken = getByToken(token);
+        if (userToken == null) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
+        }
+        if (ExpiredUtil.isExpired(userToken.getExpiredTime())) {
+            revokeToken(userToken);
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_TOKEN_EXPIRED);
+        }
+        return userToken;
+    }
+
+    private void revokeToken(UserToken userToken) {
+        UserToken updateUserToken = UserToken.builder()
+                .id(userToken.getId())
+                .valid(false)
+                .build();
+        userTokenService.updateByPrimaryKeySelective(updateUserToken);
+    }
+
+    @Override
+    public boolean verifyResourceAuthorizedToToken(String token, String resource) {
+        return userTokenService.countResourcesAuthorizedByToken(token, resource) > 0;
     }
 
 }
