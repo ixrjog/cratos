@@ -36,10 +36,6 @@ public class TagParam {
 
         private String comment;
 
-        @Override
-        public Class<Tag> getTargetClazz() {
-            return Tag.class;
-        }
     }
 
     @Data
@@ -63,11 +59,6 @@ public class TagParam {
         private Boolean valid;
 
         private String comment;
-
-        @Override
-        public Class<Tag> getTargetClazz() {
-            return Tag.class;
-        }
 
     }
 

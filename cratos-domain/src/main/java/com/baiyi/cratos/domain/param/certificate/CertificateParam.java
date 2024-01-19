@@ -46,10 +46,6 @@ public class CertificateParam {
 
         private String comment;
 
-        @Override
-        public Class<Certificate> getTargetClazz() {
-            return Certificate.class;
-        }
     }
 
     @Data
@@ -81,11 +77,6 @@ public class CertificateParam {
         private Date notAfter;
 
         private String comment;
-
-        @Override
-        public Class<Certificate> getTargetClazz() {
-            return Certificate.class;
-        }
 
     }
 

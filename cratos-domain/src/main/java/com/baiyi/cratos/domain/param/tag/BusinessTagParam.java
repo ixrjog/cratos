@@ -24,11 +24,6 @@ public class BusinessTagParam {
 
         private String tagValue;
 
-        @Override
-        public Class<BusinessTag> getTargetClazz() {
-            return BusinessTag.class;
-        }
-
     }
 
     @Data
@@ -44,11 +39,6 @@ public class BusinessTagParam {
         private Integer tagId;
 
         private String tagValue;
-
-        @Override
-        public Class<BusinessTag> getTargetClazz() {
-            return BusinessTag.class;
-        }
 
     }
 
