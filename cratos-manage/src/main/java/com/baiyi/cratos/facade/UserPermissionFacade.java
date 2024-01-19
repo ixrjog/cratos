@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public interface UserPermissionFacade {
 
+    boolean verify(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum);
+
     void revokeUserBusinessPermission(String username, BaseBusiness.IBusiness business);
 
     void grantUserBusinessPermission(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime);

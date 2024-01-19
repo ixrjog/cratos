@@ -32,6 +32,13 @@
             <version>4.5.14</version>
         </dependency>
 
+        <!-- OPT -->
+        <dependency>
+            <groupId>com.eatthepath</groupId>
+            <artifactId>java-otp</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

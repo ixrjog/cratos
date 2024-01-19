@@ -20,4 +20,21 @@
 ```
 
 
+#### 反射说明
 
++ 获取范型接口实现类的对象类型
+```Java
+public interface IToTarget<T> {
+
+    default T toTarget() {
+        return BeanCopierUtil.copyProperties(this, getTargetClazz());
+    }
+
+    default Class<T> getTargetClazz() {
+        //  return (Class<T>) AopUtils.getTargetClass(this).getAnnotation(TargetClazz.class).clazz();
+        // 反射获取范型T的具体类型
+        return Generics.find(this.getClass(), IToTarget.class, 0);
+    }
+
+}
+```

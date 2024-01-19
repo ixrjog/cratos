@@ -14,6 +14,7 @@ public interface IToTarget<T> {
         return BeanCopierUtil.copyProperties(this, getTargetClazz());
     }
 
+    @SuppressWarnings("unchecked")
     default Class<T> getTargetClazz() {
         //  return (Class<T>) AopUtils.getTargetClass(this).getAnnotation(TargetClazz.class).clazz();
         // 反射获取范型T的具体类型

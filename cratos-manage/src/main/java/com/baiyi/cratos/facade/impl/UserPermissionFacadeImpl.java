@@ -21,9 +21,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     private final UserPermissionService userPermissionService;
 
-    private static final String ROLE_BASE = "BASE";
-    private static final String ROLE_OWNER = "OWNER";
-
+    @Override
     public boolean verify(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum) {
         UserPermission uniqueKey = UserPermission.builder()
                 .username(username)
@@ -31,7 +29,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .businessId(business.getBusinessId())
                 .build();
         UserPermission userPermission = userPermissionService.getByUniqueKey(uniqueKey);
-
         try {
             PermissionRoleEnum roleEnum = PermissionRoleEnum.valueOf(userPermission.getPermissionRole()
                     .toUpperCase());
@@ -40,6 +37,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
             }
             return roleEnum.getCode() > permissionRoleEnum.getCode();
         } catch (IllegalArgumentException e) {
+            // 枚举类转换错误
             return false;
         }
     }

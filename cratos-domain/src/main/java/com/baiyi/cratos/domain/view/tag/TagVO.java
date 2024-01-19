@@ -47,7 +47,7 @@ public class TagVO {
          */
         private String color;
 
-        private Integer promptColor;
+        private String promptColor;
 
         /**
          * 顺序
