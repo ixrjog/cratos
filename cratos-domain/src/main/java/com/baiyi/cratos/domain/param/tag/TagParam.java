@@ -20,7 +20,7 @@ public class TagParam {
     @Schema
     public static class AddTag implements IToTarget<Tag> {
 
-        private Integer tagType;
+        private String tagType;
 
         private String tagKey;
 
@@ -48,7 +48,7 @@ public class TagParam {
 
         private Integer id;
 
-        private Integer tagType;
+        private String tagType;
 
         private String tagKey;
 
