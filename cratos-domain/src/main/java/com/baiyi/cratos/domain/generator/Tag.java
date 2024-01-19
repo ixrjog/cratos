@@ -39,7 +39,7 @@ public class Tag {
      * 终端提示色
      */
     @Column(name = "prompt_color")
-    private Integer promptColor;
+    private String promptColor;
 
     /**
      * 顺序

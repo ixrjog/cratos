@@ -1,7 +1,5 @@
 package com.baiyi.cratos.service.impl;
 
-import com.baiyi.cratos.domain.annotation.BusinessType;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.mapper.UserTokenMapper;
 import com.baiyi.cratos.service.UserTokenService;
@@ -18,7 +16,6 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-@BusinessType(type = BusinessTypeEnum.USER)
 public class UserTokenServiceImpl implements UserTokenService {
 
     private final UserTokenMapper userTokenMapper;

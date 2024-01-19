@@ -28,7 +28,7 @@ public class TagParam {
 
         private String color;
 
-        private Integer promptColor;
+        private String promptColor;
 
         private Integer seq;
 
@@ -56,7 +56,7 @@ public class TagParam {
 
         private String color;
 
-        private Integer promptColor;
+        private String promptColor;
 
         private Integer seq;
 
