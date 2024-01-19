@@ -31,4 +31,6 @@ public class CredentialFacadeImpl implements CredentialFacade {
         return credentialWrapper.wrapToTarget(table);
     }
 
+    // 查询用户有效的凭据
+
 }

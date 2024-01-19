@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.SensitiveType;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
+import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,11 +32,13 @@ public class UserVO {
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class User extends BaseVO implements BaseBusiness.IBusinessAnnotate,
             // Business
-            BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs,
+            BusinessTagVO.IBusinessTags,
+            BusinessDocVO.IBusinessDocs,
+            RbacRoleVO.IRbacRoles,
             Serializable {
 
         @Serial
-        private static final long serialVersionUID = 7558634705508664148L;
+        private static final long serialVersionUID = 7642003154901654181L;
 
         private Integer id;
 
@@ -79,10 +82,13 @@ public class UserVO {
         }
 
         @Schema(description = "Business Tags")
-        List<BusinessTagVO.BusinessTag> businessTags;
+        private List<BusinessTagVO.BusinessTag> businessTags;
 
         @Schema(description = "Business Docs")
-        List<BusinessDocVO.BusinessDoc> businessDocs;
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
+
+        @Schema(description = "Rbac Roles")
+        private List<RbacRoleVO.Role> rbacRoles;
 
     }
 

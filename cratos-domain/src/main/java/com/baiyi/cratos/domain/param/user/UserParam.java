@@ -66,6 +66,15 @@ public class UserParam {
     @Data
     @Schema
     @Builder
+    public static class ResetPassword {
+
+        private String password;
+
+    }
+
+    @Data
+    @Schema
+    @Builder
     public static class UpdatePassword {
 
         private String username;

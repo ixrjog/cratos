@@ -1,8 +1,9 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Table(name = "rbac_user_role")
@@ -22,9 +23,9 @@ public class RbacUserRole {
     @Column(name = "role_id")
     private Integer roleId;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 }

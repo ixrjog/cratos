@@ -1,37 +1,29 @@
 package com.baiyi.cratos.domain.generator;
 
+import java.util.Date;
+import javax.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.Date;
-
 @Data
-@Table(name = "tag")
-public class Tag {
+public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
-     * 标签类型
+     * 环境名称
      */
-    @Column(name = "tag_type")
-    private String tagType;
+    @Column(name = "env_name")
+    private String envName;
 
     /**
-     * 标签Key
+     * 环境类型
      */
-    @Column(name = "tag_key")
-    private String tagKey;
+    @Column(name = "env_type")
+    private Integer envType;
 
     /**
-     * 标签值
-     */
-    @Column(name = "tag_value")
-    private String tagValue;
-
-    /**
-     * 颜色
+     * 环境色
      */
     private String color;
 
@@ -53,9 +45,9 @@ public class Tag {
 
     private String comment;
 
-    @Column(name = "create_time", insertable = false, updatable = false)
+    @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", insertable = false, updatable = false)
+    @Column(name = "update_time")
     private Date updateTime;
 }

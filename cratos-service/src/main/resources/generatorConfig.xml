@@ -17,6 +17,12 @@
             <property name="lombok" value="Data"/>
         </plugin>
 
+<!--        <plugin type="com.mybatis.extend.generator.plugin.ColumnOverridePlugin">-->
+<!--            &lt;!&ndash;            <property name="column=isactive" value="javaProperty=isActive,insertable=false"/>&ndash;&gt;-->
+<!--            <property name="column=create_time" value="javaProperty=createTime,insertable=false,updatable=false"/>-->
+<!--            <property name="column=update_time" value="javaProperty=updateTime,insertable=false,updatable=false"/>-->
+<!--        </plugin>-->
+
         <commentGenerator>
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true"/>
@@ -93,30 +99,9 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="rbac_group">
+        <table tableName="user_permission">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
-
-        <table tableName="rbac_resource">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="rbac_role">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="rbac_role_menu">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="rbac_role_resource">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
-        <table tableName="rbac_user_role">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
-        </table>
-
     </context>
 
 </generatorConfiguration>

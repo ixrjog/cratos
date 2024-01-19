@@ -15,6 +15,11 @@ public enum BusinessTypeEnum {
     // 凭据
     CREDENTIAL,
     BUSINESS_CREDENTIAL,
-    USER
+    USER,
+
+    // RBAC
+
+    RBAC_ROLE
+
 
 }

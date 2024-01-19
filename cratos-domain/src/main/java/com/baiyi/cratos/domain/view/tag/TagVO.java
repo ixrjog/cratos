@@ -36,7 +36,7 @@ public class TagVO {
 
         private Integer id;
 
-        private Integer tagType;
+        private String tagType;
 
         private String tagKey;
 
