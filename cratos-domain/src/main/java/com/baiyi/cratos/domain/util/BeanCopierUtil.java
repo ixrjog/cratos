@@ -30,7 +30,6 @@ public class BeanCopierUtil {
         if (source == null) {
             return null;
         }
-
         String beanKey = generateKey(source.getClass(), targetClazz);
         BeanCopier copier;
         if (!BEAN_COPIER_MAP.containsKey(beanKey)) {
@@ -39,7 +38,6 @@ public class BeanCopierUtil {
         } else {
             copier = BEAN_COPIER_MAP.get(beanKey);
         }
-
         T targetObject;
         try {
             // targetObject = targetClass.newInstance();
@@ -47,11 +45,8 @@ public class BeanCopierUtil {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-
         copier.copy(source, targetObject, null);
-
         return targetObject;
-
     }
 
     /**
@@ -60,14 +55,11 @@ public class BeanCopierUtil {
      * @throws Exception
      */
     public static <T> List<T> copyListProperties(List<?> source, Class<T> targetClass) {
-
         if (CollectionUtils.isEmpty(source)) {
             return new ArrayList<>();
         }
-
         List<T> target = new ArrayList<T>();
         for (Object obj : source) {
-
             T targetObject;
             try {
                 // targetObject = targetClass.newInstance();
@@ -76,10 +68,8 @@ public class BeanCopierUtil {
                 throw new RuntimeException(e);
             }
             copyProperties(obj, targetObject);
-
             target.add(targetObject);
         }
-
         return target;
     }
 
@@ -102,7 +92,6 @@ public class BeanCopierUtil {
             copier = BEAN_COPIER_MAP.get(beanKey);
         }
         copier.copy(source, target, null);
-
     }
 
     private static String generateKey(Class<?> class1, Class<?> class2) {
