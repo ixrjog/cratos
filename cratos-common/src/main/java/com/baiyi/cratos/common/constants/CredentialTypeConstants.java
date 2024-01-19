@@ -27,7 +27,9 @@ public enum CredentialTypeConstants {
     KUBE_CONFIG("Kubeconfig"),
     // SSL 证书（Pem/Key）
     SSL_CERTIFICATES("SSL certificates"),
-    OTP("OTP");
+    OTP("OTP"),
+    // 字典
+    DICTIONARY("Dictionary");
 
     private final String displayName;
 
