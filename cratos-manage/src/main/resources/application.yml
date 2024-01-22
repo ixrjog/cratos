@@ -1,3 +1,4 @@
+#file: noinspection SpringBootApplicationYaml
 spring:
   application:
     name: cratos
@@ -42,9 +43,11 @@ cratos:
   auth:
     white:
       resources:
+        # 前缀匹配
         - /swagger-resources
         - /swagger-ui/
         - /v3/api-docs
+        - /api/log/login
 
 mapper:
   mappers:

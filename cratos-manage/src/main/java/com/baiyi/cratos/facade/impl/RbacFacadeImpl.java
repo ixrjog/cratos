@@ -32,7 +32,7 @@ public class RbacFacadeImpl implements RbacFacade {
         }
         RbacResource rbacResource = rbacResourceFacade.getByResource(resource);
         if (rbacResource == null) {
-            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST);
+            throw new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST);
         }
         if (!rbacResource.getValid()) {
             // 登录用户即可访问
