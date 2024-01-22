@@ -53,7 +53,10 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         // 开发者模式关闭鉴权
-        if(!Optional.of(cratosConfiguration).map(CratosConfiguration::getAuth).map(CratosConfiguration.Auth::getEnabled).orElse(true)){
+        if (!Optional.of(cratosConfiguration)
+                .map(CratosConfiguration::getAuth)
+                .map(CratosConfiguration.Auth::getEnabled)
+                .orElse(true)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -69,12 +72,18 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
             filterChain.doFilter(request, response);
-        } catch (AuthenticationException | AuthorizationException ex) {
-            response.setContentType("application/json;charset=UTF-8");
-            //setHeaders(request, response);
-            response.getWriter()
-                    .println(objectMapper.writeValueAsString(new HttpResult<>(ex)));
+        } catch (AuthenticationException authenticationException) {
+            exceptionResultHandle(response, HttpServletResponse.SC_UNAUTHORIZED, new HttpResult<>(new HttpResult<>(authenticationException)));
+        } catch (AuthorizationException authorizationException) {
+            exceptionResultHandle(response, HttpServletResponse.SC_FORBIDDEN, new HttpResult<>(authorizationException));
         }
+    }
+
+    private void exceptionResultHandle(HttpServletResponse response, int status, HttpResult<?> httpResult) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(status);
+        response.getWriter()
+                .println(objectMapper.writeValueAsString(httpResult));
     }
 
 }
