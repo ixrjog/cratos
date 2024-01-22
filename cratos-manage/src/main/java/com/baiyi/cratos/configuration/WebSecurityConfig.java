@@ -31,6 +31,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+
+
         http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(new AntPathRequestMatcher("**"))
                         .permitAll()
                         .anyRequest()

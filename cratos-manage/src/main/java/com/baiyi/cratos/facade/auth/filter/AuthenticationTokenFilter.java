@@ -73,13 +73,15 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                     .setAuthentication(usernamePasswordAuthenticationToken);
             filterChain.doFilter(request, response);
         } catch (AuthenticationException authenticationException) {
-            exceptionResultHandle(response, HttpServletResponse.SC_UNAUTHORIZED, new HttpResult<>(authenticationException));
+            // 认证
+            handleExceptionResult(response, HttpServletResponse.SC_UNAUTHORIZED, new HttpResult<>(authenticationException));
         } catch (AuthorizationException authorizationException) {
-            exceptionResultHandle(response, HttpServletResponse.SC_FORBIDDEN, new HttpResult<>(authorizationException));
+            // 授权
+            handleExceptionResult(response, HttpServletResponse.SC_FORBIDDEN, new HttpResult<>(authorizationException));
         }
     }
 
-    private void exceptionResultHandle(HttpServletResponse response, int status, HttpResult<Exception> httpResult) throws IOException {
+    private void handleExceptionResult(HttpServletResponse response, int status, HttpResult<Exception> httpResult) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(status);
         response.getWriter()
