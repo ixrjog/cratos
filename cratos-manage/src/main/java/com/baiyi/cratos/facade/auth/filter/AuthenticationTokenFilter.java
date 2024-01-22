@@ -79,7 +79,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         }
     }
 
-    private void exceptionResultHandle(HttpServletResponse response, int status, HttpResult<?> httpResult) throws IOException {
+    private void exceptionResultHandle(HttpServletResponse response, int status, HttpResult<Exception> httpResult) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(status);
         response.getWriter()
