@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import static com.baiyi.cratos.common.constants.Global.AUTHORIZATION;
  * @Date 2024/1/16 11:13
  * @Version 1.0
  */
+@Slf4j
 @Component
 @AllArgsConstructor
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
@@ -71,6 +73,9 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userToken.getUsername(), null);
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
+            log.debug("Login username={}", SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getName());
             filterChain.doFilter(request, response);
         } catch (AuthenticationException authenticationException) {
             // 认证

@@ -59,7 +59,7 @@ public class AuthFacadeImpl implements AuthFacade {
     public void logout() {
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
-        String username = (String) authentication.getPrincipal();
+        String username = authentication.getName();
         if (StringUtils.hasText(username)) {
             userTokenFacade.logout(username);
         }

@@ -42,14 +42,9 @@ cratos:
   auth:
     white:
       resources:
-        - /*.js
-        - /*.css
-        - /*.jpg
-        - /*.ico
         - /swagger-resources
-        - /swagger-ui.html
+        - /swagger-ui/
         - /v3/api-docs
-        - /doc.html
 
 mapper:
   mappers:
