@@ -11,6 +11,8 @@ public interface UserTokenFacade {
 
     UserToken revokeAndIssueNewToken(String username);
 
+    void logout(String username);
+
     UserToken getByToken(String token);
 
     /**

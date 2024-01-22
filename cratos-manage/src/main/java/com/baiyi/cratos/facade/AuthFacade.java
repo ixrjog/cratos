@@ -12,4 +12,6 @@ public interface AuthFacade {
 
     LoginVO.Login login(LoginParam.Login loginParam);
 
+    void logout();
+
 }

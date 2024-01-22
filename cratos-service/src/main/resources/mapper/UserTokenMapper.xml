@@ -10,6 +10,7 @@
         <result column="token" jdbcType="CHAR" property="token"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>

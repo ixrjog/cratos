@@ -30,17 +30,23 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
 
     @Transactional(rollbackFor = {Exception.class})
     public UserToken revokeAndIssueNewToken(String username) {
-        revokeToken(username);
+        revokeToken(username,"Login revocation token");
         return issueNewToken(username);
     }
 
-    private void revokeToken(String username) {
+    @Transactional(rollbackFor = {Exception.class})
+    public void logout(String username) {
+        revokeToken(username,"Logout");
+    }
+
+    private void revokeToken(String username, String comment) {
         List<UserToken> userTokens = userTokenService.queryValidTokenByUsername(username);
         if (!CollectionUtils.isEmpty(userTokens)) {
             userTokens.forEach(t -> {
                 UserToken userToken = UserToken.builder()
                         .id(t.getId())
                         .valid(false)
+                        .comment(comment)
                         .build();
                 userTokenService.updateByPrimaryKeySelective(userToken);
             });
@@ -80,6 +86,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
         UserToken updateUserToken = UserToken.builder()
                 .id(userToken.getId())
                 .valid(false)
+                .comment("Token expiration")
                 .build();
         userTokenService.updateByPrimaryKeySelective(updateUserToken);
     }

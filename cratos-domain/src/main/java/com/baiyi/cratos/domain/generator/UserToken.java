@@ -29,6 +29,8 @@ public class UserToken {
      */
     private Boolean valid;
 
+    private String comment;
+
     @Column(name = "expired_time")
     private Date expiredTime;
 

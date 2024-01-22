@@ -4,6 +4,11 @@ import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
 
+/**
+ * 表名：test
+ * 表注释：`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ *           `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+*/
 @Data
 public class Test {
     @Id
@@ -47,7 +52,4 @@ public class Test {
 
     @Column(name = "create_time")
     private Date createTime;
-
-    @Column(name = "update_time")
-    private Date updateTime;
 }

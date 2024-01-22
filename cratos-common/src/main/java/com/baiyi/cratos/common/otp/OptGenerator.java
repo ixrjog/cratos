@@ -66,7 +66,7 @@ public class OptGenerator {
      * @return
      * @throws OtpException.DecodingException
      */
-    public static SecretKey toKey(String otpSecretKeyStr) throws OtpException.DecodingException {
+    public static SecretKey of(String otpSecretKeyStr) throws OtpException.DecodingException {
         return new SecretKeySpec(Base32StringUtil.decode(otpSecretKeyStr), "HmacSHA1");
     }
 

@@ -40,7 +40,6 @@ public class BeanCopierUtil {
         }
         T targetObject;
         try {
-            // targetObject = targetClass.newInstance();
             targetObject = targetClazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
