@@ -43,11 +43,6 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
-    public UserTokenMapper getMapper() {
-        return userTokenMapper;
-    }
-
-    @Override
     public UserToken getByUniqueKey(UserToken userToken) {
         return getByToken(userToken.getToken());
     }

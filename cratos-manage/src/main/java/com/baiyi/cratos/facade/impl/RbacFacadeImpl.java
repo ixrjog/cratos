@@ -1,12 +1,15 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.constants.AccessLevel;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.RbacResource;
+import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
+import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +28,8 @@ public class RbacFacadeImpl implements RbacFacade {
     private final RbacResourceFacade rbacResourceFacade;
     private final UserTokenFacade userTokenFacade;
 
+    private final RbacRoleFacade rbacRoleFacade;
+
     @Override
     public void verifyResourceAccessPermissions(String token, String resource) {
         if (!StringUtils.hasText(token)) {
@@ -39,10 +44,19 @@ public class RbacFacadeImpl implements RbacFacade {
             return;
         }
         // 校验用户是否可以访问资源路径
-        // TODO 管理员跳过验证
         if (!userTokenFacade.verifyResourceAuthorizedToToken(token, resource)) {
-            throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);
+            // TODO 管理员跳过验证
+            if (!verifyRoleAccessLevel(AccessLevel.ADMIN, token)) {
+                throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);
+            }
         }
+    }
+
+    public boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token) {
+        UserToken userToken = userTokenFacade.verifyToken(token);
+        // TODO
+        return false;
+
     }
 
 }

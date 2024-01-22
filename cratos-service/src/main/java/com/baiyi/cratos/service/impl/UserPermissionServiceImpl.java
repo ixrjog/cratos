@@ -19,11 +19,6 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionMapper userPermissionMapper;
 
     @Override
-    public UserPermissionMapper getMapper() {
-        return userPermissionMapper;
-    }
-
-    @Override
     public UserPermission getByUniqueKey(UserPermission userPermission) {
         Example example = new Example(UserPermission.class);
         Example.Criteria criteria = example.createCriteria();

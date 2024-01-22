@@ -26,11 +26,6 @@ public class CredentialServiceImpl implements CredentialService {
     private final CredentialMapper credentialMapper;
 
     @Override
-    public CredentialMapper getMapper() {
-        return credentialMapper;
-    }
-
-    @Override
     public DataTable<Credential> queryCredentialPage(CredentialParam.CredentialPageQuery pageQuery) {
         Page<Certificate> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<Credential> data = credentialMapper.queryPageByParam(pageQuery);

@@ -30,11 +30,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserMapper getMapper() {
-        return userMapper;
-    }
-
-    @Override
     public DataTable<User> queryUserPage(UserParam.UserPageQuery pageQuery) {
         Page<User> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<User> data = userMapper.queryPageByParam(pageQuery);

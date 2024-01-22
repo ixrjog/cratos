@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.util;
+package com.baiyi.cratos.domain.util;
 
 import lombok.NonNull;
 import org.springframework.beans.BeansException;
@@ -23,6 +23,10 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     public static <T> T getBean(Class<T> clazz) {
         return context.getBean(clazz);
+    }
+
+    public static Object getBean(String name) {
+        return context.getBean(name);
     }
 
     // 获取当前环境

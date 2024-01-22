@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper.base;
 
 import com.baiyi.cratos.common.Converter;
-import com.baiyi.cratos.common.util.SpringContextUtil;
+import com.baiyi.cratos.domain.util.SpringContextUtil;
 import com.baiyi.cratos.domain.DataTable;
 import lombok.extern.slf4j.Slf4j;
 

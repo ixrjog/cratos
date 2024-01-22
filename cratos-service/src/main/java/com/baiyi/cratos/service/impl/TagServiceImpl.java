@@ -25,11 +25,6 @@ public class TagServiceImpl implements TagService {
     private final TagMapper tagMapper;
 
     @Override
-    public TagMapper getMapper() {
-        return tagMapper;
-    }
-
-    @Override
     public DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery) {
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         Example example = new Example(Tag.class);

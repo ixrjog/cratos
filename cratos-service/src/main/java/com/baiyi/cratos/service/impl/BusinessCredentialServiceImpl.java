@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -50,11 +49,6 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
             credentialService.deleteById(credential.getId());
         }
         deleteById(businessCredential.getId());
-    }
-
-    @Override
-    public Mapper<BusinessCredential> getMapper() {
-        return businessCredentialMapper;
     }
 
     @Override

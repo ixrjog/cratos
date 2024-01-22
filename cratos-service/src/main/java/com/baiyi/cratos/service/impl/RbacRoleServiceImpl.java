@@ -2,7 +2,6 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
-import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
 import com.baiyi.cratos.mapper.RbacRoleMapper;
 import com.baiyi.cratos.service.RbacRoleService;
@@ -29,11 +28,6 @@ public class RbacRoleServiceImpl implements RbacRoleService {
         Page<RbacRole> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<RbacRole> data = rbacRoleMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
-    }
-
-    @Override
-    public RbacRoleMapper getMapper() {
-        return rbacRoleMapper;
     }
 
 }

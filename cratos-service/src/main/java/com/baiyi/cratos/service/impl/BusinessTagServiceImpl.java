@@ -27,11 +27,6 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     private final BusinessTagMapper businessTagMapper;
 
     @Override
-    public BusinessTagMapper getMapper() {
-        return businessTagMapper;
-    }
-
-    @Override
     public List<BusinessTag> selectByBusiness(BaseBusiness.IBusiness business) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();

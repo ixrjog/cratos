@@ -2,6 +2,8 @@ package com.baiyi.cratos.service.base;
 
 import com.baiyi.cratos.annotation.DomainDecrypt;
 import com.baiyi.cratos.annotation.DomainEncrypt;
+import com.baiyi.cratos.domain.util.SpringContextUtil;
+import org.apache.commons.lang3.StringUtils;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
@@ -11,9 +13,16 @@ import java.util.List;
  * @Date 2024/1/2 16:06
  * @Version 1.0
  */
+
 public interface BaseService<T, M extends Mapper<T>> {
 
-    M getMapper();
+    @SuppressWarnings("unchecked")
+    default M getMapper() {
+        final String mapperBeanName = StringUtils.uncapitalize(this.getClass()
+                .getSimpleName()
+                .replace("ServiceImpl", "Mapper"));
+        return (M) SpringContextUtil.getBean(mapperBeanName);
+    }
 
     @DomainEncrypt
     default void add(T t) {

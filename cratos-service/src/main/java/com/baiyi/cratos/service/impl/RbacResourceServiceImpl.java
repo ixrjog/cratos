@@ -19,11 +19,6 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     private final RbacResourceMapper rbacResourceMapper;
 
     @Override
-    public RbacResourceMapper getMapper() {
-        return rbacResourceMapper;
-    }
-
-    @Override
     public RbacResource getByUniqueKey(RbacResource rbacResource) {
         Example example = new Example(RbacResource.class);
         Example.Criteria criteria = example.createCriteria();

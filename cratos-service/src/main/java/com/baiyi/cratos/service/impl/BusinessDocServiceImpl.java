@@ -27,11 +27,6 @@ public class BusinessDocServiceImpl implements BusinessDocService {
     private final BusinessDocumentMapper businessDocumentMapper;
 
     @Override
-    public BusinessDocumentMapper getMapper() {
-        return businessDocumentMapper;
-    }
-
-    @Override
     public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
         Example example = new Example(BusinessDocument.class);
         Example.Criteria criteria = example.createCriteria();

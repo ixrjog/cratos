@@ -29,11 +29,6 @@ public class CertificateServiceImpl implements CertificateService {
     private final CertificateMapper certificateMapper;
 
     @Override
-    public CertificateMapper getMapper() {
-        return certificateMapper;
-    }
-
-    @Override
     public void deleteByCertificateId(String certificateId) {
         Example example = new Example(Certificate.class);
         Example.Criteria criteria = example.createCriteria();
