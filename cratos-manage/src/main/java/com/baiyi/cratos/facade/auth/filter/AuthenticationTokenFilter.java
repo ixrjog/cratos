@@ -73,7 +73,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                     .setAuthentication(usernamePasswordAuthenticationToken);
             filterChain.doFilter(request, response);
         } catch (AuthenticationException authenticationException) {
-            exceptionResultHandle(response, HttpServletResponse.SC_UNAUTHORIZED, new HttpResult<>(new HttpResult<>(authenticationException)));
+            exceptionResultHandle(response, HttpServletResponse.SC_UNAUTHORIZED, new HttpResult<>(authenticationException));
         } catch (AuthorizationException authorizationException) {
             exceptionResultHandle(response, HttpServletResponse.SC_FORBIDDEN, new HttpResult<>(authorizationException));
         }
