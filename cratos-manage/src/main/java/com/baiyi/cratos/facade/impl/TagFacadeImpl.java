@@ -1,10 +1,12 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.facade.TagFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.TagWrapper;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 public class TagFacadeImpl implements TagFacade {
 
     private final TagService tagService;
+
+    private final BusinessTagService businessTagService;
 
     private final TagWrapper tagWrapper;
 
@@ -42,8 +46,12 @@ public class TagFacadeImpl implements TagFacade {
     }
 
     @Override
-    public void deleteById(int id) {
-        tagService.deleteById(id);
+    public void deleteById(int tagId) {
+        int count = businessTagService.selectCountByTagId(tagId);
+        if (count > 0) {
+            throw new BusinessException("Business object in use count={}.", count);
+        }
+        tagService.deleteById(tagId);
     }
 
 }

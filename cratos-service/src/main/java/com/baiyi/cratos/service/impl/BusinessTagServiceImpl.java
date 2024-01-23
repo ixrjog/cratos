@@ -41,13 +41,21 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public BusinessTag getByUniqueKey(BusinessTag businessTag){
+    public BusinessTag getByUniqueKey(BusinessTag businessTag) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", businessTag.getBusinessType())
                 .andEqualTo("businessId", businessTag.getBusinessId())
-                .andEqualTo("tagId",businessTag.getTagId());
+                .andEqualTo("tagId", businessTag.getTagId());
         return businessTagMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public int selectCountByTagId(int tagId) {
+        Example example = new Example(BusinessTag.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("tagId", tagId);
+        return businessTagMapper.selectCountByExample(example);
     }
 
 }

@@ -11,4 +11,6 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
  */
 public interface BusinessTagService extends BaseBusinessService<BusinessTag>, BaseUniqueKeyService<BusinessTag> {
 
+    int selectCountByTagId(int tagId);
+
 }
