@@ -39,6 +39,13 @@ public class TagController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update tag valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setTagValidById(@RequestParam @Valid int id) {
+        tagFacade.setTagValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query tag")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TagVO.Tag>> queryTagPage(@RequestBody @Valid TagParam.TagPageQuery pageQuery) {

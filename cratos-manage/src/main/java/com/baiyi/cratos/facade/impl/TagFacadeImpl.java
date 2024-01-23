@@ -54,4 +54,9 @@ public class TagFacadeImpl implements TagFacade {
         tagService.deleteById(tagId);
     }
 
+    @Override
+    public void setTagValidById(int tagId) {
+        tagService.updateValidById(tagId);
+    }
+
 }

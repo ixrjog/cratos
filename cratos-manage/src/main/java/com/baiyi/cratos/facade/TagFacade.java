@@ -19,4 +19,6 @@ public interface TagFacade {
 
     void deleteById(int tagId);
 
+    void setTagValidById(int tagId);
+
 }

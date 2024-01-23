@@ -4,14 +4,14 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.mapper.TagMapper;
-import com.baiyi.cratos.service.base.BaseService;
+import com.baiyi.cratos.service.base.BaseValidService;
 
 /**
  * @Author baiyi
  * @Date 2024/1/2 13:28
  * @Version 1.0
  */
-public interface TagService extends BaseService<Tag, TagMapper> {
+public interface TagService extends BaseValidService<Tag, TagMapper> {
 
     DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery);
 
