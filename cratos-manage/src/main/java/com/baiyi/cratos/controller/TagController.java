@@ -45,4 +45,11 @@ public class TagController {
         return new HttpResult<>(tagFacade.queryTagPage(pageQuery));
     }
 
+    @Operation(summary = "Delete tag by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTagById(@RequestParam @Valid int id) {
+        tagFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

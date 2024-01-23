@@ -41,4 +41,9 @@ public class TagFacadeImpl implements TagFacade {
         return tagWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void deleteById(int id) {
+        tagService.deleteById(id);
+    }
+
 }

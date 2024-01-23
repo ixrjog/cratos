@@ -48,7 +48,12 @@ public class EncryptorTest extends BaseUnit {
 
     @Test
     void encryptPasswordTest(){
-        log.error(stringEncryptor.encrypt("IYMt^6h*yiD1u47*lwrtUy1v++87T!Pl"));
+        log.error(stringEncryptor.encrypt(""));
+    }
+
+    @Test
+    void decryptTest(){
+        log.error(stringEncryptor.decrypt(""));
     }
 
 }

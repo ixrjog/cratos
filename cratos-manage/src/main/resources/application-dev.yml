@@ -26,6 +26,17 @@ spring:
     username: cratos
     password: ENC(WsXO1UZ84J+HM5RKunlujJ6+BUyCdgvBov3uFNz8UZGEHqHPQrUaESfbZ3eLBbez)
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: r-d7obmf3lmgs0hpph5n.redis.eu-west-1.rds.aliyuncs.com
+      port: 6379
+      password: ENC(BVoGo8e0BvGmAW+LXzW1+ErFLXtWlavyAOzpLcDhLeUYGjD+DVdEVzSnkQacurQeCWPbqGmSWeU=)
+      jedis:
+        pool:
+          max-wait: 10000
+          max-idle: 20
+          max-active: 100
+          min-idle: 5
 
 jasypt:
   encryptor:

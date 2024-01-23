@@ -41,6 +41,7 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Reset user password")
     @PostMapping(value = "/password/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> resetUserPassword(@RequestBody @Valid UserParam.ResetPassword resetPassword) {
         // TODO

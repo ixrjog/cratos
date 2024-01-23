@@ -17,4 +17,6 @@ public interface TagFacade {
 
     DataTable<TagVO.Tag> queryTagPage(TagParam.TagPageQuery pageQuery);
 
+    void deleteById(int id);
+
 }
