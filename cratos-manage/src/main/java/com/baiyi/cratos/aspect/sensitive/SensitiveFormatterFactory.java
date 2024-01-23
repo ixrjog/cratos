@@ -20,7 +20,7 @@ public class SensitiveFormatterFactory {
 
     public static void register(SensitiveFormatter formatter) {
         CONTEXT.put(formatter.getSensitiveType(), formatter);
-        log.info("SensitiveFormatterFactory Registered: formatter={}, sensitiveType={}", formatter.getClass().getSimpleName(), formatter.getSensitiveType());
+        log.debug("SensitiveFormatterFactory Registered: formatter={}, sensitiveType={}", formatter.getClass().getSimpleName(), formatter.getSensitiveType());
     }
 
     public static SensitiveFormatter getFormatter(String sensitiveType) {
@@ -28,6 +28,10 @@ public class SensitiveFormatterFactory {
             return CONTEXT.get(sensitiveType);
         }
         return null;
+    }
+
+    public static void productList(){
+        // TODO
     }
 
 }

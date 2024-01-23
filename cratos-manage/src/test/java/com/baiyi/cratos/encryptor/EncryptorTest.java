@@ -7,6 +7,7 @@ import jakarta.annotation.Resource;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.jasypt.encryption.StringEncryptor;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -19,6 +20,9 @@ public class EncryptorTest extends BaseUnit {
 
     @Resource
     private EncryptDomainTest encryptDomainTest;
+
+    @Resource
+    private StringEncryptor stringEncryptor;
 
     @Data
     @Builder
@@ -40,6 +44,11 @@ public class EncryptorTest extends BaseUnit {
         EncryptDomain encryptDomain = EncryptDomain.builder().build();
         encryptDomainTest.doEncrypt(encryptDomain);
         log.info("After execution encryptDomain: {}", encryptDomain);
+    }
+
+    @Test
+    void encryptPasswordTest(){
+        log.error(stringEncryptor.encrypt("IYMt^6h*yiD1u47*lwrtUy1v++87T!Pl"));
     }
 
 }

@@ -1,5 +1,7 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.common.constants.AccessLevel;
+
 /**
  * @Author baiyi
  * @Date 2024/1/17 10:05
@@ -9,9 +11,18 @@ public interface RbacFacade {
 
     /**
      * 验证资源访问权限
+     *
      * @param token
      * @param resource
      */
-   void verifyResourceAccessPermissions(String token, String resource);
+    void verifyResourceAccessPermissions(String token, String resource);
+
+    /**
+     * 校验Token的访问级别
+     * @param accessLevel
+     * @param token
+     * @return
+     */
+    boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token);
 
 }

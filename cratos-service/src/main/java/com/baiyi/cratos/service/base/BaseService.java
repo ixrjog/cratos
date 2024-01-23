@@ -23,28 +23,34 @@ public interface BaseService<T, M extends Mapper<T>> {
         return (M) SpringContextUtil.getBean(mapperBeanName);
     }
 
+    // 方法映射
     @DomainEncrypt
     default void add(T t) {
         getMapper().insert(t);
     }
 
+    // 方法映射
     @DomainDecrypt
     default T getById(int id) {
         return getMapper().selectByPrimaryKey(id);
     }
 
+    // 方法映射
     default void updateByPrimaryKey(T t) {
         getMapper().updateByPrimaryKey(t);
     }
 
+    // 方法映射
     default void updateByPrimaryKeySelective(T t) {
         getMapper().updateByPrimaryKeySelective(t);
     }
 
+    // 方法映射
     default void deleteById(int id) {
         getMapper().deleteByPrimaryKey(id);
     }
 
+    // 方法映射
     default List<T> selectAll() {
         return getMapper().selectAll();
     }

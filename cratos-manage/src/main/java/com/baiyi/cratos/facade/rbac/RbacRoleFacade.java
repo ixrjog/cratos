@@ -1,8 +1,11 @@
 package com.baiyi.cratos.facade.rbac;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -12,5 +15,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 public interface RbacRoleFacade {
 
     DataTable<RbacRoleVO.Role> queryRolePage(RbacRoleParam.RolePageQuery pageQuery);
+
+    List<RbacRole> queryUserRole(String username);
 
 }

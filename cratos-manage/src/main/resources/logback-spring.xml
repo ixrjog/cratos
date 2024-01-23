@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- Spring Boot 默认日志配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!-- 日志文件输出位置 -->
+    <property name="LOG_PATH" value="./logs"/>
+    <!-- 日志文件名 -->
+    <property name="LOG_FILE" value="${LOG_PATH}/spring-boot.log"/>
+    <!-- 归档日志名 -->
+    <property name="FILE_NAME_PATTERN" value="${LOG_FILE}-%d{yyyyMMdd}.%i.gz"/>
+    <!-- 在启动时清除历史日志 -->
+    <property name="LOGBACK_ROLLINGPOLICY_CLEAN_HISTORY_ON_START" value="false"/>
+    <!-- 单个日志文件最大大小 -->
+    <property name="LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE" value="100MB"/>
+    <!-- 日志总大小 -->
+    <property name="LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP" value="0"/>
+    <!-- 日志保留天数 -->
+    <property name="LOGBACK_ROLLINGPOLICY_MAX_HISTORY" value="7"/>
+    <!-- 控制台日志编码格式 -->
+    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
+    <!-- 控制台日志打印格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} [%X{user-id}] [%X{request-id}] [%X{client-ip}] %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr(${LOGGED_APPLICATION_NAME:-}[%15.15t]){faint} %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <!-- 控制台日志输出级别 -->
+    <property name="CONSOLE_LOG_THRESHOLD" value="INFO"/>
+    <!-- 日志文件输出打印格式 -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} [%X{user-id}] [%X{request-id}] [%X{client-ip}] ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- ${LOGGED_APPLICATION_NAME:-}[%t] ${LOG_CORRELATION_PATTERN:-}%-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <!-- 日志文件输出编码格式 -->
+    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
+    <!-- 日志文件输出级别 -->
+    <property name="FILE_LOG_THRESHOLD" value="INFO"/>
+
+
+    <!-- 日志输出到控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_THRESHOLD}</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${CONSOLE_LOG_CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <!-- 日志输出到文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${FILE_LOG_THRESHOLD}</level>
+        </filter>
+        <!-- 日志打印配置 -->
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${FILE_LOG_CHARSET}</charset>
+        </encoder>
+        <!-- 日志文件名 -->
+        <file>${LOG_FILE}</file>
+        <!-- 日志输出配置 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志归档名 -->
+            <fileNamePattern>${FILE_NAME_PATTERN}</fileNamePattern>
+            <!-- 在启动时清除日志 -->
+            <cleanHistoryOnStart>${LOGBACK_ROLLINGPOLICY_CLEAN_HISTORY_ON_START}</cleanHistoryOnStart>
+            <!-- 单个文件大小 -->
+            <maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE}</maxFileSize>
+            <!-- 日志总大小 -->
+            <totalSizeCap>${LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP}</totalSizeCap>
+            <!-- 日志保留天数 -->
+            <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 指定日志输出级别，以及启动的Appender -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

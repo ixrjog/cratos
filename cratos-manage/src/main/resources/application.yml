@@ -1,4 +1,7 @@
 #file: noinspection SpringBootApplicationYaml
+logging:
+  config: classpath:logback-spring.xml
+
 spring:
   application:
     name: cratos

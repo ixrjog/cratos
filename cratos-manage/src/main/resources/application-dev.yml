@@ -24,7 +24,7 @@ spring:
   datasource:
     url: jdbc:mysql://172.19.0.128:3306/cratos-prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useInformationSchema=true&tinyInt1isBit=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: cratos
-    password: 'IYMt^6h*yiD1u47*lwrtUy1v++87T!Pl'
+    password: ENC(WsXO1UZ84J+HM5RKunlujJ6+BUyCdgvBov3uFNz8UZGEHqHPQrUaESfbZ3eLBbez)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 jasypt:

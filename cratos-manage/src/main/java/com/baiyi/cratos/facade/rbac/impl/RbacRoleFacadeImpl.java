@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -36,8 +37,12 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
         return rbacRoleWrapper.wrapToTarget(table);
     }
 
-    public List<RbacRole> queryUserRole(String username){
-       return null;
+    @Override
+    public List<RbacRole> queryUserRole(String username) {
+        return rbacUserRoleService.queryByUsername(username)
+                .stream()
+                .map(e -> rbacRoleService.getById(e.getRoleId()))
+                .collect(Collectors.toList());
     }
 
 }
