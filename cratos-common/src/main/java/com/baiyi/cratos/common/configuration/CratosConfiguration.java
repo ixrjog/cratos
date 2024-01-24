@@ -20,6 +20,8 @@ public class CratosConfiguration {
 
     private Auth auth;
 
+    private Rbac rbac;
+
     @Data
     public static class Auth {
         private White white;
@@ -29,6 +31,16 @@ public class CratosConfiguration {
     @Data
     public static class White {
         private List<String> resources;
+    }
+
+    @Data
+    public static class Rbac {
+        private AutoConfiguration autoConfiguration;
+    }
+
+    @Data
+    public static class AutoConfiguration {
+        private Boolean enabled;
     }
 
     public boolean isTheResourceInTheWhiteList(String resourceName) {

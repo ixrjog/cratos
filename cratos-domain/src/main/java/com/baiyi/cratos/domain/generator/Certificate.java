@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.generator.base.IValid;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,7 +10,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Data
-public class Certificate {
+public class Certificate implements IValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

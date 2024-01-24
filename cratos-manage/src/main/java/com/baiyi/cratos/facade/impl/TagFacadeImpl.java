@@ -46,17 +46,17 @@ public class TagFacadeImpl implements TagFacade {
     }
 
     @Override
-    public void deleteById(int tagId) {
-        int count = businessTagService.selectCountByTagId(tagId);
+    public void deleteById(int id) {
+        int count = businessTagService.selectCountByTagId(id);
         if (count > 0) {
             throw new BusinessException("Business object in use count={}.", count);
         }
-        tagService.deleteById(tagId);
+        tagService.deleteById(id);
     }
 
     @Override
-    public void setTagValidById(int tagId) {
-        tagService.updateValidById(tagId);
+    public void setTagValidById(int id) {
+        tagService.updateValidById(id);
     }
 
 }

@@ -39,6 +39,13 @@ public class CertificateController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update certificate valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setCertificateValidById(@RequestParam @Valid int id) {
+        certificateFacade.setCertificateValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query certificate")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CertificateVO.Certificate>> queryCertificatePage(@RequestBody @Valid CertificateParam.CertificatePageQuery pageQuery) {

@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
+import com.baiyi.cratos.exception.DaoServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,6 +45,12 @@ public class ResponseExceptionHandler {
 
     @ExceptionHandler(value = {AuthorizationException.class})
     public HttpResult<?> handleRuntimeException(AuthorizationException exception) {
+        return new HttpResult<>(exception.getCode(), exception.getMessage());
+    }
+
+    // Dao
+    @ExceptionHandler(value = {DaoServiceException.class})
+    public HttpResult<?> handleRuntimeException(DaoServiceException exception) {
         return new HttpResult<>(exception.getCode(), exception.getMessage());
     }
 

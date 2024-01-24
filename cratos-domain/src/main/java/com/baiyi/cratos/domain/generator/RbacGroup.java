@@ -1,11 +1,13 @@
 package com.baiyi.cratos.domain.generator;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@Builder
 @Table(name = "rbac_group")
 public class RbacGroup {
     @Id

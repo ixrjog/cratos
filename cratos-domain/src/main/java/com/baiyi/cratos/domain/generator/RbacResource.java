@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.generator.base.IValid;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 @Data
 @Builder
 @Table(name = "rbac_resource")
-public class RbacResource {
+public class RbacResource implements IValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

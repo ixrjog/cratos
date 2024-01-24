@@ -51,4 +51,10 @@ public class CertificateFacadeImpl implements CertificateFacade {
         certificateService.deleteById(id);
     }
 
+
+    @Override
+    public void setCertificateValidById(int id) {
+        certificateService.updateValidById(id);
+    }
+
 }

@@ -21,4 +21,6 @@ public interface CertificateFacade {
 
     void deleteById(int id);
 
+    void setCertificateValidById(int id);
+
 }

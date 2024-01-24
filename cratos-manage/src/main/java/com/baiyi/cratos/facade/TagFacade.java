@@ -17,8 +17,8 @@ public interface TagFacade {
 
     DataTable<TagVO.Tag> queryTagPage(TagParam.TagPageQuery pageQuery);
 
-    void deleteById(int tagId);
+    void deleteById(int id);
 
-    void setTagValidById(int tagId);
+    void setTagValidById(int id);
 
 }
