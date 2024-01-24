@@ -13,4 +13,6 @@ public interface CredentialFacade {
 
     DataTable<CredentialVO.Credential> queryCredentialPage(CredentialParam.CredentialPageQuery pageQuery);
 
+    void setCredentialValidById(int id);
+
 }

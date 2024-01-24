@@ -31,6 +31,11 @@ public class CredentialFacadeImpl implements CredentialFacade {
         return credentialWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void setCredentialValidById(int id) {
+        credentialService.updateValidById(id);
+    }
+
     // 查询用户有效的凭据
 
 }

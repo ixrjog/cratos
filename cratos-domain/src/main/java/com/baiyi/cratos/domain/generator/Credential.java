@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.annotation.FieldEncrypt;
+import com.baiyi.cratos.domain.generator.base.IExpiredTime;
 import com.baiyi.cratos.domain.generator.base.IValid;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 
 @Data
 @EncryptedDomain
-public class Credential implements IValid {
+public class Credential implements IValid, IExpiredTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
