@@ -50,25 +50,23 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
     private static final String[] SCAN_PACKAGES = {"com.baiyi.cratos.controller"};
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         boolean enabledRbacAutoConfiguration = Optional.of(cratosConfiguration)
                 .map(CratosConfiguration::getRbac)
                 .map(CratosConfiguration.Rbac::getAutoConfiguration)
                 .map(CratosConfiguration.AutoConfiguration::getEnabled)
                 .orElse(false);
         if (enabledRbacAutoConfiguration) {
-            log.info("RBAC resource autoConfiguration.");
+            log.info("RBAC group & resource auto configuration.");
             start();
         }
     }
 
     public void start() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
-        // 输出Controller信息
         handlerMethods.forEach((mappingInfo, method) -> {
             if (matchController(method.getBeanType()
                     .getName())) {
-                // log.debug("Controller Class: {}", method.getBeanType().getName());
                 handle(mappingInfo, method);
             }
         });
@@ -92,6 +90,7 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
                 .build();
         Object controller = SpringContextUtil.getBean(method.getBean()
                 .toString());
+        // 从 controller 上获取 Tag 注解
         Tag tag = AopUtils.getTargetClass(controller)
                 .getAnnotation(Tag.class);
         controllerMethodMapping.setTag(tag.name());
@@ -100,31 +99,7 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
         if (requestMapping != null) {
             controllerMethodMapping.setBase(requestMapping.value()[0]);
         }
-        for (Annotation declaredAnnotation : declaredAnnotations) {
-            if (declaredAnnotation instanceof Operation operation) {
-                controllerMethodMapping.setSummary(operation.summary());
-                continue;
-            }
-            if (declaredAnnotation instanceof PostMapping postMapping) {
-                controllerMethodMapping.setRequestMethod("POST");
-                controllerMethodMapping.setMethodValue(postMapping.value()[0]);
-                continue;
-            }
-            if (declaredAnnotation instanceof GetMapping getMapping) {
-                controllerMethodMapping.setRequestMethod("GET");
-                controllerMethodMapping.setMethodValue(getMapping.value()[0]);
-                continue;
-            }
-            if (declaredAnnotation instanceof PutMapping putMapping) {
-                controllerMethodMapping.setRequestMethod("PUT");
-                controllerMethodMapping.setMethodValue(putMapping.value()[0]);
-                continue;
-            }
-            if (declaredAnnotation instanceof DeleteMapping deleteMapping) {
-                controllerMethodMapping.setRequestMethod("DELETE");
-                controllerMethodMapping.setMethodValue(deleteMapping.value()[0]);
-            }
-        }
+        invoke(controllerMethodMapping, declaredAnnotations);
         RbacGroup rbacGroup = RbacGroup.builder()
                 .groupName(controllerMethodMapping.getTag())
                 .base(controllerMethodMapping.getBase())
@@ -147,6 +122,35 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
         if (rbacResourceService.getByUniqueKey(rbacResource) == null) {
             rbacResourceService.add(rbacResource);
         }
+    }
+
+    private void invoke(ControllerMethodMapping controllerMethodMapping, Annotation[] declaredAnnotations) {
+        Arrays.stream(declaredAnnotations)
+                .forEachOrdered(declaredAnnotation -> {
+                    if (declaredAnnotation instanceof Operation operation) {
+                        controllerMethodMapping.setSummary(operation.summary());
+                        return;
+                    }
+                    if (declaredAnnotation instanceof PostMapping postMapping) {
+                        controllerMethodMapping.setRequestMethod("POST");
+                        controllerMethodMapping.setMethodValue(postMapping.value()[0]);
+                        return;
+                    }
+                    if (declaredAnnotation instanceof GetMapping getMapping) {
+                        controllerMethodMapping.setRequestMethod("GET");
+                        controllerMethodMapping.setMethodValue(getMapping.value()[0]);
+                        return;
+                    }
+                    if (declaredAnnotation instanceof PutMapping putMapping) {
+                        controllerMethodMapping.setRequestMethod("PUT");
+                        controllerMethodMapping.setMethodValue(putMapping.value()[0]);
+                        return;
+                    }
+                    if (declaredAnnotation instanceof DeleteMapping deleteMapping) {
+                        controllerMethodMapping.setRequestMethod("DELETE");
+                        controllerMethodMapping.setMethodValue(deleteMapping.value()[0]);
+                    }
+                });
     }
 
     private boolean matchController(String controllerName) {
