@@ -28,7 +28,7 @@ public class TagServiceImpl implements TagService {
     public DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery) {
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         Example example = new Example(Tag.class);
-        Example.Criteria criteria = example.createCriteria();
+        // Example.Criteria criteria = example.createCriteria();
         example.setOrderByClause("create_time");
         List<Tag> data = tagMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());

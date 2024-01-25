@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author baiyi
@@ -59,11 +58,6 @@ public class UserServiceImpl implements UserService {
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL})
     public void deleteById(int id) {
         userMapper.deleteByPrimaryKey(id);
-    }
-
-    public List<User> queryByTagIds(Set<Integer> tagIds) {
-        // TODO
-        return null;
     }
 
 }
