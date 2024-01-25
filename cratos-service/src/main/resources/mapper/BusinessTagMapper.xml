@@ -13,4 +13,15 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="queryByTagIds" resultType="int">
+      select business_id from business_tag where
+      business_type = #{businessType}
+      and tag_id in (
+      <foreach open="(" item="tagId" separator="," close=")" collection="tagIds">
+          #{tagId}
+      </foreach>
+      )
+  </select>
+
 </mapper>

@@ -12,6 +12,11 @@ import tk.mybatis.mapper.common.Mapper;
  */
 public interface BaseValidService<T extends IValid, M extends Mapper<T>> extends BaseService<T, M> {
 
+    /**
+     * 设置 valid 属性
+     *
+     * @param id
+     */
     default void updateValidById(int id) {
         T t = this.getById(id);
         if (t == null) {
@@ -25,7 +30,8 @@ public interface BaseValidService<T extends IValid, M extends Mapper<T>> extends
             if ((expiredTime.getExpiredTime()
                     .getTime() - System.currentTimeMillis()) <= 0 && !t.getValid()) {
                 // 过期
-                throw new DaoServiceException("Credential has expired and cannot be set as valid");
+                throw new DaoServiceException(t.getClass()
+                        .getSimpleName() + " has expired and cannot be set as valid");
             }
         }
         t.setValid(!t.getValid());

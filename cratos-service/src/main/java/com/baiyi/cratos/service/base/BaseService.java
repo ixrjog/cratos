@@ -3,8 +3,10 @@ package com.baiyi.cratos.service.base;
 import com.baiyi.cratos.annotation.DomainDecrypt;
 import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.util.BeanNameConverter;
+import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.domain.util.SpringContextUtil;
 import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -53,6 +55,14 @@ public interface BaseService<T, M extends Mapper<T>> {
     // 方法映射
     default List<T> selectAll() {
         return getMapper().selectAll();
+    }
+
+    default List<T> queryByIds(List<Integer> ids) {
+        // 反射获取范型T的实体类
+        Example example = new Example(Generics.find(this.getClass(), BaseService.class, 0));
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("id", ids);
+        return getMapper().selectByExample(example);
     }
 
 }

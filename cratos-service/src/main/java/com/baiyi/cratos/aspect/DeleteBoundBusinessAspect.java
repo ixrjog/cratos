@@ -2,6 +2,7 @@ package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.service.base.BaseBusinessService;
 import com.baiyi.cratos.service.factory.BusinessServiceFactory;
@@ -12,6 +13,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
 import org.springframework.expression.EvaluationContext;
@@ -54,6 +56,12 @@ public class DeleteBoundBusinessAspect {
      */
     @After(value = "@annotation(deleteBoundBusiness)")
     public void afterAdvice(JoinPoint joinPoint, DeleteBoundBusiness deleteBoundBusiness) {
+        BusinessType businessType = AopUtils.getTargetClass(joinPoint.getTarget())
+                .getAnnotation(BusinessType.class);
+        // 缺少注解
+        if (businessType == null) {
+            return;
+        }
         //获取切面方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -69,22 +77,25 @@ public class DeleteBoundBusinessAspect {
         Expression expression = expressionParser.parseExpression(deleteBoundBusiness.businessId());
         Object businessIdSpEL = expression.getValue(context);
         if (businessIdSpEL instanceof Integer businessId) {
-            Arrays.stream(deleteBoundBusiness.types())
-                    .forEach(type -> doDelete(businessId, type));
+            Arrays.stream(deleteBoundBusiness.targetTypes())
+                    .forEach(serviceType -> doDelete(businessId, businessType, serviceType));
         }
     }
 
-    private void doDelete(int businessId, BusinessTypeEnum businessTypeEnum) {
-        BaseBusinessService<?> baseBusinessService = BusinessServiceFactory.getService(businessTypeEnum.name());
-        if (baseBusinessService != null) {
-            SimpleBusiness simpleBusiness = SimpleBusiness.builder()
-                    .businessId(businessId)
-                    .businessType(businessTypeEnum.name())
-                    .build();
-            log.info("Service delete by business: service={}, businessTyp{}, businessId={}", baseBusinessService.getClass()
-                    .getSimpleName(), businessTypeEnum.name(), businessId);
-            baseBusinessService.deleteByBusiness(simpleBusiness);
+    private void doDelete(int businessId, BusinessType businessType, BusinessTypeEnum serviceTypeEnum) {
+        BaseBusinessService<?> baseBusinessService = BusinessServiceFactory.getService(serviceTypeEnum.name());
+        if (baseBusinessService == null) {
+            return;
         }
+        SimpleBusiness simpleBusiness = SimpleBusiness.builder()
+                .businessId(businessId)
+                .businessType(businessType.type()
+                        .name())
+                .build();
+        log.info("Service delete by business: service={}, businessTyp{}, businessId={}", baseBusinessService.getClass()
+                .getSimpleName(), businessType.type()
+                .name(), businessId);
+        baseBusinessService.deleteByBusiness(simpleBusiness);
     }
 
 }

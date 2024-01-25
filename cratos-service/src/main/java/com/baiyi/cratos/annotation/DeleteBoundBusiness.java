@@ -18,6 +18,6 @@ public @interface DeleteBoundBusiness {
 
     @Schema(description = "SpEL") String businessId();
 
-    BusinessTypeEnum[] types();
+    BusinessTypeEnum[] targetTypes();
 
 }

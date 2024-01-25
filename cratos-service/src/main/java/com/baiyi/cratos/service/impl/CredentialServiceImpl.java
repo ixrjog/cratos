@@ -1,7 +1,10 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.param.credential.CredentialParam;
@@ -21,6 +24,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.CREDENTIAL)
 public class CredentialServiceImpl implements CredentialService {
 
     private final CredentialMapper credentialMapper;
@@ -42,6 +46,13 @@ public class CredentialServiceImpl implements CredentialService {
     @DomainEncrypt
     public void updateByPrimaryKeySelective(Credential credential) {
         credentialMapper.updateByPrimaryKeySelective(credential);
+    }
+
+    @Override
+    // 删除用证书关联的业务标签、凭据
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    public void deleteById(int id) {
+        credentialMapper.deleteByPrimaryKey(id);
     }
 
 }

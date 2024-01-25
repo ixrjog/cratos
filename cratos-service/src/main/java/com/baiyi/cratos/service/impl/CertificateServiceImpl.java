@@ -45,7 +45,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     @Override
     // 删除用证书关联的业务标签、凭据
-    @DeleteBoundBusiness(businessId = "#id", types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL})
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL})
     public void deleteById(int id) {
         certificateMapper.deleteByPrimaryKey(id);
     }

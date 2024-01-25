@@ -58,4 +58,9 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         return businessTagMapper.selectCountByExample(example);
     }
 
+    @Override
+    public List<Integer> queryBusinessIdsByParam(BusinessTypeEnum businessTypeEnum, List<Integer> tagIds) {
+        return businessTagMapper.queryByTagIds(businessTypeEnum.name(), tagIds);
+    }
+
 }

@@ -37,7 +37,6 @@ public class ResponseExceptionHandler {
         return new HttpResult<>(ErrorEnum.AUTHENTICATION_FAILED.getCode(), exception.getMessage());
     }
 
-
     @ExceptionHandler(value = {AuthenticationException.class})
     public HttpResult<?> handleRuntimeException(AuthenticationException exception) {
         return new HttpResult<>(exception.getCode(), exception.getMessage());
