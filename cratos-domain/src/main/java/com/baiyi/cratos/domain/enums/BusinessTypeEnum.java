@@ -24,5 +24,4 @@ public enum BusinessTypeEnum {
     RBAC_RESOURCE,
     RBAC_USER_ROLE
 
-
 }

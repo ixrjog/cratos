@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.constants.AccessLevel;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;

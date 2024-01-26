@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.constants;
+package com.baiyi.cratos.common.enums;
 
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Getter
-public enum CredentialTypeConstants {
+public enum CredentialTypeEnum {
 
     /**
      * 凭据类型
@@ -33,12 +33,12 @@ public enum CredentialTypeConstants {
 
     private final String displayName;
 
-    CredentialTypeConstants(String displayName) {
+    CredentialTypeEnum(String displayName) {
         this.displayName= displayName;
     }
 
     public static OptionsVO.Options toOptions(){
-        List<OptionsVO.Option> optionList = Arrays.stream(CredentialTypeConstants.values()).map(e -> OptionsVO.Option.builder()
+        List<OptionsVO.Option> optionList = Arrays.stream(CredentialTypeEnum.values()).map(e -> OptionsVO.Option.builder()
                 .label(e.name())
                 .value(e.getDisplayName())
                 .build()).collect(Collectors.toList());

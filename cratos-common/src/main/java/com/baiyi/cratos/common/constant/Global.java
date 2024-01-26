@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.constants;
+package com.baiyi.cratos.common.constant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

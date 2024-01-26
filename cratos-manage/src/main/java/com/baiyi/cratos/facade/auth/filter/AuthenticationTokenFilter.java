@@ -25,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.baiyi.cratos.common.constants.Global.AUTHORIZATION;
+import static com.baiyi.cratos.common.constant.Global.AUTHORIZATION;
 
 /**
  * @Author baiyi

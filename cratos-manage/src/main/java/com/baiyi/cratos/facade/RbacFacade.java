@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.common.constants.AccessLevel;
+import com.baiyi.cratos.common.enums.AccessLevel;
 
 /**
  * @Author baiyi

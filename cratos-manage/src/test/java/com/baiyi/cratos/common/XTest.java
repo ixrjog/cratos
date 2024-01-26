@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.constants.PermissionRoleEnum;
+import com.baiyi.cratos.common.enums.PermissionRoleEnum;
 import org.junit.jupiter.api.Test;
 
 /**

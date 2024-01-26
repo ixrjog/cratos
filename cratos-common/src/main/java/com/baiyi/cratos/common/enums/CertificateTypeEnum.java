@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.constants;
+package com.baiyi.cratos.common.enums;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Getter;
  * @Version 1.0
  */
 @Getter
-public enum CertificateTypeConstants {
+public enum CertificateTypeEnum {
 
     // 亚马逊颁发
     AMAZON_ISSUED("Amazon Issued"),
@@ -19,7 +19,7 @@ public enum CertificateTypeConstants {
 
     private final String type;
 
-    CertificateTypeConstants(String type) {
+    CertificateTypeEnum(String type) {
         this.type = type;
     }
 

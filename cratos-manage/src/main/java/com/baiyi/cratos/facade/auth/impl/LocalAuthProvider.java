@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.auth.impl;
 
-import com.baiyi.cratos.common.constants.AuthProviderEnum;
+import com.baiyi.cratos.common.enums.AuthProviderEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.UserToken;

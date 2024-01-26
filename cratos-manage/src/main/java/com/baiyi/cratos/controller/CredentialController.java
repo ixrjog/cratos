@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.common.constants.CredentialTypeConstants;
+import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.credential.CredentialParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
@@ -36,7 +36,7 @@ public class CredentialController {
     @Operation(summary = "Query credential type options")
     @GetMapping(value = "/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getCredentialOptions() {
-        return new HttpResult<>(CredentialTypeConstants.toOptions());
+        return new HttpResult<>(CredentialTypeEnum.toOptions());
     }
 
     @Operation(summary = "Update credential valid")

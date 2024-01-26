@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.common.constants.PermissionRoleEnum;
+import com.baiyi.cratos.common.enums.PermissionRoleEnum;
 import com.baiyi.cratos.domain.BaseBusiness;
 
 import java.util.Date;
