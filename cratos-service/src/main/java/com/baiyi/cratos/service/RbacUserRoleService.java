@@ -15,4 +15,6 @@ public interface RbacUserRoleService extends BaseService<RbacUserRole, RbacUserR
 
     List<RbacUserRole> queryByUsername(String username);
 
+    int selectCountByUsername(String username);
+
 }

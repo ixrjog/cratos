@@ -11,4 +11,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Version 1.0
  */
 public interface RbacResourceService extends BaseUniqueKeyService<RbacResource>, BaseValidService<RbacResource, RbacResourceMapper> {
+
+    int selectCountByGroupId(int groupId);
+
 }

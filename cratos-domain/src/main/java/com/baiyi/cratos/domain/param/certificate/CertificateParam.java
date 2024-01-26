@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.certificate;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,9 +40,11 @@ public class CertificateParam {
         private String keyAlgorithm;
 
         @Schema(description = "不早于")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date notBefore;
 
         @Schema(description = "不晚于")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date notAfter;
 
         private String comment;
@@ -71,9 +74,11 @@ public class CertificateParam {
         private String keyAlgorithm;
 
         @Schema(description = "不早于")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date notBefore;
 
         @Schema(description = "不晚于")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date notAfter;
 
         private String comment;

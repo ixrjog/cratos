@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.annotation.FieldSensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.SensitiveType;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.IResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -18,6 +19,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -35,6 +37,7 @@ public class UserVO {
             BusinessTagVO.IBusinessTags,
             BusinessDocVO.IBusinessDocs,
             RbacRoleVO.IRbacRoles,
+            IResourceCount,
             Serializable {
 
         @Serial
@@ -89,6 +92,9 @@ public class UserVO {
 
         @Schema(description = "Rbac Roles")
         private List<RbacRoleVO.Role> rbacRoles;
+
+        @Schema(description = "Resource Count")
+        private Map<String, Integer> resourceCount;
 
     }
 

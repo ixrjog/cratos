@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.user;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -58,6 +59,9 @@ public class UserParam {
         private String source;
 
         private String password;
+
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date expiredTime;
 
         private String comment;
 

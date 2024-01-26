@@ -19,7 +19,10 @@ public enum BusinessTypeEnum {
 
     // RBAC
 
-    RBAC_ROLE
+    RBAC_ROLE,
+    RBAC_GROUP,
+    RBAC_RESOURCE,
+    RBAC_USER_ROLE
 
 
 }

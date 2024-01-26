@@ -21,11 +21,19 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
     private final RbacUserRoleMapper rbacUserRoleMapper;
 
     @Override
-    public List<RbacUserRole> queryByUsername(String username){
+    public List<RbacUserRole> queryByUsername(String username) {
         Example example = new Example(RbacUserRole.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", username);
         return rbacUserRoleMapper.selectByExample(example);
+    }
+
+    @Override
+    public int selectCountByUsername(String username) {
+        Example example = new Example(RbacUserRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", username);
+        return rbacUserRoleMapper.selectCountByExample(example);
     }
 
 }

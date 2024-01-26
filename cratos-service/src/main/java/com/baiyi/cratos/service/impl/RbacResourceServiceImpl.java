@@ -26,4 +26,12 @@ public class RbacResourceServiceImpl implements RbacResourceService {
         return rbacResourceMapper.selectOneByExample(example);
     }
 
+    @Override
+    public int selectCountByGroupId(int groupId) {
+        Example example = new Example(RbacResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("groupId", groupId);
+        return rbacResourceMapper.selectCountByExample(example);
+    }
+
 }

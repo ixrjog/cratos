@@ -5,11 +5,17 @@ import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.user.UserVO;
+import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_USER_ROLE;
 
 /**
  * @Author baiyi
@@ -21,11 +27,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements IBaseWrapper<UserVO.User> {
 
+    private final RbacUserRoleService rbacUserRoleService;
+
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     @Sensitive
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(UserVO.User user) {
-        // This is a good idea
+        Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
+                .put(buildResourceCountForRbacUserRole(user))
+                .build();
+        user.setResourceCount(resourceCount);
+    }
+
+    private Map<String, Integer> buildResourceCountForRbacUserRole(UserVO.User user) {
+        Map<String, Integer> resourceCount = Maps.newHashMap();
+        resourceCount.put(RBAC_USER_ROLE.name(), rbacUserRoleService.selectCountByUsername(user.getUsername()));
+        return resourceCount;
     }
 
 }

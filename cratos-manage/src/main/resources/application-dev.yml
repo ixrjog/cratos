@@ -19,6 +19,10 @@ cratos:
     autoConfiguration:
       enabled: on
 
+#springfox:
+#  documentation:
+#    enabled: off
+
 spring:
   config:
     activate:
