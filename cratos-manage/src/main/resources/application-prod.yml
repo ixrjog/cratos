@@ -1,6 +1,6 @@
 logging:
   level:
-    com.baiyi.cratos : debug
+    com.baiyi.cratos : info
     # swagger 警告日志忽略
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.springframework: warn
@@ -13,21 +13,21 @@ logging:
 
 cratos:
   auth:
-    enabled: off
+    enabled: on
     provider: LOCAL
   rbac:
-    autoConfiguration:
-      enabled: on
+    auto-configuration:
+      enabled: off
 
 springdoc:
   swagger-ui:
-    enabled: on
+    enabled: off
 
 spring:
   config:
     activate:
       on-profile:
-        - dev
+        - prod
   datasource:
     url: jdbc:mysql://172.19.0.128:3306/cratos-prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useInformationSchema=true&tinyInt1isBit=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: cratos

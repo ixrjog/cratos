@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2024/1/3 14:15
  * @Version 1.0
  */
+@Slf4j
 @OpenAPIDefinition(servers = {@Server(url = "/", description = "Default Server URL")})
 @Configuration
 public class OpenAPIConfiguration {
