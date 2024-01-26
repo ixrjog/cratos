@@ -19,9 +19,10 @@ public enum ErrorEnum {
 
     // 认证
     AUTHENTICATION_FAILED(401, "Authentication failed."),
+    NO_VALID_CREDENTIALS_AVAILABLE(401, "No valid credentials available."),
     AUTHENTICATION_REQUEST_NO_TOKEN(401, "No valid token was carried in the request."),
-    AUTHENTICATION_INVALID_TOKEN(401,"Invalid token."),
-    AUTHENTICATION_TOKEN_EXPIRED(401,"Token expired, please login again."),
+    AUTHENTICATION_INVALID_TOKEN(401, "Invalid token."),
+    AUTHENTICATION_TOKEN_EXPIRED(401, "Token expired, please login again."),
     AUTHENTICATION_RESOURCE_NOT_EXIST(403, "The resource path does not exist."),
     AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION(401, "Invalid identity authentication provider configuration."),
 

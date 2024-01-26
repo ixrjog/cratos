@@ -2,7 +2,9 @@ package com.baiyi.cratos.secutity;
 
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.UserService;
 import com.google.common.collect.Lists;
@@ -32,6 +34,8 @@ public class CratosUserDetailsService implements UserDetailsService {
 
     private final JasyptPasswordEncoder cratosPasswordEncoder;
 
+    private final CredentialFacade credentialFacade;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.getByUsername(username);
@@ -39,10 +43,11 @@ public class CratosUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(StringFormatter.format("username {} is not found.", username));
         }
         // PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123456");
+        Credential credential = credentialFacade.getUserPasswordCredential(user);
         return org.springframework.security.core.userdetails.User.withUsername(username)
                 .username(username)
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder()
-                        .encode("123456"))
+                        .encode(credential.getCredential()))
                 .accountLocked(!user.getValid())
                 .accountExpired(ExpiredUtil.isExpired(user.getExpiredTime()))
                 .credentialsExpired(false)

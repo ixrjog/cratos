@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import com.baiyi.cratos.domain.generator.base.IExpiredTime;
 import com.baiyi.cratos.domain.generator.base.IValid;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Data
+@Builder
 @EncryptedDomain
 public class Credential implements IValid, IExpiredTime {
     @Id

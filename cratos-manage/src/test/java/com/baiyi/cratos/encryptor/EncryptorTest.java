@@ -1,6 +1,7 @@
 package com.baiyi.cratos.encryptor;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import com.baiyi.cratos.domain.annotation.FieldSensitive;
 import jakarta.annotation.Resource;
@@ -27,6 +28,7 @@ public class EncryptorTest extends BaseUnit {
     @Data
     @Builder
     @FieldSensitive
+    @EncryptedDomain
     public static class EncryptDomain {
 
         @FieldEncrypt(erase = false)

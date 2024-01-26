@@ -42,7 +42,7 @@ public class DomainEncryptAspect {
 
     @Before(value = "@annotation(domainEncrypt)")
     public void beforeAdvice(JoinPoint joinPoint, DomainEncrypt domainEncrypt) {
-        if (AopUtils.getTargetClass(joinPoint.getArgs()[0])
+        if (!AopUtils.getTargetClass(joinPoint.getArgs()[0])
                 .isAnnotationPresent(EncryptedDomain.class)) {
             return;
         }

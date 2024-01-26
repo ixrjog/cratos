@@ -1,11 +1,13 @@
 package com.baiyi.cratos.domain.generator;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@Builder
 @Table(name = "business_credential")
 public class BusinessCredential {
     @Id

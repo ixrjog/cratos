@@ -17,4 +17,8 @@ public interface UserFacade {
 
     UserVO.User getUserByUsername(String username);
 
+    void resetUserPassword(UserParam.ResetPassword resetPassword);
+
+    void resetUserPassword(String username, UserParam.ResetPassword resetPassword);
+
 }
