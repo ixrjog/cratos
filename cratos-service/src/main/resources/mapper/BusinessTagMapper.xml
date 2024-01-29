@@ -29,12 +29,11 @@
         select id, business_type, business_id, tag_id, distinct tag_value from business_tag
         <where>
             tag_id = #{tagId}
-            <if test="queryKeyValue != null and queryKeyValue != ''">
-                and tag_value like "%" #{queryKeyValue} "%"
-                order by replace( tag_value, #{queryKeyValue}, '' )
+            <if test="queryTagValue != null and queryTagValue != ''">
+                and tag_value like "%" #{queryTagValue} "%"
+                order by replace( tag_value, #{queryTagValue}, '' )
             </if>
         </where>
     </select>
-
 
 </mapper>

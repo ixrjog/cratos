@@ -20,7 +20,7 @@ public class BusinessTagParam {
         @NotNull
         private Integer tagId;
 
-        private String queryKeyValue;
+        private String queryTagValue;
 
     }
 
