@@ -6,6 +6,8 @@ import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.service.BusinessTagService;
+import com.baiyi.cratos.service.base.BaseBusinessService;
+import com.baiyi.cratos.service.factory.BusinessServiceFactory;
 import com.baiyi.cratos.wrapper.BusinessTagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +43,21 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
     }
 
     @Override
+    public List<BusinessTagVO.BusinessTag> queryBusinessTagByValue(BusinessTagParam.QueryByValue queryByValue) {
+        List<BusinessTag> tags =   businessTagService.queryBusinessTagByValue(queryByValue);
+        return tags.stream()
+                .map(t -> {
+                    BusinessTagVO.BusinessTag tag = businessTagWrapper.convert(t);
+                    businessTagWrapper.wrap(tag);
+                    return tag;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void addBusinessTag(BusinessTagParam.AddBusinessTag addBusinessTag) {
         BusinessTag businessTag = addBusinessTag.toTarget();
+        BaseBusinessService<?> baseBusinessService = BusinessServiceFactory.getService(addBusinessTag.getBusinessType());
         if (businessTagService.getByUniqueKey(businessTag) == null) {
             businessTagService.add(businessTag);
         }

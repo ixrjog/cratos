@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         criteria.andEqualTo("businessType", business.getBusinessType())
                 .andEqualTo("businessId", business.getBusinessId());
         return businessTagMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<BusinessTag> queryBusinessTagByValue(BusinessTagParam.QueryByValue queryByValue) {
+        return businessTagMapper.queryBusinessTagByValue(queryByValue);
     }
 
     @Override

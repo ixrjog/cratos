@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.BusinessTagMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.BusinessTag">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
-    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
-    <result column="tag_value" jdbcType="VARCHAR" property="tagValue" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.BusinessTag">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+        <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+        <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
+        <result column="tag_value" jdbcType="VARCHAR" property="tagValue"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-  <select id="queryByTagIds" resultType="int">
-      select business_id from business_tag where
-      business_type = #{businessType}
-      and tag_id in (
-      <foreach open="(" item="tagId" separator="," close=")" collection="tagIds">
-          #{tagId}
-      </foreach>
-      )
-  </select>
+    <select id="queryByTagIds" resultType="int">
+        select business_id from business_tag where
+        business_type = #{businessType}
+        and tag_id in (
+        <foreach open="(" item="tagId" separator="," close=")" collection="tagIds">
+            #{tagId}
+        </foreach>
+        )
+    </select>
+
+    <select id="queryBusinessTagByValue" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByValue"
+            resultMap="BaseResultMap">
+        select id, business_type, business_id, tag_id, distinct tag_value from business_tag
+        <where>
+            tag_id = #{tagId}
+            <if test="queryKeyValue != null and queryKeyValue != ''">
+                and tag_value like "%" #{queryKeyValue} "%"
+                order by replace( tag_value, #{queryKeyValue}, '' )
+            </if>
+        </where>
+    </select>
+
 
 </mapper>
