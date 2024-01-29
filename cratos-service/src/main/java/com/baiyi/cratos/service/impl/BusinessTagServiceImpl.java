@@ -37,8 +37,8 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public List<BusinessTag> queryBusinessTagByValue(BusinessTagParam.QueryByValue queryByValue) {
-        return businessTagMapper.queryBusinessTagByValue(queryByValue);
+    public List<BusinessTag> queryByValue(BusinessTagParam.QueryByValue queryByValue) {
+        return businessTagMapper.queryByValue(queryByValue);
     }
 
     @Override
