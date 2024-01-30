@@ -11,6 +11,6 @@ public interface BusinessTagMapper extends Mapper<BusinessTag> {
 
     List<Integer> queryByTagIds(String businessType, @Param("tagIds") List<Integer> tagIds);
 
-    List<BusinessTag> queryByValue(BusinessTagParam.QueryByValue queryByValue);
+    List<String> queryByValue(BusinessTagParam.QueryByValue queryByValue);
 
 }

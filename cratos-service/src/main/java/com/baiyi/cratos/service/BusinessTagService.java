@@ -25,6 +25,6 @@ public interface BusinessTagService extends BaseBusinessService<BusinessTag>, Ba
      */
     List<Integer> queryBusinessIdsByParam(BusinessTypeEnum businessTypeEnum, List<Integer> tagIds);
 
-    List<BusinessTag> queryByValue(BusinessTagParam.QueryByValue queryByValue);
+    List<String> queryByValue(BusinessTagParam.QueryByValue queryByValue);
 
 }

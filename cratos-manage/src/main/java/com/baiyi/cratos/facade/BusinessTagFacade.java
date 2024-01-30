@@ -15,7 +15,7 @@ public interface BusinessTagFacade {
 
     List<BusinessTagVO.BusinessTag> getBusinessTagByBusiness(BusinessParam.GetByBusiness getByBusiness);
 
-    List<BusinessTagVO.BusinessTag> queryBusinessTagByValue(BusinessTagParam.QueryByValue queryByValue);
+    List<String> queryBusinessTagValue(BusinessTagParam.QueryByValue queryByValue);
 
     void addBusinessTag(BusinessTagParam.AddBusinessTag addBusinessTag);
 

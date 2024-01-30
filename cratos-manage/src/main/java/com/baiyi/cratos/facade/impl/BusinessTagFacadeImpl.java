@@ -43,15 +43,8 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
     }
 
     @Override
-    public List<BusinessTagVO.BusinessTag> queryBusinessTagByValue(BusinessTagParam.QueryByValue queryByValue) {
-        List<BusinessTag> tags = businessTagService.queryByValue(queryByValue);
-        return tags.stream()
-                .map(t -> {
-                    BusinessTagVO.BusinessTag tag = businessTagWrapper.convert(t);
-                    businessTagWrapper.wrap(tag);
-                    return tag;
-                })
-                .collect(Collectors.toList());
+    public List<String> queryBusinessTagValue(BusinessTagParam.QueryByValue queryByValue) {
+        return businessTagService.queryByValue(queryByValue);
     }
 
     @Override
