@@ -63,8 +63,12 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
             if (saveBusinessTag.getId() != null) {
                 businessTagService.updateByPrimaryKey(businessTag);
             } else {
-                if (businessTagService.getByUniqueKey(businessTag) == null) {
+                BusinessTag dbBusinessTag = businessTagService.getByUniqueKey(businessTag);
+                if (dbBusinessTag == null) {
                     businessTagService.add(businessTag);
+                } else {
+                    dbBusinessTag.setTagValue(saveBusinessTag.getTagValue());
+                    businessTagService.updateByPrimaryKey(dbBusinessTag);
                 }
             }
         } else {
