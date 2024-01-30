@@ -57,25 +57,29 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
         }
         BusinessTag businessTag = saveBusinessTag.toTarget();
         if (supportBusinessService instanceof BaseService<?, ?> baseService) {
-            if (baseService.getById(businessTag.getBusinessId()) == null) {
-                throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}", saveBusinessTag.getBusinessType(), businessTag.getBusinessId());
-            }
-            if (saveBusinessTag.getId() != null) {
-                businessTagService.updateByPrimaryKey(businessTag);
-            } else {
-                BusinessTag dbBusinessTag = businessTagService.getByUniqueKey(businessTag);
-                if (dbBusinessTag == null) {
-                    businessTagService.add(businessTag);
-                } else {
-                    dbBusinessTag.setTagValue(saveBusinessTag.getTagValue());
-                    businessTagService.updateByPrimaryKey(dbBusinessTag);
-                }
-            }
+            saveBusinessTag(baseService, businessTag);
         } else {
             throw new BusinessException("SupportBusinessTagService does not BaseService.");
         }
     }
 
+    private void saveBusinessTag(BaseService<?, ?> baseService, BusinessTag saveBusinessTag) {
+        if (baseService.getById(saveBusinessTag.getBusinessId()) == null) {
+            throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}", saveBusinessTag.getBusinessType(), saveBusinessTag.getBusinessId());
+        }
+        if (saveBusinessTag.getId() != null) {
+            businessTagService.updateByPrimaryKey(saveBusinessTag);
+        } else {
+            BusinessTag dbBusinessTag = businessTagService.getByUniqueKey(saveBusinessTag);
+            if (dbBusinessTag == null) {
+                businessTagService.add(saveBusinessTag);
+            } else {
+                dbBusinessTag.setTagValue(saveBusinessTag.getTagValue());
+                businessTagService.updateByPrimaryKey(dbBusinessTag);
+            }
+        }
+    }
+    
     @Override
     public void deleteById(int id) {
         businessTagService.deleteById(id);
