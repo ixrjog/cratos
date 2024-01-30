@@ -1,5 +1,6 @@
 package com.baiyi.cratos.wrapper.factory;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,14 +18,16 @@ public class BusinessWrapperFactory {
     private BusinessWrapperFactory() {
     }
 
-    private static final Map<String, IBusinessWrapper<?,?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, IBusinessWrapper<?, ?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(IBusinessWrapper<?,?> bean) {
+    public static void register(IBusinessWrapper<?, ?> bean) {
         CONTEXT.put(bean.getBusinessType(), bean);
-        log.debug("BusinessWrapperFactory Registered: beanName={}, businessType={}", bean.getClass().getSimpleName(), bean.getBusinessType());
+        log.debug(StringFormatter.inDramaFormat("BusinessWrapperFactory"));
+        log.debug("BusinessWrapperFactory Registered: beanName={}, businessType={}", bean.getClass()
+                .getSimpleName(), bean.getBusinessType());
     }
 
-    public static IBusinessWrapper<?,?> getWrapper(String businessType) {
+    public static IBusinessWrapper<?, ?> getWrapper(String businessType) {
         if (CONTEXT.containsKey(businessType)) {
             return CONTEXT.get(businessType);
         }
