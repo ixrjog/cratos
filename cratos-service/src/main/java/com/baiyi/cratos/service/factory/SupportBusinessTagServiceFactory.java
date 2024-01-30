@@ -14,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SupportBusinessTagServiceFactory {
 
-    //TODO
-
     private SupportBusinessTagServiceFactory () {
     }
 
@@ -23,7 +21,7 @@ public class SupportBusinessTagServiceFactory {
 
     public static void register(SupportBusinessTagService bean) {
         CONTEXT.put(bean.getBusinessType(), bean);
-        log.debug("===================================== BusinessServiceFactory ======================================");
+        log.debug("=============================== SupportBusinessTagServiceFactory ===============================");
         log.debug("BusinessWrapperFactory Registered: serviceName={}, businessType={}", bean.getClass()
                 .getSimpleName(), bean.getBusinessType());
     }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.aspect.sensitive;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -20,7 +21,9 @@ public class SensitiveFormatterFactory {
 
     public static void register(SensitiveFormatter formatter) {
         CONTEXT.put(formatter.getSensitiveType(), formatter);
-        log.debug("SensitiveFormatterFactory Registered: formatter={}, sensitiveType={}", formatter.getClass().getSimpleName(), formatter.getSensitiveType());
+        log.debug(StringFormatter.inDramaFormat("SensitiveFormatterFactory"));
+        log.debug("SensitiveFormatterFactory Registered: formatter={}, sensitiveType={}", formatter.getClass()
+                .getSimpleName(), formatter.getSensitiveType());
     }
 
     public static SensitiveFormatter getFormatter(String sensitiveType) {
@@ -30,7 +33,7 @@ public class SensitiveFormatterFactory {
         return null;
     }
 
-    public static void productList(){
+    public static void productList() {
         // TODO
     }
 

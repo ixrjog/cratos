@@ -21,7 +21,7 @@ spring:
   # 关闭控制台
   shell:
     interactive:
-      enabled: on
+      enabled: off
 
 # 开发环境配置
 server:
