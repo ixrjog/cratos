@@ -26,6 +26,22 @@ public class BusinessTagParam {
 
     @Data
     @Schema
+    public static class SaveBusinessTag implements IToTarget<BusinessTag> {
+
+        private Integer id;
+
+        private String businessType;
+
+        private Integer businessId;
+
+        private Integer tagId;
+
+        private String tagValue;
+
+    }
+
+    @Data
+    @Schema
     public static class AddBusinessTag implements IToTarget<BusinessTag> {
 
         private String businessType;

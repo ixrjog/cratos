@@ -17,9 +17,7 @@ public interface BusinessTagFacade {
 
     List<String> queryBusinessTagValue(BusinessTagParam.QueryByValue queryByValue);
 
-    void addBusinessTag(BusinessTagParam.AddBusinessTag addBusinessTag);
-
-    void updateBusinessTag(BusinessTagParam.UpdateBusinessTag updateBusinessTag);
+    void saveBusinessTag(BusinessTagParam.SaveBusinessTag saveBusinessTag);
 
     void deleteById(int id);
 

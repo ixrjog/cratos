@@ -6,13 +6,14 @@ import com.baiyi.cratos.domain.param.user.UserParam;
 import com.baiyi.cratos.mapper.UserMapper;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import com.baiyi.cratos.service.base.SupportBusinessTagService;
 
 /**
  * @Author baiyi
  * @Date 2024/1/10 10:19
  * @Version 1.0
  */
-public interface UserService extends BaseUniqueKeyService<User>, BaseService<User, UserMapper> {
+public interface UserService extends BaseUniqueKeyService<User>, BaseService<User, UserMapper>, SupportBusinessTagService {
 
     DataTable<User> queryUserPage(UserParam.UserPageQuery pageQuery);
 

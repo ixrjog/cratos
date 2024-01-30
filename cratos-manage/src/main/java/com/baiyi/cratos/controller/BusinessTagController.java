@@ -39,17 +39,24 @@ public class BusinessTagController {
         return new HttpResult<>(businessTagFacade.queryBusinessTagValue(queryByValue));
     }
 
+    @Operation(summary = "Save businessTag")
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> saveBusinessTag(@RequestBody @Valid BusinessTagParam.SaveBusinessTag saveBusinessTag) {
+        businessTagFacade.saveBusinessTag(saveBusinessTag);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add businessTag")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addBusinessTag(@RequestBody @Valid BusinessTagParam.AddBusinessTag addBusinessTag) {
-        businessTagFacade.addBusinessTag(addBusinessTag);
+        // TODO
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Update businessTag")
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateBusinessTag(@RequestBody @Valid BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
-        businessTagFacade.updateBusinessTag(updateBusinessTag);
+        // TODO
         return HttpResult.SUCCESS;
     }
 

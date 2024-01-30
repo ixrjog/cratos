@@ -1,13 +1,15 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.service.BusinessTagService;
-import com.baiyi.cratos.service.base.BaseBusinessService;
-import com.baiyi.cratos.service.factory.BusinessServiceFactory;
+import com.baiyi.cratos.service.base.BaseService;
+import com.baiyi.cratos.service.base.SupportBusinessTagService;
+import com.baiyi.cratos.service.factory.SupportBusinessTagServiceFactory;
 import com.baiyi.cratos.wrapper.BusinessTagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,19 +50,25 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
     }
 
     @Override
-    public void addBusinessTag(BusinessTagParam.AddBusinessTag addBusinessTag) {
-        BusinessTag businessTag = addBusinessTag.toTarget();
-        BaseBusinessService<?> baseBusinessService = BusinessServiceFactory.getService(addBusinessTag.getBusinessType());
-        if (businessTagService.getByUniqueKey(businessTag) == null) {
-            businessTagService.add(businessTag);
+    public void saveBusinessTag(BusinessTagParam.SaveBusinessTag saveBusinessTag) {
+        SupportBusinessTagService supportBusinessService = SupportBusinessTagServiceFactory.getService(saveBusinessTag.getBusinessType());
+        if (supportBusinessService == null) {
+            throw new BusinessException("BusinessType {} does not support business tag.", saveBusinessTag.getBusinessType());
         }
-    }
-
-    @Override
-    public void updateBusinessTag(BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
-        BusinessTag businessTag = updateBusinessTag.toTarget();
-        if (businessTagService.getByUniqueKey(businessTag) != null) {
-            businessTagService.updateByPrimaryKey(businessTag);
+        BusinessTag businessTag = saveBusinessTag.toTarget();
+        if (supportBusinessService instanceof BaseService<?, ?> baseService) {
+            if (baseService.getById(businessTag.getBusinessId()) == null) {
+                throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}", saveBusinessTag.getBusinessType(), businessTag.getBusinessId());
+            }
+            if (saveBusinessTag.getId() != null) {
+                businessTagService.updateByPrimaryKey(businessTag);
+            } else {
+                if (businessTagService.getByUniqueKey(businessTag) == null) {
+                    businessTagService.add(businessTag);
+                }
+            }
+        } else {
+            throw new BusinessException("SupportBusinessTagService does not BaseService.");
         }
     }
 
