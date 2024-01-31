@@ -12,4 +12,16 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.rbac.RbacGroupParam$GroupPageQuery"
+          resultMap="BaseResultMap">
+      select * from rbac_group
+      <where>
+          <if test="queryName != null and queryName != ''">
+              group_name like "%" #{queryName} "%"
+              or base like "%" #{queryName} "%"
+          </if>
+      </where>
+  </select>
+
 </mapper>

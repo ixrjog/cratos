@@ -1,6 +1,12 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.RbacGroup;
+import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
+import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
+import com.baiyi.cratos.service.RbacGroupService;
+import com.baiyi.cratos.wrapper.RbacGroupWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,5 +20,15 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class RbacGroupFacadeImpl implements RbacGroupFacade {
+
+    private final RbacGroupService rbacGroupService;
+
+    private final RbacGroupWrapper rbacGroupWrapper;
+
+    @Override
+    public DataTable<RbacGroupVO.Group> queryGroupPage(RbacGroupParam.GroupPageQuery pageQuery) {
+        DataTable<RbacGroup> table = rbacGroupService.queryPageByParam(pageQuery);
+        return rbacGroupWrapper.wrapToTarget(table);
+    }
 
 }

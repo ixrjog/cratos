@@ -1,14 +1,18 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.generator.base.IValid;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "rbac_resource")
 public class RbacResource implements IValid {
     @Id

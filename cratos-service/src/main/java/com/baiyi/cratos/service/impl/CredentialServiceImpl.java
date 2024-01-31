@@ -5,7 +5,6 @@ import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.param.credential.CredentialParam;
 import com.baiyi.cratos.mapper.CredentialMapper;
@@ -31,7 +30,7 @@ public class CredentialServiceImpl implements CredentialService {
 
     @Override
     public DataTable<Credential> queryCredentialPage(CredentialParam.CredentialPageQuery pageQuery) {
-        Page<Certificate> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        Page<Credential> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<Credential> data = credentialMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
     }

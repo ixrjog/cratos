@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.CertificateMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Certificate">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="certificate_id" jdbcType="VARCHAR" property="certificateId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="domain_name" jdbcType="VARCHAR" property="domainName" />
-    <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="key_algorithm" jdbcType="VARCHAR" property="keyAlgorithm" />
-    <result column="not_before" jdbcType="TIMESTAMP" property="notBefore" />
-    <result column="not_after" jdbcType="TIMESTAMP" property="notAfter" />
-      <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Certificate">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="certificate_id" jdbcType="VARCHAR" property="certificateId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="domain_name" jdbcType="VARCHAR" property="domainName"/>
+        <result column="certificate_type" jdbcType="VARCHAR" property="certificateType"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="key_algorithm" jdbcType="VARCHAR" property="keyAlgorithm"/>
+        <result column="not_before" jdbcType="TIMESTAMP" property="notBefore"/>
+        <result column="not_after" jdbcType="TIMESTAMP" property="notAfter"/>
+        <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.certificate.CertificateParam$CertificatePageQuery"
-          resultMap="BaseResultMap">
-      select * from certificate
-      <where>
-          <if test="queryName != null and queryName != ''">
-              and name like "%" #{queryName} "%"
-              order by replace(name, #{queryName}, '')
-          </if>
-      </where>
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.certificate.CertificateParam$CertificatePageQuery"
+            resultMap="BaseResultMap">
+        select * from certificate
+        <where>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+                order by replace(name, #{queryName}, '')
+            </if>
+        </where>
+    </select>
 
 </mapper>
