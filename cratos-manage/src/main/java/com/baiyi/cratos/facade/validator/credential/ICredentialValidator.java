@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.validator;
+package com.baiyi.cratos.facade.validator.credential;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.validator;
+package com.baiyi.cratos.facade.validator.credential;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.InvalidCredentialException;
@@ -24,7 +24,6 @@ public abstract class BaseFingerprintAlgorithm {
 
     protected String calcFingerprint(String privateKey, String publicKey) {
         String fingerprint = "-";
-        // ssh-ed25519
         if (!org.springframework.util.StringUtils.hasText(publicKey)) {
             return fingerprint;
         }

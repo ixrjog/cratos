@@ -18,6 +18,9 @@ cratos:
   rbac:
     autoConfiguration:
       enabled: on
+  credential:
+    # 高安全性密钥
+    highSecurity: on
 
 springdoc:
   swagger-ui:

@@ -1,9 +1,9 @@
-package com.baiyi.cratos.facade.validator.impl;
+package com.baiyi.cratos.facade.validator.credential.impl;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.facade.validator.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
 import org.springframework.stereotype.Component;
 
 /**

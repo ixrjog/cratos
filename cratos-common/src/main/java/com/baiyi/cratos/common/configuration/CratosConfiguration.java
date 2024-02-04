@@ -1,5 +1,6 @@
 package com.baiyi.cratos.common.configuration;
 
+import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -18,35 +19,16 @@ import java.util.Optional;
 @ConfigurationProperties(prefix = "cratos", ignoreInvalidFields = true)
 public class CratosConfiguration {
 
-    private Auth auth;
+    private CratosModel.Auth auth;
 
-    private Rbac rbac;
+    private CratosModel.Rbac rbac;
 
-    @Data
-    public static class Auth {
-        private White white;
-        private Boolean enabled;
-    }
-
-    @Data
-    public static class White {
-        private List<String> resources;
-    }
-
-    @Data
-    public static class Rbac {
-        private AutoConfiguration autoConfiguration;
-    }
-
-    @Data
-    public static class AutoConfiguration {
-        private Boolean enabled;
-    }
+    private CratosModel.Credential credential;
 
     public boolean isTheResourceInTheWhiteList(String resourceName) {
         List<String> resources = Optional.of(auth)
-                .map(Auth::getWhite)
-                .map(White::getResources)
+                .map(CratosModel.Auth::getWhite)
+                .map(CratosModel.White::getResources)
                 .orElse(Lists.newArrayList());
         return resources.stream()
                 .anyMatch(resource -> resourceName.indexOf(resource) == 0);
