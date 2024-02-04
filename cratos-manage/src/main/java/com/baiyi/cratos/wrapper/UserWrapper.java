@@ -34,12 +34,12 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(UserVO.User user) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForRbacUserRole(user))
+                .put(buildRbacUserRoleResourceCount(user))
                 .build();
         user.setResourceCount(resourceCount);
     }
 
-    private Map<String, Integer> buildResourceCountForRbacUserRole(UserVO.User user) {
+    private Map<String, Integer> buildRbacUserRoleResourceCount(UserVO.User user) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(RBAC_USER_ROLE.name(), rbacUserRoleService.selectCountByUsername(user.getUsername()));
         return resourceCount;

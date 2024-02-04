@@ -33,6 +33,13 @@ public class CredentialController {
         return new HttpResult<>(credentialFacade.queryCredentialPage(pageQuery));
     }
 
+    @Operation(summary = "Add credential")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCredential(@RequestBody @Valid CredentialParam.AddCredential addCredential) {
+        credentialFacade.addCredential(addCredential);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Query credential type options")
     @GetMapping(value = "/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getCredentialOptions() {

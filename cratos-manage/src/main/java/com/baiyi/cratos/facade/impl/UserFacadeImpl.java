@@ -35,7 +35,7 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserWrapper userWrapper;
 
-//    private final BusinessCredentialService businessCredentialService;
+    //private final BusinessCredentialService businessCredentialService;
 //
 //    private final CredentialService credentialService;
 
@@ -95,6 +95,24 @@ public class UserFacadeImpl implements UserFacade {
                 .valid(true)
                 .build();
         credentialFacade.createBusinessCredential(credential, business);
+    }
+
+    public List<Credential> getUserSshKeyCredentials(String username) {
+        User user = userService.getByUsername(username);
+        SimpleBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.USER.name())
+                .businessId(user.getId())
+                .build();
+        return credentialFacade.queryCredentialByBusiness(business)
+                .stream()
+                .filter(cred -> {
+                    if (!cred.getPrivateCredential()) {
+                        return false;
+                    }
+                    return CredentialTypeEnum.SSH_USERNAME_WITH_KEY_PAIR.name()
+                            .equals(cred.getCredentialType());
+                })
+                .toList();
     }
 
 }

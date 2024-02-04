@@ -33,4 +33,6 @@ public interface CredentialFacade {
 
     Credential getUserPasswordCredential(User user);
 
+    void addCredential(CredentialParam.AddCredential addCredential);
+
 }
