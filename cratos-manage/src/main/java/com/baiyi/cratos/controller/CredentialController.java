@@ -40,6 +40,13 @@ public class CredentialController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update credential")
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateCredential(@RequestBody @Valid CredentialParam.UpdateCredential updateCredential) {
+        credentialFacade.updateCredential(updateCredential);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Query credential type options")
     @GetMapping(value = "/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getCredentialOptions() {

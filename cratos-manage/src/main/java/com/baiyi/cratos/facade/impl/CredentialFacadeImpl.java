@@ -139,22 +139,29 @@ public class CredentialFacadeImpl implements CredentialFacade {
             throw new InvalidCredentialException("The credential type is incorrect.");
         }
         credValidator.verify(credential);
-        if (credValidator instanceof BaseFingerprintAlgorithm baseFingerprintAlgorithm) {
+        if (credValidator instanceof BaseFingerprintAlgorithm fingerprintAlgorithm) {
             // 计算并填充指纹
-            baseFingerprintAlgorithm.calcAndFillInFingerprint(credential);
+            fingerprintAlgorithm.calcAndFillInFingerprint(credential);
         }
         credentialService.add(credential);
     }
 
-    public void updateCredential(CredentialParam.AddCredential addCredential) {
-        Credential credential = addCredential.toTarget();
-        CredentialTypeEnum credentialTypeEnum = CredentialTypeEnum.valueOf(credential.getCredentialType());
-        ICredentialValidator credValidator = CredentialValidatorFactory.getValidator(credentialTypeEnum);
-        if (credValidator == null) {
-            throw new InvalidCredentialException("The credential type is incorrect.");
+    @Override
+    public void updateCredential(CredentialParam.UpdateCredential updateCredential) {
+        Credential credential = credentialService.getById(updateCredential.getId());
+        if (credential == null) {
+            throw new InvalidCredentialException("The credential do not exist.");
         }
-        credValidator.verify(credential);
-        credentialService.add(credential);
+        if (updateCredential.getValid()) {
+            if (ExpiredUtil.isExpired(credential.getExpiredTime())) {
+                throw new InvalidCredentialException("The credential have expired.");
+            }
+            credential.setValid(updateCredential.getValid());
+        }
+        credential.setTitle(updateCredential.getTitle());
+        credential.setUsername(updateCredential.getUsername());
+        credential.setComment(updateCredential.getComment());
+        credentialService.updateByPrimaryKey(credential);
     }
 
 }

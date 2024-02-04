@@ -35,4 +35,6 @@ public interface CredentialFacade {
 
     void addCredential(CredentialParam.AddCredential addCredential);
 
+    void updateCredential(CredentialParam.UpdateCredential updateCredential);
+
 }

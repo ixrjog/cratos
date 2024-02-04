@@ -88,11 +88,11 @@ public class CredentialParam {
     @Schema
     public static class UpdateCredential implements IToTarget<Credential> {
 
+        @NotNull(message = "The ID must be specified.")
         private Integer id;
 
         private String title;
 
-        @NotBlank(message = "CredentialType must be specified.")
         private String credentialType;
 
         /**
@@ -125,9 +125,6 @@ public class CredentialParam {
         private Boolean valid;
 
         private String comment;
-
-        @NotNull(message = "ExpiredTime must be specified.")
-        private Date expiredTime;
 
     }
 
