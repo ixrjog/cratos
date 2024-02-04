@@ -39,8 +39,8 @@ public enum CredentialTypeEnum {
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(CredentialTypeEnum.values()).map(e -> OptionsVO.Option.builder()
-                .label(e.name())
-                .value(e.getDisplayName())
+                .label(e.getDisplayName())
+                .value(e.name())
                 .build()).collect(Collectors.toList());
         return OptionsVO.Options.builder()
                 .options(optionList)
