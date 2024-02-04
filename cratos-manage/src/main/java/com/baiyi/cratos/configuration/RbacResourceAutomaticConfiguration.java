@@ -1,6 +1,7 @@
 package com.baiyi.cratos.configuration;
 
 import com.baiyi.cratos.common.configuration.CratosConfiguration;
+import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.baiyi.cratos.domain.generator.RbacGroup;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.util.SpringContextUtil;
@@ -53,8 +54,8 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
     public void run(String... args) {
         boolean enabledRbacAutoConfiguration = Optional.of(cratosConfiguration)
                 .map(CratosConfiguration::getRbac)
-                .map(CratosConfiguration.Rbac::getAutoConfiguration)
-                .map(CratosConfiguration.AutoConfiguration::getEnabled)
+                .map(CratosModel.Rbac::getAutoConfiguration)
+                .map(CratosModel.AutoConfiguration::getEnabled)
                 .orElse(false);
         if (enabledRbacAutoConfiguration) {
             log.info("RBAC group & resource auto configuration.");
