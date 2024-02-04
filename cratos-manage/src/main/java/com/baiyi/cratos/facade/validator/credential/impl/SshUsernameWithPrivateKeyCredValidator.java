@@ -1,10 +1,12 @@
 package com.baiyi.cratos.facade.validator.credential.impl;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
+import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.facade.validator.credential.BaseFingerprintAlgorithm;
 import com.baiyi.cratos.facade.validator.credential.CredValidationRules;
 import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -16,6 +18,9 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgorithm implements ICredentialValidator {
+
+    @Value("${cratos.credential.highSecurity:false}")
+    private boolean highSecurity;
 
     private static final CredValidationRules rules = CredValidationRules.builder()
             .credentialNullMessage("The SSH privateKey must be specified.")
@@ -34,6 +39,9 @@ public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgor
 
     @Override
     public void verify(Credential credential) {
+        if (highSecurity) {
+            throw new InvalidCredentialException("The platform has enabled high security and uses key \"Ed25519\" pairs.");
+        }
         rules.verify(credential);
     }
 

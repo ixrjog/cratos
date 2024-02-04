@@ -54,7 +54,7 @@ public class CredValidationRules {
             } else {
                 if ((credential.getExpiredTime()
                         .getTime() - System.currentTimeMillis()) > maxExpiredTime) {
-                    throw new InvalidCredentialException("The expiredTime of credentials exceeds the limit.");
+                    throw new InvalidCredentialException("The expiredTime of credential exceeds the limit.");
                 }
             }
         }
