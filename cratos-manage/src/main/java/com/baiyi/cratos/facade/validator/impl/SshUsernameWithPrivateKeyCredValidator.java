@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.validator.impl;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
+import com.baiyi.cratos.facade.validator.BaseFingerprintAlgorithm;
 import com.baiyi.cratos.facade.validator.CredValidationRules;
 import com.baiyi.cratos.facade.validator.ICredentialValidator;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Component
-public class SshUsernameWithPrivateKeyCredValidator implements ICredentialValidator {
+public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgorithm implements ICredentialValidator {
 
     private static final CredValidationRules rules = CredValidationRules.builder()
             .credentialNullMessage("The SSH privateKey must be specified.")
@@ -24,6 +25,11 @@ public class SshUsernameWithPrivateKeyCredValidator implements ICredentialValida
 
     public CredentialTypeEnum getType() {
         return CredentialTypeEnum.SSH_USERNAME_WITH_PRIVATE_KEY;
+    }
+
+    public void calcAndFillInFingerprint(Credential credential) {
+        String fingerprint = calcFingerprint(credential.getCredential());
+        credential.setFingerprint(fingerprint);
     }
 
     @Override

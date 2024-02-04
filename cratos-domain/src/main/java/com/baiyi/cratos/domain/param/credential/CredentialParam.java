@@ -83,4 +83,53 @@ public class CredentialParam {
 
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateCredential implements IToTarget<Credential> {
+
+        private Integer id;
+
+        private String title;
+
+        @NotBlank(message = "CredentialType must be specified.")
+        private String credentialType;
+
+        /**
+         * 用户名
+         */
+        private String username;
+
+        /**
+         * 指纹
+         */
+        private String fingerprint;
+
+        /**
+         * 凭据内容
+         */
+        private String credential;
+
+        private String credential2;
+
+        /**
+         * 密码短语
+         */
+        private String passphrase;
+
+        private Boolean privateCredential;
+
+        /**
+         * 有效
+         */
+        private Boolean valid;
+
+        private String comment;
+
+        @NotNull(message = "ExpiredTime must be specified.")
+        private Date expiredTime;
+
+    }
+
+
 }
