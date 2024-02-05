@@ -5,7 +5,6 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.facade.CredentialFacade;
-import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.UserService;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
@@ -28,8 +27,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CratosUserDetailsService implements UserDetailsService {
 
-    private final UserFacade userFacade;
-
     private final UserService userService;
 
     private final JasyptPasswordEncoder cratosPasswordEncoder;
@@ -51,7 +48,6 @@ public class CratosUserDetailsService implements UserDetailsService {
                 .accountLocked(!user.getValid())
                 .accountExpired(ExpiredUtil.isExpired(user.getExpiredTime()))
                 .credentialsExpired(false)
-                //.passwordEncoder(null)
                 .authorities(getUserAuthorities(username))
                 .build();
     }

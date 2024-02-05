@@ -13,6 +13,7 @@ import org.jasypt.encryption.StringEncryptor;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -52,7 +53,10 @@ public class DomainDecryptAspect {
                 .forEach(field -> {
                     field.setAccessible(true);
                     try {
-                        field.set(domain, stringEncryptor.decrypt((String) field.get(domain)));
+                        String ciphertext = (String) field.get(domain);
+                        if (StringUtils.hasText(ciphertext)) {
+                            field.set(domain, stringEncryptor.decrypt(ciphertext));
+                        }
                     } catch (IllegalAccessException e) {
                         // 忽略字段类型错误
                     }
