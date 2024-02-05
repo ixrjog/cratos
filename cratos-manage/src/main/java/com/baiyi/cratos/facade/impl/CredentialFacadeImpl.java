@@ -148,10 +148,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
 
     @Override
     public void updateCredential(CredentialParam.UpdateCredential updateCredential) {
-        Credential credential = credentialService.getById(updateCredential.getId());
-        if (credential == null) {
-            throw new InvalidCredentialException("The credential do not exist.");
-        }
+        Credential credential = getById(updateCredential.getId());
         if (updateCredential.getValid()) {
             if (ExpiredUtil.isExpired(credential.getExpiredTime())) {
                 throw new InvalidCredentialException("The credential have expired.");
@@ -162,6 +159,29 @@ public class CredentialFacadeImpl implements CredentialFacade {
         credential.setUsername(updateCredential.getUsername());
         credential.setComment(updateCredential.getComment());
         credentialService.updateByPrimaryKey(credential);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        Credential credential = getById(id);
+        if (credential.getValid()) {
+            throw new InvalidCredentialException("The credential are not invalid.");
+        }
+        // 删除所有关联的业务凭据
+        List<BusinessCredential> businessCredentials = businessCredentialService.queryByCredentialId(id);
+        if (!CollectionUtils.isEmpty(businessCredentials)) {
+            businessCredentials.forEach(businessCredentialService::delete);
+        }
+        // 删除凭据
+        credentialService.deleteById(id);
+    }
+
+    private Credential getById(int id) {
+        Credential credential = credentialService.getById(id);
+        if (credential == null) {
+            throw new InvalidCredentialException("The credential do not exist.");
+        }
+        return credential;
     }
 
 }

@@ -69,4 +69,12 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
         return businessCredentialMapper.selectOneByExample(example);
     }
 
+    @Override
+    public List<BusinessCredential> queryByCredentialId(int credentialId) {
+        Example example = new Example(BusinessCredential.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("credentialId", credentialId);
+        return businessCredentialMapper.selectByExample(example);
+    }
+
 }

@@ -37,4 +37,6 @@ public interface CredentialFacade {
 
     void updateCredential(CredentialParam.UpdateCredential updateCredential);
 
+    void deleteById(int id);
+
 }

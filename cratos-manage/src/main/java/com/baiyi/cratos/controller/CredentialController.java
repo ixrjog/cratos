@@ -60,4 +60,11 @@ public class CredentialController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete credential by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteCredentialById(@RequestParam @Valid int id) {
+        credentialFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }
