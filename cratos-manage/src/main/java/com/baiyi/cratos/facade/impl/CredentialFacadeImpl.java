@@ -149,16 +149,19 @@ public class CredentialFacadeImpl implements CredentialFacade {
 
     @Override
     public void updateCredential(CredentialParam.UpdateCredential updateCredential) {
-        Credential credential = getById(updateCredential.getId());
+        Credential credential = Credential.builder()
+                .id(updateCredential.getId())
+                .title(StringUtils.hasText(updateCredential.getTitle()) ? updateCredential.getTitle() : "")
+                .username(StringUtils.hasText(updateCredential.getUsername()) ? updateCredential.getUsername() : "")
+                .comment(StringUtils.hasText(updateCredential.getComment()) ? updateCredential.getComment() : "")
+                .build();
+        Credential dbCredential = getById(updateCredential.getId());
         if (updateCredential.getValid()) {
-            if (ExpiredUtil.isExpired(credential.getExpiredTime())) {
+            if (ExpiredUtil.isExpired(dbCredential.getExpiredTime())) {
                 throw new InvalidCredentialException("The credential have expired.");
             }
             credential.setValid(updateCredential.getValid());
         }
-        credential.setTitle(StringUtils.hasText(updateCredential.getTitle()) ? updateCredential.getTitle() : "");
-        credential.setUsername(StringUtils.hasText(updateCredential.getUsername()) ? updateCredential.getUsername() : "");
-        credential.setComment(StringUtils.hasText(updateCredential.getComment()) ? updateCredential.getComment() : "");
         credentialService.updateByPrimaryKeySelective(credential);
     }
 
