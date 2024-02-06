@@ -38,7 +38,6 @@ public class SensitiveAspect {
         if (enabled) {
             Arrays.stream(joinPoint.getArgs())
                     .filter(arg -> AopUtils.getTargetClass(arg)
-                            .getSuperclass()
                             .isAnnotationPresent(FieldSensitive.class))
                     .forEach(this::eraseSensitiveInfo);
         }

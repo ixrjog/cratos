@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -155,10 +156,10 @@ public class CredentialFacadeImpl implements CredentialFacade {
             }
             credential.setValid(updateCredential.getValid());
         }
-        credential.setTitle(updateCredential.getTitle());
-        credential.setUsername(updateCredential.getUsername());
-        credential.setComment(updateCredential.getComment());
-        credentialService.updateByPrimaryKey(credential);
+        credential.setTitle(StringUtils.hasText(updateCredential.getTitle()) ? updateCredential.getTitle() : "");
+        credential.setUsername(StringUtils.hasText(updateCredential.getUsername()) ? updateCredential.getUsername() : "");
+        credential.setComment(StringUtils.hasText(updateCredential.getComment()) ? updateCredential.getComment() : "");
+        credentialService.updateByPrimaryKeySelective(credential);
     }
 
     @Override
