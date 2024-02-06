@@ -19,4 +19,10 @@ public interface EdsFacade {
 
     DataTable<EdsConfigVO.EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);
 
+    EdsConfigVO.EdsConfig getEdsConfigById(int configId);
+
+    void addEdsConfig(EdsConfigParam.AddEdsConfig addEdsConfig);
+
+    void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig);
+
 }

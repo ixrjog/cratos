@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author baiyi
@@ -46,10 +43,30 @@ public class ExternalDatasourceController {
     }
 
     // Config
-    @Operation(summary = "分页查询数据源配置")
+    @Operation(summary = "Pagination query eds config")
     @PostMapping(value = "/config/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsConfigVO.EdsConfig>> queryEdsConfigPage(@RequestBody @Valid EdsConfigParam.EdsConfigPageQuery pageQuery) {
         return new HttpResult<>(edsFacade.queryEdsConfigPage(pageQuery));
+    }
+
+    @Operation(summary = "Query eds config by id")
+    @GetMapping(value = "/config/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsConfigVO.EdsConfig> getEdsConfigById(@RequestParam int configId) {
+        return new HttpResult<>(edsFacade.getEdsConfigById(configId));
+    }
+
+    @Operation(summary = "Add eds config")
+    @PostMapping(value = "/config/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addEdsConfig(@RequestBody @Valid EdsConfigParam.AddEdsConfig addEdsConfig) {
+        edsFacade.addEdsConfig(addEdsConfig);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update eds config")
+    @PutMapping(value = "/config/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateEdsConfig(@RequestBody @Valid EdsConfigParam.UpdateEdsConfig updateEdsConfig) {
+        edsFacade.updateEdsConfig(updateEdsConfig);
+        return HttpResult.SUCCESS;
     }
 
 }

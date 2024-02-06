@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.eds;
 
+import com.baiyi.cratos.domain.generator.EdsConfig;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -25,6 +27,60 @@ public class EdsConfigParam {
         private String edsType;
 
         private Boolean valid;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class AddEdsConfig implements IToTarget<EdsConfig> {
+
+        private Integer id;
+
+        private String name;
+
+        private String edsType;
+
+        private String version;
+
+        private Boolean valid;
+
+        private Integer credentialId;
+
+        private Integer instanceId;
+
+        private String url;
+
+        private String configContent;
+
+        private String comment;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateEdsConfig implements IToTarget<EdsConfig> {
+
+        private Integer id;
+
+        private String name;
+
+        private String edsType;
+
+        private String version;
+
+        private Boolean valid;
+
+        private Integer credentialId;
+
+        private Integer instanceId;
+
+        private String url;
+
+        private String configContent;
+
+        private String comment;
 
     }
 

@@ -28,6 +28,7 @@ public class CredentialVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
+    @FieldSensitive
     public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
 
         @Serial

@@ -15,7 +15,7 @@ public class SensitiveVOTest {
 
     @Sensitive
     public void wrap(SensitiveTest.SensitiveVO vo) {
-        log.info("1: {}", vo);
+        log.info("{}", vo);
     }
 
 }
