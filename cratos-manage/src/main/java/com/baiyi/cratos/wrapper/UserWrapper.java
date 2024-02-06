@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

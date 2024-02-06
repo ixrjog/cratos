@@ -51,5 +51,4 @@ public class CertificateServiceImpl implements CertificateService {
         certificateMapper.deleteByPrimaryKey(id);
     }
 
-
 }

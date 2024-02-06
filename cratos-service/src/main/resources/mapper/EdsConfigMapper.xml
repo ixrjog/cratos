@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.EdsConfigMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.EdsConfig">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="eds_type" jdbcType="VARCHAR" property="edsType" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="credential_id" jdbcType="INTEGER" property="credentialId" />
+    <result column="instance_id" jdbcType="INTEGER" property="instanceId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="url" jdbcType="LONGVARCHAR" property="url" />
+    <result column="config_content" jdbcType="LONGVARCHAR" property="configContent" />
+    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
+  </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.eds.EdsConfigParam$EdsConfigPageQuery"
+          resultMap="BaseResultMap">
+      select * from eds_config
+      <where>
+          <if test="edsType != null and edsType != ''">
+              eds_type = #{edsType}
+          </if>
+          <if test="valid != null">
+              and valid = #{valid}
+          </if>
+          <if test="queryName != null and queryName != ''">
+              and instance_name like "%" #{queryName} "%"
+              or kind like "%" #{queryName} "%"
+          </if>
+      </where>
+  </select>
+
+</mapper>

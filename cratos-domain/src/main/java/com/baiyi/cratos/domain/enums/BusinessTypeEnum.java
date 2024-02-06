@@ -22,6 +22,9 @@ public enum BusinessTypeEnum {
     RBAC_ROLE,
     RBAC_GROUP,
     RBAC_RESOURCE,
-    RBAC_USER_ROLE
+    RBAC_USER_ROLE,
 
+    // EDS
+    EDS_INSTANCE,
+    EDS_CONFIG,
 }

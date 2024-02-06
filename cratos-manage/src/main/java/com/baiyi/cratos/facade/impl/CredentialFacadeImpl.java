@@ -163,10 +163,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
 
     @Override
     public void deleteById(int id) {
-        Credential credential = getById(id);
-        if (credential.getValid()) {
-            throw new InvalidCredentialException("The credential are not invalid.");
-        }
+        getById(id);
         // 删除所有关联的业务凭据
         List<BusinessCredential> businessCredentials = businessCredentialService.queryByCredentialId(id);
         if (!CollectionUtils.isEmpty(businessCredentials)) {
