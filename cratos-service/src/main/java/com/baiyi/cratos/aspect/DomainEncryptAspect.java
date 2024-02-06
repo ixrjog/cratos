@@ -14,6 +14,7 @@ import org.jasypt.encryption.StringEncryptor;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -68,7 +69,11 @@ public class DomainEncryptAspect {
                     field.setAccessible(true);
                     if (action == ENCRYPT) {
                         try {
-                            field.set(domain, stringEncryptor.encrypt((String) field.get(domain)));
+                            // 为空时不加密
+                            String fieldValue = (String) field.get(domain);
+                            if (StringUtils.hasText(fieldValue)) {
+                                field.set(domain, stringEncryptor.encrypt(fieldValue));
+                            }
                         } catch (IllegalAccessException e) {
                             // 忽略字段类型错误
                         }
