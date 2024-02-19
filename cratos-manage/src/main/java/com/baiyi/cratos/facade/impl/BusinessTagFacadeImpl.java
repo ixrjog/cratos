@@ -6,10 +6,9 @@ import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
+import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.base.BaseService;
-import com.baiyi.cratos.service.base.SupportBusinessTagService;
-import com.baiyi.cratos.service.factory.SupportBusinessTagServiceFactory;
 import com.baiyi.cratos.wrapper.BusinessTagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BusinessTagFacadeImpl implements BusinessTagFacade {
+public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag> implements BusinessTagFacade {
 
     private final BusinessTagService businessTagService;
 
@@ -51,16 +50,9 @@ public class BusinessTagFacadeImpl implements BusinessTagFacade {
 
     @Override
     public void saveBusinessTag(BusinessTagParam.SaveBusinessTag saveBusinessTag) {
-        SupportBusinessTagService supportBusinessService = SupportBusinessTagServiceFactory.getService(saveBusinessTag.getBusinessType());
-        if (supportBusinessService == null) {
-            throw new BusinessException("BusinessType {} does not support business tag.", saveBusinessTag.getBusinessType());
-        }
         BusinessTag businessTag = saveBusinessTag.toTarget();
-        if (supportBusinessService instanceof BaseService<?, ?> baseService) {
-            saveBusinessTag(baseService, businessTag);
-        } else {
-            throw new BusinessException("SupportBusinessTagService does not BaseService.");
-        }
+        BaseService<?, ?> baseService = getBusinessService(businessTag);
+        saveBusinessTag(baseService, businessTag);
     }
 
     private void saveBusinessTag(BaseService<?, ?> baseService, BusinessTag saveBusinessTag) {

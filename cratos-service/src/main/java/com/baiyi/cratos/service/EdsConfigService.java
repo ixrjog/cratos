@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.mapper.EdsConfigMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
-import com.baiyi.cratos.service.base.SupportBusinessTagService;
+import com.baiyi.cratos.service.base.SupportBusinessService;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @Date 2024/2/5 17:55
  * @Version 1.0
  */
-public interface EdsConfigService extends BaseUniqueKeyService<EdsConfig>, BaseValidService<EdsConfig, EdsConfigMapper>, SupportBusinessTagService {
+public interface EdsConfigService extends BaseUniqueKeyService<EdsConfig>, BaseValidService<EdsConfig, EdsConfigMapper>, SupportBusinessService {
 
     DataTable<EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);
 

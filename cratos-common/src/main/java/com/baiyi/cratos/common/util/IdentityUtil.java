@@ -8,9 +8,9 @@ import com.baiyi.cratos.common.fun.ValidRunnableFunction;
  * @Date 2024/2/6 16:04
  * @Version 1.0
  */
-public class IntegerUtils {
+public class IdentityUtil {
 
-    private IntegerUtils() {
+    private IdentityUtil() {
     }
 
     public static boolean hasIdentity(Integer id) {
@@ -28,7 +28,7 @@ public class IntegerUtils {
         };
     }
 
-    public static ValidRunnableFunction validIdentity(Integer id) {
+    public static ValidRunnableFunction tryIdentity(Integer id) {
         return (validRunnable, invalidRunnable) -> {
             if (hasIdentity(id)) {
                 validRunnable.run();

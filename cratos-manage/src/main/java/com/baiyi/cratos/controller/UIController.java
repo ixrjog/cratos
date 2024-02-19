@@ -24,6 +24,7 @@ public class UIController {
     @Operation(summary = "Get UI")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UIVO.UI> getUI() {
+        // TODO
         return null;
     }
 

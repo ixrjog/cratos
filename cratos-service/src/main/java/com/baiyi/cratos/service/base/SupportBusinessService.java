@@ -1,7 +1,7 @@
 package com.baiyi.cratos.service.base;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.service.factory.SupportBusinessTagServiceFactory;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/1/30 10:46
  * @Version 1.0
  */
-public interface SupportBusinessTagService extends BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
+public interface SupportBusinessService extends BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
     default void afterPropertiesSet() throws Exception {
-        SupportBusinessTagServiceFactory.register(this);
+        SupportBusinessServiceFactory.register(this);
     }
 
 }

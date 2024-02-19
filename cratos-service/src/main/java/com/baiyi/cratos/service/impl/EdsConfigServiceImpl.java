@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.mapper.EdsConfigMapper;
 import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.factory.SupportBusinessTagServiceFactory;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import com.baiyi.cratos.service.factory.credential.CredentialHolderFactory;
 import com.baiyi.cratos.service.factory.credential.ICredentialHolder;
 import com.github.pagehelper.Page;
@@ -64,7 +64,7 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
 
     @Override
     public void afterPropertiesSet() {
-        SupportBusinessTagServiceFactory.register(this);
+        SupportBusinessServiceFactory.register(this);
         CredentialHolderFactory.register(this);
     }
 

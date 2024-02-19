@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.util.IntegerUtils;
+import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -70,7 +70,7 @@ public class EdsFacadeImpl implements EdsFacade {
     public void addEdsConfig(EdsConfigParam.AddEdsConfig addEdsConfig) {
         EdsConfig edsConfig = addEdsConfig.toTarget();
         edsConfigService.add(edsConfig);
-        if (IntegerUtils.hasIdentity(addEdsConfig.getCredentialId())) {
+        if (IdentityUtil.hasIdentity(addEdsConfig.getCredentialId())) {
             SimpleBusiness business = SimpleBusiness.builder()
                     .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                     .businessId(edsConfig.getId())
@@ -88,11 +88,11 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessId(edsConfig.getId())
                 .build();
 
-        IntegerUtils.validIdentity(updateEdsConfig.getCredentialId())
+        IdentityUtil.tryIdentity(updateEdsConfig.getCredentialId())
                 .withValid(
                         // UpdateEdsConfig credentialId valid
                         () -> {
-                            IntegerUtils.validIdentity(edsConfig.getCredentialId())
+                            IdentityUtil.tryIdentity(edsConfig.getCredentialId())
                                     .withValid(
                                             // EdsConfig credentialId valid
                                             () -> {
@@ -110,12 +110,36 @@ public class EdsFacadeImpl implements EdsFacade {
                                             });
                         }, () -> {
                             // UpdateEdsConfig credentialId invalid
-                            if (IntegerUtils.hasIdentity(edsConfig.getCredentialId())) {
+                            if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
                                 // 吊销凭据
                                 businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
                             }
                         });
         edsConfigService.updateByPrimaryKey(updateEdsConfig.toTarget());
+    }
+
+    @Override
+    public void deleteEdsConfigById(int id) {
+        EdsConfig edsConfig = edsConfigService.getById(id);
+        IdentityUtil.tryIdentity(edsConfig.getInstanceId())
+                .withValid(() -> {
+                    EdsInstance edsInstance = edsInstanceService.getById(edsConfig.getInstanceId());
+                    if (edsInstance == null || !edsInstance.getValid()) {
+                        deleteEdsConfig(edsConfig);
+                    }
+                }, () -> {
+                    deleteEdsConfig(edsConfig);
+                });
+    }
+
+    private void deleteEdsConfig(EdsConfig edsConfig) {
+        // 吊销凭据
+        SimpleBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_CONFIG.name())
+                .businessId(edsConfig.getId())
+                .build();
+        businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
+        edsConfigService.deleteById(edsConfig.getId());
     }
 
 }

@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.doc.BusinessDocParam;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.facade.BusinessDocFacade;
+import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessDocService;
 import com.baiyi.cratos.wrapper.BusinessDocWrapper;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BusinessDocFacadeImpl implements BusinessDocFacade {
+public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDocument> implements BusinessDocFacade {
 
     private final BusinessDocService businessDocService;
 
@@ -42,12 +43,16 @@ public class BusinessDocFacadeImpl implements BusinessDocFacade {
 
     @Override
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
-        businessDocService.add(addBusinessDoc.toTarget());
+        BusinessDocument businessDocument = addBusinessDoc.toTarget();
+        trySupported(businessDocument);
+        businessDocService.add(businessDocument);
     }
 
     @Override
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
-        businessDocService.updateByPrimaryKey(updateBusinessDoc.toTarget());
+        BusinessDocument businessDocument = updateBusinessDoc.toTarget();
+        trySupported(businessDocument);
+        businessDocService.updateByPrimaryKey(businessDocument);
     }
 
     @Override

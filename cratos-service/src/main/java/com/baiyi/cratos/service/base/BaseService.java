@@ -5,6 +5,8 @@ import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.util.BeanNameConverter;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.domain.util.SpringContextUtil;
+import com.google.common.collect.Lists;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
 
@@ -58,6 +60,9 @@ public interface BaseService<T, M extends Mapper<T>> {
     }
 
     default List<T> queryByIds(List<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Lists.newArrayList();
+        }
         // 反射获取范型T的实体类
         Example example = new Example(Generics.find(this.getClass(), BaseService.class, 0));
         Example.Criteria criteria = example.createCriteria();

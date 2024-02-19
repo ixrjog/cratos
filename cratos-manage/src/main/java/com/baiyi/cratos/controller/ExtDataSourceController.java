@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/eds")
 @Tag(name = "External Datasource")
 @RequiredArgsConstructor
-public class ExternalDatasourceController {
+public class ExtDataSourceController {
 
     private final EdsFacade edsFacade;
 
@@ -43,6 +43,7 @@ public class ExternalDatasourceController {
     }
 
     // Config
+
     @Operation(summary = "Pagination query eds config")
     @PostMapping(value = "/config/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsConfigVO.EdsConfig>> queryEdsConfigPage(@RequestBody @Valid EdsConfigParam.EdsConfigPageQuery pageQuery) {
@@ -66,6 +67,13 @@ public class ExternalDatasourceController {
     @PutMapping(value = "/config/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateEdsConfig(@RequestBody @Valid EdsConfigParam.UpdateEdsConfig updateEdsConfig) {
         edsFacade.updateEdsConfig(updateEdsConfig);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete eds config by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteEdsConfigById(@RequestParam @Valid int id) {
+        edsFacade.deleteEdsConfigById(id);
         return HttpResult.SUCCESS;
     }
 

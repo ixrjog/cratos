@@ -25,4 +25,6 @@ public interface EdsFacade {
 
     void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig);
 
+    void deleteEdsConfigById(int id);
+
 }

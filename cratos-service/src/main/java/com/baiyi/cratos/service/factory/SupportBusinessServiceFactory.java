@@ -1,6 +1,6 @@
 package com.baiyi.cratos.service.factory;
 
-import com.baiyi.cratos.service.base.SupportBusinessTagService;
+import com.baiyi.cratos.service.base.SupportBusinessService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -12,21 +12,21 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
-public class SupportBusinessTagServiceFactory {
+public class SupportBusinessServiceFactory {
 
-    private SupportBusinessTagServiceFactory () {
+    private SupportBusinessServiceFactory() {
     }
 
-    private static final Map<String, SupportBusinessTagService> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, SupportBusinessService> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(SupportBusinessTagService bean) {
+    public static void register(SupportBusinessService bean) {
         CONTEXT.put(bean.getBusinessType(), bean);
-        log.debug("=============================== SupportBusinessTagServiceFactory ===============================");
+        log.debug("=============================== SupportBusinessServiceFactory ===============================");
         log.debug("BusinessWrapperFactory Registered: serviceName={}, businessType={}", bean.getClass()
                 .getSimpleName(), bean.getBusinessType());
     }
 
-    public static SupportBusinessTagService getService(String businessType) {
+    public static SupportBusinessService getService(String businessType) {
         if (CONTEXT.containsKey(businessType)) {
             return CONTEXT.get(businessType);
         }
