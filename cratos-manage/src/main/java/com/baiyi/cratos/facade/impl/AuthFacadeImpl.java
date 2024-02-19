@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION;
 
@@ -40,10 +41,8 @@ public class AuthFacadeImpl implements AuthFacade {
 
     @Override
     public LoginVO.Login login(LoginParam.Login loginParam) {
-        IAuthProvider authProvider = AuthProviderFactory.getProvider(provider);
-        if (authProvider == null) {
-            throw new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION);
-        }
+        IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
+                .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
         User user = userService.getByUsername(loginParam.getUsername());
         LoginVO.Login login = authProvider.login(loginParam, user);
         // 更新用户登录信息

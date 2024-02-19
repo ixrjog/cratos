@@ -1,6 +1,7 @@
 package com.baiyi.cratos.mytest;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.common.enums.DocumentTypeEnum;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,6 +17,11 @@ public class MyTest extends BaseUnit {
         while (true) {
         }
 
+    }
+
+    @Test
+    void test2(){
+        DocumentTypeEnum.valueOf("abc");
     }
 
 }
