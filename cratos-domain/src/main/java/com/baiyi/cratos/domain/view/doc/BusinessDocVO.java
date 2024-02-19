@@ -45,6 +45,8 @@ public class BusinessDocVO {
 
         private Integer seq;
 
+        private String author;
+
         private String comment;
 
         private String content;

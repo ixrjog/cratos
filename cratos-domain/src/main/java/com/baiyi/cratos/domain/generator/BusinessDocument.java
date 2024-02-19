@@ -41,6 +41,8 @@ public class BusinessDocument implements BaseBusiness.IBusiness {
      */
     private Integer seq;
 
+    private String author;
+
     private String comment;
 
     @Column(name = "create_time", insertable = false, updatable = false)

@@ -13,6 +13,8 @@ import com.baiyi.cratos.wrapper.BusinessDocWrapper;
 import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -54,6 +56,9 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
                     .join(DocumentTypeEnum.values()));
         }
         trySupportedBusiness(businessDocument);
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        businessDocument.setAuthor(authentication.getName());
         businessDocService.add(businessDocument);
     }
 
