@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.mapper.BusinessDocumentMapper;
-import com.baiyi.cratos.service.BusinessDocService;
+import com.baiyi.cratos.service.BusinessDocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.BUSINESS_DOC)
-public class BusinessDocServiceImpl implements BusinessDocService {
+public class BusinessDocumentServiceImpl implements BusinessDocumentService {
 
     private final BusinessDocumentMapper businessDocumentMapper;
 

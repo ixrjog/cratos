@@ -8,5 +8,5 @@ import com.baiyi.cratos.service.base.BaseBusinessService;
  * @Date 2024/1/9 10:11
  * @Version 1.0
  */
-public interface BusinessDocService extends BaseBusinessService<BusinessDocument> {
+public interface BusinessDocumentService extends BaseBusinessService<BusinessDocument> {
 }

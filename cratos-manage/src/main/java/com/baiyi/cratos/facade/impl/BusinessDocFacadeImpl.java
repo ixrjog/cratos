@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.doc.BusinessDocParam;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.facade.BusinessDocFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
-import com.baiyi.cratos.service.BusinessDocService;
+import com.baiyi.cratos.service.BusinessDocumentService;
 import com.baiyi.cratos.wrapper.BusinessDocWrapper;
 import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDocument> implements BusinessDocFacade {
 
-    private final BusinessDocService businessDocService;
+    private final BusinessDocumentService businessDocService;
 
     private final BusinessDocWrapper businessDocWrapper;
 
