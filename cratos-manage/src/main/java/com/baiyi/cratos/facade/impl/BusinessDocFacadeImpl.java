@@ -52,7 +52,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
         try {
             DocumentTypeEnum.valueOf(businessDocument.getDocumentType());
         } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported document type! enter: {}", Joiner.on(",")
+            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
                     .join(DocumentTypeEnum.values()));
         }
         trySupportedBusiness(businessDocument);
@@ -68,7 +68,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
         try {
             DocumentTypeEnum.valueOf(businessDocument.getDocumentType());
         } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported document type! enter: {}", Joiner.on(",")
+            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
                     .join(DocumentTypeEnum.values()));
         }
         trySupportedBusiness(businessDocument);
