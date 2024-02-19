@@ -72,6 +72,9 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
                     .join(DocumentTypeEnum.values()));
         }
         trySupportedBusiness(businessDocument);
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        businessDocument.setAuthor(authentication.getName());
         businessDocService.updateByPrimaryKey(businessDocument);
     }
 
