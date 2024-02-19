@@ -21,16 +21,16 @@ public abstract class BaseSupportBusinessFacade<T extends BaseBusiness.IBusiness
         if (supportBusinessService instanceof BaseService<?, ?> baseService) {
             return baseService;
         } else {
-            throw new BusinessException("SupportBusinessService does not BaseService.");
+            throw new BusinessException("SupportBusinessService not extends BaseService.");
         }
     }
 
-    protected boolean isSupported(BaseBusiness.IBusiness business) {
+    protected boolean isSupportedBusiness(BaseBusiness.IBusiness business) {
         return SupportBusinessServiceFactory.getService(business.getBusinessType()) != null;
     }
 
-    protected void trySupported(BaseBusiness.IBusiness business) {
-        if (SupportBusinessServiceFactory.getService(business.getBusinessType()) == null) {
+    protected void trySupportedBusiness(BaseBusiness.IBusiness business) {
+        if (!isSupportedBusiness(business)) {
             throw new BusinessException("BusinessType {} does not support business factory.", business.getBusinessType());
         }
     }

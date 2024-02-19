@@ -44,14 +44,14 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
-        trySupported(businessDocument);
+        trySupportedBusiness(businessDocument);
         businessDocService.add(businessDocument);
     }
 
     @Override
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
-        trySupported(businessDocument);
+        trySupportedBusiness(businessDocument);
         businessDocService.updateByPrimaryKey(businessDocument);
     }
 
