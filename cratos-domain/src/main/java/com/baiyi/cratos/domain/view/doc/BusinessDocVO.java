@@ -47,6 +47,8 @@ public class BusinessDocVO {
 
         private String author;
 
+        private String lastEditor;
+
         private String comment;
 
         private String content;

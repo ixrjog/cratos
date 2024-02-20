@@ -12,6 +12,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="seq" jdbcType="INTEGER" property="seq" />
     <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="last_editor" jdbcType="VARCHAR" property="lastEditor" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />

@@ -43,6 +43,9 @@ public class BusinessDocument implements BaseBusiness.IBusiness {
 
     private String author;
 
+    @Column(name = "last_editor")
+    private String lastEditor;
+
     private String comment;
 
     @Column(name = "create_time", insertable = false, updatable = false)

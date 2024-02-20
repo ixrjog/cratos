@@ -72,9 +72,13 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
                     .join(DocumentTypeEnum.values()));
         }
         trySupportedBusiness(businessDocument);
+        // Author
+        BusinessDocument dBBusinessDocument = businessDocService.getById(updateBusinessDoc.getId());
+        businessDocument.setAuthor(dBBusinessDocument.getAuthor());
+        // Last Editor
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
-        businessDocument.setAuthor(authentication.getName());
+        businessDocument.setLastEditor(authentication.getName());
         businessDocService.updateByPrimaryKey(businessDocument);
     }
 
