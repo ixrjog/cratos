@@ -49,13 +49,9 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
-        try {
-            DocumentTypeEnum.valueOf(businessDocument.getDocumentType());
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
-                    .join(DocumentTypeEnum.values()));
-        }
+        verifyDocumentType(businessDocument.getDocumentType());
         trySupportedBusiness(businessDocument);
+        // Author
         Authentication authentication = SecurityContextHolder.getContext()
                 .getAuthentication();
         businessDocument.setAuthor(authentication.getName());
@@ -65,12 +61,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
-        try {
-            DocumentTypeEnum.valueOf(businessDocument.getDocumentType());
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
-                    .join(DocumentTypeEnum.values()));
-        }
+        verifyDocumentType(businessDocument.getDocumentType());
         trySupportedBusiness(businessDocument);
         // Author
         BusinessDocument dBBusinessDocument = businessDocService.getById(updateBusinessDoc.getId());
@@ -85,6 +76,15 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void deleteById(int id) {
         businessDocService.deleteById(id);
+    }
+
+    private void verifyDocumentType(String documentType) {
+        try {
+            DocumentTypeEnum.valueOf(documentType);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
+                    .join(DocumentTypeEnum.values()));
+        }
     }
 
 }
