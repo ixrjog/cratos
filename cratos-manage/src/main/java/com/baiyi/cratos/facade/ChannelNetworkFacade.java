@@ -1,0 +1,22 @@
+package com.baiyi.cratos.facade;
+
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
+import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
+
+/**
+ * @Author baiyi
+ * @Date 2024/2/21 11:17
+ * @Version 1.0
+ */
+public interface ChannelNetworkFacade {
+
+    void setChannelNetworkValidById(int id);
+
+    DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQuery pageQuery);
+
+    void addChannelNetwork(ChannelNetworkParam.AddChannelNetwork addChannelNetwork);
+
+    void updateChannelNetwork(ChannelNetworkParam.UpdateChannelNetwork updateChannelNetwork);
+
+}
