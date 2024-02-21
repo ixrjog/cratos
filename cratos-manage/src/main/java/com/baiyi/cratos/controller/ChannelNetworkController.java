@@ -52,4 +52,11 @@ public class ChannelNetworkController {
         return new HttpResult<>(channelNetworkFacade.queryChannelNetworkPage(pageQuery));
     }
 
+    @Operation(summary = "Delete channelNetwork by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteChannelNetworkById(@RequestParam @Valid int id) {
+        channelNetworkFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

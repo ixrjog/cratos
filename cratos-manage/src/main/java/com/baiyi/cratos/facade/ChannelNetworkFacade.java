@@ -19,4 +19,6 @@ public interface ChannelNetworkFacade {
 
     void updateChannelNetwork(ChannelNetworkParam.UpdateChannelNetwork updateChannelNetwork);
 
+    void deleteById(int id);
+
 }
