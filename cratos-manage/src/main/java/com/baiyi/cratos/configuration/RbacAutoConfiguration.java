@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
-public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
+public class RbacAutoConfiguration implements CommandLineRunner {
 
     @Resource
     private RequestMappingHandlerMapping handlerMapping;
@@ -117,7 +117,7 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
                         .join(controllerMethodMapping.getBase(), controllerMethodMapping.getMethodValue()))
                 .comment(controllerMethodMapping.getSummary())
                 .valid(!controllerMethodMapping.getRequestMethod()
-                        .equalsIgnoreCase("GET"))
+                        .equalsIgnoreCase(RequestMethod.GET.name()))
                 .uiPoint(false)
                 .build();
         if (rbacResourceService.getByUniqueKey(rbacResource) == null) {
@@ -125,30 +125,34 @@ public class RbacResourceAutomaticConfiguration implements CommandLineRunner {
         }
     }
 
+    private void getOrCreateGroup() {
+
+    }
+
     private void invoke(ControllerMethodMapping controllerMethodMapping, Annotation[] declaredAnnotations) {
         Arrays.stream(declaredAnnotations)
-                .forEachOrdered(declaredAnnotation -> {
+                .forEach(declaredAnnotation -> {
                     if (declaredAnnotation instanceof Operation operation) {
                         controllerMethodMapping.setSummary(operation.summary());
                         return;
                     }
                     if (declaredAnnotation instanceof PostMapping postMapping) {
-                        controllerMethodMapping.setRequestMethod("POST");
+                        controllerMethodMapping.setRequestMethod(RequestMethod.POST.name());
                         controllerMethodMapping.setMethodValue(postMapping.value()[0]);
                         return;
                     }
                     if (declaredAnnotation instanceof GetMapping getMapping) {
-                        controllerMethodMapping.setRequestMethod("GET");
+                        controllerMethodMapping.setRequestMethod(RequestMethod.GET.name());
                         controllerMethodMapping.setMethodValue(getMapping.value()[0]);
                         return;
                     }
                     if (declaredAnnotation instanceof PutMapping putMapping) {
-                        controllerMethodMapping.setRequestMethod("PUT");
+                        controllerMethodMapping.setRequestMethod(RequestMethod.PUT.name());
                         controllerMethodMapping.setMethodValue(putMapping.value()[0]);
                         return;
                     }
                     if (declaredAnnotation instanceof DeleteMapping deleteMapping) {
-                        controllerMethodMapping.setRequestMethod("DELETE");
+                        controllerMethodMapping.setRequestMethod(RequestMethod.DELETE.name());
                         controllerMethodMapping.setMethodValue(deleteMapping.value()[0]);
                     }
                 });

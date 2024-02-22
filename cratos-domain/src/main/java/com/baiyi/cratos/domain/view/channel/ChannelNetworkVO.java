@@ -37,7 +37,6 @@ public class ChannelNetworkVO {
 
         private String channelKey;
 
-
         private Boolean valid;
 
         private String channelStatus;

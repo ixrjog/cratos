@@ -30,7 +30,7 @@ public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.Bus
     private final BusinessTagService businessTagService;
 
     @Override
-    @BusinessWrapper(types = BusinessTypeEnum.TAG)
+    @BusinessWrapper(ofTypes = BusinessTypeEnum.TAG)
     public void wrap(BusinessTagVO.BusinessTag businessTag) {
         // This is a good idea
     }

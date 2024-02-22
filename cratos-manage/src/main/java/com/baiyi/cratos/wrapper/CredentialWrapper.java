@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Credential, Credential> implements IBaseWrapper<CredentialVO.Credential> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     @Sensitive
     public void wrap(CredentialVO.Credential credential) {
         // This is a good idea

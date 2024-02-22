@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class ChannelNetworkWrapper extends BaseDataTableConverter<ChannelNetworkVO.ChannelNetwork, ChannelNetwork> implements IBaseWrapper<ChannelNetworkVO.ChannelNetwork> {
 
     @Override
-    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(ChannelNetworkVO.ChannelNetwork channelNetwork) {
         // This is a good idea
     }
