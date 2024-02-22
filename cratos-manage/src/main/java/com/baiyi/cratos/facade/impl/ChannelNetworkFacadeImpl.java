@@ -53,7 +53,7 @@ public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
 
     @Override
     public void deleteById(int id) {
-        // TODO
+        channelNetworkService.deleteById(id);
     }
 
     private void verifyAvailableStatus(String availableStatus) {

@@ -1,10 +1,10 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
-import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
 import com.baiyi.cratos.mapper.ChannelNetworkMapper;
 import com.baiyi.cratos.service.ChannelNetworkService;
@@ -32,6 +32,12 @@ public class ChannelNetworkServiceImpl implements ChannelNetworkService {
         Page<ChannelNetwork> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<ChannelNetwork> data = channelNetworkMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        channelNetworkMapper.deleteByPrimaryKey(id);
     }
 
 }
