@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.enums.ChannelAvailableStatusEnum;
-import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
 import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
@@ -9,7 +8,6 @@ import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.ChannelNetworkFacade;
 import com.baiyi.cratos.service.ChannelNetworkService;
 import com.baiyi.cratos.wrapper.ChannelNetworkWrapper;
-import com.google.common.base.Joiner;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,28 +39,19 @@ public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
 
     @Override
     public void addChannelNetwork(ChannelNetworkParam.AddChannelNetwork addChannelNetwork) {
-        verifyAvailableStatus(addChannelNetwork.getAvailableStatus());
+        ChannelAvailableStatusEnum.verifyValueOf(addChannelNetwork.getAvailableStatus());
         channelNetworkService.add(addChannelNetwork.toTarget());
     }
 
     @Override
     public void updateChannelNetwork(ChannelNetworkParam.UpdateChannelNetwork updateChannelNetwork) {
-        verifyAvailableStatus(updateChannelNetwork.getAvailableStatus());
+        ChannelAvailableStatusEnum.verifyValueOf(updateChannelNetwork.getAvailableStatus());
         channelNetworkService.updateByPrimaryKey(updateChannelNetwork.toTarget());
     }
 
     @Override
     public void deleteById(int id) {
         channelNetworkService.deleteById(id);
-    }
-
-    private void verifyAvailableStatus(String availableStatus) {
-        try {
-            ChannelAvailableStatusEnum.valueOf(availableStatus);
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported availableStatus! please enter: {}", Joiner.on(",")
-                    .join(ChannelAvailableStatusEnum.values()));
-        }
     }
 
 }

@@ -21,7 +21,7 @@ public class BusinessDocVO {
 
         void setBusinessDocs(List<BusinessDoc> businessDocs);
 
-        List<BusinessDoc> getBusinessDocs();
+        // List<BusinessDoc> getBusinessDocs();
 
     }
 

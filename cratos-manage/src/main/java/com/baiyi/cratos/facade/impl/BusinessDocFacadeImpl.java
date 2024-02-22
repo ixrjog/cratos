@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.enums.DocumentTypeEnum;
-import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.doc.BusinessDocParam;
@@ -10,7 +9,6 @@ import com.baiyi.cratos.facade.BusinessDocFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessDocumentService;
 import com.baiyi.cratos.wrapper.BusinessDocWrapper;
-import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -49,7 +47,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
-        verifyDocumentType(businessDocument.getDocumentType());
+        DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
         trySupportedBusiness(businessDocument);
         // Author
         Authentication authentication = SecurityContextHolder.getContext()
@@ -61,7 +59,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
-        verifyDocumentType(businessDocument.getDocumentType());
+        DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
         trySupportedBusiness(businessDocument);
         // Author
         BusinessDocument dBBusinessDocument = businessDocService.getById(updateBusinessDoc.getId());
@@ -76,15 +74,6 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     @Override
     public void deleteById(int id) {
         businessDocService.deleteById(id);
-    }
-
-    private void verifyDocumentType(String documentType) {
-        try {
-            DocumentTypeEnum.valueOf(documentType);
-        } catch (IllegalArgumentException e) {
-            throw new BusinessException("Unsupported document type! please enter: {}", Joiner.on(",")
-                    .join(DocumentTypeEnum.values()));
-        }
     }
 
 }
