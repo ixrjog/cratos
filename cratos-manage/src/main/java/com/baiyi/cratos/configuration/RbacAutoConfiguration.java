@@ -101,15 +101,7 @@ public class RbacAutoConfiguration implements CommandLineRunner {
             controllerMethodMapping.setBase(requestMapping.value()[0]);
         }
         invoke(controllerMethodMapping, declaredAnnotations);
-        RbacGroup rbacGroup = RbacGroup.builder()
-                .groupName(controllerMethodMapping.getTag())
-                .base(controllerMethodMapping.getBase())
-                .comment("")
-                .build();
-        RbacGroup dBRbacGroup = rbacGroupService.getByUniqueKey(rbacGroup);
-        if (dBRbacGroup != null) {
-            rbacGroup.setId(dBRbacGroup.getId());
-        }
+        RbacGroup rbacGroup = getOrCreateGroup(controllerMethodMapping);
         RbacResource rbacResource = RbacResource.builder()
                 .groupId(rbacGroup.getId())
                 .resourceName(Joiner.on("")
@@ -125,8 +117,19 @@ public class RbacAutoConfiguration implements CommandLineRunner {
         }
     }
 
-    private void getOrCreateGroup() {
-
+    private RbacGroup getOrCreateGroup(ControllerMethodMapping controllerMethodMapping) {
+        RbacGroup rbacGroup = RbacGroup.builder()
+                .groupName(controllerMethodMapping.getTag())
+                .base(controllerMethodMapping.getBase())
+                .comment("")
+                .build();
+        RbacGroup dBRbacGroup = rbacGroupService.getByUniqueKey(rbacGroup);
+        if (dBRbacGroup != null) {
+            return dBRbacGroup;
+        } else {
+            rbacGroupService.add(rbacGroup);
+            return rbacGroup;
+        }
     }
 
     private void invoke(ControllerMethodMapping controllerMethodMapping, Annotation[] declaredAnnotations) {
