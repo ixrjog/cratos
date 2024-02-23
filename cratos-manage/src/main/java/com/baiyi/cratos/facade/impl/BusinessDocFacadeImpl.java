@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.DocumentTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.param.business.BusinessParam;
@@ -11,8 +12,6 @@ import com.baiyi.cratos.service.BusinessDocumentService;
 import com.baiyi.cratos.wrapper.BusinessDocWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -45,18 +44,16 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     }
 
     @Override
+    @SetSessionUserToParam(desc = "set Author")
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
         trySupportedBusiness(businessDocument);
-        // Author
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        businessDocument.setAuthor(authentication.getName());
         businessDocService.add(businessDocument);
     }
 
     @Override
+    @SetSessionUserToParam(desc = "set LastEditor")
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
@@ -64,10 +61,6 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
         // Author
         BusinessDocument dBBusinessDocument = businessDocService.getById(updateBusinessDoc.getId());
         businessDocument.setAuthor(dBBusinessDocument.getAuthor());
-        // Last Editor
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        businessDocument.setLastEditor(authentication.getName());
         businessDocService.updateByPrimaryKey(businessDocument);
     }
 

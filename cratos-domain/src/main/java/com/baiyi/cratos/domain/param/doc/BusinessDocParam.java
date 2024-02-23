@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.doc;
 
+import com.baiyi.cratos.domain.ISetSessionUser;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +17,7 @@ public class BusinessDocParam {
 
     @Data
     @Schema
-    public static class AddBusinessDoc implements IToTarget<BusinessDocument> {
+    public static class AddBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
 
         private Integer id;
 
@@ -38,11 +39,17 @@ public class BusinessDocParam {
 
         private String content;
 
+        private String author;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.author = username;
+        }
     }
 
     @Data
     @Schema
-    public static class UpdateBusinessDoc implements IToTarget<BusinessDocument> {
+    public static class UpdateBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
 
         private Integer id;
 
@@ -63,6 +70,13 @@ public class BusinessDocParam {
         private Date updateTime;
 
         private String content;
+
+        private String lastEditor;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.lastEditor = username;
+        }
 
     }
 
