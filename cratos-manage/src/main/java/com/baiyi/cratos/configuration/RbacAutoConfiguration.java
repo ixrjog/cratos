@@ -63,6 +63,9 @@ public class RbacAutoConfiguration implements CommandLineRunner {
         }
     }
 
+    /**
+     * test
+     */
     public void start() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
         handlerMethods.forEach((mappingInfo, method) -> {
