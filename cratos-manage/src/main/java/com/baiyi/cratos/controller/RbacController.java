@@ -3,10 +3,13 @@ package com.baiyi.cratos.controller;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
+import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
+import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
+import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +36,8 @@ public class RbacController {
 
     private final RbacGroupFacade rbacGroupFacade;
 
+    private final RbacResourceFacade rbacResourceFacade;
+
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacRoleVO.Role>> queryRolePage(@RequestBody @Valid RbacRoleParam.RolePageQuery pageQuery) {
@@ -43,6 +48,12 @@ public class RbacController {
     @PostMapping(value = "/group/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacGroupVO.Group>> queryGroupPage(@RequestBody @Valid RbacGroupParam.GroupPageQuery pageQuery) {
         return new HttpResult<>(rbacGroupFacade.queryGroupPage(pageQuery));
+    }
+
+    @Operation(summary = "Pagination query resource")
+    @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(@RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
+        return new HttpResult<>(rbacResourceFacade.queryResourcePage(pageQuery));
     }
 
 }
