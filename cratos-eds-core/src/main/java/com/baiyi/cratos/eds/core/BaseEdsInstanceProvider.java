@@ -1,15 +1,23 @@
 package com.baiyi.cratos.eds.core;
 
 
+import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsConfig;
+import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.core.util.ConfigUtil;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.base.BaseService;
 import com.google.common.collect.Sets;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +39,12 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
 
     @Resource
     private SimpleEdsFacade simpleEdsFacade;
+
+    @Resource
+    private CredentialService credService;
+
+    @Resource
+    private ConfigCredTemplate configCredTemplate;
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
@@ -118,6 +132,29 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     private List<EdsAsset> queryFromDatabaseAssets(ExternalDataSourceInstance<C> instance) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), getAssetType());
+    }
+
+    @Override
+    public C produce(EdsConfig edsConfig) {
+        String configContent = edsConfig.getConfigContent();
+        if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+            Credential cred = credService.getById(edsConfig.getCredentialId());
+            if (cred != null) {
+                return loadAs(configCredTemplate.renderTemplate(configContent, cred));
+            }
+        }
+        return loadAs(configContent);
+    }
+
+    @SuppressWarnings("unchecked")
+    private C loadAs(String configContent) {
+        Class<C> clazz = Generics.find(this.getClass(), BaseService.class, 0);
+        return ConfigUtil.loadAs(configContent, clazz);
+    }
+
+    @Override
+    public EdsAsset pushAsset(ExternalDataSourceInstance<C> instance, A asset) {
+        return enterEntity(instance, asset);
     }
 
     @Override

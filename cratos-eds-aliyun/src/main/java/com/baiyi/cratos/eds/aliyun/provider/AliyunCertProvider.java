@@ -41,9 +41,5 @@ public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigM
         return null;
     }
 
-    @Override
-    public void pushAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, ListCertResponseBody.ListCertResponseBodyCertList asset) {
-
-    }
 
 }

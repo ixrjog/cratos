@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 
 /**
  * @Author baiyi
@@ -13,9 +14,9 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
  */
 public interface EdsFacade {
 
-    DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.EdsInstancePageQuery pageQuery);
+    DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
-    void registerEdsInstance(EdsInstanceParam.RegisterEdsInstance registerEdsInstance);
+    void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance);
 
     DataTable<EdsConfigVO.EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);
 
@@ -26,5 +27,9 @@ public interface EdsFacade {
     void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig);
 
     void deleteEdsConfigById(int id);
+
+    void importInstanceAsset(EdsInstanceParam.importInstanceAsset importInstanceAsset);
+
+    EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType);
 
 }

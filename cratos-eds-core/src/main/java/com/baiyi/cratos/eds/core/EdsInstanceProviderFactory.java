@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.core;
 
 
+import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
@@ -37,6 +38,13 @@ public class EdsInstanceProviderFactory {
             providerMap.put(providerBean.getAssetType(), providerBean);
             CONTEXT.put(providerBean.getInstanceType(), providerMap);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <C extends IEdsConfigModel> C produce(String instanceType, String assetType, EdsConfig edsConfig) {
+        return (C) CONTEXT.get(instanceType)
+                .get(assetType)
+                .produce(edsConfig);
     }
 
     /**

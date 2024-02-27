@@ -10,6 +10,10 @@ import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -40,14 +44,14 @@ public class EdsFacadeImpl implements EdsFacade {
     private final BusinessCredentialFacade businessCredentialFacade;
 
     @Override
-    public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.EdsInstancePageQuery pageQuery) {
+    public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
         DataTable<EdsInstance> table = edsInstanceService.queryEdsInstancePage(pageQuery);
         return edsInstanceWrapper.wrapToTarget(table);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void registerEdsInstance(EdsInstanceParam.RegisterEdsInstance registerEdsInstance) {
+    public void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance) {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
 
@@ -127,9 +131,7 @@ public class EdsFacadeImpl implements EdsFacade {
                     if (edsInstance == null || !edsInstance.getValid()) {
                         deleteEdsConfig(edsConfig);
                     }
-                }, () -> {
-                    deleteEdsConfig(edsConfig);
-                });
+                }, () -> deleteEdsConfig(edsConfig));
     }
 
     private void deleteEdsConfig(EdsConfig edsConfig) {
@@ -140,6 +142,36 @@ public class EdsFacadeImpl implements EdsFacade {
                 .build();
         businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
         edsConfigService.deleteById(edsConfig.getId());
+    }
+
+    @Override
+    public void importInstanceAsset(EdsInstanceParam.importInstanceAsset importInstanceAsset) {
+        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
+        edsInstanceProviderDelegate.importAssets();
+    }
+
+    /**
+     * Build Eds provider delegate
+     *
+     * @param instanceId
+     * @param assetType
+     * @return
+     */
+    @Override
+    public EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType) {
+        EdsInstance edsInstance = edsInstanceService.getById(instanceId);
+        IEdsConfigModel edsConfigModel = null;
+        if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
+            EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
+            if (edsConfig != null) {
+                edsConfigModel = EdsInstanceProviderFactory.produce(edsInstance.getEdsType(), assetType, edsConfig);
+            }
+        }
+        ExternalDataSourceInstance<?> extDataSourceInstance = ExternalDataSourceInstance.builder()
+                .edsInstance(edsInstance)
+                .edsConfig(edsConfigModel)
+                .build();
+        return EdsInstanceProviderFactory.buildDelegate(extDataSourceInstance, assetType);
     }
 
 }

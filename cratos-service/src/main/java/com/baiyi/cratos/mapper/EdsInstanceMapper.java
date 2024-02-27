@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface EdsInstanceMapper extends Mapper<EdsInstance> {
 
-    List<EdsInstance> queryPageByParam(EdsInstanceParam.EdsInstancePageQuery pageQuery);
+    List<EdsInstance> queryPageByParam(EdsInstanceParam.InstancePageQuery pageQuery);
 
 }

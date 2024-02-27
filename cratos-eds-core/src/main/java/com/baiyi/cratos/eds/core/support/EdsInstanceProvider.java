@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.core.support;
 
 
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import org.springframework.aop.support.AopUtils;
@@ -14,7 +16,9 @@ public interface EdsInstanceProvider<C extends IEdsConfigModel, A> {
 
     void importAssets(ExternalDataSourceInstance<C> instance);
 
-    void pushAsset(ExternalDataSourceInstance<C> instance, A asset);
+    EdsAsset pushAsset(ExternalDataSourceInstance<C> instance, A asset);
+
+    C produce(EdsConfig edsConfig);
 
     default String getInstanceType() {
         return AopUtils.getTargetClass(this)

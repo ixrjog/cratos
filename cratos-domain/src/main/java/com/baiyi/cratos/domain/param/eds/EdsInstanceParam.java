@@ -21,7 +21,7 @@ public class EdsInstanceParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class EdsInstancePageQuery extends PageParam {
+    public static class InstancePageQuery extends PageParam {
 
         @Schema(description = "Query by name")
         private String queryName;
@@ -34,7 +34,7 @@ public class EdsInstanceParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class RegisterEdsInstance implements IToTarget<EdsInstance> {
+    public static class RegisterInstance implements IToTarget<EdsInstance> {
 
         private Integer id;
 
@@ -53,6 +53,20 @@ public class EdsInstanceParam {
         private String url;
 
         private String comment;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class importInstanceAsset {
+
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+
+       // private String instanceType;
+
+        private String assetType;
 
     }
 

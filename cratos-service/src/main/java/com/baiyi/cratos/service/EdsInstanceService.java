@@ -15,6 +15,6 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  */
 public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance>, BaseValidService<EdsInstance, EdsInstanceMapper>, SupportBusinessService {
 
-    DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.EdsInstancePageQuery pageQuery);
+    DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
 }

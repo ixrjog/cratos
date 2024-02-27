@@ -28,7 +28,7 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     private final EdsInstanceMapper edsInstanceMapper;
 
     @Override
-    public DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.EdsInstancePageQuery pageQuery) {
+    public DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
         Page<EdsInstance> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<EdsInstance> data = edsInstanceMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());

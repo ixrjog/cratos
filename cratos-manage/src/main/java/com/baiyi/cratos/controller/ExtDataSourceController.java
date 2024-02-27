@@ -31,13 +31,13 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Pagination query eds instance")
     @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryEdsInstancePage(@RequestBody @Valid EdsInstanceParam.EdsInstancePageQuery pageQuery) {
+    public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryEdsInstancePage(@RequestBody @Valid EdsInstanceParam.InstancePageQuery pageQuery) {
         return new HttpResult<>(edsFacade.queryEdsInstancePage(pageQuery));
     }
 
     @Operation(summary = "Register eds instance")
     @PostMapping(value = "/instance/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> registerEdsInstance(@RequestBody @Valid EdsInstanceParam.RegisterEdsInstance registerEdsInstance) {
+    public HttpResult<Boolean> registerEdsInstance(@RequestBody @Valid EdsInstanceParam.RegisterInstance registerEdsInstance) {
         edsFacade.registerEdsInstance(registerEdsInstance);
         return HttpResult.SUCCESS;
     }
@@ -74,6 +74,13 @@ public class ExtDataSourceController {
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteEdsConfigById(@RequestParam @Valid int id) {
         edsFacade.deleteEdsConfigById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Import eds instance asset")
+    @PostMapping(value = "/instance/asset/import", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> importEdsInstanceAsset(@RequestBody @Valid EdsInstanceParam.importInstanceAsset importInstanceAsset) {
+        edsFacade.importInstanceAsset(importInstanceAsset);
         return HttpResult.SUCCESS;
     }
 
