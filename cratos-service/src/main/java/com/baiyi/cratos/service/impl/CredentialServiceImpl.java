@@ -35,12 +35,6 @@ public class CredentialServiceImpl implements CredentialService {
         return new DataTable<>(data, page.getTotal());
     }
 
-//    @Override
-//    @DomainEncrypt
-//    public void add(Credential credential){
-//        credentialMapper.insert(credential);
-//    }
-
     @Override
     @DomainEncrypt
     public void updateByPrimaryKey(Credential credential) {

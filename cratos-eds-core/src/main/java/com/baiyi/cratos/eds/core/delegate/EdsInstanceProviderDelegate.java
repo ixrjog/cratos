@@ -1,7 +1,9 @@
-package com.baiyi.cratos.eds.delegate;
+package com.baiyi.cratos.eds.core.delegate;
 
-import com.baiyi.cratos.eds.IExternalDataSourceInstance;
-import com.baiyi.cratos.eds.support.EdsInstanceProvider;
+
+import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +19,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EdsInstanceProviderDelegate<I extends IExternalDataSourceInstance, A> {
+public class EdsInstanceProviderDelegate<C extends IEdsConfigModel, A> {
 
     @Schema(description = "Eds Instance")
-    private I instance;
+    private ExternalDataSourceInstance<C> instance;
 
-    @Schema(description = "Eds Provider;")
-    private EdsInstanceProvider<I, A> provider;
+    @Schema(description = "Eds Provider")
+    private EdsInstanceProvider<C, A> provider;
 
     public void importAssets() {
         provider.importAssets(instance);

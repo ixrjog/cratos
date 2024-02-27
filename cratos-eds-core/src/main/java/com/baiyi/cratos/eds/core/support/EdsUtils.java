@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.support;
+package com.baiyi.cratos.eds.core.support;
 
 /**
  * @Author baiyi

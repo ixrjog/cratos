@@ -16,6 +16,9 @@
         <module>cratos-service</module>
         <module>cratos-shell</module>
         <module>cratos-common</module>
+        <module>cratos-eds</module>
+        <module>cratos-eds-core</module>
+        <module>cratos-eds-aliyun</module>
     </modules>
 
     <properties>
@@ -235,6 +238,24 @@
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-eds</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-eds-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-eds-aliyun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
