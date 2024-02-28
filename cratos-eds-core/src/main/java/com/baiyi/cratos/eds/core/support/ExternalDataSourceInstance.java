@@ -16,6 +16,6 @@ public class ExternalDataSourceInstance<C extends IEdsConfigModel> {
 
     EdsInstance edsInstance;
 
-    C edsConfig;
+    C edsConfigModel;
 
 }

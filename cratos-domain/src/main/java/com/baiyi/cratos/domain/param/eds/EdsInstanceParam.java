@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -36,11 +37,12 @@ public class EdsInstanceParam {
     @Schema
     public static class RegisterInstance implements IToTarget<EdsInstance> {
 
-        private Integer id;
+        // private Integer id;
 
+        @NotNull(message = "Parameter 'instanceName' cannot be empty.")
         private String instanceName;
 
-        private String instanceType;
+        // private String instanceType;
 
         private String kind;
 
@@ -48,6 +50,7 @@ public class EdsInstanceParam {
 
         private Boolean valid;
 
+        @NotNull(message = "Parameter 'configId' cannot be empty.")
         private Integer configId;
 
         private String url;

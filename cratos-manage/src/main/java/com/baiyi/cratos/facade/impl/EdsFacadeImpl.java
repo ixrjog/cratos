@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
@@ -23,6 +24,7 @@ import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @Author baiyi
@@ -54,8 +56,17 @@ public class EdsFacadeImpl implements EdsFacade {
     public void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance) {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
+        if (!CollectionUtils.isEmpty(edsInstanceService.queryByConfigId(edsInstance.getConfigId()))) {
+            throw new EdsInstanceRegisterException("The specified configId is being used by other data source instances.");
+        }
+        EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
+        if (edsConfig == null) {
+            throw new EdsInstanceRegisterException("The edsConfig does not exist.");
+        }
 
-        //
+        edsInstance.setEdsType(edsConfig.getEdsType());
+        edsInstance.setValid(true);
+        edsInstanceService.add(edsInstance);
     }
 
     @Override
@@ -169,7 +180,7 @@ public class EdsFacadeImpl implements EdsFacade {
         }
         ExternalDataSourceInstance<?> extDataSourceInstance = ExternalDataSourceInstance.builder()
                 .edsInstance(edsInstance)
-                .edsConfig(edsConfigModel)
+                .edsConfigModel(edsConfigModel)
                 .build();
         return EdsInstanceProviderFactory.buildDelegate(extDataSourceInstance, assetType);
     }

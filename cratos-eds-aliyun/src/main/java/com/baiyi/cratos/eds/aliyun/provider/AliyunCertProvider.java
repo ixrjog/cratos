@@ -30,7 +30,7 @@ public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigM
     @Override
     protected List<ListCertResponseBody.ListCertResponseBodyCertList> listEntities(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return aliyunCertRepo.listCert(instance.getEdsConfig());
+            return aliyunCertRepo.listCert(instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
