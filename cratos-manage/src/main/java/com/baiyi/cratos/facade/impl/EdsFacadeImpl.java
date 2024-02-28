@@ -24,7 +24,6 @@ import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @Author baiyi
@@ -56,14 +55,13 @@ public class EdsFacadeImpl implements EdsFacade {
     public void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance) {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
-        if (!CollectionUtils.isEmpty(edsInstanceService.queryByConfigId(edsInstance.getConfigId()))) {
+        if (edsInstanceService.selectCountByConfigId(edsInstance.getConfigId()) > 0) {
             throw new EdsInstanceRegisterException("The specified configId is being used by other data source instances.");
         }
         EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
         if (edsConfig == null) {
             throw new EdsInstanceRegisterException("The edsConfig does not exist.");
         }
-
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(true);
         edsInstanceService.add(edsInstance);
