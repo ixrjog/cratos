@@ -72,7 +72,7 @@ public class ExtDataSourceController {
     }
 
     @Operation(summary = "Delete eds config by id")
-    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/config/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteEdsConfigById(@RequestParam @Valid int id) {
         edsFacade.deleteEdsConfigById(id);
         return HttpResult.SUCCESS;
