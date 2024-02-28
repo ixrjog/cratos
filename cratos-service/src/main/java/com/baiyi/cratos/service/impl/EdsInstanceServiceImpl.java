@@ -43,11 +43,11 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     }
 
     @Override
-    public List<EdsInstance> queryByConfigId(Integer configId) {
+    public int selectCountByConfigId(Integer configId) {
         Example example = new Example(EdsInstance.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("configId", configId);
-        return edsInstanceMapper.selectByExample(example);
+        return edsInstanceMapper.selectCountByExample(example);
     }
 
 }

@@ -1,8 +1,13 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,6 +44,13 @@ public class EdsAssetServiceImpl implements EdsAssetService {
         criteria.andEqualTo("instanceId", instanceId)
                 .andEqualTo("assetType", assetType);
         return edsAssetMapper.selectByExample(example);
+    }
+
+    @Override
+    public DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
+        Page<EdsAsset> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<EdsAsset> data = edsAssetMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
 }

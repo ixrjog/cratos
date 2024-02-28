@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
@@ -31,5 +32,7 @@ public interface EdsFacade {
     void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset);
 
     EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType);
+
+    DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
 
 }

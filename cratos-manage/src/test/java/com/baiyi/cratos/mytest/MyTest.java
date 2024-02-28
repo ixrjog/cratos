@@ -1,6 +1,9 @@
 package com.baiyi.cratos.mytest;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,9 +15,17 @@ public class MyTest extends BaseUnit {
 
     @Test
     void test() {
-        int loop = 0;
-        while (true) {
-        }
+
+        EdsAsset edsAsset = EdsAsset.builder()
+                .kind("test")
+                .assetId("test")
+                .valid(true)
+                .assetKey("test")
+                .build();
+
+        EdsAssetVO.Asset<?> asset = BeanCopierUtil.copyProperties(edsAsset, EdsAssetVO.Asset.class);
+
+        System.out.println(asset);
     }
 
     @Test

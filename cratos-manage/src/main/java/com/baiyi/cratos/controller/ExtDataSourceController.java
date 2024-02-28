@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.facade.EdsFacade;
@@ -82,6 +83,12 @@ public class ExtDataSourceController {
     public HttpResult<Boolean> importEdsInstanceAsset(@RequestBody @Valid EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
         edsFacade.importInstanceAsset(importInstanceAsset);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Pagination query eds instance asset")
+    @PostMapping(value = "/instance/asset/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<EdsAssetVO.Asset>> queryEdsInstanceAssetPage(@RequestBody @Valid EdsInstanceParam.AssetPageQuery assetPageQuery) {
+        return new HttpResult<>(edsFacade.queryEdsInstanceAssetPage(assetPageQuery));
     }
 
 }

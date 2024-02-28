@@ -4,27 +4,28 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
-import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @Author baiyi
@@ -37,6 +38,8 @@ public class EdsFacadeImpl implements EdsFacade {
 
     private final EdsInstanceService edsInstanceService;
 
+    private final EdsAssetService edsAssetService;
+
     private final EdsInstanceWrapper edsInstanceWrapper;
 
     private final EdsConfigService edsConfigService;
@@ -44,6 +47,10 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsConfigWrapper edsConfigWrapper;
 
     private final BusinessCredentialFacade businessCredentialFacade;
+
+    private final EdsAssetWrapper edsAssetWrapper;
+
+    private final EdsInstanceProviderDelegateHelper delegateHelper;
 
     @Override
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
@@ -56,14 +63,13 @@ public class EdsFacadeImpl implements EdsFacade {
     public void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance) {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
-        if (!CollectionUtils.isEmpty(edsInstanceService.queryByConfigId(edsInstance.getConfigId()))) {
+        if (edsInstanceService.selectCountByConfigId(edsInstance.getConfigId()) > 0) {
             throw new EdsInstanceRegisterException("The specified configId is being used by other data source instances.");
         }
         EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
         if (edsConfig == null) {
             throw new EdsInstanceRegisterException("The edsConfig does not exist.");
         }
-
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(true);
         edsInstanceService.add(edsInstance);
@@ -170,19 +176,13 @@ public class EdsFacadeImpl implements EdsFacade {
      */
     @Override
     public EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType) {
-        EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        IEdsConfigModel edsConfigModel = null;
-        if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
-            EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
-            if (edsConfig != null) {
-                edsConfigModel = EdsInstanceProviderFactory.produce(edsInstance.getEdsType(), assetType, edsConfig);
-            }
-        }
-        ExternalDataSourceInstance<?> extDataSourceInstance = ExternalDataSourceInstance.builder()
-                .edsInstance(edsInstance)
-                .edsConfigModel(edsConfigModel)
-                .build();
-        return EdsInstanceProviderFactory.buildDelegate(extDataSourceInstance, assetType);
+        return delegateHelper.buildDelegate(instanceId, assetType);
+    }
+
+    @Override
+    public DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
+        DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery);
+        return edsAssetWrapper.wrapToTarget(table);
     }
 
 }

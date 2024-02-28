@@ -13,12 +13,12 @@ import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.AssetUtil;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.ConfigUtil;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.base.BaseService;
 import com.google.common.collect.Sets;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -149,8 +149,15 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
 
     @SuppressWarnings("unchecked")
     private C loadAs(String configContent) {
-        Class<C> clazz = Generics.find(this.getClass(), BaseService.class, 0);
+        Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 0);
         return ConfigUtil.loadAs(configContent, clazz);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public A assetLoadAs(String originalModel){
+        Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 1);
+        return AssetUtil.loadAs(originalModel, clazz);
     }
 
     @Override

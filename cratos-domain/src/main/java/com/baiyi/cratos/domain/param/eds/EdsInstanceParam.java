@@ -73,4 +73,21 @@ public class EdsInstanceParam {
 
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class AssetPageQuery extends PageParam {
+
+        private Integer instanceId;
+
+        @Schema(description = "Query by name")
+        private String queryName;
+
+        @Schema(description = "Query by assetType")
+        private String assetType;
+
+    }
+
 }

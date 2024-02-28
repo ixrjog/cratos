@@ -1,5 +1,8 @@
 package com.baiyi.cratos.eds.core.util;
 
+import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.eds.core.exception.EdsAssetException;
+import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
@@ -28,6 +31,17 @@ public class AssetUtil {
             return data2 == null;
         }
         return date1.equals(data2);
+    }
+
+    public static <A> A loadAs(String yaml, Class<A> targetClass) {
+        if (StringUtils.isEmpty(yaml)) {
+            throw new EdsAssetException("The eds asset original model is empty.");
+        }
+        try {
+            return YamlUtil.loadAs(yaml, targetClass);
+        } catch (JsonSyntaxException e) {
+            throw new EdsAssetException("Eds asset original model conversion error.");
+        }
     }
 
 }

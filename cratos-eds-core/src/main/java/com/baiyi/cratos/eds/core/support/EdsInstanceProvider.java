@@ -20,6 +20,8 @@ public interface EdsInstanceProvider<C extends IEdsConfigModel, A> {
 
     C produce(EdsConfig edsConfig);
 
+    A assetLoadAs(String originalModel);
+
     default String getInstanceType() {
         return AopUtils.getTargetClass(this)
                 .getAnnotation(EdsInstanceAssetType.class)

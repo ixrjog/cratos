@@ -25,4 +25,21 @@
     <result column="original_model" jdbcType="LONGVARCHAR" property="originalModel" />
     <result column="description" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.eds.EdsInstanceParam$AssetPageQuery"
+          resultMap="BaseResultMap">
+      select * from eds_asset
+      <where>
+          instance_id = #{instanceId} and asset_type = #{assetType}
+          <if test="valid != null">
+              and valid = #{valid}
+          </if>
+          <if test="queryName != null and queryName != ''">
+              and instance_name like "%" #{queryName} "%"
+              or kind like "%" #{queryName} "%"
+          </if>
+      </where>
+  </select>
+
 </mapper>
