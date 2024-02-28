@@ -145,7 +145,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
-    public void importInstanceAsset(EdsInstanceParam.importInstanceAsset importInstanceAsset) {
+    public void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
         EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
         edsInstanceProviderDelegate.importAssets();
     }

@@ -28,7 +28,7 @@ public interface EdsFacade {
 
     void deleteEdsConfigById(int id);
 
-    void importInstanceAsset(EdsInstanceParam.importInstanceAsset importInstanceAsset);
+    void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset);
 
     EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType);
 

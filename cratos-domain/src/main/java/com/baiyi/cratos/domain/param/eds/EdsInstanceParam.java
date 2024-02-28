@@ -59,7 +59,7 @@ public class EdsInstanceParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class importInstanceAsset {
+    public static class ImportInstanceAsset {
 
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;

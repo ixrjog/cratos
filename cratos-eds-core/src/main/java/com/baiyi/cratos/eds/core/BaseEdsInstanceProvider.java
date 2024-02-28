@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
+import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -155,6 +156,11 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     @Override
     public EdsAsset pushAsset(ExternalDataSourceInstance<C> instance, A asset) {
         return enterEntity(instance, asset);
+    }
+
+    protected EdsAssetBuilder<C, A> newEdsAssetBuilder(ExternalDataSourceInstance<C> instance, A entity) {
+        return EdsAssetBuilder.newBuilder(instance, entity)
+                .assetTypeOf(getAssetType());
     }
 
     @Override

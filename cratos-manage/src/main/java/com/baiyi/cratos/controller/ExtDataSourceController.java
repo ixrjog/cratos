@@ -79,7 +79,7 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Import eds instance asset")
     @PostMapping(value = "/instance/asset/import", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> importEdsInstanceAsset(@RequestBody @Valid EdsInstanceParam.importInstanceAsset importInstanceAsset) {
+    public HttpResult<Boolean> importEdsInstanceAsset(@RequestBody @Valid EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
         edsFacade.importInstanceAsset(importInstanceAsset);
         return HttpResult.SUCCESS;
     }

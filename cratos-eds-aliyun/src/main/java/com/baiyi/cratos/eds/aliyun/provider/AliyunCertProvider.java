@@ -38,8 +38,15 @@ public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigM
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, ListCertResponseBody.ListCertResponseBodyCertList entity) {
-        return null;
+        // https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listcert?spm=a2c4g.11174283.0.0.4b484c27CkzXih
+        return newEdsAssetBuilder(instance, entity)
+                .assetIdOf(entity.getIdentifier())
+                .nameOf(entity.getCommonName())
+                .kindOf(entity.getCertType())
+                .statusOf(entity.getStatus())
+                .createdTimeOf(entity.getBeforeDate())
+                .expiredTimeOf(entity.getAfterDate())
+                .build();
     }
-
 
 }
