@@ -27,6 +27,8 @@ public interface EdsFacade {
 
     void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig);
 
+    void setEdsConfigValidById(int id);
+
     void deleteEdsConfigById(int id);
 
     void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset);

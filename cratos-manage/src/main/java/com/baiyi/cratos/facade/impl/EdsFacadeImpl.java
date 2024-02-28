@@ -140,6 +140,11 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    public void setEdsConfigValidById(int id) {
+        edsConfigService.updateValidById(id);
+    }
+
+    @Override
     public void deleteEdsConfigById(int id) {
         EdsConfig edsConfig = edsConfigService.getById(id);
         IdentityUtil.tryIdentity(edsConfig.getInstanceId())

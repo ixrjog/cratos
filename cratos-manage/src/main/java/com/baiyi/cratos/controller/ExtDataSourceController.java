@@ -71,6 +71,13 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update eds config valid")
+    @PutMapping(value = "/config/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setEdsConfigValidById(@RequestParam @Valid int id) {
+        edsFacade.setEdsConfigValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Delete eds config by id")
     @DeleteMapping(value = "/config/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteEdsConfigById(@RequestParam @Valid int id) {
