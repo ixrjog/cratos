@@ -35,8 +35,12 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
 
     @Override
     public void businessWrap(CredentialVO.ICred cred) {
-        CredentialVO.Credential credential = this.convert(credentialService.getById(cred.getCredId()));
-        wrapFromProxy(credential);
+        Credential credential = credentialService.getById(cred.getCredId());
+        if (credential == null) {
+            return;
+        }
+        CredentialVO.Credential credentialVO = this.convert(credential);
+        wrapFromProxy(credentialVO);
     }
 
 }
