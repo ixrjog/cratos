@@ -54,10 +54,10 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     public void importAssets(ExternalDataSourceInstance<C> instance) {
         // EdsInstanceProviderFactory.buildDelegate(instance,getAssetType());
         List<A> entities = listEntities(instance);
-        enterAssets(instance, entities);
+        enterEntities(instance, entities);
     }
 
-    private void enterAssets(ExternalDataSourceInstance<C> instance, List<A> entities) {
+    private void enterEntities(ExternalDataSourceInstance<C> instance, List<A> entities) {
         Set<Integer> idSet = listAssetsIdSet(instance);
         entities.forEach(e -> enterEntity(instance, idSet, e));
         idSet.forEach(id -> simpleEdsFacade.deleteEdsAssetById(id));
@@ -76,7 +76,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     protected EdsAsset enterAsset(EdsAsset newEdsAsset) {
         EdsAsset edsAsset = attemptToEnterAsset(newEdsAsset);
         // 是否需要有资产属性表 ？
-        postEnterEntity(edsAsset);
+        postEnterAsset(edsAsset);
         return edsAsset;
     }
 
@@ -85,7 +85,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
      *
      * @param edsAsset
      */
-    protected void postEnterEntity(EdsAsset edsAsset) {
+    protected void postEnterAsset(EdsAsset edsAsset) {
     }
 
     private EdsAsset attemptToEnterAsset(EdsAsset newEdsAsset) {

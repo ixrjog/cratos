@@ -24,6 +24,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
@@ -59,6 +60,9 @@ public class EdsTaskLockAspect {
     @Around("@annotation(edsTaskLock)")
     public Object around(ProceedingJoinPoint joinPoint, EdsTaskLock edsTaskLock) throws Throwable {
         String key = generateLockKey(joinPoint, edsTaskLock);
+        if (!StringUtils.hasText(key)) {
+            return joinPoint.proceed();
+        }
         String providerBeanName = AopUtils.getTargetClass(joinPoint.getTarget())
                 .getSimpleName();
         try {

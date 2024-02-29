@@ -14,10 +14,10 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface EdsTaskLock {
 
+    @Schema(description = "SpEL specified parameters.")
     String instanceId() default "";
 
-
-    @Schema(description = "最大锁定时间（秒）")
+    @Schema(description = "Maximum lock time (seconds): Default 60 seconds.")
     String maxLockTime() default "60";
 
 }
