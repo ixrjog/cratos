@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.view.eds;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,8 +29,8 @@ public class EdsConfigVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
-    public static class EdsConfig extends BaseVO implements Serializable {
+    @BusinessType(type = BusinessTypeEnum.EDS_CONFIG)
+    public static class EdsConfig extends BaseVO implements CredentialVO.ICred, Serializable {
 
         @Serial
         private static final long serialVersionUID = 5528314871263301871L;
@@ -54,6 +55,12 @@ public class EdsConfigVO {
 
         private String comment;
 
+        private CredentialVO.Credential cred;
+
+        @Override
+        public Integer getCredId() {
+            return credentialId;
+        }
     }
 
 }

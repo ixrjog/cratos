@@ -24,6 +24,14 @@ import java.util.List;
  */
 public class CredentialVO {
 
+    public interface ICred {
+
+        Integer getCredId();
+
+        void setCred(Credential cred);
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
