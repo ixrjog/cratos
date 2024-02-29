@@ -81,7 +81,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     }
 
     /**
-     * 重写
+     * Post processing, please rewrite if necessary
      *
      * @param edsAsset
      */
@@ -94,7 +94,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
             try {
                 edsAssetService.add(newEdsAsset);
             } catch (Exception e) {
-                log.error("Enter EDS asset err: {}", e.getMessage());
+                log.error("Enter eds asset err: {}", e.getMessage());
             }
         } else {
             newEdsAsset.setId(edsAsset.getId());
@@ -141,21 +141,23 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
         if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credService.getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return loadAs(configCredTemplate.renderTemplate(configContent, cred));
+                return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));
             }
         }
-        return loadAs(configContent);
+        return configLoadAs(configContent);
     }
 
     @SuppressWarnings("unchecked")
-    private C loadAs(String configContent) {
+    private C configLoadAs(String configContent) {
+        // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 0);
         return ConfigUtil.loadAs(configContent, clazz);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public A assetLoadAs(String originalModel){
+    public A assetLoadAs(String originalModel) {
+        // Get the entity type of generic `A`
         Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 1);
         return AssetUtil.loadAs(originalModel, clazz);
     }
