@@ -1,28 +1,31 @@
-package com.baiyi.cratos.eds.core.util;
+package com.baiyi.cratos.facade.cred.base;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
+import com.baiyi.cratos.common.cred.CredInjectionNameEnum;
+import com.baiyi.cratos.common.cred.ICredProvider;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.jasypt.encryption.StringEncryptor;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 /**
  * @Author baiyi
- * @Date 2024/2/27 14:34
+ * @Date 2024/2/29 14:48
  * @Version 1.0
  */
-@Component
-@RequiredArgsConstructor
-public class ConfigCredTemplate {
+public abstract class BaseCredProvider implements ICredProvider {
 
-    private final StringEncryptor stringEncryptor;
+    @Resource
+    private StringEncryptor stringEncryptor;
 
-    private static final String CREDENTIAL = "CRED_";
+    protected static final String CREDENTIAL = "CRED_";
+
+    abstract protected CredInjectionNameEnum[] listCredInjectionNameEnums();
 
     public interface Names {
         String USERNAME = CREDENTIAL + "USERNAME";
@@ -44,7 +47,7 @@ public class ConfigCredTemplate {
         if (CredentialTypeEnum.ACCESS_KEY.name()
                 .equals(credential.getCredentialType())) {
             String credential2 = decrypt(credential.getCredential2());
-            dictBuilder.put(Names.SECRET, credential2);
+            dictBuilder.put(ConfigCredTemplate.Names.SECRET, credential2);
         }
         return renderTemplate(yaml, dictBuilder.build());
     }
@@ -52,13 +55,13 @@ public class ConfigCredTemplate {
     private DictBuilder newDictBuilder(Credential credential) {
         String decryptedCredential = decrypt(credential.getCredential());
         return DictBuilder.newBuilder()
-                .put(Names.USERNAME, credential.getUsername())
-                .put(Names.PASSWORD, decryptedCredential)
-                .put(Names.TOKEN, decryptedCredential)
-                .put(Names.ACCESS_KEY, decryptedCredential);
+                .put(ConfigCredTemplate.Names.USERNAME, credential.getUsername())
+                .put(ConfigCredTemplate.Names.PASSWORD, decryptedCredential)
+                .put(ConfigCredTemplate.Names.TOKEN, decryptedCredential)
+                .put(ConfigCredTemplate.Names.ACCESS_KEY, decryptedCredential);
     }
 
-    private String decrypt(String str) {
+    protected String decrypt(String str) {
         if (StringUtils.isEmpty(str)) {
             return null;
         }

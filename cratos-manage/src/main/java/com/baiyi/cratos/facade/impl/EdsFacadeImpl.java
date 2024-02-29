@@ -73,6 +73,8 @@ public class EdsFacadeImpl implements EdsFacade {
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(true);
         edsInstanceService.add(edsInstance);
+        edsConfig.setInstanceId(edsInstance.getId());
+        edsConfigService.updateByPrimaryKey(edsConfig);
     }
 
     @Override
