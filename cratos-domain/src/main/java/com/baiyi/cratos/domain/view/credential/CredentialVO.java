@@ -24,11 +24,11 @@ import java.util.List;
  */
 public class CredentialVO {
 
-    public interface ICred {
+    public interface ICredential {
 
-        Integer getCredId();
+        Integer getCredentialId();
 
-        void setCred(Credential cred);
+        void setCredential(Credential cred);
 
     }
 

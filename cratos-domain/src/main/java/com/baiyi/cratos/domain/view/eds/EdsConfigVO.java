@@ -30,7 +30,7 @@ public class EdsConfigVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_CONFIG)
-    public static class EdsConfig extends BaseVO implements CredentialVO.ICred, Serializable {
+    public static class EdsConfig extends BaseVO implements CredentialVO.ICredential, Serializable {
 
         @Serial
         private static final long serialVersionUID = 5528314871263301871L;
@@ -55,12 +55,8 @@ public class EdsConfigVO {
 
         private String comment;
 
-        private CredentialVO.Credential cred;
+        private CredentialVO.Credential credential;
 
-        @Override
-        public Integer getCredId() {
-            return credentialId;
-        }
     }
 
 }
