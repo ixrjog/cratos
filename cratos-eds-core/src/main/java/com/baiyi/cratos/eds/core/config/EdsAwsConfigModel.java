@@ -18,9 +18,13 @@ public class EdsAwsConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Aws implements IEdsConfigModel {
+
         private Cred cred;
+
         private String regionId;
+
         private Set<String> regionIds;
+
     }
 
     @Data
@@ -29,10 +33,14 @@ public class EdsAwsConfigModel {
     public static class Cred {
 
         private String id;
+
         private String name;
+
         @Schema(description = "可选项公司")
         private String company;
+
         private String accessKey;
+
         private String secretKey;
 
     }

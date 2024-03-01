@@ -12,7 +12,6 @@ import java.util.Set;
  * @Date 2024/2/26 10:52
  * @Version 1.0
  */
-@Data
 public class EdsAliyunConfigModel {
 
     @Data
@@ -37,9 +36,13 @@ public class EdsAliyunConfigModel {
     public static class Cred {
 
         private String uid;
+
         private String name;
+
         private String company;
+
         private String accessKeyId;
+
         private String accessKeySecret;
 
     }

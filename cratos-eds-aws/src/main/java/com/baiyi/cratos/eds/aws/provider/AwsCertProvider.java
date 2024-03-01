@@ -27,10 +27,8 @@ import java.util.Set;
  */
 @Component
 @RequiredArgsConstructor
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_CERT)
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_CERT)
 public class AwsCertProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
-
-    private final AwsCertRepo awsCertRepo;
 
     @Override
     protected List<CertificateSummary> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
@@ -41,7 +39,7 @@ public class AwsCertProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.A
                     .map(EdsAwsConfigModel.Aws::getRegionIds)
                     .orElse(null));
             List<CertificateSummary> entities = Lists.newArrayList();
-            reggionIdSet.forEach(regionId -> entities.addAll(awsCertRepo.listCert(regionId, aws)));
+            reggionIdSet.forEach(regionId -> entities.addAll(AwsCertRepo.listCert(regionId, aws)));
             return entities;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
@@ -52,14 +50,13 @@ public class AwsCertProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.A
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, CertificateSummary entity) throws ParseException {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
         return newEdsAssetBuilder(instance, entity)
-                // 资源 ID
-//                .assetIdOf(entity.getInstanceId())
-//                .nameOf(entity.getDomain())
-//                .kindOf(entity.getCertType())
-//                .statusOf(entity.getStatus())
-//                .descriptionOf(entity.getSans())
-//                .createdTimeOf(entity.getCertStartTime())
-//                .expiredTimeOf(entity.getCertEndTime())
+                // ARN
+                .assetIdOf(entity.getCertificateArn())
+                .nameOf(entity.getDomainName())
+                .kindOf(entity.getType())
+                .statusOf(entity.getStatus())
+                .createdTimeOf(entity.getNotBefore())
+                .expiredTimeOf(entity.getNotAfter())
                 .build();
     }
 

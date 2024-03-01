@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 public enum EdsInstanceTypeEnum {
 
     ALIYUN,
-    AWS;
+    AWS,
+    CLOUDFLARE;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()

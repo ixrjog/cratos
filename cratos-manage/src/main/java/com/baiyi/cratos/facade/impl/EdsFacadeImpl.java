@@ -129,7 +129,7 @@ public class EdsFacadeImpl implements EdsFacade {
                                             // EdsConfig credentialId invalid
                                             () -> {
                                                 // 颁发凭据
-                                                businessCredentialFacade.issueBusinessCredential(edsConfig.getCredentialId(), business);
+                                                businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
                                             });
                         }, () -> {
                             // UpdateEdsConfig credentialId invalid

@@ -7,6 +7,7 @@ package com.baiyi.cratos.eds.core.enums;
  */
 public enum EdsAssetTypeEnum {
 
-    ALIYUN_CERT
+    ALIYUN_CERT,
+    AWS_CERT
 
 }

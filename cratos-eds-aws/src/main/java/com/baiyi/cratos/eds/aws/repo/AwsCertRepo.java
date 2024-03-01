@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class AwsCertRepo {
 
-    public List<CertificateSummary> listCert(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<CertificateSummary> listCert(String regionId, EdsAwsConfigModel.Aws aws) {
         ListCertificatesRequest request = new ListCertificatesRequest();
         List<CertificateSummary> certificateSummaryList = Lists.newArrayList();
         while (true) {

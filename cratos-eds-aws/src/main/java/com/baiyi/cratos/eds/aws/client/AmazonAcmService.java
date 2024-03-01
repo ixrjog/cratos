@@ -14,7 +14,6 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
  */
 public class AmazonAcmService {
 
-
     private void AmazonEcrService() {
     }
 
@@ -33,4 +32,5 @@ public class AmazonAcmService {
                 .withRegion(regionId)
                 .build();
     }
+
 }
