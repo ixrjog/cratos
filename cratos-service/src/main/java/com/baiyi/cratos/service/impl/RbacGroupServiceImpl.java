@@ -7,7 +7,7 @@ import com.baiyi.cratos.mapper.RbacGroupMapper;
 import com.baiyi.cratos.service.RbacGroupService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RbacGroupServiceImpl implements RbacGroupService {
 
     private final RbacGroupMapper rbacGroupMapper;

@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
 import com.baiyi.cratos.service.RbacGroupService;
 import com.baiyi.cratos.wrapper.RbacGroupWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RbacGroupFacadeImpl implements RbacGroupFacade {
 
     private final RbacGroupService rbacGroupService;

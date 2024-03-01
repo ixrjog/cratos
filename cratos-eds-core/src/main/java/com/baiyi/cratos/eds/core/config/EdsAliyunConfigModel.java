@@ -15,8 +15,6 @@ import java.util.Set;
 @Data
 public class EdsAliyunConfigModel {
 
-    private Aliyun aliyun;
-
     @Data
     @NoArgsConstructor
     @Schema

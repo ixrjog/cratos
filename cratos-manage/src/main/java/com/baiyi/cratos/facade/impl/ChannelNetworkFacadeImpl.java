@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.ChannelNetworkFacade;
 import com.baiyi.cratos.service.ChannelNetworkService;
 import com.baiyi.cratos.wrapper.ChannelNetworkWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
 
     private final ChannelNetworkService channelNetworkService;

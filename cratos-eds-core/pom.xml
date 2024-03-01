@@ -9,7 +9,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.baiyi</groupId>
     <artifactId>cratos-eds-core</artifactId>
 
     <properties>
@@ -17,7 +16,9 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
+
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-common</artifactId>
@@ -27,6 +28,7 @@
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-service</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

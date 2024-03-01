@@ -23,7 +23,7 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EdsFacadeImpl implements EdsFacade {
 
     private final EdsInstanceService edsInstanceService;

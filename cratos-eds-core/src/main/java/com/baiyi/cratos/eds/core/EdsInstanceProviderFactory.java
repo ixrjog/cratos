@@ -30,6 +30,7 @@ public class EdsInstanceProviderFactory {
     private static final Map<String, Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
     public static <C extends IEdsConfigModel, A> void register(EdsInstanceProvider<C, A> providerBean) {
+        log.info("EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(), providerBean.getAssetType());
         if (CONTEXT.containsKey(providerBean.getInstanceType())) {
             Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> providerMap = CONTEXT.get(providerBean.getInstanceType());
             providerMap.put(providerBean.getAssetType(), providerBean);
@@ -42,7 +43,7 @@ public class EdsInstanceProviderFactory {
 
     @SuppressWarnings("unchecked")
     public static <C extends IEdsConfigModel> C produce(String instanceType, String assetType, EdsConfig edsConfig) {
-        return (C) CONTEXT.get(instanceType)
+        return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .produce(edsConfig);
     }

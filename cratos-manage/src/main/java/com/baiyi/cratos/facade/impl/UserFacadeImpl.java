@@ -13,7 +13,7 @@ import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.UserWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;

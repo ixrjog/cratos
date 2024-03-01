@@ -23,7 +23,7 @@ public class MyTest extends BaseUnit {
                 .assetKey("test")
                 .build();
 
-        EdsAssetVO.Asset<?> asset = BeanCopierUtil.copyProperties(edsAsset, EdsAssetVO.Asset.class);
+        EdsAssetVO.Asset asset = BeanCopierUtil.copyProperties(edsAsset, EdsAssetVO.Asset.class);
 
         System.out.println(asset);
     }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
-import com.aliyun.cas20200407.models.ListCertResponseBody;
+import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
@@ -10,9 +10,10 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -21,31 +22,33 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_CERT)
-public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigModel.Aliyun, ListCertResponseBody.ListCertResponseBodyCertList> {
+public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigModel.Aliyun, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
 
     private final AliyunCertRepo aliyunCertRepo;
 
     @Override
-    protected List<ListCertResponseBody.ListCertResponseBodyCertList> listEntities(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+    protected List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> listEntities(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return aliyunCertRepo.listCert(instance.getEdsConfigModel());
+            return aliyunCertRepo.listUserCertOrder(instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, ListCertResponseBody.ListCertResponseBodyCertList entity) {
-        // https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listcert?spm=a2c4g.11174283.0.0.4b484c27CkzXih
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList entity) throws ParseException {
+        // https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listusercertificateorder?spm=a2c4g.11186623.0.0.7c9d4c27ACYKGJ
         return newEdsAssetBuilder(instance, entity)
-                .assetIdOf(entity.getIdentifier())
-                .nameOf(entity.getCommonName())
+                // 资源 ID
+                .assetIdOf(entity.getInstanceId())
+                .nameOf(entity.getDomain())
                 .kindOf(entity.getCertType())
                 .statusOf(entity.getStatus())
-                .createdTimeOf(entity.getBeforeDate())
-                .expiredTimeOf(entity.getAfterDate())
+                .descriptionOf(entity.getSans())
+                .createdTimeOf(entity.getCertStartTime())
+                .expiredTimeOf(entity.getCertEndTime())
                 .build();
     }
 

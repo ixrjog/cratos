@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.stereotype.Component;
@@ -59,10 +58,12 @@ public class ConfigCredTemplate {
     }
 
     private String decrypt(String str) {
-        if (StringUtils.isEmpty(str)) {
-            return null;
-        }
-        return stringEncryptor.decrypt(str);
+        // 无需要解密,AOP实现
+//        if (StringUtils.isEmpty(str)) {
+//            return null;
+//        }
+//        return stringEncryptor.decrypt(str);
+        return str;
     }
 
     private String renderTemplate(String templateString, Map<String, String> variable) {

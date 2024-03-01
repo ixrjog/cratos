@@ -5,9 +5,7 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -60,6 +58,8 @@ public class EdsInstanceParam {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     @Schema
     public static class ImportInstanceAsset {

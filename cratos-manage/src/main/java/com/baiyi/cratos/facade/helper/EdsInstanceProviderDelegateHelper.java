@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EdsInstanceProviderDelegateHelper {
 
     private final EdsInstanceService edsInstanceService;

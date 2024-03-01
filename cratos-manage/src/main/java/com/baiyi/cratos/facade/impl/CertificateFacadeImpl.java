@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import com.baiyi.cratos.facade.CertificateFacade;
 import com.baiyi.cratos.service.CertificateService;
 import com.baiyi.cratos.wrapper.CertificateWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CertificateFacadeImpl implements CertificateFacade {
 
     private final CertificateService certificateService;

@@ -61,6 +61,11 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return this;
     }
 
+    public EdsAssetBuilder<C, A> descriptionOf(String desc) {
+        edsAsset.setDescription(desc);
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> createdTimeOf(Long createdTime) {
         edsAsset.setCreatedTime(new Date(createdTime));
         return this;

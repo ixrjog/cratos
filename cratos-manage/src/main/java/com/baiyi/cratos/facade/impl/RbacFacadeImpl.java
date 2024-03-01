@@ -11,7 +11,7 @@ import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RbacFacadeImpl implements RbacFacade {
 
     private final RbacResourceFacade rbacResourceFacade;

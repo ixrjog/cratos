@@ -21,7 +21,7 @@ import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.google.common.collect.Lists;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -39,7 +39,7 @@ import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CredentialFacadeImpl implements CredentialFacade {
 
     private final CredentialService credentialService;

@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
@@ -23,7 +24,9 @@ import com.google.common.collect.Sets;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +36,7 @@ import java.util.Set;
  * @Version 1.0
  */
 @Slf4j
+@Component
 public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> implements EdsInstanceProvider<C, A>, InitializingBean {
 
     @Resource
@@ -70,7 +74,11 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     }
 
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
-        return enterAsset(toEdsAsset(instance, entity));
+        try {
+            return enterAsset(toEdsAsset(instance, entity));
+        } catch (ParseException e) {
+            throw new EdsAssetException("Asset conversion error. {}", e.getMessage());
+        }
     }
 
     protected EdsAsset enterAsset(EdsAsset newEdsAsset) {
@@ -116,7 +124,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
         return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
-    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity);
+    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity) throws ParseException;
 
     private Set<Integer> listAssetsIdSet(ExternalDataSourceInstance<C> instance) {
         Set<Integer> idSet = Sets.newHashSet();

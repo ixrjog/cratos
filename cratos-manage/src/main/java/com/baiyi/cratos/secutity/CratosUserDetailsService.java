@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.service.UserService;
 import com.google.common.collect.Lists;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CratosUserDetailsService implements UserDetailsService {
 
     private final UserService userService;

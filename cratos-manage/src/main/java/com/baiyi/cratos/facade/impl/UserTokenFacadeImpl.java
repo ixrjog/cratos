@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.service.UserTokenService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserTokenFacadeImpl implements UserTokenFacade {
 
     private final UserTokenService userTokenService;

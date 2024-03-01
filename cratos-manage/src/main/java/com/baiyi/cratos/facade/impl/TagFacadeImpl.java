@@ -9,7 +9,7 @@ import com.baiyi.cratos.facade.TagFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.TagWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TagFacadeImpl implements TagFacade {
 
     private final TagService tagService;

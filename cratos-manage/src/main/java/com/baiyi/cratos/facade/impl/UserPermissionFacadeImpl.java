@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.service.UserPermissionService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ import java.util.Date;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     private final UserPermissionService userPermissionService;

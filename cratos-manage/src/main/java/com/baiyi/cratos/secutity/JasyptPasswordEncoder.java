@@ -1,6 +1,6 @@
 package com.baiyi.cratos.secutity;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JasyptPasswordEncoder implements PasswordEncoder {
 
     private final StringEncryptor stringEncryptor;

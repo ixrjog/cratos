@@ -8,7 +8,7 @@ import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.service.RbacRoleService;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.RbacRoleWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RbacRoleFacadeImpl implements RbacRoleFacade {
 
     private final RbacRoleService rbacRoleService;
