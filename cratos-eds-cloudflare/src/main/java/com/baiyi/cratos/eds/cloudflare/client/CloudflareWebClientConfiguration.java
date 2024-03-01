@@ -16,8 +16,8 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class CloudflareWebClientConfiguration {
 
     @Bean
-    public CloudflareService cloudflareClient(WebClient.Builder webClientBuilder, EdsCloudflareConfigModel.Cloudflare cloudflare) {
-        WebClient webClient = webClientBuilder.baseUrl(EdsCloudflareConfigModel.CLIENT_API)
+    public CloudflareService cloudflareClient() {
+        WebClient webClient = WebClient.builder().baseUrl(EdsCloudflareConfigModel.CLIENT_API)
                 .build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
