@@ -19,6 +19,7 @@
         <module>cratos-eds</module>
         <module>cratos-eds-core</module>
         <module>cratos-eds-aliyun</module>
+        <module>cratos-eds-aws</module>
     </modules>
 
     <properties>
@@ -28,6 +29,7 @@
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <spring-security.version>6.2.0</spring-security.version>
+        <aws-java-sdk.version>1.12.565</aws-java-sdk.version>
     </properties>
 
     <parent>
@@ -244,18 +246,6 @@
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-eds</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baiyi.cratos</groupId>
-                <artifactId>cratos-eds-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baiyi.cratos</groupId>
-                <artifactId>cratos-eds-aliyun</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
