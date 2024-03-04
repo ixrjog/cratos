@@ -17,6 +17,8 @@ public interface EdsFacade {
 
     DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
+    EdsInstanceVO.EdsInstance getEdsInstanceById(int instanceId);
+
     void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance);
 
     DataTable<EdsConfigVO.EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);

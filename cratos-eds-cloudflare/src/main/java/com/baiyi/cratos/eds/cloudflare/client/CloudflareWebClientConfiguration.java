@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.client;
 
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,12 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 @Configuration(proxyBeanMethods = false)
 public class CloudflareWebClientConfiguration {
 
+    /**
+     * docs https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-interface
+     * @return
+     */
     @Bean
-    public CloudflareService cloudflareClient() {
+    public CloudflareService cloudflareService() {
         WebClient webClient = WebClient.builder().baseUrl(EdsCloudflareConfigModel.CLIENT_API)
                 .build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);

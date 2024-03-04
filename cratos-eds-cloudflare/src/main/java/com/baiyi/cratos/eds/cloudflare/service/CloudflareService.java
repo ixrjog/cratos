@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.cloudflare.client;
+package com.baiyi.cratos.eds.cloudflare.service;
 
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.model.VerifyUserTokens;
@@ -16,7 +16,7 @@ public interface CloudflareService {
 
     /**
      *
-     * @param bearerToken -H "Authorization: Bearer API_TOKEN"
+     * @param bearerToken -H "Authorization: Bearer <API_TOKEN>"
      * @return
      */
     @GetExchange("/v4/user/tokens/verify")

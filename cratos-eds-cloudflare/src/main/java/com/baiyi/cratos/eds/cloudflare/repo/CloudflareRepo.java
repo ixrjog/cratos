@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
-import com.baiyi.cratos.eds.cloudflare.client.CloudflareService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.model.VerifyUserTokens;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
@@ -19,7 +19,7 @@ public class CloudflareRepo {
 
     private final CloudflareService cloudflareService;
 
-    public CloudflareHttpResult<VerifyUserTokens.Result> ddd(EdsCloudflareConfigModel.Cloudflare cloudflare) {
+    public CloudflareHttpResult<VerifyUserTokens.Result> verifyUserTokens(EdsCloudflareConfigModel.Cloudflare cloudflare) {
         return cloudflareService.verifyUserTokens(generateBearer(cloudflare));
     }
 

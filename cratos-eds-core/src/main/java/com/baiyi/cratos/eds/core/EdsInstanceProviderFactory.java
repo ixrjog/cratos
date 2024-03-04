@@ -4,6 +4,7 @@ package com.baiyi.cratos.eds.core;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
@@ -46,6 +47,20 @@ public class EdsInstanceProviderFactory {
         return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .produce(edsConfig);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <C extends IEdsConfigModel> C produce(String instanceType, EdsConfig edsConfig) {
+        try {
+            Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
+            for (String assetType : pMap.keySet()) {
+                return (C) pMap.get(assetType)
+                        .produce(edsConfig);
+            }
+        } catch (Exception e) {
+            throw new EdsConfigException("The eds instance type is incorrect: {}.", e.getMessage());
+        }
+        throw new EdsConfigException("The eds instance type is incorrect.");
     }
 
     /**

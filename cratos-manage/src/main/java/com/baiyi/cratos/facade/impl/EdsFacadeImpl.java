@@ -59,6 +59,12 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    public EdsInstanceVO.EdsInstance getEdsInstanceById(int instanceId) {
+        EdsInstance edsInstance = edsInstanceService.getById(instanceId);
+        return edsInstanceWrapper.wrapToTarget(edsInstance);
+    }
+
+    @Override
     @Transactional(rollbackFor = {Exception.class})
     public void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance) {
         EdsInstance edsInstance = registerEdsInstance.toTarget();

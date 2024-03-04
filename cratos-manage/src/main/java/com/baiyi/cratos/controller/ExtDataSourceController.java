@@ -44,6 +44,12 @@ public class ExtDataSourceController {
         return new HttpResult<>(edsFacade.queryEdsInstancePage(pageQuery));
     }
 
+    @Operation(summary = "Get eds instance")
+    @PostMapping(value = "/instance/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsInstanceVO.EdsInstance> getEdsInstanceById(@RequestBody @Valid int instanceId) {
+        return new HttpResult<>(edsFacade.getEdsInstanceById(instanceId));
+    }
+
     @Operation(summary = "Register eds instance")
     @PostMapping(value = "/instance/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> registerEdsInstance(@RequestBody @Valid EdsInstanceParam.RegisterInstance registerEdsInstance) {
