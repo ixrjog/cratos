@@ -1,0 +1,30 @@
+package com.baiyi.cratos.eds;
+
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.model.Zone;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
+import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
+import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+/**
+ * @Author baiyi
+ * @Date 2024/3/4 13:57
+ * @Version 1.0
+ */
+public class EdsCloudflareTest extends BaseEdsTest<EdsCloudflareConfigModel.Cloudflare> {
+
+    @Resource
+    private CloudflareZoneRepo cloudflareZoneRepo;
+
+    @Test
+    void zoneTest() {
+        EdsCloudflareConfigModel.Cloudflare cf = getConfig(5);
+
+        CloudflareHttpResult<List<Zone.Result>> rt = cloudflareZoneRepo.listZones(cf);
+        System.out.println(rt);
+    }
+
+}

@@ -1,25 +1,22 @@
 package com.baiyi.cratos.eds.cloudflare.service;
 
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.model.base.VerifyUserTokens;
+import com.baiyi.cratos.eds.cloudflare.model.Zone;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
+import java.util.List;
+
 /**
  * @Author baiyi
- * @Date 2024/3/1 16:40
+ * @Date 2024/3/4 13:47
  * @Version 1.0
  */
 @HttpExchange(accept = "application/json")
-public interface CloudflareService {
+public interface CloudflareZoneService {
 
-    /**
-     *
-     * @param bearerToken -H "Authorization: Bearer <API_TOKEN>"
-     * @return
-     */
-    @GetExchange("/user/tokens/verify")
-    CloudflareHttpResult<VerifyUserTokens.Result> verifyUserTokens(@RequestHeader("Authorization") String bearerToken);
+    @GetExchange("/zones")
+    CloudflareHttpResult<List<Zone.Result>> listZones(@RequestHeader("Authorization") String bearerToken);
 
 }

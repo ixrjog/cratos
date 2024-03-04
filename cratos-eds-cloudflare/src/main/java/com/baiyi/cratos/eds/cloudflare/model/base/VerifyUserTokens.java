@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.cloudflare.model;
+package com.baiyi.cratos.eds.cloudflare.model.base;
 
 import lombok.Data;
 

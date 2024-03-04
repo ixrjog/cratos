@@ -1,11 +1,11 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.model.base.VerifyUserTokens;
+import com.baiyi.cratos.eds.cloudflare.repo.base.BaseCloudflareRepo;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.model.VerifyUserTokens;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
-import com.google.common.base.Joiner;
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,19 +14,13 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
-public class CloudflareRepo {
+public class CloudflareRepo extends BaseCloudflareRepo {
 
-    private final CloudflareService cloudflareService;
+    @Resource
+    private CloudflareService cloudflareService;
 
     public CloudflareHttpResult<VerifyUserTokens.Result> verifyUserTokens(EdsCloudflareConfigModel.Cloudflare cloudflare) {
         return cloudflareService.verifyUserTokens(generateBearer(cloudflare));
-    }
-
-    private String generateBearer(EdsCloudflareConfigModel.Cloudflare cloudflare) {
-        return Joiner.on(" ")
-                .join("Bearer", cloudflare.getCred()
-                        .getApiToken());
     }
 
 }
