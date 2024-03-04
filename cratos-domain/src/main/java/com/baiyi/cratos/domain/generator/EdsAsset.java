@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.generator.base.IValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,13 +12,13 @@ import java.util.Date;
 /**
  * 表名：eds_asset
  * 表注释：数据源实例资产
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "eds_asset")
-public class EdsAsset {
+public class EdsAsset implements IValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

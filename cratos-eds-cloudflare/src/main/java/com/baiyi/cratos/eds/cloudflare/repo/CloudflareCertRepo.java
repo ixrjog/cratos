@@ -1,9 +1,9 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
+import com.baiyi.cratos.eds.cloudflare.model.Cert;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.model.Zone;
 import com.baiyi.cratos.eds.cloudflare.repo.base.BaseCloudflareRepo;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -19,10 +19,10 @@ import java.util.List;
 public class CloudflareCertRepo extends BaseCloudflareRepo {
 
     @Resource
-    private CloudflareZoneService cloudflareZoneService;
+    private CloudflareCertService cloudflareCertService;
 
-    public CloudflareHttpResult<List<Zone.Result>> listZones(EdsCloudflareConfigModel.Cloudflare cloudflare) {
-        return cloudflareZoneService.listZones(generateBearer(cloudflare));
+    public CloudflareHttpResult<List<Cert.Result>> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare, String zoneId) {
+        return cloudflareCertService.listCertificatePacks(generateBearer(cloudflare), zoneId);
     }
 
 }
