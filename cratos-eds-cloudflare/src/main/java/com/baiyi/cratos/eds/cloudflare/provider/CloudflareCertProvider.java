@@ -14,7 +14,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -32,11 +31,9 @@ import java.util.List;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
 public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, Cert.Certificate> {
 
-    @Resource
-    private CloudflareZoneRepo cloudflareZoneRepo;
+    private final CloudflareZoneRepo cloudflareZoneRepo;
 
-    @Resource
-    private CloudflareCertRepo cloudflareCertRepo;
+    private final CloudflareCertRepo cloudflareCertRepo;
 
     @Override
     protected List<Cert.Certificate> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {

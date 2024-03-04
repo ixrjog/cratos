@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.client;
 
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import io.netty.channel.ChannelOption;
@@ -20,23 +19,6 @@ import reactor.netty.http.client.HttpClient;
  */
 @Configuration(proxyBeanMethods = false)
 public class CloudflareWebClientConfiguration {
-
-
-    /**
-     * docs https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-interface
-     *
-     * @return
-     */
-    @Bean
-    public CloudflareService cloudflareService() {
-        WebClient webClient = WebClient.builder()
-                .baseUrl(EdsCloudflareConfigModel.CLIENT_API)
-                .build();
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(CloudflareService.class);
-    }
 
     @Bean
     public CloudflareZoneService cloudflareZoneService() {
