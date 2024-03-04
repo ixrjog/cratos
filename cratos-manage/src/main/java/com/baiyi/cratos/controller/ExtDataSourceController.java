@@ -46,7 +46,7 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Get eds instance")
     @GetMapping(value = "/instance/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<EdsInstanceVO.EdsInstance> getEdsInstanceById(int instanceId) {
+    public HttpResult<EdsInstanceVO.EdsInstance> getEdsInstanceById(@RequestParam int instanceId) {
         return new HttpResult<>(edsFacade.getEdsInstanceById(instanceId));
     }
 

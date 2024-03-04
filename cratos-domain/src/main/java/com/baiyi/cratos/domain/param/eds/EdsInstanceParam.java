@@ -67,7 +67,7 @@ public class EdsInstanceParam {
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
 
-       // private String instanceType;
+        // private String instanceType;
 
         private String assetType;
 
@@ -87,6 +87,8 @@ public class EdsInstanceParam {
 
         @Schema(description = "Query by assetType")
         private String assetType;
+
+        private Boolean valid;
 
     }
 
