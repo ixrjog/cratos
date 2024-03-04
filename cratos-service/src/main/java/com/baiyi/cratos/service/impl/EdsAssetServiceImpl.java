@@ -1,8 +1,9 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -51,6 +52,13 @@ public class EdsAssetServiceImpl implements EdsAssetService {
         Page<EdsAsset> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<EdsAsset> data = edsAssetMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    // 删除用证书关联的业务标签、凭据
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        edsAssetMapper.deleteByPrimaryKey(id);
     }
 
 }

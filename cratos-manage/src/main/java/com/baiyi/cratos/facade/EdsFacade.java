@@ -39,4 +39,6 @@ public interface EdsFacade {
 
     DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
 
+    void deleteEdsAssetById(int id);
+
 }

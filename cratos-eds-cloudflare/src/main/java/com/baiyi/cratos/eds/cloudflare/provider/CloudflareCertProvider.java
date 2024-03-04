@@ -2,6 +2,9 @@ package com.baiyi.cratos.eds.cloudflare.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.cloudflare.model.Cert;
+import com.baiyi.cratos.eds.cloudflare.model.Zone;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
@@ -9,8 +12,12 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,30 +30,51 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
-public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, Cert.Result> {
+public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, Cert.Certificate> {
+
+    @Resource
+    private CloudflareZoneRepo cloudflareZoneRepo;
+
+    @Resource
+    private CloudflareCertRepo cloudflareCertRepo;
 
     @Override
-    protected List<Cert.Result> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+    protected List<Cert.Certificate> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+        List<Cert.Certificate> results = Lists.newArrayList();
         try {
-            // TODO
-            return null;
+            List<Zone.Result> zoneResults = cloudflareZoneRepo.listZones(instance.getEdsConfigModel());
+            if (CollectionUtils.isEmpty(zoneResults)) {
+                return results;
+            }
+            zoneResults.forEach(e -> {
+                List<Cert.Result> cRt = cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId());
+                if (!CollectionUtils.isEmpty(cRt)) {
+                    cRt.forEach(c -> results.addAll(c.getCertificates()));
+                }
+            });
+            return results;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, Cert.Result entity) throws ParseException {
-        // https://developers.cloudflare.com/api/operations/certificate-packs-order-advanced-certificate-manager-certificate-pack
-        // TODO
-        return newEdsAssetBuilder(instance, entity)
-                // ARN
-//                .assetIdOf(entity.getCertificateArn())
-//                .nameOf(entity.getDomainName())
-//                .kindOf(entity.getType())
-//                .statusOf(entity.getStatus())
-//                .createdTimeOf(entity.getNotBefore())
-//                .expiredTimeOf(entity.getNotAfter())
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, Cert.Certificate entity) throws ParseException {
+        String hosts = Joiner.on(",")
+                .join(entity.getHosts());
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+                .nameOf(entity.getHosts()
+                        .stream()
+                        .filter(e -> e.startsWith("*."))
+                        .findAny()
+                        .orElse(entity.getHosts()
+                                .get(0)))
+                .zoneOf(entity.getZoneId())
+                .kindOf(entity.getIssuer())
+                .statusOf(entity.getStatus())
+                .createdTimeOf(entity.getUploadedOn())
+                .expiredTimeOf(entity.getExpiresOn())
+                .descriptionOf(hosts)
                 .build();
     }
 
