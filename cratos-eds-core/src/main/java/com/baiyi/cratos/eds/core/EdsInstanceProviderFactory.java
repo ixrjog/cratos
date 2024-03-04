@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -47,6 +48,16 @@ public class EdsInstanceProviderFactory {
         return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .produce(edsConfig);
+    }
+
+    /**
+     * 查询实例下所有资产类型
+     * @param instanceType
+     * @return
+     */
+    public static Set<String> getInstanceAssetTypes(String instanceType) {
+        Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
+        return pMap.keySet();
     }
 
     @SuppressWarnings("unchecked")

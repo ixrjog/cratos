@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @Author baiyi
@@ -48,6 +49,8 @@ public class EdsInstanceVO {
         private boolean registered;
 
         private EdsConfigVO.EdsConfig edsConfig;
+
+        private Set<String> assetTypes;
 
     }
 

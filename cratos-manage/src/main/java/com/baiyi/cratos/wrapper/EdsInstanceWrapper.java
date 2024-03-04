@@ -2,6 +2,7 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
         edsInstance.setRegistered(edsInstance.getConfigId() != null);
         // Wrap Eds Config
         edsConfigWrapper.wrap(edsInstance);
+        edsInstance.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType()));
     }
 
 }
