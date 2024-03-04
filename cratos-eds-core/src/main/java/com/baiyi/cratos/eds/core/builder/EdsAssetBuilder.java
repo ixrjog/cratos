@@ -61,6 +61,16 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return this;
     }
 
+    public EdsAssetBuilder<C, A> zoneOf(String zone) {
+        edsAsset.setZone(zone);
+        return this;
+    }
+
+    public EdsAssetBuilder<C, A> validOf(Boolean valid) {
+        edsAsset.setValid(valid);
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> descriptionOf(String desc) {
         edsAsset.setDescription(desc);
         return this;

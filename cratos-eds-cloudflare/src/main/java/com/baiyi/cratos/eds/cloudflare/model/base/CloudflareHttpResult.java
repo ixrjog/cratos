@@ -30,6 +30,7 @@ public class CloudflareHttpResult<T> {
     private int code;
 
     @JsonProperty("result_info")
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private ResultInfo resultInfo;
 
     @Data

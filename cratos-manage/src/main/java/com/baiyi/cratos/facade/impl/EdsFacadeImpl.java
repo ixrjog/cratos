@@ -198,4 +198,9 @@ public class EdsFacadeImpl implements EdsFacade {
         return edsAssetWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void deleteEdsAssetById(int id) {
+        edsAssetService.deleteById(id);
+    }
+
 }

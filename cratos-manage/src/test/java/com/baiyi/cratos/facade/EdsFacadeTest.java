@@ -34,4 +34,15 @@ public class EdsFacadeTest extends BaseUnit {
         edsFacade.importInstanceAsset(importInstanceAsset);
     }
 
+    // @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
+
+    @Test
+    void cfCertTest() {
+        EdsInstanceParam.ImportInstanceAsset importInstanceAsset = EdsInstanceParam.ImportInstanceAsset.builder()
+                .instanceId(95)
+                .assetType(EdsAssetTypeEnum.CLOUDFLARE_CERT.name())
+                .build();
+        edsFacade.importInstanceAsset(importInstanceAsset);
+    }
+
 }

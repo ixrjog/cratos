@@ -112,4 +112,11 @@ public class ExtDataSourceController {
         return new HttpResult<>(edsFacade.queryEdsInstanceAssetPage(assetPageQuery));
     }
 
+    @Operation(summary = "Delete eds asset by id")
+    @DeleteMapping(value = "/asset/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteEdsAssetById(@RequestParam @Valid int id) {
+        edsFacade.deleteEdsAssetById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }
