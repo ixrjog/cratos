@@ -15,7 +15,6 @@ import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,7 +46,7 @@ public class AwsCertProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.A
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, CertificateSummary entity) throws ParseException {
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, CertificateSummary entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
         return newEdsAssetBuilder(instance, entity)
                 // ARN

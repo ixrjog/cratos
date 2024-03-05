@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
@@ -26,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +76,8 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
         try {
             return enterAsset(toEdsAsset(instance, entity));
-        } catch (ParseException e) {
+        } catch (EdsAssetConversionException e) {
+            log.error("Asset conversion error. {}", e.getMessage());
             throw new EdsAssetException("Asset conversion error. {}", e.getMessage());
         }
     }
@@ -124,7 +125,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
         return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
-    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity) throws ParseException;
+    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity) throws EdsAssetConversionException;
 
     private Set<Integer> listAssetsIdSet(ExternalDataSourceInstance<C> instance) {
         Set<Integer> idSet = Sets.newHashSet();
@@ -171,7 +172,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     }
 
     @Override
-    public EdsAsset pushAsset(ExternalDataSourceInstance<C> instance, A asset) {
+    public EdsAsset importAsset(ExternalDataSourceInstance<C> instance, A asset) {
         return enterEntity(instance, asset);
     }
 

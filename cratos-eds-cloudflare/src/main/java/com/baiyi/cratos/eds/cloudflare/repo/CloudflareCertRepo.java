@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
-import com.baiyi.cratos.eds.cloudflare.model.Cert;
+import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.repo.base.BaseCloudflareRepo;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
@@ -24,14 +24,14 @@ public class CloudflareCertRepo extends BaseCloudflareRepo {
     @Resource
     private CloudflareCertService certService;
 
-    public List<Cert.Result> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare, String zoneId) {
-        List<Cert.Result> results = Lists.newArrayList();
+    public List<CloudflareCert.Result> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare, String zoneId) {
+        List<CloudflareCert.Result> results = Lists.newArrayList();
         int page = 1;
         while (true) {
             Map<String, String> param = DictBuilder.newBuilder()
                     .put("page", String.valueOf(page))
                     .build();
-            CloudflareHttpResult<List<Cert.Result>> rt = certService.listCertificatePacks(generateBearer(cloudflare), zoneId, param);
+            CloudflareHttpResult<List<CloudflareCert.Result>> rt = certService.listCertificatePacks(generateBearer(cloudflare), zoneId, param);
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()
                     .getTotalCount()) {

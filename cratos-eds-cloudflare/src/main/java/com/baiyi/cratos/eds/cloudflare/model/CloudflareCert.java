@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2024/3/1 18:05
  * @Version 1.0
  */
-public class Cert {
+public class CloudflareCert {
 
     @Data
     public static class Result {

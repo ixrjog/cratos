@@ -32,7 +32,7 @@ public class EdsInstanceProviderDelegate<C extends IEdsConfigModel, A> {
     }
 
     public void pushAsset(A asset) {
-        provider.pushAsset(instance, asset);
+        provider.importAsset(instance, asset);
     }
 
 }

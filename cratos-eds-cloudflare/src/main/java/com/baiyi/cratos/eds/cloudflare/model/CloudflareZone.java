@@ -13,7 +13,7 @@ import java.util.Date;
  * @Date 2024/3/4 13:35
  * @Version 1.0
  */
-public class Zone {
+public class CloudflareZone {
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

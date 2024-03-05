@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.cloudflare.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.cloudflare.model.Cert;
-import com.baiyi.cratos.eds.cloudflare.model.Zone;
+import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
+import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -29,22 +28,23 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
-public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, Cert.Certificate> {
+public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;
 
     private final CloudflareCertRepo cloudflareCertRepo;
 
     @Override
-    protected List<Cert.Certificate> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
-        List<Cert.Certificate> results = Lists.newArrayList();
+    protected List<CloudflareCert.Certificate> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+        List<CloudflareCert.Certificate> results = Lists.newArrayList();
         try {
-            List<Zone.Result> zoneResults = cloudflareZoneRepo.listZones(instance.getEdsConfigModel());
+            // 查询所有的zone
+            List<CloudflareZone.Result> zoneResults = cloudflareZoneRepo.listZones(instance.getEdsConfigModel());
             if (CollectionUtils.isEmpty(zoneResults)) {
                 return results;
             }
             zoneResults.forEach(e -> {
-                List<Cert.Result> cRt = cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId());
+                List<CloudflareCert.Result> cRt = cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId());
                 if (!CollectionUtils.isEmpty(cRt)) {
                     cRt.forEach(c -> results.addAll(c.getCertificates()));
                 }
@@ -56,16 +56,17 @@ public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflar
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, Cert.Certificate entity) throws ParseException {
-        String hosts = Joiner.on(",")
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, CloudflareCert.Certificate entity) {
+        final String hosts = Joiner.on(",")
                 .join(entity.getHosts());
+        final String name = entity.getHosts()
+                .stream()
+                .filter(e -> e.startsWith("*."))
+                .findAny()
+                .orElseGet(() -> entity.getHosts()
+                        .get(0));
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
-                .nameOf(entity.getHosts()
-                        .stream()
-                        .filter(e -> e.startsWith("*."))
-                        .findAny()
-                        .orElse(entity.getHosts()
-                                .get(0)))
+                .nameOf(name)
                 .zoneOf(entity.getZoneId())
                 .kindOf(entity.getIssuer())
                 .statusOf(entity.getStatus())
