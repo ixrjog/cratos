@@ -16,8 +16,11 @@ public class CloudflareCert {
 
     @Data
     public static class Result {
+
         private String id;
+
         private String type;
+
         private List<String> hosts;
 
         @JsonProperty("primary_certificate")
@@ -26,22 +29,29 @@ public class CloudflareCert {
         private String status;
 
         private List<Certificate> certificates;
+
         @JsonProperty("certificate_authority")
         private String certificateAuthority;
 
         @JsonProperty("created_on")
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
         private Date createdOn;
+
     }
 
     @Data
     public static class Certificate {
 
         private String id;
+
         private List<String> hosts;
+
         private String issuer;
+
         private String signature;
+
         private String status;
+
         @JsonProperty("bundle_method")
         private String bundleMethod;
 

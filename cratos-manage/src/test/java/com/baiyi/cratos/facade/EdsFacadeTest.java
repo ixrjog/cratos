@@ -22,7 +22,7 @@ public class EdsFacadeTest extends BaseUnit {
                 .instanceId(93)
                 .assetType(EdsAssetTypeEnum.ALIYUN_CERT.name())
                 .build();
-        edsFacade.importInstanceAsset(importInstanceAsset);
+        edsFacade.importEdsInstanceAsset(importInstanceAsset);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class EdsFacadeTest extends BaseUnit {
                 .instanceId(94)
                 .assetType(EdsAssetTypeEnum.AWS_CERT.name())
                 .build();
-        edsFacade.importInstanceAsset(importInstanceAsset);
+        edsFacade.importEdsInstanceAsset(importInstanceAsset);
     }
 
     // @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
@@ -42,7 +42,7 @@ public class EdsFacadeTest extends BaseUnit {
                 .instanceId(95)
                 .assetType(EdsAssetTypeEnum.CLOUDFLARE_CERT.name())
                 .build();
-        edsFacade.importInstanceAsset(importInstanceAsset);
+        edsFacade.importEdsInstanceAsset(importInstanceAsset);
     }
 
 }

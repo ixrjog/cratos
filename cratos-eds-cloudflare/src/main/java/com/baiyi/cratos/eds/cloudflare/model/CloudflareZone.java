@@ -21,12 +21,18 @@ public class CloudflareZone {
 
         @Schema(description = "zoneId")
         private String id;
+
         private String name;
+
         private String status;
+
         private Boolean paused;
+
         private String type;
+
         @JsonProperty("development_mode")
         private Integer developmentMode;
+
         @JsonProperty("verification_key")
         private String verificationKey;
 
