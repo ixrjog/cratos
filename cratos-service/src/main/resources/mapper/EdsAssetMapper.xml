@@ -36,8 +36,9 @@
               and valid = #{valid}
           </if>
           <if test="queryName != null and queryName != ''">
-              and instance_name like "%" #{queryName} "%"
-              or kind like "%" #{queryName} "%"
+              and name like "%" #{queryName} "%"
+              or asset_id like "%" #{queryName} "%"
+              or asset_key like "%" #{queryName} "%"
           </if>
       </where>
   </select>
