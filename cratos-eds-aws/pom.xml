@@ -43,6 +43,13 @@
             <version>${aws-java-sdk.version}</version>
         </dependency>
 
+        <!--Site-to-Site VPN-->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ec2</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

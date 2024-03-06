@@ -45,4 +45,14 @@ public class EdsFacadeTest extends BaseUnit {
         edsFacade.importEdsInstanceAsset(importInstanceAsset);
     }
 
+
+    @Test
+    void awsVpnTest() {
+        EdsInstanceParam.ImportInstanceAsset importInstanceAsset = EdsInstanceParam.ImportInstanceAsset.builder()
+                .instanceId(94)
+                .assetType(EdsAssetTypeEnum.AWS_STS_VPN.name())
+                .build();
+        edsFacade.importEdsInstanceAsset(importInstanceAsset);
+    }
+
 }

@@ -9,6 +9,7 @@ public enum EdsAssetTypeEnum {
 
     ALIYUN_CERT,
     AWS_CERT,
+    AWS_STS_VPN,
     CLOUDFLARE_CERT
 
 }
