@@ -24,6 +24,7 @@ public class SshUsernameWithKeyPairCredProvider extends BaseCredProvider {
         return new CredInjectionNameEnum[]{};
     }
 
+    @Override
     protected DictBuilder newDictBuilder(Credential credential) {
         return DictBuilder.newBuilder();
     }

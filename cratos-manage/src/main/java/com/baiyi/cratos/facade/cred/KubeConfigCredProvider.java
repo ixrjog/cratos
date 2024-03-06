@@ -24,9 +24,9 @@ public class KubeConfigCredProvider extends BaseCredProvider {
         return new CredInjectionNameEnum[]{};
     }
 
+    @Override
     protected DictBuilder newDictBuilder(Credential credential) {
         return DictBuilder.newBuilder();
     }
 
 }
-

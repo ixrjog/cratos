@@ -25,6 +25,7 @@ public class TokenCredProvider extends BaseCredProvider {
         return new CredInjectionNameEnum[]{CredInjectionNameEnum.CRED_TOKEN};
     }
 
+    @Override
     protected DictBuilder newDictBuilder(Credential credential) {
         String decryptedToken = decrypt(credential.getCredential());
         return DictBuilder.newBuilder()

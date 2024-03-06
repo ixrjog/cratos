@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.cred;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
+import com.baiyi.cratos.domain.generator.Credential;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -11,6 +12,10 @@ import org.springframework.beans.factory.InitializingBean;
 public interface ICredProvider extends InitializingBean {
 
     CredentialTypeEnum getType();
+
+    String getDesc();
+
+    String renderTemplate(String yaml, Credential credential);
 
     default void afterPropertiesSet() {
         CredProviderFactory.register(this);

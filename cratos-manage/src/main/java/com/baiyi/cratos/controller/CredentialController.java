@@ -1,6 +1,8 @@
 package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.cred.CredProviderFactory;
+import com.baiyi.cratos.common.cred.ICredProvider;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.credential.CredentialParam;
@@ -50,7 +52,14 @@ public class CredentialController {
     @Operation(summary = "Query credential type options")
     @GetMapping(value = "/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getCredentialOptions() {
-        return new HttpResult<>(CredentialTypeEnum.toOptions());
+        OptionsVO.Options options = CredentialTypeEnum.toOptions();
+        options.getOptions()
+                .forEach(e -> {
+                    ICredProvider iCredProvider = CredProviderFactory.getCredProvider(e.getValue()
+                            .toString());
+                    e.setComment(iCredProvider != null ? iCredProvider.getDesc() : "n/a");
+                });
+        return new HttpResult<>(options);
     }
 
     @Operation(summary = "Update credential valid")

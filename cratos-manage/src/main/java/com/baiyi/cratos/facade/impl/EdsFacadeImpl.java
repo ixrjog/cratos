@@ -24,6 +24,7 @@ import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -175,6 +176,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
         EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
         edsInstanceProviderDelegate.importAssets();

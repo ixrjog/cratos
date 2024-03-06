@@ -6,11 +6,10 @@ import com.baiyi.cratos.common.cred.ICredProvider;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Joiner;
 import org.apache.commons.text.StringSubstitutor;
-import org.jasypt.encryption.StringEncryptor;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -20,19 +19,19 @@ import java.util.Map;
  */
 public abstract class BaseCredProvider implements ICredProvider {
 
-    @Resource
-    private StringEncryptor stringEncryptor;
-
-    protected static final String CREDENTIAL = "CRED_";
+    //  protected static final String CREDENTIAL = "CRED_";
 
     abstract protected CredInjectionNameEnum[] listCredInjectionNameEnums();
 
-    public interface Names {
-        String USERNAME = CREDENTIAL + "USERNAME";
-        String PASSWORD = CREDENTIAL + "PASSWORD";
-        String TOKEN = CREDENTIAL + "TOKEN";
-        String ACCESS_KEY = CREDENTIAL + "ACCESS_KEY";
-        String SECRET = CREDENTIAL + "SECRET";
+    @Override
+    public String getDesc() {
+        if (listCredInjectionNameEnums().length == 0) {
+            return "n/a";
+        } else {
+            return Joiner.on("、")
+                    .join(Arrays.stream(listCredInjectionNameEnums())
+                            .map(e -> "${" + e.name() + "}").toList());
+        }
     }
 
     /**
@@ -42,6 +41,7 @@ public abstract class BaseCredProvider implements ICredProvider {
      * @param credential
      * @return
      */
+    @Override
     public String renderTemplate(String yaml, Credential credential) {
         DictBuilder dictBuilder = newDictBuilder(credential);
         if (CredentialTypeEnum.ACCESS_KEY.name()
@@ -52,20 +52,14 @@ public abstract class BaseCredProvider implements ICredProvider {
         return renderTemplate(yaml, dictBuilder.build());
     }
 
-    private DictBuilder newDictBuilder(Credential credential) {
-        String decryptedCredential = decrypt(credential.getCredential());
-        return DictBuilder.newBuilder()
-                .put(ConfigCredTemplate.Names.USERNAME, credential.getUsername())
-                .put(ConfigCredTemplate.Names.PASSWORD, decryptedCredential)
-                .put(ConfigCredTemplate.Names.TOKEN, decryptedCredential)
-                .put(ConfigCredTemplate.Names.ACCESS_KEY, decryptedCredential);
-    }
+    abstract protected DictBuilder newDictBuilder(Credential credential);
 
     protected String decrypt(String str) {
-        if (StringUtils.isEmpty(str)) {
-            return null;
-        }
-        return stringEncryptor.decrypt(str);
+//        if (StringUtils.isEmpty(str)) {
+//            return null;
+//        }
+//        return stringEncryptor.decrypt(str);
+        return str;
     }
 
     private String renderTemplate(String templateString, Map<String, String> variable) {

@@ -24,9 +24,9 @@ public class UsernameWithPasswordCredProvider extends BaseCredProvider {
         return new CredInjectionNameEnum[]{CredInjectionNameEnum.CRED_USERNAME, CredInjectionNameEnum.CRED_PASSWORD};
     }
 
+    @Override
     protected DictBuilder newDictBuilder(Credential credential) {
         String decryptedPassword = decrypt(credential.getCredential());
-
         return DictBuilder.newBuilder()
                 .put(CredInjectionNameEnum.CRED_USERNAME.name(), credential.getUsername())
                 .put(CredInjectionNameEnum.CRED_PASSWORD.name(), decryptedPassword);
