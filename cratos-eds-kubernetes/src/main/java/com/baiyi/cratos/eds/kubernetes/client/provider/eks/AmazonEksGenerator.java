@@ -10,9 +10,11 @@ import com.amazonaws.internal.auth.SignerProvider;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClient;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
 import com.amazonaws.services.securitytoken.model.GetCallerIdentityRequest;
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -44,7 +46,7 @@ public class AmazonEksGenerator {
      * @return
      * @throws URISyntaxException
      */
-    //@Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'eks_url_'+ #amazonEks.url", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'EKS:URL:'+ #amazonEks.url", unless = "#result == null")
     public String generateEksToken(EdsKubernetesConfigModel.AmazonEks amazonEks) throws URISyntaxException {
         DefaultRequest<GetCallerIdentityRequest> defaultRequest = new DefaultRequest<>(new GetCallerIdentityRequest(), "sts");
         URI uri = new URI("https", "sts.amazonaws.com", null, null);
@@ -54,11 +56,12 @@ public class AmazonEksGenerator {
         defaultRequest.addParameter("Action", "GetCallerIdentity");
         defaultRequest.addParameter("Version", "2011-06-15");
         defaultRequest.addHeader("x-k8s-aws-id", amazonEks.getClusterName());
-        BasicAWSCredentials basicCredentials = new BasicAWSCredentials(amazonEks.getCred().getAccessKeyId(), amazonEks.getCred().getSecretKey());
+        BasicAWSCredentials basicCredentials = new BasicAWSCredentials(amazonEks.getCred()
+                .getAccessKey(), amazonEks.getCred()
+                .getSecretKey());
         AWSStaticCredentialsProvider credentials = new AWSStaticCredentialsProvider(basicCredentials);
         Signer signer = SignerFactory.createSigner(SignerFactory.VERSION_FOUR_SIGNER, new SignerParams("sts", amazonEks.getRegion()));
-        AWSSecurityTokenServiceClient stsClient = (AWSSecurityTokenServiceClient) AWSSecurityTokenServiceClientBuilder
-                .standard()
+        AWSSecurityTokenServiceClient stsClient = (AWSSecurityTokenServiceClient) AWSSecurityTokenServiceClientBuilder.standard()
                 .withRegion(amazonEks.getRegion())
                 .withCredentials(credentials)
                 .build();
@@ -66,9 +69,13 @@ public class AmazonEksGenerator {
         PresignerParams presignerParams = new PresignerParams(uri, credentials, signerProvider, SdkClock.STANDARD);
         PresignerFacade presignerFacade = new PresignerFacade(presignerParams);
         URL url = presignerFacade.presign(defaultRequest, new Date(System.currentTimeMillis() + 60000));
-        String encodedUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(url.toString().getBytes());
-        log.debug("Generate EKS Token: clusterName={}, url={}", amazonEks.getClusterName(),amazonEks.getUrl());
-        return Joiner.on(".").join("k8s-aws-v1", encodedUrl);
+        String encodedUrl = Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(url.toString()
+                        .getBytes());
+        log.debug("Generate EKS Token: clusterName={}, url={}", amazonEks.getClusterName(), amazonEks.getUrl());
+        return Joiner.on(".")
+                .join("k8s-aws-v1", encodedUrl);
     }
 
 }

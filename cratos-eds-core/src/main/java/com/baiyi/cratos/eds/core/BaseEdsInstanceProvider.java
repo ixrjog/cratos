@@ -145,7 +145,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     }
 
     @Override
-    public C produce(EdsConfig edsConfig) {
+    public C produceConfig(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credService.getById(edsConfig.getCredentialId());
@@ -157,7 +157,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     }
 
     @SuppressWarnings("unchecked")
-    private C configLoadAs(String configContent) {
+    protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 0);
         return ConfigUtil.loadAs(configContent, clazz);
@@ -179,6 +179,11 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     protected EdsAssetBuilder<C, A> newEdsAssetBuilder(ExternalDataSourceInstance<C> instance, A entity) {
         return EdsAssetBuilder.newBuilder(instance, entity)
                 .assetTypeOf(getAssetType());
+    }
+
+    @Override
+    public void setConfig(EdsConfig edsConfig){
+        // Unsupported
     }
 
     @Override

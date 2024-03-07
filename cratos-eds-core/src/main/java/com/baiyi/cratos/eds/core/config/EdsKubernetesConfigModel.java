@@ -52,7 +52,7 @@ public class EdsKubernetesConfigModel {
     @Schema
     public static class Cred {
 
-        private String accessKeyId;
+        private String accessKey;
 
         private String secretKey;
 
@@ -84,6 +84,7 @@ public class EdsKubernetesConfigModel {
     public static class Namespace {
 
         private List<String> exclude;
+
     }
 
     @Data

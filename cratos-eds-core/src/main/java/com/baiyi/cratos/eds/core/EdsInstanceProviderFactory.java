@@ -47,11 +47,12 @@ public class EdsInstanceProviderFactory {
     public static <C extends IEdsConfigModel> C produce(String instanceType, String assetType, EdsConfig edsConfig) {
         return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
-                .produce(edsConfig);
+                .produceConfig(edsConfig);
     }
 
     /**
      * 查询实例下所有资产类型
+     *
      * @param instanceType
      * @return
      */
@@ -66,12 +67,24 @@ public class EdsInstanceProviderFactory {
             Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
             for (String assetType : pMap.keySet()) {
                 return (C) pMap.get(assetType)
-                        .produce(edsConfig);
+                        .produceConfig(edsConfig);
             }
         } catch (Exception e) {
             throw new EdsConfigException("The eds instance type is incorrect: {}.", e.getMessage());
         }
         throw new EdsConfigException("The eds instance type is incorrect.");
+    }
+
+    public static void setConfig(String instanceType, EdsConfig edsConfig) {
+        if (!EdsInstanceProviderFactory.CONTEXT.containsKey(instanceType)) {
+            return;
+        }
+        Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> providerMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
+        providerMap.keySet()
+                .stream()
+                .findFirst()
+                .ifPresent(s -> providerMap.get(s)
+                        .setConfig(edsConfig));
     }
 
     /**

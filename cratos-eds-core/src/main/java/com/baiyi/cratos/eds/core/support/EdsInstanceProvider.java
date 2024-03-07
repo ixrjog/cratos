@@ -18,9 +18,11 @@ public interface EdsInstanceProvider<C extends IEdsConfigModel, A> {
 
     EdsAsset importAsset(ExternalDataSourceInstance<C> instance, A asset);
 
-    C produce(EdsConfig edsConfig);
+    C produceConfig(EdsConfig edsConfig);
 
     A assetLoadAs(String originalModel);
+
+    void setConfig(EdsConfig edsConfig);
 
     default String getInstanceType() {
         return AopUtils.getTargetClass(this)

@@ -12,6 +12,7 @@ import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
@@ -107,6 +108,8 @@ public class EdsFacadeImpl implements EdsFacade {
                     .build();
             businessCredentialFacade.issueBusinessCredential(addEdsConfig.getCredentialId(), business);
         }
+        // Async set config
+        EdsInstanceProviderFactory.setConfig(edsConfig.getEdsType(), edsConfig);
     }
 
     @Override
