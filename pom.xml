@@ -21,6 +21,7 @@
         <module>cratos-eds-aliyun</module>
         <module>cratos-eds-aws</module>
         <module>cratos-eds-cloudflare</module>
+        <module>cratos-eds-kubernetes</module>
     </modules>
 
     <properties>

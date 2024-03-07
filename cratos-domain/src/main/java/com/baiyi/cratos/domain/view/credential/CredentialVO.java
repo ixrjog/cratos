@@ -67,6 +67,8 @@ public class CredentialVO {
 
         private String comment;
 
+        private String tips;
+
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;

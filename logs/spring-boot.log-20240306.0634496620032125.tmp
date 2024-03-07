@@ -1,0 +1,425 @@
+2024-03-06 16:43:49.986 [] [] []  INFO 81691 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Starting ManageApplication using Java 21 with PID 81691 (/Users/liangjian/Documents/workspace/baiyi/cratos/cratos-manage/target/classes started by liangjian in /Users/liangjian/Documents/workspace/baiyi/cratos)
+2024-03-06 16:43:49.989 [] [] []  INFO 81691 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : The following 1 profile is active: "dev"
+2024-03-06 16:43:50.743 [] [] []  WARN 81691 --- [cratos] [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.baiyi.cratos]' package. Please check your configuration.
+2024-03-06 16:43:50.839 [] [] []  INFO 81691 --- [cratos] [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2024-03-06 16:43:50.839 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletContextInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableSystemEnvironmentPropertySourceWrapper
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:43:50.840 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:43:51.084 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2024-03-06 16:43:51.087 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2024-03-06 16:43:51.088 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2024-03-06 16:43:51.231 [] [] []  INFO 81691 --- [cratos] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-06 16:43:51.232 [] [] []  INFO 81691 --- [cratos] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-06 16:43:51.268 [] [] []  INFO 81691 --- [cratos] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-06 16:43:51.296 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.key-obtention-iterations, using default value: 1000
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.pool-size, using default value: 1
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-name, using default value: null
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-class-name, using default value: null
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.salt-generator-classname, using default value: org.jasypt.salt.RandomSaltGenerator
+2024-03-06 16:43:51.300 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.string-output-type, using default value: base64
+2024-03-06 16:43:51.997 [] [] []  WARN 81691 --- [cratos] [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-06 16:43:52.309 [] [] [] ERROR 81691 --- [cratos] [main] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2024-03-06 16:43:55.528 [] [] []  WARN 81691 --- [cratos] [main] org.jline                                : Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+2024-03-06 16:43:55.757 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.s.l.SshShellListenerService        : Ssh shell listener service initialized with 0 listeners
+2024-03-06 16:43:55.760 [] [] []  INFO 81691 --- [cratos] [main] a.SshShellSecurityAuthenticationProvider : Using authentication manager named: authManager [class=org.springframework.security.authentication.ProviderManager]
+2024-03-06 16:43:55.773 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=ALIYUN, assetType=ALIYUN_CERT
+2024-03-06 16:43:55.782 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_CERT
+2024-03-06 16:43:55.786 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_STS_VPN
+2024-03-06 16:43:55.865 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=CLOUDFLARE, assetType=CLOUDFLARE_CERT
+2024-03-06 16:43:56.046 [] [] []  INFO 81691 --- [cratos] [main] .b.BouncyCastleSecurityProviderRegistrar : getOrCreateProvider(BC) created instance of org.bouncycastle.jce.provider.BouncyCastleProvider
+2024-03-06 16:43:56.047 [] [] []  INFO 81691 --- [cratos] [main] s.c.u.s.e.EdDSASecurityProviderRegistrar : getOrCreateProvider(EdDSA) created instance of net.i2p.crypto.eddsa.EdDSASecurityProvider
+2024-03-06 16:43:56.127 [] [] []  INFO 81691 --- [cratos] [main] o.a.s.c.i.DefaultIoServiceFactoryFactory : No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+2024-03-06 16:43:56.132 [] [] []  INFO 81691 --- [cratos] [main] c.b.cratos.shell.SshShellConfiguration   : Ssh server started [0.0.0.0:2222]
+2024-03-06 16:43:56.439 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-03-06 16:43:56.444 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-03-06 16:43:56.444 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-03-06 16:43:56.444 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-03-06 16:43:56.444 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-03-06 16:43:56.444 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-03-06 16:43:56.445 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-03-06 16:43:56.445 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@4bdd6fe0
+2024-03-06 16:43:56.516 [] [] []  INFO 81691 --- [cratos] [main] u.j.c.RefreshScopeRefreshedEventListener : Refreshing cached encryptable property sources on ServletWebServerInitializedEvent
+2024-03-06 16:43:56.516 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemProperties refreshed
+2024-03-06 16:43:56.516 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemEnvironment refreshed
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source random refreshed
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.web.context.support.ServletContextPropertySource] to EncryptableEnumerablePropertySourceWrapper
+2024-03-06 16:43:56.517 [] [] []  INFO 81691 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-03-06 16:43:56.522 [] [] []  INFO 81691 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Started ManageApplication in 6.786 seconds (process running for 7.066)
+2024-03-06 16:43:56.527 [] [] []  INFO 81691 --- [cratos] [main] c.b.c.c.RbacAutoConfiguration            : RBAC group & resource auto configuration.
+2024-03-06 16:43:56.565 [] [] []  INFO 81691 --- [cratos] [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2024-03-06 16:44:21.187 [] [] []  INFO 81691 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Cratos <Spring Boot 3.2.3>
+2024-03-06 16:44:21.187 [] [] []  INFO 81691 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html
+2024-03-06 16:46:41.280 [] [] []  INFO 81691 --- [cratos] [tomcat-handler-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-06 16:46:41.916 [] [] []  INFO 81691 --- [cratos] [tomcat-handler-5] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 450 ms
+2024-03-06 16:47:06.994 [] [] [] ERROR 81691 --- [cratos] [tomcat-handler-11] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException] with root cause
+
+java.lang.NullPointerException: null
+	at java.base/java.util.Objects.requireNonNull(Objects.java:233)
+	at com.baiyi.cratos.controller.CredentialController.lambda$getCredentialOptions$0(CredentialController.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at com.baiyi.cratos.controller.CredentialController.getCredentialOptions(CredentialController.java:57)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:219)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at com.baiyi.cratos.facade.auth.filter.AuthenticationTokenFilter.doFilterInternal(AuthenticationTokenFilter.java:63)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:311)
+
+2024-03-06 16:47:24.490 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 16:47:24.502 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2024-03-06 16:47:24.502 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 16:47:24.502 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2024-03-06 16:47:24.512 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2024-03-06 16:47:24.516 [] [] []  INFO 81691 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2024-03-06 16:47:30.800 [] [] []  INFO 81960 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Starting ManageApplication using Java 21 with PID 81960 (/Users/liangjian/Documents/workspace/baiyi/cratos/cratos-manage/target/classes started by liangjian in /Users/liangjian/Documents/workspace/baiyi/cratos)
+2024-03-06 16:47:30.800 [] [] []  INFO 81960 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : The following 1 profile is active: "dev"
+2024-03-06 16:47:31.453 [] [] []  WARN 81960 --- [cratos] [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.baiyi.cratos]' package. Please check your configuration.
+2024-03-06 16:47:31.532 [] [] []  INFO 81960 --- [cratos] [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2024-03-06 16:47:31.533 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 16:47:31.533 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:47:31.533 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletContextInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableSystemEnvironmentPropertySourceWrapper
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:47:31.534 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 16:47:31.750 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2024-03-06 16:47:31.752 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2024-03-06 16:47:31.754 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2024-03-06 16:47:31.863 [] [] []  INFO 81960 --- [cratos] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-06 16:47:31.863 [] [] []  INFO 81960 --- [cratos] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-06 16:47:31.896 [] [] []  INFO 81960 --- [cratos] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-06 16:47:31.921 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.key-obtention-iterations, using default value: 1000
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.pool-size, using default value: 1
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-name, using default value: null
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-class-name, using default value: null
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.salt-generator-classname, using default value: org.jasypt.salt.RandomSaltGenerator
+2024-03-06 16:47:31.925 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.string-output-type, using default value: base64
+2024-03-06 16:47:32.616 [] [] []  WARN 81960 --- [cratos] [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-06 16:47:32.923 [] [] [] ERROR 81960 --- [cratos] [main] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2024-03-06 16:47:35.569 [] [] []  WARN 81960 --- [cratos] [main] org.jline                                : Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+2024-03-06 16:47:35.787 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.s.l.SshShellListenerService        : Ssh shell listener service initialized with 0 listeners
+2024-03-06 16:47:35.790 [] [] []  INFO 81960 --- [cratos] [main] a.SshShellSecurityAuthenticationProvider : Using authentication manager named: authManager [class=org.springframework.security.authentication.ProviderManager]
+2024-03-06 16:47:35.803 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=ALIYUN, assetType=ALIYUN_CERT
+2024-03-06 16:47:35.812 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_CERT
+2024-03-06 16:47:35.816 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_STS_VPN
+2024-03-06 16:47:35.894 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=CLOUDFLARE, assetType=CLOUDFLARE_CERT
+2024-03-06 16:47:36.080 [] [] []  INFO 81960 --- [cratos] [main] .b.BouncyCastleSecurityProviderRegistrar : getOrCreateProvider(BC) created instance of org.bouncycastle.jce.provider.BouncyCastleProvider
+2024-03-06 16:47:36.080 [] [] []  INFO 81960 --- [cratos] [main] s.c.u.s.e.EdDSASecurityProviderRegistrar : getOrCreateProvider(EdDSA) created instance of net.i2p.crypto.eddsa.EdDSASecurityProvider
+2024-03-06 16:47:36.163 [] [] []  INFO 81960 --- [cratos] [main] o.a.s.c.i.DefaultIoServiceFactoryFactory : No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+2024-03-06 16:47:36.169 [] [] []  INFO 81960 --- [cratos] [main] c.b.cratos.shell.SshShellConfiguration   : Ssh server started [0.0.0.0:2222]
+2024-03-06 16:47:36.484 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-03-06 16:47:36.489 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-03-06 16:47:36.489 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-03-06 16:47:36.490 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-03-06 16:47:36.490 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-03-06 16:47:36.490 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-03-06 16:47:36.490 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-03-06 16:47:36.490 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@3545bfea
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] u.j.c.RefreshScopeRefreshedEventListener : Refreshing cached encryptable property sources on ServletWebServerInitializedEvent
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemProperties refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemEnvironment refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source random refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 16:47:36.568 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 16:47:36.569 [] [] []  INFO 81960 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.web.context.support.ServletContextPropertySource] to EncryptableEnumerablePropertySourceWrapper
+2024-03-06 16:47:36.569 [] [] []  INFO 81960 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-03-06 16:47:36.574 [] [] []  INFO 81960 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Started ManageApplication in 6.006 seconds (process running for 9.456)
+2024-03-06 16:47:36.576 [] [] []  INFO 81960 --- [cratos] [main] c.b.c.c.RbacAutoConfiguration            : RBAC group & resource auto configuration.
+2024-03-06 16:47:36.613 [] [] []  INFO 81960 --- [cratos] [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2024-03-06 16:47:59.075 [] [] []  INFO 81960 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Cratos <Spring Boot 3.2.3>
+2024-03-06 16:47:59.076 [] [] []  INFO 81960 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html
+2024-03-06 16:55:46.697 [] [] []  INFO 81960 --- [cratos] [tomcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-06 16:56:32.379 [] [] [] ERROR 81960 --- [cratos] [tomcat-handler-0] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: java.lang.NullPointerException] with root cause
+
+java.lang.NullPointerException: null
+	at java.base/java.util.Objects.requireNonNull(Objects.java:233)
+	at com.baiyi.cratos.controller.CredentialController.lambda$getCredentialOptions$0(CredentialController.java:57)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at com.baiyi.cratos.controller.CredentialController.getCredentialOptions(CredentialController.java:57)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:259)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:192)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:920)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:830)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:205)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:219)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at com.baiyi.cratos.facade.auth.filter.AuthenticationTokenFilter.doFilterInternal(AuthenticationTokenFilter.java:63)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:174)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:149)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:391)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1744)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:311)
+
+2024-03-06 17:04:49.694 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 17:04:49.738 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2024-03-06 17:04:49.738 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 17:04:49.739 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2024-03-06 17:04:49.759 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2024-03-06 17:04:49.767 [] [] []  INFO 81960 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2024-03-06 17:04:52.788 [] [] []  INFO 83220 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Starting ManageApplication using Java 21 with PID 83220 (/Users/liangjian/Documents/workspace/baiyi/cratos/cratos-manage/target/classes started by liangjian in /Users/liangjian/Documents/workspace/baiyi/cratos)
+2024-03-06 17:04:52.789 [] [] []  INFO 83220 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : The following 1 profile is active: "dev"
+2024-03-06 17:04:53.499 [] [] []  WARN 83220 --- [cratos] [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.baiyi.cratos]' package. Please check your configuration.
+2024-03-06 17:04:53.581 [] [] []  INFO 83220 --- [cratos] [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2024-03-06 17:04:53.581 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletContextInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableSystemEnvironmentPropertySourceWrapper
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:04:53.582 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:04:53.823 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2024-03-06 17:04:53.826 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2024-03-06 17:04:53.827 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2024-03-06 17:04:53.957 [] [] []  INFO 83220 --- [cratos] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-06 17:04:53.957 [] [] []  INFO 83220 --- [cratos] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-06 17:04:53.984 [] [] []  INFO 83220 --- [cratos] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-06 17:04:54.012 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2024-03-06 17:04:54.016 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.key-obtention-iterations, using default value: 1000
+2024-03-06 17:04:54.016 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.pool-size, using default value: 1
+2024-03-06 17:04:54.016 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-name, using default value: null
+2024-03-06 17:04:54.016 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-class-name, using default value: null
+2024-03-06 17:04:54.016 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.salt-generator-classname, using default value: org.jasypt.salt.RandomSaltGenerator
+2024-03-06 17:04:54.017 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.string-output-type, using default value: base64
+2024-03-06 17:04:54.771 [] [] []  WARN 83220 --- [cratos] [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-06 17:04:55.088 [] [] [] ERROR 83220 --- [cratos] [main] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2024-03-06 17:04:58.297 [] [] []  WARN 83220 --- [cratos] [main] org.jline                                : Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+2024-03-06 17:04:58.518 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.s.l.SshShellListenerService        : Ssh shell listener service initialized with 0 listeners
+2024-03-06 17:04:58.522 [] [] []  INFO 83220 --- [cratos] [main] a.SshShellSecurityAuthenticationProvider : Using authentication manager named: authManager [class=org.springframework.security.authentication.ProviderManager]
+2024-03-06 17:04:58.536 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=ALIYUN, assetType=ALIYUN_CERT
+2024-03-06 17:04:58.546 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_CERT
+2024-03-06 17:04:58.551 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_STS_VPN
+2024-03-06 17:04:58.639 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=CLOUDFLARE, assetType=CLOUDFLARE_CERT
+2024-03-06 17:04:58.831 [] [] []  INFO 83220 --- [cratos] [main] .b.BouncyCastleSecurityProviderRegistrar : getOrCreateProvider(BC) created instance of org.bouncycastle.jce.provider.BouncyCastleProvider
+2024-03-06 17:04:58.832 [] [] []  INFO 83220 --- [cratos] [main] s.c.u.s.e.EdDSASecurityProviderRegistrar : getOrCreateProvider(EdDSA) created instance of net.i2p.crypto.eddsa.EdDSASecurityProvider
+2024-03-06 17:04:58.933 [] [] []  INFO 83220 --- [cratos] [main] o.a.s.c.i.DefaultIoServiceFactoryFactory : No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+2024-03-06 17:04:58.940 [] [] []  INFO 83220 --- [cratos] [main] c.b.cratos.shell.SshShellConfiguration   : Ssh server started [0.0.0.0:2222]
+2024-03-06 17:04:59.281 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-03-06 17:04:59.285 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-03-06 17:04:59.286 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@71f9f8ba
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] u.j.c.RefreshScopeRefreshedEventListener : Refreshing cached encryptable property sources on ServletWebServerInitializedEvent
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemProperties refreshed
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemEnvironment refreshed
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source random refreshed
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:04:59.353 [] [] []  INFO 83220 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:04:59.354 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 17:04:59.354 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:04:59.354 [] [] []  INFO 83220 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.web.context.support.ServletContextPropertySource] to EncryptableEnumerablePropertySourceWrapper
+2024-03-06 17:04:59.354 [] [] []  INFO 83220 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-03-06 17:04:59.359 [] [] []  INFO 83220 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Started ManageApplication in 6.83 seconds (process running for 7.127)
+2024-03-06 17:04:59.360 [] [] []  INFO 83220 --- [cratos] [main] c.b.c.c.RbacAutoConfiguration            : RBAC group & resource auto configuration.
+2024-03-06 17:04:59.398 [] [] []  INFO 83220 --- [cratos] [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2024-03-06 17:05:21.234 [] [] []  INFO 83220 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Cratos <Spring Boot 3.2.3>
+2024-03-06 17:05:21.234 [] [] []  INFO 83220 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html
+2024-03-06 17:05:40.487 [] [] []  INFO 83220 --- [cratos] [tomcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-06 17:06:57.464 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 17:06:57.477 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2024-03-06 17:06:57.478 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2024-03-06 17:06:57.478 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2024-03-06 17:06:57.488 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2024-03-06 17:06:57.492 [] [] []  INFO 83220 --- [cratos] [SpringApplicationShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2024-03-06 17:07:00.284 [] [] []  INFO 83313 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Starting ManageApplication using Java 21 with PID 83313 (/Users/liangjian/Documents/workspace/baiyi/cratos/cratos-manage/target/classes started by liangjian in /Users/liangjian/Documents/workspace/baiyi/cratos)
+2024-03-06 17:07:00.285 [] [] []  INFO 83313 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : The following 1 profile is active: "dev"
+2024-03-06 17:07:00.983 [] [] []  WARN 83313 --- [cratos] [main] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.baiyi.cratos]' package. Please check your configuration.
+2024-03-06 17:07:01.070 [] [] []  INFO 83313 --- [cratos] [main] ptablePropertiesBeanFactoryPostProcessor : Post-processing PropertySource instances
+2024-03-06 17:07:01.070 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletContextInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableSystemEnvironmentPropertySourceWrapper
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:07:01.071 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+2024-03-06 17:07:01.302 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.filter.DefaultLazyPropertyFilter   : Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+2024-03-06 17:07:01.305 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.r.DefaultLazyPropertyResolver      : Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+2024-03-06 17:07:01.306 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.d.DefaultLazyPropertyDetector      : Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+2024-03-06 17:07:01.415 [] [] []  INFO 83313 --- [cratos] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-03-06 17:07:01.415 [] [] []  INFO 83313 --- [cratos] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-03-06 17:07:01.447 [] [] []  INFO 83313 --- [cratos] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-03-06 17:07:01.474 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.encryptor.DefaultLazyEncryptor     : String Encryptor custom Bean not found with name 'jasyptStringEncryptor'. Initializing Default String Encryptor
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.key-obtention-iterations, using default value: 1000
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.pool-size, using default value: 1
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-name, using default value: null
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.provider-class-name, using default value: null
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.salt-generator-classname, using default value: org.jasypt.salt.RandomSaltGenerator
+2024-03-06 17:07:01.478 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.c.StringEncryptorBuilder           : Encryptor config not found for property jasypt.encryptor.string-output-type, using default value: base64
+2024-03-06 17:07:02.196 [] [] []  WARN 83313 --- [cratos] [main] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore Ant [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-03-06 17:07:02.517 [] [] [] ERROR 83313 --- [cratos] [main] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2024-03-06 17:07:02.719 [] [] []  WARN 83313 --- [cratos] [main] org.jline                                : Unable to create a system terminal, creating a dumb terminal (enable debug logging for more information)
+2024-03-06 17:07:02.899 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.s.l.SshShellListenerService        : Ssh shell listener service initialized with 0 listeners
+2024-03-06 17:07:02.902 [] [] []  INFO 83313 --- [cratos] [main] a.SshShellSecurityAuthenticationProvider : Using authentication manager named: authManager [class=org.springframework.security.authentication.ProviderManager]
+2024-03-06 17:07:02.912 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=ALIYUN, assetType=ALIYUN_CERT
+2024-03-06 17:07:02.920 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_CERT
+2024-03-06 17:07:02.923 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=AWS, assetType=AWS_STS_VPN
+2024-03-06 17:07:03.001 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.e.core.EdsInstanceProviderFactory  : EdsInstanceProviderFactory Registered: instanceType=CLOUDFLARE, assetType=CLOUDFLARE_CERT
+2024-03-06 17:07:03.189 [] [] []  INFO 83313 --- [cratos] [main] .b.BouncyCastleSecurityProviderRegistrar : getOrCreateProvider(BC) created instance of org.bouncycastle.jce.provider.BouncyCastleProvider
+2024-03-06 17:07:03.190 [] [] []  INFO 83313 --- [cratos] [main] s.c.u.s.e.EdDSASecurityProviderRegistrar : getOrCreateProvider(EdDSA) created instance of net.i2p.crypto.eddsa.EdDSASecurityProvider
+2024-03-06 17:07:03.282 [] [] []  INFO 83313 --- [cratos] [main] o.a.s.c.i.DefaultIoServiceFactoryFactory : No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+2024-03-06 17:07:03.287 [] [] []  INFO 83313 --- [cratos] [main] c.b.cratos.shell.SshShellConfiguration   : Ssh server started [0.0.0.0:2222]
+2024-03-06 17:07:03.611 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Using default implementation for ThreadExecutor
+2024-03-06 17:07:03.615 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.core.SchedulerSignalerImpl    : Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2024-03-06 17:07:03.615 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Quartz Scheduler v.2.3.2 created.
+2024-03-06 17:07:03.616 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.simpl.RAMJobStore             : RAMJobStore initialized.
+2024-03-06 17:07:03.616 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler meta-data: Quartz Scheduler (v2.3.2) 'quartzScheduler' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+2024-03-06 17:07:03.616 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2024-03-06 17:07:03.616 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.impl.StdSchedulerFactory      : Quartz scheduler version: 2.3.2
+2024-03-06 17:07:03.616 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.core.QuartzScheduler          : JobFactory set to: org.springframework.scheduling.quartz.SpringBeanJobFactory@545d772e
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] u.j.c.RefreshScopeRefreshedEventListener : Refreshing cached encryptable property sources on ServletWebServerInitializedEvent
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemProperties refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source systemEnvironment refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source random refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application-dev.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.properties]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] CachingDelegateEncryptablePropertySource : Property Source Config resource 'class path resource [application.yml]' via location 'optional:classpath:/' refreshed
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource configurationProperties [class org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Skipping PropertySource servletConfigInitParams [class org.springframework.core.env.PropertySource$StubPropertySource
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] c.u.j.EncryptablePropertySourceConverter : Converting PropertySource servletContextInitParams [org.springframework.web.context.support.ServletContextPropertySource] to EncryptableEnumerablePropertySourceWrapper
+2024-03-06 17:07:03.687 [] [] []  INFO 83313 --- [cratos] [main] org.quartz.core.QuartzScheduler          : Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2024-03-06 17:07:03.694 [] [] []  INFO 83313 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Started ManageApplication in 3.701 seconds (process running for 3.968)
+2024-03-06 17:07:03.696 [] [] []  INFO 83313 --- [cratos] [main] c.b.c.c.RbacAutoConfiguration            : RBAC group & resource auto configuration.
+2024-03-06 17:07:03.733 [] [] []  INFO 83313 --- [cratos] [main] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2024-03-06 17:07:13.791 [] [] []  INFO 83313 --- [cratos] [tomcat-handler-0] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-03-06 17:07:24.087 [] [] []  INFO 83313 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Cratos <Spring Boot 3.2.3>
+2024-03-06 17:07:24.087 [] [] []  INFO 83313 --- [cratos] [main] com.baiyi.cratos.ManageApplication       : Swagger UI page http://127.0.0.1:8081/swagger-ui/index.html

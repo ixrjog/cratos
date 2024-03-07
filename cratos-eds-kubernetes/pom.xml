@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.baiyi.cratos</groupId>
+        <artifactId>cratos</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cratos-eds-kubernetes</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- https://github.com/fabric8io/kubernetes-client -->
+        <fabric8-sdk.version>6.10.0</fabric8-sdk.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- https://github.com/fabric8io/kubernetes-client -->
+        <!-- https://mvnrepository.com/artifact/io.fabric8/kubernetes-client -->
+        <!--suppress VulnerableLibrariesLocal -->
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client</artifactId>
+            <version>${fabric8-sdk.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.fabric8/kubernetes-model -->
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-model</artifactId>
+            <version>${fabric8-sdk.version}</version>
+        </dependency>
+
+        <!--  https://search.maven.org/artifact/io.fabric8/istio-client/6.9.0/jar?eh= -->
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>istio-client</artifactId>
+            <version>${fabric8-sdk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baiyi.cratos</groupId>
+            <artifactId>cratos-eds-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
