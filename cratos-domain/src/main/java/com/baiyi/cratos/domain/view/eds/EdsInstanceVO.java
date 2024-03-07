@@ -1,14 +1,17 @@
 package com.baiyi.cratos.domain.view.eds;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,7 +25,7 @@ public class EdsInstanceVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
-    public static class EdsInstance extends BaseVO implements EdsConfigVO.IEdsConfig, Serializable {
+    public static class EdsInstance extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, EdsConfigVO.IEdsConfig, Serializable {
 
         @Serial
         private static final long serialVersionUID = -7340773895154204152L;
@@ -51,6 +54,13 @@ public class EdsInstanceVO {
         private EdsConfigVO.EdsConfig edsConfig;
 
         private Set<String> assetTypes;
+
+        @Override
+        public Integer getBusinessId() {
+            return id;
+        }
+
+        List<BusinessTagVO.BusinessTag> businessTags;
 
     }
 
