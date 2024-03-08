@@ -8,6 +8,8 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/2/5 16:51
@@ -18,5 +20,7 @@ public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance>, B
     DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
     int selectCountByConfigId(Integer configId);
+
+    List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
 }

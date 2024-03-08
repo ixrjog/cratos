@@ -29,6 +29,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/2/5 17:07
@@ -208,6 +210,12 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public void deleteEdsAssetById(int id) {
         edsAssetService.deleteById(id);
+    }
+
+
+    @Override
+    public List<EdsInstance> queryValidEdsInstanceByType(String edsType) {
+        return edsInstanceService.queryValidEdsInstanceByType(edsType);
     }
 
 }

@@ -1,12 +1,15 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -40,5 +43,7 @@ public interface EdsFacade {
     DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
 
     void deleteEdsAssetById(int id);
+
+    List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
 }
