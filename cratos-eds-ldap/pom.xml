@@ -3,14 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.baiyi.cratos</groupId>
         <artifactId>cratos</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cratos-eds</artifactId>
+    <artifactId>cratos-eds-ldap</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -21,32 +20,14 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-aliyun</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-ldap</artifactId>
+            <version>3.1.5</version>
         </dependency>
 
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-aws</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-cloudflare</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-kubernetes</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-ldap</artifactId>
+            <artifactId>cratos-eds-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
