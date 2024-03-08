@@ -114,25 +114,25 @@ public class EdsFacadeImpl implements EdsFacade {
 
     @Override
     public void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig) {
-        EdsConfig edsConfig = edsConfigService.getById(updateEdsConfig.getId());
+        EdsConfig dbEdsConfig = edsConfigService.getById(updateEdsConfig.getId());
 
         SimpleBusiness business = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.EDS_CONFIG.name())
-                .businessId(edsConfig.getId())
+                .businessId(dbEdsConfig.getId())
                 .build();
 
         IdentityUtil.tryIdentity(updateEdsConfig.getCredentialId())
                 .withValid(
                         // UpdateEdsConfig credentialId valid
                         () -> {
-                            IdentityUtil.tryIdentity(edsConfig.getCredentialId())
+                            IdentityUtil.tryIdentity(dbEdsConfig.getCredentialId())
                                     .withValid(
                                             // EdsConfig credentialId valid
                                             () -> {
                                                 // 吊销凭据
                                                 if (!updateEdsConfig.getCredentialId()
-                                                        .equals(edsConfig.getCredentialId())) {
-                                                    businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
+                                                        .equals(dbEdsConfig.getCredentialId())) {
+                                                    businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
                                                     businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
                                                 }
                                             },
@@ -143,12 +143,14 @@ public class EdsFacadeImpl implements EdsFacade {
                                             });
                         }, () -> {
                             // UpdateEdsConfig credentialId invalid
-                            if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+                            if (IdentityUtil.hasIdentity(dbEdsConfig.getCredentialId())) {
                                 // 吊销凭据
-                                businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
+                                businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
                             }
                         });
-        edsConfigService.updateByPrimaryKey(updateEdsConfig.toTarget());
+        EdsConfig edsConfig = updateEdsConfig.toTarget();
+        edsConfigService.updateByPrimaryKey(edsConfig);
+        EdsInstanceProviderFactory.setConfig(edsConfig.getEdsType(), edsConfig);
     }
 
     @Override
