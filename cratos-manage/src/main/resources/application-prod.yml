@@ -14,7 +14,7 @@ logging:
 cratos:
   auth:
     enabled: on
-    provider: LOCAL
+    provider: LDAP
   rbac:
     auto-configuration:
       enabled: off

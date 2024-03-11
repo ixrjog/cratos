@@ -31,6 +31,7 @@ public class EdsScheduleParam {
         private String jobTime;
 
         private String jobDescription;
+
     }
 
     @Data
@@ -43,6 +44,7 @@ public class EdsScheduleParam {
 
         @NotNull(message = "任务名不能为空")
         private String name;
+
     }
 
     @Data
@@ -55,6 +57,7 @@ public class EdsScheduleParam {
 
         @NotNull(message = "任务名不能为空")
         private String name;
+
     }
 
     @Data
@@ -64,6 +67,7 @@ public class EdsScheduleParam {
 
         @NotNull(message = "Cron不能为空")
         private String jobTime;
+
     }
 
 }

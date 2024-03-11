@@ -16,10 +16,17 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class UsernameWithPasswordCredValidator implements ICredentialValidator {
 
-    private static final CredValidationRules rules = CredValidationRules.builder()
+    // Private as individual user credentials
+    private static final CredValidationRules privateRules = CredValidationRules.builder()
             .credentialNullMessage("The password must be specified.")
             .verifyExpiredTime(true)
             .maxExpiredTime(TimeUnit.MILLISECONDS.convert(90L, TimeUnit.DAYS))
+            .build();
+
+    private static final CredValidationRules rules = CredValidationRules.builder()
+            .credentialNullMessage("The password must be specified.")
+            .verifyExpiredTime(true)
+            .maxExpiredTime(TimeUnit.MILLISECONDS.convert(366L * 5, TimeUnit.DAYS))
             .build();
 
     public CredentialTypeEnum getType() {
@@ -28,7 +35,11 @@ public class UsernameWithPasswordCredValidator implements ICredentialValidator {
 
     @Override
     public void verify(Credential credential) {
-        rules.verify(credential);
+        if (credential.getPrivateCredential()) {
+            privateRules.verify(credential);
+        } else {
+            rules.verify(credential);
+        }
     }
 
 }
