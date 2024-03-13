@@ -70,6 +70,9 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             }
             // 验证令牌是否有效
             UserToken userToken = userTokenFacade.verifyToken(token);
+            if (userToken == null || !userToken.getValid()) {
+                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
+            }
             rbacFacade.verifyResourceAccessPermissions(token, resource);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userToken.getUsername(), null);
             SecurityContextHolder.getContext()
