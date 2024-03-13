@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.certificate.CertificateParam;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 
@@ -11,7 +12,7 @@ import com.baiyi.cratos.domain.view.certificate.CertificateVO;
  */
 public interface CertificateFacade {
 
-    void addCertificate(CertificateParam.AddCertificate addCertificate);
+    Certificate addCertificate(CertificateParam.AddCertificate addCertificate);
 
     void updateCertificate(CertificateParam.UpdateCertificate updateCertificate);
 

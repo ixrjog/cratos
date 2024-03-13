@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.certificate.CertificateParam;
@@ -26,8 +27,11 @@ public class CertificateFacadeImpl implements CertificateFacade {
     private final CertificateWrapper certificateWrapper;
 
     @Override
-    public void addCertificate(CertificateParam.AddCertificate addCertificate) {
-        certificateService.add(addCertificate.toTarget());
+    @BindAssetsAfterImport
+    public Certificate addCertificate(CertificateParam.AddCertificate addCertificate) {
+        Certificate certificate = addCertificate.toTarget();
+        certificateService.add(certificate);
+        return certificate;
     }
 
     @Override

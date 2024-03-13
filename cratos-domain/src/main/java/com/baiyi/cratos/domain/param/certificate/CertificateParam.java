@@ -1,6 +1,9 @@
 package com.baiyi.cratos.domain.param.certificate;
 
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
+import com.baiyi.cratos.domain.param.IImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -21,7 +24,8 @@ public class CertificateParam {
 
     @Data
     @Schema
-    public static class AddCertificate implements IToTarget<Certificate> {
+    @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
+    public static class AddCertificate implements IToTarget<Certificate>, IImportFromAsset {
 
         private String certificateId;
 
@@ -48,6 +52,9 @@ public class CertificateParam {
         private Date notAfter;
 
         private String comment;
+
+        @Schema(description = "Import from assetId")
+        private Integer fromAssetId;
 
     }
 
