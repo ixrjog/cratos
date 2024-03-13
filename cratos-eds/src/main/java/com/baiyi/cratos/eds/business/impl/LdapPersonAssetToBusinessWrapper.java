@@ -24,18 +24,14 @@ import org.springframework.stereotype.Component;
 public class LdapPersonAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<User, LdapPerson.Person> {
 
     @Override
-    public EdsAssetVO.AssetToBusiness<User> getToBusinessTarget(EdsAssetVO.Asset asset) {
+    protected User getTarget(EdsAssetVO.Asset asset) {
         LdapPerson.Person model = getAssetModel(asset);
-        User user = User.builder()
+        return User.builder()
                 .username(model.getUsername())
                 .name(model.getDisplayName())
                 .displayName(model.getDisplayName())
                 .email(model.getEmail())
                 .mobilePhone(model.getMobile())
-                .build();
-        return EdsAssetVO.AssetToBusiness.<User>builder()
-                .target(user)
-                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 

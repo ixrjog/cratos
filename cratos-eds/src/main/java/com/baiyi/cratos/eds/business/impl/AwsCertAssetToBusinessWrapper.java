@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class AwsCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, CertificateSummary> {
 
     @Override
-    public EdsAssetVO.AssetToBusiness<Certificate> getToBusinessTarget(EdsAssetVO.Asset asset) {
+    protected Certificate getTarget(EdsAssetVO.Asset asset) {
         CertificateSummary model = getAssetModel(asset);
-        Certificate cert = Certificate.builder()
+        return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getName())
@@ -35,10 +35,6 @@ public class AwsCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Ce
                 .valid(asset.getValid())
                 .notBefore(asset.getCreatedTime())
                 .notAfter(asset.getExpiredTime())
-                .build();
-        return EdsAssetVO.AssetToBusiness.<Certificate>builder()
-                .target(cert)
-                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 

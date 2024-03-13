@@ -15,7 +15,7 @@ public interface IAssetToBusinessWrapper<B extends IToBusinessTarget> extends Ba
 
     void wrap(EdsAssetVO.Asset asset);
 
-    EdsAssetVO.AssetToBusiness<B> getToBusinessTarget(EdsAssetVO.Asset asset);
+    EdsAssetVO.AssetToBusiness<B> getAssetToBusiness(EdsAssetVO.Asset asset);
 
     default void afterPropertiesSet() {
         AssetToBusinessWrapperFactory.register(this);

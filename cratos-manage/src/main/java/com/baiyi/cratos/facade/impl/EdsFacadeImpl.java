@@ -232,7 +232,7 @@ public class EdsFacadeImpl implements EdsFacade {
         if (assetToBusinessWrapper == null) {
             throw new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId);
         }
-        return assetToBusinessWrapper.getToBusinessTarget(assetVO);
+        return assetToBusinessWrapper.getAssetToBusiness(assetVO);
     }
 
 }

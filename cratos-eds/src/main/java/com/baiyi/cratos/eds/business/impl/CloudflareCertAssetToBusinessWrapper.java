@@ -24,9 +24,9 @@ import org.springframework.stereotype.Component;
 public class CloudflareCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, CloudflareCert.Certificate> {
 
     @Override
-    public EdsAssetVO.AssetToBusiness<Certificate> getToBusinessTarget(EdsAssetVO.Asset asset) {
+    protected Certificate getTarget(EdsAssetVO.Asset asset) {
         CloudflareCert.Certificate cloudflareCert = getAssetModel(asset);
-        Certificate cert = Certificate.builder()
+        return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getDescription())
@@ -35,10 +35,6 @@ public class CloudflareCertAssetToBusinessWrapper extends BaseAssetToBusinessWra
                 .valid(asset.getValid())
                 .notBefore(cloudflareCert.getUploadedOn())
                 .notAfter(cloudflareCert.getExpiresOn())
-                .build();
-        return EdsAssetVO.AssetToBusiness.<Certificate>builder()
-                .target(cert)
-                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 

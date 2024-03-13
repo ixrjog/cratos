@@ -13,7 +13,7 @@ import jakarta.annotation.Resource;
  * @Date 2024/3/12 10:49
  * @Version 1.0
  */
-public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget,T> implements IAssetToBusinessWrapper<B> {
+public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget, T> implements IAssetToBusinessWrapper<B> {
 
     @Resource
     protected BusinessAssetBindService businessAssetBindService;
@@ -22,12 +22,25 @@ public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget,T> 
         return EdsInstanceProviderFactory.produceModel(getInstanceType(), getAssetType(), asset);
     }
 
+    //     //  EdsAssetVO.AssetToBusiness<B> getToBusinessTarget(EdsAssetVO.Asset asset);
+
+    @Override
+    public EdsAssetVO.AssetToBusiness<B> getAssetToBusiness(EdsAssetVO.Asset asset) {
+        return EdsAssetVO.AssetToBusiness.<B>builder()
+                .target(getTarget(asset))
+                .toBusiness(getToBusiness(asset.getId()))
+                .build();
+    }
+
+    protected abstract B getTarget(EdsAssetVO.Asset asset);
+
+
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
         asset.setToBusiness(getToBusiness(asset.getId()));
     }
 
-    protected EdsAssetVO.ToBusiness getToBusiness(int assetId){
+    protected EdsAssetVO.ToBusiness getToBusiness(int assetId) {
         BusinessAssetBind businessAssetBind = getBusinessAssetBind(assetId);
         if (businessAssetBind == null) {
             return EdsAssetVO.ToBusiness.builder()
