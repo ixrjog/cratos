@@ -25,15 +25,17 @@ public class LdapPersonAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
 
     @Override
     public EdsAssetVO.AssetToBusiness<User> getToBusinessTarget(EdsAssetVO.Asset asset) {
-        LdapPerson.Person person = getAssetModel(asset);
+        LdapPerson.Person model = getAssetModel(asset);
         User user = User.builder()
-                .username(person.getUsername())
-                .displayName(person.getDisplayName())
-                .email(person.getEmail())
-                .mobilePhone(person.getMobile())
+                .username(model.getUsername())
+                .name(model.getDisplayName())
+                .displayName(model.getDisplayName())
+                .email(model.getEmail())
+                .mobilePhone(model.getMobile())
                 .build();
         return EdsAssetVO.AssetToBusiness.<User>builder()
                 .target(user)
+                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 
