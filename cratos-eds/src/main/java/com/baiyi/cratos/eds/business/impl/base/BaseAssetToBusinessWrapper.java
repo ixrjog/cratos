@@ -24,23 +24,25 @@ public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget,T> 
 
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
-        BusinessAssetBind businessAssetBind = getBusinessAssetBind(asset.getId());
-        EdsAssetVO.ToBusiness toBusiness;
+        asset.setToBusiness(getToBusiness(asset.getId()));
+    }
+
+    protected EdsAssetVO.ToBusiness getToBusiness(int assetId){
+        BusinessAssetBind businessAssetBind = getBusinessAssetBind(assetId);
         if (businessAssetBind == null) {
-            toBusiness = EdsAssetVO.ToBusiness.builder()
+            return EdsAssetVO.ToBusiness.builder()
                     .businessType(getBusinessType())
-                    .assetId(asset.getId())
+                    .assetId(assetId)
                     .bind(false)
                     .build();
         } else {
-            toBusiness = EdsAssetVO.ToBusiness.builder()
+            return EdsAssetVO.ToBusiness.builder()
                     .businessType(getBusinessType())
                     .businessId(businessAssetBind.getBusinessId())
-                    .assetId(asset.getId())
+                    .assetId(assetId)
                     .bind(true)
                     .build();
         }
-        asset.setToBusiness(toBusiness);
     }
 
     protected BusinessAssetBind getBusinessAssetBind(Integer assetId) {

@@ -38,6 +38,7 @@ public class AwsCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Ce
                 .build();
         return EdsAssetVO.AssetToBusiness.<Certificate>builder()
                 .target(cert)
+                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 

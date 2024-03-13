@@ -38,6 +38,7 @@ public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
                 .build();
         return EdsAssetVO.AssetToBusiness.<Certificate>builder()
                 .target(cert)
+                .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 
