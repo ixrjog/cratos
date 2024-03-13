@@ -29,7 +29,7 @@ public class AwsCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Ce
         Certificate cert = Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
-                .domainName(asset.getDescription())
+                .domainName(asset.getName())
                 .certificateType(getAssetType())
                 .keyAlgorithm(model.getKeyAlgorithm())
                 .valid(asset.getValid())

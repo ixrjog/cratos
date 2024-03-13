@@ -10,7 +10,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
@@ -36,8 +36,8 @@ public class BindAssetsAfterImportAspect {
     public void annotationPoint() {
     }
 
-    @After(value = "annotationPoint()")
-    public void doAfter(JoinPoint joinPoint) {
+    @AfterReturning(value = "annotationPoint()", returning = "businessObject")
+    public void doAfterReturning(JoinPoint joinPoint, Object businessObject) {
         Arrays.stream(joinPoint.getArgs())
                 .filter(arg -> arg instanceof IImportFromAsset)
                 .map(arg -> (IImportFromAsset) arg)
@@ -45,7 +45,7 @@ public class BindAssetsAfterImportAspect {
                     Integer assetId = importFromAsset.getFromAssetId();
                     IdentityUtil.validIdentityRun(assetId)
                             .withTrue(() -> {
-                                if (joinPoint.getTarget() instanceof IToBusinessTarget toBusinessTarget) {
+                                if (businessObject instanceof IToBusinessTarget toBusinessTarget) {
                                     int businessId = toBusinessTarget.getId();
                                     EdsAsset asset = edsAssetService.getById(assetId);
                                     if (asset == null) {

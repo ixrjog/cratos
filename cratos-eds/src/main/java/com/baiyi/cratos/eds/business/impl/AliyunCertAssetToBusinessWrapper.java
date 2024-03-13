@@ -29,7 +29,7 @@ public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
         Certificate cert = Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
-                .domainName(asset.getDescription())
+                .domainName(asset.getName())
                 .certificateType(getAssetType())
                 .keyAlgorithm(aliyunCert.getAlgorithm())
                 .valid(asset.getValid())
