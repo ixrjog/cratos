@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.model;
 
+import com.baiyi.cratos.domain.view.eds.IToBusinessTarget;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -40,7 +41,7 @@ public class CloudflareCert {
     }
 
     @Data
-    public static class Certificate {
+    public static class Certificate implements IToBusinessTarget {
 
         private String id;
 
