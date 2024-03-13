@@ -30,13 +30,13 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
 
     @Transactional(rollbackFor = {Exception.class})
     public UserToken revokeAndIssueNewToken(String username) {
-        revokeToken(username,"Login revocation token");
+        revokeToken(username, "Login revocation token");
         return issueNewToken(username);
     }
 
     @Transactional(rollbackFor = {Exception.class})
     public void logout(String username) {
-        revokeToken(username,"Logout");
+        revokeToken(username, "Logout");
     }
 
     private void revokeToken(String username, String comment) {
@@ -72,7 +72,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
     @Override
     public UserToken verifyToken(String token) {
         UserToken userToken = getByToken(token);
-        if (userToken == null) {
+        if (userToken == null || !userToken.getValid()) {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
         }
         if (ExpiredUtil.isExpired(userToken.getExpiredTime())) {
