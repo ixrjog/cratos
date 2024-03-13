@@ -2,6 +2,8 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
+import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -28,6 +30,12 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         // TODO 是否要序列化对象？
         asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
                 .assetLoadAs(asset.getOriginalModel()));
+        // ToBusiness
+        IAssetToBusinessWrapper assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
+        if (assetToBusinessWrapper != null) {
+            assetToBusinessWrapper.wrap(asset);
+        }
+
     }
 
 }

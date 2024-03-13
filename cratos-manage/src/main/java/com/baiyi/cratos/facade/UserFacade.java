@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.user.UserParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
 
@@ -13,7 +14,7 @@ public interface UserFacade {
 
     DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery);
 
-    void addUser(UserParam.AddUser addUser);
+    User addUser(UserParam.AddUser addUser);
 
     UserVO.User getUserByUsername(String username);
 

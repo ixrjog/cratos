@@ -4,6 +4,7 @@ import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.base.BaseBusinessService;
 import com.baiyi.cratos.service.factory.BusinessServiceFactory;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 @Order(-1)
 public class DeleteBoundBusinessAspect {
+
+    private final BusinessAssetBindService businessAssetBindService;
 
     // SpEL
     private final DefaultParameterNameDiscoverer discoverer = new DefaultParameterNameDiscoverer();
@@ -96,6 +99,7 @@ public class DeleteBoundBusinessAspect {
                 .getSimpleName(), businessType.type()
                 .name(), businessId);
         baseBusinessService.deleteByBusiness(simpleBusiness);
+        businessAssetBindService.deleteByBusiness(simpleBusiness);
     }
 
 }

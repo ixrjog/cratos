@@ -56,7 +56,7 @@ public class LdapAuthProvider extends BaseAuthProvider {
         for (EdsInstance edsLdapInstance : edsLdapInstances) {
             EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
             if (edsConfig != null) {
-                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produce(EdsInstanceTypeEnum.LDAP.name(), edsConfig);
+                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(), edsConfig);
                 boolean pass = ldapClient.verifyLogin(ldap, credential);
                 if (pass) {
                     UserToken userToken = revokeAndIssueNewToken(loginParam);

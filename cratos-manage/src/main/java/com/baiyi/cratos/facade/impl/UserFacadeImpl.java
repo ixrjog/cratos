@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.DataTable;
@@ -35,10 +36,6 @@ public class UserFacadeImpl implements UserFacade {
 
     private final UserWrapper userWrapper;
 
-    //private final BusinessCredentialService businessCredentialService;
-//
-//    private final CredentialService credentialService;
-
     private final CredentialFacade credentialFacade;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
@@ -55,8 +52,11 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void addUser(UserParam.AddUser addUser) {
-        userService.add(addUser.toTarget());
+    @BindAssetsAfterImport
+    public User addUser(UserParam.AddUser addUser) {
+        User user = addUser.toTarget();
+        userService.add(user);
+        return user;
     }
 
     @Override

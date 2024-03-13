@@ -12,8 +12,11 @@ import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
+import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
@@ -216,6 +219,20 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public List<EdsInstance> queryValidEdsInstanceByType(String edsType) {
         return edsInstanceService.queryValidEdsInstanceByType(edsType);
+    }
+
+    @Override
+    public EdsAssetVO.AssetToBusiness<?> getToBusinessTarget(Integer assetId) {
+        EdsAsset edsAsset = edsAssetService.getById(assetId);
+        if (edsAsset == null) {
+            throw new EdsAssetException("The asset object does not exist: assetId={}.", assetId);
+        }
+        EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(edsAsset);
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType());
+        if (assetToBusinessWrapper == null) {
+            throw new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId);
+        }
+        return assetToBusinessWrapper.getToBusinessTarget(assetVO);
     }
 
 }

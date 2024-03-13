@@ -1,11 +1,17 @@
 package com.baiyi.cratos.domain.param.user;
 
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.IImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -32,7 +38,8 @@ public class UserParam {
     @Data
     @Schema
     @Builder
-    public static class AddUser implements IToTarget<User> {
+    @BusinessType(type = BusinessTypeEnum.USER)
+    public static class AddUser implements IToTarget<User>, IImportFromAsset {
 
         private Integer id;
 
@@ -64,6 +71,9 @@ public class UserParam {
         private Date expiredTime;
 
         private String comment;
+
+        @Schema(description = "Import from assetId")
+        private Integer fromAssetId;
 
     }
 

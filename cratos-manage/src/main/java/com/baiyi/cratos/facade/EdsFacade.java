@@ -46,4 +46,6 @@ public interface EdsFacade {
 
     List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
+    EdsAssetVO.AssetToBusiness<?> getToBusinessTarget(Integer assetId);
+
 }

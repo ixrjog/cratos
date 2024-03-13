@@ -48,7 +48,7 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
     @Override
-    // 删除用证书关联的业务标签、凭据
+    // 删除证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
         credentialMapper.deleteByPrimaryKey(id);

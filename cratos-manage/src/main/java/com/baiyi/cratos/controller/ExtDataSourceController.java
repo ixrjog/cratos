@@ -119,4 +119,10 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Get to business target")
+    @GetMapping(value = "/to/business/target/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsAssetVO.AssetToBusiness<?>> getToBusinessTarget(@RequestParam int assetId) {
+        return new HttpResult<>(edsFacade.getToBusinessTarget(assetId));
+    }
+
 }

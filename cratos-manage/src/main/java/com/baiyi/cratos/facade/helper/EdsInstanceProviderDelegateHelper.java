@@ -31,7 +31,7 @@ public class EdsInstanceProviderDelegateHelper {
         if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
             EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
             if (edsConfig != null) {
-                edsConfigModel = EdsInstanceProviderFactory.produce(edsInstance.getEdsType(), assetType, edsConfig);
+                edsConfigModel = EdsInstanceProviderFactory.produceConfig(edsInstance.getEdsType(), assetType, edsConfig);
             }
         }
         ExternalDataSourceInstance<?> extDataSourceInstance = ExternalDataSourceInstance.builder()

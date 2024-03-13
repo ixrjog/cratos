@@ -15,6 +15,43 @@ import java.util.Date;
  */
 public class EdsAssetVO {
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class ToBusiness implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 8963852386777447343L;
+
+        private String businessType;
+
+        private Integer businessId;
+
+        private Integer assetId;
+
+        @Schema(description = "已绑定")
+        private Boolean bind;
+
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AssetToBusiness<T extends IToBusinessTarget> implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -1350874228317416818L;
+
+        private ToBusiness toBusiness;
+
+        T target;
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Builder
@@ -61,6 +98,8 @@ public class EdsAssetVO {
         private Object originalAsset;
 
         private String description;
+
+        private ToBusiness toBusiness;
 
     }
 

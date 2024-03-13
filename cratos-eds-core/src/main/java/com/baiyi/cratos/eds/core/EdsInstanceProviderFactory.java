@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core;
 
 
 import com.baiyi.cratos.domain.generator.EdsConfig;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
@@ -44,7 +45,14 @@ public class EdsInstanceProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> C produce(String instanceType, String assetType, EdsConfig edsConfig) {
+    public static <A> A produceModel(String instanceType, String assetType, EdsAssetVO.Asset asset) {
+        return (A) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
+                .get(assetType)
+                .assetLoadAs(asset.getOriginalModel());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <C extends IEdsConfigModel> C produceConfig(String instanceType, String assetType, EdsConfig edsConfig) {
         return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .produceConfig(edsConfig);
@@ -62,7 +70,7 @@ public class EdsInstanceProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> C produce(String instanceType, EdsConfig edsConfig) {
+    public static <C extends IEdsConfigModel> C produceConfig(String instanceType, EdsConfig edsConfig) {
         try {
             Map<String, EdsInstanceProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
             for (String assetType : pMap.keySet()) {
