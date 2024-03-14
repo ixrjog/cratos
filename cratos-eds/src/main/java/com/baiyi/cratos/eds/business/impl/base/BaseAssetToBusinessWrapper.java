@@ -22,8 +22,6 @@ public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget, T>
         return EdsInstanceProviderFactory.produceModel(getInstanceType(), getAssetType(), asset);
     }
 
-    //     //  EdsAssetVO.AssetToBusiness<B> getToBusinessTarget(EdsAssetVO.Asset asset);
-
     @Override
     public EdsAssetVO.AssetToBusiness<B> getAssetToBusiness(EdsAssetVO.Asset asset) {
         return EdsAssetVO.AssetToBusiness.<B>builder()
@@ -34,7 +32,6 @@ public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget, T>
 
     protected abstract B getTarget(EdsAssetVO.Asset asset);
 
-
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
         asset.setToBusiness(getToBusiness(asset.getId()));
@@ -42,20 +39,16 @@ public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget, T>
 
     protected EdsAssetVO.ToBusiness getToBusiness(int assetId) {
         BusinessAssetBind businessAssetBind = getBusinessAssetBind(assetId);
-        if (businessAssetBind == null) {
-            return EdsAssetVO.ToBusiness.builder()
-                    .businessType(getBusinessType())
-                    .assetId(assetId)
-                    .bind(false)
-                    .build();
-        } else {
-            return EdsAssetVO.ToBusiness.builder()
-                    .businessType(getBusinessType())
-                    .businessId(businessAssetBind.getBusinessId())
-                    .assetId(assetId)
-                    .bind(true)
-                    .build();
-        }
+        return businessAssetBind == null ? EdsAssetVO.ToBusiness.builder()
+                .businessType(getBusinessType())
+                .assetId(assetId)
+                .bind(false)
+                .build() : EdsAssetVO.ToBusiness.builder()
+                .businessType(getBusinessType())
+                .businessId(businessAssetBind.getBusinessId())
+                .assetId(assetId)
+                .bind(true)
+                .build();
     }
 
     protected BusinessAssetBind getBusinessAssetBind(Integer assetId) {

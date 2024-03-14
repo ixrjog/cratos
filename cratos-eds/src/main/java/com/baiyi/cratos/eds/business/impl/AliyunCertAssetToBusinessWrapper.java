@@ -25,13 +25,13 @@ public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
 
     @Override
     protected Certificate getTarget(EdsAssetVO.Asset asset) {
-        ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList aliyunCert = getAssetModel(asset);
+        ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getName())
                 .certificateType(getAssetType())
-                .keyAlgorithm(aliyunCert.getAlgorithm())
+                .keyAlgorithm(model.getAlgorithm())
                 .valid(asset.getValid())
                 .notBefore(asset.getCreatedTime())
                 .notAfter(asset.getExpiredTime())

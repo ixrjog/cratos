@@ -25,16 +25,16 @@ public class CloudflareCertAssetToBusinessWrapper extends BaseAssetToBusinessWra
 
     @Override
     protected Certificate getTarget(EdsAssetVO.Asset asset) {
-        CloudflareCert.Certificate cloudflareCert = getAssetModel(asset);
+        CloudflareCert.Certificate model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
                 .domainName(asset.getDescription())
                 .certificateType(getAssetType())
-                .keyAlgorithm(cloudflareCert.getSignature())
+                .keyAlgorithm(model.getSignature())
                 .valid(asset.getValid())
-                .notBefore(cloudflareCert.getUploadedOn())
-                .notAfter(cloudflareCert.getExpiresOn())
+                .notBefore(model.getUploadedOn())
+                .notAfter(model.getExpiresOn())
                 .build();
     }
 
