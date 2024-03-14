@@ -17,11 +17,11 @@ cratos:
     # LOCAL, LDAP
     provider: LDAP
   rbac:
-    autoConfiguration:
-      enabled: on
+    auto-configuration:
+      enabled: off
   credential:
     # 高安全性密钥
-    highSecurity: on
+    high-security: on
 
 springdoc:
   swagger-ui:

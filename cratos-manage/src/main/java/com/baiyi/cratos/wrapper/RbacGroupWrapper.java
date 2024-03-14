@@ -1,10 +1,14 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RbacGroup;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
+import com.baiyi.cratos.service.RbacGroupService;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +27,12 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_RESOURCE;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements IBaseWrapper<RbacGroupVO.Group> {
+@BusinessType(type = BusinessTypeEnum.RBAC_GROUP)
+public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements IBusinessWrapper<RbacGroupVO.IRbacGroup, RbacGroupVO.Group> {
 
     private final RbacResourceService rbacResourceService;
+
+    private final RbacGroupService rbacGroupService;
 
     @Override
     public void wrap(RbacGroupVO.Group group) {
@@ -39,6 +46,19 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(RBAC_RESOURCE.name(), rbacResourceService.selectCountByGroupId(group.getId()));
         return resourceCount;
+    }
+
+    @Override
+    public void businessWrap(RbacGroupVO.IRbacGroup group) {
+        IdentityUtil.validIdentityRun(group.getRbacGroupId())
+                .withTrue(() -> {
+                    RbacGroup rbacGroup = rbacGroupService.getById(group.getRbacGroupId());
+                    if (rbacGroup != null) {
+                        RbacGroupVO.Group groupVO = this.convert(rbacGroup);
+                        wrapFromProxy(groupVO);
+                        group.setRbacGroup(groupVO);
+                    }
+                });
     }
 
 }

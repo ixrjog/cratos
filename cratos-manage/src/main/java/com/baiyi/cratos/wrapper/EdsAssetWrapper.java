@@ -31,7 +31,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
                 .assetLoadAs(asset.getOriginalModel()));
         // ToBusiness
-        IAssetToBusinessWrapper assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
         if (assetToBusinessWrapper != null) {
             assetToBusinessWrapper.wrap(asset);
         }
