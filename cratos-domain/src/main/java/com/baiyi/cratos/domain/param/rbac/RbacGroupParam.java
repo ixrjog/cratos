@@ -1,11 +1,11 @@
 package com.baiyi.cratos.domain.param.rbac;
 
+import com.baiyi.cratos.domain.generator.RbacGroup;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -24,6 +24,21 @@ public class RbacGroupParam {
     public static class GroupPageQuery extends PageParam {
 
         private String queryName;
+
+    }
+
+    @Data
+    @Schema
+    public static class UpdateGroup implements IToTarget<RbacGroup> {
+
+        @NotNull(message = "The ID must be specified.")
+        private Integer id;
+
+        private String groupName;
+
+        private String base;
+
+        private String comment;
 
     }
 

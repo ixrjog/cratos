@@ -39,4 +39,21 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
         return rbacResourceWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void updateResource(RbacResourceParam.UpdateResource updateResource) {
+        RbacResource rbacResource = rbacResourceService.getById(updateResource.getId());
+        if (rbacResource != null) {
+            rbacResource.setUiPoint(updateResource.getUiPoint());
+            rbacResource.setGroupId(updateResource.getGroupId());
+            rbacResource.setValid(updateResource.getValid());
+            rbacResource.setComment(updateResource.getComment());
+            rbacResourceService.updateByPrimaryKey(rbacResource);
+        }
+    }
+
+    @Override
+    public void setResourceValidById(int id) {
+        rbacResourceService.updateValidById(id);
+    }
+
 }

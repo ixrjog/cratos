@@ -31,4 +31,14 @@ public class RbacGroupFacadeImpl implements RbacGroupFacade {
         return rbacGroupWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void updateGroup(RbacGroupParam.UpdateGroup updateGroup) {
+        RbacGroup rbacGroup = rbacGroupService.getById(updateGroup.getId());
+        if (rbacGroup != null) {
+            rbacGroup.setBase(updateGroup.getBase());
+            rbacGroup.setComment(updateGroup.getComment());
+            rbacGroupService.updateByPrimaryKey(rbacGroup);
+        }
+    }
+
 }

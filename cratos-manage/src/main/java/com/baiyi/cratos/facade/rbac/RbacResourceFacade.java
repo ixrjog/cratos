@@ -16,4 +16,8 @@ public interface RbacResourceFacade {
 
     DataTable<RbacResourceVO.Resource> queryResourcePage(RbacResourceParam.ResourcePageQuery pageQuery);
 
+    void updateResource(RbacResourceParam.UpdateResource updateResource);
+
+    void setResourceValidById(int id);
+
 }

@@ -13,4 +13,6 @@ public interface RbacGroupFacade {
 
     DataTable<RbacGroupVO.Group> queryGroupPage(RbacGroupParam.GroupPageQuery pageQuery);
 
+    void updateGroup(RbacGroupParam.UpdateGroup updateGroup);
+
 }

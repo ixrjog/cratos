@@ -16,10 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author baiyi
@@ -50,10 +47,32 @@ public class RbacController {
         return new HttpResult<>(rbacGroupFacade.queryGroupPage(pageQuery));
     }
 
+    @Operation(summary = "Update group")
+    @PutMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateGroup(@RequestBody @Valid RbacGroupParam.UpdateGroup updateGroup) {
+        rbacGroupFacade.updateGroup(updateGroup);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query resource")
     @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(@RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
         return new HttpResult<>(rbacResourceFacade.queryResourcePage(pageQuery));
     }
+
+    @Operation(summary = "Update resource")
+    @PutMapping(value = "/resource/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateResource(@RequestBody @Valid  RbacResourceParam.UpdateResource updateResource) {
+        rbacResourceFacade.updateResource(updateResource);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update resource valid")
+    @PutMapping(value = "/resource/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setResourceValidById(@RequestParam @Valid int id) {
+        rbacResourceFacade.setResourceValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
 
 }
