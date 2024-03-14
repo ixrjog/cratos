@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 */log/
+*/logs/
 *.log
 *.db
 .mvn
