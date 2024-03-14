@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
 import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
+import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
@@ -54,6 +55,12 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Pagination query role resource")
+    @PostMapping(value = "/role/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<RbacResourceVO.Resource>> queryRoleResourcePage(@RequestBody @Valid RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
+        return new HttpResult<>(rbacResourceFacade.queryRoleResourcePage(pageQuery));
+    }
+
     @Operation(summary = "Pagination query resource")
     @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(@RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
@@ -73,6 +80,5 @@ public class RbacController {
         rbacResourceFacade.setResourceValidById(id);
         return HttpResult.SUCCESS;
     }
-
 
 }

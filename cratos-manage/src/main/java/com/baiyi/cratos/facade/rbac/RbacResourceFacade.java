@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.rbac;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 
 /**
@@ -19,5 +20,7 @@ public interface RbacResourceFacade {
     void updateResource(RbacResourceParam.UpdateResource updateResource);
 
     void setResourceValidById(int id);
+
+    DataTable<RbacResourceVO.Resource> queryRoleResourcePage(RbacRoleResourceParam.RoleResourcePageQuery pageQuery);
 
 }

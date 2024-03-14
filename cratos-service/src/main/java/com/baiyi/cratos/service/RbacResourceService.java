@@ -3,6 +3,7 @@ package com.baiyi.cratos.service;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.mapper.RbacResourceMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -17,5 +18,7 @@ public interface RbacResourceService extends BaseUniqueKeyService<RbacResource>,
     int selectCountByGroupId(int groupId);
 
     DataTable<RbacResource> queryPageByParam(RbacResourceParam.ResourcePageQuery pageQuery);
+
+    DataTable<RbacResource> queryRoleResourcePageByParam(RbacRoleResourceParam.RoleResourcePageQuery pageQuery);
 
 }

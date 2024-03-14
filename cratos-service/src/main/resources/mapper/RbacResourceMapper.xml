@@ -31,4 +31,33 @@
         </where>
     </select>
 
+    <select id="queryResourceInRoleByParam"
+            parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
+            resultMap="BaseResultMap">
+        select a0.id, a1.group_id, a1.resource_name, a1.comment, a1.need_auth, a1.create_time, a1.update_time
+        from rbac_role_resource a0
+        join rabc_resource a1 on a0.resource_id = a1.id
+        <where>
+            a0.role_id = #{roleId}
+            <if test="groupId != null">
+                and a1.group_id = #{groupId}
+            </if>
+        </where>
+    </select>
+
+    <!--  查询角色未绑定资源-->
+    <select id="queryResourceNotInRoleByParam"
+            parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
+            resultMap="BaseResultMap">
+        select * from rbac_resource
+        <where>
+            id not in
+            ( select resource_id FROM rbac_role_resource WHERE role_id = #{roleId} GROUP BY resource_id )
+            and valid = 1
+            <if test="groupId != null">
+                and group_id = #{groupId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

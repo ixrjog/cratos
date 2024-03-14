@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.mapper.RbacResourceMapper;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.github.pagehelper.Page;
@@ -44,6 +45,14 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     public DataTable<RbacResource> queryPageByParam(RbacResourceParam.ResourcePageQuery pageQuery) {
         Page<RbacResource> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<RbacResource> data = rbacResourceMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public DataTable<RbacResource> queryRoleResourcePageByParam(RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
+        Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<RbacResource> data = pageQuery.getInRole() ? rbacResourceMapper.queryResourceInRoleByParam(pageQuery)
+                : rbacResourceMapper.queryResourceNotInRoleByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
     }
 
