@@ -4,12 +4,13 @@ target/
 !**/src/main/**
 !**/src/test/**
 */log/
-*/logs/
+*/logs/**
 *.log
 *.db
 .mvn
 *.gz
 .DS_Store
+*.tmp
 
 ### Static
 static/
