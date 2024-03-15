@@ -36,4 +36,12 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
         return rbacUserRoleMapper.selectCountByExample(example);
     }
 
+    @Override
+    public int selectCountByRoleId(int roleId) {
+        Example example = new Example(RbacUserRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", roleId);
+        return rbacUserRoleMapper.selectCountByExample(example);
+    }
+
 }

@@ -18,4 +18,10 @@ public interface RbacRoleFacade {
 
     List<RbacRole> queryUserRole(String username);
 
+    void updateRole(RbacRoleParam.UpdateRole updateRole);
+
+    void addRole(RbacRoleParam.AddRole addRole);
+
+    void deleteRoleById(int id);
+
 }

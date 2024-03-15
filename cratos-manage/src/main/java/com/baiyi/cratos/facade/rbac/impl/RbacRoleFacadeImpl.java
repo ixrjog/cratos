@@ -45,4 +45,21 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void updateRole(RbacRoleParam.UpdateRole updateRole) {
+        RbacRole rbacRole = updateRole.toTarget();
+        rbacRoleService.updateByPrimaryKey(rbacRole);
+    }
+
+    @Override
+    public void addRole(RbacRoleParam.AddRole addRole) {
+        RbacRole rbacRole = addRole.toTarget();
+        rbacRoleService.add(rbacRole);
+    }
+
+    @Override
+    public void deleteRoleById(int id) {
+        // TODO
+    }
+
 }

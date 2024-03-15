@@ -42,6 +42,27 @@ public class RbacController {
         return new HttpResult<>(rbacRoleFacade.queryRolePage(pageQuery));
     }
 
+    @Operation(summary = "Update role")
+    @PutMapping(value = "/role/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateRole(@RequestBody @Valid RbacRoleParam.UpdateRole updateRole) {
+        rbacRoleFacade.updateRole(updateRole);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add role")
+    @PostMapping(value = "/role/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addRole(@RequestBody @Valid RbacRoleParam.AddRole addRole) {
+        rbacRoleFacade.addRole(addRole);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete role by id")
+    @DeleteMapping(value = "/role/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteRoleById(@RequestParam @Valid int id) {
+        rbacRoleFacade.deleteRoleById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query group")
     @PostMapping(value = "/group/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacGroupVO.Group>> queryGroupPage(@RequestBody @Valid RbacGroupParam.GroupPageQuery pageQuery) {
