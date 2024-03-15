@@ -24,7 +24,7 @@ public class RbacRoleResourceParam {
         @Schema(description = "资源组ID")
         private Integer groupId;
 
-        @Schema(description = "资源ID")
+        @Schema(description = "角色ID")
         private Integer roleId;
 
         @Schema(description = "是否在角色中")

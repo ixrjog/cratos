@@ -20,13 +20,13 @@
         select * from rbac_resource
         <where>
             <if test="groupId != null">
-               group_id = #{groupId}
+                group_id = #{groupId}
             </if>
             <if test="valid != null">
-               and valid = #{valid}
+                and valid = #{valid}
             </if>
             <if test="queryName != null and queryName != ''">
-               and resource_name like "%" #{queryName} "%"
+                and resource_name like "%" #{queryName} "%"
             </if>
         </where>
     </select>
@@ -36,7 +36,7 @@
             resultMap="BaseResultMap">
         select a0.id, a1.group_id, a1.resource_name, a1.comment, a1.need_auth, a1.create_time, a1.update_time
         from rbac_role_resource a0
-        join rabc_resource a1 on a0.resource_id = a1.id
+        join rbac_resource a1 on a0.resource_id = a1.id
         <where>
             a0.role_id = #{roleId}
             <if test="groupId != null">
