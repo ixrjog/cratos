@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.BASE_ERROR;
+
 /**
  * @Author baiyi
  * @Date 2020/4/19 12:17 下午
@@ -26,12 +28,12 @@ public abstract class BaseException extends RuntimeException {
 
     public BaseException(String message) {
         super(message);
-        this.code = 10000;
+        this.code = BASE_ERROR;
     }
 
     public BaseException(String message, Object... var2) {
         super(StringFormatter.arrayFormat(message, var2));
-        this.code = 10000;
+        this.code = BASE_ERROR;
     }
 
     public BaseException(Integer code, String message) {

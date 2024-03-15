@@ -12,7 +12,6 @@ public interface Global {
     @Schema(description = "前端认证头")
     String AUTHORIZATION = "Authorization";
 
-
     String ENV_PROD = "prod";
 
 }

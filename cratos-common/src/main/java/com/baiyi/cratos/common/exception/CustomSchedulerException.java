@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.CUSTOM_SCHEDULER_ERROR;
+
 /**
  * @Author baiyi
  * @Date 2024/3/11 09:47
@@ -24,12 +26,12 @@ public class CustomSchedulerException extends BaseException {
 
     public CustomSchedulerException(String message) {
         super(message);
-        this.code = 80000;
+        this.code = CUSTOM_SCHEDULER_ERROR;
     }
 
     public CustomSchedulerException(String message, Object... var2) {
         super(StringFormatter.arrayFormat(message, var2));
-        this.code = 80000;
+        this.code = CUSTOM_SCHEDULER_ERROR;
     }
 
 }
