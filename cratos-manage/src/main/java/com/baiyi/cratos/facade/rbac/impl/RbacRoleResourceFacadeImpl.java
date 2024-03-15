@@ -1,12 +1,13 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
-import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.facade.rbac.RbacRoleResourceFacade;
 import com.baiyi.cratos.service.RbacRoleResourceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * @Author baiyi
@@ -22,19 +23,19 @@ public class RbacRoleResourceFacadeImpl implements RbacRoleResourceFacade {
 
     @Override
     public void addRoleResource(RbacRoleResourceParam.AddRoleResource addRoleResource) {
-        RbacRoleResource rbacRoleResource = addRoleResource.toTarget();
-        if (rbacRoleResourceService.getByUniqueKey(rbacRoleResource) == null) {
-            rbacRoleResourceService.add(rbacRoleResource);
-        }
+        addRoleResource.toRbacRoleResources()
+                .stream()
+                .filter(rbacRoleResource -> rbacRoleResourceService.getByUniqueKey(rbacRoleResource) == null)
+                .forEach(rbacRoleResourceService::add);
     }
 
     @Override
     public void deleteRoleResource(RbacRoleResourceParam.DeleteRoleResource deleteRoleResource) {
-        RbacRoleResource rbacRoleResource = deleteRoleResource.toTarget();
-        RbacRoleResource dbRbacRoleResource = rbacRoleResourceService.getByUniqueKey(rbacRoleResource);
-        if (dbRbacRoleResource != null) {
-            rbacRoleResourceService.deleteById(dbRbacRoleResource.getId());
-        }
+        deleteRoleResource.toRbacRoleResources()
+                .stream()
+                .map(rbacRoleResourceService::getByUniqueKey)
+                .filter(Objects::nonNull)
+                .forEach(dbRbacRoleResource -> rbacRoleResourceService.deleteById(dbRbacRoleResource.getId()));
     }
 
 }

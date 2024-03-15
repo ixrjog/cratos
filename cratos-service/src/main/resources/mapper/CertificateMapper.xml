@@ -24,12 +24,15 @@
             parameterType="com.baiyi.cratos.domain.param.certificate.CertificateParam$CertificatePageQuery"
             resultMap="BaseResultMap">
         select * from certificate
-        <where>
-            <if test="queryName != null and queryName != ''">
-                and name like "%" #{queryName} "%"
-                order by replace(name, #{queryName}, '')
-            </if>
-        </where>
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                where name like "%" #{queryName} "%"
+                order by replace(name, #{queryName}, ''), not_after
+            </when>
+            <otherwise>
+                order by not_after
+            </otherwise>
+        </choose>
     </select>
 
 </mapper>

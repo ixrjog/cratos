@@ -1,12 +1,13 @@
 package com.baiyi.cratos.domain.param.rbac;
 
 import com.baiyi.cratos.domain.generator.RbacRoleResource;
-import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -14,6 +15,23 @@ import lombok.NoArgsConstructor;
  * @Version 1.0
  */
 public class RbacRoleResourceParam {
+
+    public interface IToRbacRoleResources {
+
+        Integer getRoleId();
+
+        List<Integer> getResourceIds();
+
+        default List<RbacRoleResource> toRbacRoleResources() {
+            return getResourceIds().stream()
+                    .map(resourceId -> RbacRoleResource.builder()
+                            .resourceId(resourceId)
+                            .roleId(getRoleId())
+                            .build())
+                    .toList();
+        }
+
+    }
 
     @Data
     @EqualsAndHashCode(callSuper = true)
@@ -35,26 +53,26 @@ public class RbacRoleResourceParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class AddRoleResource implements IToTarget<RbacRoleResource> {
+    public static class AddRoleResource implements IToRbacRoleResources {
 
         @Schema(description = "资源ID")
         private Integer roleId;
 
         @Schema(description = "资源ID")
-        private Integer resourceId;
+        private List<Integer> resourceIds;
 
     }
 
     @Data
     @NoArgsConstructor
     @Schema
-    public static class DeleteRoleResource implements IToTarget<RbacRoleResource> {
+    public static class DeleteRoleResource implements IToRbacRoleResources {
 
         @Schema(description = "资源ID")
         private Integer roleId;
 
         @Schema(description = "资源ID")
-        private Integer resourceId;
+        private List<Integer> resourceIds;
 
     }
 
