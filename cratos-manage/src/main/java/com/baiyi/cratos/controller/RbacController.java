@@ -12,6 +12,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.facade.rbac.RbacRoleResourceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,6 +36,8 @@ public class RbacController {
     private final RbacGroupFacade rbacGroupFacade;
 
     private final RbacResourceFacade rbacResourceFacade;
+
+    private final RbacRoleResourceFacade rbacRoleResourceFacade;
 
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -82,6 +85,20 @@ public class RbacController {
         return new HttpResult<>(rbacResourceFacade.queryRoleResourcePage(pageQuery));
     }
 
+    @Operation(summary = "Add role resource")
+    @PostMapping(value = "/role/resource/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addRoleResource(@RequestBody @Valid RbacRoleResourceParam.AddRoleResource addRoleResource) {
+        rbacRoleResourceFacade.addRoleResource(addRoleResource);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete role resource")
+    @DeleteMapping(value = "/role/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteRoleResource(@RequestBody @Valid RbacRoleResourceParam.DeleteRoleResource deleteRoleResource) {
+        rbacRoleResourceFacade.deleteRoleResource(deleteRoleResource);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query resource")
     @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(@RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
@@ -90,7 +107,7 @@ public class RbacController {
 
     @Operation(summary = "Update resource")
     @PutMapping(value = "/resource/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateResource(@RequestBody @Valid  RbacResourceParam.UpdateResource updateResource) {
+    public HttpResult<Boolean> updateResource(@RequestBody @Valid RbacResourceParam.UpdateResource updateResource) {
         rbacResourceFacade.updateResource(updateResource);
         return HttpResult.SUCCESS;
     }

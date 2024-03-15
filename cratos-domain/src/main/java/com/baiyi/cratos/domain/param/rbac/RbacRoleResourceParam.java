@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.rbac;
 
+import com.baiyi.cratos.domain.generator.RbacRoleResource;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -27,6 +29,32 @@ public class RbacRoleResourceParam {
 
         @Schema(description = "是否在角色中")
         private Boolean inRole;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class AddRoleResource implements IToTarget<RbacRoleResource> {
+
+        @Schema(description = "资源ID")
+        private Integer roleId;
+
+        @Schema(description = "资源ID")
+        private Integer resourceId;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class DeleteRoleResource implements IToTarget<RbacRoleResource> {
+
+        @Schema(description = "资源ID")
+        private Integer roleId;
+
+        @Schema(description = "资源ID")
+        private Integer resourceId;
 
     }
 
