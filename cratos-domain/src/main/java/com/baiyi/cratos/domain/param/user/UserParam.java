@@ -80,6 +80,81 @@ public class UserParam {
     @Data
     @Schema
     @Builder
+    @BusinessType(type = BusinessTypeEnum.USER)
+    public static class UpdateUser implements IToTarget<User> {
+
+        private Integer id;
+
+        private String username;
+
+        private String uuid;
+
+        private String name;
+
+        private String displayName;
+
+        private String email;
+
+        private Boolean valid;
+
+        private Date lastLogin;
+
+        private String mobilePhone;
+
+        private Integer otp;
+
+        private String createdBy;
+
+        private String source;
+
+        private String password;
+
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date expiredTime;
+
+        private String comment;
+
+    }
+
+    @Data
+    @Schema
+    @Builder
+    @BusinessType(type = BusinessTypeEnum.USER)
+    public static class UpdateMy implements IToTarget<User> {
+
+        private Integer id;
+
+        private String username;
+
+        private String uuid;
+
+        private String name;
+
+        private String displayName;
+
+        private String email;
+
+        private Boolean valid;
+
+        private Date lastLogin;
+
+        private String mobilePhone;
+
+        private Integer otp;
+
+        private String createdBy;
+
+        private String source;
+
+        private String password;
+
+        private String comment;
+
+    }
+
+    @Data
+    @Schema
+    @Builder
     public static class ResetPassword {
 
         private String password;

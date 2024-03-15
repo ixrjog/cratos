@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.AUTHORIZATION_403;
+
 /**
  * 权限校验
  *
@@ -25,7 +27,7 @@ public class AuthorizationException extends BaseException {
 
     public AuthorizationException(String message) {
         super(message);
-        this.code = 999;
+        this.code = AUTHORIZATION_403;
     }
 
     public AuthorizationException(Integer code, String message) {

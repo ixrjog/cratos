@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.INVALID_CREDENTIAL_ERROR;
+
 /**
  * @Author baiyi
  * @Date 2024/2/4 11:05
@@ -23,12 +25,12 @@ public class InvalidCredentialException extends BaseException {
 
     public InvalidCredentialException(String message) {
         super(message);
-        this.code = 50000;
+        this.code = INVALID_CREDENTIAL_ERROR;
     }
 
     public InvalidCredentialException(String message, Object... var2) {
         super(StringFormatter.arrayFormat(message, var2));
-        this.code = 50000;
+        this.code = INVALID_CREDENTIAL_ERROR;
     }
 
 }

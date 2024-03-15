@@ -22,4 +22,10 @@ public interface UserFacade {
 
     void resetUserPassword(String username, UserParam.ResetPassword resetPassword);
 
+    void setUserValidById(int id);
+
+    void updateUser(UserParam.UpdateUser updateUser);
+
+    void updateUser(UserParam.UpdateMy updateMy);
+
 }

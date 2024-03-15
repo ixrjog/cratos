@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.BUSINESS_ERROR;
+
 /**
  * @Author baiyi
  * @Date 2024/1/23 16:12
@@ -24,12 +26,12 @@ public class BusinessException extends BaseException {
 
     public BusinessException(String message) {
         super(message);
-        this.code = 40000;
+        this.code = BUSINESS_ERROR;
     }
 
     public BusinessException(String message, Object... var2) {
         super(StringFormatter.arrayFormat(message, var2));
-        this.code = 40000;
+        this.code = BUSINESS_ERROR;
     }
 
 }

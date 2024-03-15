@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -113,6 +114,41 @@ public class UserFacadeImpl implements UserFacade {
                             .equals(cred.getCredentialType());
                 })
                 .toList();
+    }
+
+    @Override
+    public void setUserValidById(int id) {
+        userService.updateValidById(id);
+    }
+
+    @Override
+    public void updateUser(UserParam.UpdateUser updateUser) {
+        User user = userService.getById(updateUser.getId());
+        // 设置允许更新的属性
+        user.setName(updateUser.getName());
+        user.setDisplayName(updateUser.getDisplayName());
+        user.setEmail(updateUser.getEmail());
+        user.setComment(updateUser.getComment());
+        user.setMobilePhone(updateUser.getMobilePhone());
+        user.setValid(updateUser.getValid());
+        user.setExpiredTime(updateUser.getExpiredTime());
+        userService.updateByPrimaryKey(user);
+    }
+
+    @Override
+    public void updateUser(UserParam.UpdateMy updateMy) {
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        if (StringUtils.hasText(username)) {
+            User user = userService.getByUsername(username);
+            user.setName(updateMy.getName());
+            user.setDisplayName(updateMy.getDisplayName());
+            user.setEmail(updateMy.getEmail());
+            user.setComment(updateMy.getComment());
+            user.setMobilePhone(updateMy.getMobilePhone());
+            userService.updateByPrimaryKey(user);
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.exception.auth;
 
 import com.baiyi.cratos.common.exception.BaseException;
+import com.baiyi.cratos.common.exception.constant.ErrorCodeConstants;
 import com.baiyi.cratos.domain.ErrorEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,12 +25,12 @@ public class AuthenticationException extends BaseException {
 
     public AuthenticationException(String message) {
         super(message);
-        this.code = 401;
+        this.code = ErrorCodeConstants.AUTHENTICATION_401;
     }
 
     public AuthenticationException(Integer code, String message) {
         super(message);
-        this.code = 401;
+        this.code = ErrorCodeConstants.AUTHENTICATION_401;
     }
 
     public AuthenticationException(ErrorEnum errorEnum) {
