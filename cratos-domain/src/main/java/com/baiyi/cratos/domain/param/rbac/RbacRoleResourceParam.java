@@ -3,6 +3,8 @@ package com.baiyi.cratos.domain.param.rbac;
 import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -55,10 +57,12 @@ public class RbacRoleResourceParam {
     @Schema
     public static class AddRoleResource implements IToRbacRoleResources {
 
-        @Schema(description = "资源ID")
+        @Schema(description = "角色ID")
+        @NotNull
         private Integer roleId;
 
         @Schema(description = "资源ID")
+        @NotEmpty
         private List<Integer> resourceIds;
 
     }
@@ -68,10 +72,12 @@ public class RbacRoleResourceParam {
     @Schema
     public static class DeleteRoleResource implements IToRbacRoleResources {
 
-        @Schema(description = "资源ID")
+        @Schema(description = "角色ID")
+        @NotNull
         private Integer roleId;
 
         @Schema(description = "资源ID")
+        @NotEmpty
         private List<Integer> resourceIds;
 
     }
