@@ -42,11 +42,6 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public void delete(BusinessTag businessTag) {
-        deleteById(businessTag.getId());
-    }
-
-    @Override
     public BusinessTag getByUniqueKey(BusinessTag businessTag) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();

@@ -1,8 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.domain.annotation.EncryptedDomain;
-import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,7 +8,6 @@ import java.util.Date;
 
 @Data
 @Table(name = "business_document")
-@EncryptedDomain
 public class BusinessDocument implements BaseBusiness.IBusiness {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +57,5 @@ public class BusinessDocument implements BaseBusiness.IBusiness {
     /**
      * 文档内容
      */
-    @FieldEncrypt
     private String content;
 }

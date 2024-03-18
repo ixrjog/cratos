@@ -1,7 +1,5 @@
 package com.baiyi.cratos.service.impl;
 
-import com.baiyi.cratos.annotation.DomainDecrypt;
-import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -29,7 +27,6 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
     private final BusinessDocumentMapper businessDocumentMapper;
 
     @Override
-    @DomainDecrypt
     public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
         Example example = new Example(BusinessDocument.class);
         Example.Criteria criteria = example.createCriteria();
@@ -39,20 +36,18 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
     }
 
     @Override
-    @DomainEncrypt
     public void updateByPrimaryKey(BusinessDocument businessDocument) {
         businessDocumentMapper.updateByPrimaryKey(businessDocument);
     }
 
     @Override
-    @DomainEncrypt
     public void updateByPrimaryKeySelective(BusinessDocument businessDocument) {
         businessDocumentMapper.updateByPrimaryKeySelective(businessDocument);
     }
 
-    @Override
-    public void delete(BusinessDocument businessDocument) {
-        deleteById(businessDocument.getId());
-    }
+//    @Override
+//    public void delete(BusinessDocument businessDocument) {
+//        deleteById(businessDocument.getId());
+//    }
 
 }
