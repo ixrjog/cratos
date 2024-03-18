@@ -2,17 +2,11 @@ package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
-import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
+import com.baiyi.cratos.domain.param.rbac.*;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
-import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
-import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
-import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
-import com.baiyi.cratos.facade.rbac.RbacRoleResourceFacade;
+import com.baiyi.cratos.facade.rbac.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,6 +32,8 @@ public class RbacController {
     private final RbacResourceFacade rbacResourceFacade;
 
     private final RbacRoleResourceFacade rbacRoleResourceFacade;
+
+    private final RbacUserRoleFacade rbacUserRoleFacade;
 
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -116,6 +112,20 @@ public class RbacController {
     @PutMapping(value = "/resource/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setResourceValidById(@RequestParam @Valid int id) {
         rbacResourceFacade.setResourceValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add user role")
+    @PostMapping(value = "/user/role/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addUserRole(@RequestBody @Valid RbacUserRoleParam.AddUserRole addUserRole) {
+        rbacUserRoleFacade.addUserRole(addUserRole);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete user role by id")
+    @DeleteMapping(value = "/user/role/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteUserRoleById(@RequestParam @Valid int id) {
+        rbacUserRoleFacade.deleteUserRoleById(id);
         return HttpResult.SUCCESS;
     }
 

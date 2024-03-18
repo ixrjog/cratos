@@ -3,6 +3,7 @@ package com.baiyi.cratos.service;
 import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.mapper.RbacUserRoleMapper;
 import com.baiyi.cratos.service.base.BaseService;
+import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Date 2024/1/22 17:26
  * @Version 1.0
  */
-public interface RbacUserRoleService extends BaseService<RbacUserRole, RbacUserRoleMapper> {
+public interface RbacUserRoleService extends BaseUniqueKeyService<RbacUserRole>, BaseService<RbacUserRole, RbacUserRoleMapper> {
 
     List<RbacUserRole> queryByUsername(String username);
 

@@ -12,6 +12,14 @@
 @DomainEncrypt Service的方法中加密Domain(在BaseService接口中默认实现)
 ```
 
+```
+    @Override
+    @DomainDecrypt
+    public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
+       ...
+    }
+```
+
 #### View脱敏注解使用
 ```
 @FieldSensitive VO字段中使用
