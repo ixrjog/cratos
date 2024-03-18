@@ -34,7 +34,7 @@
     <select id="queryResourceInRoleByParam"
             parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
             resultMap="BaseResultMap">
-        select a0.id, a1.group_id, a1.resource_name, a1.comment, a1.valid, a1.create_time, a1.update_time
+        select a1.*
         from rbac_role_resource a0
         join rbac_resource a1 on a0.resource_id = a1.id
         <where>
