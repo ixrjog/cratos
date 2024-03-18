@@ -13,12 +13,12 @@ logging:
 
 cratos:
   auth:
-    enabled: off
+    enabled: on
     # LOCAL, LDAP
     provider: LDAP
   rbac:
     auto-configuration:
-      enabled: off
+      enabled: on
   credential:
     # 高安全性密钥
     high-security: on

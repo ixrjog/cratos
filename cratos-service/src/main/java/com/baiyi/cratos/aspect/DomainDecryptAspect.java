@@ -13,10 +13,12 @@ import org.jasypt.encryption.StringEncryptor;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -38,11 +40,24 @@ public class DomainDecryptAspect {
 
     @AfterReturning(value = "@annotation(domainDecrypt)", returning = "domain")
     public void afterAdvice(JoinPoint joinPoint, DomainDecrypt domainDecrypt, Object domain) {
-        if (domain == null || !AopUtils.getTargetClass(domain)
-                .isAnnotationPresent(EncryptedDomain.class)) {
+        if (domain == null) {
             return;
         }
-        operationDomain(domain);
+        if (domain instanceof List<?> domains) {
+            if (CollectionUtils.isEmpty(domains)) {
+                return;
+            }
+            if (AopUtils.getTargetClass(domains.get(0))
+                    .isAnnotationPresent(EncryptedDomain.class)) {
+                domains.forEach(this::operationDomain);
+            }
+        } else {
+            if (!AopUtils.getTargetClass(domain)
+                    .isAnnotationPresent(EncryptedDomain.class)) {
+                return;
+            }
+            operationDomain(domain);
+        }
     }
 
     private void operationDomain(Object domain) {
