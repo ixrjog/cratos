@@ -31,6 +31,12 @@ public class UserController {
         return new HttpResult<>(userFacade.queryUserPage(pageQuery));
     }
 
+    @Operation(summary = "Get user by username")
+    @GetMapping(value = "/username/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<UserVO.User> getUserByUsername(@RequestParam @Valid String username) {
+        return new HttpResult<>(userFacade.getUserByUsername(username));
+    }
+
     @Operation(summary = "Add user")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addUser(@RequestBody @Valid UserParam.AddUser addUser) {

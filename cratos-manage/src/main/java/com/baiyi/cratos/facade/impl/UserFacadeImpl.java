@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
+import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -49,7 +50,11 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserVO.User getUserByUsername(String username) {
-        return null;
+        User user = userService.getByUsername(username);
+        if (user == null) {
+            throw new UserException("User {} does not exist.", username);
+        }
+        return userWrapper.wrapToTarget(user);
     }
 
     @Override

@@ -20,4 +20,6 @@ public interface ErrorCodeConstants {
 
     int INVALID_CREDENTIAL_ERROR = 43000;
 
+    int USER_ERROR = 44000;
+
 }
