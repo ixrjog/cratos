@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.EnvMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Env">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="env_name" jdbcType="VARCHAR" property="envName" />
+    <result column="color" jdbcType="CHAR" property="color" />
+    <result column="prompt_color" jdbcType="INTEGER" property="promptColor" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.env.EnvParam$EnvPageQuery"
+          resultMap="BaseResultMap">
+      select * from env
+      <where>
+          <if test="queryName != null and queryName != ''">
+              env_name like "%" #{queryName} "%"
+          </if>
+      </where>
+  </select>
+
+</mapper>

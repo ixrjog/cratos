@@ -11,6 +11,6 @@ public interface RbacUserRoleFacade {
 
     void addUserRole(RbacUserRoleParam.AddUserRole addUserRole);
 
-    void deleteUserRoleById(int id);
+    void deleteUserRole(RbacUserRoleParam.DeleteUserRole deleteUserRole);
 
 }

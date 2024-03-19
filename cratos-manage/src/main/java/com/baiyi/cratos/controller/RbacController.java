@@ -122,10 +122,10 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Delete user role by id")
+    @Operation(summary = "Delete user role")
     @DeleteMapping(value = "/user/role/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteUserRoleById(@RequestParam @Valid int id) {
-        rbacUserRoleFacade.deleteUserRoleById(id);
+    public HttpResult<Boolean> deleteUserRole(@RequestBody @Valid RbacUserRoleParam.DeleteUserRole deleteUserRole) {
+        rbacUserRoleFacade.deleteUserRole(deleteUserRole);
         return HttpResult.SUCCESS;
     }
 

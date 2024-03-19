@@ -29,8 +29,12 @@ public class RbacUserRoleFacadeImpl implements RbacUserRoleFacade {
     }
 
     @Override
-    public void deleteUserRoleById(int id) {
-        rbacUserRoleService.deleteById(id);
+    public void deleteUserRole(RbacUserRoleParam.DeleteUserRole deleteUserRole) {
+        RbacUserRole rbacUserRole = deleteUserRole.toTarget();
+        RbacUserRole dbRbacUserRole = rbacUserRoleService.getByUniqueKey(rbacUserRole);
+        if (dbRbacUserRole != null) {
+            rbacUserRoleService.deleteById(dbRbacUserRole.getId());
+        }
     }
 
 }
