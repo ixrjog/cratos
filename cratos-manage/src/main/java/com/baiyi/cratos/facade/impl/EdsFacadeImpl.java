@@ -33,6 +33,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -79,10 +80,8 @@ public class EdsFacadeImpl implements EdsFacade {
         if (edsInstanceService.selectCountByConfigId(edsInstance.getConfigId()) > 0) {
             throw new EdsInstanceRegisterException("The specified configId is being used by other data source instances.");
         }
-        EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
-        if (edsConfig == null) {
-            throw new EdsInstanceRegisterException("The edsConfig does not exist.");
-        }
+        EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
+                .orElseThrow(() -> new EdsInstanceRegisterException("The edsConfig does not exist."));
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(true);
         edsInstanceService.add(edsInstance);
@@ -120,7 +119,6 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig) {
         EdsConfig dbEdsConfig = edsConfigService.getById(updateEdsConfig.getId());
-
         SimpleBusiness business = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                 .businessId(dbEdsConfig.getId())
@@ -223,15 +221,11 @@ public class EdsFacadeImpl implements EdsFacade {
 
     @Override
     public EdsAssetVO.AssetToBusiness<?> getToBusinessTarget(Integer assetId) {
-        EdsAsset edsAsset = edsAssetService.getById(assetId);
-        if (edsAsset == null) {
-            throw new EdsAssetException("The asset object does not exist: assetId={}.", assetId);
-        }
+        EdsAsset edsAsset = Optional.ofNullable(edsAssetService.getById(assetId))
+                .orElseThrow(() -> new EdsAssetException("The asset object does not exist: assetId={}.", assetId));
         EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(edsAsset);
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType());
-        if (assetToBusinessWrapper == null) {
-            throw new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId);
-        }
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = Optional.ofNullable(AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType()))
+                .orElseThrow(() -> new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId));
         return assetToBusinessWrapper.getAssetToBusiness(assetVO);
     }
 

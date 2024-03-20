@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,10 +51,8 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public UserVO.User getUserByUsername(String username) {
-        User user = userService.getByUsername(username);
-        if (user == null) {
-            throw new UserException("User {} does not exist.", username);
-        }
+        User user = Optional.ofNullable(userService.getByUsername(username))
+                .orElseThrow(() -> new UserException("User {} does not exist.", username));
         return userWrapper.wrapToTarget(user);
     }
 
@@ -76,7 +75,8 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public void resetUserPassword(String username, UserParam.ResetPassword resetPassword) {
-        User user = userService.getByUsername(username);
+        User user = Optional.ofNullable(userService.getByUsername(username))
+                .orElseThrow(() -> new UserException("User {} does not exist.", username));
         SimpleBusiness business = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.USER.name())
                 .businessId(user.getId())
@@ -104,7 +104,8 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     public List<Credential> getUserSshKeyCredentials(String username) {
-        User user = userService.getByUsername(username);
+        User user = Optional.ofNullable(userService.getByUsername(username))
+                .orElseThrow(() -> new UserException("User {} does not exist.", username));
         SimpleBusiness business = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.USER.name())
                 .businessId(user.getId())
@@ -129,6 +130,8 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public void updateUser(UserParam.UpdateUser updateUser) {
         User user = userService.getById(updateUser.getId());
+        Optional.ofNullable(userService.getById(updateUser.getId()))
+                .orElseThrow(() -> new UserException("User id={} does not exist.", updateUser.getId()));
         // 设置允许更新的属性
         user.setName(updateUser.getName());
         user.setDisplayName(updateUser.getDisplayName());
@@ -146,7 +149,8 @@ public class UserFacadeImpl implements UserFacade {
                 .getAuthentication()
                 .getName();
         if (StringUtils.hasText(username)) {
-            User user = userService.getByUsername(username);
+            User user = Optional.ofNullable(userService.getByUsername(username))
+                    .orElseThrow(() -> new UserException("User {} does not exist.", username));
             user.setName(updateMy.getName());
             user.setDisplayName(updateMy.getDisplayName());
             user.setEmail(updateMy.getEmail());

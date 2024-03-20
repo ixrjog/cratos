@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -41,10 +42,8 @@ public class RbacFacadeImpl implements RbacFacade {
         if (!StringUtils.hasText(token)) {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
         }
-        RbacResource rbacResource = rbacResourceFacade.getByResource(resource);
-        if (rbacResource == null) {
-            throw new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST);
-        }
+        RbacResource rbacResource = Optional.ofNullable(rbacResourceFacade.getByResource(resource))
+                .orElseThrow(() -> new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST));
         if (!rbacResource.getValid()) {
             // 登录用户即可访问
             return;

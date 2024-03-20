@@ -73,31 +73,26 @@ public class EdsAssetComparer {
                 return false;
             }
         }
-
         if (this.isComparisonOfDescription()) {
             if (!AssetUtil.equals(a2.getDescription(), a1.getDescription())) {
                 return false;
             }
         }
-
         if (this.isComparisonOfKind()) {
             if (!AssetUtil.equals(a2.getKind(), a1.getKind())) {
                 return false;
             }
         }
-
         if (this.isComparisonOfExpiredTime()) {
             if (!AssetUtil.equals(a2.getExpiredTime(), a1.getExpiredTime())) {
                 return false;
             }
         }
-
         if (this.isComparisonOfCreatedTime()) {
             if (a2.getCreatedTime() != a1.getCreatedTime()) {
                 return false;
             }
         }
-
         if (this.isComparisonOfValid()) {
             return a2.getValid()
                     .equals(a1.getValid());

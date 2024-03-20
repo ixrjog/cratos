@@ -76,7 +76,7 @@ public class EdsTaskLockAspect {
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start("Execute asset sync task");
                 Object result = joinPoint.proceed();
-                unlock(key);
+                //unlock(key);
                 stopWatch.stop();
                 log.info("Execute {} task end, runtime={}/s", providerBeanName, stopWatch.getTotalTimeSeconds());
                 return result;
