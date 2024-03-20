@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -47,10 +48,8 @@ public class EdsScheduleFacadeImpl implements EdsScheduleFacade {
 
     @Override
     public List<ScheduleVO.Job> queryJob(int instanceId) {
-        EdsInstance instance = instanceService.getById(instanceId);
-        if (instance == null) {
-            throw new CustomSchedulerException("数据源实例不存在！");
-        }
+        Optional.ofNullable(instanceService.getById(instanceId))
+                .orElseThrow(() -> new CustomSchedulerException("数据源实例不存在！"));
         try {
             return schedulerService.queryJob(toScheduleGroup(instanceId));
         } catch (SchedulerException e) {
@@ -64,10 +63,8 @@ public class EdsScheduleFacadeImpl implements EdsScheduleFacade {
         if (!jobClassMap.containsKey(param.getJobType())) {
             throw new CustomSchedulerException("任务类型不存在！");
         }
-        EdsInstance instance = instanceService.getById(param.getInstanceId());
-        if (instance == null) {
-            throw new CustomSchedulerException("数据源实例不存在！");
-        }
+        EdsInstance instance =  Optional.ofNullable(instanceService.getById(param.getInstanceId()))
+                .orElseThrow(() -> new CustomSchedulerException("数据源实例不存在！"));
         if (schedulerService.checkJobExist(toScheduleGroup(instance.getId()), param.getAssetType())) {
             throw new CustomSchedulerException("任务已存在！");
         }

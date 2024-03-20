@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION;
+import static com.baiyi.cratos.domain.ErrorEnum.INCORRECT_USERNAME_OR_PASSWORD;
 
 /**
  * @Author baiyi
@@ -43,7 +44,10 @@ public class AuthFacadeImpl implements AuthFacade {
     public LoginVO.Login login(LoginParam.Login loginParam) {
         IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
                 .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
-        User user = userService.getByUsername(loginParam.getUsername());
+
+        User user = Optional.ofNullable(userService.getByUsername(loginParam.getUsername()))
+                .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
+
         LoginVO.Login login = authProvider.login(loginParam, user);
         // 更新用户登录信息
         User updateUser = User.builder()

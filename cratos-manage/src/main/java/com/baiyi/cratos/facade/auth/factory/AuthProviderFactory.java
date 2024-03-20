@@ -21,7 +21,7 @@ public class AuthProviderFactory {
 
     public static void register(IAuthProvider bean) {
         CONTEXT.put(bean.getName(), bean);
-        log.debug("BusinessWrapperFactory Registered: {}", bean.getName());
+        log.debug("AuthProviderFactory Registered: {}", bean.getName());
     }
 
     public static IAuthProvider getProvider(String name) {

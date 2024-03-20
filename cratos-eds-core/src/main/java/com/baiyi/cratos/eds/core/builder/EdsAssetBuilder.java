@@ -28,7 +28,7 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
     }
 
     public static <C extends IEdsConfigModel, A> EdsAssetBuilder<C, A> newBuilder(ExternalDataSourceInstance<C> instance, A entity) {
-        return new EdsAssetBuilder<C, A>(instance, entity);
+        return new EdsAssetBuilder<>(instance, entity);
     }
 
     public EdsAssetBuilder<C, A> nameOf(String name) {

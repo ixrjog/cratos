@@ -19,8 +19,6 @@ import java.util.Map;
  */
 public abstract class BaseCredProvider implements ICredProvider {
 
-    //  protected static final String CREDENTIAL = "CRED_";
-
     abstract protected CredInjectionNameEnum[] listCredInjectionNameEnums();
 
     @Override
