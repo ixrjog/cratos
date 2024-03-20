@@ -21,7 +21,7 @@ public class EdsConfigException extends BaseException {
     @Serial
     private static final long serialVersionUID = 970944638016396476L;
 
-    private Integer code;
+    private int code;
 
     public EdsConfigException(String message) {
         super(message);

@@ -23,14 +23,14 @@ public class AuthorizationException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = 8005430143499358990L;
-    private Integer code;
+    private int code;
 
     public AuthorizationException(String message) {
         super(message);
         this.code = AUTHORIZATION_403;
     }
 
-    public AuthorizationException(Integer code, String message) {
+    public AuthorizationException(int code, String message) {
         super(message);
         this.code = code;
     }

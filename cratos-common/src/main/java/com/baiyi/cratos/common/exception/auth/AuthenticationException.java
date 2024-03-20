@@ -21,14 +21,14 @@ public class AuthenticationException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = 3787610554197575905L;
-    private Integer code;
+    private int code;
 
     public AuthenticationException(String message) {
         super(message);
         this.code = ErrorCodeConstants.AUTHENTICATION_401;
     }
 
-    public AuthenticationException(Integer code, String message) {
+    public AuthenticationException(int code, String message) {
         super(message);
         this.code = ErrorCodeConstants.AUTHENTICATION_401;
     }

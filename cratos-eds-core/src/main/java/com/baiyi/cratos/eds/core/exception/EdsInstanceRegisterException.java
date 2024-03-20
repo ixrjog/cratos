@@ -21,7 +21,7 @@ public class EdsInstanceRegisterException extends BaseException {
     @Serial
     private static final long serialVersionUID = 8039168661217859286L;
 
-    private Integer code;
+    private int code;
 
     public EdsInstanceRegisterException(String message) {
         super(message);

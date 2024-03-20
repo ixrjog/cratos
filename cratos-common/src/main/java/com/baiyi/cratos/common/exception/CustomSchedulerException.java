@@ -22,7 +22,7 @@ public class CustomSchedulerException extends BaseException {
     @Serial
     private static final long serialVersionUID = -2371442471548080976L;
 
-    private Integer code;
+    private int code;
 
     public CustomSchedulerException(String message) {
         super(message);

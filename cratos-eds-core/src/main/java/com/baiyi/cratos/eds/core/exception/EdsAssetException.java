@@ -20,7 +20,7 @@ public class EdsAssetException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = 5669960579611222078L;
-    private Integer code;
+    private int code;
 
     public EdsAssetException(String message) {
         super(message);
