@@ -21,7 +21,7 @@ public class EdsTaskLockException extends BaseException {
     @Serial
     private static final long serialVersionUID = 6635464512031544617L;
 
-    private Integer code;
+    private int code;
 
     public EdsTaskLockException(String message) {
         super(message);

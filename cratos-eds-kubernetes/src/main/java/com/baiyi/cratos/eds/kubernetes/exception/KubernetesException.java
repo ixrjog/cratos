@@ -18,10 +18,9 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 public class KubernetesException extends BaseException {
 
-
     @Serial
     private static final long serialVersionUID = 7945241394103786076L;
-    private final Integer code = 11001;
+    private final int code = 11001;
 
     public KubernetesException(String message) {
         super(message);

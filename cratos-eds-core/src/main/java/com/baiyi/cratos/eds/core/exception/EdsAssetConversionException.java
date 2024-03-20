@@ -21,7 +21,7 @@ public class EdsAssetConversionException extends BaseException {
     @Serial
     private static final long serialVersionUID = 7152247908720761111L;
 
-    private Integer code;
+    private int code;
 
     public EdsAssetConversionException(String message) {
         super(message);

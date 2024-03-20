@@ -21,7 +21,7 @@ public class InvalidCredentialException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = -2331744828471567910L;
-    private Integer code;
+    private int code;
 
     public InvalidCredentialException(String message) {
         super(message);

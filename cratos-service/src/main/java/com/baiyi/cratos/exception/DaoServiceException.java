@@ -19,7 +19,7 @@ public class DaoServiceException extends RuntimeException{
     @Serial
     private static final long serialVersionUID = -5807490039234051240L;
 
-    private Integer code;
+    private int code;
 
     public DaoServiceException(String message) {
         super(message);

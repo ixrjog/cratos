@@ -22,7 +22,7 @@ public class BusinessException extends BaseException {
     @Serial
     private static final long serialVersionUID = -3384211631717079399L;
 
-    private Integer code;
+    private int code;
 
     public BusinessException(String message) {
         super(message);

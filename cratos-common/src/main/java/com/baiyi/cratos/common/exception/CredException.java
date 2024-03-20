@@ -21,7 +21,7 @@ public class CredException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = 8533271697854738627L;
-    private Integer code;
+    private int code;
 
     public CredException(String message) {
         super(message);

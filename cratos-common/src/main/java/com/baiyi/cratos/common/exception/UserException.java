@@ -21,7 +21,7 @@ public class UserException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = -8615156646435845284L;
-    private Integer code;
+    private int code;
 
     public UserException(String message) {
         super(message);

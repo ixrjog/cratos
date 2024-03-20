@@ -24,7 +24,7 @@ public abstract class BaseException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -6758520149628532498L;
 
-    private Integer code;
+    private int code;
 
     public BaseException(String message) {
         super(message);
@@ -36,7 +36,7 @@ public abstract class BaseException extends RuntimeException {
         this.code = BASE_ERROR;
     }
 
-    public BaseException(Integer code, String message) {
+    public BaseException(int code, String message) {
         super(message);
         this.code = code;
     }

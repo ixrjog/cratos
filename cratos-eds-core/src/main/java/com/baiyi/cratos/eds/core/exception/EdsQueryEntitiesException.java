@@ -18,7 +18,7 @@ import java.io.Serial;
 @NoArgsConstructor
 public class EdsQueryEntitiesException extends BaseException {
 
-    private Integer code;
+    private int code;
 
     @Serial
     private static final long serialVersionUID = 3850232282127762189L;

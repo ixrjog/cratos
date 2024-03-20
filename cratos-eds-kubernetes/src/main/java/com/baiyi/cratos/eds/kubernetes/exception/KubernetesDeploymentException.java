@@ -20,7 +20,7 @@ public class KubernetesDeploymentException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = -8800466332489055385L;
-    private final Integer code = 10001;
+    private final int code = 10001;
 
     public KubernetesDeploymentException(String message) {
         super(message);
