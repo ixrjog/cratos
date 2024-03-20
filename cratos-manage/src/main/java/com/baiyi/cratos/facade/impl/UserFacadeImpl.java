@@ -4,6 +4,7 @@ import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -60,6 +61,9 @@ public class UserFacadeImpl implements UserFacade {
     @BindAssetsAfterImport
     public User addUser(UserParam.AddUser addUser) {
         User user = addUser.toTarget();
+        if (!StringUtils.hasText(user.getUuid())) {
+            user.setUuid(IdentityUtil.randomUUID());
+        }
         userService.add(user);
         return user;
     }

@@ -3,6 +3,8 @@ package com.baiyi.cratos.common.util;
 import com.baiyi.cratos.common.fun.HasRun;
 import com.baiyi.cratos.common.fun.ValidRunnableFunction;
 
+import java.util.UUID;
+
 /**
  * @Author baiyi
  * @Date 2024/2/6 16:04
@@ -36,7 +38,16 @@ public class IdentityUtil {
                 invalidRunnable.run();
             }
         };
+    }
 
+    /**
+     * 获得一个UUID   不含-
+     *
+     * @return String UUID
+     *//**/
+    public static String randomUUID() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replaceAll("-", "");
     }
 
 }
