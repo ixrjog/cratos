@@ -1,7 +1,7 @@
 package com.baiyi.cratos.event.consumer.base;
 
 import com.baiyi.cratos.event.factory.EventConsumerFactory;
-import com.baiyi.cratos.event.IEvent;
+import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +15,7 @@ public abstract class AbstractEventConsumer<T> implements IEventConsumer<T>, Ini
 
     @Override
     @Async
-    public void onMessage(IEvent<T> noticeEvent) {
+    public void onMessage(Event<T> noticeEvent) {
 
     }
 

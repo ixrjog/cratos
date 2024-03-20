@@ -1,6 +1,6 @@
 package com.baiyi.cratos.event.consumer;
 
-import com.baiyi.cratos.event.IEvent;
+import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.IEventType;
 
 /**
@@ -10,6 +10,6 @@ import com.baiyi.cratos.event.IEventType;
  */
 public interface IEventConsumer<T> extends IEventType {
 
-    void onMessage(IEvent<T> event);
+    void onMessage(Event<T> event);
 
 }

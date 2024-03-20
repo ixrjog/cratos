@@ -14,7 +14,7 @@ import java.io.Serial;
 @Slf4j
 @Getter
 @Setter
-public class IEvent<T> extends ApplicationEvent implements IEventType {
+public class Event<T> extends ApplicationEvent implements IEventType {
 
     @Serial
     private static final long serialVersionUID = -6293229481889657060L;
@@ -22,15 +22,14 @@ public class IEvent<T> extends ApplicationEvent implements IEventType {
     private String eventType;
 
     /**
-     * 接受信息
+     * 消息体
      */
     private final T message;
 
-    public IEvent(T message, String eventType) {
+    public Event(T message, String eventType) {
         super(message);
         this.message = message;
         this.eventType = eventType;
-        log.debug("ApplicationEvent: {}", message);
     }
 
 }

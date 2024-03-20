@@ -69,7 +69,7 @@ public class SchedulerService {
         try {
             // 把作业和触发器注册到任务调度中
             scheduler.scheduleJob(jobDetail, trigger);
-        } catch (Exception e) {
+        } catch (SchedulerException e) {
             throw new CustomSchedulerException("Registration schedule job err: {}", e.getMessage());
         }
     }
