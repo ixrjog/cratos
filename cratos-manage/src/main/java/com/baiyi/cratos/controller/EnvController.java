@@ -47,7 +47,7 @@ public class EnvController {
 
     @Operation(summary = "Update env")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateCredential(@RequestBody @Valid EnvParam.UpdateEnv updateEnv) {
+    public HttpResult<Boolean> updateEnv(@RequestBody @Valid EnvParam.UpdateEnv updateEnv) {
         envFacade.updateEnv(updateEnv);
         return HttpResult.SUCCESS;
     }
