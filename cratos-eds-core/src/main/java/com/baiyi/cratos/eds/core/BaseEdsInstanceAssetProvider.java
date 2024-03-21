@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -52,6 +53,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private ConfigCredTemplate configCredTemplate;
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
+
+    protected List<EdsAsset> queryEdsInstanceAssets(ExternalDataSourceInstance<C> instance, EdsAssetTypeEnum assetTypeEnum) {
+        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
+                .getId(), assetTypeEnum.name());
+    }
 
     @Override
     @EdsTaskLock(instanceId = "#instance.edsInstance.id")
@@ -182,7 +188,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     }
 
     @Override
-    public void setConfig(EdsConfig edsConfig){
+    public void setConfig(EdsConfig edsConfig) {
         // Unsupported
     }
 

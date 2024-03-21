@@ -1,7 +1,9 @@
 package com.baiyi.cratos.eds.gitlab.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.gitlab4j.api.models.SshKey;
 
 /**
@@ -11,6 +13,8 @@ import org.gitlab4j.api.models.SshKey;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SshKeyData {
 
     private String username;
