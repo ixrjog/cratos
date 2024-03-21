@@ -38,16 +38,16 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         try {
             List<EdsAsset> edsUserAssets = queryEdsInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
-                return listEntitiesWithEdsUserAssets(instance, edsUserAssets);
+                return listSshKeyWithEdsUserAssets(instance, edsUserAssets);
             }
-            return listEntitiesFromRepo(instance);
+            return listSshKeyFromRepo(instance);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     // 从EdsAsset中查询用户
-    private List<SshKeyData> listEntitiesWithEdsUserAssets(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, List<EdsAsset> edsUserAssets) throws GitLabApiException {
+    private List<SshKeyData> listSshKeyWithEdsUserAssets(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, List<EdsAsset> edsUserAssets) throws GitLabApiException {
         List<SshKeyData> keys = Lists.newArrayList();
         for (EdsAsset edsUserAsset : edsUserAssets) {
             keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), Long.parseLong(edsUserAsset.getAssetId()))
@@ -61,7 +61,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         return keys;
     }
 
-    private List<SshKeyData> listEntitiesFromRepo(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws GitLabApiException {
+    private List<SshKeyData> listSshKeyFromRepo(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws GitLabApiException {
         List<User> users = GitLabUserRepo.getUsers(instance.getEdsConfigModel());
         if (CollectionUtils.isEmpty(users)) {
             return Collections.emptyList();
