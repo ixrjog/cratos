@@ -17,7 +17,8 @@ public enum EdsInstanceTypeEnum {
     AWS,
     CLOUDFLARE,
     KUBERNETES,
-    LDAP;
+    LDAP,
+    GITLAB;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()

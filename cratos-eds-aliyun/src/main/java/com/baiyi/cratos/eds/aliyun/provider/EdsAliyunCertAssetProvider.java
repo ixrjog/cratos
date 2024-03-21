@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_CERT)
-public class AliyunCertProvider extends BaseEdsInstanceProvider<EdsAliyunConfigModel.Aliyun, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
+public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
 
     private final AliyunCertRepo aliyunCertRepo;
 

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.ldap.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.LDAP, assetType = EdsAssetTypeEnum.LDAP_PERSON)
-public class LdapPersonProvider extends BaseEdsInstanceProvider<EdsLdapConfigModel.Ldap, LdapPerson.Person> {
+public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfigModel.Ldap, LdapPerson.Person> {
 
     private final LdapPersonRepo ldapPersonRepo;
 

@@ -46,6 +46,16 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return this;
     }
 
+    public EdsAssetBuilder<C, A> assetIdOf(Integer assetId) {
+        edsAsset.setAssetId(String.valueOf(assetId));
+        return this;
+    }
+
+    public EdsAssetBuilder<C, A> assetIdOf(Long assetId) {
+        edsAsset.setAssetId(String.valueOf(assetId));
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> assetKeyOf(String assetKey) {
         edsAsset.setAssetKey(assetKey);
         return this;

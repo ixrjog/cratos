@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.repo.AwsVpnRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -28,7 +28,7 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_STS_VPN)
-public class AwsVpnProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.Aws, VpnConnection> {
+public class EdsAwsVpnAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
 
     @Override
     protected List<VpnConnection> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {

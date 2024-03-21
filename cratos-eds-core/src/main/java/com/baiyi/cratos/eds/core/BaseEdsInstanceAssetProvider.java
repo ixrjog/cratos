@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
-import com.baiyi.cratos.eds.core.support.EdsInstanceProvider;
+import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.AssetUtil;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -37,7 +37,7 @@ import java.util.Set;
  */
 @Slf4j
 @Component
-public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> implements EdsInstanceProvider<C, A>, InitializingBean {
+public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
     @Resource
     private EdsAssetService edsAssetService;
@@ -159,7 +159,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     @SuppressWarnings("unchecked")
     protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
-        Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 0);
+        Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
         return ConfigUtil.loadAs(configContent, clazz);
     }
 
@@ -167,7 +167,7 @@ public abstract class BaseEdsInstanceProvider<C extends IEdsConfigModel, A> impl
     @Override
     public A assetLoadAs(String originalModel) {
         // Get the entity type of generic `A`
-        Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceProvider.class, 1);
+        Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 1);
         return AssetUtil.loadAs(originalModel, clazz);
     }
 

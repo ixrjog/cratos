@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
  * @Date 2024/2/23 18:16
  * @Version 1.0
  */
-public interface EdsInstanceProvider<C extends IEdsConfigModel, A> extends IEdsInstanceTypeAnnotate {
+public interface EdsInstanceAssetProvider<C extends IEdsConfigModel, A> extends IEdsInstanceTypeAnnotate {
 
     void importAssets(ExternalDataSourceInstance<C> instance);
 

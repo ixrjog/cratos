@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -28,7 +28,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
-public class CloudflareCertProvider extends BaseEdsInstanceProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
+public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;
 

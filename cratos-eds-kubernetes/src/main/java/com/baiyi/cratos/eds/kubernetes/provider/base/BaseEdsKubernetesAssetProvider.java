@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.util.IOUtil;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.util.SystemEnvUtil;
 import com.baiyi.cratos.eds.kubernetes.client.provider.enums.KubernetesProvidersEnum;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * @Version 1.0
  */
 @Slf4j
-public abstract class BaseKubernetesProvider<A> extends BaseEdsInstanceProvider<EdsKubernetesConfigModel.Kubernetes, A> {
+public abstract class BaseEdsKubernetesAssetProvider<A> extends BaseEdsInstanceAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> {
 
     @Resource
     private CredentialService credentialService;

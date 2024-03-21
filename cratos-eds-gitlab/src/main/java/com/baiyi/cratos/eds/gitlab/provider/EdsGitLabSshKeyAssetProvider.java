@@ -1,0 +1,69 @@
+package com.baiyi.cratos.eds.gitlab.provider;
+
+import com.baiyi.cratos.common.util.SshKeyUtil;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.gitlab.data.SshKeyData;
+import com.baiyi.cratos.eds.gitlab.repo.GitLabSshKeyRepo;
+import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
+import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
+import org.gitlab4j.api.models.SshKey;
+import org.gitlab4j.api.models.User;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * @Author baiyi
+ * @Date 2024/3/21 14:26
+ * @Version 1.0
+ */
+@Component
+@RequiredArgsConstructor
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_SSHKEY)
+public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, SshKeyData> {
+
+    @Override
+    protected List<SshKeyData> listEntities(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+        try {
+            List<User> users = GitLabUserRepo.getUsers(instance.getEdsConfigModel());
+            if (CollectionUtils.isEmpty(users)) {
+                return Collections.emptyList();
+            }
+            List<SshKeyData> keys = Lists.newArrayList();
+            for (User e : users) {
+                keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), e.getId())
+                        .stream()
+                        .map(key -> SshKeyData.builder()
+                                .sshKey(key)
+                                .username(e.getUsername())
+                                .build())
+                        .toList());
+            }
+            return keys;
+        } catch (Exception e) {
+            throw new EdsQueryEntitiesException(e.getMessage());
+        }
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, SshKeyData entity) {
+        SshKey sshKey = entity.getSshKey();
+        return newEdsAssetBuilder(instance, entity)
+                .assetIdOf(sshKey.getId())
+                .nameOf(entity.getUsername())
+                .assetKeyOf(SshKeyUtil.calcFingerprint(sshKey.getKey()))
+                .descriptionOf(sshKey.getTitle())
+                .build();
+    }
+
+}

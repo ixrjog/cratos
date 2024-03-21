@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.certificatemanager.model.CertificateSummary;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.repo.AwsCertRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceProvider;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -27,7 +27,7 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_CERT)
-public class AwsCertProvider extends BaseEdsInstanceProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
+public class EdsAwsCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
 
     @Override
     protected List<CertificateSummary> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
