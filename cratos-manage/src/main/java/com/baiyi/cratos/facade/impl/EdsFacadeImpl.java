@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -227,6 +228,17 @@ public class EdsFacadeImpl implements EdsFacade {
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = Optional.ofNullable(AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType()))
                 .orElseThrow(() -> new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId));
         return assetToBusinessWrapper.getAssetToBusiness(assetVO);
+    }
+
+    @Override
+    @Async
+    public void deleteEdsInstanceAsset(EdsInstanceParam.DeleteInstanceAsset deleteInstanceAsset) {
+        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(deleteInstanceAsset.getInstanceId(), deleteInstanceAsset.getAssetType());
+        if (!CollectionUtils.isEmpty(assets)) {
+            assets.stream()
+                    .mapToInt(EdsAsset::getId)
+                    .forEach(this::deleteEdsAssetById);
+        }
     }
 
 }

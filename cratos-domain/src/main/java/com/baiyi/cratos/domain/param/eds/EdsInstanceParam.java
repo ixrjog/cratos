@@ -92,4 +92,19 @@ public class EdsInstanceParam {
 
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DeleteInstanceAsset {
+
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+
+        private String assetType;
+
+    }
+
+
 }

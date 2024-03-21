@@ -48,4 +48,6 @@ public interface EdsFacade {
 
     EdsAssetVO.AssetToBusiness<?> getToBusinessTarget(Integer assetId);
 
+    void deleteEdsInstanceAsset(EdsInstanceParam.DeleteInstanceAsset deleteInstanceAsset);
+
 }
