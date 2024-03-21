@@ -29,7 +29,7 @@ public class EnvVO {
 
         private String color;
 
-        private Integer promptColor;
+        private String promptColor;
 
         private Integer seq;
 
