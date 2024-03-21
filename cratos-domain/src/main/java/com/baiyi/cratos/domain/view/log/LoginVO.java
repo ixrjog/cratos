@@ -20,6 +20,7 @@ public class LoginVO {
     @Builder
     public static class Login {
 
+        private String username;
         @Schema(description = "DisplayName")
         private String name;
         private String uuid;

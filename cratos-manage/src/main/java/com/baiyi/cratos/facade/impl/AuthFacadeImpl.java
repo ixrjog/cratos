@@ -55,6 +55,7 @@ public class AuthFacadeImpl implements AuthFacade {
                 .lastLogin(new Date())
                 .build();
         userService.updateByPrimaryKeySelective(updateUser);
+        login.setUsername(loginParam.getUsername());
         return login;
     }
 
