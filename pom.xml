@@ -23,6 +23,7 @@
         <module>cratos-eds-cloudflare</module>
         <module>cratos-eds-kubernetes</module>
         <module>cratos-eds-ldap</module>
+        <module>cratos-eds-gitlab</module>
     </modules>
 
     <properties>

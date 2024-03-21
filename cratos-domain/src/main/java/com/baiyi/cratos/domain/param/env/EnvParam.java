@@ -43,7 +43,7 @@ public class EnvParam {
         private String color;
 
         @NotBlank
-        private Integer promptColor;
+        private String promptColor;
 
         @NotNull
         private Integer seq;
@@ -65,7 +65,7 @@ public class EnvParam {
 
         private String color;
 
-        private Integer promptColor;
+        private String promptColor;
 
         private Integer seq;
 
