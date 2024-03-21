@@ -54,6 +54,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
+    /**
+     * 按类型查询本数据源实例资产
+     * @param instance
+     * @param assetTypeEnum
+     * @return
+     */
     protected List<EdsAsset> queryEdsInstanceAssets(ExternalDataSourceInstance<C> instance, EdsAssetTypeEnum assetTypeEnum) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), assetTypeEnum.name());
@@ -62,7 +68,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     @Override
     @EdsTaskLock(instanceId = "#instance.edsInstance.id")
     public void importAssets(ExternalDataSourceInstance<C> instance) {
-        // EdsInstanceProviderFactory.buildDelegate(instance,getAssetType());
         List<A> entities = listEntities(instance);
         enterEntities(instance, entities);
     }
