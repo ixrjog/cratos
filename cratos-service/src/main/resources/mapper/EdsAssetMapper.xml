@@ -30,17 +30,15 @@
           parameterType="com.baiyi.cratos.domain.param.eds.EdsInstanceParam$AssetPageQuery"
           resultMap="BaseResultMap">
       select * from eds_asset
-      <where>
-          instance_id = #{instanceId} and asset_type = #{assetType}
-          <if test="valid != null">
-              and valid = #{valid}
-          </if>
-          <if test="queryName != null and queryName != ''">
-              and name like "%" #{queryName} "%"
-              or asset_id like "%" #{queryName} "%"
-              or asset_key like "%" #{queryName} "%"
-          </if>
-      </where>
+      where instance_id = #{instanceId} and asset_type = #{assetType}
+      <if test="valid != null">
+          and valid = #{valid}
+      </if>
+      <if test="queryName != null and queryName != ''">
+          and name like "%" #{queryName} "%"
+          or asset_id like "%" #{queryName} "%"
+          or asset_key like "%" #{queryName} "%"
+      </if>
   </select>
 
 </mapper>
