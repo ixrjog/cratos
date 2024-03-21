@@ -31,8 +31,8 @@
               and valid = #{valid}
           </if>
           <if test="queryName != null and queryName != ''">
-              and name like "%" #{queryName} "%"
-              or comment like "%" #{queryName} "%"
+              and (name like "%" #{queryName} "%"
+              or comment like "%" #{queryName} "%")
           </if>
       </where>
   </select>

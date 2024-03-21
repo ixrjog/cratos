@@ -27,8 +27,8 @@
                 eds_type = #{edsType}
             </if>
             <if test="queryName != null and queryName != ''">
-                and instance_name like "%" #{queryName} "%"
-                or kind like "%" #{queryName} "%"
+                and (instance_name like "%" #{queryName} "%"
+                or kind like "%" #{queryName} "%")
             </if>
         </where>
     </select>
