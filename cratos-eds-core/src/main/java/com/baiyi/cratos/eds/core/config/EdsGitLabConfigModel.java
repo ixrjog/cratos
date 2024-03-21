@@ -21,7 +21,6 @@ public class EdsGitLabConfigModel {
     public static class GitLab implements IEdsConfigModel {
 
         private Api api;
-        private String url;
         private SystemHooks systemHooks;
         private GitFlow gitFlow;
 
@@ -47,6 +46,7 @@ public class EdsGitLabConfigModel {
         private String version;
         private Integer connectTimeout;
         private Integer readTimeout;
+        private String url;
 
     }
 

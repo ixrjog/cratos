@@ -18,13 +18,13 @@ public class GitLabApiFactory {
 
     public static GitLabApi buildGitLabApi(EdsGitLabConfigModel.GitLab gitlab) {
         assert gitlab != null;
-
-        GitLabApi.ApiVersion apiVersion = GitLabApi.ApiVersion.valueOf(Optional.of(gitlab)
+        final String version = Optional.of(gitlab)
                 .map(EdsGitLabConfigModel.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getVersion)
-                .orElse("v4"));
-
-        GitLabApi gitLabApi = new GitLabApi(apiVersion, gitlab.getUrl(), gitlab.getCred()
+                .orElse("V4");
+        GitLabApi.ApiVersion apiVersion = GitLabApi.ApiVersion.valueOf(version.toUpperCase());
+        GitLabApi gitLabApi = new GitLabApi(apiVersion, gitlab.getApi()
+                .getUrl(), gitlab.getCred()
                 .getToken());
         int connectTimeout = Optional.of(gitlab)
                 .map(EdsGitLabConfigModel.GitLab::getApi)
