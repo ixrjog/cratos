@@ -17,17 +17,12 @@
 package com.baiyi.cratos.shell.commands;
 
 import com.baiyi.cratos.shell.*;
-import com.baiyi.cratos.shell.ExtendedShell;
-import com.baiyi.cratos.shell.SshContext;
-import com.baiyi.cratos.shell.SshShellHelper;
-import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.interactive.Interactive;
 import com.baiyi.cratos.shell.interactive.InteractiveInputIO;
 import com.baiyi.cratos.shell.interactive.StoppableInteractiveInput;
 import com.baiyi.cratos.shell.postprocess.PostProcessorObject;
 import com.baiyi.cratos.shell.postprocess.provided.SavePostProcessor;
 import com.baiyi.cratos.shell.providers.ExtendedFileValueProvider;
-import com.baiyi.cratos.shell.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -224,4 +219,5 @@ public class ScriptCommand extends AbstractCommand
     private Availability scriptAvailability() {
         return availability(GROUP, COMMAND_SCRIPT);
     }
+
 }
