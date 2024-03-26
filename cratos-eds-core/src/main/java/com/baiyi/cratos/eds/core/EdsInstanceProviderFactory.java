@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -66,7 +67,7 @@ public class EdsInstanceProviderFactory {
      */
     public static Set<String> getInstanceAssetTypes(String instanceType) {
         Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(instanceType);
-        return pMap.keySet();
+        return pMap != null ? pMap.keySet() : Sets.newHashSet();
     }
 
     @SuppressWarnings("unchecked")

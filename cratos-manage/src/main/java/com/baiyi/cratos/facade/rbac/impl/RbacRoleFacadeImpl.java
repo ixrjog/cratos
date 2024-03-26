@@ -38,7 +38,7 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
     }
 
     @Override
-    public List<RbacRole> queryUserRole(String username) {
+    public List<RbacRole> queryUserRoles(String username) {
         return rbacUserRoleService.queryByUsername(username)
                 .stream()
                 .map(e -> rbacRoleService.getById(e.getRoleId()))

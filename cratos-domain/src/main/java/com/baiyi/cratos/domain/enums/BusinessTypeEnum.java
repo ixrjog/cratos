@@ -7,6 +7,7 @@ package com.baiyi.cratos.domain.enums;
  */
 public enum BusinessTypeEnum {
 
+    BUSINESS_PROPERTY,
     BUSINESS_DOC,
     // 证书
     CERTIFICATE,
@@ -30,6 +31,7 @@ public enum BusinessTypeEnum {
 
     CHANNEL_NETWORK,
 
-    ENV
+    ENV,
+    SERVER_ACCOUNT
 
 }

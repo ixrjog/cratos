@@ -37,4 +37,16 @@ public class RbacUserRoleParam {
 
     }
 
+    @Data
+    @Schema
+    public static class VerifyUserRoleResourcePermission {
+
+        @NotNull(message = "Username must be specified.")
+        private String username;
+
+        @NotNull(message = "ResourceId must be specified.")
+        private Integer resourceId;
+
+    }
+
 }

@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.rbac.*;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
+import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.rbac.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -34,6 +37,8 @@ public class RbacController {
     private final RbacRoleResourceFacade rbacRoleResourceFacade;
 
     private final RbacUserRoleFacade rbacUserRoleFacade;
+
+    private final RbacFacade rbacFacade;
 
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -127,6 +132,12 @@ public class RbacController {
     public HttpResult<Boolean> deleteUserRole(@RequestBody @Valid RbacUserRoleParam.DeleteUserRole deleteUserRole) {
         rbacUserRoleFacade.deleteUserRole(deleteUserRole);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Verify user permissions")
+    @PostMapping(value = "/user/role/resource/permission/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<RbacRoleVO.Role>> verifyUserPermissions(@RequestBody @Valid RbacUserRoleParam.VerifyUserRoleResourcePermission verifyUserRoleResourcePermission) {
+         return new HttpResult<>( rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
     }
 
 }

@@ -16,7 +16,7 @@ public interface RbacRoleFacade {
 
     DataTable<RbacRoleVO.Role> queryRolePage(RbacRoleParam.RolePageQuery pageQuery);
 
-    List<RbacRole> queryUserRole(String username);
+    List<RbacRole> queryUserRoles(String username);
 
     void updateRole(RbacRoleParam.UpdateRole updateRole);
 

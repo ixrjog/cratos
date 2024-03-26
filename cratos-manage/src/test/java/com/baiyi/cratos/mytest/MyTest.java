@@ -4,6 +4,9 @@ import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.google.common.base.Splitter;
+import lombok.Builder;
+import lombok.Data;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,6 +41,53 @@ public class MyTest extends BaseUnit {
 
     private boolean matchesDC(String name) {
         return name.matches(".*-dc\\d+");
+    }
+
+
+    private final static String X = """
+            """;
+
+    @Data
+    @Builder
+    public static class Conf {
+
+        private String location;
+        private String wl;
+        private String pass;
+    }
+
+    @Test
+    void test3() {
+        Iterable<String> xxx = Splitter.on("\n")
+                .split(X);
+
+        boolean flag = false;
+        Conf conf = Conf.builder()
+                .build();
+        for (String s : xxx) {
+            if (s.startsWith("location")) {
+                flag = true;
+                conf.setLocation(s.replace("location ", ""));
+
+            } else if (s.startsWith("proxy_pass")) {
+                flag = true;
+                conf.setPass(s.replace("proxy_pass ", ""));
+
+            } else if (s.startsWith("wl")) {
+                flag = true;
+                conf.setWl(s.replace("wl ", ""));
+            } else {
+                flag = false;
+                System.out.println(conf.getLocation() + "," + conf.pass + "," + conf.getWl());
+            }
+            if (!flag) {
+                conf = Conf.builder()
+                        .build();
+            }
+
+        }
+
+
     }
 
 }

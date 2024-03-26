@@ -14,4 +14,6 @@ public interface Global {
 
     String ENV_PROD = "prod";
 
+    String ROLE_FOUNDER_NAME = "FOUNDER";
+
 }

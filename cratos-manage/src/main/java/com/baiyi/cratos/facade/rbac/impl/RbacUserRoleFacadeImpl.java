@@ -7,6 +7,10 @@ import com.baiyi.cratos.service.RbacUserRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -35,6 +39,14 @@ public class RbacUserRoleFacadeImpl implements RbacUserRoleFacade {
         if (dbRbacUserRole != null) {
             rbacUserRoleService.deleteById(dbRbacUserRole.getId());
         }
+    }
+
+    @Override
+    public List<RbacUserRole> queryUserRoles(String username) {
+        if (StringUtils.hasText(username)) {
+            return rbacUserRoleService.queryByUsername(username);
+        }
+        return Collections.emptyList();
     }
 
 }

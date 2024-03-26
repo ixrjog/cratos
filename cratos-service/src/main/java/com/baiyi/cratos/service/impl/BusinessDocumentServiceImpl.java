@@ -45,9 +45,4 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
         businessDocumentMapper.updateByPrimaryKeySelective(businessDocument);
     }
 
-//    @Override
-//    public void delete(BusinessDocument businessDocument) {
-//        deleteById(businessDocument.getId());
-//    }
-
 }

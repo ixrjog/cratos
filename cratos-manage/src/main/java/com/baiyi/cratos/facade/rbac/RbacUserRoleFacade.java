@@ -1,6 +1,9 @@
 package com.baiyi.cratos.facade.rbac;
 
+import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -12,5 +15,7 @@ public interface RbacUserRoleFacade {
     void addUserRole(RbacUserRoleParam.AddUserRole addUserRole);
 
     void deleteUserRole(RbacUserRoleParam.DeleteUserRole deleteUserRole);
+
+    List<RbacUserRole> queryUserRoles(String username);
 
 }

@@ -6,11 +6,16 @@ import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.generator.RbacRole;
+import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.generator.UserToken;
+import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
+import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.service.RbacRoleResourceService;
+import com.baiyi.cratos.wrapper.RbacRoleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +25,8 @@ import org.springframework.util.StringUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+
+import static com.baiyi.cratos.common.constant.Global.ROLE_FOUNDER_NAME;
 
 /**
  * @Author baiyi
@@ -36,6 +43,10 @@ public class RbacFacadeImpl implements RbacFacade {
     private final UserTokenFacade userTokenFacade;
 
     private final RbacRoleFacade rbacRoleFacade;
+
+    private final RbacRoleResourceService rbacRoleResourceService;
+
+    private final RbacRoleWrapper rbacRoleWrapper;
 
     @Override
     public void verifyResourceAccessPermissions(String token, String resource) {
@@ -61,7 +72,7 @@ public class RbacFacadeImpl implements RbacFacade {
     public boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token) {
         // FIXME 此代码可以用一条SQL实现，但我就喜欢写Java
         UserToken userToken = userTokenFacade.verifyToken(token);
-        List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRole(userToken.getUsername());
+        List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRoles(userToken.getUsername());
         if (CollectionUtils.isEmpty(rbacRoles)) {
             return false;
         }
@@ -69,6 +80,24 @@ public class RbacFacadeImpl implements RbacFacade {
                 .map(RbacRole::getAccessLevel)
                 .max(Comparator.comparing(Integer::intValue))
                 .orElse(0) >= accessLevel.getLevel();
+    }
+
+    @Override
+    public List<RbacRoleVO.Role> checkUserRoleResourcePermission(RbacUserRoleParam.VerifyUserRoleResourcePermission checkPermission) {
+        return rbacRoleFacade.queryUserRoles(checkPermission.getUsername())
+                .stream()
+                .filter(e -> {
+                    if (ROLE_FOUNDER_NAME.equals(e.getRoleName())) {
+                        return true;
+                    }
+                    RbacRoleResource uniqueKey = RbacRoleResource.builder()
+                            .roleId(e.getId())
+                            .resourceId(checkPermission.getResourceId())
+                            .build();
+                    return rbacRoleResourceService.getByUniqueKey(uniqueKey) != null;
+                })
+                .map(rbacRoleWrapper::wrapToTarget)
+                .toList();
     }
 
 }

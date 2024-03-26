@@ -1,6 +1,10 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
+import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -24,5 +28,7 @@ public interface RbacFacade {
      * @return
      */
     boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token);
+
+    List<RbacRoleVO.Role> checkUserRoleResourcePermission(RbacUserRoleParam.VerifyUserRoleResourcePermission checkPermission);
 
 }
