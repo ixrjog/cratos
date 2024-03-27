@@ -31,11 +31,15 @@ import java.util.List;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT)
 public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
 
+    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
+
+    private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+
     @Override
     protected List<Deployment> listEntities(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = KubernetesNamespaceRepo.list(instance.getEdsConfigModel());
+        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
         List<Deployment> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(KubernetesDeploymentRepo.list(instance.getEdsConfigModel(), e.getMetadata()
+        namespaces.forEach(e -> entities.addAll(kubernetesDeploymentRepo.list(instance.getEdsConfigModel(), e.getMetadata()
                 .getName())));
         return entities;
     }

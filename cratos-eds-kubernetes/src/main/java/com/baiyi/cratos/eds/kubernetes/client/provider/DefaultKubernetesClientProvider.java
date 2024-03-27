@@ -2,11 +2,12 @@ package com.baiyi.cratos.eds.kubernetes.client.provider;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.util.SystemEnvUtil;
-import com.baiyi.cratos.eds.kubernetes.client.MyKubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.google.common.base.Joiner;
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.fabric8.kubernetes.client.KubernetesClientBuilder;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
@@ -15,7 +16,8 @@ import java.util.Optional;
  * @Date 2022/9/14 09:40
  * @Version 1.0
  */
-public class DefaultKubernetesProvider {
+@Component
+public class DefaultKubernetesClientProvider implements IKubernetesClientProvider {
 
     /**
      * io.fabric8.kubernetes.client.Config.*
@@ -32,30 +34,25 @@ public class DefaultKubernetesProvider {
      * @param kubernetes
      * @return
      */
-    public static KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        return new KubernetesClientBuilder()
-                .withConfig(buildConfig(kubernetes))
+    public KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        return new io.fabric8.kubernetes.client.KubernetesClientBuilder().withConfig(buildConfig(kubernetes))
                 .build();
     }
 
-    public static io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        preSet(kubernetes);
-        return new ConfigBuilder()
-                .withTrustCerts(true)
+    public io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        setProperties(kubernetes);
+        return new ConfigBuilder().withTrustCerts(true)
                 // .withWebsocketTimeout(KubeClient.Config.WEBSOCKET_TIMEOUT)
                 // .withConnectionTimeout(KubeClient.Config.CONNECTION_TIMEOUT)
                 // .withRequestTimeout(KubeClient.Config.REQUEST_TIMEOUT)
                 .build();
     }
 
-    private static void preSet(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    private void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         System.setProperty(KUBERNETES_KUBECONFIG_FILE, toKubeconfigPath(kubernetes));
-        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY,
-                String.valueOf(MyKubernetesClientBuilder.Values.REQUEST_TIMEOUT));
-        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY,
-                String.valueOf(MyKubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
-        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY,
-                String.valueOf(MyKubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
+        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
+        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
+        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
     }
 
     private static String toKubeconfigPath(EdsKubernetesConfigModel.Kubernetes kubernetes) {
@@ -63,9 +60,14 @@ public class DefaultKubernetesProvider {
                 .map(EdsKubernetesConfigModel.Kubernetes::getKubeconfig)
                 .map(EdsKubernetesConfigModel.Kubeconfig::getPath)
                 .orElse("");
-        String path = Joiner.on("/").join(kubeConfigPath,
-                io.fabric8.kubernetes.client.Config.KUBERNETES_KUBECONFIG_FILE);
+        String path = Joiner.on("/")
+                .join(kubeConfigPath, io.fabric8.kubernetes.client.Config.KUBERNETES_KUBECONFIG_FILE);
         return SystemEnvUtil.renderEnvHome(path);
+    }
+
+    @Override
+    public String getName() {
+        return KubernetesProvidersEnum.DEFAULT.getDisplayName();
     }
 
 }

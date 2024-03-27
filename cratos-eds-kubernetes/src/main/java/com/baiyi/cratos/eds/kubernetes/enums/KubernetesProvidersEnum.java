@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.client.provider.enums;
+package com.baiyi.cratos.eds.kubernetes.enums;
 
 import lombok.Getter;
 
@@ -13,12 +13,13 @@ public enum KubernetesProvidersEnum {
     /**
      * 供应商
      */
-    AMAZON_EKS("AmazonEKS");
+    AMAZON_EKS("AmazonEKS"),
+    DEFAULT("Default");
 
-    private final String desc;
+    private final String displayName;
 
     KubernetesProvidersEnum(String desc) {
-        this.desc = desc;
+        this.displayName = desc;
     }
 
 }

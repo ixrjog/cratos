@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.util.SystemEnvUtil;
-import com.baiyi.cratos.eds.kubernetes.client.provider.enums.KubernetesProvidersEnum;
+import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.service.CredentialService;
 import com.google.common.base.Joiner;
 import jakarta.annotation.Resource;
@@ -40,7 +40,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A> extends BaseEdsInstanceA
             return;
         }
         EdsKubernetesConfigModel.Kubernetes kubernetes = configLoadAs(edsConfig.getConfigContent());
-        if (KubernetesProvidersEnum.AMAZON_EKS.getDesc()
+        if (KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
                 .equals(Optional.of(kubernetes)
                         .map(EdsKubernetesConfigModel.Kubernetes::getProvider)
                         .orElse(""))) {

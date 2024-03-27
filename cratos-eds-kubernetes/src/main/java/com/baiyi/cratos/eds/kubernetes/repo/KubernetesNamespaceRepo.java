@@ -1,11 +1,13 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.kubernetes.client.MyKubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.NamespaceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
@@ -19,10 +21,14 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class KubernetesNamespaceRepo {
 
-    public static List<Namespace> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        try (KubernetesClient kc = MyKubernetesClientBuilder.build(kubernetes)) {
+    private final KubernetesClientBuilder kubernetesClientBuilder;
+
+    public List<Namespace> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             NamespaceList namespaceList = kc.namespaces()
                     .list();
             return namespaceList.getItems()
@@ -35,8 +41,8 @@ public class KubernetesNamespaceRepo {
         }
     }
 
-    public static Namespace get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = MyKubernetesClientBuilder.build(kubernetes)) {
+    public Namespace get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.namespaces()
                     .withName(namespace)
                     .get();
@@ -46,7 +52,7 @@ public class KubernetesNamespaceRepo {
         }
     }
 
-    private static boolean filter(EdsKubernetesConfigModel.Kubernetes kubernetes, Namespace namespace) {
+    private boolean filter(EdsKubernetesConfigModel.Kubernetes kubernetes, Namespace namespace) {
         List<String> namespaceExclude = Optional.of(kubernetes)
                 .map(EdsKubernetesConfigModel.Kubernetes::getFilter)
                 .map(EdsKubernetesConfigModel.Filter::getNamespace)

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.client.provider.eks;
+package com.baiyi.cratos.eds.kubernetes.client.provider.generator;
 
 import com.amazonaws.DefaultRequest;
 import com.amazonaws.auth.*;
@@ -30,7 +30,7 @@ import java.util.Date;
  */
 @Slf4j
 @Component
-public class AmazonEksGenerator {
+public class AmazonEksTokenGenerator {
 
     /**
      * https://docs.aws.amazon.com/zh_cn/zh_cn/sdk-for-java/v1/developer-guide/prog-services-sts.html
