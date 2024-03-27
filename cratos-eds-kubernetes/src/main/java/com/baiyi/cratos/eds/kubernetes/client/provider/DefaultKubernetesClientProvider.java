@@ -2,7 +2,6 @@ package com.baiyi.cratos.eds.kubernetes.client.provider;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.util.SystemEnvUtil;
-import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.google.common.base.Joiner;
 import io.fabric8.kubernetes.client.ConfigBuilder;
@@ -18,14 +17,6 @@ import java.util.Optional;
  */
 @Component
 public class DefaultKubernetesClientProvider implements IKubernetesClientProvider {
-
-    /**
-     * io.fabric8.kubernetes.client.Config.*
-     */
-    public static final String KUBERNETES_KUBECONFIG_FILE = "kubeconfig";
-    public static final String KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.request.timeout";
-    public static final String KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.websocket.timeout";
-    public static final String KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.connection.timeout";
 
     /**
      * 5.0
@@ -48,11 +39,10 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
                 .build();
     }
 
-    private void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    @Override
+    public void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         System.setProperty(KUBERNETES_KUBECONFIG_FILE, toKubeconfigPath(kubernetes));
-        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
-        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
-        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
+        IKubernetesClientProvider.super.setProperties(kubernetes);
     }
 
     private static String toKubeconfigPath(EdsKubernetesConfigModel.Kubernetes kubernetes) {

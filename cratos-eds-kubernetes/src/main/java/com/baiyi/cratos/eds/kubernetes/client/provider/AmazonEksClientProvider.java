@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.provider;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.client.provider.generator.AmazonEksTokenGenerator;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
@@ -25,10 +24,6 @@ import java.util.Optional;
 public class AmazonEksClientProvider implements IKubernetesClientProvider {
 
     private final AmazonEksTokenGenerator amazonEksGenerator;
-
-    public static final String KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.request.timeout";
-    public static final String KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.websocket.timeout";
-    public static final String KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.connection.timeout";
 
     /**
      * 按供应商构建 client
@@ -59,17 +54,6 @@ public class AmazonEksClientProvider implements IKubernetesClientProvider {
         } catch (URISyntaxException e) {
             throw new KubernetesException(e.getMessage());
         }
-    }
-
-    /**
-     * 注入配置
-     *
-     * @param kubernetes
-     */
-    private void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
-        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
-        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
     }
 
     @Override
