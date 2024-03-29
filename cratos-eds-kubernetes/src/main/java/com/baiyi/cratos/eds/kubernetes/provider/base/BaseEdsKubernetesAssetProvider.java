@@ -27,6 +27,11 @@ public abstract class BaseEdsKubernetesAssetProvider<A> extends BaseEdsInstanceA
     @Resource
     private CredentialService credentialService;
 
+    protected String getAssetId(String namespace, String name) {
+        return Joiner.on(":")
+                .join(namespace, name);
+    }
+
     @Override
     public void setConfig(EdsConfig edsConfig) {
         if (edsConfig.getCredentialId() == null) {

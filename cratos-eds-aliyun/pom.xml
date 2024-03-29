@@ -50,6 +50,13 @@
             <version>0.3.0</version>
         </dependency>
 
+        <!-- https://next.api.aliyun.com/api-tools/sdk/Alb?version=2020-06-16&language=java-tea&tab=primer-doc -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alb20200616</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-core</artifactId>

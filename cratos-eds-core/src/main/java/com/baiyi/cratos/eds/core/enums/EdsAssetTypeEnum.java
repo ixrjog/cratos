@@ -12,6 +12,7 @@ public enum EdsAssetTypeEnum {
     AWS_STS_VPN,
     CLOUDFLARE_CERT,
     KUBERNETES_DEPLOYMENT,
+    KUBERNETES_INGRESS,
     LDAP_PERSON,
     LDAP_GROUP,
 

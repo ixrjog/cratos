@@ -50,4 +50,6 @@ public interface EdsFacade {
 
     void deleteEdsInstanceAsset(EdsInstanceParam.DeleteInstanceAsset deleteInstanceAsset);
 
+    List<EdsAssetVO.Index> queryAssetIndexByAssetId(int assetId);
+
 }

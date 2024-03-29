@@ -50,7 +50,6 @@ public class AliyunCertRepo extends BaseAliyunRepo {
             pageNo++;
         }
         return userCertificateOrderList;
-
     }
 
     public List<ListCertResponseBody.ListCertResponseBodyCertList> listCert(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {

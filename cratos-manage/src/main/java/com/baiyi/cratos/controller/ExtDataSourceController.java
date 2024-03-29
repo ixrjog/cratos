@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/2/5 17:06
@@ -124,6 +126,12 @@ public class ExtDataSourceController {
     public HttpResult<Boolean> deleteEdsAssetById(@RequestParam @Valid int id) {
         edsFacade.deleteEdsAssetById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query eds asset index by id")
+    @GetMapping(value = "/asset/index/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam @Valid int id) {
+        return new HttpResult<>(edsFacade.queryAssetIndexByAssetId(id));
     }
 
     @Operation(summary = "Get to business target")

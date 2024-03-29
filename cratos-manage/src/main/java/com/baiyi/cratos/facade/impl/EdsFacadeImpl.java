@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
@@ -21,9 +22,11 @@ import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
@@ -60,6 +63,10 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsAssetWrapper edsAssetWrapper;
 
     private final EdsInstanceProviderDelegateHelper delegateHelper;
+
+    private final EdsAssetIndexService edsAssetIndexService;
+
+    private final EdsAssetIndexWrapper edsAssetIndexWrapper;
 
     @Override
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
@@ -210,10 +217,14 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteEdsAssetById(int id) {
+        edsAssetIndexService.queryIndexByAssetId(id)
+                .stream()
+                .mapToInt(EdsAssetIndex::getId)
+                .forEach(edsAssetIndexService::deleteById);
         edsAssetService.deleteById(id);
     }
-
 
     @Override
     public List<EdsInstance> queryValidEdsInstanceByType(String edsType) {
@@ -239,6 +250,14 @@ public class EdsFacadeImpl implements EdsFacade {
                     .mapToInt(EdsAsset::getId)
                     .forEach(this::deleteEdsAssetById);
         }
+    }
+
+    @Override
+    public List<EdsAssetVO.Index> queryAssetIndexByAssetId(int assetId) {
+        return edsAssetIndexService.queryIndexByAssetId(assetId)
+                .stream()
+                .map(edsAssetIndexWrapper::wrapToTarget)
+                .toList();
     }
 
 }

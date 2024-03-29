@@ -1,12 +1,14 @@
 package com.baiyi.cratos.domain.view.eds;
 
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.IResourceCount;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -58,7 +60,7 @@ public class EdsAssetVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Asset extends BaseVO implements Serializable {
+    public static class Asset extends BaseVO implements IResourceCount, Serializable {
 
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;
@@ -101,7 +103,33 @@ public class EdsAssetVO {
 
         private ToBusiness toBusiness;
 
+        private Map<String, Integer> resourceCount;
+
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Index extends BaseVO implements  Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -7612746160295687836L;
+
+        private Integer id;
+
+        private Integer instanceId;
+
+        private Integer assetId;
+
+        private String name;
+
+        private String value;
+
+        private String comment;
+
+    }
 
 }

@@ -32,6 +32,8 @@ public enum BusinessTypeEnum {
     CHANNEL_NETWORK,
 
     ENV,
-    SERVER_ACCOUNT
+    SERVER_ACCOUNT,
+
+    EDS_ASSET_INDEX
 
 }

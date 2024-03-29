@@ -4,6 +4,7 @@ package com.baiyi.cratos.eds.core;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.AssetUtil;
@@ -28,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -52,10 +55,14 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     @Resource
     private ConfigCredTemplate configCredTemplate;
 
+    @Resource
+    protected EdsAssetIndexFacade edsAssetIndexFacade;
+
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
     /**
      * 按类型查询本数据源实例资产
+     *
      * @param instance
      * @param assetTypeEnum
      * @return
@@ -86,11 +93,18 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
         try {
-            return enterAsset(toEdsAsset(instance, entity));
+            EdsAsset edsAsset = enterAsset(toEdsAsset(instance, entity));
+            List<EdsAssetIndex> edsAssetIndexList = toEdsAssetIndexList(edsAsset, entity);
+            edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), edsAssetIndexList);
+            return edsAsset;
         } catch (EdsAssetConversionException e) {
             log.error("Asset conversion error. {}", e.getMessage());
             throw new EdsAssetException("Asset conversion error. {}", e.getMessage());
         }
+    }
+
+    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, A entity) {
+        return Collections.emptyList();
     }
 
     protected EdsAsset enterAsset(EdsAsset newEdsAsset) {

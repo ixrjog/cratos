@@ -6,11 +6,18 @@ import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
 
 /**
  * @Author baiyi
@@ -24,6 +31,8 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
 
     private final EdsInstanceProviderDelegateHelper delegateHelper;
 
+    private final EdsAssetIndexService edsAssetIndexService;
+
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
         EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(asset.getInstanceId(), asset.getAssetType());
@@ -36,6 +45,16 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
             assetToBusinessWrapper.wrap(asset);
         }
 
+        Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
+                .put(buildResourceCountForAssetIndex(asset))
+                .build();
+        asset.setResourceCount(resourceCount);
+    }
+
+    private Map<String, Integer> buildResourceCountForAssetIndex(EdsAssetVO.Asset asset) {
+        Map<String, Integer> resourceCount = Maps.newHashMap();
+        resourceCount.put(EDS_ASSET_INDEX.name(), edsAssetIndexService.selectCountByAssetId(asset.getId()));
+        return resourceCount;
     }
 
 }
