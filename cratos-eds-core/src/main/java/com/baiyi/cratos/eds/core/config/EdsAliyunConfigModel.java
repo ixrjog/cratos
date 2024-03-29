@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,6 +29,8 @@ public class EdsAliyunConfigModel {
         @Schema(description = "凭据")
         private Cred cred;
 
+        private ALB alb;
+
     }
 
     @Data
@@ -44,6 +47,15 @@ public class EdsAliyunConfigModel {
         private String accessKeyId;
 
         private String accessKeySecret;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class ALB {
+
+        private List<String> endpoints;
 
     }
 

@@ -34,6 +34,8 @@ public enum BusinessTypeEnum {
     ENV,
     SERVER_ACCOUNT,
 
-    EDS_ASSET_INDEX
+    EDS_ASSET_INDEX,
+
+    TRAFFIC_LAYER_DOMAIN_RECORD
 
 }

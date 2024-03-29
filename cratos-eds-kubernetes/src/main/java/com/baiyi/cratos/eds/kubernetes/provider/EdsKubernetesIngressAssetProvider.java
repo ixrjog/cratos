@@ -39,6 +39,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
 
     private static final String UNDEFINED_SERVICE = "Undefined Service";
 
+    public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
+
     @Override
     protected List<Ingress> listEntities(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
@@ -89,7 +91,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
             return EdsAssetIndex.builder()
                     .instanceId(edsAsset.getInstanceId())
                     .assetId(edsAsset.getId())
-                    .name("loadBalancer.ingress.hostname")
+                    .name(LB_INGRESS_HOSTNAME)
                     .value(ingressLoadBalancerIngress.getHostname())
                     .build();
         }
