@@ -17,4 +17,6 @@ public interface TrafficLayerDomainFacade {
 
     void updateTrafficLayerDomain(TrafficLayerDomainParam.UpdateDomain updateDomain);
 
+    void deleteById(int id);
+
 }

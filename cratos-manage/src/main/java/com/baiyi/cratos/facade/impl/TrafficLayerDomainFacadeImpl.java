@@ -1,10 +1,12 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.TrafficLayerException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
+import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
 import com.baiyi.cratos.wrapper.TrafficLayerDomainWrapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
 
     private final TrafficLayerDomainService domainService;
+
+    private final TrafficLayerDomainRecordService recordService;
 
     private final TrafficLayerDomainWrapper domainWrapper;
 
@@ -42,6 +46,14 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
         trafficLayerDomain.setName(updateDomain.getName());
         trafficLayerDomain.setComment(updateDomain.getComment());
         domainService.updateByPrimaryKey(trafficLayerDomain);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        if (recordService.selectCountByDomainId(id) > 0) {
+            throw new TrafficLayerException("Resolved record association.");
+        }
+        domainService.deleteById(id);
     }
 
 }

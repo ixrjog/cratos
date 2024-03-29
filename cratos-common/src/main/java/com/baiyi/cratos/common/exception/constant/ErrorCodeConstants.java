@@ -22,4 +22,6 @@ public interface ErrorCodeConstants {
 
     int USER_ERROR = 44000;
 
+    int TRAFFIC_LAYER_ERROR = 45000;
+
 }

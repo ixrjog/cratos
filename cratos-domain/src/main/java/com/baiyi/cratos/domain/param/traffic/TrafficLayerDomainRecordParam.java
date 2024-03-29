@@ -49,7 +49,6 @@ public class TrafficLayerDomainRecordParam {
     }
 
     @Data
-    @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
     public static class AddRecord implements IToTarget<TrafficLayerDomainRecord> {
@@ -71,7 +70,6 @@ public class TrafficLayerDomainRecordParam {
     }
 
     @Data
-    @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
     public static class UpdateRecord implements IToTarget<TrafficLayerDomainRecord> {

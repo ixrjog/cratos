@@ -27,4 +27,12 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
         return trafficLayerDomainRecordMapper.selectOneByExample(example);
     }
 
+    @Override
+    public int selectCountByDomainId(int domainId) {
+        Example example = new Example(TrafficLayerDomainRecord.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("domainId", domainId);
+        return trafficLayerDomainRecordMapper.selectCountByExample(example);
+    }
+
 }

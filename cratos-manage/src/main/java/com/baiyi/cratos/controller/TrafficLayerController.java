@@ -53,6 +53,13 @@ public class TrafficLayerController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete traffic layer domain by id")
+    @DeleteMapping(value = "/domain/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTrafficLayerDomainById(@RequestParam @Valid int id) {
+        domainFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add traffic layer domain record")
     @PostMapping(value = "/domain/record/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addTrafficLayerDomainRecord(@RequestBody @Valid TrafficLayerDomainRecordParam.AddRecord addRecord) {
@@ -64,6 +71,13 @@ public class TrafficLayerController {
     @PutMapping(value = "/domain/record/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateTrafficLayerDomainRecord(@RequestBody @Valid TrafficLayerDomainRecordParam.UpdateRecord updateRecord) {
         recordFacade.updateTrafficLayerDomainRecord(updateRecord);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete traffic layer domain record by id")
+    @DeleteMapping(value = "/domain/record/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTrafficLayerDomainRecordById(@RequestParam @Valid int id) {
+        recordFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
 

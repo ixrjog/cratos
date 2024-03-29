@@ -13,4 +13,6 @@ public interface TrafficLayerDomainRecordFacade {
 
     void updateTrafficLayerDomainRecord(TrafficLayerDomainRecordParam.UpdateRecord updateRecord);
 
+    void deleteById(int id);
+
 }

@@ -35,4 +35,9 @@ public class TrafficLayerDomainRecordFacadeImpl implements TrafficLayerDomainRec
         recordService.updateByPrimaryKey(trafficLayerDomainRecord);
     }
 
+    @Override
+    public void deleteById(int id) {
+        recordService.deleteById(id);
+    }
+
 }

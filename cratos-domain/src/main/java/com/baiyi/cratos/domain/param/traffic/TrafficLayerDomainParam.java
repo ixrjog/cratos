@@ -29,7 +29,6 @@ public class TrafficLayerDomainParam {
     }
 
     @Data
-    @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
     public static class AddDomain implements IToTarget<TrafficLayerDomain> {
@@ -45,7 +44,6 @@ public class TrafficLayerDomainParam {
     }
 
     @Data
-    @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
     public static class UpdateDomain implements IToTarget<TrafficLayerDomain> {

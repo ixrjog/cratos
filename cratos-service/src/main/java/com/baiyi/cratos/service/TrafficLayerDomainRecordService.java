@@ -11,4 +11,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Version 1.0
  */
 public interface TrafficLayerDomainRecordService  extends BaseUniqueKeyService<TrafficLayerDomainRecord>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
+
+    int selectCountByDomainId(int domainId);
+
 }
