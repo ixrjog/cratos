@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.traffic;
 
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +33,6 @@ public class TrafficLayerDomainRecordParam {
 
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
@@ -45,6 +45,52 @@ public class TrafficLayerDomainRecordParam {
 
         @NotBlank
         private String envName;
+
+    }
+
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class AddRecord implements IToTarget<TrafficLayerDomainRecord> {
+
+        private Integer domainId;
+
+        private String envName;
+
+        private String recordName;
+
+        private String routeTrafficTo;
+
+        private String originServer;
+
+        private Boolean valid;
+
+        private String comment;
+
+    }
+
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateRecord implements IToTarget<TrafficLayerDomainRecord> {
+
+        private Integer id;
+
+        private Integer domainId;
+
+        private String envName;
+
+        private String recordName;
+
+        private String routeTrafficTo;
+
+        private String originServer;
+
+        private Boolean valid;
+
+        private String comment;
 
     }
 

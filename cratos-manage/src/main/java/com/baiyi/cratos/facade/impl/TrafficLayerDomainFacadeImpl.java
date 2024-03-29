@@ -31,4 +31,17 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
         return domainWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void addTrafficLayerDomain(TrafficLayerDomainParam.AddDomain addDomain) {
+        domainService.add(addDomain.toTarget());
+    }
+
+    @Override
+    public void updateTrafficLayerDomain(TrafficLayerDomainParam.UpdateDomain updateDomain) {
+        TrafficLayerDomain trafficLayerDomain = domainService.getById(updateDomain.getId());
+        trafficLayerDomain.setName(updateDomain.getName());
+        trafficLayerDomain.setComment(updateDomain.getComment());
+        domainService.updateByPrimaryKey(trafficLayerDomain);
+    }
+
 }
