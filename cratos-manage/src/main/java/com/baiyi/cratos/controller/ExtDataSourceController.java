@@ -130,8 +130,8 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Query eds asset index by id")
     @GetMapping(value = "/asset/index/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam @Valid int id) {
-        return new HttpResult<>(edsFacade.queryAssetIndexByAssetId(id));
+    public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam @Valid int assetId) {
+        return new HttpResult<>(edsFacade.queryAssetIndexByAssetId(assetId));
     }
 
     @Operation(summary = "Get to business target")
