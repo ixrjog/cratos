@@ -13,4 +13,8 @@ public interface TrafficLayerDomainFacade {
 
     DataTable<TrafficLayerDomainVO.Domain> queryDomainPage(TrafficLayerDomainParam.DomainPageQuery pageQuery);
 
+    void addTrafficLayerDomain(TrafficLayerDomainParam.AddDomain addDomain);
+
+    void updateTrafficLayerDomain(TrafficLayerDomainParam.UpdateDomain updateDomain);
+
 }
