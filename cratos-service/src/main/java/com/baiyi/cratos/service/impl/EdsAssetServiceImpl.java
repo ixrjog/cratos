@@ -48,6 +48,15 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public List<EdsAsset> queryAssetByParam(String assetKey, String assetType) {
+        Example example = new Example(EdsAsset.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("assetKey",  assetKey)
+                .andEqualTo("assetType", assetType);
+        return edsAssetMapper.selectByExample(example);
+    }
+
+    @Override
     public DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
         Page<EdsAsset> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<EdsAsset> data = edsAssetMapper.queryPageByParam(pageQuery);

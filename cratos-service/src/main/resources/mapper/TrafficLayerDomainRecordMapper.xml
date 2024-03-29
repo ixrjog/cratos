@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="domain_id" jdbcType="INTEGER" property="domainId" />
+    <result column="env_name" jdbcType="VARCHAR" property="envName" />
+    <result column="record_name" jdbcType="VARCHAR" property="recordName" />
+    <result column="route_traffic_to" jdbcType="VARCHAR" property="routeTrafficTo" />
+    <result column="origin_server" jdbcType="VARCHAR" property="originServer" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
+  </resultMap>
+</mapper>

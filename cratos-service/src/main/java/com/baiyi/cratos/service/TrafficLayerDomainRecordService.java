@@ -1,0 +1,14 @@
+package com.baiyi.cratos.service;
+
+import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
+import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
+import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import com.baiyi.cratos.service.base.BaseValidService;
+
+/**
+ * @Author baiyi
+ * @Date 2024/3/29 10:40
+ * @Version 1.0
+ */
+public interface TrafficLayerDomainRecordService  extends BaseUniqueKeyService<TrafficLayerDomainRecord>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
+}

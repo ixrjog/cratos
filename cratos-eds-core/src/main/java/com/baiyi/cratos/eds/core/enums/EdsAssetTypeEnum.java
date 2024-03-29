@@ -8,8 +8,10 @@ package com.baiyi.cratos.eds.core.enums;
 public enum EdsAssetTypeEnum {
 
     ALIYUN_CERT,
+    ALIYUN_ALB,
     AWS_CERT,
     AWS_STS_VPN,
+    AWS_ALB,
     CLOUDFLARE_CERT,
     KUBERNETES_DEPLOYMENT,
     KUBERNETES_INGRESS,

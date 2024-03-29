@@ -18,4 +18,8 @@ public interface EdsAssetIndexFacade {
      */
     void saveAssetIndexList(int assetId, List<EdsAssetIndex> edsAssetIndexList);
 
+    List<EdsAssetIndex> queryAssetIndexById(int assetId);
+
+    List<EdsAssetIndex> queryAssetIndexByValue(String value);
+
 }
