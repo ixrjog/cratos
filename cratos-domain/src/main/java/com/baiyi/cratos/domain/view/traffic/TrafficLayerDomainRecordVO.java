@@ -56,10 +56,6 @@ public class TrafficLayerDomainRecordVO {
 
         private Boolean valid;
 
-        private Date createTime;
-
-        private Date updateTime;
-
         private String comment;
 
         @Override
