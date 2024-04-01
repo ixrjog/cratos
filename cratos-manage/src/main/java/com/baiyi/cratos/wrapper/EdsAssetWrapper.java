@@ -33,12 +33,32 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
 
     private final EdsAssetIndexService edsAssetIndexService;
 
+    public static final boolean SKIP_LOAD_ASSET = true;
+
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
         EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(asset.getInstanceId(), asset.getAssetType());
         // TODO 是否要序列化对象？
         asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
                 .assetLoadAs(asset.getOriginalModel()));
+        // ToBusiness
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
+        if (assetToBusinessWrapper != null) {
+            assetToBusinessWrapper.wrap(asset);
+        }
+
+        Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
+                .put(buildResourceCountForAssetIndex(asset))
+                .build();
+        asset.setResourceCount(resourceCount);
+    }
+
+    public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
+        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(asset.getInstanceId(), asset.getAssetType());
+        if (!skipLoadAsset) {
+            asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
+                    .assetLoadAs(asset.getOriginalModel()));
+        }
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
         if (assetToBusinessWrapper != null) {

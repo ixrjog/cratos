@@ -45,6 +45,13 @@
             <version>${aws-java-sdk.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-cloudwatch -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-cloudwatch</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

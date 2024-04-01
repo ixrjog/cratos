@@ -20,7 +20,7 @@ public class AwsElbRepo {
 
     public static List<LoadBalancer> listLoadBalancer(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeLoadBalancersRequest request = new DescribeLoadBalancersRequest();
-        request.setPageSize(400);
+        // request.setPageSize(400);
         List<LoadBalancer> loadBalancerDescriptions = Lists.newArrayList();
         while (true) {
             DescribeLoadBalancersResult result = AmazonElbService.buildAmazonELB(regionId, aws)

@@ -93,10 +93,11 @@ public class CachingConfiguration {
         om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(om, Object.class);
-        // 值采用json序列化
-        template.setValueSerializer(jackson2JsonRedisSerializer);
+
         //使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(new StringRedisSerializer());
+        // 值采用json序列化
+        template.setValueSerializer(jackson2JsonRedisSerializer);
 
         // 设置hash key 和value序列化模式
         template.setHashKeySerializer(new StringRedisSerializer());

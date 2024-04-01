@@ -113,7 +113,7 @@ public class EdsAssetVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Index extends BaseVO implements  Serializable {
+    public static class Index extends BaseVO implements Serializable {
 
         @Serial
         private static final long serialVersionUID = -7612746160295687836L;

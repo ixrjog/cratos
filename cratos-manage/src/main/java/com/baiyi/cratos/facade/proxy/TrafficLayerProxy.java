@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.LB_INGRESS_HOSTNAME;
+import static com.baiyi.cratos.wrapper.EdsAssetWrapper.SKIP_LOAD_ASSET;
 
 /**
  * @Author baiyi
@@ -45,7 +46,7 @@ public class TrafficLayerProxy {
 
     private static final String RULES = "RULES";
 
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V1:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
     public TrafficLayerDomainRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {
         // 查找所有的索引
         List<EdsAsset> ingressAssets = edsAssetIndexFacade.queryAssetIndexByValue(originServerName)
@@ -86,7 +87,12 @@ public class TrafficLayerProxy {
         albAssets.addAll(assetService.queryAssetByParam(originServerName, EdsAssetTypeEnum.ALIYUN_ALB.name()));
         albAssets.addAll(assetService.queryAssetByParam(originServerName, EdsAssetTypeEnum.AWS_ELB.name()));
         return albAssets.stream()
-                .map(edsAssetWrapper::wrapToTarget)
+                .map(e -> {
+                    EdsAssetVO.Asset asset = edsAssetWrapper.convert(e);
+                    // 不能序列化
+                    edsAssetWrapper.wrap(asset, SKIP_LOAD_ASSET);
+                    return asset;
+                })
                 .toList();
     }
 

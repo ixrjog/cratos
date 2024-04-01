@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +14,10 @@ import java.util.Date;
  * @Version 1.0
  */
 @Data
-public class BaseVO {
+public class BaseVO implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 7289480709427236439L;
 
     @Schema(description = "Create time")
     @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")

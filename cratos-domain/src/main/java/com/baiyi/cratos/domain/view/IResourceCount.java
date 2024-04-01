@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface IResourceCount {
 
-    void setResourceCount(Map<String,Integer> resourceCount);
+    void setResourceCount(Map<String, Integer> resourceCount);
 
 }

@@ -14,6 +14,8 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
  */
 public class AmazonElbService {
 
+    private AmazonElbService (){}
+
     public static AmazonElasticLoadBalancing buildAmazonELB(EdsAwsConfigModel.Aws aws) {
         return buildAmazonELB(aws.getRegionId(), aws);
     }
