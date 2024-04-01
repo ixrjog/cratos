@@ -72,7 +72,10 @@ public class TrafficLayerDomainRecordVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class RecordDetails implements IRecord, CachedVO.ICached, Serializable {
+    public static class RecordDetails implements IRecord, Serializable {
+
+        public static final RecordDetails NOT_FOUND = RecordDetails.builder()
+                .build();
 
         @Serial
         private static final long serialVersionUID = 4049706572702022792L;
@@ -83,8 +86,6 @@ public class TrafficLayerDomainRecordVO {
 
         private OriginServer originServer;
 
-        private CachedVO.Cached cached;
-
     }
 
     @Data
@@ -92,7 +93,7 @@ public class TrafficLayerDomainRecordVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class OriginServer implements Serializable {
+    public static class OriginServer implements CachedVO.ICached, Serializable {
 
         @Serial
         private static final long serialVersionUID = -5858488088287315080L;
@@ -103,6 +104,10 @@ public class TrafficLayerDomainRecordVO {
          * Keys: RULES / HOSTNAME
          */
         private Map<String, List<EdsAssetVO.Index>> details;
+
+        @Builder.Default
+        private CachedVO.Cached cached = CachedVO.Cached.builder()
+                .build();
 
     }
 
