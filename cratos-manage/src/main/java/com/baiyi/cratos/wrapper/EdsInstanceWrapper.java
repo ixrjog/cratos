@@ -3,13 +3,17 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.view.eds.EdsAssetTypeVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -31,6 +35,17 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
         // Wrap Eds Config
         edsConfigWrapper.wrap(edsInstance);
         edsInstance.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType()));
+        List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType())
+                .stream()
+                .map(e -> {
+                    EdsAssetTypeEnum type = EdsAssetTypeEnum.valueOf(e);
+                    return EdsAssetTypeVO.Type.builder()
+                            .type(type.name())
+                            .displayName(type.getDisplayName())
+                            .build();
+                })
+                .toList();
+        edsInstance.setInstanceAssetTypes(instanceAssetTypes);
     }
 
 }

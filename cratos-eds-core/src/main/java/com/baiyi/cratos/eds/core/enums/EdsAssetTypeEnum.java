@@ -1,26 +1,35 @@
 package com.baiyi.cratos.eds.core.enums;
 
+import lombok.Getter;
+
 /**
  * @Author baiyi
  * @Date 2024/2/26 13:48
  * @Version 1.0
  */
+@Getter
 public enum EdsAssetTypeEnum {
 
-    ALIYUN_CERT,
-    ALIYUN_ALB,
-    AWS_CERT,
-    AWS_STS_VPN,
-    AWS_ALB,
-    CLOUDFLARE_CERT,
-    KUBERNETES_DEPLOYMENT,
-    KUBERNETES_INGRESS,
-    LDAP_PERSON,
-    LDAP_GROUP,
+    ALIYUN_CERT("Certificate"),
+    ALIYUN_ALB("ALB"),
+    AWS_CERT("Certificate"),
+    AWS_STS_VPN("Site-to-Site VPN"),
+    AWS_ELB("ELB"),
+    CLOUDFLARE_CERT("Certificate"),
+    KUBERNETES_DEPLOYMENT("Deployment"),
+    KUBERNETES_INGRESS("Ingress"),
+    LDAP_PERSON("Person"),
+    LDAP_GROUP("Group"),
 
-    GITLAB_PROJECT,
-    GITLAB_GROUP,
-    GITLAB_USER,
-    GITLAB_SSHKEY;
+    GITLAB_PROJECT("Project"),
+    GITLAB_GROUP("Group"),
+    GITLAB_USER("User"),
+    GITLAB_SSHKEY("SSH Key");
+
+    private final String displayName;
+
+    EdsAssetTypeEnum(String displayName) {
+        this.displayName = displayName;
+    }
 
 }

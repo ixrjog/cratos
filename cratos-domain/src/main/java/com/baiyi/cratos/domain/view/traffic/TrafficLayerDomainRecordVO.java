@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.CachedVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +12,6 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +72,7 @@ public class TrafficLayerDomainRecordVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class RecordDetails implements IRecord, Serializable {
+    public static class RecordDetails implements IRecord, CachedVO.ICached, Serializable {
 
         @Serial
         private static final long serialVersionUID = 4049706572702022792L;
@@ -82,6 +82,8 @@ public class TrafficLayerDomainRecordVO {
         private Record record;
 
         private OriginServer originServer;
+
+        private CachedVO.Cached cached;
 
     }
 

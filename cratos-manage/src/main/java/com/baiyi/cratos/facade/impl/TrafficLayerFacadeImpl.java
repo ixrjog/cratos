@@ -66,8 +66,6 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .build();
     }
 
-    // 先查找ALB
-
     private TrafficLayerDomainRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {
         // 查找所有的索引
         List<EdsAsset> ingressAssets = edsAssetIndexFacade.queryAssetIndexByValue(originServerName)
@@ -103,11 +101,10 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .build();
     }
 
-
     private List<EdsAssetVO.Asset> buildOrigins(String originServerName) {
         List<EdsAsset> albAssets = Lists.newArrayList();
         albAssets.addAll(assetService.queryAssetByParam(originServerName, EdsAssetTypeEnum.ALIYUN_ALB.name()));
-        albAssets.addAll(assetService.queryAssetByParam(originServerName, EdsAssetTypeEnum.AWS_ALB.name()));
+        albAssets.addAll(assetService.queryAssetByParam(originServerName, EdsAssetTypeEnum.AWS_ELB.name()));
         return albAssets.stream()
                 .map(edsAssetWrapper::wrapToTarget)
                 .toList();

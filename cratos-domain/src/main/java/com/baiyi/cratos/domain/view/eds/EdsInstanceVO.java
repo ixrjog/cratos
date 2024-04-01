@@ -55,6 +55,8 @@ public class EdsInstanceVO {
 
         private Set<String> assetTypes;
 
+        private List<EdsAssetTypeVO.Type> instanceAssetTypes;
+
         @Override
         public Integer getBusinessId() {
             return id;
