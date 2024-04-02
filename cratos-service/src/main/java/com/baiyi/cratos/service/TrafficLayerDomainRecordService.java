@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
+import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -11,6 +13,8 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Version 1.0
  */
 public interface TrafficLayerDomainRecordService  extends BaseUniqueKeyService<TrafficLayerDomainRecord>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
+
+    DataTable<TrafficLayerDomainRecord> queryPageByParam(TrafficLayerRecordParam.RecordPageQuery pageQuery);
 
     int selectCountByDomainId(int domainId);
 

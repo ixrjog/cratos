@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 
 /**
  * @Author baiyi
@@ -14,5 +16,7 @@ public interface TrafficLayerRecordFacade {
     void updateTrafficLayerRecord(TrafficLayerRecordParam.UpdateRecord updateRecord);
 
     void deleteById(int id);
+
+    DataTable<TrafficLayerRecordVO.Record> queryRecordPage(TrafficLayerRecordParam.RecordPageQuery pageQuery);
 
 }

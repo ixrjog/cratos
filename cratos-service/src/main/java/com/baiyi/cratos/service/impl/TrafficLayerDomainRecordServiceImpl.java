@@ -1,14 +1,22 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
+import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
+import com.baiyi.cratos.util.SqlHelper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -21,6 +29,21 @@ import tk.mybatis.mapper.entity.Example;
 public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRecordService {
 
     private final TrafficLayerDomainRecordMapper trafficLayerDomainRecordMapper;
+
+    @Override
+    public DataTable<TrafficLayerDomainRecord> queryPageByParam(TrafficLayerRecordParam.RecordPageQuery pageQuery) {
+        Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        Example example = new Example(TrafficLayerDomainRecord.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
+            criteria.andLike("recordName", SqlHelper.toLike(pageQuery.getQueryName()));
+        }
+        if (pageQuery.getDomainId() != null) {
+            criteria.andEqualTo("domainId", pageQuery.getDomainId());
+        }
+        List<TrafficLayerDomainRecord> data = trafficLayerDomainRecordMapper.selectByExample(example);
+        return new DataTable<>(data, page.getTotal());
+    }
 
     @Override
     public TrafficLayerDomainRecord getByUniqueKey(TrafficLayerDomainRecord trafficLayerDomainRecord) {

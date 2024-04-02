@@ -1,9 +1,12 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
+import com.baiyi.cratos.wrapper.TrafficLayerRecordWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,9 +23,17 @@ public class TrafficLayerRecordFacadeImpl implements TrafficLayerRecordFacade {
 
     private final TrafficLayerDomainRecordService recordService;
 
+    private final TrafficLayerRecordWrapper recordWrapper;
+
     @Override
     public void addTrafficLayerRecord(TrafficLayerRecordParam.AddRecord addRecord) {
         recordService.add(addRecord.toTarget());
+    }
+
+    @Override
+    public DataTable<TrafficLayerRecordVO.Record> queryRecordPage(TrafficLayerRecordParam.RecordPageQuery pageQuery) {
+        DataTable<TrafficLayerDomainRecord> table = recordService.queryPageByParam(pageQuery);
+        return recordWrapper.wrapToTarget(table);
     }
 
     @Override

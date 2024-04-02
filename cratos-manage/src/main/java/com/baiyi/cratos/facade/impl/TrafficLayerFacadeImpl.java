@@ -79,16 +79,12 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .map(TrafficLayerRecordVO.OriginServer::getDetails)
                 .ifPresent(stringListMap -> stringListMap.get(RULES)
                         .forEach(e -> ingressRuleTable.addRow(e.getName(), e.getValue())));
-
-
         return TrafficLayerRecordVO.TableDetails.builder()
                 .recordTable(recordTable.toString())
                 .lbTable(lbTable.toString())
                 .ingressRuleTable(ingressRuleTable.toString())
                 .build();
-
     }
-
 
     @Override
     public String queryRecordDetailsStringTable(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {

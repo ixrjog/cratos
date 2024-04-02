@@ -60,6 +60,13 @@ public class TrafficLayerController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Pagination query traffic layer record")
+    @PostMapping(value = "/record/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<TrafficLayerRecordVO.Record>> queryTrafficLayerRecordPage(@RequestBody @Valid TrafficLayerRecordParam.RecordPageQuery pageQuery) {
+        return new HttpResult<>(recordFacade.queryRecordPage(pageQuery));
+    }
+
+
     @Operation(summary = "Add traffic layer record")
     @PostMapping(value = "/record/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addTrafficLayerRecord(@RequestBody @Valid TrafficLayerRecordParam.AddRecord addRecord) {
