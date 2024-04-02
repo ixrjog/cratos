@@ -1,6 +1,9 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainMapper;
@@ -22,6 +25,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
 public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService {
 
     private final TrafficLayerDomainMapper trafficLayerDomainMapper;
@@ -45,6 +49,12 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
         //example.setOrderByClause("create_time");
         List<TrafficLayerDomain> data = trafficLayerDomainMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        trafficLayerDomainMapper.deleteByPrimaryKey(id);
     }
 
 }

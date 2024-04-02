@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TrafficLayerDomainRecordFacadeImpl implements TrafficLayerRecordFacade {
+public class TrafficLayerRecordFacadeImpl implements TrafficLayerRecordFacade {
 
     private final TrafficLayerDomainRecordService recordService;
 

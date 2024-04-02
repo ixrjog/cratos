@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.CachedVO;
+import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,8 +37,8 @@ public class TrafficLayerDomainRecordVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN_RECORD)
-    public static class Record extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
+    @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_RECORD)
+    public static class Record extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -6173359438855341290L;
@@ -63,7 +64,11 @@ public class TrafficLayerDomainRecordVO {
             return id;
         }
 
+        @Schema(description = "Business Tags")
         List<BusinessTagVO.BusinessTag> businessTags;
+
+        @Schema(description = "Business Docs")
+        List<BusinessDocVO.BusinessDoc> businessDocs;
 
     }
 

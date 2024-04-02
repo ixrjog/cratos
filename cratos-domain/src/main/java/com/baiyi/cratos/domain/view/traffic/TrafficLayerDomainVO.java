@@ -1,12 +1,18 @@
 package com.baiyi.cratos.domain.view.traffic;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.IResourceCount;
+import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +28,8 @@ public class TrafficLayerDomainVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Domain extends BaseVO implements IResourceCount, Serializable {
+    @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
+    public static class Domain extends BaseVO implements IResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
 
         @Serial
         private static final long serialVersionUID = -8990726488134957647L;
@@ -38,6 +45,17 @@ public class TrafficLayerDomainVO {
         private String comment;
 
         private Map<String, Integer> resourceCount;
+
+        @Override
+        public Integer getBusinessId() {
+            return id;
+        }
+
+        @Schema(description = "Business Tags")
+        List<BusinessTagVO.BusinessTag> businessTags;
+
+        @Schema(description = "Business Docs")
+        List<BusinessDocVO.BusinessDoc> businessDocs;
 
     }
 

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
-import com.baiyi.cratos.wrapper.TrafficLayerDomainRecordWrapper;
+import com.baiyi.cratos.wrapper.TrafficLayerRecordWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
 
     private final TrafficLayerDomainRecordService recordService;
 
-    private final TrafficLayerDomainRecordWrapper recordWrapper;
+    private final TrafficLayerRecordWrapper recordWrapper;
 
     private final TrafficLayerProxy trafficLayerProxy;
 
