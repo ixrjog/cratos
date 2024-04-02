@@ -70,9 +70,7 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
         Optional.of(recordDetails)
                 .map(TrafficLayerRecordVO.RecordDetails::getOriginServer)
                 .map(TrafficLayerRecordVO.OriginServer::getOrigins)
-                .ifPresent(assets -> assets.forEach(e -> {
-                    lbTable.addRow(e.getName(), e.getAssetKey(), e.getAssetType());
-                }));
+                .ifPresent(assets -> assets.forEach(e -> lbTable.addRow(e.getName(), e.getAssetKey(), e.getAssetType())));
 
         // Ingress Rule Table
         PrettyTable ingressRuleTable = PrettyTable.fieldNames(RULE_TABLE_FIELD_NAME);

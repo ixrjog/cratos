@@ -43,14 +43,15 @@ public abstract class ConsoleConverter implements Converter, Bordered {
 
         leftBorder();
 
-        IntStream.range(0, pt.fieldNames.size()).forEach(i -> {
-            af(StringUtils.rightPad(pt.fieldNames.get(i), maxWidth[i]));
-            if (i < pt.fieldNames.size() - 1) {
-                centerBorder();
-            } else {
-                rightBorder();
-            }
-        });
+        IntStream.range(0, pt.fieldNames.size())
+                .forEach(i -> {
+                    af(StringUtils.rightPad(pt.fieldNames.get(i), maxWidth[i]));
+                    if (i < pt.fieldNames.size() - 1) {
+                        centerBorder();
+                    } else {
+                        rightBorder();
+                    }
+                });
 
         bottomBorderLine(maxWidth);
 
@@ -65,11 +66,8 @@ public abstract class ConsoleConverter implements Converter, Bordered {
 
                 String nc;
                 if (r[c] instanceof Number) {
-                    String n = pt.comma
-                            ? NumberFormat
-                            .getNumberInstance(Locale.US)
-                            .format(r[c])
-                            : r[c].toString();
+                    String n = pt.comma ? NumberFormat.getNumberInstance(Locale.US)
+                            .format(r[c]) : r[c].toString();
                     nc = StringUtils.leftPad(n, maxWidth[c]);
                 } else {
 
@@ -103,6 +101,7 @@ public abstract class ConsoleConverter implements Converter, Bordered {
 
     /**
      * Adjust for max width of the column
+     *
      * @param pt
      * @return
      */
@@ -111,26 +110,32 @@ public abstract class ConsoleConverter implements Converter, Bordered {
         // Adjust comma
         List<List<String>> converted = new ArrayList<>();
         for (Object[] r : pt.rows) {
-            List<String> collect = Stream.of(r).map(o -> {
-                if (pt.comma && o instanceof Number) {
-                    return NumberFormat
-                            .getNumberInstance(Locale.US)
-                            .format(o);
-                } else {
-                    return o.toString();
-                }
-            }).collect(Collectors.toList());
+            List<String> collect = Stream.of(r)
+                    .map(o -> {
+                        if (pt.comma && o instanceof Number) {
+                            return NumberFormat.getNumberInstance(Locale.US)
+                                    .format(o);
+                        } else {
+                            try {
+                                return o.toString();
+                            } catch (NullPointerException e) {
+                                return "";
+                            }
+                        }
+                    })
+                    .collect(Collectors.toList());
             converted.add(collect);
         }
         return IntStream.range(0, pt.fieldNames.size())
                 .map(i -> {
                     int n = converted.stream()
-                            .map(f ->
-                                    colLength(f.get(i)))
+                            .map(f -> colLength(f.get(i)))
                             .max(Comparator.naturalOrder())
                             .orElse(0);
-                    return Math.max(pt.fieldNames.get(i).length(), n);
-                }).toArray();
+                    return Math.max(pt.fieldNames.get(i)
+                            .length(), n);
+                })
+                .toArray();
     }
 
     private int colLength(String colStr) {
