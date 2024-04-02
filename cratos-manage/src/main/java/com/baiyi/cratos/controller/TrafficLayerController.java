@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
-import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
@@ -83,7 +83,7 @@ public class TrafficLayerController {
 
     @Operation(summary = "Query traffic layer record details")
     @PostMapping(value = "/record/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<TrafficLayerDomainRecordVO.RecordDetails> queryRecordDetails(@RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
+    public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(@RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
         return new HttpResult<>(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
     }
 

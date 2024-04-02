@@ -29,7 +29,7 @@ public class TrafficLayerDomainVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-    public static class Domain extends BaseVO implements IResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
+    public static class Domain extends BaseVO implements IResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -8990726488134957647L;

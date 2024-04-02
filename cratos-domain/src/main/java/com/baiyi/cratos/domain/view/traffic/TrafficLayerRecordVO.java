@@ -21,7 +21,7 @@ import java.util.Map;
  * @Date 2024/3/29 11:34
  * @Version 1.0
  */
-public class TrafficLayerDomainRecordVO {
+public class TrafficLayerRecordVO {
 
     public interface IRecord {
 

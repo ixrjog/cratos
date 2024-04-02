@@ -43,12 +43,10 @@ public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider
             if (CollectionUtils.isEmpty(zoneResults)) {
                 return results;
             }
-            zoneResults.forEach(e -> {
-                List<CloudflareCert.Result> cRt = cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId());
-                if (!CollectionUtils.isEmpty(cRt)) {
-                    cRt.forEach(c -> results.addAll(c.getCertificates()));
-                }
-            });
+            zoneResults.stream()
+                    .map(e -> cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId()))
+                    .filter(cRt -> !CollectionUtils.isEmpty(cRt))
+                    .forEach(cRt -> cRt.forEach(c -> results.addAll(c.getCertificates())));
             return results;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());

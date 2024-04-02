@@ -33,14 +33,14 @@
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <spring-security.version>6.2.2</spring-security.version>
-        <aws-java-sdk.version>1.12.565</aws-java-sdk.version>
+        <!-- 1.12.565 -->
+        <aws-java-sdk.version>1.12.691</aws-java-sdk.version>
     </properties>
 
     <parent>
         <!--  https://spring.io/projects/spring-boot#learn  -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!-- 3.2.3-->
         <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>

@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -48,7 +48,7 @@ public class TrafficLayerProxy {
     private static final String RULES = "RULES";
 
     @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
-    public TrafficLayerDomainRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {
+    public TrafficLayerRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {
         // 查找所有的索引
         List<EdsAsset> ingressAssets = edsAssetIndexFacade.queryAssetIndexByValue(originServerName)
                 .stream()
@@ -62,7 +62,7 @@ public class TrafficLayerProxy {
                     .flatMap(Collection::stream)
                     .forEach(index -> putMap(details, index, recordName));
         }
-        return TrafficLayerDomainRecordVO.OriginServer.builder()
+        return TrafficLayerRecordVO.OriginServer.builder()
                 .origins(buildOrigins(originServerName))
                 .details(details)
                 .build();

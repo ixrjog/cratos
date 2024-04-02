@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
-import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
@@ -28,11 +28,11 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
     private final TrafficLayerProxy trafficLayerProxy;
 
     @Override
-    public TrafficLayerDomainRecordVO.RecordDetails queryRecordDetails(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
+    public TrafficLayerRecordVO.RecordDetails queryRecordDetails(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
         TrafficLayerDomainRecord uniqueKey = queryRecordDetails.toTrafficLayerRecord();
         TrafficLayerDomainRecord trafficLayerDomainRecord = recordService.getByUniqueKey(uniqueKey);
-        return trafficLayerDomainRecord == null ? TrafficLayerDomainRecordVO.RecordDetails.NOT_FOUND :
-                TrafficLayerDomainRecordVO.RecordDetails.builder()
+        return trafficLayerDomainRecord == null ? TrafficLayerRecordVO.RecordDetails.NOT_FOUND :
+                TrafficLayerRecordVO.RecordDetails.builder()
                         .recordId(trafficLayerDomainRecord.getId())
                         .record(recordWrapper.wrapToTarget(trafficLayerDomainRecord))
                         .originServer(trafficLayerProxy.buildOriginServer(trafficLayerDomainRecord.getRecordName(), trafficLayerDomainRecord.getOriginServer()))

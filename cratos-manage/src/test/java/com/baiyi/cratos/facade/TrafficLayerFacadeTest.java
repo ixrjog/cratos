@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
-import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ public class TrafficLayerFacadeTest extends BaseUnit {
                 .domainId(1)
                 .envName("dev")
                 .build();
-        TrafficLayerDomainRecordVO.RecordDetails recordDetails = trafficLayerFacade.queryRecordDetails(queryRecordDetails);
+        TrafficLayerRecordVO.RecordDetails recordDetails = trafficLayerFacade.queryRecordDetails(queryRecordDetails);
         System.out.println(recordDetails);
     }
 
