@@ -77,8 +77,12 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
         Optional.of(recordDetails)
                 .map(TrafficLayerRecordVO.RecordDetails::getOriginServer)
                 .map(TrafficLayerRecordVO.OriginServer::getDetails)
-                .ifPresent(stringListMap -> stringListMap.get(RULES)
-                        .forEach(e -> ingressRuleTable.addRow(e.getName(), e.getValue())));
+                .ifPresent(stringListMap -> {
+                    if (stringListMap.containsKey(RULES)) {
+                        stringListMap.get(RULES)
+                                .forEach(e -> ingressRuleTable.addRow(e.getName(), e.getValue()));
+                    }
+                });
         return TrafficLayerRecordVO.TableDetails.builder()
                 .recordTable(recordTable.toString())
                 .lbTable(lbTable.toString())
