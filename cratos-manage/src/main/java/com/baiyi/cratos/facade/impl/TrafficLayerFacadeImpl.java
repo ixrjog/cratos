@@ -31,7 +31,6 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
     public TrafficLayerDomainRecordVO.RecordDetails queryRecordDetails(TrafficLayerDomainRecordParam.QueryRecordDetails queryRecordDetails) {
         TrafficLayerDomainRecord uniqueKey = queryRecordDetails.toTrafficLayerDomainRecord();
         TrafficLayerDomainRecord trafficLayerDomainRecord = recordService.getByUniqueKey(uniqueKey);
-
         return trafficLayerDomainRecord == null ? TrafficLayerDomainRecordVO.RecordDetails.NOT_FOUND :
                 TrafficLayerDomainRecordVO.RecordDetails.builder()
                         .recordId(trafficLayerDomainRecord.getId())

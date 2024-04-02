@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.proxy;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -59,27 +60,29 @@ public class TrafficLayerProxy {
             ingressAssets.stream()
                     .map(albAsset -> edsAssetIndexFacade.queryAssetIndexById(albAsset.getId()))
                     .flatMap(Collection::stream)
-                    .forEach(index -> {
-                        if (LB_INGRESS_HOSTNAME.equals(index.getName())) {
-                            details.put(HOSTNAME, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
-                        } else {
-                            // 过滤掉其他域名
-                            if (index.getName()
-                                    .startsWith(recordName)) {
-                                if (details.containsKey(RULES)) {
-                                    details.get(RULES)
-                                            .add(edsAssetIndexWrapper.wrapToTarget(index));
-                                } else {
-                                    details.put(RULES, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
-                                }
-                            }
-                        }
-                    });
+                    .forEach(index -> putMap(details, index, recordName));
         }
         return TrafficLayerDomainRecordVO.OriginServer.builder()
                 .origins(buildOrigins(originServerName))
                 .details(details)
                 .build();
+    }
+
+    private void putMap(Map<String, List<EdsAssetVO.Index>> details, EdsAssetIndex index, String recordName) {
+        if (LB_INGRESS_HOSTNAME.equals(index.getName())) {
+            details.put(HOSTNAME, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
+        } else {
+            // 过滤掉其他域名
+            if (index.getName()
+                    .startsWith(recordName)) {
+                if (details.containsKey(RULES)) {
+                    details.get(RULES)
+                            .add(edsAssetIndexWrapper.wrapToTarget(index));
+                } else {
+                    details.put(RULES, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
+                }
+            }
+        }
     }
 
     private List<EdsAssetVO.Asset> buildOrigins(String originServerName) {
