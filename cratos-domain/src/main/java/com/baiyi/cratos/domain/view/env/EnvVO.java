@@ -15,6 +15,14 @@ import java.io.Serializable;
  */
 public class EnvVO {
 
+    public interface IEnv {
+
+        String getEnvName();
+
+        void setEnv(Env env);
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema

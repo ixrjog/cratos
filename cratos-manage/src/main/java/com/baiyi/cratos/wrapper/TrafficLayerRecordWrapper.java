@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class TrafficLayerRecordWrapper extends BaseDataTableConverter<TrafficLayerRecordVO.Record, TrafficLayerDomainRecord> implements IBaseWrapper<TrafficLayerRecordVO.Record> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV})
     public void wrap(TrafficLayerRecordVO.Record record) {
     }
 

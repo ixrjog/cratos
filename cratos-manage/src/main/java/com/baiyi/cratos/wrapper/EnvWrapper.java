@@ -1,12 +1,16 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.env.EnvVO;
+import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * @Author baiyi
@@ -16,10 +20,30 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class  EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements IBaseWrapper<EnvVO.Env> {
+@BusinessType(type = BusinessTypeEnum.ENV)
+public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements IBusinessWrapper<EnvVO.IEnv, EnvVO.Env> {
+
+    private final EnvService envService;
 
     @Override
     public void wrap(EnvVO.Env env) {
+    }
+
+    @Override
+    public void businessWrap(EnvVO.IEnv iEnv) {
+        if (!StringUtils.hasText(iEnv.getEnvName())) {
+            return;
+        }
+        Env uniqueKey = Env.builder()
+                .envName(iEnv.getEnvName())
+                .build();
+        Env env = envService.getByUniqueKey(uniqueKey);
+        if (env == null) {
+            return;
+        }
+        EnvVO.Env envVO = this.convert(env);
+        wrapFromProxy(envVO);
+        iEnv.setEnv(envVO);
 
     }
 

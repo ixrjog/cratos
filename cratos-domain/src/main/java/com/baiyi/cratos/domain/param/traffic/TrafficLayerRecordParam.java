@@ -2,14 +2,11 @@ package com.baiyi.cratos.domain.param.traffic;
 
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.IToTarget;
-import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 /**
  * @Author baiyi
@@ -33,12 +30,10 @@ public class TrafficLayerRecordParam {
 
     }
 
-    @EqualsAndHashCode(callSuper = true)
     @Data
-    @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class QueryRecordDetails extends PageParam implements IToTrafficLayerRecord {
+    public static class QueryRecordDetails implements IToTrafficLayerRecord {
 
         @NotNull
         private Integer domainId;

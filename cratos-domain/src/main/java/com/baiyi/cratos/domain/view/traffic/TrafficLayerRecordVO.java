@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.CachedVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -38,7 +39,7 @@ public class TrafficLayerRecordVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_RECORD)
-    public static class Record extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
+    public static class Record extends BaseVO implements EnvVO.IEnv, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -6173359438855341290L;
@@ -69,6 +70,8 @@ public class TrafficLayerRecordVO {
 
         @Schema(description = "Business Docs")
         List<BusinessDocVO.BusinessDoc> businessDocs;
+
+        private EnvVO.Env env;
 
     }
 

@@ -1,7 +1,10 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.generator.base.IValid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -14,7 +17,10 @@ import java.util.Date;
  * 表注释：`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  *           `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 */
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Env implements IValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
