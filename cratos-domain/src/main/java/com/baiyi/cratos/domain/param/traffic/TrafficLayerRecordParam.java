@@ -16,15 +16,15 @@ import lombok.experimental.SuperBuilder;
  * @Date 2024/3/29 17:04
  * @Version 1.0
  */
-public class TrafficLayerDomainRecordParam {
+public class TrafficLayerRecordParam {
 
-    public interface IToTrafficLayerDomainRecord {
+    public interface IToTrafficLayerRecord {
 
         Integer getDomainId();
 
         String getEnvName();
 
-        default TrafficLayerDomainRecord toTrafficLayerDomainRecord() {
+        default TrafficLayerDomainRecord toTrafficLayerRecord() {
             return TrafficLayerDomainRecord.builder()
                     .domainId(getDomainId())
                     .envName(getEnvName())
@@ -38,7 +38,7 @@ public class TrafficLayerDomainRecordParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class QueryRecordDetails extends PageParam implements IToTrafficLayerDomainRecord {
+    public static class QueryRecordDetails extends PageParam implements IToTrafficLayerRecord {
 
         @NotNull
         private Integer domainId;

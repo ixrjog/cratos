@@ -1,8 +1,8 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainRecordParam;
-import com.baiyi.cratos.facade.TrafficLayerDomainRecordFacade;
+import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,17 +16,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TrafficLayerDomainRecordFacadeImpl implements TrafficLayerDomainRecordFacade {
+public class TrafficLayerDomainRecordFacadeImpl implements TrafficLayerRecordFacade {
 
     private final TrafficLayerDomainRecordService recordService;
 
     @Override
-    public void addTrafficLayerDomainRecord(TrafficLayerDomainRecordParam.AddRecord addRecord) {
+    public void addTrafficLayerRecord(TrafficLayerRecordParam.AddRecord addRecord) {
         recordService.add(addRecord.toTarget());
     }
 
     @Override
-    public void updateTrafficLayerDomainRecord(TrafficLayerDomainRecordParam.UpdateRecord updateRecord) {
+    public void updateTrafficLayerRecord(TrafficLayerRecordParam.UpdateRecord updateRecord) {
         TrafficLayerDomainRecord trafficLayerDomainRecord = recordService.getById(updateRecord.getId());
         trafficLayerDomainRecord.setEnvName(updateRecord.getEnvName());
         trafficLayerDomainRecord.setRecordName(updateRecord.getRecordName());

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainRecordParam;
+import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
 
 /**
@@ -10,6 +10,6 @@ import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainRecordVO;
  */
 public interface TrafficLayerFacade {
 
-    TrafficLayerDomainRecordVO.RecordDetails queryRecordDetails(TrafficLayerDomainRecordParam.QueryRecordDetails queryRecordDetails);
+    TrafficLayerDomainRecordVO.RecordDetails queryRecordDetails(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails);
 
 }
