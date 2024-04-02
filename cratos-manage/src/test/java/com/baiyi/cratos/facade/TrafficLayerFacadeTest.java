@@ -30,4 +30,16 @@ public class TrafficLayerFacadeTest extends BaseUnit {
         System.out.println(recordDetails);
     }
 
+
+    @Test
+    void test2() {
+        TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails = TrafficLayerRecordParam.QueryRecordDetails.builder()
+                .domainId(1)
+                .envName("daily")
+                .build();
+        String table = trafficLayerFacade.queryRecordDetailsStringTable(queryRecordDetails);
+        System.out.println(table);
+    }
+
+
 }

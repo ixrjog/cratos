@@ -94,7 +94,27 @@ public class TrafficLayerRecordVO {
 
         private OriginServer originServer;
 
+        private TableDetails tableDetails;
+
     }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class TableDetails implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -4666058159156691234L;
+
+        private String recordTable;
+
+        private String lbTable;
+
+        private String ingressRuleTable;
+    }
+
 
     @Data
     @Builder

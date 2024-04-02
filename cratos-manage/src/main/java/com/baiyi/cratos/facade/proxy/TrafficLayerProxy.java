@@ -43,9 +43,9 @@ public class TrafficLayerProxy {
 
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
 
-    private static final String HOSTNAME = "HOSTNAME";
+    public static final String HOSTNAME = "HOSTNAME";
 
-    private static final String RULES = "RULES";
+    public static final String RULES = "RULES";
 
     @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
     public TrafficLayerRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {

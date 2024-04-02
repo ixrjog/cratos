@@ -12,4 +12,6 @@ public interface TrafficLayerFacade {
 
     TrafficLayerRecordVO.RecordDetails queryRecordDetails(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails);
 
+    String queryRecordDetailsStringTable(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails);
+
 }
