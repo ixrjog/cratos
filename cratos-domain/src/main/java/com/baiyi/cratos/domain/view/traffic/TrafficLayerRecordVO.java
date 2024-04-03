@@ -39,7 +39,7 @@ public class TrafficLayerRecordVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_RECORD)
-    public static class Record extends BaseVO implements EnvVO.IEnv, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
+    public static class Record extends BaseVO implements TrafficLayerDomainVO.IDomain, EnvVO.IEnv, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -6173359438855341290L;
@@ -59,6 +59,8 @@ public class TrafficLayerRecordVO {
         private Boolean valid;
 
         private String comment;
+
+        private TrafficLayerDomainVO.Domain domain;
 
         @Override
         public Integer getBusinessId() {

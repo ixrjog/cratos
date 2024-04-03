@@ -22,6 +22,14 @@ import java.util.Map;
  */
 public class TrafficLayerDomainVO {
 
+    public interface IDomain {
+
+        Integer getDomainId();
+
+        void setDomain(Domain domain);
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Builder

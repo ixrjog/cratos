@@ -1,8 +1,12 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * 表名：test
@@ -50,6 +54,6 @@ public class Test {
 
     private String comment;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 }
