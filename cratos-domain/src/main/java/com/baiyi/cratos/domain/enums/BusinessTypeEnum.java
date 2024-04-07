@@ -37,7 +37,10 @@ public enum BusinessTypeEnum {
     EDS_ASSET_INDEX,
 
     TRAFFIC_LAYER_DOMAIN,
-    TRAFFIC_LAYER_RECORD
+    TRAFFIC_LAYER_RECORD,
+
+    MENU,
+    MENU_TITLE
 
 
 }

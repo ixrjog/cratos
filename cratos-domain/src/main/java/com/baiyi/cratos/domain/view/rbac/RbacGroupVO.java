@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -25,6 +26,9 @@ public class RbacGroupVO {
     @Data
     @Schema
     public static class Group extends BaseVO implements IResourceCount {
+
+        @Serial
+        private static final long serialVersionUID = 7404729006872174030L;
 
         private Integer id;
 
