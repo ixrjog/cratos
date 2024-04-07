@@ -3,11 +3,8 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.Menu;
-import com.baiyi.cratos.domain.param.env.EnvParam;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
-import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.mapper.MenuMapper;
 import com.baiyi.cratos.service.MenuService;
 import com.github.pagehelper.Page;
@@ -43,6 +40,15 @@ public class MenuServiceImpl implements MenuService {
         Page<Menu> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<Menu> data = menuMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public List<Menu> queryMenuChildren(int menuId) {
+        Example example = new Example(Menu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("parentId", menuId)
+                .andEqualTo("menuType", "CHILDREN");
+        return menuMapper.selectByExample(example);
     }
 
 }

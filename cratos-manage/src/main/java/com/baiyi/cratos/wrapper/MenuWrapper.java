@@ -6,12 +6,14 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
+import com.baiyi.cratos.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -24,18 +26,35 @@ import java.util.List;
 @BusinessType(type = BusinessTypeEnum.MENU)
 public class MenuWrapper implements Converter<Menu, MenuVO.Menu> {
 
+    private final MenuService menuService;
+
     private final MenuTitleWrapper menuTitleWrapper;
 
     public void wrap(MenuVO.Menu menu) {
         menuTitleWrapper.wrap(menu);
+        recursionWrapMenuChildren(menu);
+    }
+
+    public void recursionWrapMenuChildren(MenuVO.IMenuChildren menuChildren) {
+        List<Menu> menus = menuService.queryMenuChildren(menuChildren.getMenuId());
+        if (CollectionUtils.isEmpty(menus)) {
+            return;
+        }
+        List<MenuVO.Menu> children = menus.stream()
+                .map(e -> {
+                    MenuVO.Menu menu = wrapToTarget(e, menuChildren.getLang());
+                    recursionWrapMenuChildren(menu);
+                    return menu;
+                })
+                .collect(Collectors.toList());
+        menuChildren.setChildren(children);
     }
 
     public DataTable<MenuVO.Menu> wrapToTarget(DataTable<Menu> dataTable, String lang) {
-        List<MenuVO.Menu> list = new ArrayList<>();
-        for (Menu menu : dataTable.getData()) {
-            MenuVO.Menu wrapToTarget = wrapToTarget(menu, lang);
-            list.add(wrapToTarget);
-        }
+        List<MenuVO.Menu> list = dataTable.getData()
+                .stream()
+                .map(menu -> wrapToTarget(menu, lang))
+                .collect(Collectors.toList());
         return new DataTable<>(list, dataTable.getTotalNum());
     }
 
