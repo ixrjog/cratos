@@ -47,7 +47,7 @@ public class MenuParam {
 
         private String queryName;
 
-        @Schema(description = "MAIN, CHILDREN")
+        @Schema(description = "MAIN, SUB")
         private String menuType;
 
         private Integer parentId;
