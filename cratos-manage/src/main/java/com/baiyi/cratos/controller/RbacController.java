@@ -149,6 +149,13 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Save role menu")
+    @PostMapping(value = "/role/menu/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> saveRoleMenu(@RequestBody @Valid RbacRoleMenuParam.SaveRoleMenu saveRoleMenu) {
+        rbacRoleMenuFacade.saveRoleMenu(saveRoleMenu);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Delete role menu")
     @DeleteMapping(value = "/role/menu/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteRoleMenuById(@RequestParam int id) {

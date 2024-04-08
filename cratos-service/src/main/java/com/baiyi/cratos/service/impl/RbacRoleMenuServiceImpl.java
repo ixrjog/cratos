@@ -31,7 +31,15 @@ public class RbacRoleMenuServiceImpl implements RbacRoleMenuService {
 
     @Override
     public List<Integer> queryUserMenuIds(String username) {
-       return rbacRoleMenuMapper.queryUserMenuIds(username);
+        return rbacRoleMenuMapper.queryUserMenuIds(username);
+    }
+
+    @Override
+    public List<RbacRoleMenu> queryByRoleId(int roleId) {
+        Example example = new Example(RbacRoleMenu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", roleId);
+        return rbacRoleMenuMapper.selectByExample(example);
     }
 
 }

@@ -3,7 +3,11 @@ package com.baiyi.cratos.domain.param.rbac;
 import com.baiyi.cratos.domain.generator.RbacRoleMenu;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.NonNull;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -12,6 +16,23 @@ import lombok.Data;
  */
 public class RbacRoleMenuParam {
 
+    public interface IToRoleMenus {
+
+        List<Integer> getMenuIds();
+
+        Integer getRoleId();
+
+        default List<RbacRoleMenu> toRoleMenus() {
+            return getMenuIds().stream()
+                    .map(e -> RbacRoleMenu.builder()
+                            .menuId(e)
+                            .roleId(getRoleId())
+                            .build())
+                    .toList();
+        }
+
+    }
+
     @Data
     @Schema
     public static class AddRoleMenu implements IToTarget<RbacRoleMenu> {
@@ -19,6 +40,18 @@ public class RbacRoleMenuParam {
         private Integer roleId;
 
         private Integer menuId;
+
+    }
+
+    @Data
+    @Schema
+    public static class SaveRoleMenu implements IToRoleMenus {
+
+        @NonNull
+        private Integer roleId;
+
+        @NotEmpty
+        private List<Integer> menuIds;
 
     }
 

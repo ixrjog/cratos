@@ -16,4 +16,6 @@ public interface RbacRoleMenuService extends BaseUniqueKeyService<RbacRoleMenu>,
 
     List<Integer> queryUserMenuIds(String username);
 
+    List<RbacRoleMenu> queryByRoleId(int roleId);
+
 }

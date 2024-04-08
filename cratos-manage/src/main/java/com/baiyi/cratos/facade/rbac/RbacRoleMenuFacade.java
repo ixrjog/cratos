@@ -11,6 +11,8 @@ public interface RbacRoleMenuFacade {
 
     void addRoleMenu(RbacRoleMenuParam.AddRoleMenu addRoleMenu);
 
+    void saveRoleMenu(RbacRoleMenuParam.SaveRoleMenu saveRoleMenu);
+
     void deleteById(int id);
 
 }

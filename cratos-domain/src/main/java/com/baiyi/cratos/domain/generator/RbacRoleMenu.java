@@ -1,13 +1,20 @@
 package com.baiyi.cratos.domain.generator;
 
-import java.util.Date;
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * 表名：rbac_role_menu
 */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "rbac_role_menu")
 public class RbacRoleMenu {
     @Id

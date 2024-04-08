@@ -6,7 +6,14 @@ import com.baiyi.cratos.facade.rbac.RbacRoleMenuFacade;
 import com.baiyi.cratos.service.RbacRoleMenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.jersey.internal.guava.Sets;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @Author baiyi
@@ -31,6 +38,39 @@ public class RbacRoleMenuFacadeImpl implements RbacRoleMenuFacade {
     @Override
     public void deleteById(int id) {
         rbacRoleMenuService.deleteById(id);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void saveRoleMenu(RbacRoleMenuParam.SaveRoleMenu saveRoleMenu) {
+        List<RbacRoleMenu> rbacRoleMenus = rbacRoleMenuService.queryByRoleId(saveRoleMenu.getRoleId());
+        if (CollectionUtils.isEmpty(rbacRoleMenus)) {
+            saveRoleMenu.toRoleMenus()
+                    .forEach(rbacRoleMenuService::add);
+        }
+
+        Set<Integer> menuIdSet = Sets.newHashSet();
+        rbacRoleMenus.stream()
+                .map(RbacRoleMenu::getMenuId)
+                .forEach(menuIdSet::add);
+
+        rbacRoleMenus.forEach(rbacRoleMenu -> {
+            if (!menuIdSet.contains(rbacRoleMenu.getMenuId())) {
+                rbacRoleMenuService.add(rbacRoleMenu);
+            } else {
+                menuIdSet.remove(rbacRoleMenu.getMenuId());
+            }
+        });
+        // 删除
+        menuIdSet.stream()
+                .map(i -> RbacRoleMenu.builder()
+                        .menuId(i)
+                        .roleId(saveRoleMenu.getRoleId())
+                        .build())
+                .map(rbacRoleMenuService::getByUniqueKey)
+                .filter(Objects::nonNull)
+                .forEach(rbacRoleMenu -> rbacRoleMenuService.deleteById(rbacRoleMenu.getId()));
+
     }
 
 }
