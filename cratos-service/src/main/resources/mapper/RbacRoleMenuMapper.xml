@@ -16,7 +16,7 @@
           resultType="java.lang.Integer">
       select distinct menu_id
       from rbac_role_menu
-      where role_id in (select role_id from rbac_user_role where uaername = #{username})
+      where role_id in (select role_id from rbac_user_role where username = #{username})
   </select>
 
 </mapper>

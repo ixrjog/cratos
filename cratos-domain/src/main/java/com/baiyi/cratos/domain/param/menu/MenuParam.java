@@ -26,6 +26,18 @@ public class MenuParam {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryUserMenu {
+
+        private String username;
+
+        private String lang;
+
+    }
+
+    @Data
     @SuperBuilder(toBuilder = true)
     @EqualsAndHashCode(callSuper = true)
     @AllArgsConstructor

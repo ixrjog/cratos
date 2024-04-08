@@ -43,6 +43,11 @@ public class MyMenuFacadeImpl implements MyMenuFacade {
         if (!StringUtils.hasText(username)) {
             return MyMenuVO.MyMenu.INVALID;
         }
+        return queryUserMenu(username, lang);
+    }
+
+    @Override
+    public List<MyMenuVO.MyMenu> queryUserMenu(String username, String lang) {
         // 用户关联的所有菜单
         List<Integer> myMenuIds = rbacRoleMenuService.queryUserMenuIds(username);
         // 主菜单

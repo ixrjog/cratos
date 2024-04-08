@@ -43,4 +43,10 @@ public class MenuController {
         return new HttpResult<>(myMenuFacade.queryMyMenu(queryMyMenu));
     }
 
+    @Operation(summary = "Query user menu (TEST)")
+    @PostMapping(value = "/user/menu/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
+        return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(),queryUserMenu.getLang()));
+    }
+
 }

@@ -40,6 +40,8 @@ public class RbacController {
 
     private final RbacFacade rbacFacade;
 
+    private final RbacRoleMenuFacade rbacRoleMenuFacade;
+
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacRoleVO.Role>> queryRolePage(@RequestBody @Valid RbacRoleParam.RolePageQuery pageQuery) {
@@ -137,7 +139,21 @@ public class RbacController {
     @Operation(summary = "Verify user permissions")
     @PostMapping(value = "/user/role/resource/permission/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<RbacRoleVO.Role>> verifyUserPermissions(@RequestBody @Valid RbacUserRoleParam.VerifyUserRoleResourcePermission verifyUserRoleResourcePermission) {
-         return new HttpResult<>( rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
+        return new HttpResult<>(rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
+    }
+
+    @Operation(summary = "Add role menu")
+    @PostMapping(value = "/role/menu/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addRoleMenu(@RequestBody @Valid RbacRoleMenuParam.AddRoleMenu addRoleMenu) {
+        rbacRoleMenuFacade.addRoleMenu(addRoleMenu);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete role menu")
+    @DeleteMapping(value = "/role/menu/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteRoleMenuById(@RequestParam int id) {
+        rbacRoleMenuFacade.deleteById(id);
+        return HttpResult.SUCCESS;
     }
 
 }

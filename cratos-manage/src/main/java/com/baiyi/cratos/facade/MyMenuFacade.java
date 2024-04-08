@@ -14,4 +14,6 @@ public interface MyMenuFacade {
 
     List<MyMenuVO.MyMenu> queryMyMenu(MenuParam.QueryMyMenu queryMyMenu);
 
+    List<MyMenuVO.MyMenu> queryUserMenu(String username, String lang);
+
 }
