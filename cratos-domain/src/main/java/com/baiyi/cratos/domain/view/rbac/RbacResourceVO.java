@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
+
 /**
  * @Author baiyi
  * @Date 2024/1/18 10:01
@@ -16,6 +18,9 @@ public class RbacResourceVO {
     @Data
     @Schema
     public static class Resource extends BaseVO implements RbacGroupVO.IRbacGroup {
+
+        @Serial
+        private static final long serialVersionUID = 1537978025458286103L;
 
         private Integer id;
 

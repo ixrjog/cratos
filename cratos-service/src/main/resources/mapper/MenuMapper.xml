@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Menu">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="menu_type" jdbcType="VARCHAR" property="menuType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.menu.MenuParam$MenuPageQuery"
+          resultMap="BaseResultMap">
+      select * from menu
+      <where>
+          <if test="parentId != null">
+              parent_id = #{parentId}
+          </if>
+          <if test="menuType != null and menuType != ''">
+              and menu_type = #{menuType}
+          </if>
+          <if test="queryName != null and queryName != ''">
+             and name like "%" #{queryName} "%"
+          </if>
+      </where>
+      order by seq
+  </select>
+
+</mapper>
