@@ -25,10 +25,8 @@ public class RbacRoleResourceFacadeImpl implements RbacRoleResourceFacade {
     public void addRoleResource(RbacRoleResourceParam.AddRoleResource addRoleResource) {
         addRoleResource.toRbacRoleResources()
                 .stream()
-                .map(rbacRoleResourceService::getByUniqueKey)
-                .filter(Objects::isNull)
+                .filter(rbacRoleResource -> rbacRoleResourceService.getByUniqueKey(rbacRoleResource) == null)
                 .forEach(rbacRoleResourceService::add);
-
     }
 
     @Override
