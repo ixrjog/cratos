@@ -35,8 +35,12 @@ public class MenuWrapper implements Converter<Menu, MenuVO.Menu> {
         recursionWrapMenuChildren(menu);
     }
 
+    /**
+     * 递归
+     * @param menuChildren
+     */
     public void recursionWrapMenuChildren(MenuVO.IMenuChildren menuChildren) {
-        List<Menu> menus = menuService.queryMenuChildren(menuChildren.getMenuId());
+        List<Menu> menus = menuService.querySubMenu(menuChildren.getMenuId());
         if (CollectionUtils.isEmpty(menus)) {
             return;
         }

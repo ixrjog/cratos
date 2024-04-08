@@ -16,6 +16,16 @@ import lombok.experimental.SuperBuilder;
 public class MenuParam {
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryMyMenu {
+
+        private String lang;
+
+    }
+
+    @Data
     @SuperBuilder(toBuilder = true)
     @EqualsAndHashCode(callSuper = true)
     @AllArgsConstructor

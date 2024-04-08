@@ -7,8 +7,16 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="submenu_id" jdbcType="INTEGER" property="submenuId" />
+    <result column="menu_id" jdbcType="INTEGER" property="menuId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="queryUserMenuIds" parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleParam$RolePageQuery"
+          resultType="java.lang.Integer">
+      select distinct menu_id
+      from rbac_role_menu
+      where role_id in (select role_id from rbac_user_role where uaername = #{username})
+  </select>
+
 </mapper>

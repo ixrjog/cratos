@@ -1,0 +1,37 @@
+package com.baiyi.cratos.service.impl;
+
+import com.baiyi.cratos.domain.generator.RbacRoleMenu;
+import com.baiyi.cratos.mapper.RbacRoleMenuMapper;
+import com.baiyi.cratos.service.RbacRoleMenuService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
+
+/**
+ * @Author baiyi
+ * @Date 2024/4/8 上午9:57
+ * @Version 1.0
+ */
+@Service
+@RequiredArgsConstructor
+public class RbacRoleMenuServiceImpl implements RbacRoleMenuService {
+
+    private final RbacRoleMenuMapper rbacRoleMenuMapper;
+
+    @Override
+    public RbacRoleMenu getByUniqueKey(RbacRoleMenu rbacRoleMenu) {
+        Example example = new Example(RbacRoleMenu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", rbacRoleMenu.getRoleId())
+                .andEqualTo("menuId", rbacRoleMenu.getMenuId());
+        return rbacRoleMenuMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<Integer> queryUserMenuIds(String username) {
+       return rbacRoleMenuMapper.queryUserMenuIds(username);
+    }
+
+}

@@ -18,6 +18,10 @@ public interface MenuService extends BaseUniqueKeyService<Menu>, BaseValidServic
 
     DataTable<Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery);
 
-    List<Menu> queryMenuChildren(int menuId);
+    List<Menu> querySubMenu(int parentId);
+
+    List<Menu> queryMySubMenu(int parentId, List<Integer> myMenuIds);
+
+    List<Menu> queryMainMenu(List<Integer> menuIds);
 
 }
