@@ -35,8 +35,6 @@ public class MenuTitleWrapper {
         } else {
             List<MenuTitle> menuTitles = menuTitleService.queryByMenuId(menu.getMenuId());
             if (CollectionUtils.isEmpty(menuTitles)) {
-                // 未配置 Title 则降级成 Name
-                menu.setTitle(menu.getName());
                 return;
             }
             MenuTitle preferenceMenuTitle = menuTitles.stream()
@@ -59,7 +57,8 @@ public class MenuTitleWrapper {
         } else {
             List<MenuTitle> menuTitles = menuTitleService.queryByMenuId(menu.getMenuId());
             if (CollectionUtils.isEmpty(menuTitles)) {
-                return;
+                // 未配置 Title 则降级成 Name
+                menu.setTitle(menu.getName());
             }
             MenuTitle preferenceMenuTitle = menuTitles.stream()
                     .filter(MenuTitle::getPreference)
