@@ -32,19 +32,19 @@ public class MenuController {
     private final MyMenuFacade myMenuFacade;
 
     @Operation(summary = "Pagination query menu")
-    @PostMapping(value = "/menu/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<MenuVO.Menu>> queryMenuPage(@RequestBody @Valid MenuParam.MenuPageQuery pageQuery) {
         return new HttpResult<>(menuFacade.queryMenuPage(pageQuery));
     }
 
     @Operation(summary = "Query my menu")
-    @PostMapping(value = "/menu/my/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/my/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryMyMenu(@RequestBody @Valid MenuParam.QueryMyMenu queryMyMenu) {
         return new HttpResult<>(myMenuFacade.queryMyMenu(queryMyMenu));
     }
 
     @Operation(summary = "Query user menu (TEST)")
-    @PostMapping(value = "/user/menu/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
         return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(),queryUserMenu.getLang()));
     }
