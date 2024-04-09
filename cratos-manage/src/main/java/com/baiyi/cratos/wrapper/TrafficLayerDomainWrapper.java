@@ -6,11 +6,18 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
+import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.TRAFFIC_LAYER_RECORD;
 
 /**
  * @Author baiyi
@@ -24,9 +31,15 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
 
     private final TrafficLayerDomainService domainService;
 
+    private final TrafficLayerDomainRecordService recordService;
+
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(TrafficLayerDomainVO.Domain domain) {
+        Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
+                .put(buildResourceCountForRecord(domain))
+                .build();
+        domain.setResourceCount(resourceCount);
     }
 
     @Override
@@ -38,6 +51,12 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
                     wrapFromProxy(domain);
                     iDomain.setDomain(domain);
                 });
+    }
+
+    private Map<String, Integer> buildResourceCountForRecord(TrafficLayerDomainVO.Domain domain) {
+        Map<String, Integer> resourceCount = Maps.newHashMap();
+        resourceCount.put(TRAFFIC_LAYER_RECORD.name(), recordService.selectCountByDomainId(domain.getId()));
+        return resourceCount;
     }
 
 }
