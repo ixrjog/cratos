@@ -13,4 +13,6 @@ public interface MenuFacade {
 
     DataTable<MenuVO.Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery);
 
+    MenuVO.NavMenu getNavMenu();
+
 }

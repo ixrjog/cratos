@@ -1,12 +1,12 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.common.Converter;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.service.MenuService;
-import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,29 +15,25 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * @Author baiyi
- * @Date 2024/4/10 下午1:52
+ * @Date 2024/4/7 下午4:04
  * @Version 1.0
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.MENU)
-public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> implements IBaseWrapper<MenuVO.Menu> {
-
-    private final MenuTitleWrapper menuTitleWrapper;
+public class Menu2Wrapper implements Converter<Menu, MenuVO.Menu> {
 
     private final MenuService menuService;
 
-    @Override
-    //@BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    private final MenuTitleWrapper menuTitleWrapper;
+
     public void wrap(MenuVO.Menu menu) {
         menuTitleWrapper.wrap(menu);
         recursionWrapMenuChildren(menu);
     }
-
 
     /**
      * 递归
@@ -50,12 +46,27 @@ public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> imple
         }
         List<MenuVO.Menu> children = menus.stream()
                 .map(e -> {
-                    MenuVO.Menu menu = wrapToTarget(e);
+                    MenuVO.Menu menu = wrapToTarget(e, menuChildren.getLang());
                     recursionWrapMenuChildren(menu);
                     return menu;
                 })
                 .collect(Collectors.toList());
         menuChildren.setChildren(children);
+    }
+
+    public DataTable<MenuVO.Menu> wrapToTarget(DataTable<Menu> dataTable, String lang) {
+        List<MenuVO.Menu> list = dataTable.getData()
+                .stream()
+                .map(menu -> wrapToTarget(menu, lang))
+                .collect(Collectors.toList());
+        return new DataTable<>(list, dataTable.getTotalNum());
+    }
+
+    public MenuVO.Menu wrapToTarget(Menu s, String lang) {
+        MenuVO.Menu menu = convert(s);
+        menu.setLang(lang);
+        wrap(menu);
+        return menu;
     }
 
 }

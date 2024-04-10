@@ -54,8 +54,7 @@ public class CratosUserDetailsService implements UserDetailsService {
 
     private List<GrantedAuthority> getUserAuthorities(String username) {
         List<GrantedAuthority> authorities = Lists.newArrayList();
-        authorities.add(new SimpleGrantedAuthority("OPS"));
-        authorities.add(new SimpleGrantedAuthority("DEV"));
+        authorities.add(new SimpleGrantedAuthority("BASE"));
         return authorities;
     }
 

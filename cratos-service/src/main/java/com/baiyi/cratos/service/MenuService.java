@@ -24,4 +24,6 @@ public interface MenuService extends BaseUniqueKeyService<Menu>, BaseValidServic
 
     List<Menu> queryMainMenu(List<Integer> menuIds);
 
+    List<Menu> queryMainMenu();
+
 }

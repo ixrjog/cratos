@@ -70,7 +70,6 @@ public class RbacFacadeImpl implements RbacFacade {
 
     @Override
     public boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token) {
-        // FIXME 此代码可以用一条SQL实现，但我就喜欢写Java
         UserToken userToken = userTokenFacade.verifyToken(token);
         List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRoles(userToken.getUsername());
         if (CollectionUtils.isEmpty(rbacRoles)) {

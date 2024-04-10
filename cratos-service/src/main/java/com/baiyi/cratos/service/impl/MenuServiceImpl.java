@@ -71,4 +71,12 @@ public class MenuServiceImpl implements MenuService {
         return menuMapper.selectByExample(example);
     }
 
+    @Override
+    public List<Menu> queryMainMenu() {
+        Example example = new Example(Menu.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("menuType", MenuTypeEnum.MAIN.name());
+        return menuMapper.selectByExample(example);
+    }
+
 }
