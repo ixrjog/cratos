@@ -43,6 +43,20 @@ public class MenuController {
         return new HttpResult<>(menuFacade.getMenuById(menuId));
     }
 
+    @Operation(summary = "Update menu")
+    @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateMenu(@RequestBody @Valid MenuParam.UpdateMenu updateMenu) {
+        menuFacade.updateMenu(updateMenu);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete menu by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteMenuById(@RequestParam @Valid int menuId) {
+        menuFacade.deleteMenuById(menuId);
+        return HttpResult.SUCCESS;
+    }
+
     @Deprecated
     @Operation(summary = "Pagination query menu")
     @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -59,7 +73,7 @@ public class MenuController {
     @Operation(summary = "Query user menu (TEST)")
     @PostMapping(value = "/user/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
-        return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(),queryUserMenu.getLang()));
+        return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
     }
 
 }

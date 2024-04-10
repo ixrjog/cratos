@@ -18,4 +18,10 @@ public interface MenuFacade {
 
     MenuVO.Menu getMenuById(int id);
 
+    void updateMenu(MenuParam.UpdateMenu updateMenu);
+
+    void addMenu(MenuParam.AddMenu addMenu);
+
+    void deleteMenuById(int id);
+
 }

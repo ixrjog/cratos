@@ -1,11 +1,11 @@
 package com.baiyi.cratos.domain.param.menu;
 
+import com.baiyi.cratos.domain.generator.Menu;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -53,6 +53,62 @@ public class MenuParam {
         private Integer parentId;
 
         private String lang;
+
+    }
+
+    @Data
+    @Schema
+    public static class UpdateMenu implements IToTarget<Menu> {
+
+        private Integer id;
+
+        @NotBlank
+        private String name;
+
+        @NotBlank
+        private String icon;
+
+        @NotBlank
+        private String link;
+
+        @NonNull
+        private Integer seq;
+
+        @NonNull
+        private Integer parentId;
+
+        @NonNull
+        private Boolean valid;
+
+        @NotBlank
+        private String menuType;
+
+    }
+
+    @Data
+    @Schema
+    public static class AddMenu implements IToTarget<Menu> {
+
+        @NotBlank
+        private String name;
+
+        @NotBlank
+        private String icon;
+
+        @NotBlank
+        private String link;
+
+        @NonNull
+        private Integer seq;
+
+        @NonNull
+        private Integer parentId;
+
+        @NonNull
+        private Boolean valid;
+
+        @NotBlank
+        private String menuType;
 
     }
 

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.MenuException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
@@ -12,6 +13,7 @@ import com.baiyi.cratos.wrapper.MenuWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +61,43 @@ public class MenuFacadeImpl implements MenuFacade {
             return null;
         }
         return menuWrapper.wrapToTarget(menu);
+    }
+
+    @Override
+    public void updateMenu(MenuParam.UpdateMenu updateMenu) {
+        Menu menu = updateMenu.toTarget();
+        Menu dbMenu = menuService.getById(menu.getId());
+        if (dbMenu == null) {
+            return;
+        }
+        dbMenu.setIcon(menu.getIcon());
+        dbMenu.setName(menu.getName());
+        dbMenu.setLink(menu.getLink());
+        dbMenu.setParentId(menu.getParentId());
+        dbMenu.setSeq(menu.getSeq());
+        dbMenu.setValid(menu.getValid());
+        menuService.updateByPrimaryKey(dbMenu);
+    }
+
+    @Override
+    public void addMenu(MenuParam.AddMenu addMenu) {
+        Menu menu = addMenu.toTarget();
+        if (menuService.getByUniqueKey(menu) == null) {
+            menuService.add(menu);
+        }
+    }
+
+    @Override
+    public void deleteMenuById(int id) {
+        Menu menu = menuService.getById(id);
+        if (menu == null) {
+            return;
+        }
+        if (!CollectionUtils.isEmpty(menuService.querySubMenu(id))) {
+            throw new MenuException("Please delete the associated sub dishes first.");
+        }
+        menuTitleService.queryByMenuId(id).forEach(e-> menuTitleService.deleteById(e.getId()));
+        menuService.deleteById(id);
     }
 
 }
