@@ -45,7 +45,7 @@ public class MenuController {
 
     @Operation(summary = "Add menu")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> AddMenu(@RequestBody @Valid MenuParam.AddMenu addMenu) {
+    public HttpResult<Boolean> addMenu(@RequestBody @Valid MenuParam.AddMenu addMenu) {
         menuFacade.addMenu(addMenu);
         return HttpResult.SUCCESS;
     }
