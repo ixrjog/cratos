@@ -43,6 +43,13 @@ public class MenuController {
         return new HttpResult<>(menuFacade.getMenuById(menuId));
     }
 
+    @Operation(summary = "Add menu")
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> AddMenu(@RequestBody @Valid MenuParam.AddMenu addMenu) {
+        menuFacade.addMenu(addMenu);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update menu")
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateMenu(@RequestBody @Valid MenuParam.UpdateMenu updateMenu) {
