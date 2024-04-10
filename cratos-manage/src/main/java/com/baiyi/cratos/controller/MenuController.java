@@ -37,6 +37,7 @@ public class MenuController {
         return new HttpResult<>(menuFacade.getNavMenu());
     }
 
+    @Deprecated
     @Operation(summary = "Pagination query menu")
     @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<MenuVO.Menu>> queryMenuPage(@RequestBody @Valid MenuParam.MenuPageQuery pageQuery) {

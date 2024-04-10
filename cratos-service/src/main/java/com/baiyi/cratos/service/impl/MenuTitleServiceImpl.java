@@ -37,6 +37,7 @@ public class MenuTitleServiceImpl implements MenuTitleService {
         Example example = new Example(MenuTitle.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("menuId",menuId);
+        example.setOrderByClause("lang");
         return menuTitleMapper.selectByExample(example);
     }
 

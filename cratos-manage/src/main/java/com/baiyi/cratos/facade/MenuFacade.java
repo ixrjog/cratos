@@ -11,6 +11,7 @@ import com.baiyi.cratos.domain.view.menu.MenuVO;
  */
 public interface MenuFacade {
 
+    @Deprecated
     DataTable<MenuVO.Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery);
 
     MenuVO.NavMenu getNavMenu();

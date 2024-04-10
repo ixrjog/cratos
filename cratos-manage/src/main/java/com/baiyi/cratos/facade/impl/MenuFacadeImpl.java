@@ -35,6 +35,7 @@ public class MenuFacadeImpl implements MenuFacade {
     private final MenuWrapper menuWrapper;
 
     @Override
+    @Deprecated
     public DataTable<MenuVO.Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery) {
         DataTable<Menu> table = menuService.queryMenuPage(pageQuery);
         return menu2Wrapper.wrapToTarget(table, pageQuery.getLang());
