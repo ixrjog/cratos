@@ -31,10 +31,16 @@ public class MenuController {
 
     private final MyMenuFacade myMenuFacade;
 
-    @Operation(summary = "Query menu")
+    @Operation(summary = "Get nav menu")
     @GetMapping(value = "/nav/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MenuVO.NavMenu> getNavMenu() {
         return new HttpResult<>(menuFacade.getNavMenu());
+    }
+
+    @Operation(summary = "Get menu by id")
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<MenuVO.Menu> getMenuById(@RequestParam @Valid int menuId) {
+        return new HttpResult<>(menuFacade.getMenuById(menuId));
     }
 
     @Deprecated

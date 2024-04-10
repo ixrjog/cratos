@@ -52,4 +52,13 @@ public class MenuFacadeImpl implements MenuFacade {
                 .build();
     }
 
+    @Override
+    public MenuVO.Menu getMenuById(int id) {
+        Menu menu = menuService.getById(id);
+        if (menu == null) {
+            return null;
+        }
+        return menuWrapper.wrapToTarget(menu);
+    }
+
 }

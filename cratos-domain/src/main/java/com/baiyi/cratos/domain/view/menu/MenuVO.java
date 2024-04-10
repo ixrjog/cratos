@@ -47,6 +47,8 @@ public class MenuVO {
 
         private String name;
 
+        @Schema(description = "Name")
+        private String title;
 
         private String lang;
 
@@ -65,6 +67,12 @@ public class MenuVO {
         private List<Menu> children;
 
         private List<Title> menuTitles;
+
+        @Schema(description = "For FE")
+        private Boolean active;
+
+        @Schema(description = "For FE")
+        private Boolean open;
 
         @Override
         public Integer getMenuId() {

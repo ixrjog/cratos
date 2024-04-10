@@ -16,4 +16,6 @@ public interface MenuFacade {
 
     MenuVO.NavMenu getNavMenu();
 
+    MenuVO.Menu getMenuById(int id);
+
 }
