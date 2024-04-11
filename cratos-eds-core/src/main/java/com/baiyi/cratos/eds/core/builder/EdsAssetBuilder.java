@@ -66,6 +66,11 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return this;
     }
 
+    public EdsAssetBuilder<C, A> regionOf(String region) {
+        edsAsset.setRegion(region);
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> statusOf(String status) {
         edsAsset.setAssetStatus(status);
         return this;
@@ -97,12 +102,16 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
     }
 
     public EdsAssetBuilder<C, A> expiredTimeOf(Long expiredTime) {
-        edsAsset.setExpiredTime(new Date(expiredTime));
+        if (expiredTime != null) {
+            edsAsset.setExpiredTime(new Date(expiredTime));
+        }
         return this;
     }
 
     public EdsAssetBuilder<C, A> expiredTimeOf(Date expiredTime) {
-        edsAsset.setExpiredTime(expiredTime);
+        if (expiredTime != null) {
+            edsAsset.setExpiredTime(expiredTime);
+        }
         return this;
     }
 

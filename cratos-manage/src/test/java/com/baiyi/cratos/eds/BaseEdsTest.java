@@ -44,6 +44,7 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
         edsInstanceProviderDelegate.importAssets();
     }
 
+    @SuppressWarnings("unchecked")
     public C getConfig(int instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(instanceId, assetType);
