@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.exception.MenuException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Menu;
+import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.facade.MenuFacade;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +79,28 @@ public class MenuFacadeImpl implements MenuFacade {
         dbMenu.setSeq(menu.getSeq());
         dbMenu.setValid(menu.getValid());
         menuService.updateByPrimaryKey(dbMenu);
+
+        List<MenuTitle> titles = menuTitleService.queryByMenuId(dbMenu.getId());
+        Map<String, MenuTitle> titleMap = titles.stream()
+                .collect(Collectors.toMap(MenuTitle::getLang, a -> a, (k1, k2) -> k1));
+
+        updateMenu.toTitles()
+                .forEach(e -> {
+                    if (titleMap.containsKey(e.getLang())) {
+                        // 更新
+                        MenuTitle menuTitle = titleMap.get(e.getLang());
+                        menuTitle.setTitle(e.getTitle());
+                        menuTitleService.updateByPrimaryKey(menuTitle);
+                        titleMap.remove(e.getLang());
+                    } else {
+                        // 新增
+                        e.setMenuId(dbMenu.getId());
+                        menuTitleService.add(e);
+                    }
+                });
+        titleMap.keySet()
+                .forEach(e -> menuTitleService.deleteById(titleMap.get(e)
+                        .getId()));
     }
 
     @Override
@@ -85,6 +109,11 @@ public class MenuFacadeImpl implements MenuFacade {
         if (menuService.getByUniqueKey(menu) == null) {
             menuService.add(menu);
         }
+        addMenu.toTitles()
+                .forEach(e -> {
+                    e.setMenuId(menu.getId());
+                    menuTitleService.add(e);
+                });
     }
 
     @Override
@@ -96,7 +125,8 @@ public class MenuFacadeImpl implements MenuFacade {
         if (!CollectionUtils.isEmpty(menuService.querySubMenu(id))) {
             throw new MenuException("Please delete the associated sub dishes first.");
         }
-        menuTitleService.queryByMenuId(id).forEach(e-> menuTitleService.deleteById(e.getId()));
+        menuTitleService.queryByMenuId(id)
+                .forEach(e -> menuTitleService.deleteById(e.getId()));
         menuService.deleteById(id);
     }
 

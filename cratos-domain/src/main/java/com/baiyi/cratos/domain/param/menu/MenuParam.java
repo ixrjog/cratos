@@ -1,12 +1,15 @@
 package com.baiyi.cratos.domain.param.menu;
 
 import com.baiyi.cratos.domain.generator.Menu;
+import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -58,7 +61,7 @@ public class MenuParam {
 
     @Data
     @Schema
-    public static class UpdateMenu implements IToTarget<Menu> {
+    public static class UpdateMenu implements IToTarget<Menu>, IToTitles {
 
         private Integer id;
 
@@ -82,11 +85,25 @@ public class MenuParam {
         @NotBlank
         private String menuType;
 
+        private List<Title> titles;
+
+    }
+
+    public interface IToTitles {
+
+        List<Title> getTitles();
+
+        default List<MenuTitle> toTitles() {
+            return getTitles().stream()
+                    .map(IToTarget::toTarget)
+                    .toList();
+        }
+
     }
 
     @Data
     @Schema
-    public static class AddMenu implements IToTarget<Menu> {
+    public static class AddMenu implements IToTarget<Menu>, IToTitles {
 
         @NotBlank
         private String name;
@@ -107,6 +124,22 @@ public class MenuParam {
 
         @NotBlank
         private String menuType;
+
+        private List<Title> titles;
+
+    }
+
+    @Data
+    @Schema
+    public static class Title implements IToTarget<MenuTitle> {
+
+        private Integer menuId;
+
+        private String title;
+
+        private String lang;
+
+        private Boolean preference;
 
     }
 
