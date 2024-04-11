@@ -60,6 +60,7 @@ public class EcsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
                 List<Instance> ec2Instances = awsEc2Repo.listInstances(regionId, aws);
                 if (!CollectionUtils.isEmpty(ec2Instances)) {
                     ec2Instances.forEach(ec2 -> {
+                        // 过滤掉终止态的EC2
                         if (StringUtils.hasText(ec2.getPrivateIpAddress())) {
                             entities.add(AwsEc2.Ec2.builder()
                                     .regionId(regionId)
