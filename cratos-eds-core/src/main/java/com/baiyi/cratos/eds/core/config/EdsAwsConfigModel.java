@@ -25,6 +25,8 @@ public class EdsAwsConfigModel {
 
         private Set<String> regionIds;
 
+        private Ec2 ec2;
+
     }
 
     @Data
@@ -42,6 +44,15 @@ public class EdsAwsConfigModel {
         private String accessKey;
 
         private String secretKey;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Ec2 {
+
+        private String instances;
 
     }
 

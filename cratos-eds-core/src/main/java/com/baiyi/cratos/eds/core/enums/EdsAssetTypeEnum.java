@@ -12,9 +12,11 @@ public enum EdsAssetTypeEnum {
 
     ALIYUN_CERT("Certificate"),
     ALIYUN_ALB("ALB"),
+    ALIYUN_ECS("ECS"),
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),
     AWS_ELB("ELB"),
+    AWS_EC2("EC2"),
     CLOUDFLARE_CERT("Certificate"),
     KUBERNETES_DEPLOYMENT("Deployment"),
     KUBERNETES_INGRESS("Ingress"),

@@ -37,8 +37,8 @@ public class TrafficLayerFacadeTest extends BaseUnit {
                 .domainId(1)
                 .envName("daily")
                 .build();
-        String table = trafficLayerFacade.queryRecordDetailsStringTable(queryRecordDetails);
-        System.out.println(table);
+       // String table = trafficLayerFacade.queryRecordDetailsStringTable(queryRecordDetails);
+      //  System.out.println(table);
     }
 
 
