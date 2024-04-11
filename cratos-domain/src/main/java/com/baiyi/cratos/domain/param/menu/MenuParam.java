@@ -65,7 +65,6 @@ public class MenuParam {
         @NotBlank
         private String name;
 
-        @NotBlank
         private String icon;
 
         @NotBlank
@@ -92,7 +91,6 @@ public class MenuParam {
         @NotBlank
         private String name;
 
-        @NotBlank
         private String icon;
 
         @NotBlank
