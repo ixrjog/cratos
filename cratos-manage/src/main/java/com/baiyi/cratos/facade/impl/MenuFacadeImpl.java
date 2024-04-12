@@ -95,6 +95,9 @@ public class MenuFacadeImpl implements MenuFacade {
                     } else {
                         // 新增
                         e.setMenuId(dbMenu.getId());
+                        if (e.getPreference() == null) {
+                            e.setPreference(false);
+                        }
                         menuTitleService.add(e);
                     }
                 });
@@ -112,6 +115,9 @@ public class MenuFacadeImpl implements MenuFacade {
         addMenu.toTitles()
                 .forEach(e -> {
                     e.setMenuId(menu.getId());
+                    if (e.getPreference() == null) {
+                        e.setPreference(false);
+                    }
                     menuTitleService.add(e);
                 });
     }

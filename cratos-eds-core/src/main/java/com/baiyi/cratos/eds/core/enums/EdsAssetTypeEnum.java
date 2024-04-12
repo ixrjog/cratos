@@ -17,6 +17,7 @@ public enum EdsAssetTypeEnum {
     AWS_STS_VPN("Site-to-Site VPN"),
     AWS_ELB("ELB"),
     AWS_EC2("EC2"),
+    AWS_EBS("EBS"),
     CLOUDFLARE_CERT("Certificate"),
     KUBERNETES_DEPLOYMENT("Deployment"),
     KUBERNETES_INGRESS("Ingress"),
