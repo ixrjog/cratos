@@ -54,13 +54,14 @@ public class RbacRoleMenuFacadeImpl implements RbacRoleMenuFacade {
                 .map(RbacRoleMenu::getMenuId)
                 .forEach(menuIdSet::add);
 
-        rbacRoleMenus.forEach(rbacRoleMenu -> {
-            if (!menuIdSet.contains(rbacRoleMenu.getMenuId())) {
-                rbacRoleMenuService.add(rbacRoleMenu);
-            } else {
-                menuIdSet.remove(rbacRoleMenu.getMenuId());
-            }
-        });
+        saveRoleMenu.toRoleMenus()
+                .forEach(rbacRoleMenu -> {
+                    if (!menuIdSet.contains(rbacRoleMenu.getMenuId())) {
+                        rbacRoleMenuService.add(rbacRoleMenu);
+                    } else {
+                        menuIdSet.remove(rbacRoleMenu.getMenuId());
+                    }
+                });
         // 删除
         menuIdSet.stream()
                 .map(i -> RbacRoleMenu.builder()
