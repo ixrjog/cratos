@@ -57,7 +57,7 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
                     return menu;
                 })
                 .collect(Collectors.toList());
-        roleMenu.setChildren(children);
+        roleMenu.setItems(children);
     }
 
     public RoleMenuVO.Menu wrapToTarget(Menu s, String lang) {

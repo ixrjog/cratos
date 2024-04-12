@@ -57,7 +57,7 @@ public class RoleMenuVO {
 
         private Integer roleId;
 
-        private List<Menu> children;
+        private List<Menu> items;
 
     }
 
