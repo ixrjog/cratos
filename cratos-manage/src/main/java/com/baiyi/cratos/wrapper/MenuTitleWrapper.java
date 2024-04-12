@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
+import com.baiyi.cratos.domain.view.menu.RoleMenuVO;
 import com.baiyi.cratos.service.MenuTitleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,26 +41,42 @@ public class MenuTitleWrapper extends BaseDataTableConverter<MenuVO.Title, MenuT
                         .collect(Collectors.toList())));
     }
 
+    public void wrap(RoleMenuVO.Menu roleMenu) {
+        String title = getTitle(roleMenu.getId(), roleMenu.getLang());
+        if (StringUtils.hasText(title)) {
+            roleMenu.setName(title);
+        }
+    }
+
     public void wrap(MyMenuVO.MyMenu menu) {
+        String title = getTitle(menu.getMenuId(), menu.getLang());
+        if (StringUtils.hasText(title)) {
+            menu.setTitle(title);
+        } else {
+            menu.setTitle(menu.getName());
+        }
+    }
+
+    public String getTitle(int menuId, String lang) {
         MenuTitle uniqueKey = MenuTitle.builder()
-                .menuId(menu.getMenuId())
-                .lang(menu.getLang())
+                .menuId(menuId)
+                .lang(lang)
                 .build();
 
         MenuTitle menuTitle = menuTitleService.getByUniqueKey(uniqueKey);
         if (menuTitle != null) {
-            menu.setTitle(menuTitle.getTitle());
+            return menuTitle.getTitle();
         } else {
-            List<MenuTitle> menuTitles = menuTitleService.queryByMenuId(menu.getMenuId());
+            List<MenuTitle> menuTitles = menuTitleService.queryByMenuId(menuId);
             if (CollectionUtils.isEmpty(menuTitles)) {
                 // 未配置 Title 则降级成 Name
-                menu.setTitle(menu.getName());
+                return null;
             }
             MenuTitle preferenceMenuTitle = menuTitles.stream()
                     .filter(MenuTitle::getPreference)
                     .findFirst()
                     .orElse(menuTitles.get(0));
-            menu.setTitle(preferenceMenuTitle.getTitle());
+            return preferenceMenuTitle.getTitle();
         }
     }
 
