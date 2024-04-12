@@ -63,4 +63,9 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
         return rbacResourceWrapper.wrapToTarget(table);
     }
 
+    @Override
+    public void deleteResourceById(int id) {
+        rbacResourceService.deleteById(id);
+    }
+
 }

@@ -122,6 +122,13 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete resource by id")
+    @DeleteMapping(value = "/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteResourceById(@RequestParam @Valid int id) {
+        rbacResourceFacade.deleteResourceById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add user role")
     @PostMapping(value = "/user/role/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addUserRole(@RequestBody @Valid RbacUserRoleParam.AddUserRole addUserRole) {

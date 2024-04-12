@@ -23,4 +23,6 @@ public interface RbacResourceFacade {
 
     DataTable<RbacResourceVO.Resource> queryRoleResourcePage(RbacRoleResourceParam.RoleResourcePageQuery pageQuery);
 
+    void deleteResourceById(int id);
+
 }
