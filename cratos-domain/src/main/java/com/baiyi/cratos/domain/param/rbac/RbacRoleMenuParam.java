@@ -4,8 +4,8 @@ import com.baiyi.cratos.domain.generator.RbacRoleMenu;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class RbacRoleMenuParam {
     @Schema
     public static class SaveRoleMenu implements IToRoleMenus {
 
-        @NonNull
+        @NotNull
         private Integer roleId;
 
         @NotEmpty

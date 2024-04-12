@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -73,13 +74,13 @@ public class MenuParam {
         @NotBlank
         private String link;
 
-        @NonNull
+        @NotNull
         private Integer seq;
 
-        @NonNull
+        @NotNull
         private Integer parentId;
 
-        @NonNull
+        @NotNull
         private Boolean valid;
 
         @NotBlank
@@ -113,13 +114,13 @@ public class MenuParam {
         @NotBlank
         private String link;
 
-        @NonNull
+        @NotNull
         private Integer seq;
 
-        @NonNull
+        @NotNull
         private Integer parentId;
 
-        @NonNull
+        @NotNull
         private Boolean valid;
 
         @NotBlank
