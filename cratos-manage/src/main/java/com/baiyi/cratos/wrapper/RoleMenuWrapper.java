@@ -37,8 +37,8 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
                 .roleId(roleMenu.getRoleId())
                 .menuId(roleMenu.getId())
                 .build();
-        roleMenu.setTitle(roleMenu.getName());
         roleMenu.setIsChecked(roleMenuService.getByUniqueKey(uniqueKey) != null);
+        roleMenu.setTitle(roleMenu.getName());
         roleMenu.setDisabled(!roleMenu.getValid());
         roleMenu.setOpen(true);
         menuTitleWrapper.wrap(roleMenu);
