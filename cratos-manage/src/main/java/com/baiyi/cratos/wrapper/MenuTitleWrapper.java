@@ -44,7 +44,9 @@ public class MenuTitleWrapper extends BaseDataTableConverter<MenuVO.Title, MenuT
     public void wrap(RoleMenuVO.Menu roleMenu) {
         String title = getTitle(roleMenu.getId(), roleMenu.getLang());
         if (StringUtils.hasText(title)) {
-            roleMenu.setName(title);
+            roleMenu.setTitle(title);
+        } else {
+            roleMenu.setTitle(roleMenu.getName());
         }
     }
 
