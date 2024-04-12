@@ -111,15 +111,15 @@ public class MenuFacadeImpl implements MenuFacade {
         Menu menu = addMenu.toTarget();
         if (menuService.getByUniqueKey(menu) == null) {
             menuService.add(menu);
+            addMenu.toTitles()
+                    .forEach(e -> {
+                        e.setMenuId(menu.getId());
+                        if (e.getPreference() == null) {
+                            e.setPreference(false);
+                        }
+                        menuTitleService.add(e);
+                    });
         }
-        addMenu.toTitles()
-                .forEach(e -> {
-                    e.setMenuId(menu.getId());
-                    if (e.getPreference() == null) {
-                        e.setPreference(false);
-                    }
-                    menuTitleService.add(e);
-                });
     }
 
     @Override
