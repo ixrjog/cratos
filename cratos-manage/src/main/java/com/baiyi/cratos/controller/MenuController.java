@@ -5,8 +5,10 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
+import com.baiyi.cratos.domain.view.menu.RoleMenuVO;
 import com.baiyi.cratos.facade.MenuFacade;
 import com.baiyi.cratos.facade.MyMenuFacade;
+import com.baiyi.cratos.facade.RoleMenuFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -30,6 +32,8 @@ public class MenuController {
     private final MenuFacade menuFacade;
 
     private final MyMenuFacade myMenuFacade;
+
+    private final RoleMenuFacade roleMenuFacade;
 
     @Operation(summary = "Get nav menu")
     @GetMapping(value = "/nav/get", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +85,12 @@ public class MenuController {
     @PostMapping(value = "/user/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
         return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
+    }
+
+    @Operation(summary = "Get role menu by id")
+    @GetMapping(value = "/role/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<RoleMenuVO.RoleMenu> getRoleMenuByRoleId(@RequestParam @Valid int roleId, @Valid String lang) {
+        return new HttpResult<>(roleMenuFacade.getRoleMenu(roleId, lang));
     }
 
 }
