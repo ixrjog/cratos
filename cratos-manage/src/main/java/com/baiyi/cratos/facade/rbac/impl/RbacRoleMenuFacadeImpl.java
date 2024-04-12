@@ -47,6 +47,7 @@ public class RbacRoleMenuFacadeImpl implements RbacRoleMenuFacade {
         if (CollectionUtils.isEmpty(rbacRoleMenus)) {
             saveRoleMenu.toRoleMenus()
                     .forEach(rbacRoleMenuService::add);
+            return;
         }
 
         Set<Integer> menuIdSet = Sets.newHashSet();
