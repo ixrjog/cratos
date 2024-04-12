@@ -52,7 +52,7 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
         }
         List<RoleMenuVO.Menu> children = menus.stream()
                 .map(e -> {
-                    RoleMenuVO.Menu menu = wrapToTarget(e, roleMenu.getLang());
+                    RoleMenuVO.Menu menu = wrapToTarget(e, roleMenu.getLang(), roleMenu.getRoleId());
                     recursionWrapRoleMenuChildren(menu);
                     return menu;
                 })
@@ -60,9 +60,10 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
         roleMenu.setItems(children);
     }
 
-    public RoleMenuVO.Menu wrapToTarget(Menu s, String lang) {
+    public RoleMenuVO.Menu wrapToTarget(Menu s, String lang, int roleId) {
         RoleMenuVO.Menu menu = convert(s);
         menu.setLang(lang);
+        menu.setRoleId(roleId);
         wrap(menu);
         return menu;
     }
