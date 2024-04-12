@@ -2,15 +2,21 @@ package com.baiyi.cratos.facade.rbac.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
+import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
 import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.service.RbacResourceService;
+import com.baiyi.cratos.service.RbacRoleResourceService;
 import com.baiyi.cratos.wrapper.RbacResourceWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -25,6 +31,8 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
     private final RbacResourceService rbacResourceService;
 
     private final RbacResourceWrapper rbacResourceWrapper;
+
+    private final RbacRoleResourceService rbacRoleResourceService;
 
     @Override
     public RbacResource getByResource(String resource) {
@@ -64,7 +72,14 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteResourceById(int id) {
+        List<RbacRoleResource> rbacRoleResources = rbacRoleResourceService.queryByResourceId(id);
+        if (!CollectionUtils.isEmpty(rbacRoleResources)) {
+            for (RbacRoleResource rbacRoleResource : rbacRoleResources) {
+                rbacRoleResourceService.deleteById(rbacRoleResource.getId());
+            }
+        }
         rbacResourceService.deleteById(id);
     }
 

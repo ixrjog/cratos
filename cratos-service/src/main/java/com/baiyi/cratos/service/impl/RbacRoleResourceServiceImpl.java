@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/3/15 10:18
@@ -33,6 +35,14 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
         criteria.andEqualTo("roleId", rbacRoleResource.getRoleId())
                 .andEqualTo("resourceId", rbacRoleResource.getResourceId());
         return rbacRoleResourceMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<RbacRoleResource> queryByResourceId(int resourceId) {
+        Example example = new Example(RbacRoleResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("resourceId", resourceId);
+        return rbacRoleResourceMapper.selectByExample(example);
     }
 
 }
