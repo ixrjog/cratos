@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class MyMenuWrapper implements Converter<Menu, MyMenuVO.MyMenu> {
                     recursionWrapMenuChildren(menu, myMenuIds);
                     return menu;
                 })
+                .sorted(Comparator.comparingInt(MyMenuVO.MyMenu::getSeq))
                 .collect(Collectors.toList());
         menuChildren.setChildren(children);
     }
@@ -49,6 +51,7 @@ public class MyMenuWrapper implements Converter<Menu, MyMenuVO.MyMenu> {
     public List<MyMenuVO.MyMenu> wrapToTarget(List<Menu> dataTable, String lang, List<Integer> myMenuIds) {
         return dataTable.stream()
                 .map(menu -> wrapToTarget(menu, lang, myMenuIds))
+                .sorted(Comparator.comparingInt(MyMenuVO.MyMenu::getSeq))
                 .collect(Collectors.toList());
     }
 

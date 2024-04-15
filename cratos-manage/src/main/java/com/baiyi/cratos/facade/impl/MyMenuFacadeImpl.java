@@ -34,7 +34,7 @@ public class MyMenuFacadeImpl implements MyMenuFacade {
 
     @Override
     public List<MyMenuVO.MyMenu> queryMyMenu(MenuParam.QueryMyMenu queryMyMenu) {
-        String lang = Optional.of(queryMyMenu)
+        final String lang = Optional.of(queryMyMenu)
                 .map(MenuParam.QueryMyMenu::getLang)
                 .orElse("zh-cn");
         String username = SecurityContextHolder.getContext()
