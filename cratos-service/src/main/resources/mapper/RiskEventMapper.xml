@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.RiskEventMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.RiskEvent">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="event_time" jdbcType="TIMESTAMP" property="eventTime"/>
+        <result column="states" jdbcType="VARCHAR" property="states"/>
+        <result column="year" jdbcType="VARCHAR" property="year"/>
+        <result column="quarter" jdbcType="VARCHAR" property="quarter"/>
+        <result column="weeks" jdbcType="INTEGER" property="weeks"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.risk.RiskEventParam$RiskEventPageQuery"
+            resultMap="BaseResultMap">
+        select * from risk_event
+        <where>
+            <if test="year != null and year != ''">
+                'year' = #{year}
+            </if>
+            <if test="quarter != null and quarter != ''">
+                and quarter = #{quarter}
+            </if>
+            <if test="weeks != null">
+                and weeks = #{weeks}
+            </if>
+            <if test="states != null and states != ''">
+                and states = #{states}
+            </if>
+            <if test="valid != null">
+                and valid = #{valid}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+            </if>
+        </where>
+        order by event_time desc
+    </select>
+
+</mapper>

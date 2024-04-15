@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -14,6 +15,8 @@ import java.util.TimeZone;
  * @Version 1.0
  */
 public class TimeUtil {
+
+    public static final String YEAR = "yyyy";
 
     private TimeUtil() {
     }
@@ -42,6 +45,25 @@ public class TimeUtil {
         } catch (ParseException e) {
             return new Date();
         }
+    }
+
+    public static String parse(Date date, String fmt) {
+        SimpleDateFormat formatter = new SimpleDateFormat(fmt);
+        return formatter.format(date);
+    }
+
+    public static int getWeekOfYear(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public static int getQuarter(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        // 由于月份从0开始，所以需要+1
+        int month = calendar.get(Calendar.MONTH) + 1;
+        return month / 4 + 1;
     }
 
 }

@@ -40,7 +40,9 @@ public enum BusinessTypeEnum {
     TRAFFIC_LAYER_RECORD,
 
     MENU,
-    MENU_TITLE
+    MENU_TITLE,
+
+    RISK_EVENT
 
 
 }
