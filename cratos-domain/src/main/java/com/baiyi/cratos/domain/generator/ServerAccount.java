@@ -36,7 +36,7 @@ public class ServerAccount implements IValid {
     /**
      * 特权
      */
-    private Byte sudo;
+    private Boolean sudo;
 
     /**
      * 连接协议

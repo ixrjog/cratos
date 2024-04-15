@@ -9,7 +9,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="credential_id" jdbcType="INTEGER" property="credentialId" />
-    <result column="sudo" jdbcType="TINYINT" property="sudo" />
+    <result column="sudo" jdbcType="BIT" property="sudo" />
     <result column="protocol" jdbcType="VARCHAR" property="protocol" />
     <result column="valid" jdbcType="BIT" property="valid" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
