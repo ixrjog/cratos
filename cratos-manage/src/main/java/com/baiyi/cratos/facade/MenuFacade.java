@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 
@@ -10,9 +9,6 @@ import com.baiyi.cratos.domain.view.menu.MenuVO;
  * @Version 1.0
  */
 public interface MenuFacade {
-
-    @Deprecated
-    DataTable<MenuVO.Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery);
 
     MenuVO.NavMenu getNavMenu();
 

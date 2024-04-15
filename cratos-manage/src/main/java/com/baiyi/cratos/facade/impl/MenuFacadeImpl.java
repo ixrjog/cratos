@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.MenuException;
-import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
@@ -9,7 +8,6 @@ import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.facade.MenuFacade;
 import com.baiyi.cratos.service.MenuService;
 import com.baiyi.cratos.service.MenuTitleService;
-import com.baiyi.cratos.wrapper.Menu2Wrapper;
 import com.baiyi.cratos.wrapper.MenuWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +32,7 @@ public class MenuFacadeImpl implements MenuFacade {
 
     private final MenuTitleService menuTitleService;
 
-    private final Menu2Wrapper menu2Wrapper;
-
     private final MenuWrapper menuWrapper;
-
-    @Override
-    @Deprecated
-    public DataTable<MenuVO.Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery) {
-        DataTable<Menu> table = menuService.queryMenuPage(pageQuery);
-        return menu2Wrapper.wrapToTarget(table, pageQuery.getLang());
-    }
 
     @Override
     public MenuVO.NavMenu getNavMenu() {

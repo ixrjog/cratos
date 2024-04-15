@@ -25,6 +25,10 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
 
     private final ServerAccountService accountService;
 
+    private static final String ROOT = "root";
+
+    private static final String ADMIN = "Administrators";
+
     @Override
     public void addServerAccount(ServerAccountParam.AddServerAccount addServerAccount) {
         ServerAccount serverAccount = addServerAccount.toTarget();
@@ -38,11 +42,11 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     }
 
     private void saveServerAccount(ServerAccount serverAccount) {
-        if ("root".equals(serverAccount.getUsername())) {
+        if (ROOT.equals(serverAccount.getUsername())) {
             serverAccount.setSudo(true);
         }
         if (RemoteManagementProtocolEnum.RDP.name()
-                .equals(serverAccount.getProtocol()) && "Administrators".equalsIgnoreCase(serverAccount.getUsername())) {
+                .equals(serverAccount.getProtocol()) && ADMIN.equalsIgnoreCase(serverAccount.getUsername())) {
             serverAccount.setSudo(true);
         }
         if (IdentityUtil.hasIdentity(serverAccount.getCredentialId())) {

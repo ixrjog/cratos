@@ -1,7 +1,6 @@
 package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
@@ -66,13 +65,6 @@ public class MenuController {
     public HttpResult<Boolean> deleteMenuById(@RequestParam @Valid int menuId) {
         menuFacade.deleteMenuById(menuId);
         return HttpResult.SUCCESS;
-    }
-
-    @Deprecated
-    @Operation(summary = "Pagination query menu")
-    @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<MenuVO.Menu>> queryMenuPage(@RequestBody @Valid MenuParam.MenuPageQuery pageQuery) {
-        return new HttpResult<>(menuFacade.queryMenuPage(pageQuery));
     }
 
     @Operation(summary = "Query my menu")
