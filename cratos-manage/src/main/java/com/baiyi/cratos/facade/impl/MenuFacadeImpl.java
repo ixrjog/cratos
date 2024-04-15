@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,6 +40,7 @@ public class MenuFacadeImpl implements MenuFacade {
         List<Menu> menus = menuService.queryMainMenu();
         List<MenuVO.Menu> items = menus.stream()
                 .map(menuWrapper::wrapToTarget)
+                .sorted(Comparator.comparingInt(MenuVO.Menu::getSeq))
                 .collect(Collectors.toList());
         return MenuVO.NavMenu.builder()
                 .items(items)
