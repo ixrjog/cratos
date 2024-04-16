@@ -46,6 +46,12 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
     }
 
     @Override
+    public RiskEventVO.Event getRiskEventById(int id) {
+        RiskEvent riskEvent = riskEventService.getById(id);
+        return riskEventWrapper.wrapToTarget(riskEvent);
+    }
+
+    @Override
     public void addRiskEvent(RiskEventParam.AddRiskEvent addRiskEvent) {
         RiskEvent riskEvent = addRiskEvent.toTarget();
         Date eventTime = riskEvent.getEventTime();

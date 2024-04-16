@@ -32,6 +32,12 @@ public class RiskEventController {
         return new HttpResult<>(riskEventFacade.queryRiskEventPage(pageQuery));
     }
 
+    @Operation(summary = "Get risk event")
+    @GetMapping(value = "/get",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<RiskEventVO.Event> getRiskEventById(@RequestParam @Valid int id) {
+        return new HttpResult<>(riskEventFacade.getRiskEventById(id));
+    }
+
     @Operation(summary = "Add risk event")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addRiskEvent(@RequestBody @Valid RiskEventParam.AddRiskEvent addRiskEvent) {

@@ -14,6 +14,8 @@ public interface RiskEventFacade {
 
     DataTable<RiskEventVO.Event> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery);
 
+    RiskEventVO.Event getRiskEventById(int id);
+
     void addRiskEvent(RiskEventParam.AddRiskEvent addRiskEvent);
 
     void updateRiskEvent(RiskEventParam.UpdateRiskEvent updateRiskEvent);
