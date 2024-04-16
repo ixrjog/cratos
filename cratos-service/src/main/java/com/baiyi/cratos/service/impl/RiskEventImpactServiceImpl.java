@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.RISK_EVENT_IMPACT)
 public class RiskEventImpactServiceImpl implements RiskEventImpactService {
 
     private final RiskEventImpactMapper riskEventImpactMapper;
