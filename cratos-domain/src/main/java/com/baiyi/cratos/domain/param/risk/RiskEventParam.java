@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @Author baiyi
@@ -38,6 +39,34 @@ public class RiskEventParam {
         private String states;
 
         private Boolean valid;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class RiskEventReportQuery  {
+
+        private String year;
+
+        private String quarter;
+
+        private Integer weeks;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class RiskEventReportQueryByTags  {
+
+        private String year;
+
+        private String quarter;
+
+        private Integer weeks;
+
+        private Set<Integer> byTags;
 
     }
 

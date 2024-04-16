@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,7 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
                     recursionWrapRoleMenuChildren(menu);
                     return menu;
                 })
+                .sorted(Comparator.comparingInt(RoleMenuVO.Menu::getSeq))
                 .collect(Collectors.toList());
         roleMenu.setItems(children);
     }

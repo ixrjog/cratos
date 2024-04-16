@@ -67,4 +67,19 @@ public class RiskEventController {
         return HttpResult.SUCCESS;
     }
 
+    // statistics
+    @Operation(summary = "Query risk event SLA report")
+    @PostMapping(value = "/report/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> queryReport(@RequestBody @Valid RiskEventParam.RiskEventReportQuery riskEventReportQuery) {
+        // TODO
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query risk event SLA report by tags")
+    @PostMapping(value = "/report/by/tags/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> queryReportByTags(@RequestBody @Valid RiskEventParam.RiskEventReportQueryByTags riskEventReportQueryByTags) {
+        // TODO
+        return HttpResult.SUCCESS;
+    }
+
 }

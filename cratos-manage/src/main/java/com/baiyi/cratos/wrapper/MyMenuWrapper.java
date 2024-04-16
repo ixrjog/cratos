@@ -48,8 +48,8 @@ public class MyMenuWrapper implements Converter<Menu, MyMenuVO.MyMenu> {
         menuChildren.setChildren(children);
     }
 
-    public List<MyMenuVO.MyMenu> wrapToTarget(List<Menu> dataTable, String lang, List<Integer> myMenuIds) {
-        return dataTable.stream()
+    public List<MyMenuVO.MyMenu> wrapToTarget(List<Menu> data, String lang, List<Integer> myMenuIds) {
+        return data.stream()
                 .map(menu -> wrapToTarget(menu, lang, myMenuIds))
                 .sorted(Comparator.comparingInt(MyMenuVO.MyMenu::getSeq))
                 .collect(Collectors.toList());

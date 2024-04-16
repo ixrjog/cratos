@@ -120,4 +120,8 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         }
     }
 
+    public void queryReport(RiskEventParam.RiskEventReportQuery riskEventReportQuery) {
+
+    }
+
 }

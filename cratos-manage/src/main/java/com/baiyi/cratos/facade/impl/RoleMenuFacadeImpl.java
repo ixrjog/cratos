@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ public class RoleMenuFacadeImpl implements RoleMenuFacade {
         List<Menu> menus = menuService.queryMainMenu();
         List<RoleMenuVO.Menu> items = menus.stream()
                 .map(e -> menuWrapper.wrapToTarget(e, lang, roleId))
+                .sorted(Comparator.comparingInt(RoleMenuVO.Menu::getSeq))
                 .collect(Collectors.toList());
         return RoleMenuVO.RoleMenu.builder()
                 .items(items)

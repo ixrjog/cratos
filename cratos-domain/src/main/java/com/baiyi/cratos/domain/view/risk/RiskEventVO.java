@@ -120,7 +120,7 @@ public class RiskEventVO {
 
         private String comment;
 
-        public Long getSort() {
+        public Long getSeq() {
             return this.startTime == null ? 0L : startTime.getTime();
         }
 

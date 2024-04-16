@@ -1,5 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -33,6 +34,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
     private final RiskEventImpactService impactService;
 
     @Override
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(RiskEventVO.Impact impact) {
     }
 
@@ -51,7 +53,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
                         sumCost.set(sumCost.get() + impact.getCost());
                         return impact;
                     })
-                    .sorted(Comparator.comparingLong(RiskEventVO.Impact::getSort))
+                    .sorted(Comparator.comparingLong(RiskEventVO.Impact::getSeq))
                     .collect(Collectors.toList());
             iRiskEventImpacts.setImpacts(impacts);
             RiskEventVO.TotalCost totalCost = RiskEventVO.TotalCost.builder()
