@@ -10,4 +10,6 @@ public interface RiskEventMapper extends Mapper<RiskEvent> {
 
     List<RiskEvent> queryPageByParam(RiskEventParam.RiskEventPageQuery pageQuery);
 
+    List<String> queryYears();
+
 }

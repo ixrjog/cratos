@@ -4,8 +4,10 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.risk.RiskEventImpactParam;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.facade.RiskEventFacade;
+import com.baiyi.cratos.facade.RiskEventReportFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +28,8 @@ public class RiskEventController {
 
     private final RiskEventFacade riskEventFacade;
 
+    private final RiskEventReportFacade riskEventReportFacade;
+
     @Operation(summary = "Pagination query risk event")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RiskEventVO.Event>> queryRiskEventPage(@RequestBody @Valid RiskEventParam.RiskEventPageQuery pageQuery) {
@@ -33,7 +37,7 @@ public class RiskEventController {
     }
 
     @Operation(summary = "Get risk event")
-    @GetMapping(value = "/get",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RiskEventVO.Event> getRiskEventById(@RequestParam @Valid int id) {
         return new HttpResult<>(riskEventFacade.getRiskEventById(id));
     }
@@ -73,16 +77,22 @@ public class RiskEventController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Get SLA report year options")
+    @GetMapping(value = "/report/year/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getYearOptions() {
+        return new HttpResult<>(riskEventReportFacade.getYearOptions());
+    }
+
     // statistics
-    @Operation(summary = "Query risk event SLA report")
+    @Operation(summary = "Query SLA report")
     @PostMapping(value = "/report/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> queryReport(@RequestBody @Valid RiskEventParam.RiskEventReportQuery riskEventReportQuery) {
         // TODO
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Query risk event SLA report by tags")
-    @PostMapping(value = "/report/by/tags/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Query SLA report by tags")
+    @PostMapping(value = "/report/query/by/tags", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> queryReportByTags(@RequestBody @Valid RiskEventParam.RiskEventReportQueryByTags riskEventReportQueryByTags) {
         // TODO
         return HttpResult.SUCCESS;

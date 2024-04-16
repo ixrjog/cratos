@@ -45,4 +45,8 @@
         order by event_time desc
     </select>
 
+    <select id="queryYears" resultType="java.lang.String">
+        select distinct(`year`) from risk_event
+    </select>
+
 </mapper>

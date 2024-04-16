@@ -39,4 +39,9 @@ public class RiskEventServiceImpl implements RiskEventService {
         return new DataTable<>(data, page.getTotal());
     }
 
+    @Override
+    public List<String> queryYears() {
+        return riskEventMapper.queryYears();
+    }
+
 }

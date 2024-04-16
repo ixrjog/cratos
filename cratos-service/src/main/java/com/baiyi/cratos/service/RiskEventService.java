@@ -7,6 +7,8 @@ import com.baiyi.cratos.mapper.RiskEventMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/4/15 下午3:19
@@ -15,5 +17,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
 public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseValidService<RiskEvent, RiskEventMapper> {
 
     DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery);
+
+    List<String> queryYears();
 
 }
