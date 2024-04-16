@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author baiyi
@@ -64,6 +65,14 @@ public class TimeUtil {
         // 由于月份从0开始，所以需要+1
         int month = calendar.get(Calendar.MONTH) + 1;
         return month / 4 + 1;
+    }
+
+    public static String convertSecondsToHMS(long seconds) {
+        long hours = TimeUnit.SECONDS.toHours(seconds);
+        long remainingSeconds = seconds - TimeUnit.HOURS.toSeconds(hours);
+        long minutes = TimeUnit.SECONDS.toMinutes(remainingSeconds);
+        remainingSeconds = remainingSeconds - TimeUnit.MINUTES.toSeconds(minutes);
+        return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
     }
 
 }

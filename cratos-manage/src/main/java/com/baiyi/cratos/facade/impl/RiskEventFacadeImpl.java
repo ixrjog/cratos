@@ -1,5 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.exception.RiskEventImpactException;
+import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RiskEvent;
@@ -77,7 +79,45 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
     @Override
     public void addRiskEventImpact(RiskEventImpactParam.AddRiskEventImpact addRiskEventImpact) {
         RiskEventImpact riskEventImpact = addRiskEventImpact.toTarget();
+        saveRiskEventImpact(riskEventImpact);
+    }
 
+    @Override
+    public void updateRiskEventImpact(RiskEventImpactParam.UpdateRiskEventImpact updateRiskEventImpact) {
+        RiskEventImpact riskEventImpact = updateRiskEventImpact.toTarget();
+        saveRiskEventImpact(riskEventImpact);
+    }
+
+    @Override
+    public void deleteRiskEventImpactById(int id) {
+        if (impactService.getById(id) != null) {
+            impactService.deleteById(id);
+        }
+    }
+
+    private void saveRiskEventImpact(RiskEventImpact riskEventImpact) {
+        if (riskEventImpact.getSla()) {
+            if (riskEventImpact.getStartTime() == null) {
+                throw new RiskEventImpactException("SLA impact must specify a start time.");
+            }
+            if (riskEventImpact.getEndTime() == null) {
+                throw new RiskEventImpactException("SLA impact must specify a end time.");
+            }
+            if (riskEventImpact.getStartTime()
+                    .getTime() >= riskEventImpact.getEndTime()
+                    .getTime()) {
+                throw new RiskEventImpactException("The start time is greater than the end time.");
+            }
+            // 设置SLA 成本
+            riskEventImpact.setCost((int) (riskEventImpact.getEndTime()
+                    .getTime() - riskEventImpact.getStartTime()
+                    .getTime()) / 1000);
+        }
+        if (IdentityUtil.hasIdentity(riskEventImpact.getId())) {
+            impactService.updateByPrimaryKey(riskEventImpact);
+        } else {
+            impactService.add(riskEventImpact);
+        }
     }
 
 }

@@ -53,4 +53,18 @@ public class RiskEventController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update risk event impact")
+    @PutMapping(value = "/impact/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateRiskEventImpact(@RequestBody @Valid RiskEventImpactParam.UpdateRiskEventImpact updateRiskEventImpact) {
+        riskEventFacade.updateRiskEventImpact(updateRiskEventImpact);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete risk event impact by id")
+    @DeleteMapping(value = "/impact/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteRiskEventImpactById(@RequestParam @Valid int id) {
+        riskEventFacade.deleteRiskEventImpactById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

@@ -13,7 +13,7 @@ logging:
 
 cratos:
   auth:
-    enabled: on
+    enabled: off
     # LOCAL, LDAP
     provider: LDAP
   rbac:

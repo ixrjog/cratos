@@ -42,7 +42,8 @@ public enum BusinessTypeEnum {
     MENU,
     MENU_TITLE,
 
-    RISK_EVENT
+    RISK_EVENT,
+    RISK_EVENT_IMPACT
 
 
 }

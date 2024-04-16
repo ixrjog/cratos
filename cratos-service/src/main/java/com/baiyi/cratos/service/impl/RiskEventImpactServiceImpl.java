@@ -1,6 +1,5 @@
 package com.baiyi.cratos.service.impl;
 
-import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
 import com.baiyi.cratos.service.RiskEventImpactService;
@@ -23,7 +22,7 @@ public class RiskEventImpactServiceImpl implements RiskEventImpactService {
 
     @Override
     public List<RiskEventImpact> queryByEventId(int eventId) {
-        Example example = new Example(RiskEvent.class);
+        Example example = new Example(RiskEventImpact.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("riskEventId", eventId);
         return riskEventImpactMapper.selectByExample(example);

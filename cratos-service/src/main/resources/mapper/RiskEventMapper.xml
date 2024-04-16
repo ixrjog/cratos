@@ -29,7 +29,7 @@
             <if test="quarter != null and quarter != ''">
                 and quarter = #{quarter}
             </if>
-            <if test="weeks != null">
+            <if test="weeks != null and weeks > 0">
                 and weeks = #{weeks}
             </if>
             <if test="states != null and states != ''">

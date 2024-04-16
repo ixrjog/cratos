@@ -6,9 +6,9 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,11 +22,21 @@ import java.util.List;
  */
 public class RiskEventVO {
 
+    public interface IRiskEventImpacts {
+
+        Integer getEventId();
+
+        void setImpacts(List<Impact> impacts);
+
+        void setTotalCost(TotalCost totalCost);
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.RISK_EVENT)
-    public static class Event extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
+    public static class Event extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, IRiskEventImpacts, Serializable {
 
         @Serial
         private static final long serialVersionUID = -400794265071626360L;
@@ -35,6 +45,7 @@ public class RiskEventVO {
 
         private String name;
 
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date eventTime;
 
         private String states;
@@ -49,6 +60,10 @@ public class RiskEventVO {
 
         private String comment;
 
+        private List<Impact> impacts;
+
+        private TotalCost totalCost;
+
         @Override
         public Integer getBusinessId() {
             return id;
@@ -59,6 +74,79 @@ public class RiskEventVO {
 
         @Schema(description = "Business Docs")
         List<BusinessDocVO.BusinessDoc> businessDocs;
+
+        @Override
+        public Integer getEventId() {
+            return id;
+        }
+
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @Schema
+    @BusinessType(type = BusinessTypeEnum.RISK_EVENT_IMPACT)
+    public static class Impact extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -3661658835687559897L;
+
+        private Integer id;
+
+        private Integer riskEventId;
+
+        /**
+         * 影响内容
+         */
+        private String content;
+
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date startTime;
+
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date endTime;
+
+        /**
+         * SLA
+         */
+        private Boolean sla;
+
+        /**
+         * 成本
+         */
+        private Integer cost;
+
+        private Boolean valid;
+
+        private String comment;
+
+        public Long getSort() {
+            return this.startTime == null ? 0L : startTime.getTime();
+        }
+
+        @Override
+        public Integer getBusinessId() {
+            return id;
+        }
+
+        @Schema(description = "Business Tags")
+        List<BusinessTagVO.BusinessTag> businessTags;
+
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class TotalCost implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -3987148145853498775L;
+
+        private Integer cost;
+
+        private String costDesc;
 
     }
 

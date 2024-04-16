@@ -37,6 +37,8 @@ public class RiskEventParam {
 
         private String states;
 
+        private Boolean valid;
+
     }
 
     @Data

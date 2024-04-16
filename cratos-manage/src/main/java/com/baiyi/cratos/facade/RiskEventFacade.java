@@ -20,4 +20,8 @@ public interface RiskEventFacade {
 
     void addRiskEventImpact(RiskEventImpactParam.AddRiskEventImpact addRiskEventImpact);
 
+    void updateRiskEventImpact(RiskEventImpactParam.UpdateRiskEventImpact updateRiskEventImpact);
+
+    void deleteRiskEventImpactById(int id);
+
 }

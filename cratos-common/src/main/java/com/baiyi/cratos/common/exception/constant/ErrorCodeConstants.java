@@ -8,6 +8,7 @@ package com.baiyi.cratos.common.exception.constant;
 public interface ErrorCodeConstants {
 
     int AUTHENTICATION_401 = 401;
+
     int AUTHORIZATION_403 = 403;
 
     int BASE_ERROR = 999;
@@ -25,5 +26,7 @@ public interface ErrorCodeConstants {
     int TRAFFIC_LAYER_ERROR = 45000;
 
     int MENU_ERROR = 46000;
+
+    int RISK_EVENT_ERROR = 47000;
 
 }
