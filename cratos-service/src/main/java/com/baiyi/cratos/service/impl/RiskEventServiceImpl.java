@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
 import com.baiyi.cratos.mapper.RiskEventMapper;
@@ -42,6 +44,12 @@ public class RiskEventServiceImpl implements RiskEventService {
     @Override
     public List<String> queryYears() {
         return riskEventMapper.queryYears();
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        riskEventMapper.deleteByPrimaryKey(id);
     }
 
 }
