@@ -12,6 +12,7 @@
         <result column="year" jdbcType="VARCHAR" property="year"/>
         <result column="quarter" jdbcType="VARCHAR" property="quarter"/>
         <result column="weeks" jdbcType="INTEGER" property="weeks"/>
+        <result column="color" jdbcType="VARCHAR" property="color"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>

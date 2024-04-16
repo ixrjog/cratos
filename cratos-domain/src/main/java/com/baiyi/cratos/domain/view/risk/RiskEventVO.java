@@ -56,6 +56,8 @@ public class RiskEventVO {
 
         private Integer weeks;
 
+        private String color;
+
         private Boolean valid;
 
         private String comment;

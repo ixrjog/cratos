@@ -59,6 +59,8 @@ public class RiskEvent implements IValid {
      */
     private Boolean valid;
 
+    private String color;
+
     /**
      * 创建时间
      */

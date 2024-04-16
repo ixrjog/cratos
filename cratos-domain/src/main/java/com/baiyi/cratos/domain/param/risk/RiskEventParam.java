@@ -89,6 +89,8 @@ public class RiskEventParam {
 
         private Integer weeks;
 
+        private String color;
+
         private Boolean valid;
 
         private String comment;
@@ -113,6 +115,8 @@ public class RiskEventParam {
         private String quarter;
 
         private Integer weeks;
+
+        private String color;
 
         private Boolean valid;
 
