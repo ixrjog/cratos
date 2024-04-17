@@ -141,6 +141,9 @@ public class SshShellProperties {
         private CommandProperties jmx = new CommandProperties();
 
         @NestedConfigurationProperty
+        private CommandProperties assetHost = new CommandProperties();
+
+        @NestedConfigurationProperty
         private CommandProperties system = new CommandProperties();
 
         @NestedConfigurationProperty

@@ -71,4 +71,24 @@ public class LdapAuthProvider extends BaseAuthProvider {
         throw new AuthenticationException(AUTHENTICATION_FAILED);
     }
 
+    @Override
+    public boolean verifyPassword(User user, String password) {
+        Authorization.Credential credential = Authorization.Credential.builder()
+                .username(user.getUsername())
+                .password(password)
+                .build();
+        List<EdsInstance> edsLdapInstances = edsFacade.queryValidEdsInstanceByType(EdsInstanceTypeEnum.LDAP.name());
+        for (EdsInstance edsLdapInstance : edsLdapInstances) {
+            EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
+            if (edsConfig != null) {
+                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(), edsConfig);
+                boolean pass = ldapClient.verifyLogin(ldap, credential);
+                if (pass) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

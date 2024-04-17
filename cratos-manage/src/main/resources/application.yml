@@ -85,10 +85,10 @@ ssh:
         excludes:
           - audit
       history:
-        enable: off
+        enable: on
     display-banner: on
     host: 0.0.0.0
-    port: 2222
+    port: 2223
     shared-history: off
     history-directory: ${home}/cratos-data/ssh-server/history-log/
     host-key-file: ${home}/cratos-data/ssh-server/hostKey.ser

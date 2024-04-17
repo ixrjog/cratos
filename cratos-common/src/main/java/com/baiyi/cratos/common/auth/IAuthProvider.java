@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.auth;
+package com.baiyi.cratos.common.auth;
 
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.login.LoginParam;
@@ -14,5 +14,7 @@ public interface IAuthProvider {
     String getName();
 
     LoginVO.Login login(LoginParam.Login loginParam, User user);
+
+    boolean verifyPassword(User user, String password);
 
 }

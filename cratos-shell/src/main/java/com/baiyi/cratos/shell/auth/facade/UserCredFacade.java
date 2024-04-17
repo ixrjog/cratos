@@ -1,6 +1,5 @@
-package com.baiyi.cratos.facade.auth;
+package com.baiyi.cratos.shell.auth.facade;
 
-import com.baiyi.cratos.common.auth.IAuthProvider;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
@@ -9,15 +8,12 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.generator.UserToken;
-import com.baiyi.cratos.domain.param.login.LoginParam;
-import com.baiyi.cratos.facade.UserTokenFacade;
-import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.UserService;
-import jakarta.annotation.Resource;
-import org.springframework.beans.factory.InitializingBean;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -26,34 +22,21 @@ import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
 
 /**
  * @Author baiyi
- * @Date 2024/1/10 13:46
+ * @Date 2024/4/17 上午11:06
  * @Version 1.0
  */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class UserCredFacade {
 
-public abstract class BaseAuthProvider implements IAuthProvider, InitializingBean {
+    private final UserService userService;
 
-    @Resource
-    private UserTokenFacade userTokenFacade;
+    private final BusinessCredentialService businessCredentialService;
 
-    @Resource
-    private UserService userService;
+    private final CredentialService credentialService;
 
-    @Resource
-    private BusinessCredentialService businessCredentialService;
-
-    @Resource
-    private CredentialService credentialService;
-
-    @Override
-    public void afterPropertiesSet() {
-        AuthProviderFactory.register(this);
-    }
-
-    protected UserToken revokeAndIssueNewToken(LoginParam.Login loginParam) {
-        return userTokenFacade.revokeAndIssueNewToken(loginParam.getUsername());
-    }
-
-    protected Credential getUserPasswordCredential(String username) {
+    public Credential getUserPasswordCredential(String username) {
         User user = userService.getByUsername(username);
         if (user == null || !user.getValid()) {
             throw new AuthenticationException(AUTHENTICATION_FAILED);
@@ -64,7 +47,7 @@ public abstract class BaseAuthProvider implements IAuthProvider, InitializingBea
         return getUserPasswordCredential(user);
     }
 
-    protected Credential getUserPasswordCredential(User user) {
+    public Credential getUserPasswordCredential(User user) {
         SimpleBusiness query = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.USER.name())
                 .businessId(user.getId())
