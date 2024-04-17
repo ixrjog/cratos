@@ -1,14 +1,17 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.Menu;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
 import com.baiyi.cratos.facade.MyMenuFacade;
 import com.baiyi.cratos.service.MenuService;
 import com.baiyi.cratos.service.RbacRoleMenuService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.MyMenuWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -32,18 +35,32 @@ public class MyMenuFacadeImpl implements MyMenuFacade {
 
     private final MyMenuWrapper myMenuWrapper;
 
+    private final UserService userService;
+
+    @Value("${cratos.language:zh-cn}")
+    private String language;
+
     @Override
     public List<MyMenuVO.MyMenu> queryMyMenu(MenuParam.QueryMyMenu queryMyMenu) {
-        final String lang = Optional.of(queryMyMenu)
-                .map(MenuParam.QueryMyMenu::getLang)
-                .orElse("zh-cn");
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
         if (!StringUtils.hasText(username)) {
             return MyMenuVO.MyMenu.INVALID;
         }
+        final String lang = Optional.of(queryMyMenu)
+                .map(MenuParam.QueryMyMenu::getLang)
+                .orElse(getUserLang(username));
+
         return queryUserMenu(username, lang);
+    }
+
+    private String getUserLang(String username) {
+        User user = userService.getByUsername(username);
+        if (user != null && StringUtils.hasText(user.getLang())) {
+            return user.getLang();
+        }
+        return language;
     }
 
     @Override

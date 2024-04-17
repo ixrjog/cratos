@@ -65,6 +65,8 @@ public class UserParam {
 
         private String source;
 
+        private String lang;
+
         private String password;
 
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -107,6 +109,8 @@ public class UserParam {
 
         private String source;
 
+        private String lang;
+
         private String password;
 
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
@@ -145,6 +149,8 @@ public class UserParam {
         private String createdBy;
 
         private String source;
+
+        private String lang;
 
         private String password;
 

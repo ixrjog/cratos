@@ -17,6 +17,7 @@
     <result column="otp" jdbcType="INTEGER" property="otp" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
     <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="password" jdbcType="LONGVARCHAR" property="password" />

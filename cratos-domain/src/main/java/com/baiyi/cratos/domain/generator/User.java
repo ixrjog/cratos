@@ -80,6 +80,8 @@ public class User implements IValid, IToBusinessTarget {
      */
     private String source;
 
+    private String lang;
+
     /**
      * 创建时间
      */
