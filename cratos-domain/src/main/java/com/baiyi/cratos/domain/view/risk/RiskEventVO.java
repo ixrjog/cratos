@@ -45,7 +45,9 @@ public class RiskEventVO {
 
         private String name;
 
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        // YYYY-MM-DDThh:mm:ssZ
+        //@JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(timezone = "UTC", pattern = "YYYY-MM-DDThh:mm:ssZ")
         private Date eventTime;
 
         private String states;

@@ -1,6 +1,7 @@
-package com.baiyi.cratos.facade.auth.factory;
+package com.baiyi.cratos.common.auth.factory;
 
-import com.baiyi.cratos.facade.auth.IAuthProvider;
+
+import com.baiyi.cratos.common.auth.IAuthProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
