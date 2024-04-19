@@ -60,7 +60,7 @@ public class CertificateVO {
         private String comment;
 
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
         private Date expiredTime;
 
         @Override
