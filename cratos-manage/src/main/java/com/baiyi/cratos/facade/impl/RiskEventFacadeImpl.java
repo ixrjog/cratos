@@ -68,7 +68,7 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         riskEvent.setYear(TimeUtil.parse(eventTime, YEAR));
         riskEvent.setWeeks(TimeUtil.getWeekOfYear(eventTime));
         riskEvent.setQuarter(String.valueOf(TimeUtil.getWeekOfYear(eventTime)));
-        riskEventService.add(riskEvent);
+        riskEventService.updateByPrimaryKey(riskEvent);
         if (!riskEvent.getValid()) {
             List<RiskEventImpact> impacts = impactService.queryByEventId(riskEvent.getId());
             if (!CollectionUtils.isEmpty(impacts)) {
