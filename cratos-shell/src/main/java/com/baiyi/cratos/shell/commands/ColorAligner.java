@@ -20,6 +20,8 @@ import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import org.springframework.shell.table.Aligner;
 
+import java.util.Arrays;
+
 /**
  * Add this aligner to color cell
  */
@@ -38,11 +40,14 @@ public class ColorAligner implements Aligner {
 
     @Override
     public String[] align(String[] text, int cellWidth, int cellHeight) {
-        String[] result = new String[text.length];
-        for (int i = 0; i < text.length; i++) {
-            result[i] = SshShellHelper.getColoredMessage(text[i], color);
-        }
-        return result;
+//        String[] result = new String[text.length];
+//        for (int i = 0; i < text.length; i++) {
+//            result[i] = SshShellHelper.getColoredMessage(text[i], color);
+//        }
+//        return result;
+        return Arrays.stream(text)
+                .map(s -> SshShellHelper.getColoredMessage(s, color))
+                .toArray(String[]::new);
     }
 
 }

@@ -29,7 +29,7 @@ public class RiskEventVO {
 
         void setImpacts(List<Impact> impacts);
 
-        void setTotalCost(TotalCost totalCost);
+        void setTotalCost(CostDetail totalCost);
 
     }
 
@@ -66,7 +66,7 @@ public class RiskEventVO {
 
         private List<Impact> impacts;
 
-        private TotalCost totalCost;
+        private CostDetail totalCost;
 
         @Override
         public Integer getBusinessId() {
@@ -120,6 +120,8 @@ public class RiskEventVO {
          */
         private Integer cost;
 
+        private CostDetail costDetail;
+
         private Boolean valid;
 
         private String comment;
@@ -143,7 +145,7 @@ public class RiskEventVO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class TotalCost implements Serializable {
+    public static class CostDetail implements Serializable {
 
         @Serial
         private static final long serialVersionUID = -3987148145853498775L;

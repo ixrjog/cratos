@@ -36,6 +36,13 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(RiskEventVO.Impact impact) {
+        if (impact.getCost() != 0) {
+            RiskEventVO.CostDetail costDetail = RiskEventVO.CostDetail.builder()
+                    .cost(impact.getCost())
+                    .costDesc(TimeUtil.convertSecondsToHMS(impact.getCost()))
+                    .build();
+            impact.setCostDetail(costDetail);
+        }
     }
 
     @Override
@@ -56,7 +63,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
                     .sorted(Comparator.comparingLong(RiskEventVO.Impact::getSeq))
                     .collect(Collectors.toList());
             iRiskEventImpacts.setImpacts(impacts);
-            RiskEventVO.TotalCost totalCost = RiskEventVO.TotalCost.builder()
+            RiskEventVO.CostDetail totalCost = RiskEventVO.CostDetail.builder()
                     .cost(sumCost.get())
                     .costDesc(TimeUtil.convertSecondsToHMS(sumCost.get()))
                     .build();

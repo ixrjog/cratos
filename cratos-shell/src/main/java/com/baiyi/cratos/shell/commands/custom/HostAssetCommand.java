@@ -1,15 +1,21 @@
 package com.baiyi.cratos.shell.commands.custom;
 
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.commands.AbstractCommand;
 import com.baiyi.cratos.shell.commands.SshShellComponent;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.shell.standard.ShellCommandGroup;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellMethodAvailability;
-import org.springframework.shell.standard.ShellOption;
+import org.springframework.shell.CompletionContext;
+import org.springframework.shell.CompletionProposal;
+import org.springframework.shell.standard.*;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
 
@@ -37,8 +43,9 @@ public class HostAssetCommand extends AbstractCommand {
      */
     @ShellMethod(key = COMMAND_ASSET_HOST_LIST, value = "List host asset")
     @ShellMethodAvailability("hostListAvailability")
-    public void hostList(@ShellOption(help = "Pattern to search for (ex: org.springframework.boot:*, org.springframework.boot:type=Endpoint,name=*,)", defaultValue = ShellOption.NULL) String pattern,
-                         @ShellOption(help = "Asset Name", defaultValue = "") String name) {
+    public void hostList(@ShellOption(help = "Asset Name", defaultValue = "") String name,
+                         @ShellOption(help = "Asset Type", valueProvider = EnumValueProvider.class, defaultValue = ShellOption.NULL) AssetTypeEnum assetType) {
+        helper.print(assetType.name());
 
     }
 
@@ -48,4 +55,31 @@ public class HostAssetCommand extends AbstractCommand {
     //                .ifPresent(assets -> assets.forEach(e -> lbTable.addRow(e.getName(), e.getAssetKey(), e.getAssetType())));
     //        return lbTable.toString();
 
+    public Set<String> getAssetTypes() {
+        return Sets.newHashSet(EdsAssetTypeEnum.ALIYUN_ECS.name(),EdsAssetTypeEnum.AWS_EC2.name());
+    }
+
+    public enum AssetTypeEnum {
+        ALIYUN_ECS, AWS_EC2
+    }
+
+}
+
+
+
+
+@Slf4j
+@Component
+class AssetTypeValuesProvider implements ValueProvider {
+
+    private final HostAssetCommand hostAssetCommand;
+
+    AssetTypeValuesProvider(HostAssetCommand hostAssetCommand) {
+        this.hostAssetCommand = hostAssetCommand;
+    }
+
+    @Override
+    public List<CompletionProposal> complete(CompletionContext completionContext) {
+        return hostAssetCommand.getAssetTypes().stream().map(CompletionProposal::new).collect(Collectors.toList());
+    }
 }
