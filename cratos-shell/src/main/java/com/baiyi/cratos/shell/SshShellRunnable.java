@@ -20,6 +20,7 @@ import com.baiyi.cratos.shell.auth.SshAuthentication;
 import com.baiyi.cratos.shell.auth.SshShellSecurityAuthenticationProvider;
 import com.baiyi.cratos.shell.listeners.SshShellListenerService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.common.Factory;
 import org.apache.sshd.server.ExitCallback;
@@ -69,9 +70,11 @@ public class SshShellRunnable
     private final Completer completer;
     private final Environment environment;
     private ChannelSession session;
+    @Getter
     private final org.apache.sshd.server.Environment sshEnv;
     private final SshShellCommandFactory sshShellCommandFactory;
     private final InputStream is;
+    @Getter
     private final OutputStream os;
     private final ExitCallback ec;
 
@@ -183,10 +186,6 @@ public class SshShellRunnable
 
     public ServerSession getSshSession() {
         return session.getSession();
-    }
-
-    public org.apache.sshd.server.Environment getSshEnv() {
-        return sshEnv;
     }
 
     @Override

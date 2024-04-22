@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.common.util.io.IoUtils;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.auth.password.PasswordAuthenticator;
-import org.apache.sshd.server.auth.pubkey.RejectAllPublickeyAuthenticator;
+import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +52,8 @@ public class SshShellConfiguration {
 
     private final PasswordAuthenticator passwordAuthenticator;
 
+    private final PublickeyAuthenticator publickeyAuthenticator;
+
     /**
      * Create the bean responsible for starting and stopping the SSH server
      *
@@ -74,7 +76,8 @@ public class SshShellConfiguration {
         server.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(properties.getHostKeyFile().toPath()));
         server.setHost(properties.getHost());
         server.setPasswordAuthenticator(passwordAuthenticator);
-        server.setPublickeyAuthenticator(RejectAllPublickeyAuthenticator.INSTANCE);
+        // server.setPublickeyAuthenticator(RejectAllPublickeyAuthenticator.INSTANCE);
+        server.setPublickeyAuthenticator(publickeyAuthenticator);
         if (properties.getAuthorizedPublicKeys() != null) {
             if (properties.getAuthorizedPublicKeys().exists()) {
                 server.setPublickeyAuthenticator(

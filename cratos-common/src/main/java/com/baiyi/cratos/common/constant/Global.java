@@ -16,4 +16,6 @@ public interface Global {
 
     String ROLE_FOUNDER_NAME = "FOUNDER";
 
+    String APP_NAME = "appName";
+
 }

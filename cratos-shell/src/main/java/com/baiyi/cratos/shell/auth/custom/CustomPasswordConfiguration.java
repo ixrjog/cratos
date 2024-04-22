@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -46,6 +47,9 @@ public class CustomPasswordConfiguration {
             if (!authEnabled) {
                 return true;
             }
+            if (!StringUtils.hasText(pass)) {
+                return false;
+            }
             try {
                 IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
                         .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
@@ -56,13 +60,6 @@ public class CustomPasswordConfiguration {
             } catch (AuthenticationException e) {
                 return false;
             }
-
-//            try {
-//                Credential credential = userCredFacade.getUserPasswordCredential(username);
-//                return pass.equals(credential.getCredential());
-//            } catch (AuthenticationException e) {
-//                return false;
-//            }
         };
     }
 

@@ -144,6 +144,12 @@ public class SshShellProperties {
         private CommandProperties assetHost = new CommandProperties();
 
         @NestedConfigurationProperty
+        private CommandProperties report = new CommandProperties();
+
+        @NestedConfigurationProperty
+        private CommandProperties sshKey = new CommandProperties();
+
+        @NestedConfigurationProperty
         private CommandProperties system = new CommandProperties();
 
         @NestedConfigurationProperty

@@ -45,7 +45,6 @@ public class SecurityConfiguration {
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-
 //        authenticationManagerBuilder.inMemoryAuthentication()
 //                .withUser("user")
 //                .password(passwordEncoder().encode("password"))

@@ -18,7 +18,8 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     int selectCountByAssetId(int assetId);
 
+    List<EdsAssetIndex> queryIndexByName(String name);
+
     List<EdsAssetIndex> queryIndexByValue(String value);
 
 }
-

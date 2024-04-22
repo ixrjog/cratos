@@ -48,4 +48,17 @@ public class StringFormatter {
         return (num & 1) == 0;
     }
 
+    public static String eraseLastStr(String str1, String str2) {
+        if (!org.springframework.util.StringUtils.hasText(str1)) {
+            return "";
+        }
+        if (!org.springframework.util.StringUtils.hasText(str2)) {
+            return str1;
+        }
+        if (!str1.endsWith(str2)) {
+            return str1;
+        }
+        return str1.substring(0, str1.length() - str2.length());
+    }
+
 }

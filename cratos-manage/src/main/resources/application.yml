@@ -79,7 +79,9 @@ mybatis:
 ssh:
   shell:
     version: 1.0.0
+    # simple security
     authentication: security
+    # auth-provider-bean-name: publickeyAuthenticatorProvider
     commands:
       actuator:
         excludes:

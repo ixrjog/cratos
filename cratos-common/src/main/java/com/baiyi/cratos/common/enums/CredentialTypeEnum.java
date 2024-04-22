@@ -20,6 +20,7 @@ public enum CredentialTypeEnum {
      */
     USERNAME_WITH_PASSWORD("Username with password"),
     SSH_USERNAME_WITH_PRIVATE_KEY("SSH Username with private key"),
+    SSH_USERNAME_WITH_PUBLIC_KEY("SSH Username with public key"),
     SSH_USERNAME_WITH_KEY_PAIR("SSH Username with key pair"),
     TOKEN("Token"),
     ACCESS_KEY("Access key"),

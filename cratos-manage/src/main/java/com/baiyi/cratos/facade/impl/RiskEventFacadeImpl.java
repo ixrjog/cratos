@@ -118,6 +118,8 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
             riskEventImpact.setCost((int) (riskEventImpact.getEndTime()
                     .getTime() - riskEventImpact.getStartTime()
                     .getTime()) / 1000);
+        } else {
+            riskEventImpact.setCost(0);
         }
         if (IdentityUtil.hasIdentity(riskEventImpact.getId())) {
             impactService.updateByPrimaryKey(riskEventImpact);

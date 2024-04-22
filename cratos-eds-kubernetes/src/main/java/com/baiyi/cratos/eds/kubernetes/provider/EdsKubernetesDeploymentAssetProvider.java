@@ -1,7 +1,9 @@
 package com.baiyi.cratos.eds.kubernetes.provider;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -13,13 +15,21 @@ import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Namespace;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.baiyi.cratos.common.constant.Global.APP_NAME;
 
 /**
  * @Author baiyi
@@ -64,6 +74,58 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                 .createdTimeOf(toUTCDate(entity.getMetadata()
                         .getCreationTimestamp()))
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, Deployment entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+
+        Map<String, String> labels = Optional.of(entity)
+                .map(Deployment::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Maps.newHashMap());
+
+        String env = "";
+        if (labels.containsKey("env")) {
+            env = labels.get("env");
+            EdsAssetIndex envIndex = EdsAssetIndex.builder()
+                    .instanceId(edsAsset.getInstanceId())
+                    .assetId(edsAsset.getId())
+                    .name("env")
+                    .value(env)
+                    .build();
+            indices.add(envIndex);
+        }
+
+        if (labels.containsKey("app")) {
+            String appName = labels.get("app");
+            if (StringUtils.hasText(env)) {
+                // 去掉环境后缀
+                if (appName.endsWith("-" + env)) {
+                    appName = StringFormatter.eraseLastStr(appName, "-" + env);
+                }
+            }
+            EdsAssetIndex appNameIndex = EdsAssetIndex.builder()
+                    .instanceId(edsAsset.getInstanceId())
+                    .assetId(edsAsset.getId())
+                    .name(APP_NAME)
+                    .value(appName)
+                    .build();
+            indices.add(appNameIndex);
+        }
+
+        int replicas = Optional.of(entity)
+                .map(Deployment::getSpec)
+                .map(DeploymentSpec::getReplicas)
+                .orElse(0);
+        EdsAssetIndex envIndex = EdsAssetIndex.builder()
+                .instanceId(edsAsset.getInstanceId())
+                .assetId(edsAsset.getId())
+                .name("replicas")
+                .value(String.valueOf(replicas))
+                .build();
+        indices.add(envIndex);
+        return indices;
     }
 
     private Date toUTCDate(String time) {
