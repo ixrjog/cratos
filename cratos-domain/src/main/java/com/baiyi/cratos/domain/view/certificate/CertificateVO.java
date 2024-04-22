@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.view.certificate;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
@@ -60,7 +61,7 @@ public class CertificateVO {
         private String comment;
 
         @Schema(description = "Expired time")
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
 
         @Override

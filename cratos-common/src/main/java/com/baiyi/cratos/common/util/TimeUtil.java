@@ -19,8 +19,6 @@ public class TimeUtil {
 
     public static final String YEAR = "yyyy";
 
-    public static final String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
     private TimeUtil() {
     }
 

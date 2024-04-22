@@ -6,6 +6,7 @@ import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.SshFingerprintUtil;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.Credential;
@@ -32,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.baiyi.cratos.common.util.TimeUtil.ISO8601;
+
 import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
 
 /**
@@ -146,7 +147,7 @@ public class SshKeyCommand extends AbstractCommand {
             helper.getSuccess("Never expire");
         }
 
-        String time = TimeUtil.parse(expiredTime, ISO8601);
+        String time = TimeUtil.parse(expiredTime, Global.ISO8601);
         return ExpiredUtil.isExpired(expiredTime) ? helper.getError(time) : helper.getSuccess(time);
     }
 

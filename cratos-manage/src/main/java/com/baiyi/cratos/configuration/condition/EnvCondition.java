@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
-import static com.baiyi.cratos.common.constant.Global.ENV_PROD;
+import static com.baiyi.cratos.domain.constant.Global.ENV_PROD;
 
 /**
  * @Author baiyi

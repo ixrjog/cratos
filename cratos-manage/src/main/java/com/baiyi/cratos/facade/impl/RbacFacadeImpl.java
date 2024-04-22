@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import static com.baiyi.cratos.common.constant.Global.ROLE_FOUNDER_NAME;
+import static com.baiyi.cratos.domain.constant.Global.ROLE_FOUNDER_NAME;
 
 /**
  * @Author baiyi

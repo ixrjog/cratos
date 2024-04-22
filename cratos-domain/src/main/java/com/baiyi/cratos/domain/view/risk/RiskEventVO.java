@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.view.risk;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
@@ -46,7 +47,7 @@ public class RiskEventVO {
         private String name;
 
         // YYYY-MM-DDThh:mm:ssZ
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date eventTime;
 
         private String states;
@@ -103,10 +104,10 @@ public class RiskEventVO {
          */
         private String content;
 
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date startTime;
 
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
 
         /**

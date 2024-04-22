@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.constant;
+package com.baiyi.cratos.domain.constant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -17,5 +17,7 @@ public interface Global {
     String ROLE_FOUNDER_NAME = "FOUNDER";
 
     String APP_NAME = "appName";
+
+    String ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view;
 
+import com.baiyi.cratos.domain.constant.Global;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -20,11 +21,11 @@ public class BaseVO implements Serializable {
     private static final long serialVersionUID = 7289480709427236439L;
 
     @Schema(description = "Create time")
-    @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date createTime;
 
     @Schema(description = "Update time")
-    @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date updateTime;
 
 }
