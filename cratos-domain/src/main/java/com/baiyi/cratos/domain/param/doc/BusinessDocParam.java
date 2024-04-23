@@ -33,10 +33,6 @@ public class BusinessDocParam {
 
         private String comment;
 
-        private Date createTime;
-
-        private Date updateTime;
-
         private String content;
 
         private String author;
@@ -64,10 +60,6 @@ public class BusinessDocParam {
         private Integer seq;
 
         private String comment;
-
-        private Date createTime;
-
-        private Date updateTime;
 
         private String content;
 
