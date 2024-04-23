@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.risk.RiskEventImpactParam;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.view.risk.RiskEventGraphVO;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.facade.RiskEventFacade;
 import com.baiyi.cratos.service.RiskEventImpactService;
@@ -128,8 +129,9 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         }
     }
 
-    public void queryReport(RiskEventParam.RiskEventReportQuery riskEventReportQuery) {
+    public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
 
+        return null;
     }
 
 }

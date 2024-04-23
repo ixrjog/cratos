@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 class RiskEventReportFacadeTest extends BaseUnit {
 
     @Resource
-    private RiskEventReportFacade riskEventReportFacade;
+    private RiskEventGraphFacade riskEventReportFacade;
 
     @Test
     void test() {
