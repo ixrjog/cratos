@@ -21,7 +21,7 @@ import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;

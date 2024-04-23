@@ -62,4 +62,13 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
         return edsAssetIndexMapper.selectByExample(example);
     }
 
+    @Override
+    public List<EdsAssetIndex> queryIndexByNameAndValue(String name, String value) {
+        Example example = new Example(EdsAssetIndex.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("name", name)
+                .andEqualTo("value", value);
+        return edsAssetIndexMapper.selectByExample(example);
+    }
+
 }

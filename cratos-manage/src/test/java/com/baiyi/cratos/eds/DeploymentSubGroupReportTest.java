@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.eds.report.DeploymentSubGroupReport;
+import com.baiyi.cratos.eds.report.ListAppGroup;
 import jakarta.annotation.Resource;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import java.util.List;
 public class DeploymentSubGroupReportTest extends BaseUnit {
 
     @Resource
-    private DeploymentSubGroupReport deploymentSubGroupReport;
+    private ListAppGroup deploymentSubGroupReport;
 
     @Test
     void doReportTest() {

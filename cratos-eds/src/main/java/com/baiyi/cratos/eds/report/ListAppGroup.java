@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.report;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.report.model.AppGroupingSpecifications;
+import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Maps;
@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
+import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider.REPLICAS;
 
 /**
  * @Author baiyi
@@ -26,33 +27,40 @@ import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DeploymentSubGroupReport {
+public class ListAppGroup {
 
     private final EdsAssetIndexService indexService;
 
     private final EdsAssetService assetService;
 
     public void doReport() {
-        Map<String, AppGroupingSpecifications.GroupingSpecifications> groupingMap = getGroupingMap(null);
+        Map<String, AppGroupSpec.GroupSpec> groupingMap = getGroupMap(null, false);
         groupingMap.keySet()
                 .forEach(ka -> groupingMap.get(ka)
                         .print());
     }
 
-    public Map<String, AppGroupingSpecifications.GroupingSpecifications> getGroupingMap(String queryName) {
+    public Map<String, AppGroupSpec.GroupSpec> getGroupMap(String queryName, boolean equals) {
         List<EdsAssetIndex> appNameIndices = indexService.queryIndexByName(APP_NAME);
-        Map<String, AppGroupingSpecifications.GroupingSpecifications> groupingMap = Maps.newHashMap();
+        Map<String, AppGroupSpec.GroupSpec> groupingMap = Maps.newHashMap();
         Map<Integer, EdsAsset> assetMap = Maps.newHashMap();
 
         for (EdsAssetIndex appNameIndex : appNameIndices) {
             // 按名称过滤
-            if (StringUtils.hasText(queryName) && !appNameIndex.getValue()
-                    .contains(queryName)) {
-                continue;
+            if (StringUtils.hasText(queryName)) {
+                if (!equals && !appNameIndex.getValue()
+                        .contains(queryName)) {
+                    continue;
+                }
+                if (equals && !appNameIndex.getValue()
+                        .equals(queryName)) {
+                    continue;
+                }
             }
 
             // 获取资产信息
-            EdsAsset edsAsset = assetMap.containsKey(appNameIndex.getAssetId()) ? assetMap.get(appNameIndex.getAssetId()) : assetService.getById(appNameIndex.getAssetId());
+            EdsAsset edsAsset = assetMap.containsKey(appNameIndex.getAssetId()) ? assetMap.get(
+                    appNameIndex.getAssetId()) : assetService.getById(appNameIndex.getAssetId());
             if (edsAsset == null) {
                 continue;
             }
@@ -78,68 +86,67 @@ public class DeploymentSubGroupReport {
 
             Optional<EdsAssetIndex> replicasIndexOptional = assetIndices.stream()
                     .filter(e -> e.getName()
-                            .equals("replicas"))
+                            .equals(REPLICAS))
                     .findFirst();
             if (replicasIndexOptional.isEmpty()) {
                 continue;
             }
 
-            AppGroupingSpecifications.GroupingSpecifications groupingSpecifications;
+            AppGroupSpec.GroupSpec groupSpecifications;
             if (groupingMap.containsKey(appNameIndex.getValue())) {
-                groupingSpecifications = groupingMap.get(appNameIndex.getValue());
+                groupSpecifications = groupingMap.get(appNameIndex.getValue());
             } else {
-                groupingSpecifications = AppGroupingSpecifications.GroupingSpecifications.builder()
+                groupSpecifications = AppGroupSpec.GroupSpec.builder()
                         .appName(appNameIndex.getValue())
                         .env(envIndexOptional.get()
                                 .getValue())
                         .build();
             }
             // 通过资产名称来设置分组副本数
-
-            AppGroupingSpecifications.Grouping grouping = AppGroupingSpecifications.Grouping.builder()
+            AppGroupSpec.Group group = AppGroupSpec.Group.builder()
                     .name(edsAsset.getName())
                     .replicas(Integer.parseInt(replicasIndexOptional.get()
                             .getValue()))
                     .build();
 
             // 去掉环境表情
-            String newGroupingName = StringFormatter.eraseLastStr(edsAsset.getName(), "-" + envIndexOptional.get()
+            String newGroupName = StringFormatter.eraseLastStr(edsAsset.getName(), "-" + envIndexOptional.get()
                     .getValue());
             // 分组名称 = 应用名称
             if (appNameIndex.getValue()
-                    .equals(newGroupingName)) {
-                groupingSpecifications.setG1(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+                    .equals(newGroupName)) {
+                groupSpecifications.setG1(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
                 continue;
             }
 
-            if (newGroupingName.endsWith("-canary")) {
-                grouping.setReplicas(1);
-                groupingSpecifications.setCanary(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+            if (newGroupName.endsWith("-canary")) {
+                group.setReplicas(1);
+                groupSpecifications.setCanary(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
                 continue;
             }
 
-            if (newGroupingName.endsWith("-1")) {
-                groupingSpecifications.setG1(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+            if (newGroupName.endsWith("-1")) {
+                groupSpecifications.setG1(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
                 continue;
             }
 
-            if (newGroupingName.endsWith("-2")) {
-                groupingSpecifications.setG2(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+            if (newGroupName.endsWith("-2")) {
+                groupSpecifications.setG2(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
                 continue;
             }
 
-            if (newGroupingName.endsWith("-3")) {
-                groupingSpecifications.setG3(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+            if (newGroupName.endsWith("-3")) {
+                groupSpecifications.setG3(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
             }
 
-            if (newGroupingName.endsWith("-4")) {
-                groupingSpecifications.setG4(grouping);
-                groupingMap.put(appNameIndex.getValue(), groupingSpecifications);
+            if (newGroupName.endsWith("-4")) {
+                groupSpecifications.setG4(group);
+                groupingMap.put(appNameIndex.getValue(), groupSpecifications);
             }
         }
         return groupingMap;

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
-import com.baiyi.cratos.facade.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
