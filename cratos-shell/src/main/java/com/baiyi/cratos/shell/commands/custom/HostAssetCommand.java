@@ -56,7 +56,7 @@ public class HostAssetCommand extends AbstractCommand {
     //        return lbTable.toString();
 
     public Set<String> getAssetTypes() {
-        return Sets.newHashSet(EdsAssetTypeEnum.ALIYUN_ECS.name(),EdsAssetTypeEnum.AWS_EC2.name());
+        return Sets.newHashSet(EdsAssetTypeEnum.ALIYUN_ECS.name(), EdsAssetTypeEnum.AWS_EC2.name());
     }
 
     public enum AssetTypeEnum {
