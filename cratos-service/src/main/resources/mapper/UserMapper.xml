@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.User">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="uuid" jdbcType="CHAR" property="uuid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
-    <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone" />
-    <result column="otp" jdbcType="INTEGER" property="otp" />
-    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
-    <result column="source" jdbcType="VARCHAR" property="source" />
-    <result column="lang" jdbcType="VARCHAR" property="lang" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="password" jdbcType="LONGVARCHAR" property="password" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-    <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.User">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="uuid" jdbcType="CHAR" property="uuid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin"/>
+        <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone"/>
+        <result column="otp" jdbcType="INTEGER" property="otp"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="lang" jdbcType="VARCHAR" property="lang"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="password" jdbcType="LONGVARCHAR" property="password"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+        <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+    </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.user.UserParam$UserPageQuery"
-          resultMap="BaseResultMap">
-    select * from user
-    <where>
-      <if test="queryName != null and queryName != ''">
-        and ( name like "%" #{queryName} "%" or display_name like "%" #{queryName} "%" )
-        order by replace(title, #{queryName}, '')
-      </if>
-    </where>
-  </select>
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.user.UserParam$UserPageQuery"
+            resultMap="BaseResultMap">
+        select * from user
+        <where>
+            <if test="queryName != null and queryName != ''">
+                and
+                (username like "%" #{queryName} "%"
+                or name like "%" #{queryName} "%"
+                or display_name like "%" #{queryName} "%" )
+            </if>
+        </where>
+        order by replace( name, #{queryName}, '' ) , create_time
+    </select>
 
 </mapper>
