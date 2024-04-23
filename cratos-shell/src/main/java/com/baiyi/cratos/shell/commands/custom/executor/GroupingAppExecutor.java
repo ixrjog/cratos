@@ -79,25 +79,29 @@ public class GroupingAppExecutor {
                     .equals("prod")) {
                 continue;
             }
-
             if (edsAsset.getName()
                     .endsWith("-1")) {
-                updateReplicas(edsAsset, groupSpec.getG1(), groups.get(0));
+                if (!groups.isEmpty()) {
+                    updateReplicas(edsAsset, groupSpec.getG1(), groups.get(0));
+                }
             }
-
             if (edsAsset.getName()
                     .endsWith("-2")) {
-                updateReplicas(edsAsset, groupSpec.getG2(), groups.get(1));
+                if (groups.size() > 1) {
+                    updateReplicas(edsAsset, groupSpec.getG2(), groups.get(1));
+                }
             }
-
             if (edsAsset.getName()
                     .endsWith("-3")) {
-                updateReplicas(edsAsset, groupSpec.getG3(), groups.get(2));
+                if (groups.size() > 2) {
+                    updateReplicas(edsAsset, groupSpec.getG3(), groups.get(2));
+                }
             }
-
             if (edsAsset.getName()
                     .endsWith("-4")) {
-                updateReplicas(edsAsset, groupSpec.getG4(), groups.get(3));
+                if (groups.size() > 3) {
+                    updateReplicas(edsAsset, groupSpec.getG4(), groups.get(3));
+                }
             }
         }
 
