@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.EdsAssetMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.EdsAsset">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
-    <result column="instance_id" jdbcType="INTEGER" property="instanceId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="asset_id" jdbcType="VARCHAR" property="assetId" />
-    <result column="asset_key" jdbcType="VARCHAR" property="assetKey" />
-    <result column="asset_type" jdbcType="VARCHAR" property="assetType" />
-    <result column="kind" jdbcType="VARCHAR" property="kind" />
-    <result column="version" jdbcType="VARCHAR" property="version" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="region" jdbcType="VARCHAR" property="region" />
-    <result column="zone" jdbcType="VARCHAR" property="zone" />
-    <result column="asset_status" jdbcType="VARCHAR" property="assetStatus" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="original_model" jdbcType="LONGVARCHAR" property="originalModel" />
-    <result column="description" jdbcType="LONGVARCHAR" property="description" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.EdsAsset">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="instance_id" jdbcType="INTEGER" property="instanceId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="asset_id" jdbcType="VARCHAR" property="assetId"/>
+        <result column="asset_key" jdbcType="VARCHAR" property="assetKey"/>
+        <result column="asset_type" jdbcType="VARCHAR" property="assetType"/>
+        <result column="kind" jdbcType="VARCHAR" property="kind"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="zone" jdbcType="VARCHAR" property="zone"/>
+        <result column="asset_status" jdbcType="VARCHAR" property="assetStatus"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="original_model" jdbcType="LONGVARCHAR" property="originalModel"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+    </resultMap>
 
-  <select id="queryPageByParam"
-          parameterType="com.baiyi.cratos.domain.param.eds.EdsInstanceParam$AssetPageQuery"
-          resultMap="BaseResultMap">
-      select * from eds_asset
-      where instance_id = #{instanceId} and asset_type = #{assetType}
-      <if test="valid != null">
-          and valid = #{valid}
-      </if>
-      <if test="queryName != null and queryName != ''">
-          and (name like "%" #{queryName} "%"
-          or asset_id like "%" #{queryName} "%"
-          or asset_key like "%" #{queryName} "%")
-      </if>
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.eds.EdsInstanceParam$AssetPageQuery"
+            resultMap="BaseResultMap">
+        select * from eds_asset
+        where asset_type = #{assetType}
+        <if test="instanceId != null">
+            and instance_id = #{instanceId}
+        </if>
+        <if test="valid != null">
+            and valid = #{valid}
+        </if>
+        <if test="queryName != null and queryName != ''">
+            and (name like "%" #{queryName} "%"
+            or asset_id like "%" #{queryName} "%"
+            or asset_key like "%" #{queryName} "%")
+        </if>
+    </select>
 
 </mapper>

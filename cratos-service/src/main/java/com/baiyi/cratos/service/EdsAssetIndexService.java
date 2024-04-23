@@ -22,4 +22,6 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     List<EdsAssetIndex> queryIndexByValue(String value);
 
+    List<EdsAssetIndex> queryIndexByNameAndValue(String name, String value);
+
 }

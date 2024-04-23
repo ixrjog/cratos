@@ -26,4 +26,5 @@ public interface RiskEventFacade {
 
     void deleteRiskEventImpactById(int id);
 
+
 }

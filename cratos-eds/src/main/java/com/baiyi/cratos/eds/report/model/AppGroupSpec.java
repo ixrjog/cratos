@@ -16,27 +16,27 @@ import java.util.List;
  * @Date 2024/4/18 下午1:43
  * @Version 1.0
  */
-public class AppGroupingSpecifications {
+public class AppGroupSpec {
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class GroupingSpecifications {
+    public static class GroupSpec {
 
         private String appName;
 
         private String env;
 
-        private Grouping canary;
+        private Group canary;
 
-        private Grouping g1;
+        private Group g1;
 
-        private Grouping g2;
+        private Group g2;
 
-        private Grouping g3;
+        private Group g3;
 
-        private Grouping g4;
+        private Group g4;
 
         private Specifications specifications;
 
@@ -55,7 +55,7 @@ public class AppGroupingSpecifications {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Grouping {
+    public static class Group {
 
         private String name;
 

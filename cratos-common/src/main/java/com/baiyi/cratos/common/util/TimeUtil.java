@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -23,7 +24,6 @@ public class TimeUtil {
     }
 
     /**
-     *
      * @param d
      * @param format "yyyy-MM-dd"
      * @return
@@ -65,6 +65,34 @@ public class TimeUtil {
         // 由于月份从0开始，所以需要+1
         int month = calendar.get(Calendar.MONTH) + 1;
         return month / 4 + 1;
+    }
+
+    public static int getDaysByQuarter(int isoYear, int quarter) {
+        if (quarter == 4) {
+            return 92;
+        }
+        if (quarter == 3) {
+            return 92;
+        }
+        if (quarter == 2) {
+            return 91;
+        }
+        if (quarter == 1) {
+            Year year = Year.of(isoYear);
+            return year.isLeap() ? 62 + 29 : 62 + 28;
+        }
+        return 0;
+    }
+
+    /**
+     * 获取年的总天数
+     *
+     * @param isoYear
+     * @return
+     */
+    public static int getDaysByYear(int isoYear) {
+        Year year = Year.of(isoYear);
+        return year.isLeap() ? 366 : 365;
     }
 
     public static String convertSecondsToHMS(long seconds) {

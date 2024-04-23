@@ -4,6 +4,7 @@ import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
+import com.baiyi.cratos.domain.param.risk.RiskEventParam;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class RiskEventImpactServiceImpl implements RiskEventImpactService {
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
         riskEventImpactMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer queryTotalCostByParam(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        return riskEventImpactMapper.queryTotalCostByParam(riskEventGraphQuery);
     }
 
 }

@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.RiskEventImpactMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.RiskEventImpact">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="risk_event_id" jdbcType="INTEGER" property="riskEventId" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="sla" jdbcType="BIT" property="sla" />
-    <result column="cost" jdbcType="INTEGER" property="cost" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.RiskEventImpact">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="risk_event_id" jdbcType="INTEGER" property="riskEventId"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="sla" jdbcType="BIT" property="sla"/>
+        <result column="cost" jdbcType="INTEGER" property="cost"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryTotalCostByParam"
+            parameterType="com.baiyi.cratos.domain.param.risk.RiskEventParam$RiskEventGraphQuery"
+            resultType="java.lang.Integer">
+        select sum(a0.cost) from risk_event_impact a0 join risk_event a1 on a0.risk_event_id = a1.id
+        <where>
+            a0.sla = true and a0.valid = true
+            <if test="year != null and year != ''">
+                and a1.year = #{year}
+            </if>
+            <if test="quarter != null and quarter != ''">
+                and a1.quarter = #{quarter}
+            </if>
+        </where>
+    </select>
+
 </mapper>

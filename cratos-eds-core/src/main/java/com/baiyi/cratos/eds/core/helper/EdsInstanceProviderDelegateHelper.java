@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.helper;
+package com.baiyi.cratos.eds.core.helper;
 
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.EdsConfig;

@@ -13,13 +13,13 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -47,17 +47,22 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     private final EdsAssetIndexService edsAssetIndexService;
 
+    public static final String REPLICAS = "replicas";
+
     @Override
-    protected List<Deployment> listEntities(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+    protected List<Deployment> listEntities(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
         List<Deployment> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(kubernetesDeploymentRepo.list(instance.getEdsConfigModel(), e.getMetadata()
-                .getName())));
+        namespaces.forEach(e -> entities.addAll(kubernetesDeploymentRepo.list(instance.getEdsConfigModel(),
+                e.getMetadata()
+                        .getName())));
         return entities;
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, Deployment entity) {
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                  Deployment entity) {
         final String namespace = entity.getMetadata()
                 .getNamespace();
         final String name = entity.getMetadata()
@@ -114,14 +119,11 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             indices.add(appNameIndex);
         }
 
-        int replicas = Optional.of(entity)
-                .map(Deployment::getSpec)
-                .map(DeploymentSpec::getReplicas)
-                .orElse(0);
+        int replicas = KubeUtil.getReplicas(entity);
         EdsAssetIndex envIndex = EdsAssetIndex.builder()
                 .instanceId(edsAsset.getInstanceId())
                 .assetId(edsAsset.getId())
-                .name("replicas")
+                .name(REPLICAS)
                 .value(String.valueOf(replicas))
                 .build();
         indices.add(envIndex);
