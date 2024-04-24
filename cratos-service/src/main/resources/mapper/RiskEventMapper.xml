@@ -68,7 +68,7 @@
             and quarter = #{quarter}
         </if>
         group by `c_name`
-        order by `c_name`;
+        order by `c_name`
     </select>
 
     <select id="querySLADataForTheMonth" resultMap="SimpleDataMap">
