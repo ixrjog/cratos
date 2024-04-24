@@ -22,6 +22,7 @@ public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseV
 
     List<String> queryYears();
 
-    List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery);
+    List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery,
+                                                     List<Integer> inImpactIdList);
 
 }

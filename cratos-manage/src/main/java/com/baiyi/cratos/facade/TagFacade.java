@@ -1,8 +1,11 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -20,5 +23,7 @@ public interface TagFacade {
     void deleteById(int id);
 
     void setTagValidById(int id);
+
+    List<TagVO.Tag> queryTagByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType);
 
 }

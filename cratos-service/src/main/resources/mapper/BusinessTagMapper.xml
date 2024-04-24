@@ -24,7 +24,7 @@
         )
     </select>
 
-    <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByValue"
+    <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByTag"
             resultType="java.lang.String">
         select distinct tag_value from business_tag
         <where>
@@ -34,6 +34,20 @@
                 order by replace( tag_value, #{queryTagValue}, '' )
             </if>
         </where>
+    </select>
+
+    <select id="queryTagIdByBusinessType" parameterType="com.baiyi.cratos.domain.param.business.BusinessParam$QueryByBusinessType"
+            resultType="java.lang.Integer">
+        select distinct tag_id from business_tag where business_type = #{businessType}
+    </select>
+
+    <select id="queryBusinessIdByTag" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByTag"
+            resultType="java.lang.Integer">
+        select business_id from business_tag
+        where tag_id = #{tagId}
+        <if test="tagValue != null and tagValue != ''">
+           and tag_value = #{tagValue}
+        </if>
     </select>
 
 </mapper>

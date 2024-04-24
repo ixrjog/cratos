@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.risk;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -45,12 +46,14 @@ public class RiskEventParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class RiskEventGraphQuery  {
+    public static class RiskEventGraphQuery {
 
         @NotBlank
         private String year;
 
         private String quarter;
+
+        private BusinessTagParam.QueryByTag queryByTag;
 
     }
 

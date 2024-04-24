@@ -3,7 +3,6 @@ package com.baiyi.cratos.domain.param.tag;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -15,12 +14,13 @@ public class BusinessTagParam {
 
     @Data
     @Schema
-    public static class QueryByValue {
+    public static class QueryByTag {
 
-        @NotNull
         private Integer tagId;
 
         private String queryTagValue;
+
+        private String tagValue;
 
     }
 

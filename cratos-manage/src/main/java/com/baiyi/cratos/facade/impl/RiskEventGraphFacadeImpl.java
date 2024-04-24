@@ -2,18 +2,23 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.base.GraphVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.risk.RiskEventGraphVO;
 import com.baiyi.cratos.facade.RiskEventGraphFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import com.baiyi.cratos.service.RiskEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.common.util.TimeUtil.THE_NUMBER_OF_SECONDS_IN_A_DAY;
@@ -32,6 +37,8 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private final RiskEventImpactService impactService;
 
+    private final BusinessTagService businessTagService;
+
     @Override
     public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
         Integer cost = impactService.queryTotalCostByParam(riskEventGraphQuery);
@@ -43,14 +50,32 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                 .total(days * THE_NUMBER_OF_SECONDS_IN_A_DAY)
                 .cost(cost)
                 .build();
-
-        List<GraphVO.SimpleData> data = eventService.querySLADataForTheMonth(riskEventGraphQuery);
-        RiskEventGraphVO.MonthlySlaCostBarGraph monthlySlaCostBarGraph = RiskEventGraphVO.MonthlySlaCostBarGraph.builder()
-                .data(data)
-                .build();
+        RiskEventGraphVO.MonthlySlaCostBarGraph monthlySlaCostBarGraph = getMonthlySlaCostBarGraph(riskEventGraphQuery);
         return RiskEventGraphVO.Graph.builder()
                 .slaPieGraph(slaPieGraph)
                 .monthlySlaCostBarGraph(monthlySlaCostBarGraph)
+                .build();
+    }
+
+    private RiskEventGraphVO.MonthlySlaCostBarGraph getMonthlySlaCostBarGraph(
+            RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        int tagId = Optional.of(riskEventGraphQuery)
+                .map(RiskEventParam.RiskEventGraphQuery::getQueryByTag)
+                .map(BusinessTagParam.QueryByTag::getTagId)
+                .orElse(0);
+        List<GraphVO.SimpleData> data;
+        if (tagId == 0) {
+            data = eventService.querySLADataForTheMonth(riskEventGraphQuery, Collections.emptyList());
+        } else {
+            List<Integer> inImpactIdList = businessTagService.queryBusinessIdByTag(riskEventGraphQuery.getQueryByTag());
+            if (CollectionUtils.isEmpty(inImpactIdList)) {
+                data = Collections.emptyList();
+            } else {
+                data = eventService.querySLADataForTheMonth(riskEventGraphQuery, inImpactIdList);
+            }
+        }
+        return RiskEventGraphVO.MonthlySlaCostBarGraph.builder()
+                .data(data)
                 .build();
     }
 

@@ -2,6 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.service.base.BaseBusinessService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
@@ -25,6 +26,10 @@ public interface BusinessTagService extends BaseBusinessService<BusinessTag>, Ba
      */
     List<Integer> queryBusinessIdsByParam(BusinessTypeEnum businessTypeEnum, List<Integer> tagIds);
 
-    List<String> queryByValue(BusinessTagParam.QueryByValue queryByValue);
+    List<String> queryByValue(BusinessTagParam.QueryByTag queryByValue);
+
+    List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType);
+
+    List<Integer> queryBusinessIdByTag(BusinessTagParam.QueryByTag queryByTag);
 
 }

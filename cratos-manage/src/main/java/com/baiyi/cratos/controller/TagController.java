@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.facade.TagFacade;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -50,6 +53,12 @@ public class TagController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TagVO.Tag>> queryTagPage(@RequestBody @Valid TagParam.TagPageQuery pageQuery) {
         return new HttpResult<>(tagFacade.queryTagPage(pageQuery));
+    }
+
+    @Operation(summary = "Query tag by business type")
+    @PostMapping(value = "/business/type/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<TagVO.Tag>> queryTagByBusinessType(@RequestBody @Valid BusinessParam.QueryByBusinessType getByBusinessType) {
+        return new HttpResult<>(tagFacade.queryTagByBusinessType(getByBusinessType));
     }
 
     @Operation(summary = "Delete tag by id")
