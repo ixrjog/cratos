@@ -24,4 +24,13 @@ public class BusinessParam {
 
     }
 
+    @Data
+    @Schema
+    public static class QueryByBusinessType implements BaseBusiness.IBusinessType {
+
+        @NotNull
+        private String businessType;
+
+    }
+
 }

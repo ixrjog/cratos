@@ -35,7 +35,7 @@ public class BusinessTagController {
 
     @Operation(summary = "Query businessTag value by tagValue")
     @PostMapping(value = "/query/by/value", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<String>> queryBusinessTagValue(@RequestBody @Valid BusinessTagParam.QueryByValue queryByValue) {
+    public HttpResult<List<String>> queryBusinessTagValue(@RequestBody @Valid BusinessTagParam.QueryByTag queryByValue) {
         return new HttpResult<>(businessTagFacade.queryBusinessTagValue(queryByValue));
     }
 

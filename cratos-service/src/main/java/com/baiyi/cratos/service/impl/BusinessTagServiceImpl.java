@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -37,8 +38,13 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public List<String> queryByValue(BusinessTagParam.QueryByValue queryByValue) {
+    public List<String> queryByValue(BusinessTagParam.QueryByTag queryByValue) {
         return businessTagMapper.queryByValue(queryByValue);
+    }
+
+    @Override
+    public List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
+        return businessTagMapper.queryTagIdByBusinessType(getByBusinessType);
     }
 
     @Override
@@ -62,6 +68,11 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     @Override
     public List<Integer> queryBusinessIdsByParam(BusinessTypeEnum businessTypeEnum, List<Integer> tagIds) {
         return businessTagMapper.queryByTagIds(businessTypeEnum.name(), tagIds);
+    }
+
+    @Override
+    public List<Integer> queryBusinessIdByTag(BusinessTagParam.QueryByTag queryByTag) {
+        return businessTagMapper.queryBusinessIdByTag(queryByTag);
     }
 
 }

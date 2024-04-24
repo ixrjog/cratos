@@ -52,7 +52,8 @@
     </select>
 
     <select id="queryYears" resultType="java.lang.String">
-        select distinct(`year`) from risk_event
+        select distinct(`year`)
+        from risk_event
     </select>
 
     <select id="queryMonths"
@@ -70,9 +71,7 @@
         order by `c_name`;
     </select>
 
-    <select id="querySLADataForTheMonth"
-            parameterType="com.baiyi.cratos.domain.param.risk.RiskEventParam$RiskEventGraphQuery"
-            resultMap="SimpleDataMap">
+    <select id="querySLADataForTheMonth" resultMap="SimpleDataMap">
         select date_format(event_time, '%Y-%m') as `c_name`, sum(a1.cost) as `value`
         from risk_event a0 join risk_event_impact a1 on a0.id = a1.risk_event_id
         where a1.sla = true and a1.valid = true
@@ -81,6 +80,12 @@
         </if>
         <if test="quarter != null and quarter != ''">
             and a0.quarter = #{quarter}
+        </if>
+        <if test="inImpactIdList != null and inImpactIdList.size() > 0">
+            and a1.id in
+            <foreach open="(" item="impactId" separator="," close=")" collection="inImpactIdList">
+                #{impactId}
+            </foreach>
         </if>
         group by `c_name`
         order by `c_name`

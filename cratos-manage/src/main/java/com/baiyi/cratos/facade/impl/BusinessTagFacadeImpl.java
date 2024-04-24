@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessTagService;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.wrapper.BusinessTagWrapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
 
     private final BusinessTagWrapper businessTagWrapper;
 
+    private final TagService tagService;
+
     @Override
     public List<BusinessTagVO.BusinessTag> getBusinessTagByBusiness(BusinessParam.GetByBusiness getByBusiness) {
         List<BusinessTag> tags = businessTagService.selectByBusiness(getByBusiness);
@@ -44,7 +47,7 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
     }
 
     @Override
-    public List<String> queryBusinessTagValue(BusinessTagParam.QueryByValue queryByValue) {
+    public List<String> queryBusinessTagValue(BusinessTagParam.QueryByTag queryByValue) {
         return businessTagService.queryByValue(queryByValue);
     }
 
@@ -57,7 +60,8 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
 
     private void saveBusinessTag(BaseService<?, ?> baseService, BusinessTag saveBusinessTag) {
         if (baseService.getById(saveBusinessTag.getBusinessId()) == null) {
-            throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}", saveBusinessTag.getBusinessType(), saveBusinessTag.getBusinessId());
+            throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}",
+                    saveBusinessTag.getBusinessType(), saveBusinessTag.getBusinessId());
         }
         if (saveBusinessTag.getId() != null) {
             businessTagService.updateByPrimaryKey(saveBusinessTag);

@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.facade.TagFacade;
@@ -12,6 +13,10 @@ import com.baiyi.cratos.wrapper.TagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -57,6 +62,18 @@ public class TagFacadeImpl implements TagFacade {
     @Override
     public void setTagValidById(int id) {
         tagService.updateValidById(id);
+    }
+
+    @Override
+    public List<TagVO.Tag> queryTagByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
+        List<Integer> tagIds = businessTagService.queryTagIdByBusinessType(getByBusinessType);
+        if (CollectionUtils.isEmpty(tagIds)) {
+            return Collections.emptyList();
+        }
+        List<Tag> tags = tagService.queryByIds(tagIds);
+        return tags.stream()
+                .map(tagWrapper::wrapToTarget)
+                .toList();
     }
 
 }
