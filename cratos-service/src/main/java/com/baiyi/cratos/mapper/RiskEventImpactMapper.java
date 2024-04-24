@@ -6,6 +6,6 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface RiskEventImpactMapper extends Mapper<RiskEventImpact> {
 
-    int queryTotalCostByParam(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery);
+    Integer queryTotalCostByParam(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery);
 
 }
