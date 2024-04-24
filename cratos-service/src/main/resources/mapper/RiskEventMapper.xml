@@ -81,9 +81,9 @@
         <if test="quarter != null and quarter != ''">
             and a0.quarter = #{quarter}
         </if>
-        <if test="inImpactIdList != null and inImpactIdList.size() > 0">
+        <if test="impactIdList != null and impactIdList.size() > 0">
             and a1.id in
-            <foreach open="(" item="impactId" separator="," close=")" collection="inImpactIdList">
+            <foreach open="(" item="impactId" separator="," close=")" collection="impactIdList">
                 #{impactId}
             </foreach>
         </if>

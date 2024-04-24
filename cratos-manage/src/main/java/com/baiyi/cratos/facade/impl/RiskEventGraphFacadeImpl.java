@@ -67,11 +67,11 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
         if (tagId == 0) {
             data = eventService.querySLADataForTheMonth(riskEventGraphQuery, Collections.emptyList());
         } else {
-            List<Integer> inImpactIdList = businessTagService.queryBusinessIdByTag(riskEventGraphQuery.getQueryByTag());
-            if (CollectionUtils.isEmpty(inImpactIdList)) {
+            List<Integer> impactIdList = businessTagService.queryBusinessIdByTag(riskEventGraphQuery.getQueryByTag());
+            if (CollectionUtils.isEmpty(impactIdList)) {
                 data = Collections.emptyList();
             } else {
-                data = eventService.querySLADataForTheMonth(riskEventGraphQuery, inImpactIdList);
+                data = eventService.querySLADataForTheMonth(riskEventGraphQuery, impactIdList);
             }
         }
         return RiskEventGraphVO.MonthlySlaCostBarGraph.builder()

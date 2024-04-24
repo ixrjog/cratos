@@ -57,9 +57,9 @@ public class RiskEventServiceImpl implements RiskEventService {
 
     @Override
     public List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery,
-                                                            List<Integer> inImpactIdList) {
+                                                            List<Integer> impactIdList) {
         return riskEventMapper.querySLADataForTheMonth(riskEventGraphQuery.getYear(), riskEventGraphQuery.getQuarter(),
-                inImpactIdList);
+                impactIdList);
     }
 
 }

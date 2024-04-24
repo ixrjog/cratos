@@ -18,6 +18,6 @@ public interface RiskEventMapper extends Mapper<RiskEvent> {
 
     List<GraphVO.SimpleData> querySLADataForTheMonth(
             @Param("year") String year, @Param("quarter") String quarter,
-            @Param("inImpactIdList") List<Integer> inImpactIdList);
+            @Param("inImpactIdList") List<Integer> impactIdList);
 
 }
