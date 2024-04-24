@@ -3,6 +3,7 @@ package com.baiyi.cratos.service;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.view.base.GraphVO;
 import com.baiyi.cratos.mapper.RiskEventMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -20,5 +21,7 @@ public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseV
     DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery);
 
     List<String> queryYears();
+
+    List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery);
 
 }

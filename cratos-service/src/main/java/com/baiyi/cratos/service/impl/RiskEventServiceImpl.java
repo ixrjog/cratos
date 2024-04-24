@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.view.base.GraphVO;
 import com.baiyi.cratos.mapper.RiskEventMapper;
 import com.baiyi.cratos.service.RiskEventService;
 import com.github.pagehelper.Page;
@@ -52,6 +53,11 @@ public class RiskEventServiceImpl implements RiskEventService {
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
         riskEventMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        return riskEventMapper.querySLADataForTheMonth(riskEventGraphQuery);
     }
 
 }

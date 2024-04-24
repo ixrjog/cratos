@@ -1,11 +1,13 @@
 package com.baiyi.cratos.domain.view.risk;
 
+import com.baiyi.cratos.domain.view.base.GraphVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -22,14 +24,28 @@ public class RiskEventGraphVO {
         @Serial
         private static final long serialVersionUID = 1298504895468034771L;
 
-        private SlaGraph slaGraph;
+        private SlaPieGraph slaPieGraph;
+
+        private MonthlySlaCostBarGraph monthlySlaCostBarGraph;
 
     }
 
     @Data
     @Builder
     @Schema
-    public static class SlaGraph implements Serializable {
+    public static class MonthlySlaCostBarGraph implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 2444144022432053817L;
+
+        private List<GraphVO.SimpleData> data;
+
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class SlaPieGraph implements Serializable {
 
         @Serial
         private static final long serialVersionUID = 658457964874146789L;

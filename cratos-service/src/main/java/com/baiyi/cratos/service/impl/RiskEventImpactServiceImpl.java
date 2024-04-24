@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.view.base.GraphVO;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import lombok.RequiredArgsConstructor;
