@@ -8,6 +8,7 @@ import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
+import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.commands.AbstractCommand;
 import com.baiyi.cratos.shell.commands.SshShellComponent;
 import com.baiyi.cratos.shell.commands.custom.executor.GroupingAppExecutor;
@@ -49,8 +50,7 @@ public class ApplicationCommand extends AbstractCommand {
     private final GroupingAppExecutor groupingAppExecutor;
 
     public ApplicationCommand(SshShellHelper helper, SshShellProperties properties,
-                              GroupingAppExecutor groupingAppExecutor,
-                              ListAppGroup deploymentSubGroupReport) {
+                              GroupingAppExecutor groupingAppExecutor, ListAppGroup deploymentSubGroupReport) {
         super(helper, properties, properties.getCommands()
                 .getReport());
         this.groupingAppExecutor = groupingAppExecutor;
@@ -65,12 +65,15 @@ public class ApplicationCommand extends AbstractCommand {
 
     @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping Application")
     @ShellMethodAvailability("appGroupingAvailability")
+    @ShellAuthentication(resource = "/shell/application/app-grouping")
     public void appGrouping(@ShellOption(help = "Application Name", defaultValue = "") String name,
                             @ShellOption(help = "Specify the total number of replicas for the group", defaultValue = "0") int replicas,
                             @ShellOption(help = "Preview group details", defaultValue = "false") boolean preview) {
-
-        Map<String, AppGroupSpec.GroupSpec> groupMap = listAppGroup.getGroupMap(name,
-                true);
+        if (!StringUtils.hasText(name)) {
+            helper.printError("Application name must be specified.");
+            return;
+        }
+        Map<String, AppGroupSpec.GroupSpec> groupMap = listAppGroup.getGroupMap(name, true);
 
         // preview
         if (preview && StringUtils.hasText(name)) {
@@ -125,8 +128,7 @@ public class ApplicationCommand extends AbstractCommand {
         }
         helper.print("The total number does not include canary.", PromptColor.GREEN);
         PrettyTable table = PrettyTable.fieldNames(APP_GROUPING_REPORT_TABLE_FIELD_NAME);
-        Map<String, AppGroupSpec.GroupSpec> groupingMap = listAppGroup.getGroupMap(name,
-                false);
+        Map<String, AppGroupSpec.GroupSpec> groupingMap = listAppGroup.getGroupMap(name, false);
         AtomicReference<Integer> sum = new AtomicReference<>(0);
         groupingMap.keySet()
                 .forEach(k -> {

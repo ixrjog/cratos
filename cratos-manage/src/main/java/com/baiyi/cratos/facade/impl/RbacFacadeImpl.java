@@ -14,6 +14,7 @@ import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.service.RbacResourceService;
 import com.baiyi.cratos.service.RbacRoleResourceService;
 import com.baiyi.cratos.wrapper.RbacRoleWrapper;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,8 @@ public class RbacFacadeImpl implements RbacFacade {
 
     private final RbacResourceFacade rbacResourceFacade;
 
+    private final RbacResourceService rbacResourceService;
+
     private final UserTokenFacade userTokenFacade;
 
     private final RbacRoleFacade rbacRoleFacade;
@@ -47,6 +50,23 @@ public class RbacFacadeImpl implements RbacFacade {
     private final RbacRoleResourceService rbacRoleResourceService;
 
     private final RbacRoleWrapper rbacRoleWrapper;
+
+    @Override
+    public void verifyResourceAccessPermissionsForUsername(String username, String resource) {
+        RbacResource rbacResource = Optional.ofNullable(rbacResourceFacade.getByResource(resource))
+                .orElseThrow(() -> new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST));
+        if (!rbacResource.getValid()) {
+            // 登录用户即可访问
+            return;
+        }
+        // 校验用户是否可以访问资源路径
+        if (rbacResourceService.countResourcesAuthorizedByUsername(username, resource) == 0) {
+            // 管理员跳过验证
+            if (!verifyRoleAccessLevelByUsername(AccessLevel.ADMIN, username)) {
+                throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);
+            }
+        }
+    }
 
     @Override
     public void verifyResourceAccessPermissions(String token, String resource) {
@@ -71,7 +91,11 @@ public class RbacFacadeImpl implements RbacFacade {
     @Override
     public boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token) {
         UserToken userToken = userTokenFacade.verifyToken(token);
-        List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRoles(userToken.getUsername());
+        return verifyRoleAccessLevelByUsername(accessLevel, userToken.getUsername());
+    }
+
+    private boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel, String username) {
+        List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRoles(username);
         if (CollectionUtils.isEmpty(rbacRoles)) {
             return false;
         }
@@ -82,7 +106,8 @@ public class RbacFacadeImpl implements RbacFacade {
     }
 
     @Override
-    public List<RbacRoleVO.Role> checkUserRoleResourcePermission(RbacUserRoleParam.VerifyUserRoleResourcePermission checkPermission) {
+    public List<RbacRoleVO.Role> checkUserRoleResourcePermission(
+            RbacUserRoleParam.VerifyUserRoleResourcePermission checkPermission) {
         return rbacRoleFacade.queryUserRoles(checkPermission.getUsername())
                 .stream()
                 .filter(e -> {

@@ -21,4 +21,6 @@ public interface RbacResourceService extends BaseUniqueKeyService<RbacResource>,
 
     DataTable<RbacResource> queryRoleResourcePageByParam(RbacRoleResourceParam.RoleResourcePageQuery pageQuery);
 
+    int countResourcesAuthorizedByUsername(String username, String resource);
+
 }

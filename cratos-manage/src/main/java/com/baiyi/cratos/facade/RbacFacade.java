@@ -29,6 +29,8 @@ public interface RbacFacade {
      */
     boolean verifyRoleAccessLevel(AccessLevel accessLevel, String token);
 
+    void verifyResourceAccessPermissionsForUsername(String username, String resource);
+
     List<RbacRoleVO.Role> checkUserRoleResourcePermission(RbacUserRoleParam.VerifyUserRoleResourcePermission checkPermission);
 
 }

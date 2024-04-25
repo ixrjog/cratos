@@ -51,9 +51,14 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     @Override
     public DataTable<RbacResource> queryRoleResourcePageByParam(RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
         Page<RbacResource> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<RbacResource> data = pageQuery.getInRole() ? rbacResourceMapper.queryResourceInRoleByParam(pageQuery)
-                : rbacResourceMapper.queryResourceNotInRoleByParam(pageQuery);
+        List<RbacResource> data = pageQuery.getInRole() ? rbacResourceMapper.queryResourceInRoleByParam(
+                pageQuery) : rbacResourceMapper.queryResourceNotInRoleByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public int countResourcesAuthorizedByUsername(String username, String resource) {
+        return rbacResourceMapper.countResourcesAuthorizedByUsername(username, resource);
     }
 
 }
