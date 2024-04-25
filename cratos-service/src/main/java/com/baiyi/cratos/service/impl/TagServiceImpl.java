@@ -39,4 +39,12 @@ public class TagServiceImpl implements TagService {
         return new DataTable<>(data, page.getTotal());
     }
 
+    @Override
+    public Tag getByUniqueKey(Tag tag) {
+        Example example = new Example(Tag.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("tagKey", tag.getTagKey());
+        return tagMapper.selectOneByExample(example);
+    }
+
 }

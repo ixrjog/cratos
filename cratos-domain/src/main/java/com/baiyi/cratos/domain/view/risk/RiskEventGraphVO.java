@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.risk;
 
 import com.baiyi.cratos.domain.view.base.GraphVO;
+import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -66,10 +67,14 @@ public class RiskEventGraphVO {
     @Schema
     public static class FinLosses implements Serializable {
 
+        public static final FinLosses EMPTY = FinLosses.builder()
+                .build();
+
         @Serial
         private static final long serialVersionUID = -563089568684362074L;
 
-        private Map<String,Integer> data;
+        @Builder.Default
+        private Map<String,Integer> data = Maps.newHashMap();
 
     }
 

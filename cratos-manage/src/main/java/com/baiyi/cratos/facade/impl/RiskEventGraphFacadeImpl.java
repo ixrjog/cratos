@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.RiskEvent;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.base.GraphVO;
@@ -13,6 +14,7 @@ import com.baiyi.cratos.facade.RiskEventGraphFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import com.baiyi.cratos.service.RiskEventService;
+import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,8 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private final RiskEventService eventService;
 
+    private final TagService tagService;
+
     private final RiskEventImpactService impactService;
 
     private final BusinessTagService businessTagService;
@@ -65,9 +69,18 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
     }
 
     private RiskEventGraphVO.FinLosses getFinLosses(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        Tag tagUniqueKey = Tag.builder()
+                .tagKey("FinLosses")
+                .build();
+
+        Tag tag = tagService.getByUniqueKey(tagUniqueKey);
+        if (tag == null) {
+            return RiskEventGraphVO.FinLosses.EMPTY;
+        }
+
         BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
                 // FinLosses
-                .tagId(18)
+                .tagId(tag.getId())
                 .businessType(BusinessTypeEnum.RISK_EVENT.name())
                 .build();
         List<Integer> eventIdList = businessTagService.queryBusinessIdByTag(queryByTag);
@@ -91,12 +104,12 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                     continue;
                 }
             }
-            BusinessTag uniqueKey = BusinessTag.builder()
-                    .tagId(18)
+            BusinessTag businessTagUniqueKey = BusinessTag.builder()
+                    .tagId(tag.getId())
                     .businessId(eventId)
                     .businessType(BusinessTypeEnum.RISK_EVENT.name())
                     .build();
-            BusinessTag businessTag = businessTagService.getByUniqueKey(uniqueKey);
+            BusinessTag businessTag = businessTagService.getByUniqueKey(businessTagUniqueKey);
 
             String[] s = businessTag.getTagValue()
                     .split(":");
