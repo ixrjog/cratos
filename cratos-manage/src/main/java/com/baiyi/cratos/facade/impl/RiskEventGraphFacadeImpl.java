@@ -1,6 +1,9 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.base.GraphVO;
@@ -10,6 +13,7 @@ import com.baiyi.cratos.facade.RiskEventGraphFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import com.baiyi.cratos.service.RiskEventService;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -51,9 +56,64 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                 .cost(cost)
                 .build();
         RiskEventGraphVO.MonthlySlaCostBarGraph monthlySlaCostBarGraph = getMonthlySlaCostBarGraph(riskEventGraphQuery);
+        RiskEventGraphVO.FinLosses finLosses = getFinLosses(riskEventGraphQuery);
         return RiskEventGraphVO.Graph.builder()
                 .slaPieGraph(slaPieGraph)
                 .monthlySlaCostBarGraph(monthlySlaCostBarGraph)
+                .finLosses(finLosses)
+                .build();
+    }
+
+    private RiskEventGraphVO.FinLosses getFinLosses(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                // FinLosses
+                .tagId(18)
+                .businessType(BusinessTypeEnum.RISK_EVENT.name())
+                .build();
+        List<Integer> eventIdList = businessTagService.queryBusinessIdByTag(queryByTag);
+
+        Map<String, Integer> finLossesMap = Maps.newHashMap();
+
+        for (Integer eventId : eventIdList) {
+            RiskEvent riskEvent = eventService.getById(eventId);
+            if (!riskEvent.getValid()) {
+                continue;
+            }
+            if (StringUtils.hasText(riskEventGraphQuery.getYear())) {
+                if (!riskEventGraphQuery.getYear()
+                        .equals(riskEvent.getYear())) {
+                    continue;
+                }
+            }
+            if (StringUtils.hasText(riskEventGraphQuery.getQuarter())) {
+                if (!riskEventGraphQuery.getQuarter()
+                        .equals(riskEvent.getQuarter())) {
+                    continue;
+                }
+            }
+            BusinessTag uniqueKey = BusinessTag.builder()
+                    .tagId(18)
+                    .businessId(eventId)
+                    .businessType(BusinessTypeEnum.RISK_EVENT.name())
+                    .build();
+            BusinessTag businessTag = businessTagService.getByUniqueKey(uniqueKey);
+
+            String[] s = businessTag.getTagValue()
+                    .split(":");
+            try {
+                String type = s[0];
+                int currency = Integer.parseInt(s[1]);
+
+                if (finLossesMap.containsKey(type)) {
+                    finLossesMap.put(type, currency + finLossesMap.get(type));
+                } else {
+                    finLossesMap.put(type, currency);
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return RiskEventGraphVO.FinLosses.builder()
+                .data(finLossesMap)
                 .build();
     }
 
@@ -67,6 +127,8 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
         if (tagId == 0) {
             data = eventService.querySLADataForTheMonth(riskEventGraphQuery, Collections.emptyList());
         } else {
+            BusinessTagParam.QueryByTag queryByTag = riskEventGraphQuery.getQueryByTag();
+            queryByTag.setBusinessType(BusinessTypeEnum.RISK_EVENT_IMPACT.name());
             List<Integer> impactIdList = businessTagService.queryBusinessIdByTag(riskEventGraphQuery.getQueryByTag());
             if (CollectionUtils.isEmpty(impactIdList)) {
                 data = Collections.emptyList();

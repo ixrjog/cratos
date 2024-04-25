@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.tag;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -13,10 +14,13 @@ import lombok.Data;
 public class BusinessTagParam {
 
     @Data
+    @Builder
     @Schema
     public static class QueryByTag {
 
         private Integer tagId;
+
+        private String businessType;
 
         private String queryTagValue;
 

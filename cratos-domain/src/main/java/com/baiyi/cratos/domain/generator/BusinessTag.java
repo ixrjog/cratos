@@ -1,12 +1,18 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "business_tag")
 public class BusinessTag implements BaseBusiness.IBusiness {
     @Id

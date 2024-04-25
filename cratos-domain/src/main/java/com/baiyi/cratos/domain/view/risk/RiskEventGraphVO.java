@@ -8,6 +8,7 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -27,6 +28,8 @@ public class RiskEventGraphVO {
         private SlaPieGraph slaPieGraph;
 
         private MonthlySlaCostBarGraph monthlySlaCostBarGraph;
+
+        private FinLosses finLosses;
 
     }
 
@@ -55,6 +58,18 @@ public class RiskEventGraphVO {
 
         @Schema(description = "SLA损失(秒)")
         private int cost;
+
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class FinLosses implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -563089568684362074L;
+
+        private Map<String,Integer> data;
 
     }
 
