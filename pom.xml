@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
-        <spring-security.version>6.2.2</spring-security.version>
+        <spring-security.version>6.2.3</spring-security.version>
         <!-- 1.12.565 -->
         <aws-java-sdk.version>1.12.691</aws-java-sdk.version>
     </properties>
