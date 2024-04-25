@@ -10,7 +10,6 @@ import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.risk.RiskEventImpactParam;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.view.risk.RiskEventGraphVO;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.facade.RiskEventFacade;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -141,11 +140,6 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         } else {
             impactService.add(riskEventImpact);
         }
-    }
-
-    public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
-
-        return null;
     }
 
 }

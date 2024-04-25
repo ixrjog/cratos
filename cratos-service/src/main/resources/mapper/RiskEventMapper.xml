@@ -45,7 +45,7 @@
                 and valid = #{valid}
             </if>
             <if test="sla != null">
-                and sla = #{sla}
+                and id in ( select risk_event_id from risk_event_impact where sla = true )
             </if>
             <if test="eventIdList != null and eventIdList.size() > 0">
                 and id in

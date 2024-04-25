@@ -6,12 +6,27 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Optional;
+
 /**
  * @Author baiyi
  * @Date 2024/1/5 17:54
  * @Version 1.0
  */
 public class BusinessTagParam {
+
+    public interface IQueryByTag {
+
+        BusinessTagParam.QueryByTag getQueryByTag();
+
+        default boolean isQueryByTag() {
+            int tagId = Optional.ofNullable(getQueryByTag())
+                    .map(BusinessTagParam.QueryByTag::getTagId)
+                    .orElse(0);
+            return tagId != 0;
+        }
+
+    }
 
     @Data
     @Builder

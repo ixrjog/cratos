@@ -82,25 +82,11 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                 .businessType(BusinessTypeEnum.RISK_EVENT.name())
                 .build();
         List<Integer> eventIdList = businessTagService.queryBusinessIdByTag(queryByTag);
-
         Map<String, Integer> finLossesMap = Maps.newHashMap();
-
-        for (Integer eventId : eventIdList) {
+        eventIdList.forEach(eventId -> {
             RiskEvent riskEvent = eventService.getById(eventId);
-            if (!riskEvent.getValid()) {
-                continue;
-            }
-            if (StringUtils.hasText(riskEventGraphQuery.getYear())) {
-                if (!riskEventGraphQuery.getYear()
-                        .equals(riskEvent.getYear())) {
-                    continue;
-                }
-            }
-            if (StringUtils.hasText(riskEventGraphQuery.getQuarter())) {
-                if (!riskEventGraphQuery.getQuarter()
-                        .equals(riskEvent.getQuarter())) {
-                    continue;
-                }
+            if (isSkipLoop(riskEventGraphQuery, riskEvent)) {
+                return;
             }
             BusinessTag businessTagUniqueKey = BusinessTag.builder()
                     .tagId(tag.getId())
@@ -108,7 +94,6 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                     .businessType(BusinessTypeEnum.RISK_EVENT.name())
                     .build();
             BusinessTag businessTag = businessTagService.getByUniqueKey(businessTagUniqueKey);
-
             String[] s = businessTag.getTagValue()
                     .split(":");
             try {
@@ -121,10 +106,27 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
                 }
             } catch (NumberFormatException ignored) {
             }
-        }
+        });
         return RiskEventGraphVO.FinLosses.builder()
                 .data(finLossesMap)
                 .build();
+    }
+
+    private boolean isSkipLoop(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery, RiskEvent riskEvent) {
+        if (!riskEvent.getValid()) {
+            return true;
+        }
+        if (StringUtils.hasText(riskEventGraphQuery.getYear())) {
+            if (!riskEventGraphQuery.getYear()
+                    .equals(riskEvent.getYear())) {
+                return true;
+            }
+        }
+        if (StringUtils.hasText(riskEventGraphQuery.getQuarter())) {
+            return !riskEventGraphQuery.getQuarter()
+                    .equals(riskEvent.getQuarter());
+        }
+        return false;
     }
 
     private RiskEventGraphVO.MonthlySlaCostBarGraph getMonthlySlaCostBarGraph(
