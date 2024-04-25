@@ -44,6 +44,15 @@
             <if test="valid != null">
                 and valid = #{valid}
             </if>
+            <if test="sla != null">
+                and sla = #{sla}
+            </if>
+            <if test="eventIdList != null and eventIdList.size() > 0">
+                and id in
+                <foreach open="(" item="eventId" separator="," close=")" collection="eventIdList">
+                    #{eventId}
+                </foreach>
+            </if>
             <if test="queryName != null and queryName != ''">
                 and name like "%" #{queryName} "%"
             </if>

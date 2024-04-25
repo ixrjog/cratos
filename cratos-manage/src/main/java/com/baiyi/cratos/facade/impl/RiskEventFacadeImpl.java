@@ -4,13 +4,16 @@ import com.baiyi.cratos.common.exception.RiskEventImpactException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.risk.RiskEventImpactParam;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.risk.RiskEventGraphVO;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.facade.RiskEventFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import com.baiyi.cratos.service.RiskEventService;
 import com.baiyi.cratos.wrapper.RiskEventWrapper;
@@ -19,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +44,18 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
 
     private final RiskEventWrapper riskEventWrapper;
 
+    private final BusinessTagService businessTagService;
+
     @Override
     public DataTable<RiskEventVO.Event> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery) {
+        if (pageQuery.isQueryByTag()) {
+            BusinessTagParam.QueryByTag queryByTag = pageQuery.getQueryByTag();
+            queryByTag.setBusinessType(BusinessTypeEnum.RISK_EVENT.name());
+            List<Integer> eventIdList = businessTagService.queryBusinessIdByTag(queryByTag);
+            pageQuery.setEventIdList(eventIdList);
+        } else {
+            pageQuery.setEventIdList(Collections.emptyList());
+        }
         DataTable<RiskEvent> table = riskEventService.queryRiskEventPage(pageQuery);
         return riskEventWrapper.wrapToTarget(table);
     }

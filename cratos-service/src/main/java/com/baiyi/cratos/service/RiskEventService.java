@@ -25,4 +25,8 @@ public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseV
     List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery,
                                                      List<Integer> impactIdList);
 
+    default List<GraphVO.SimpleData> querySLADataForTheMonth(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        return querySLADataForTheMonth(riskEventGraphQuery, null);
+    }
+
 }

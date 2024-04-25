@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -21,12 +23,25 @@ import java.util.Date;
  */
 public class RiskEventParam {
 
+    public interface IQueryByTag {
+
+        BusinessTagParam.QueryByTag getQueryByTag();
+
+        default boolean isQueryByTag() {
+            int tagId = Optional.ofNullable(getQueryByTag())
+                    .map(BusinessTagParam.QueryByTag::getTagId)
+                    .orElse(0);
+            return tagId != 0;
+        }
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class RiskEventPageQuery extends PageParam {
+    public static class RiskEventPageQuery extends PageParam implements IQueryByTag {
 
         @Schema(description = "Query by name")
         private String queryName;
@@ -41,12 +56,18 @@ public class RiskEventParam {
 
         private Boolean valid;
 
+        private Boolean sla;
+
+        private BusinessTagParam.QueryByTag queryByTag;
+
+        private List<Integer> eventIdList;
+
     }
 
     @Data
     @NoArgsConstructor
     @Schema
-    public static class RiskEventGraphQuery {
+    public static class RiskEventGraphQuery implements IQueryByTag {
 
         @NotBlank
         private String year;

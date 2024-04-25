@@ -25,7 +25,6 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.common.util.TimeUtil.THE_NUMBER_OF_SECONDS_IN_A_DAY;
@@ -47,6 +46,8 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
     private final RiskEventImpactService impactService;
 
     private final BusinessTagService businessTagService;
+
+    private static final String FIN_LOSSES_TAG = "FinLosses";
 
     @Override
     public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
@@ -70,16 +71,13 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private RiskEventGraphVO.FinLosses getFinLosses(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
         Tag tagUniqueKey = Tag.builder()
-                .tagKey("FinLosses")
+                .tagKey(FIN_LOSSES_TAG)
                 .build();
-
         Tag tag = tagService.getByUniqueKey(tagUniqueKey);
         if (tag == null) {
             return RiskEventGraphVO.FinLosses.EMPTY;
         }
-
         BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
-                // FinLosses
                 .tagId(tag.getId())
                 .businessType(BusinessTypeEnum.RISK_EVENT.name())
                 .build();
@@ -116,7 +114,6 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
             try {
                 String type = s[0];
                 int currency = Integer.parseInt(s[1]);
-
                 if (finLossesMap.containsKey(type)) {
                     finLossesMap.put(type, currency + finLossesMap.get(type));
                 } else {
@@ -132,22 +129,18 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private RiskEventGraphVO.MonthlySlaCostBarGraph getMonthlySlaCostBarGraph(
             RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
-        int tagId = Optional.of(riskEventGraphQuery)
-                .map(RiskEventParam.RiskEventGraphQuery::getQueryByTag)
-                .map(BusinessTagParam.QueryByTag::getTagId)
-                .orElse(0);
         List<GraphVO.SimpleData> data;
-        if (tagId == 0) {
-            data = eventService.querySLADataForTheMonth(riskEventGraphQuery, Collections.emptyList());
-        } else {
+        if (riskEventGraphQuery.isQueryByTag()) {
             BusinessTagParam.QueryByTag queryByTag = riskEventGraphQuery.getQueryByTag();
             queryByTag.setBusinessType(BusinessTypeEnum.RISK_EVENT_IMPACT.name());
-            List<Integer> impactIdList = businessTagService.queryBusinessIdByTag(riskEventGraphQuery.getQueryByTag());
+            List<Integer> impactIdList = businessTagService.queryBusinessIdByTag(queryByTag);
             if (CollectionUtils.isEmpty(impactIdList)) {
                 data = Collections.emptyList();
             } else {
                 data = eventService.querySLADataForTheMonth(riskEventGraphQuery, impactIdList);
             }
+        } else {
+            data = eventService.querySLADataForTheMonth(riskEventGraphQuery);
         }
         return RiskEventGraphVO.MonthlySlaCostBarGraph.builder()
                 .data(data)
