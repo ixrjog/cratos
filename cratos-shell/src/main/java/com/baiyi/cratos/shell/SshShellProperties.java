@@ -30,7 +30,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.baiyi.cratos.shell.SshShellProperties.SSH_SHELL_PREFIX;
-import static com.baiyi.cratos.shell.commands.DatasourceCommand.COMMAND_DATA_SOURCE_UPDATE;
 
 /**
  * Ssh shell properties (prefix : {@link SshShellProperties#SSH_SHELL_PREFIX})
@@ -138,25 +137,13 @@ public class SshShellProperties {
         private CommandProperties actuator = CommandProperties.withAuthorizedRoles(new ArrayList<>(Collections.singletonList(ACTUATOR_ROLE)));
 
         @NestedConfigurationProperty
-        private CommandProperties jmx = new CommandProperties();
-
-        @NestedConfigurationProperty
         private CommandProperties assetHost = new CommandProperties();
 
         @NestedConfigurationProperty
-        private CommandProperties report = new CommandProperties();
+        private CommandProperties application = new CommandProperties();
 
         @NestedConfigurationProperty
         private CommandProperties sshKey = new CommandProperties();
-
-        @NestedConfigurationProperty
-        private CommandProperties system = new CommandProperties();
-
-        @NestedConfigurationProperty
-        private CommandProperties tasks = new CommandProperties();
-
-        @NestedConfigurationProperty
-        private CommandProperties script = new CommandProperties();
 
         @NestedConfigurationProperty
         private CommandProperties history = new CommandProperties();
@@ -165,13 +152,8 @@ public class SshShellProperties {
         private CommandProperties stacktrace = new CommandProperties();
 
         @NestedConfigurationProperty
-        private CommandProperties datasource = CommandProperties.withExcludedByDefault(new ArrayList<>(Collections.singletonList(COMMAND_DATA_SOURCE_UPDATE)));
-
-        @NestedConfigurationProperty
         private CommandProperties postprocessors = CommandProperties.notRestrictedByDefault();
 
-        @NestedConfigurationProperty
-        private CommandProperties manageSessions = CommandProperties.disabledByDefault();
     }
 
 }

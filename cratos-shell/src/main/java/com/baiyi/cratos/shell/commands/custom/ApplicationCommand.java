@@ -52,7 +52,7 @@ public class ApplicationCommand extends AbstractCommand {
     public ApplicationCommand(SshShellHelper helper, SshShellProperties properties,
                               GroupingAppExecutor groupingAppExecutor, ListAppGroup deploymentSubGroupReport) {
         super(helper, properties, properties.getCommands()
-                .getReport());
+                .getApplication());
         this.groupingAppExecutor = groupingAppExecutor;
         this.listAppGroup = deploymentSubGroupReport;
     }
