@@ -10,14 +10,13 @@ import java.util.List;
 
 public interface RiskEventMapper extends Mapper<RiskEvent> {
 
-    List<RiskEvent> queryPageByParam(RiskEventParam.RiskEventPageQuery pageQuery);
+    List<RiskEvent> queryPageByParam(RiskEventParam.RiskEventPageQueryParam param);
 
     List<String> queryYears();
 
     List<GraphVO.SimpleData> queryMonths(RiskEventParam.RiskEventPageQuery pageQuery);
 
-    List<GraphVO.SimpleData> querySLADataForTheMonth(
-            @Param("year") String year, @Param("quarter") String quarter,
-            @Param("impactIdList") List<Integer> impactIdList);
+    List<GraphVO.SimpleData> querySLADataForTheMonth(@Param("year") String year, @Param("quarter") String quarter,
+                                                     @Param("impactIdList") List<Integer> impactIdList);
 
 }

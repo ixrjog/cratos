@@ -13,7 +13,8 @@ public enum TimeZoneEnum {
     /**
      * UTC
      */
-    UTC("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    UTC("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+    DEF("yyyy-MM-dd HH:mm:ss");
 
     private final String format;
 

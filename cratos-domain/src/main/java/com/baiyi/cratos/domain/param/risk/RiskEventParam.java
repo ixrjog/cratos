@@ -49,6 +49,45 @@ public class RiskEventParam {
 
         private List<Integer> eventIdList;
 
+        public RiskEventPageQueryParam toParam() {
+            return RiskEventPageQueryParam.builder()
+                    .queryName(queryName)
+                    .year(year)
+                    .quarter(quarter)
+                    .weeks(weeks)
+                    .states(states)
+                    .valid(valid)
+                    .sla(sla)
+                    .eventIdList(eventIdList)
+                    .build();
+        }
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class RiskEventPageQueryParam extends PageParam {
+
+        private String queryName;
+
+        private String year;
+
+        private String quarter;
+
+        private Integer weeks;
+
+        private String states;
+
+        private Boolean valid;
+
+        private Boolean sla;
+
+        private List<Integer> eventIdList;
+
+        private Integer tagId;
+
     }
 
     @Data

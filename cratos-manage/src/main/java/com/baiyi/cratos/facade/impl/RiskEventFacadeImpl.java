@@ -55,7 +55,8 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         } else {
             pageQuery.setEventIdList(Collections.emptyList());
         }
-        DataTable<RiskEvent> table = riskEventService.queryRiskEventPage(pageQuery);
+        RiskEventParam.RiskEventPageQueryParam param = pageQuery.toParam();
+        DataTable<RiskEvent> table = riskEventService.queryRiskEventPage(param);
         return riskEventWrapper.wrapToTarget(table);
     }
 

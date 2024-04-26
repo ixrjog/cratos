@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseValidService<RiskEvent, RiskEventMapper>, SupportBusinessService {
 
-    DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery);
+    DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQueryParam param);
 
     List<String> queryYears();
 

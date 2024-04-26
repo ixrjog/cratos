@@ -38,9 +38,9 @@ public class RiskEventServiceImpl implements RiskEventService {
     }
 
     @Override
-    public DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery) {
-        Page<RiskEvent> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<RiskEvent> data = riskEventMapper.queryPageByParam(pageQuery);
+    public DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQueryParam param) {
+        Page<RiskEvent> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<RiskEvent> data = riskEventMapper.queryPageByParam(param);
         return new DataTable<>(data, page.getTotal());
     }
 

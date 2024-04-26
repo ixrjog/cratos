@@ -31,6 +31,8 @@ public class EdsAliyunConfigModel {
 
         private ALB alb;
 
+        private Domain domain;
+
     }
 
     @Data
@@ -56,6 +58,15 @@ public class EdsAliyunConfigModel {
     public static class ALB {
 
         private List<String> endpoints;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Domain {
+
+        private String endpoint;
 
     }
 
