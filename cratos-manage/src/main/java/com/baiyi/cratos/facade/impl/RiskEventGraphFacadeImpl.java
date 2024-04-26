@@ -51,21 +51,25 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     @Override
     public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
-        Integer cost = impactService.queryTotalCostByParam(riskEventGraphQuery);
-        if (cost == null) {
-            cost = 0;
-        }
-        int days = getDays(riskEventGraphQuery);
-        RiskEventGraphVO.SlaPieGraph slaPieGraph = RiskEventGraphVO.SlaPieGraph.builder()
-                .total(days * THE_NUMBER_OF_SECONDS_IN_A_DAY)
-                .cost(cost)
-                .build();
+        RiskEventGraphVO.SlaPieGraph slaPieGraph = getSlaPieGraph(riskEventGraphQuery);
         RiskEventGraphVO.MonthlySlaCostBarGraph monthlySlaCostBarGraph = getMonthlySlaCostBarGraph(riskEventGraphQuery);
         RiskEventGraphVO.FinLosses finLosses = getFinLosses(riskEventGraphQuery);
         return RiskEventGraphVO.Graph.builder()
                 .slaPieGraph(slaPieGraph)
                 .monthlySlaCostBarGraph(monthlySlaCostBarGraph)
                 .finLosses(finLosses)
+                .build();
+    }
+
+    private RiskEventGraphVO.SlaPieGraph getSlaPieGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
+        Integer cost = impactService.queryTotalCostByParam(riskEventGraphQuery);
+        if (cost == null) {
+            cost = 0;
+        }
+        int days = getDays(riskEventGraphQuery);
+        return RiskEventGraphVO.SlaPieGraph.builder()
+                .total(days * THE_NUMBER_OF_SECONDS_IN_A_DAY)
+                .cost(cost)
                 .build();
     }
 
@@ -85,26 +89,25 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
         Map<String, Integer> finLossesMap = Maps.newHashMap();
         eventIdList.forEach(eventId -> {
             RiskEvent riskEvent = eventService.getById(eventId);
-            if (isSkipLoop(riskEventGraphQuery, riskEvent)) {
-                return;
-            }
-            BusinessTag businessTagUniqueKey = BusinessTag.builder()
-                    .tagId(tag.getId())
-                    .businessId(eventId)
-                    .businessType(BusinessTypeEnum.RISK_EVENT.name())
-                    .build();
-            BusinessTag businessTag = businessTagService.getByUniqueKey(businessTagUniqueKey);
-            String[] s = businessTag.getTagValue()
-                    .split(":");
-            try {
-                String type = s[0];
-                int currency = Integer.parseInt(s[1]);
-                if (finLossesMap.containsKey(type)) {
-                    finLossesMap.put(type, currency + finLossesMap.get(type));
-                } else {
-                    finLossesMap.put(type, currency);
+            if (!isSkipLoop(riskEventGraphQuery, riskEvent)) {
+                BusinessTag businessTagUniqueKey = BusinessTag.builder()
+                        .tagId(tag.getId())
+                        .businessId(eventId)
+                        .businessType(BusinessTypeEnum.RISK_EVENT.name())
+                        .build();
+                BusinessTag businessTag = businessTagService.getByUniqueKey(businessTagUniqueKey);
+                String[] s = businessTag.getTagValue()
+                        .split(":");
+                try {
+                    String type = s[0];
+                    int currency = Integer.parseInt(s[1]);
+                    if (finLossesMap.containsKey(type)) {
+                        finLossesMap.put(type, currency + finLossesMap.get(type));
+                    } else {
+                        finLossesMap.put(type, currency);
+                    }
+                } catch (NumberFormatException ignored) {
                 }
-            } catch (NumberFormatException ignored) {
             }
         });
         return RiskEventGraphVO.FinLosses.builder()
