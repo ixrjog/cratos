@@ -58,6 +58,8 @@ public class RiskEventParam {
                     .states(states)
                     .valid(valid)
                     .sla(sla)
+                    .page(getPage())
+                    .length(getLength())
                     .eventIdList(eventIdList)
                     .build();
         }
