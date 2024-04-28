@@ -17,6 +17,7 @@ public enum BusinessTypeEnum {
     CREDENTIAL,
     BUSINESS_CREDENTIAL,
     USER,
+    DOMAIN,
 
     // RBAC
 

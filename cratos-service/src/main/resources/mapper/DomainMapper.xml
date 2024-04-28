@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.DomainMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Domain">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="registration_time" jdbcType="TIMESTAMP" property="registrationTime"/>
+        <result column="expiry" jdbcType="TIMESTAMP" property="expiry"/>
+        <result column="domain_type" jdbcType="VARCHAR" property="domainType"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.domain.DomainParam$DomainPageQuery"
+            resultMap="BaseResultMap">
+        select * from domain
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                where name like "%" #{queryName} "%"
+                order by replace(name, #{queryName}, ''), expiry
+            </when>
+            <otherwise>
+                order by expiry
+            </otherwise>
+        </choose>
+    </select>
+
+
+</mapper>

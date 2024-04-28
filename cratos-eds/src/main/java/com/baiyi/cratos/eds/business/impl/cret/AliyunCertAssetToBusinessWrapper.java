@@ -1,11 +1,11 @@
-package com.baiyi.cratos.eds.business.impl;
+package com.baiyi.cratos.eds.business.impl.cret;
 
+import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.impl.base.BaseAssetToBusinessWrapper;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -14,27 +14,27 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author baiyi
- * @Date 2024/3/13 13:34
+ * @Date 2024/3/13 13:45
  * @Version 1.0
  */
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
-public class CloudflareCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, CloudflareCert.Certificate> {
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_CERT)
+public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
 
     @Override
     protected Certificate getTarget(EdsAssetVO.Asset asset) {
-        CloudflareCert.Certificate model = getAssetModel(asset);
+        ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
-                .domainName(asset.getDescription())
+                .domainName(asset.getName())
                 .certificateType(getAssetType())
-                .keyAlgorithm(model.getSignature())
+                .keyAlgorithm(model.getAlgorithm())
                 .valid(asset.getValid())
-                .notBefore(model.getUploadedOn())
-                .notAfter(model.getExpiresOn())
+                .notBefore(asset.getCreatedTime())
+                .notAfter(asset.getExpiredTime())
                 .build();
     }
 
