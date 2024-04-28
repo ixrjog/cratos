@@ -42,7 +42,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
 
     @Override
-    protected List<Ingress> listEntities(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+    protected List<Ingress> listEntities(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
         List<Ingress> entities = Lists.newArrayList();
         namespaces.forEach(e -> entities.addAll(kubernetesIngressRepo.list(instance.getEdsConfigModel(), e.getMetadata()
@@ -51,7 +52,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, Ingress entity) {
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                  Ingress entity) {
         final String namespace = entity.getMetadata()
                 .getNamespace();
         final String name = entity.getMetadata()
@@ -69,12 +71,11 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, Ingress entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-
         Optional<List<IngressRule>> optionalIngressRules = Optional.of(entity)
                 .map(Ingress::getSpec)
                 .map(IngressSpec::getRules);
         // rules
-        optionalIngressRules.ifPresent(ingressRules -> indices.addAll(getEdsAssetIndexOfRules(edsAsset, ingressRules)));
+        optionalIngressRules.ifPresent(ingressRules -> indices.addAll(getEdsAssetIndexFromRules(edsAsset, ingressRules)));
         // loadBalancer
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
         return indices;
@@ -98,7 +99,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         return null;
     }
 
-    private List<EdsAssetIndex> getEdsAssetIndexOfRules(EdsAsset edsAsset, List<IngressRule> ingressRules) {
+    private List<EdsAssetIndex> getEdsAssetIndexFromRules(EdsAsset edsAsset, List<IngressRule> ingressRules) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         ingressRules.forEach(ingressRule -> {
             String host = ingressRule.getHost();

@@ -65,7 +65,7 @@ public class ApplicationCommand extends AbstractCommand {
 
     @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping Application")
     @ShellMethodAvailability("appGroupingAvailability")
-    @ShellAuthentication(resource = "/shell/application/app-grouping")
+    @ShellAuthentication(resource = "/application/app-grouping")
     public void appGrouping(@ShellOption(help = "Application Name", defaultValue = "") String name,
                             @ShellOption(help = "Specify the total number of replicas for the group", defaultValue = "0") int replicas,
                             @ShellOption(help = "Preview group details", defaultValue = "false") boolean preview) {

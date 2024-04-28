@@ -31,6 +31,8 @@ public class ShellAuthenticationAspect {
 
     private final RbacFacade rbacFacade;
 
+    private static final String SHELL_PREFIX = "/shell";
+
     @Pointcut(value = "@annotation(com.baiyi.cratos.shell.annotation.ShellAuthentication)")
     public void annotationPoint() {
     }
@@ -43,7 +45,10 @@ public class ShellAuthenticationAspect {
             helper.printError("Authentication failed.");
             throw new com.baiyi.cratos.common.exception.auth.AuthenticationException(AUTHENTICATION_FAILED);
         }
-        rbacFacade.verifyResourceAccessPermissionsForUsername(username, shellAuthentication.resource());
+        final String resource = shellAuthentication.resource()
+                .startsWith(
+                        SHELL_PREFIX + "/") ? shellAuthentication.resource() : SHELL_PREFIX + shellAuthentication.resource();
+        rbacFacade.verifyResourceAccessPermissionsForUsername(username, resource);
     }
 
 }
