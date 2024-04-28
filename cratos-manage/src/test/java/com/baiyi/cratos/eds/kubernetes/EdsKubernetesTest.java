@@ -1,0 +1,76 @@
+package com.baiyi.cratos.eds.kubernetes;
+
+import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.eds.BaseEdsTest;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesIngressRepo;
+import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
+import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+/**
+ * @Author baiyi
+ * @Date 2024/4/28 下午2:59
+ * @Version 1.0
+ */
+public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+
+    public static final int CONFIG_ACK_DEV = 10;
+
+    public static final int CONFIG_ACK_DAILY = 11;
+
+    public static final int CONFIG_ACK_SIT = 12;
+
+    public static final int CONFIG_ACK_PRE = 13;
+
+    @Resource
+    private KubernetesIngressRepo kubernetesIngressRepo;
+
+    private static final String ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE = "alb.ingress.kubernetes.io/backend-keepalive";
+
+    @Test
+    void ingressDevTest() {
+        updateIngress(CONFIG_ACK_DEV, "dev");
+    }
+
+    @Test
+    void ingressDailyTest() {
+        updateIngress(CONFIG_ACK_DAILY, "daily");
+    }
+
+    @Test
+    void ingressSitTest() {
+        updateIngress(CONFIG_ACK_SIT, "sit");
+    }
+
+    @Test
+    void ingressPreTest() {
+        updateIngress(CONFIG_ACK_PRE, "pre");
+    }
+
+    /**
+     * ACK Ingress 启用长链接
+     * @param configId
+     * @param namespace
+     */
+    private void updateIngress(int configId, String namespace) {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(configId);
+        List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, namespace);
+        for (Ingress ingress : ingressList) {
+            if (!ingress.getMetadata()
+                    .getAnnotations()
+                    .containsKey(ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE)) {
+                ingress.getMetadata()
+                        .getAnnotations()
+                        .put(ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE, "true");
+                kubernetesIngressRepo.update(cfg, ingress);
+                String msg = "Ingress {} enable backend-keepalive.";
+                System.out.println(StringFormatter.arrayFormat(msg, ingress.getMetadata()
+                        .getName()));
+            }
+        }
+    }
+
+}
