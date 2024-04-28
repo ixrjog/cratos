@@ -20,4 +20,6 @@ public interface DomainFacade {
 
     void setDomainValidById(int id);
 
+    void deleteById(int id);
+
 }

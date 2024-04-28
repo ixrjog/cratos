@@ -11,12 +11,15 @@ import com.baiyi.cratos.eds.business.impl.base.BaseAssetToBusinessWrapper;
  */
 public abstract class BaseDomainAssetToBusinessWrapper<B> extends BaseAssetToBusinessWrapper<Domain, B> {
 
+    abstract protected String getDomainType();
+
     @Override
     protected Domain getTarget(EdsAssetVO.Asset asset) {
         // AliyunDomain model = getAssetModel(asset);
         return Domain.builder()
                 .expiry(asset.getExpiredTime())
                 .registrationTime(asset.getCreatedTime())
+                .domainType(getDomainType())
                 .name(asset.getName())
                 .valid(true)
                 .build();

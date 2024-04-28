@@ -1,11 +1,10 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.domain.DomainParam;
 import com.baiyi.cratos.mapper.DomainMapper;
 import com.baiyi.cratos.service.DomainService;
@@ -42,6 +41,12 @@ public class DomainServiceImpl implements DomainService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", domain.getName());
         return domainMapper.selectOneByExample(example);
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        domainMapper.deleteByPrimaryKey(id);
     }
 
 }

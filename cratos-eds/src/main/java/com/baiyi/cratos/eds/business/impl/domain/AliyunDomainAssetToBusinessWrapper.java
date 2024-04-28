@@ -20,4 +20,9 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_DOMAIN)
 public class AliyunDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<AliyunDomain> {
 
+    @Override
+    protected String getDomainType() {
+        return EdsAssetTypeEnum.ALIYUN_DOMAIN.name();
+    }
+
 }

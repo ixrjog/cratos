@@ -56,4 +56,9 @@ public class DomainFacadeImpl implements DomainFacade {
         domainService.updateByPrimaryKey(domain);
     }
 
+    @Override
+    public void deleteById(int id) {
+        domainService.deleteById(id);
+    }
+
 }

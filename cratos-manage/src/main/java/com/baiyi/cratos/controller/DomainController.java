@@ -52,4 +52,11 @@ public class DomainController {
         return new HttpResult<>(domainFacade.queryDomainPage(pageQuery));
     }
 
+    @Operation(summary = "Delete domain by id")
+    @DeleteMapping(value = "/del/by/id", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteDomainById(@RequestParam @Valid int id) {
+        domainFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

@@ -20,4 +20,9 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_DOMAIN)
 public class AwsDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<DomainSummary> {
 
+    @Override
+    protected String getDomainType() {
+        return EdsAssetTypeEnum.AWS_DOMAIN.name();
+    }
+
 }
