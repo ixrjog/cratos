@@ -110,7 +110,7 @@ public class UserFacadeImpl implements UserFacade {
         credentialFacade.createBusinessCredential(credential, business);
     }
 
-    public List<Credential> getUserSshKeyCredentials(String username) {
+    private List<Credential> getUserPubKeyCredentials(String username) {
         User user = Optional.ofNullable(userService.getByUsername(username))
                 .orElseThrow(() -> new UserException("User {} does not exist.", username));
         SimpleBusiness business = SimpleBusiness.builder()
@@ -123,7 +123,7 @@ public class UserFacadeImpl implements UserFacade {
                     if (!cred.getPrivateCredential()) {
                         return false;
                     }
-                    return CredentialTypeEnum.SSH_USERNAME_WITH_KEY_PAIR.name()
+                    return CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name()
                             .equals(cred.getCredentialType());
                 })
                 .toList();
@@ -172,7 +172,7 @@ public class UserFacadeImpl implements UserFacade {
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-        return getUserSshKeyCredentials(username).stream()
+        return getUserPubKeyCredentials(username).stream()
                 .map(credentialWrapper::wrapToTarget)
                 .toList();
     }
