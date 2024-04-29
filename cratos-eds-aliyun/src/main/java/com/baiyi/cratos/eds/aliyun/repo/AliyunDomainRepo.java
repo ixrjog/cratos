@@ -4,7 +4,7 @@ import com.aliyun.sdk.service.domain20180129.AsyncClient;
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListRequest;
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListResponse;
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListResponseBody;
-import com.baiyi.cratos.eds.aliyun.client.AliyunDomainClient;
+import com.baiyi.cratos.eds.aliyun.client.AliyunDomainAsyncClient;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class AliyunDomainRepo {
     public static List<QueryDomainListResponseBody.Domain> listDomain(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         int pageNum = 1;
         List<QueryDomainListResponseBody.Domain> domainList = Lists.newArrayList();
-        try (AsyncClient client = AliyunDomainClient.createClient(aliyun)) {
+        try (AsyncClient client = AliyunDomainAsyncClient.createClient(aliyun)) {
             while (true) {
                 QueryDomainListRequest request = QueryDomainListRequest.builder()
                         .pageNum(pageNum)

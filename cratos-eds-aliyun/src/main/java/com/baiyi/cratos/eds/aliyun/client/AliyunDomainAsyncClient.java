@@ -14,11 +14,11 @@ import java.util.Optional;
  * @Date 2024/4/26 上午10:19
  * @Version 1.0
  */
-public class AliyunDomainClient {
+public class AliyunDomainAsyncClient {
 
     private static final String ENDPOINT_OVERRIDE = "domain.aliyuncs.com";
 
-    private AliyunDomainClient() {
+    private AliyunDomainAsyncClient() {
     }
 
     public static AsyncClient createClient(EdsAliyunConfigModel.Aliyun aliyun) {
