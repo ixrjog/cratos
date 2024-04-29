@@ -2,11 +2,11 @@ package com.baiyi.cratos.scheduler.job;
 
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.facade.EdsFacade;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -17,18 +17,14 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ImportAssetJob extends QuartzJobBean {
 
     public static final String ASSET_TYPE = "assetType";
 
     public static final String INSTANCE_ID = "instanceId";
 
-    private static EdsFacade edsFacade;
-
-    @Autowired
-    public void setEdsFacade(EdsFacade edsFacade) {
-        ImportAssetJob.edsFacade = edsFacade;
-    }
+    private final EdsFacade edsFacade;
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

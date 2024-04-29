@@ -45,6 +45,7 @@ public class UserFacadeImpl implements UserFacade {
     private final CredentialFacade credentialFacade;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
+
     private final CredentialWrapper credentialWrapper;
 
     @Override
