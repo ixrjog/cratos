@@ -2,11 +2,11 @@ package com.baiyi.cratos.scheduler.job;
 
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.facade.EdsFacade;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
@@ -17,14 +17,18 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class ImportAssetJob extends QuartzJobBean {
 
     public static final String ASSET_TYPE = "assetType";
 
     public static final String INSTANCE_ID = "instanceId";
 
-    private final EdsFacade edsFacade;
+    private static EdsFacade edsFacade;
+
+    @Autowired
+    public void setEdsFacade(EdsFacade edsFacade) {
+        ImportAssetJob.edsFacade = edsFacade;
+    }
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -41,9 +45,11 @@ public class ImportAssetJob extends QuartzJobBean {
                 .build();
         try {
             edsFacade.importEdsInstanceAsset(importInstanceAsset);
-            log.info("Import asset job: assetType={}, instanceId={}, trigger={}", assetType, instanceId, jobExecutionContext.getTrigger());
+            log.info("Import asset job: assetType={}, instanceId={}, trigger={}", assetType, instanceId,
+                    jobExecutionContext.getTrigger());
         } catch (Exception e) {
-            log.error("Import asset job error: assetType={}, instanceId={}, trigger={}, {}", assetType, instanceId, jobExecutionContext.getTrigger(), e.getMessage());
+            log.error("Import asset job error: assetType={}, instanceId={}, trigger={}, {}", assetType, instanceId,
+                    jobExecutionContext.getTrigger(), e.getMessage());
             throw new JobExecutionException(e.getMessage());
         }
     }
