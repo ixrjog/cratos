@@ -11,10 +11,12 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +45,7 @@ public class UserFacadeImpl implements UserFacade {
     private final CredentialFacade credentialFacade;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
+    private final CredentialWrapper credentialWrapper;
 
     @Override
     public DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) {
@@ -162,6 +165,16 @@ public class UserFacadeImpl implements UserFacade {
             user.setMobilePhone(updateMy.getMobilePhone());
             userService.updateByPrimaryKey(user);
         }
+    }
+
+    @Override
+    public List<CredentialVO.Credential> queryMySshKey() {
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        return getUserSshKeyCredentials(username).stream()
+                .map(credentialWrapper::wrapToTarget)
+                .toList();
     }
 
 }

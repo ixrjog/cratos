@@ -6,11 +6,14 @@ import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.SystemEnvUtil;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -24,8 +27,11 @@ import java.util.Optional;
 @Slf4j
 public abstract class BaseEdsKubernetesAssetProvider<A> extends BaseEdsInstanceAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> {
 
-    @Resource
-    private CredentialService credentialService;
+    public BaseEdsKubernetesAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                              EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
 
     protected String getAssetId(String namespace, String name) {
         return Joiner.on(":")

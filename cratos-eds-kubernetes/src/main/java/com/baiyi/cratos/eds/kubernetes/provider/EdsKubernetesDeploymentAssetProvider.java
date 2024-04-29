@@ -9,18 +9,21 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
-import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -37,7 +40,6 @@ import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT)
 public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
 
@@ -45,7 +47,16 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
-    private final EdsAssetIndexService edsAssetIndexService;
+    public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                                CredentialService credentialService,
+                                                ConfigCredTemplate configCredTemplate,
+                                                EdsAssetIndexFacade edsAssetIndexFacade,
+                                                KubernetesNamespaceRepo kubernetesNamespaceRepo,
+                                                KubernetesDeploymentRepo kubernetesDeploymentRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+        this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
+    }
 
     public static final String REPLICAS = "replicas";
 

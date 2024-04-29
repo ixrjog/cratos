@@ -8,12 +8,16 @@ import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.gitlab.data.SshKeyData;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabSshKeyRepo;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
-import lombok.RequiredArgsConstructor;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.SshKey;
 import org.gitlab4j.api.models.User;
@@ -29,12 +33,18 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_SSHKEY)
 public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, SshKeyData> {
 
+    public EdsGitLabSshKeyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                        EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
+
     @Override
-    protected List<SshKeyData> listEntities(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+    protected List<SshKeyData> listEntities(
+            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
         try {
             List<EdsAsset> edsUserAssets = queryEdsInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
@@ -47,10 +57,13 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     // 从EdsAsset中查询用户
-    private List<SshKeyData> listSshKeyWithEdsUserAssets(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, List<EdsAsset> edsUserAssets) throws GitLabApiException {
+    private List<SshKeyData> listSshKeyWithEdsUserAssets(
+            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+            List<EdsAsset> edsUserAssets) throws GitLabApiException {
         List<SshKeyData> keys = Lists.newArrayList();
         for (EdsAsset edsUserAsset : edsUserAssets) {
-            keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), Long.parseLong(edsUserAsset.getAssetId()))
+            keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(),
+                            Long.parseLong(edsUserAsset.getAssetId()))
                     .stream()
                     .map(key -> SshKeyData.builder()
                             .sshKey(key)
@@ -61,7 +74,8 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         return keys;
     }
 
-    private List<SshKeyData> listSshKeyFromRepo(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws GitLabApiException {
+    private List<SshKeyData> listSshKeyFromRepo(
+            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws GitLabApiException {
         List<User> users = GitLabUserRepo.getUsers(instance.getEdsConfigModel());
         if (CollectionUtils.isEmpty(users)) {
             return Collections.emptyList();

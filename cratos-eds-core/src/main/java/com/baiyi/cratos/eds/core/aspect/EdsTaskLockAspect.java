@@ -43,7 +43,7 @@ import java.util.stream.IntStream;
 @Order(-1)
 public class EdsTaskLockAspect {
 
-    private static final String LOCK_KEY = "OC5:EDS:TASK:INSTANCE:TYPE{}:ID:{}:ASSET_TYPE:{}";
+    private static final String LOCK_KEY = "OC5:EDS:TASK:INSTANCE:TYPE:{}:ID:{}:ASSET_TYPE:{}";
 
     private final RedisUtil redisUtil;
 

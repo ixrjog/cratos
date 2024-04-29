@@ -13,10 +13,14 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -32,7 +36,6 @@ import java.util.Set;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EC2)
 public class EcsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
 
@@ -40,8 +43,18 @@ public class EcsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
 
     private final AwsEc2Repo awsEc2Repo;
 
+    public EcsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                  EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
+                                  AwsEc2Repo awsEc2Repo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.ec2InstancesRepo = ec2InstancesRepo;
+        this.awsEc2Repo = awsEc2Repo;
+    }
+
     @Override
-    protected List<AwsEc2.Ec2> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
+    protected List<AwsEc2.Ec2> listEntities(
+            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
         Map<String, InstanceModel.EC2InstanceType> instanceTypeMap;
         try {
             instanceTypeMap = ec2InstancesRepo.getInstances();

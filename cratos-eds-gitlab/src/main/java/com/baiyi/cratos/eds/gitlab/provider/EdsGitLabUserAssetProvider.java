@@ -7,9 +7,13 @@ import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import org.gitlab4j.api.models.User;
 import org.springframework.stereotype.Component;
 
@@ -21,12 +25,18 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_USER)
 public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, User> {
 
+    public EdsGitLabUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                      EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
+
     @Override
-    protected List<User> listEntities(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+    protected List<User> listEntities(
+            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
         try {
             return GitLabUserRepo.getUsers(instance.getEdsConfigModel());
         } catch (Exception e) {

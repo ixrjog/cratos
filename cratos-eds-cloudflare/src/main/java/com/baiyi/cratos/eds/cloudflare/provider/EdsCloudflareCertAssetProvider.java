@@ -11,10 +11,14 @@ import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -26,7 +30,6 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
 public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
@@ -34,8 +37,20 @@ public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider
 
     private final CloudflareCertRepo cloudflareCertRepo;
 
+    public EdsCloudflareCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                          EdsAssetIndexFacade edsAssetIndexFacade,
+                                          CloudflareZoneRepo cloudflareZoneRepo,
+                                          CloudflareCertRepo cloudflareCertRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.cloudflareZoneRepo = cloudflareZoneRepo;
+        this.cloudflareCertRepo = cloudflareCertRepo;
+    }
+
+
     @Override
-    protected List<CloudflareCert.Certificate> listEntities(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+    protected List<CloudflareCert.Certificate> listEntities(
+            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
         List<CloudflareCert.Certificate> results = Lists.newArrayList();
         try {
             // 查询所有的zone
@@ -54,7 +69,8 @@ public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, CloudflareCert.Certificate entity) {
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
+                                  CloudflareCert.Certificate entity) {
         final String hosts = Joiner.on(",")
                 .join(entity.getHosts());
         final String name = entity.getHosts()

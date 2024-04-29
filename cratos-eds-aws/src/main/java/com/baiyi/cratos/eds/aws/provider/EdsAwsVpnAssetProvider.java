@@ -10,10 +10,14 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,9 +30,14 @@ import java.util.Set;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_STS_VPN)
 public class EdsAwsVpnAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
+
+    public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                  EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
 
     @Override
     protected List<VpnConnection> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {

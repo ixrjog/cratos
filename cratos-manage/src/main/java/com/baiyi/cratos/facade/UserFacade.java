@@ -3,7 +3,10 @@ package com.baiyi.cratos.facade;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -27,5 +30,7 @@ public interface UserFacade {
     void updateUser(UserParam.UpdateUser updateUser);
 
     void updateUser(UserParam.UpdateMy updateMy);
+
+    List<CredentialVO.Credential> queryMySshKey();
 
 }

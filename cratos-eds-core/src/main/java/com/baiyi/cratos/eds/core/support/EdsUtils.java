@@ -7,7 +7,7 @@ package com.baiyi.cratos.eds.core.support;
  */
 public class EdsUtils {
 
-    private EdsUtils(){
+    private EdsUtils() {
     }
 
 }

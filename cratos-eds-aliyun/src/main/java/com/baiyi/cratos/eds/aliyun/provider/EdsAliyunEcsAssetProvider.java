@@ -13,10 +13,14 @@ import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -30,11 +34,17 @@ import java.util.Set;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ECS)
 public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
 
-    private final AliyunEcsRepo ecsRepo;
+    private final AliyunEcsRepo aliyunEcsRepo;
+
+    public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                     EdsAssetIndexFacade edsAssetIndexFacade, AliyunEcsRepo aliyunEcsRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.aliyunEcsRepo = aliyunEcsRepo;
+    }
 
     private static final String VPC = "vpc";
 
@@ -45,7 +55,8 @@ public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     }
 
     @Override
-    protected List<AliyunEcs.Ecs> listEntities(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+    protected List<AliyunEcs.Ecs> listEntities(
+            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         EdsAliyunConfigModel.Aliyun aliyun = instance.getEdsConfigModel();
         Set<String> regionSet = Optional.of(aliyun)
                 .map(EdsAliyunConfigModel.Aliyun::getRegionIds)
@@ -55,9 +66,10 @@ public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
         List<AliyunEcs.Ecs> entities = Lists.newArrayList();
         try {
             regionSet.forEach(regionId -> {
-                List<DescribeInstancesResponse.Instance> ecsInstances = ecsRepo.listInstances(regionId, aliyun);
+                List<DescribeInstancesResponse.Instance> ecsInstances = aliyunEcsRepo.listInstances(regionId, aliyun);
                 for (DescribeInstancesResponse.Instance ecsInstance : ecsInstances) {
-                    List<DescribeDisksResponse.Disk> disks = ecsRepo.describeDisks(regionId, aliyun, ecsInstance.getInstanceId());
+                    List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(regionId, aliyun,
+                            ecsInstance.getInstanceId());
                     AliyunEcs.Ecs ecs = AliyunEcs.Ecs.builder()
                             .regionId(regionId)
                             .instance(ecsInstance)
@@ -73,7 +85,8 @@ public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, AliyunEcs.Ecs entity) {
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                  AliyunEcs.Ecs entity) {
         final String privateIp = entity.getInstance()
                 .getInstanceNetworkType()
                 .equals(VPC) ? entity.getInstance()
@@ -103,7 +116,8 @@ public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
                 .createdTimeOf(toUtcDate(entity.getInstance()
                         .getCreationTime()))
                 .expiredTimeOf(expiredTime)
-                .descriptionOf(entity.getInstance().getDescription())
+                .descriptionOf(entity.getInstance()
+                        .getDescription())
                 .build();
     }
 

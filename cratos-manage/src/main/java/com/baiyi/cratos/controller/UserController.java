@@ -3,6 +3,7 @@ package com.baiyi.cratos.controller;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -56,6 +59,12 @@ public class UserController {
     public HttpResult<Boolean> updateMy(@RequestBody @Valid UserParam.UpdateMy updateMy) {
         userFacade.updateUser(updateMy);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query user sshkey")
+    @PostMapping(value = "/my/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<CredentialVO.Credential>> queryMySshKey() {
+        return new HttpResult<>(userFacade.queryMySshKey());
     }
 
     @Operation(summary = "Update user valid")

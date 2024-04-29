@@ -9,14 +9,18 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -29,7 +33,6 @@ import java.util.Optional;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_INGRESS)
 public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetProvider<Ingress> {
 
@@ -40,6 +43,17 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private static final String UNDEFINED_SERVICE = "Undefined Service";
 
     public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
+
+    public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                                CredentialService credentialService,
+                                                ConfigCredTemplate configCredTemplate,
+                                                EdsAssetIndexFacade edsAssetIndexFacade,
+                                                KubernetesNamespaceRepo kubernetesNamespaceRepo,
+                                             KubernetesIngressRepo kubernetesIngressRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+        this.kubernetesIngressRepo = kubernetesIngressRepo;
+    }
 
     @Override
     protected List<Ingress> listEntities(

@@ -25,7 +25,6 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Sets;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -43,20 +42,25 @@ import java.util.Set;
 @Component
 public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
-    @Resource
-    private EdsAssetService edsAssetService;
+    private final EdsAssetService edsAssetService;
 
-    @Resource
-    private SimpleEdsFacade simpleEdsFacade;
+    private final SimpleEdsFacade simpleEdsFacade;
 
-    @Resource
-    private CredentialService credService;
+    protected final CredentialService credentialService;
 
-    @Resource
-    private ConfigCredTemplate configCredTemplate;
+    private final ConfigCredTemplate configCredTemplate;
 
-    @Resource
-    protected EdsAssetIndexFacade edsAssetIndexFacade;
+    protected final EdsAssetIndexFacade edsAssetIndexFacade;
+
+    public BaseEdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                        EdsAssetIndexFacade edsAssetIndexFacade) {
+        this.edsAssetService = edsAssetService;
+        this.simpleEdsFacade = simpleEdsFacade;
+        this.credentialService = credentialService;
+        this.configCredTemplate = configCredTemplate;
+        this.edsAssetIndexFacade = edsAssetIndexFacade;
+    }
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
@@ -67,7 +71,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @param assetTypeEnum
      * @return
      */
-    protected List<EdsAsset> queryEdsInstanceAssets(ExternalDataSourceInstance<C> instance, EdsAssetTypeEnum assetTypeEnum) {
+    protected List<EdsAsset> queryEdsInstanceAssets(ExternalDataSourceInstance<C> instance,
+                                                    EdsAssetTypeEnum assetTypeEnum) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), assetTypeEnum.name());
     }
@@ -150,7 +155,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
-    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity) throws EdsAssetConversionException;
+    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance,
+                                           A entity) throws EdsAssetConversionException;
 
     private Set<Integer> listAssetsIdSet(ExternalDataSourceInstance<C> instance) {
         Set<Integer> idSet = Sets.newHashSet();
@@ -173,7 +179,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     public C produceConfig(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
-            Credential cred = credService.getById(edsConfig.getCredentialId());
+            Credential cred = credentialService.getById(edsConfig.getCredentialId());
             if (cred != null) {
                 return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));
             }

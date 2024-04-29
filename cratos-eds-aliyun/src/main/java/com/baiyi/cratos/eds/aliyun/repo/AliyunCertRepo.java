@@ -2,12 +2,13 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyun.cas20200407.Client;
 import com.aliyun.cas20200407.models.*;
+import com.baiyi.cratos.eds.aliyun.client.AliyunClient;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOpenapiClient;
-import com.baiyi.cratos.eds.aliyun.repo.base.BaseAliyunRepo;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.query.EdsRepoData;
 import com.baiyi.cratos.eds.core.query.EdsRepoPageQuery;
 import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -21,9 +22,13 @@ import java.util.Optional;
  * @Version 1.0
  */
 @Component
-public class AliyunCertRepo extends BaseAliyunRepo {
+@RequiredArgsConstructor
+public class AliyunCertRepo {
 
-    public List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> listUserCertOrder(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    private final AliyunClient aliyunClient;
+
+    public List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> listUserCertOrder(
+            EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         ListUserCertificateOrderRequest request = new ListUserCertificateOrderRequest();
         long total = 0;
         long pageNo = 1;
@@ -32,7 +37,8 @@ public class AliyunCertRepo extends BaseAliyunRepo {
             request.setCurrentPage(pageNo);
             Client aliyunClient = AliyunOpenapiClient.createClient(aliyun);
             ListUserCertificateOrderResponse response = aliyunClient.listUserCertificateOrder(request);
-            List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> results = Optional.of(response)
+            List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> results = Optional.of(
+                            response)
                     .map(ListUserCertificateOrderResponse::getBody)
                     .map(ListUserCertificateOrderResponseBody::getCertificateOrderList)
                     .orElse(Collections.emptyList());
@@ -52,7 +58,8 @@ public class AliyunCertRepo extends BaseAliyunRepo {
         return userCertificateOrderList;
     }
 
-    public List<ListCertResponseBody.ListCertResponseBodyCertList> listCert(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    public List<ListCertResponseBody.ListCertResponseBodyCertList> listCert(
+            EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         ListCertRequest request = new ListCertRequest();
         long total = 0;
         long pageNo = 1;
@@ -81,7 +88,8 @@ public class AliyunCertRepo extends BaseAliyunRepo {
         return certList;
     }
 
-    public EdsRepoData<ListCertResponseBody.ListCertResponseBodyCertList> queryCertPage(EdsAliyunConfigModel.Aliyun aliyun, EdsRepoPageQuery edsRepoPageQuery) throws Exception {
+    public EdsRepoData<ListCertResponseBody.ListCertResponseBodyCertList> queryCertPage(
+            EdsAliyunConfigModel.Aliyun aliyun, EdsRepoPageQuery edsRepoPageQuery) throws Exception {
         ListCertRequest request = new ListCertRequest();
         request.setCurrentPage(edsRepoPageQuery.getPage());
         request.setShowSize(edsRepoPageQuery.getLength());

@@ -9,8 +9,12 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,9 +25,14 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_DOMAIN)
 public class EdsAwsDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, DomainSummary> {
+
+    public EdsAwsDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                     EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
 
     @Override
     protected List<DomainSummary> listEntities(
