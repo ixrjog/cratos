@@ -14,6 +14,6 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  */
 public interface ChannelNetworkService extends BaseValidService<ChannelNetwork, ChannelNetworkMapper>, SupportBusinessService {
 
-    DataTable<ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQuery pageQuery);
+    DataTable<ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQueryParam param);
 
 }

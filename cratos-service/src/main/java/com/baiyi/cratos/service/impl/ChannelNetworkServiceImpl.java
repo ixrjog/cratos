@@ -28,9 +28,9 @@ public class ChannelNetworkServiceImpl implements ChannelNetworkService {
     private final ChannelNetworkMapper channelNetworkMapper;
 
     @Override
-    public DataTable<ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQuery pageQuery) {
-        Page<ChannelNetwork> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<ChannelNetwork> data = channelNetworkMapper.queryPageByParam(pageQuery);
+    public DataTable<ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQueryParam param){
+        Page<ChannelNetwork> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<ChannelNetwork> data = channelNetworkMapper.queryPageByParam(param);
         return new DataTable<>(data, page.getTotal());
     }
 

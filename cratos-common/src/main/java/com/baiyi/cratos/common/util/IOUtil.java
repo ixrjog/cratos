@@ -85,7 +85,7 @@ public class IOUtil {
         log.info("Write file: path={}", path);
 
         if (StringUtils.isEmpty(path)) {
-            log.error("WriteFile path is null !");
+            log.error("Write file path is null!");
             return;
         }
 
@@ -117,7 +117,7 @@ public class IOUtil {
      */
     public static void appendFile(String body, String path) {
         if (StringUtils.isEmpty(path)) {
-            log.error("WriteFile path is null !");
+            log.error("Write file path is null!");
             return;
         }
         mkdir(getPath(path));

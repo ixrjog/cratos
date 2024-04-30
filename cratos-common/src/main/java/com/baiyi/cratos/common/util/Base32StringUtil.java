@@ -105,7 +105,6 @@ public class Base32StringUtil {
 
     private StringBuilder getStringBuilder(byte[] data, int outputLength) {
         StringBuilder result = new StringBuilder(outputLength);
-
         int buffer = data[0];
         int next = 1;
         int bitsLeft = 8;

@@ -97,6 +97,9 @@ public class RbacAutoConfiguration implements CommandLineRunner {
         // 从 controller 上获取 Tag 注解
         Tag tag = AopUtils.getTargetClass(controller)
                 .getAnnotation(Tag.class);
+        if (tag == null) {
+            return;
+        }
         controllerMethodMapping.setTag(tag.name());
         RequestMapping requestMapping = AopUtils.getTargetClass(controller)
                 .getAnnotation(RequestMapping.class);
@@ -105,14 +108,15 @@ public class RbacAutoConfiguration implements CommandLineRunner {
         }
         invoke(controllerMethodMapping, declaredAnnotations);
         RbacGroup rbacGroup = getOrCreateGroup(controllerMethodMapping);
+        boolean valid = !RequestMethod.GET.name()
+                .equalsIgnoreCase(controllerMethodMapping.getRequestMethod());
         RbacResource rbacResource = RbacResource.builder()
                 .groupId(rbacGroup.getId())
                 .resourceName(Joiner.on("")
                         .skipNulls()
                         .join(controllerMethodMapping.getBase(), controllerMethodMapping.getMethodValue()))
                 .comment(controllerMethodMapping.getSummary())
-                .valid(!controllerMethodMapping.getRequestMethod()
-                        .equalsIgnoreCase(RequestMethod.GET.name()))
+                .valid(valid)
                 .uiPoint(false)
                 .build();
         if (rbacResourceService.getByUniqueKey(rbacResource) == null) {

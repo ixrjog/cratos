@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ChannelNetworkMapper extends Mapper<ChannelNetwork> {
 
-    List<ChannelNetwork> queryPageByParam(ChannelNetworkParam.ChannelNetworkPageQuery pageQuery);
+    List<ChannelNetwork> queryPageByParam(ChannelNetworkParam.ChannelNetworkPageQueryParam param);
 
 }

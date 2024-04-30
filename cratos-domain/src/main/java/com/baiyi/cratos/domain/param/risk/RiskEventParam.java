@@ -88,8 +88,6 @@ public class RiskEventParam {
 
         private List<Integer> eventIdList;
 
-        private Integer tagId;
-
     }
 
     @Data

@@ -21,22 +21,17 @@ public final class JsonParser implements Parser {
     public PrettyTable parse(String text) throws IOException {
         ObjectMapper om = new ObjectMapper();
         JsonNode root = om.readTree(text);
-
         if (root.isArray()) {
-
             if (root.isEmpty()) {
                 return PrettyTable.fieldNames();
             }
-
             PrettyTable pt = PrettyTable.fieldNames(root.get(0).fieldNames());
-
             for (JsonNode c : root) {
                 List<Object> values = new ArrayList<>();
                 c.fields().forEachRemaining(f -> values.add(toStr(f)));
                 pt.addRow(values.toArray());
             }
             return pt;
-
         } else {
             PrettyTable pt = PrettyTable.fieldNames("Name", "Value");
             root.fields().forEachRemaining(

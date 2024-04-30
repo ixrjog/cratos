@@ -3,11 +3,14 @@ package com.baiyi.cratos.domain.param.channel;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -63,10 +66,35 @@ public class ChannelNetworkParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class ChannelNetworkPageQuery extends PageParam {
+    public static class ChannelNetworkPageQuery extends PageParam implements BusinessTagParam.IQueryByTag {
 
         @Schema(description = "查询名称")
         private String queryName;
+
+        private BusinessTagParam.QueryByTag queryByTag;
+
+        private List<Integer> idList;
+
+        public ChannelNetworkPageQueryParam toParam() {
+            return ChannelNetworkPageQueryParam.builder()
+                    .queryName(queryName)
+                    .idList(idList)
+                    .build();
+        }
+
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class ChannelNetworkPageQueryParam extends PageParam {
+
+        private String queryName;
+
+        private List<Integer> idList;
+
 
     }
 

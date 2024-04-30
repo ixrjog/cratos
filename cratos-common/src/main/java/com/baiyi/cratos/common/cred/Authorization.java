@@ -37,7 +37,8 @@ public class Authorization {
         }
 
         public String toBasic() {
-            String authString = Joiner.on(":").join(username, password);
+            String authString = Joiner.on(":")
+                    .join(username, password);
             return Authorization.toBasic(authString);
         }
 
@@ -62,8 +63,8 @@ public class Authorization {
 
     }
 
-    private static String toBasic(String authString){
-        byte[] authEncBytes = Base64.encodeBase64(authString.getBytes(StandardCharsets.UTF_8),false);
+    private static String toBasic(String authString) {
+        byte[] authEncBytes = Base64.encodeBase64(authString.getBytes(StandardCharsets.UTF_8), false);
         return new String(authEncBytes);
     }
 

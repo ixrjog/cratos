@@ -16,8 +16,6 @@ spring:
     enabled: off
   profiles:
     active: '@env@'
-  thymeleaf:
-    cache: off
   # 关闭控制台
   shell:
     interactive:
