@@ -29,8 +29,8 @@ public interface BaseService<T, M extends Mapper<T>> {
 
     // 方法映射
     @DomainEncrypt
-    default void add(T t) {
-        getMapper().insert(t);
+    default void add(T record) {
+        getMapper().insert(record);
     }
 
     // 方法映射
@@ -40,8 +40,8 @@ public interface BaseService<T, M extends Mapper<T>> {
     }
 
     // 方法映射
-    default void updateByPrimaryKey(T t) {
-        getMapper().updateByPrimaryKey(t);
+    default void updateByPrimaryKey(T record) {
+        getMapper().updateByPrimaryKey(record);
     }
 
     // 方法映射
@@ -59,14 +59,14 @@ public interface BaseService<T, M extends Mapper<T>> {
         return getMapper().selectAll();
     }
 
-    default List<T> queryByIds(List<Integer> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
+    default List<T> queryByIds(List<Integer> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
             return Lists.newArrayList();
         }
         // 反射获取范型T的实体类
         Example example = new Example(Generics.find(this.getClass(), BaseService.class, 0));
         Example.Criteria criteria = example.createCriteria();
-        criteria.andIn("id", ids);
+        criteria.andIn("id", idList);
         return getMapper().selectByExample(example);
     }
 

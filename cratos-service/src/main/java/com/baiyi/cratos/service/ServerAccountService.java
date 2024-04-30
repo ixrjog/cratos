@@ -12,5 +12,4 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Version 1.0
  */
 public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount>, BaseValidService<ServerAccount, ServerAccountMapper>, SupportBusinessService {
-
 }

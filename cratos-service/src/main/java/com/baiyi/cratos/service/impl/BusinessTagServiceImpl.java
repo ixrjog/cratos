@@ -48,12 +48,12 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public BusinessTag getByUniqueKey(BusinessTag businessTag) {
+    public BusinessTag getByUniqueKey(BusinessTag record) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", businessTag.getBusinessType())
-                .andEqualTo("businessId", businessTag.getBusinessId())
-                .andEqualTo("tagId", businessTag.getTagId());
+        criteria.andEqualTo("businessType", record.getBusinessType())
+                .andEqualTo("businessId", record.getBusinessId())
+                .andEqualTo("tagId", record.getTagId());
         return businessTagMapper.selectOneByExample(example);
     }
 

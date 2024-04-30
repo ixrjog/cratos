@@ -40,10 +40,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getByUniqueKey(Tag tag) {
+    public Tag getByUniqueKey(Tag record) {
         Example example = new Example(Tag.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("tagKey", tag.getTagKey());
+        criteria.andEqualTo("tagKey", record.getTagKey());
         return tagMapper.selectOneByExample(example);
     }
 

@@ -35,10 +35,10 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     }
 
     @Override
-    public EdsInstance getByUniqueKey(EdsInstance edsInstance) {
+    public EdsInstance getByUniqueKey(EdsInstance record) {
         Example example = new Example(EdsInstance.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("instanceName", edsInstance.getInstanceName());
+        criteria.andEqualTo("instanceName", record.getInstanceName());
         return edsInstanceMapper.selectOneByExample(example);
     }
 

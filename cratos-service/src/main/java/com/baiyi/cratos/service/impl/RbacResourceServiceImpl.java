@@ -26,10 +26,10 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     private final RbacResourceMapper rbacResourceMapper;
 
     @Override
-    public RbacResource getByUniqueKey(RbacResource rbacResource) {
+    public RbacResource getByUniqueKey(RbacResource record) {
         Example example = new Example(RbacResource.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("resourceName", rbacResource.getResourceName());
+        criteria.andEqualTo("resourceName", record.getResourceName());
         return rbacResourceMapper.selectOneByExample(example);
     }
 

@@ -29,12 +29,12 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     private final EdsAssetMapper edsAssetMapper;
 
     @Override
-    public EdsAsset getByUniqueKey(EdsAsset edsAsset) {
+    public EdsAsset getByUniqueKey(EdsAsset record) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("instanceId", edsAsset.getInstanceId())
-                .andEqualTo("assetType", edsAsset.getAssetType())
-                .andEqualTo("assetKey", edsAsset.getAssetKey());
+        criteria.andEqualTo("instanceId", record.getInstanceId())
+                .andEqualTo("assetType", record.getAssetType())
+                .andEqualTo("assetKey", record.getAssetKey());
         return edsAssetMapper.selectOneByExample(example);
     }
 
@@ -51,7 +51,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     public List<EdsAsset> queryAssetByParam(String assetKey, String assetType) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("assetKey",  assetKey)
+        criteria.andEqualTo("assetKey", assetKey)
                 .andEqualTo("assetType", assetType);
         return edsAssetMapper.selectByExample(example);
     }

@@ -35,10 +35,10 @@ public class EnvServiceImpl implements EnvService {
     }
 
     @Override
-    public Env getByUniqueKey(Env env) {
+    public Env getByUniqueKey(Env record) {
         Example example = new Example(Env.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("envName", env.getEnvName());
+        criteria.andEqualTo("envName", record.getEnvName());
         return envMapper.selectOneByExample(example);
     }
 

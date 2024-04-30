@@ -46,11 +46,11 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
     }
 
     @Override
-    public TrafficLayerDomainRecord getByUniqueKey(TrafficLayerDomainRecord trafficLayerDomainRecord) {
+    public TrafficLayerDomainRecord getByUniqueKey(TrafficLayerDomainRecord record) {
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("domainId", trafficLayerDomainRecord.getDomainId())
-                .andEqualTo("envName", trafficLayerDomainRecord.getEnvName());
+        criteria.andEqualTo("domainId", record.getDomainId())
+                .andEqualTo("envName", record.getEnvName());
         return trafficLayerDomainRecordMapper.selectOneByExample(example);
     }
 

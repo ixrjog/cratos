@@ -50,22 +50,22 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void delete(BusinessCredential businessCredential) {
+    public void delete(BusinessCredential record) {
         // 一并删除私有凭据
-        Credential credential = credentialService.getById(businessCredential.getCredentialId());
+        Credential credential = credentialService.getById(record.getCredentialId());
         if (credential != null && credential.getPrivateCredential()) {
             credentialService.deleteById(credential.getId());
         }
-        deleteById(businessCredential.getId());
+        deleteById(record.getId());
     }
 
     @Override
-    public BusinessCredential getByUniqueKey(BusinessCredential businessCredential) {
+    public BusinessCredential getByUniqueKey(BusinessCredential record) {
         Example example = new Example(BusinessCredential.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", businessCredential.getBusinessType())
-                .andEqualTo("businessId", businessCredential.getBusinessId())
-                .andEqualTo("credentialId", businessCredential.getCredentialId());
+        criteria.andEqualTo("businessType", record.getBusinessType())
+                .andEqualTo("businessId", record.getBusinessId())
+                .andEqualTo("credentialId", record.getCredentialId());
         return businessCredentialMapper.selectOneByExample(example);
     }
 

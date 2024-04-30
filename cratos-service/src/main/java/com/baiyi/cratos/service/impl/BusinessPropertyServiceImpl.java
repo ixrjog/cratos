@@ -36,12 +36,12 @@ public class BusinessPropertyServiceImpl implements BusinessPropertyService {
     }
 
     @Override
-    public BusinessProperty getByUniqueKey(BusinessProperty businessProperty) {
+    public BusinessProperty getByUniqueKey(BusinessProperty record) {
         Example example = new Example(BusinessProperty.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", businessProperty.getBusinessType())
-                .andEqualTo("businessId", businessProperty.getBusinessId())
-                .andEqualTo("propertyName",businessProperty.getPropertyName());
+        criteria.andEqualTo("businessType", record.getBusinessType())
+                .andEqualTo("businessId", record.getBusinessId())
+                .andEqualTo("propertyName", record.getPropertyName());
         return businessPropertyMapper.selectOneByExample(example);
     }
 

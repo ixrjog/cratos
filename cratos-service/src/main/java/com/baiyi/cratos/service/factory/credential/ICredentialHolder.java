@@ -17,7 +17,6 @@ public interface ICredentialHolder extends InitializingBean {
                 .getSimpleName());
     }
 
-    // CredentialHolderFactory.register(this);
     void afterPropertiesSet();
 
 }

@@ -21,11 +21,11 @@ public class RbacRoleMenuServiceImpl implements RbacRoleMenuService {
     private final RbacRoleMenuMapper rbacRoleMenuMapper;
 
     @Override
-    public RbacRoleMenu getByUniqueKey(RbacRoleMenu rbacRoleMenu) {
+    public RbacRoleMenu getByUniqueKey(RbacRoleMenu record) {
         Example example = new Example(RbacRoleMenu.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("roleId", rbacRoleMenu.getRoleId())
-                .andEqualTo("menuId", rbacRoleMenu.getMenuId());
+        criteria.andEqualTo("roleId", record.getRoleId())
+                .andEqualTo("menuId", record.getMenuId());
         return rbacRoleMenuMapper.selectOneByExample(example);
     }
 

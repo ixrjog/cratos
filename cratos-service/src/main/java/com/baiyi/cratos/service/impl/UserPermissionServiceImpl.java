@@ -19,12 +19,12 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionMapper userPermissionMapper;
 
     @Override
-    public UserPermission getByUniqueKey(UserPermission userPermission) {
+    public UserPermission getByUniqueKey(UserPermission record) {
         Example example = new Example(UserPermission.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", userPermission.getBusinessType())
-                .andEqualTo("businessId", userPermission.getBusinessId())
-                .andEqualTo("username",userPermission.getUsername());
+        criteria.andEqualTo("businessType", record.getBusinessType())
+                .andEqualTo("businessId", record.getBusinessId())
+                .andEqualTo("username", record.getUsername());
         return userPermissionMapper.selectOneByExample(example);
     }
 

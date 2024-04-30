@@ -32,10 +32,10 @@ public class RbacGroupServiceImpl implements RbacGroupService {
     }
 
     @Override
-    public RbacGroup getByUniqueKey(RbacGroup rbacGroup) {
+    public RbacGroup getByUniqueKey(RbacGroup record) {
         Example example = new Example(RbacGroup.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("groupName", rbacGroup.getGroupName());
+        criteria.andEqualTo("groupName", record.getGroupName());
         return rbacGroupMapper.selectOneByExample(example);
     }
 

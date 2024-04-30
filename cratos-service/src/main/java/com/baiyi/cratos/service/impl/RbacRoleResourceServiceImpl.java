@@ -29,11 +29,11 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
     }
 
     @Override
-    public RbacRoleResource getByUniqueKey(RbacRoleResource rbacRoleResource) {
+    public RbacRoleResource getByUniqueKey(RbacRoleResource record) {
         Example example = new Example(RbacRoleResource.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("roleId", rbacRoleResource.getRoleId())
-                .andEqualTo("resourceId", rbacRoleResource.getResourceId());
+        criteria.andEqualTo("roleId", record.getRoleId())
+                .andEqualTo("resourceId", record.getResourceId());
         return rbacRoleResourceMapper.selectOneByExample(example);
     }
 

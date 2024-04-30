@@ -37,8 +37,8 @@ public class CredentialServiceImpl implements CredentialService {
 
     @Override
     @DomainEncrypt
-    public void updateByPrimaryKey(Credential credential) {
-        credentialMapper.updateByPrimaryKey(credential);
+    public void updateByPrimaryKey(Credential record) {
+        credentialMapper.updateByPrimaryKey(record);
     }
 
     @Override

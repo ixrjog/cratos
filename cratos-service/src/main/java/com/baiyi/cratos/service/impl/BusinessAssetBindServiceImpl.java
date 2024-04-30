@@ -31,11 +31,11 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
     }
 
     @Override
-    public BusinessAssetBind getByUniqueKey(BusinessAssetBind businessAssetBind) {
+    public BusinessAssetBind getByUniqueKey(BusinessAssetBind record) {
         Example example = new Example(BusinessAssetBind.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("businessType", businessAssetBind.getBusinessType())
-                .andEqualTo("assetId", businessAssetBind.getAssetId());
+        criteria.andEqualTo("businessType", record.getBusinessType())
+                .andEqualTo("assetId", record.getAssetId());
         return businessAssetBindMapper.selectOneByExample(example);
     }
 

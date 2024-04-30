@@ -21,12 +21,12 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     private final EdsAssetIndexMapper edsAssetIndexMapper;
 
     @Override
-    public EdsAssetIndex getByUniqueKey(EdsAssetIndex edsAssetIndex) {
+    public EdsAssetIndex getByUniqueKey(EdsAssetIndex record) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("instanceId", edsAssetIndex.getInstanceId())
-                .andEqualTo("assetId", edsAssetIndex.getAssetId())
-                .andEqualTo("name", edsAssetIndex.getName());
+        criteria.andEqualTo("instanceId", record.getInstanceId())
+                .andEqualTo("assetId", record.getAssetId())
+                .andEqualTo("name", record.getName());
         return edsAssetIndexMapper.selectOneByExample(example);
     }
 

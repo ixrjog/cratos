@@ -46,10 +46,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByUniqueKey(User user) {
+    public User getByUniqueKey(User record) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("username", user.getUsername());
+        criteria.andEqualTo("username", record.getUsername());
         return userMapper.selectOneByExample(example);
     }
 

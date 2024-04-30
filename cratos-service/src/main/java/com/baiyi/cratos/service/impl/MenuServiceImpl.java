@@ -29,10 +29,10 @@ public class MenuServiceImpl implements MenuService {
     private final MenuMapper menuMapper;
 
     @Override
-    public Menu getByUniqueKey(Menu menu) {
+    public Menu getByUniqueKey(Menu record) {
         Example example = new Example(Menu.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", menu.getName());
+        criteria.andEqualTo("name", record.getName());
         return menuMapper.selectOneByExample(example);
     }
 

@@ -20,15 +20,15 @@ public interface BaseBusinessService<T> extends BaseService<T, Mapper<T>>, BaseB
 
     List<T> selectByBusiness(BaseBusiness.IBusiness business);
 
-    default void delete(T t) {
-        Class<?> targetClass = AopUtils.getTargetClass(t);
+    default void delete(T record) {
+        Class<?> targetClass = AopUtils.getTargetClass(record);
         Field[] declaredFields = targetClass.getDeclaredFields();
         for (Field declaredField : declaredFields) {
             // 找出@Id注解的字段
             if (AnnotationUtils.findAnnotation(declaredField, Id.class) != null) {
                 try {
                     declaredField.setAccessible(true);
-                    deleteById((Integer) declaredField.get(t));
+                    deleteById((Integer) declaredField.get(record));
                     declaredField.setAccessible(false);
                 } catch (IllegalAccessException ignored) {
                 }

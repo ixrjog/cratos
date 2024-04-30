@@ -18,24 +18,24 @@ public interface BaseValidService<T extends IValid, M extends Mapper<T>> extends
      * @param id
      */
     default void updateValidById(int id) {
-        T t = this.getById(id);
-        if (t == null) {
+        T record = this.getById(id);
+        if (record == null) {
             throw new DaoServiceException("Domain is empty.");
         }
-        if (t.getValid() == null) {
+        if (record.getValid() == null) {
             throw new DaoServiceException("Domain field valid is empty.");
         }
         // 过期处理
-        if (t instanceof IExpiredTime expiredTime) {
+        if (record instanceof IExpiredTime expiredTime) {
             if ((expiredTime.getExpiredTime()
-                    .getTime() - System.currentTimeMillis()) <= 0 && !t.getValid()) {
+                    .getTime() - System.currentTimeMillis()) <= 0 && !record.getValid()) {
                 // 过期
-                throw new DaoServiceException(t.getClass()
+                throw new DaoServiceException(record.getClass()
                         .getSimpleName() + " has expired and cannot be set as valid");
             }
         }
-        t.setValid(!t.getValid());
-        updateByPrimaryKey(t);
+        record.setValid(!record.getValid());
+        updateByPrimaryKey(record);
     }
 
 }

@@ -36,10 +36,10 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public Domain getByUniqueKey(Domain domain) {
+    public Domain getByUniqueKey(Domain record) {
         Example example = new Example(Domain.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", domain.getName());
+        criteria.andEqualTo("name", record.getName());
         return domainMapper.selectOneByExample(example);
     }
 

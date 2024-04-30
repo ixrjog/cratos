@@ -43,8 +43,8 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
-    public UserToken getByUniqueKey(UserToken userToken) {
-        return getByToken(userToken.getToken());
+    public UserToken getByUniqueKey(UserToken record) {
+        return getByToken(record.getToken());
     }
 
 }

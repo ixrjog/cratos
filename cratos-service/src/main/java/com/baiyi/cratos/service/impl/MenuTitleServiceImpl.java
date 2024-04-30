@@ -24,11 +24,11 @@ public class MenuTitleServiceImpl implements MenuTitleService {
     private final MenuTitleMapper menuTitleMapper;
 
     @Override
-    public MenuTitle getByUniqueKey(MenuTitle menuTitle) {
+    public MenuTitle getByUniqueKey(MenuTitle record) {
         Example example = new Example(MenuTitle.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("menuId", menuTitle.getMenuId())
-                .andEqualTo("lang",menuTitle.getLang());
+        criteria.andEqualTo("menuId", record.getMenuId())
+                .andEqualTo("lang", record.getLang());
         return menuTitleMapper.selectOneByExample(example);
     }
 
@@ -36,7 +36,7 @@ public class MenuTitleServiceImpl implements MenuTitleService {
     public List<MenuTitle> queryByMenuId(int menuId) {
         Example example = new Example(MenuTitle.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("menuId",menuId);
+        criteria.andEqualTo("menuId", menuId);
         example.setOrderByClause("lang");
         return menuTitleMapper.selectByExample(example);
     }

@@ -10,5 +10,4 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
  * @Version 1.0
  */
 public interface BusinessPropertyService extends BaseBusinessService<BusinessProperty>, BaseUniqueKeyService<BusinessProperty> {
-
 }

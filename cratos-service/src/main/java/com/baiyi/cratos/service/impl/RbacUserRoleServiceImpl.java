@@ -45,11 +45,11 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
     }
 
     @Override
-    public RbacUserRole getByUniqueKey(RbacUserRole rbacUserRole) {
+    public RbacUserRole getByUniqueKey(RbacUserRole record) {
         Example example = new Example(RbacUserRole.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("username", rbacUserRole.getUsername())
-                .andEqualTo("roleId", rbacUserRole.getRoleId());
+        criteria.andEqualTo("username", record.getUsername())
+                .andEqualTo("roleId", record.getRoleId());
         return rbacUserRoleMapper.selectOneByExample(example);
     }
 

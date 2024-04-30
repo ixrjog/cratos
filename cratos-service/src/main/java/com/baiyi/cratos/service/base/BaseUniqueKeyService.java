@@ -10,6 +10,6 @@ import com.baiyi.cratos.annotation.DomainDecrypt;
 public interface BaseUniqueKeyService<T> {
 
     @DomainDecrypt
-    T getByUniqueKey(T t);
+    T getByUniqueKey(T record);
 
 }

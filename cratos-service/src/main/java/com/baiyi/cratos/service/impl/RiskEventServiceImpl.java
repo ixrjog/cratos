@@ -30,10 +30,10 @@ public class RiskEventServiceImpl implements RiskEventService {
     private final RiskEventMapper riskEventMapper;
 
     @Override
-    public RiskEvent getByUniqueKey(RiskEvent riskEvent) {
+    public RiskEvent getByUniqueKey(RiskEvent record) {
         Example example = new Example(RiskEvent.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", riskEvent.getName());
+        criteria.andEqualTo("name", record.getName());
         return riskEventMapper.selectOneByExample(example);
     }
 

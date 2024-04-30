@@ -31,10 +31,10 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
     private final TrafficLayerDomainMapper trafficLayerDomainMapper;
 
     @Override
-    public TrafficLayerDomain getByUniqueKey(TrafficLayerDomain trafficLayerDomain) {
+    public TrafficLayerDomain getByUniqueKey(TrafficLayerDomain record) {
         Example example = new Example(TrafficLayerDomain.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("domain", trafficLayerDomain.getDomain());
+        criteria.andEqualTo("domain", record.getDomain());
         return trafficLayerDomainMapper.selectOneByExample(example);
     }
 

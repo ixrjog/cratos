@@ -36,8 +36,8 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
     }
 
     @Override
-    public void updateByPrimaryKey(BusinessDocument businessDocument) {
-        businessDocumentMapper.updateByPrimaryKey(businessDocument);
+    public void updateByPrimaryKey(BusinessDocument record) {
+        businessDocumentMapper.updateByPrimaryKey(record);
     }
 
     @Override

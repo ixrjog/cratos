@@ -22,10 +22,10 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     private final ServerAccountMapper serverAccountMapper;
 
     @Override
-    public ServerAccount getByUniqueKey(ServerAccount serverAccount) {
+    public ServerAccount getByUniqueKey(ServerAccount record) {
         Example example = new Example(ServerAccount.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("name", serverAccount.getName());
+        criteria.andEqualTo("name", record.getName());
         return serverAccountMapper.selectOneByExample(example);
     }
 
