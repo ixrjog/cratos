@@ -13,7 +13,8 @@ public class SqlHelper {
     }
 
     public static String toLike(String queryName) {
-        return Joiner.on("").join("%", queryName, "%");
+        return Joiner.on("")
+                .join("%", queryName, "%");
     }
 
 }
