@@ -32,20 +32,24 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
         }
         Map<String, EdsAssetIndex> assetIndexMap = getEdsAssetIndexMap(assetId);
         edsAssetIndexList.forEach(e -> {
-            if (assetIndexMap.containsKey(e.getName())) {
-                EdsAssetIndex edsAssetIndex = assetIndexMap.get(e.getName());
-                if (!edsAssetIndex.getValue()
-                        .equals(e.getValue())) {
-                    edsAssetIndex.setValue(e.getValue());
-                    edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);
-                }
-                assetIndexMap.remove(e.getName());
-            } else {
-                try {
-                    edsAssetIndexService.add(e);
-                    log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
-                } catch (DuplicateKeyException duplicateKeyException) {
-                    log.debug("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
+            if (e != null) {
+                if (assetIndexMap.containsKey(e.getName())) {
+                    EdsAssetIndex edsAssetIndex = assetIndexMap.get(e.getName());
+                    if (!edsAssetIndex.getValue()
+                            .equals(e.getValue())) {
+                        edsAssetIndex.setValue(e.getValue());
+                        edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);
+                    }
+                    assetIndexMap.remove(e.getName());
+                } else {
+                    try {
+                        edsAssetIndexService.add(e);
+                        log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(),
+                                e.getValue());
+                    } catch (DuplicateKeyException duplicateKeyException) {
+                        log.debug("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
+                                e.getName(), e.getValue());
+                    }
                 }
             }
         });

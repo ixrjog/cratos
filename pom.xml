@@ -24,6 +24,7 @@
         <module>cratos-eds-kubernetes</module>
         <module>cratos-eds-ldap</module>
         <module>cratos-eds-gitlab</module>
+        <module>cratos-eds-dingtalk</module>
     </modules>
 
     <properties>

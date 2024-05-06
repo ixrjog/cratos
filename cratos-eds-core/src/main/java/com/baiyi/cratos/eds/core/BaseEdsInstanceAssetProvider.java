@@ -28,6 +28,7 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +52,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private final ConfigCredTemplate configCredTemplate;
 
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
+
+    protected List<EdsAsset> queryByInstanceAssets(ExternalDataSourceInstance<C> instance,
+                                                   EdsAssetTypeEnum edsAssetTypeEnum) {
+        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
+                .getId(), edsAssetTypeEnum.name());
+    }
 
     public BaseEdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -110,6 +117,18 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, A entity) {
         return Collections.emptyList();
+    }
+
+    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, String value) {
+        if (!StringUtils.hasText(value)) {
+            return null;
+        }
+        return EdsAssetIndex.builder()
+                .instanceId(edsAsset.getInstanceId())
+                .assetId(edsAsset.getId())
+                .name(name)
+                .value(value)
+                .build();
     }
 
     protected EdsAsset enterAsset(EdsAsset newEdsAsset) {

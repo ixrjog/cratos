@@ -58,6 +58,30 @@ public class EdsInstanceParam {
     }
 
     @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateInstance implements IToTarget<EdsInstance> {
+
+        private Integer id;
+
+        @NotNull(message = "Parameter 'instanceName' cannot be empty.")
+        private String instanceName;
+
+        // private String instanceType;
+
+        private String kind;
+
+        private String version;
+
+        private Boolean valid;
+
+        private String url;
+
+        private String comment;
+
+    }
+
+    @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor

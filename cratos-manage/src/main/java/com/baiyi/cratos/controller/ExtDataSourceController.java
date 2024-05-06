@@ -59,6 +59,13 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update eds instance")
+    @PostMapping(value = "/instance/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateEdsInstance(@RequestBody @Valid EdsInstanceParam.UpdateInstance updateEdsInstance) {
+        edsFacade.updateEdsInstance(updateEdsInstance);
+        return HttpResult.SUCCESS;
+    }
+
     // Config
 
     @Operation(summary = "Pagination query eds config")

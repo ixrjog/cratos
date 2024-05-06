@@ -24,6 +24,8 @@ public interface EdsFacade {
 
     void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance);
 
+    void updateEdsInstance(EdsInstanceParam.UpdateInstance updateEdsInstance);
+
     DataTable<EdsConfigVO.EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);
 
     EdsConfigVO.EdsConfig getEdsConfigById(int configId);

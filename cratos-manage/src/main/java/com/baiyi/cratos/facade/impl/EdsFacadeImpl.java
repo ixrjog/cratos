@@ -86,7 +86,8 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
         if (edsInstanceService.selectCountByConfigId(edsInstance.getConfigId()) > 0) {
-            throw new EdsInstanceRegisterException("The specified configId is being used by other data source instances.");
+            throw new EdsInstanceRegisterException(
+                    "The specified configId is being used by other data source instances.");
         }
         EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
                 .orElseThrow(() -> new EdsInstanceRegisterException("The edsConfig does not exist."));
@@ -95,6 +96,18 @@ public class EdsFacadeImpl implements EdsFacade {
         edsInstanceService.add(edsInstance);
         edsConfig.setInstanceId(edsInstance.getId());
         edsConfigService.updateByPrimaryKey(edsConfig);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void updateEdsInstance(EdsInstanceParam.UpdateInstance updateEdsInstance) {
+        EdsInstance edsInstance = edsInstanceService.getById(updateEdsInstance.getId());
+        edsInstance.setInstanceName(updateEdsInstance.getInstanceName());
+        edsInstance.setValid(updateEdsInstance.getValid());
+        edsInstance.setKind(updateEdsInstance.getKind());
+        edsInstance.setUrl(updateEdsInstance.getUrl());
+        edsInstance.setComment(updateEdsInstance.getComment());
+        edsInstanceService.updateByPrimaryKey(edsInstance);
     }
 
     @Override
@@ -143,20 +156,24 @@ public class EdsFacadeImpl implements EdsFacade {
                                                 // 吊销凭据
                                                 if (!updateEdsConfig.getCredentialId()
                                                         .equals(dbEdsConfig.getCredentialId())) {
-                                                    businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
-                                                    businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
+                                                    businessCredentialFacade.revokeBusinessCredential(
+                                                            dbEdsConfig.getCredentialId(), business);
+                                                    businessCredentialFacade.issueBusinessCredential(
+                                                            updateEdsConfig.getCredentialId(), business);
                                                 }
                                             },
                                             // EdsConfig credentialId invalid
                                             () -> {
                                                 // 颁发凭据
-                                                businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
+                                                businessCredentialFacade.issueBusinessCredential(
+                                                        updateEdsConfig.getCredentialId(), business);
                                             });
                         }, () -> {
                             // UpdateEdsConfig credentialId invalid
                             if (IdentityUtil.hasIdentity(dbEdsConfig.getCredentialId())) {
                                 // 吊销凭据
-                                businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
+                                businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(),
+                                        business);
                             }
                         });
         EdsConfig edsConfig = updateEdsConfig.toTarget();
@@ -194,7 +211,8 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
+        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(
+                importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
         edsInstanceProviderDelegate.importAssets();
     }
 
@@ -236,15 +254,18 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsAsset edsAsset = Optional.ofNullable(edsAssetService.getById(assetId))
                 .orElseThrow(() -> new EdsAssetException("The asset object does not exist: assetId={}.", assetId));
         EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(edsAsset);
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = Optional.ofNullable(AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType()))
-                .orElseThrow(() -> new EdsAssetException("This asset object cannot be converted to a business object: assetId={}.", assetId));
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = Optional.ofNullable(
+                        AssetToBusinessWrapperFactory.getProvider(edsAsset.getAssetType()))
+                .orElseThrow(() -> new EdsAssetException(
+                        "This asset object cannot be converted to a business object: assetId={}.", assetId));
         return assetToBusinessWrapper.getAssetToBusiness(assetVO);
     }
 
     @Override
     @Async
     public void deleteEdsInstanceAsset(EdsInstanceParam.DeleteInstanceAsset deleteInstanceAsset) {
-        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(deleteInstanceAsset.getInstanceId(), deleteInstanceAsset.getAssetType());
+        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(deleteInstanceAsset.getInstanceId(),
+                deleteInstanceAsset.getAssetType());
         if (!CollectionUtils.isEmpty(assets)) {
             assets.stream()
                     .mapToInt(EdsAsset::getId)

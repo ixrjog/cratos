@@ -26,6 +26,9 @@ public enum EdsAssetTypeEnum {
     LDAP_PERSON("Person"),
     LDAP_GROUP("Group"),
 
+    DINGTALK_USER("User"),
+    DINGTALK_DEPARTMENT("Department"),
+
     GITLAB_PROJECT("Project"),
     GITLAB_GROUP("Group"),
     GITLAB_USER("User"),

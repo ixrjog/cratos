@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.cloudflare.client;
+package com.baiyi.cratos.eds.cloudflare.configuration;
 
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;

@@ -18,7 +18,9 @@ public enum EdsInstanceTypeEnum {
     CLOUDFLARE,
     KUBERNETES,
     LDAP,
-    GITLAB;
+    GITLAB,
+    DINGTALK_APP,
+    DINGTALK_ROBOT;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()
