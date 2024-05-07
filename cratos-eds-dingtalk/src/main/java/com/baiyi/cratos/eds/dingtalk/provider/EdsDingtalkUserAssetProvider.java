@@ -82,14 +82,14 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
                 .collect(Collectors.toSet());
     }
 
-    private static final String GROUP = "dingtalk.user.";
+    private static final String PREFIX = "dingtalk.user.";
 
-    public static final String DINGTALK_USER_USERNAME = GROUP + "username";
-    public static final String DINGTALK_USER_MOBILE = GROUP + "mobile";
-    public static final String DINGTALK_USER_LEADER = GROUP + "leader";
-    public static final String DINGTALK_USER_AVATAR = GROUP + "avatar";
-    public static final String DINGTALK_USER_BOSS = GROUP + "boss";
-    public static final String DINGTALK_USER_JOB_NUMBER = GROUP + "jobNumber";
+    public static final String DINGTALK_USER_USERNAME = PREFIX + "username";
+    public static final String DINGTALK_USER_MOBILE = PREFIX + "mobile";
+    public static final String DINGTALK_USER_LEADER = PREFIX + "leader";
+    public static final String DINGTALK_USER_AVATAR = PREFIX + "avatar";
+    public static final String DINGTALK_USER_BOSS = PREFIX + "boss";
+    public static final String DINGTALK_USER_JOB_NUMBER = PREFIX + "jobNumber";
 
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, DingtalkUser.User entity) {
