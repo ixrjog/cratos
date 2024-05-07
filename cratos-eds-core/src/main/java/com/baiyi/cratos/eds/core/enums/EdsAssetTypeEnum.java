@@ -3,9 +3,9 @@ package com.baiyi.cratos.eds.core.enums;
 import lombok.Getter;
 
 /**
- * @Author baiyi
- * @Date 2024/2/26 13:48
- * @Version 1.0
+ * &#064;Author baiyi
+ * &#064;Date 2024/2/26 13:48
+ * &#064;Version 1.0
  */
 @Getter
 public enum EdsAssetTypeEnum {

@@ -46,6 +46,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.ibeetl/beetl -->
+        <dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+            <version>3.16.1.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Author baiyi
- * @Date 2024/2/26 15:09
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/2/26 15:09
+ * &#064;Version  1.0
  */
 public enum EdsInstanceTypeEnum {
 

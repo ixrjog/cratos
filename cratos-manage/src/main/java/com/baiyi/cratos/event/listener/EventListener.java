@@ -1,5 +1,6 @@
 package com.baiyi.cratos.event.listener;
 
+import com.baiyi.cratos.domain.message.IEventMessage;
 import com.baiyi.cratos.event.factory.EventConsumerFactory;
 import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
@@ -15,17 +16,17 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class EventListener<T> implements ApplicationListener<Event<T>> {
+public class EventListener<T extends IEventMessage> implements ApplicationListener<Event<T>> {
 
     @Override
     @Async
     public void onApplicationEvent(Event<T> event) {
-        IEventConsumer<T> consumer = EventConsumerFactory.getConsumer(event.getEventType());
+        IEventConsumer<T> consumer = EventConsumerFactory.getConsumer(event.getTopic());
         if (consumer != null) {
-            log.debug("On application event: eventType={}", event.getEventType());
+            log.debug("On application event: topic={}", event.getTopic());
             consumer.onMessage(event);
         } else {
-            log.debug("On application event, not consumer: eventType={}", event.getEventType());
+            log.debug("On application event, not consumer: topic={}", event.getTopic());
         }
     }
 

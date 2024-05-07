@@ -1,5 +1,6 @@
 package com.baiyi.cratos.event.consumer.base;
 
+import com.baiyi.cratos.domain.message.IEventMessage;
 import com.baiyi.cratos.event.factory.EventConsumerFactory;
 import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
@@ -11,21 +12,19 @@ import org.springframework.scheduling.annotation.Async;
  * @Date 2024/3/20 16:01
  * @Version 1.0
  */
-public abstract class AbstractEventConsumer<T> implements IEventConsumer<T>, InitializingBean {
+public abstract class BaseEventConsumer<T extends IEventMessage> implements IEventConsumer<T>, InitializingBean {
 
     @Override
     @Async
     public void onMessage(Event<T> noticeEvent) {
-
+        handleMessage(noticeEvent);
     }
 
-
-//    protected T toEventData(IEvent<T> event) {
-//        return event.getBody();
-//    }
+    abstract protected void handleMessage(Event<T> noticeEvent);
 
     @Override
     public void afterPropertiesSet() {
         EventConsumerFactory.register(this);
     }
+
 }
