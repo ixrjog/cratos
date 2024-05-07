@@ -78,12 +78,7 @@ public class EcsAwsEbsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))
-                .map(attachment -> EdsAssetIndex.builder()
-                        .instanceId(edsAsset.getInstanceId())
-                        .assetId(edsAsset.getId())
-                        .name(attachment.getVolumeId())
-                        .value(attachment.getInstanceId())
-                        .build())
+                .map(attachment -> toEdsAssetIndex(edsAsset, attachment.getVolumeId(), attachment.getInstanceId()))
                 .collect(Collectors.toList());
     }
 

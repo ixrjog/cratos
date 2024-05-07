@@ -104,13 +104,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
         String env = "";
         if (labels.containsKey("env")) {
             env = labels.get("env");
-            EdsAssetIndex envIndex = EdsAssetIndex.builder()
-                    .instanceId(edsAsset.getInstanceId())
-                    .assetId(edsAsset.getId())
-                    .name("env")
-                    .value(env)
-                    .build();
-            indices.add(envIndex);
+            indices.add(toEdsAssetIndex(edsAsset, "env", env));
         }
 
         if (labels.containsKey("app")) {
@@ -121,23 +115,11 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                     appName = StringFormatter.eraseLastStr(appName, "-" + env);
                 }
             }
-            EdsAssetIndex appNameIndex = EdsAssetIndex.builder()
-                    .instanceId(edsAsset.getInstanceId())
-                    .assetId(edsAsset.getId())
-                    .name(APP_NAME)
-                    .value(appName)
-                    .build();
-            indices.add(appNameIndex);
+            indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
 
         int replicas = KubeUtil.getReplicas(entity);
-        EdsAssetIndex envIndex = EdsAssetIndex.builder()
-                .instanceId(edsAsset.getInstanceId())
-                .assetId(edsAsset.getId())
-                .name(REPLICAS)
-                .value(String.valueOf(replicas))
-                .build();
-        indices.add(envIndex);
+        indices.add(toEdsAssetIndex(edsAsset, REPLICAS, replicas));
         return indices;
     }
 

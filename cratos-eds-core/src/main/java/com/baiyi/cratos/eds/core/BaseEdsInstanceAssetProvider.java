@@ -53,6 +53,13 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
 
+    /**
+     * 按类型查询本数据源实例资产
+     *
+     * @param instance
+     * @param edsAssetTypeEnum
+     * @return
+     */
     protected List<EdsAsset> queryByInstanceAssets(ExternalDataSourceInstance<C> instance,
                                                    EdsAssetTypeEnum edsAssetTypeEnum) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
@@ -70,19 +77,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     }
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
-
-    /**
-     * 按类型查询本数据源实例资产
-     *
-     * @param instance
-     * @param assetTypeEnum
-     * @return
-     */
-    protected List<EdsAsset> queryEdsInstanceAssets(ExternalDataSourceInstance<C> instance,
-                                                    EdsAssetTypeEnum assetTypeEnum) {
-        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
-                .getId(), assetTypeEnum.name());
-    }
 
     @Override
     @EdsTaskLock(instanceId = "#instance.edsInstance.id")
@@ -117,6 +111,27 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, A entity) {
         return Collections.emptyList();
+    }
+
+    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Long value) {
+        if (value == null) {
+            return null;
+        }
+        return toEdsAssetIndex(edsAsset, name, String.valueOf(value));
+    }
+
+    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Integer value) {
+        if (value == null) {
+            return null;
+        }
+        return toEdsAssetIndex(edsAsset, name, String.valueOf(value));
+    }
+
+    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Boolean value) {
+        if (value == null) {
+            return null;
+        }
+        return toEdsAssetIndex(edsAsset, name, value.toString());
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, String value) {

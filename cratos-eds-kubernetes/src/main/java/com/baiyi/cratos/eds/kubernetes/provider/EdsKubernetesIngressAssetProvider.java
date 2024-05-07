@@ -45,10 +45,9 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
 
     public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                CredentialService credentialService,
-                                                ConfigCredTemplate configCredTemplate,
-                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                                KubernetesNamespaceRepo kubernetesNamespaceRepo,
+                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                             EdsAssetIndexFacade edsAssetIndexFacade,
+                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                              KubernetesIngressRepo kubernetesIngressRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
         this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
@@ -89,7 +88,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(Ingress::getSpec)
                 .map(IngressSpec::getRules);
         // rules
-        optionalIngressRules.ifPresent(ingressRules -> indices.addAll(getEdsAssetIndexFromRules(edsAsset, ingressRules)));
+        optionalIngressRules.ifPresent(
+                ingressRules -> indices.addAll(getEdsAssetIndexFromRules(edsAsset, ingressRules)));
         // loadBalancer
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
         return indices;
@@ -103,12 +103,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         if (optionalIngressLoadBalancerIngresses.isPresent()) {
             IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
                     .get(0);
-            return EdsAssetIndex.builder()
-                    .instanceId(edsAsset.getInstanceId())
-                    .assetId(edsAsset.getId())
-                    .name(LB_INGRESS_HOSTNAME)
-                    .value(ingressLoadBalancerIngress.getHostname())
-                    .build();
+            return toEdsAssetIndex(edsAsset, LB_INGRESS_HOSTNAME, ingressLoadBalancerIngress.getHostname());
         }
         return null;
     }
@@ -125,13 +120,9 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                                 .map(IngressBackend::getService)
                                 .map(IngressServiceBackend::getName)
                                 .orElse(UNDEFINED_SERVICE);
-                        EdsAssetIndex index = EdsAssetIndex.builder()
-                                .instanceId(edsAsset.getInstanceId())
-                                .assetId(edsAsset.getId())
-                                .name(StringFormatter.arrayFormat("{} -> {}", host, path.getPath()))
-                                .value(service)
-                                .build();
-                        indices.add(index);
+                        indices.add(
+                                toEdsAssetIndex(edsAsset, StringFormatter.arrayFormat("{} -> {}", host, path.getPath()),
+                                        service));
                     });
         });
         return indices;

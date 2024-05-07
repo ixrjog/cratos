@@ -109,14 +109,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
         if (entity.getParentId() == null) {
             return Lists.newArrayList();
         }
-        EdsAssetIndex edsAssetIndex = EdsAssetIndex.builder()
-                .instanceId(edsAsset.getInstanceId())
-                .assetId(edsAsset.getId())
-                .name(DINGTALK_DEPT_PARENT_ID)
-                .value(String.valueOf(entity.getParentId()))
-                .build();
-
-        return Lists.newArrayList(edsAssetIndex);
+        return Lists.newArrayList(toEdsAssetIndex(edsAsset, DINGTALK_DEPT_PARENT_ID, entity.getParentId()));
     }
 
     @Override

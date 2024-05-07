@@ -15,6 +15,12 @@ public interface EdsInstanceAssetProvider<C extends IEdsConfigModel, A> extends 
 
     void importAssets(ExternalDataSourceInstance<C> instance);
 
+    /**
+     * Import a asset
+     * @param instance
+     * @param asset
+     * @return
+     */
     EdsAsset importAsset(ExternalDataSourceInstance<C> instance, A asset);
 
     C produceConfig(EdsConfig edsConfig);

@@ -46,7 +46,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     protected List<SshKeyData> listEntities(
             ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> edsUserAssets = queryEdsInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
+            List<EdsAsset> edsUserAssets = queryByInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
                 return listSshKeyWithEdsUserAssets(instance, edsUserAssets);
             }
