@@ -36,6 +36,8 @@
         <spring-security.version>6.2.3</spring-security.version>
         <!-- 1.12.565 -->
         <aws-java-sdk.version>1.12.691</aws-java-sdk.version>
+        <!--  net.javacrumbs.shedlock-->
+        <shedlock-spring.version>5.9.0</shedlock-spring.version>
     </properties>
 
     <parent>
@@ -118,6 +120,20 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- Shedlock 分布式任务锁 -->
+        <!-- https://mvnrepository.com/artifact/net.javacrumbs.shedlock/shedlock-spring -->
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>${shedlock-spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-jdbc-template</artifactId>
+            <version>${shedlock-spring.version}</version>
         </dependency>
 
         <!-- 模板引擎 -->

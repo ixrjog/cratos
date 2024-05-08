@@ -28,6 +28,7 @@ public enum EdsAssetTypeEnum {
 
     DINGTALK_USER("User"),
     DINGTALK_DEPARTMENT("Department"),
+    DINGTALK_ROBOT_MSG("RobotMsg"),
 
     GITLAB_PROJECT("Project"),
     GITLAB_GROUP("Group"),

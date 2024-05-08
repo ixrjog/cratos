@@ -31,8 +31,12 @@ public class EdsInstanceProviderDelegate<C extends IEdsConfigModel, A> {
         provider.importAssets(instance);
     }
 
-    public void pushAsset(A asset) {
+    public void importAsset(A asset) {
         provider.importAsset(instance, asset);
     }
+
+//    public void pushAsset(A asset) {
+//        provider.importAsset(instance, asset);
+//    }
 
 }

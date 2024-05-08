@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,15 @@ public class CertificateServiceImpl implements CertificateService {
         Page<Certificate> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<Certificate> data = certificateMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public List<Certificate> queryByLessThanExpiry(Date date) {
+        Example example = new Example(Certificate.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andLessThan("notAfter", date)
+                .andEqualTo("valid", true);
+        return certificateMapper.selectByExample(example);
     }
 
     @Override

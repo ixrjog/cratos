@@ -37,7 +37,7 @@ public class MyMenuFacadeImpl implements MyMenuFacade {
 
     private final UserService userService;
 
-    @Value("${cratos.language:zh-cn}")
+    @Value("${cratos.language:en-us}")
     private String language;
 
     @Override

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,15 @@ public class DomainServiceImpl implements DomainService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());
         return domainMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<Domain> queryByLessThanExpiry(Date date) {
+        Example example = new Example(Domain.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andLessThan("expiry", date)
+                .andEqualTo("valid", true);
+        return domainMapper.selectByExample(example);
     }
 
     @Override

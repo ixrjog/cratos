@@ -45,7 +45,8 @@ server:
   shutdown: graceful
 
 cratos:
-  language: zh-cn
+  # en-us | zh-cn
+  language: en-us
   auth:
     white:
       resources:

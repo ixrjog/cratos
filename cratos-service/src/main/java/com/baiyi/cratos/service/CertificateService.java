@@ -7,6 +7,9 @@ import com.baiyi.cratos.mapper.CertificateMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/3 11:11
@@ -17,5 +20,7 @@ public interface CertificateService extends BaseValidService<Certificate, Certif
     void deleteByCertificateId(String certificateId);
 
     DataTable<Certificate> queryCertificatePage(CertificateParam.CertificatePageQuery pageQuery);
+
+    List<Certificate> queryByLessThanExpiry(Date date);
 
 }

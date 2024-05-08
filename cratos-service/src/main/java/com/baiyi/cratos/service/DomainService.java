@@ -8,6 +8,9 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/4/28 上午9:58
@@ -16,5 +19,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
 public interface DomainService extends BaseValidService<Domain, DomainMapper>, BaseUniqueKeyService<Domain>,SupportBusinessService {
 
     DataTable<Domain> queryDomainPage(DomainParam.DomainPageQuery pageQuery);
+
+    List<Domain> queryByLessThanExpiry(Date date);
 
 }
