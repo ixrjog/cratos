@@ -47,8 +47,7 @@ public class NotificationTest extends BaseUnit {
 
     @Test
     void taskTest() {
-        inspectionNotificationFacade.domainInspectionTask();
-        inspectionNotificationFacade.certificateInspectionTask();
+        inspectionNotificationFacade.doTask();
     }
 
 }

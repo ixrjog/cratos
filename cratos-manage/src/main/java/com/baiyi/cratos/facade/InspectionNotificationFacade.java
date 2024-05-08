@@ -7,8 +7,6 @@ package com.baiyi.cratos.facade;
  */
 public interface InspectionNotificationFacade {
 
-    void domainInspectionTask();
-
-    void certificateInspectionTask();
+    void doTask();
 
 }

@@ -25,8 +25,7 @@ public class InspectionNotificationTask {
     @Scheduled(cron = "0 0 9 * * ?")
     @SchedulerLock(name = "INSPECTION_NOTIFICATION_TASK", lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void task() {
-        inspectionNotificationFacade.domainInspectionTask();
-        inspectionNotificationFacade.certificateInspectionTask();
+        inspectionNotificationFacade.doTask();
     }
 
 }

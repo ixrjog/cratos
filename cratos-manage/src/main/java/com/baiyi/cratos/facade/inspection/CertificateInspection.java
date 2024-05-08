@@ -1,0 +1,55 @@
+package com.baiyi.cratos.facade.inspection;
+
+import com.baiyi.cratos.common.builder.SimpleMapBuilder;
+import com.baiyi.cratos.common.util.BeetlUtil;
+import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.domain.generator.Certificate;
+import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.eds.EdsInstanceHelper;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.service.CertificateService;
+import com.baiyi.cratos.service.EdsConfigService;
+import com.baiyi.cratos.service.NotificationTemplateService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/5/8 下午4:30
+ * &#064;Version 1.0
+ */
+@Slf4j
+@Component
+public class CertificateInspection extends BaseInspection {
+
+    private final CertificateService certificateService;
+
+    private static final int CERTIFICATE_EXPIRY_DAYS = 30;
+
+    public static final String CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION = "CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION";
+
+    public CertificateInspection(NotificationTemplateService notificationTemplateService,
+                                 DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                                 EdsConfigService edsConfigService, CertificateService certificateService) {
+        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        this.certificateService = certificateService;
+    }
+
+    @Override
+    protected String getMsg() throws IOException {
+        NotificationTemplate notificationTemplate = getNotificationTemplate(
+                CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION);
+        Date expiry = ExpiredUtil.generateExpirationTime(CERTIFICATE_EXPIRY_DAYS, TimeUnit.DAYS);
+        List<Certificate> certificateList = certificateService.queryByLessThanExpiry(expiry);
+        return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                .put("certificates", certificateList)
+                .put("expiryDays", CERTIFICATE_EXPIRY_DAYS)
+                .build());
+    }
+
+}
