@@ -76,6 +76,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         this.edsAssetIndexFacade = edsAssetIndexFacade;
     }
 
+    public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
+
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
     @Override
@@ -100,7 +102,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
         try {
             EdsAsset edsAsset = enterAsset(toEdsAsset(instance, entity));
-            List<EdsAssetIndex> edsAssetIndexList = toEdsAssetIndexList(edsAsset, entity);
+            List<EdsAssetIndex> edsAssetIndexList = toEdsAssetIndexList(instance, edsAsset, entity);
             edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), edsAssetIndexList);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
@@ -109,7 +111,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         }
     }
 
-    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, A entity) {
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
+                                                      A entity) {
         return Collections.emptyList();
     }
 

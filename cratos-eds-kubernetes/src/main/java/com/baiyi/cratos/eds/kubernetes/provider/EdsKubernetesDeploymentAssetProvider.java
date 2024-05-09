@@ -93,7 +93,9 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, Deployment entity) {
+    protected List<EdsAssetIndex> toEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
 
         Map<String, String> labels = Optional.of(entity)

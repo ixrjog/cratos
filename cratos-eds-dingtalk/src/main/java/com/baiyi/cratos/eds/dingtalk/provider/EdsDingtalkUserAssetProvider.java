@@ -92,7 +92,9 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
     public static final String DINGTALK_USER_JOB_NUMBER = PREFIX + "jobNumber";
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, DingtalkUser.User entity) {
+    protected List<EdsAssetIndex> toEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
+            DingtalkUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, entity.getMobile()));

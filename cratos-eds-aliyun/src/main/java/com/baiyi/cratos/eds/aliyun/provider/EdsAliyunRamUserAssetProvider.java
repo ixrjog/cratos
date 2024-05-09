@@ -1,0 +1,103 @@
+package com.baiyi.cratos.eds.aliyun.provider;
+
+import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.aliyuncs.ram.model.v20150501.ListPoliciesForUserResponse;
+import com.aliyuncs.ram.model.v20150501.ListUsersResponse;
+import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/5/9 下午4:10
+ * &#064;Version 1.0
+ */
+@Component
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_RAM_USER)
+public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
+
+    private final AliyunRamUserRepo aliyunRamUserRepo;
+
+    private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
+
+    public EdsAliyunRamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                         EdsAssetIndexFacade edsAssetIndexFacade, AliyunRamUserRepo aliyunRamUserRepo,
+                                         AliyunRamPolicyRepo aliyunRamPolicyRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.aliyunRamUserRepo = aliyunRamUserRepo;
+        this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
+    }
+
+    @Override
+    protected List<GetUserResponse.User> listEntities(
+            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+        try {
+            List<ListUsersResponse.User> users = aliyunRamUserRepo.listUsers(instance.getEdsConfigModel());
+            if (CollectionUtils.isEmpty(users)) {
+                return Collections.emptyList();
+            } else {
+                List<GetUserResponse.User> entities = Lists.newArrayList();
+                for (ListUsersResponse.User user : users) {
+                    entities.add(aliyunRamUserRepo.getUser(instance.getEdsConfigModel(), user.getUserName()));
+                }
+                return entities;
+            }
+        } catch (Exception e) {
+            throw new EdsQueryEntitiesException(e.getMessage());
+        }
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                  GetUserResponse.User entity) {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
+                .nameOf(entity.getDisplayName())
+                .assetKeyOf(entity.getUserName())
+                .descriptionOf(entity.getComments())
+                .createdTimeOf(TimeUtil.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
+                .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                                      EdsAsset edsAsset, GetUserResponse.User entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        try {
+            List<ListPoliciesForUserResponse.Policy> policies = aliyunRamPolicyRepo.listPoliciesForUser(
+                    instance.getEdsConfigModel(), entity.getUserName());
+            if (!CollectionUtils.isEmpty(policies)) {
+                final String policyName = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+                        .join(policies.stream()
+                                .map(ListPoliciesForUserResponse.Policy::getPolicyName)
+                                .toList());
+                indices.add(toEdsAssetIndex(edsAsset, "ram.policies", policyName));
+            }
+        } catch (Exception ignored) {
+        }
+        return indices;
+    }
+
+}

@@ -14,6 +14,8 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ALB("ALB"),
     ALIYUN_ECS("ECS"),
     ALIYUN_DOMAIN("Domain"),
+    ALIYUN_RAM_USER("RAM User"),
+    ALIYUN_RAM_POLICY("RAM Policy"),
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),
     AWS_ELB("ELB"),

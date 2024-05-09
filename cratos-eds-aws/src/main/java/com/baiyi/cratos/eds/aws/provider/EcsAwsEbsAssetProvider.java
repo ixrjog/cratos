@@ -74,7 +74,8 @@ public class EcsAwsEbsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(EdsAsset edsAsset, Volume entity) {
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                                      EdsAsset edsAsset, Volume entity) {
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))
