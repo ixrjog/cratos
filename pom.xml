@@ -25,6 +25,7 @@
         <module>cratos-eds-ldap</module>
         <module>cratos-eds-gitlab</module>
         <module>cratos-eds-dingtalk</module>
+        <module>cratos-eds-huaweicloud</module>
     </modules>
 
     <properties>
@@ -36,6 +37,7 @@
         <spring-security.version>6.2.3</spring-security.version>
         <!-- 1.12.565 -->
         <aws-java-sdk.version>1.12.691</aws-java-sdk.version>
+        <huaweicloud-sdk.version>3.1.61</huaweicloud-sdk.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.9.0</shedlock-spring.version>
     </properties>

@@ -34,11 +34,11 @@ import java.util.stream.Collectors;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EBS)
-public class EcsAwsEbsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, Volume> {
+public class EdsAwsEbsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, Volume> {
 
     private final AwsEbsRepo ebsRepo;
 
-    public EcsAwsEbsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsAwsEbsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                   EdsAssetIndexFacade edsAssetIndexFacade, AwsEbsRepo ebsRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);

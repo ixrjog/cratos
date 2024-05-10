@@ -15,6 +15,7 @@ public enum EdsInstanceTypeEnum {
 
     ALIYUN,
     AWS,
+    HUAWEICLOUD,
     CLOUDFLARE,
     KUBERNETES,
     LDAP,

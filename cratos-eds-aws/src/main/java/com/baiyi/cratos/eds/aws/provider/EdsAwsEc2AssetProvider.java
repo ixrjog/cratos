@@ -37,13 +37,13 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EC2)
-public class EcsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
+public class EdsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
 
     private final Ec2InstancesRepo ec2InstancesRepo;
 
     private final AwsEc2Repo awsEc2Repo;
 
-    public EcsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                   EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
                                   AwsEc2Repo awsEc2Repo) {
