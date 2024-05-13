@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.config;
 
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -32,6 +33,8 @@ public class EdsAliyunConfigModel {
         private ALB alb;
 
         private Domain domain;
+
+        private EdsInstance edsInstance;
 
     }
 

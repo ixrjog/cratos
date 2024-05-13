@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.kubernetes;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesIngressRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import jakarta.annotation.Resource;
@@ -76,7 +77,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DEV);
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(104 , EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, "dev");
         for (Ingress ingress : ingressList) {
             // 打印Ingress注解配置

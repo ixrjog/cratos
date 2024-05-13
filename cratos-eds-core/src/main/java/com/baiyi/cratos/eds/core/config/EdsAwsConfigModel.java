@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.config;
 
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -26,6 +27,8 @@ public class EdsAwsConfigModel {
         private Set<String> regionIds;
 
         private Ec2 ec2;
+
+        private EdsInstance edsInstance;
 
     }
 

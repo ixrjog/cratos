@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.core.config;
 
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.google.common.base.Joiner;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +28,8 @@ public class EdsLdapConfigModel {
         private LdapManage manager; // 管理员账户
         private LdapUser user;
         private LdapGroup group;
+
+        private EdsInstance edsInstance;
 
         public String buildUserDn(String username) {
             return Joiner.on(",")
