@@ -1,6 +1,7 @@
 package com.baiyi.cratos;
 
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(exclude = {SecurityFilterAutoConfiguration.class})
 @EnableAspectJAutoProxy(exposeProxy = true)
 @EnableScheduling
-//@EnableSchedulerLock(defaultLockAtMostFor = "10m")
+@EnableSchedulerLock(defaultLockAtMostFor = "10m")
 @EnableCaching
 @EnableAsync
 @EnableRetry

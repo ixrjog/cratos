@@ -31,7 +31,7 @@
             <version>${aws-java-sdk.version}</version>
         </dependency>
 
-        <!--Site-to-Site VPN-->
+        <!--EC2 & Site-to-Site VPN-->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-ec2</artifactId>
@@ -49,12 +49,6 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-cloudwatch</artifactId>
-            <version>${aws-java-sdk.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-ec2</artifactId>
             <version>${aws-java-sdk.version}</version>
         </dependency>
 

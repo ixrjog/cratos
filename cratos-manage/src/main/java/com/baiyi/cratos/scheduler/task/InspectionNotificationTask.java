@@ -22,7 +22,7 @@ public class InspectionNotificationTask {
 
     private final InspectionNotificationFacade inspectionNotificationFacade;
 
-    @Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 0 10 * * ?")
     @SchedulerLock(name = "INSPECTION_NOTIFICATION_TASK", lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void task() {
         inspectionNotificationFacade.doTask();

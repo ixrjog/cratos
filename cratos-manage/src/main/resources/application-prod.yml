@@ -3,6 +3,7 @@ logging:
     com.baiyi.cratos : info
     # swagger 警告日志忽略
     io.swagger.models.parameters.AbstractSerializableParameter: error
+    io.fabric8.kubernetes.client.utils.HttpClientUtils: error
     org.springframework: warn
 
 # 关闭视图层脱敏

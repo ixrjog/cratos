@@ -20,7 +20,7 @@ public class TimeUtil {
 
     public static final String YEAR = "yyyy";
 
-    public static final int THE_NUMBER_OF_SECONDS_IN_A_DAY = 86400;
+    public static final int THE_NUMBER_OF_SECONDS_IN_A_DAY = 86_400;
 
     private TimeUtil() {
     }

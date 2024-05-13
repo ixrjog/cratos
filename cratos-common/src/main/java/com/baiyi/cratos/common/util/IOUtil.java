@@ -16,7 +16,6 @@ public class IOUtil {
 
     public static final String COMMENT_SIGN = "#";
 
-
     /**
      * 在指定目录下生成文件，并写入内容
      *
