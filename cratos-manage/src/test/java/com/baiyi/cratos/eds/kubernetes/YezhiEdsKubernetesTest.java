@@ -52,4 +52,26 @@ public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel
         }
     }
 
+
+    @Test
+    void test2() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(ACK_DEV_INSTANCE_ID,
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        // 获取 account-dev deployment
+        Deployment deployment = kubernetesDeploymentRepo.get(cfg, "dev", "account-dev");
+        // 打印 labels
+        Map<String, String> labels = Optional.of(deployment)
+                .map(Deployment::getSpec)
+                .map(DeploymentSpec::getTemplate)
+                .map(PodTemplateSpec::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Maps.newHashMap());
+        String msg2 = StringFormatter.format("Labels: {}", labels);
+
+        // 新增测试label
+        labels.put("YEZHI", "test");
+        // 更新
+        kubernetesDeploymentRepo.update(cfg, deployment);
+    }
+
 }
