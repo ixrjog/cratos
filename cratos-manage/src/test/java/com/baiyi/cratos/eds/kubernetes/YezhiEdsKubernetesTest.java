@@ -66,8 +66,6 @@ public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel
                 .map(PodTemplateSpec::getMetadata)
                 .map(ObjectMeta::getLabels)
                 .orElse(Maps.newHashMap());
-        String msg2 = StringFormatter.format("Labels: {}", labels);
-
         // 新增测试label
         labels.put("YEZHI", "test");
         // 更新
