@@ -1,4 +1,4 @@
-package com.baiyi.cratos.controller;
+package com.baiyi.cratos.controller.http;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

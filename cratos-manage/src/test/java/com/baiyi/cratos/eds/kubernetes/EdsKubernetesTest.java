@@ -52,6 +52,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     /**
      * ACK Ingress 启用长链接
+     *
      * @param configId
      * @param namespace
      */
@@ -70,6 +71,19 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
                 System.out.println(StringFormatter.arrayFormat(msg, ingress.getMetadata()
                         .getName()));
             }
+        }
+    }
+
+    @Test
+    void test() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DEV);
+        List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, "dev");
+        for (Ingress ingress : ingressList) {
+            // 打印Ingress注解配置
+            String msg = "Ingress {} annotations: {}";
+            System.out.println(StringFormatter.arrayFormat(msg, ingress.getMetadata()
+                    .getName(), ingress.getMetadata()
+                    .getAnnotations()));
         }
     }
 

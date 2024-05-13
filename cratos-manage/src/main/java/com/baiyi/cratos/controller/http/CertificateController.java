@@ -1,4 +1,4 @@
-package com.baiyi.cratos.controller;
+package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
