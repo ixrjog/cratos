@@ -55,6 +55,8 @@ cratos:
         - /swagger-ui/
         - /v3/api-docs
         - /api/log/login
+        # WebSocket独立鉴权
+        - /socket/
 
 mapper:
   mappers:

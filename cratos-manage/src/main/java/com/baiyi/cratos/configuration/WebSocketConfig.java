@@ -1,11 +1,17 @@
 package com.baiyi.cratos.configuration;
 
+import com.baiyi.cratos.common.exception.auth.AuthenticationException;
+import com.baiyi.cratos.domain.ErrorEnum;
+import com.baiyi.cratos.domain.generator.UserToken;
+import com.baiyi.cratos.facade.UserTokenFacade;
 import com.google.common.collect.Lists;
 import jakarta.websocket.HandshakeResponse;
 import jakarta.websocket.server.HandshakeRequest;
 import jakarta.websocket.server.ServerEndpointConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
@@ -17,7 +23,15 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Configuration
+@Component
 public class WebSocketConfig extends ServerEndpointConfig.Configurator {
+
+    private static UserTokenFacade userTokenFacade;
+
+    @Autowired
+    public void setUserTokenFacade(UserTokenFacade userTokenFacade) {
+        WebSocketConfig.userTokenFacade = userTokenFacade;
+    }
 
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
@@ -29,11 +43,17 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
         List<String> list = request.getHeaders()
                 .get(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL);
         if (!CollectionUtils.isEmpty(list)) {
-            String s = list.get(0);
-            String[] split = s.split(",");
-            List<String> resList = Lists.newArrayList(split[0]);
+            String token = list.get(0);
+            UserToken userToken = userTokenFacade.verifyToken(token);
+            String username = request.getParameterMap()
+                    .get("username")
+                    .get(0);
+            if (!userToken.getUsername()
+                    .equals(username)) {
+                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
+            }
             response.getHeaders()
-                    .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, resList);
+                    .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, Lists.newArrayList(token));
         }
         super.modifyHandshake(config, request, response);
     }
