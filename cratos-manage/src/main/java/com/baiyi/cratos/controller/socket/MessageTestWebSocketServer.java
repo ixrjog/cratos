@@ -56,7 +56,6 @@ public class MessageTestWebSocketServer {
         webSockets.add(this);
         sessionPool.put(username, session);
         log.info("User login username {}", username);
-
     }
 
     /**
@@ -66,7 +65,7 @@ public class MessageTestWebSocketServer {
     public void onClose() {
         webSockets.remove(this);
         sessionPool.remove(this.username);
-        log.info("关闭与User：{}的消息提醒计数连接", this.username);
+        log.info("关闭与{}的消息提醒计数连接", this.username);
     }
 
     /**
@@ -81,7 +80,7 @@ public class MessageTestWebSocketServer {
                             .getName());
         } catch (Exception ignored) {
         }
-        log.info("接收到User：{}的消息{}", username, message);
+        log.info("接收到{}的消息{}", username, message);
     }
 
     /**
@@ -89,7 +88,7 @@ public class MessageTestWebSocketServer {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        log.error("发送到User：{}的消息传输失败", username, error);
+        log.error("发送到{}的消息传输失败", username, error);
     }
 
     /**
@@ -118,7 +117,6 @@ public class MessageTestWebSocketServer {
             session.getAsyncRemote()
                     .sendText(message);
         }
-
     }
 
     /**
@@ -133,6 +131,6 @@ public class MessageTestWebSocketServer {
                 .filter(session -> session != null && session.isOpen())
                 .forEach(session -> session.getAsyncRemote()
                         .sendText(message));
-
     }
+
 }

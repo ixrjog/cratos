@@ -38,6 +38,12 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
         return new ServerEndpointExporter();
     }
 
+    /**
+     * WebSocket 鉴权
+     * @param config
+     * @param request
+     * @param response
+     */
     @Override
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
         List<String> list = request.getHeaders()
