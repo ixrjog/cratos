@@ -1,6 +1,5 @@
 package com.baiyi.cratos.eds.kubernetes.provider;
 
-import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -23,7 +22,6 @@ import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,23 +63,6 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
-                                  Ingress entity) {
-        final String namespace = entity.getMetadata()
-                .getNamespace();
-        final String name = entity.getMetadata()
-                .getName();
-        final String assetId = getAssetId(namespace, name);
-
-        return newEdsAssetBuilder(instance, entity).assetIdOf(assetId)
-                .nameOf(name)
-                .kindOf(entity.getKind())
-                .createdTimeOf(toUTCDate(entity.getMetadata()
-                        .getCreationTimestamp()))
-                .build();
-    }
-
-    @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
@@ -94,6 +75,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 ingressRules -> indices.addAll(getEdsAssetIndexFromRules(edsAsset, ingressRules)));
         // loadBalancer
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
+        // namespace
+        indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
         return indices;
     }
 
@@ -128,10 +111,6 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                     });
         });
         return indices;
-    }
-
-    private Date toUTCDate(String time) {
-        return com.baiyi.cratos.common.util.TimeUtil.toDate(time, TimeZoneEnum.UTC);
     }
 
 }

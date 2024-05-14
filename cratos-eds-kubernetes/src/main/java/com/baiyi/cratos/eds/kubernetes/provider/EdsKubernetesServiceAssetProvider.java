@@ -12,15 +12,14 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesServiceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.Namespace;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.Service;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -29,46 +28,42 @@ import java.util.List;
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 
 /**
- * @Author baiyi
- * @Date 2024/3/7 10:26
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/5/14 下午1:59
+ * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT)
-public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_SERVICE)
+public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetProvider<Service> {
 
     private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
 
-    private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+    private final KubernetesServiceRepo kubernetesServiceRepo;
 
-    public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                CredentialService credentialService,
-                                                ConfigCredTemplate configCredTemplate,
-                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                                KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                                KubernetesDeploymentRepo kubernetesDeploymentRepo) {
+    public EdsKubernetesServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                             EdsAssetIndexFacade edsAssetIndexFacade,
+                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
+                                             KubernetesServiceRepo kubernetesServiceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
         this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
-        this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
+        this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 
-    public static final String REPLICAS = "replicas";
-
     @Override
-    protected List<Deployment> listEntities(
+    protected List<Service> listEntities(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<Deployment> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(kubernetesDeploymentRepo.list(instance.getEdsConfigModel(),
-                e.getMetadata()
-                        .getName())));
+        List<Service> entities = Lists.newArrayList();
+        namespaces.forEach(e -> entities.addAll(kubernetesServiceRepo.list(instance.getEdsConfigModel(), e.getMetadata()
+                .getName())));
         return entities;
     }
 
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
-            Deployment entity) {
+            Service entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
 
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
@@ -89,8 +84,6 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
 
-        int replicas = KubeUtil.getReplicas(entity);
-        indices.add(toEdsAssetIndex(edsAsset, REPLICAS, replicas));
         return indices;
     }
 

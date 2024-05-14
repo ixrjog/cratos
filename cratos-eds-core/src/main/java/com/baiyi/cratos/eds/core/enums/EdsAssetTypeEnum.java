@@ -26,6 +26,10 @@ public enum EdsAssetTypeEnum {
     CLOUDFLARE_CERT("Certificate"),
     KUBERNETES_DEPLOYMENT("Deployment"),
     KUBERNETES_INGRESS("Ingress"),
+    KUBERNETES_SERVICE("Service"),
+    KUBERNETES_NODE("Node"),
+    KUBERNETES_VIRTUAL_SERVICE("VirtualService"),
+    KUBERNETES_DESTINATION_RULE("DestinationRule"),
     LDAP_PERSON("Person"),
     LDAP_GROUP("Group"),
 
