@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Slf4j
 @ServerEndpoint(value = "/socket/test/{username}", configurator = WebSocketConfig.class)
 @Component
-public class MessageCountWebSocketServer {
+public class MessageTestWebSocketServer {
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -35,7 +35,7 @@ public class MessageCountWebSocketServer {
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
      * 虽然@Component默认是单例模式的，但springboot还是会为每个websocket连接初始化一个bean，所以可以用一个静态set保存起来。
      */
-    private static final CopyOnWriteArraySet<MessageCountWebSocketServer> webSockets = new CopyOnWriteArraySet<>();
+    private static final CopyOnWriteArraySet<MessageTestWebSocketServer> webSockets = new CopyOnWriteArraySet<>();
     /**
      * 用来存在线连接用户信息
      */
@@ -49,7 +49,8 @@ public class MessageCountWebSocketServer {
         this.session = session;
         this.username = username;
         // 认证
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                username, null);
         SecurityContextHolder.getContext()
                 .setAuthentication(usernamePasswordAuthenticationToken);
         webSockets.add(this);
@@ -73,6 +74,13 @@ public class MessageCountWebSocketServer {
      */
     @OnMessage
     public void onMessage(String message) {
+        try {
+            log.info("SecurityContextHolder.getContext().getAuthentication() 获取用户名: {}",
+                    SecurityContextHolder.getContext()
+                            .getAuthentication()
+                            .getName());
+        } catch (Exception ignored) {
+        }
         log.info("接收到User：{}的消息{}", username, message);
     }
 
@@ -90,7 +98,7 @@ public class MessageCountWebSocketServer {
      * @param message
      */
     public void sendAllMessage(String message) {
-        for (MessageCountWebSocketServer socketServer : webSockets) {
+        for (MessageTestWebSocketServer socketServer : webSockets) {
             if (socketServer.session.isOpen()) {
                 socketServer.session.getAsyncRemote()
                         .sendText(message);
@@ -101,7 +109,7 @@ public class MessageCountWebSocketServer {
     /**
      * 单人单播消息
      *
-     * @param userId
+     * @param username
      * @param message
      */
     public void sendOneMessage(String username, String message) {
@@ -116,7 +124,7 @@ public class MessageCountWebSocketServer {
     /**
      * 多人单播消息
      *
-     * @param userIds
+     * @param usernames
      * @param message
      */
     public void sendMoreMessage(String[] usernames, String message) {
