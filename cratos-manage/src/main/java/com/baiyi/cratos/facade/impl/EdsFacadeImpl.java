@@ -16,12 +16,12 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -62,7 +62,7 @@ public class EdsFacadeImpl implements EdsFacade {
 
     private final EdsAssetWrapper edsAssetWrapper;
 
-    private final EdsInstanceProviderDelegateHelper delegateHelper;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     private final EdsAssetIndexService edsAssetIndexService;
 
@@ -211,9 +211,9 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = buildDelegate(
+        EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(
                 importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
-        edsInstanceProviderDelegate.importAssets();
+        providerHolder.importAssets();
     }
 
     /**
@@ -224,8 +224,8 @@ public class EdsFacadeImpl implements EdsFacade {
      * @return
      */
     @Override
-    public EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType) {
-        return delegateHelper.buildDelegate(instanceId, assetType);
+    public EdsInstanceProviderHolder<?, ?> buildHolder(Integer instanceId, String assetType) {
+        return holderBuilder.newHolder(instanceId, assetType);
     }
 
     @Override

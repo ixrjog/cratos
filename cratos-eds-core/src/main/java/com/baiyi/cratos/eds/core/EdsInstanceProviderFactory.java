@@ -4,7 +4,7 @@ package com.baiyi.cratos.eds.core;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
@@ -97,7 +97,7 @@ public class EdsInstanceProviderFactory {
     }
 
     /**
-     * build eds instance provider delegate
+     * build eds instance provider holder
      *
      * @param instance
      * @param assetType
@@ -106,14 +106,14 @@ public class EdsInstanceProviderFactory {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel, A> EdsInstanceProviderDelegate<C, A> buildDelegate(ExternalDataSourceInstance<C> instance, String assetType) {
+    public static <C extends IEdsConfigModel, A> EdsInstanceProviderHolder<C, A> buildHolder(ExternalDataSourceInstance<C> instance, String assetType) {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
         Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = Optional.of(CONTEXT.get(instanceType))
                 .orElseThrow(() -> new EdsInstanceProviderException("No available provider: instanceType={}.", instanceType));
         EdsInstanceAssetProvider<C, A> provider = (EdsInstanceAssetProvider<C, A>) Optional.of(providerMap.get(assetType))
                 .orElseThrow(() -> new EdsInstanceProviderException("No available provider: instanceType={}, assetType={}.", instanceType, assetType));
-        return EdsInstanceProviderDelegate.<C, A>builder()
+        return EdsInstanceProviderHolder.<C, A>builder()
                 .instance(instance)
                 .provider(provider)
                 .build();

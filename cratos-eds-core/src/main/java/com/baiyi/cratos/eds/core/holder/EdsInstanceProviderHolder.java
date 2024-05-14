@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.core.delegate;
+package com.baiyi.cratos.eds.core.holder;
 
 
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EdsInstanceProviderDelegate<C extends IEdsConfigModel, A> {
+public class EdsInstanceProviderHolder<C extends IEdsConfigModel, A> {
 
     @Schema(description = "Eds Instance")
     private ExternalDataSourceInstance<C> instance;

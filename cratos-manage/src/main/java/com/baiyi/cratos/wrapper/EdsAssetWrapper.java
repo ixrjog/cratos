@@ -4,8 +4,8 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
-import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -29,7 +29,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
 @RequiredArgsConstructor
 public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, EdsAsset> implements IBaseWrapper<EdsAssetVO.Asset> {
 
-    private final EdsInstanceProviderDelegateHelper delegateHelper;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     private final EdsAssetIndexService edsAssetIndexService;
 
@@ -37,9 +37,9 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
 
     @Override
     public void wrap(EdsAssetVO.Asset asset) {
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(asset.getInstanceId(), asset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(asset.getInstanceId(), asset.getAssetType());
         // TODO 是否要序列化对象？
-        asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
+        asset.setOriginalAsset(edsInstanceProviderHolder.getProvider()
                 .assetLoadAs(asset.getOriginalModel()));
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
@@ -54,9 +54,9 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(asset.getInstanceId(), asset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(asset.getInstanceId(), asset.getAssetType());
         if (!skipLoadAsset) {
-            asset.setOriginalAsset(edsInstanceProviderDelegate.getProvider()
+            asset.setOriginalAsset(providerHolder.getProvider()
                     .assetLoadAs(asset.getOriginalModel()));
         }
         // ToBusiness

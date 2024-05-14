@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
@@ -76,18 +76,18 @@ public abstract class BaseInspection {
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderDelegate<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>> edsInstanceProviderDelegates = (List<? extends EdsInstanceProviderDelegate<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>>) edsInstanceHelper.buildDelegates(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>>) edsInstanceHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
-        edsInstanceProviderDelegates.forEach(edsInstanceProviderDelegate -> {
-            EdsConfig edsConfig = edsConfigService.getById(edsInstanceProviderDelegate.getInstance()
+        holders.forEach(providerHolder -> {
+            EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                     .getEdsInstance()
                     .getConfigId());
-            EdsDingtalkConfigModel.Robot robot = edsInstanceProviderDelegate.getProvider()
+            EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
             try {
                 DingtalkRobot.Msg message = toRobotMsg(getMsg());
                 dingtalkRobotService.send(robot.getToken(), message);
-                edsInstanceProviderDelegate.importAsset(message);
+                providerHolder.importAsset(message);
             } catch (IOException e) {
                 log.error(e.getMessage());
             }

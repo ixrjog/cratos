@@ -8,10 +8,10 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.ConfigUtil;
-import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -25,7 +25,7 @@ import jakarta.annotation.Resource;
 public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
 
     @Resource
-    private EdsInstanceProviderDelegateHelper delegateHelper;
+    private EdsInstanceProviderHolderBuilder holderBuilder;
 
     @Resource
     private EdsInstanceService edsInstanceService;
@@ -40,15 +40,15 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
     private CredentialService credService;
 
     public void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
-        edsInstanceProviderDelegate.importAssets();
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
+        providerHolder.importAssets();
     }
 
     @SuppressWarnings("unchecked")
     public C getConfig(int instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        EdsInstanceProviderDelegate<?, ?> edsInstanceProviderDelegate = delegateHelper.buildDelegate(instanceId, assetType);
-        return (C) edsInstanceProviderDelegate.getInstance()
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId, assetType);
+        return (C) providerHolder.getInstance()
                 .getEdsConfigModel();
     }
 

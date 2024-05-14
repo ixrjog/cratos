@@ -1,11 +1,10 @@
-package com.baiyi.cratos.eds.core.helper;
+package com.baiyi.cratos.eds.core.holder;
 
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -19,13 +18,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class EdsInstanceProviderDelegateHelper {
+public class EdsInstanceProviderHolderBuilder {
 
     private final EdsInstanceService edsInstanceService;
 
     private final EdsConfigService edsConfigService;
 
-    public EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType) {
+    public EdsInstanceProviderHolder<?, ?> newHolder(Integer instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         IEdsConfigModel edsConfigModel = null;
         if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
@@ -40,7 +39,7 @@ public class EdsInstanceProviderDelegateHelper {
                 .edsInstance(edsInstance)
                 .edsConfigModel(edsConfigModel)
                 .build();
-        return EdsInstanceProviderFactory.buildDelegate(extDataSourceInstance, assetType);
+        return EdsInstanceProviderFactory.buildHolder(extDataSourceInstance, assetType);
     }
 
 }

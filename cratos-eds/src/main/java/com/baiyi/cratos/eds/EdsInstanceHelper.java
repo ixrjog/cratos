@@ -4,9 +4,9 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.helper.EdsInstanceProviderDelegateHelper;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
@@ -32,7 +32,7 @@ public class EdsInstanceHelper {
 
     private final BusinessTagService businessTagService;
 
-    private final EdsInstanceProviderDelegateHelper delegateHelper;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public List<EdsInstance> queryValidEdsInstance(EdsInstanceTypeEnum edsInstanceTypeEnum, String tagKey) {
         List<EdsInstance> edsInstanceList = edsInstanceService.queryValidEdsInstanceByType(edsInstanceTypeEnum.name());
@@ -58,9 +58,9 @@ public class EdsInstanceHelper {
                 .toList();
     }
 
-    public List<? extends EdsInstanceProviderDelegate<?, ?>> buildDelegates(List<EdsInstance> edsInstanceList, String assetType) {
+    public List<? extends EdsInstanceProviderHolder<?, ?>> buildHolder(List<EdsInstance> edsInstanceList, String assetType) {
         return edsInstanceList.stream()
-                .map(e -> delegateHelper.buildDelegate(e.getId(), assetType))
+                .map(e -> holderBuilder.newHolder(e.getId(), assetType))
                 .toList();
     }
 

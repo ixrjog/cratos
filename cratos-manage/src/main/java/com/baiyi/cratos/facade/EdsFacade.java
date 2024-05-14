@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.delegate.EdsInstanceProviderDelegate;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface EdsFacade {
 
     void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset);
 
-    EdsInstanceProviderDelegate<?, ?> buildDelegate(Integer instanceId, String assetType);
+    EdsInstanceProviderHolder<?, ?> buildHolder(Integer instanceId, String assetType);
 
     DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
 
