@@ -43,12 +43,12 @@ public class EdsAwsElbAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
     protected List<LoadBalancer> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
         try {
             EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
-            Set<String> reggionIdSet = Sets.newHashSet(aws.getRegionId());
-            reggionIdSet.addAll(Optional.of(aws)
+            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
+            regionIdSet.addAll(Optional.of(aws)
                     .map(EdsAwsConfigModel.Aws::getRegionIds)
                     .orElse(null));
             List<LoadBalancer> entities = Lists.newArrayList();
-            reggionIdSet.forEach(regionId -> entities.addAll(AwsElbRepo.listLoadBalancer(regionId, aws)));
+            regionIdSet.forEach(regionId -> entities.addAll(AwsElbRepo.listLoadBalancer(regionId, aws)));
             return entities;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());

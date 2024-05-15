@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.aws.configuration;
 
-import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
+import com.baiyi.cratos.eds.aws.client.Ec2InstancesService;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

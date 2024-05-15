@@ -64,12 +64,12 @@ public class EdsAwsEc2AssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
 
         try {
             EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
-            Set<String> reggionIdSet = Sets.newHashSet(aws.getRegionId());
-            reggionIdSet.addAll(Optional.of(aws)
+            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
+            regionIdSet.addAll(Optional.of(aws)
                     .map(EdsAwsConfigModel.Aws::getRegionIds)
                     .orElse(null));
             List<AwsEc2.Ec2> entities = Lists.newArrayList();
-            reggionIdSet.forEach(regionId -> {
+            regionIdSet.forEach(regionId -> {
                 List<Instance> ec2Instances = awsEc2Repo.listInstances(regionId, aws);
                 if (!CollectionUtils.isEmpty(ec2Instances)) {
                     ec2Instances.forEach(ec2 -> {

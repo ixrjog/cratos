@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.eds.aws.model.InstanceModel;
-import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
+import com.baiyi.cratos.eds.aws.client.Ec2InstancesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;

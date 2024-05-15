@@ -1,0 +1,114 @@
+package com.baiyi.cratos.eds.aws.provider;
+
+import com.amazonaws.services.sns.model.Subscription;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.eds.aws.model.AwsSns;
+import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/5/15 下午2:27
+ * &#064;Version 1.0
+ */
+@Component
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SNS_SUBSCRIPTION)
+public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Subscription> {
+
+    private final AwsSnsRepo awsSnsRepo;
+
+    public EdsAwsSnsSubscriptionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                              CredentialService credentialService,
+                                              ConfigCredTemplate configCredTemplate,
+                                              EdsAssetIndexFacade edsAssetIndexFacade, AwsSnsRepo awsSnsRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.awsSnsRepo = awsSnsRepo;
+    }
+
+    @Override
+    protected List<AwsSns.Subscription> listEntities(
+            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
+        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+        try {
+            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
+            regionIdSet.addAll(Optional.of(aws)
+                    .map(EdsAwsConfigModel.Aws::getRegionIds)
+                    .orElse(null));
+            List<AwsSns.Subscription> entities = Lists.newArrayList();
+            regionIdSet.forEach(regionId -> {
+                List<Subscription> subscriptions = awsSnsRepo.listSubscriptions(regionId, aws);
+                if (!CollectionUtils.isEmpty(subscriptions)) {
+                    entities.addAll(toSubscriptions(regionId, aws, subscriptions));
+                }
+            });
+            return entities;
+        } catch (Exception e) {
+            throw new EdsQueryEntitiesException(e.getMessage());
+        }
+    }
+
+    private List<AwsSns.Subscription> toSubscriptions(String regionId, EdsAwsConfigModel.Aws aws,
+                                                      List<Subscription> subscriptions) {
+        return subscriptions.stream()
+                .map(e -> {
+                    Map<String, String> attributes = awsSnsRepo.getSubscriptionAttributes(regionId, aws,
+                            e.getSubscriptionArn());
+                    return AwsSns.Subscription.builder()
+                            .regionId(regionId)
+                            .attributes(attributes)
+                            .subscription(e)
+                            .build();
+                })
+                .toList();
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                  AwsSns.Subscription entity) {
+        return newEdsAssetBuilder(instance, entity)
+                // ID
+                .assetIdOf(StringUtils.substringAfterLast(entity.getSubscription()
+                        .getSubscriptionArn(), ":"))
+                .nameOf(entity.getSubscription()
+                        .getEndpoint())
+                .regionOf(entity.getRegionId())
+                .kindOf(entity.getSubscription().getProtocol())
+                .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                                      EdsAsset edsAsset, AwsSns.Subscription entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        indices.add(toEdsAssetIndex(edsAsset, "endpoint", entity.getSubscription()
+                .getEndpoint()));
+        indices.add(toEdsAssetIndex(edsAsset, "topic.arn", entity.getSubscription()
+                .getTopicArn()));
+        indices.add(toEdsAssetIndex(edsAsset, "protocol", entity.getSubscription()
+                .getProtocol()));
+        return indices;
+    }
+
+}

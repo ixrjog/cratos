@@ -43,12 +43,12 @@ public class EdsAwsVpnAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
     protected List<VpnConnection> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
         try {
             EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
-            Set<String> reggionIdSet = Sets.newHashSet(aws.getRegionId());
-            reggionIdSet.addAll(Optional.of(aws)
+            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
+            regionIdSet.addAll(Optional.of(aws)
                     .map(EdsAwsConfigModel.Aws::getRegionIds)
                     .orElse(null));
             List<VpnConnection> entities = Lists.newArrayList();
-            reggionIdSet.forEach(regionId -> entities.addAll(AwsVpnRepo.describeVpnConnections(regionId, aws)));
+            regionIdSet.forEach(regionId -> entities.addAll(AwsVpnRepo.describeVpnConnections(regionId, aws)));
             return entities;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());

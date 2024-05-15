@@ -42,12 +42,12 @@ public class EdsAwsCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsAws
     protected List<CertificateSummary> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
         try {
             EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
-            Set<String> reggionIdSet = Sets.newHashSet(aws.getRegionId());
-            reggionIdSet.addAll(Optional.of(aws)
+            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
+            regionIdSet.addAll(Optional.of(aws)
                     .map(EdsAwsConfigModel.Aws::getRegionIds)
                     .orElse(null));
             List<CertificateSummary> entities = Lists.newArrayList();
-            reggionIdSet.forEach(regionId -> entities.addAll(AwsCertRepo.listCert(regionId, aws)));
+            regionIdSet.forEach(regionId -> entities.addAll(AwsCertRepo.listCert(regionId, aws)));
             return entities;
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
