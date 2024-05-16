@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author baiyi
- * @Date 2024/4/26 上午10:51
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/4/26 上午10:51
+ * &#064;Version  1.0
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_DOMAIN)

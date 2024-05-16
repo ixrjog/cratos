@@ -7,35 +7,33 @@ import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
- * @Author baiyi
- * @Date 2024/4/11 上午10:59
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/4/11 上午10:59
+ * &#064;Version  1.0
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ECS)
-public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
+public class EdsAliyunEcsAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
 
     private final AliyunEcsRepo aliyunEcsRepo;
 
@@ -55,33 +53,27 @@ public class EdsAliyunEcsAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     }
 
     @Override
-    protected List<AliyunEcs.Ecs> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-        EdsAliyunConfigModel.Aliyun aliyun = instance.getEdsConfigModel();
-        Set<String> regionSet = Optional.of(aliyun)
-                .map(EdsAliyunConfigModel.Aliyun::getRegionIds)
-                .orElse(Sets.newHashSet());
+    protected List<AliyunEcs.Ecs> listEntities(String regionId, EdsAliyunConfigModel.Aliyun configModel) {
+        List<DescribeInstancesResponse.Instance> instances = aliyunEcsRepo.listInstances(regionId, configModel);
+        if (!CollectionUtils.isEmpty(instances)) {
+            return toEcs(regionId, configModel, instances);
+        }
+        return Collections.emptyList();
+    }
 
-        regionSet.add(aliyun.getRegionId());
-        List<AliyunEcs.Ecs> entities = Lists.newArrayList();
-        try {
-            regionSet.forEach(regionId -> {
-                List<DescribeInstancesResponse.Instance> ecsInstances = aliyunEcsRepo.listInstances(regionId, aliyun);
-                for (DescribeInstancesResponse.Instance ecsInstance : ecsInstances) {
-                    List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(regionId, aliyun,
-                            ecsInstance.getInstanceId());
-                    AliyunEcs.Ecs ecs = AliyunEcs.Ecs.builder()
+    private List<AliyunEcs.Ecs> toEcs(String regionId, EdsAliyunConfigModel.Aliyun configModel,
+                                      List<DescribeInstancesResponse.Instance> instances) {
+        return instances.stream()
+                .map(e -> {
+                    List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(regionId, configModel,
+                            e.getInstanceId());
+                    return AliyunEcs.Ecs.builder()
                             .regionId(regionId)
-                            .instance(ecsInstance)
+                            .instance(e)
                             .disks(disks)
                             .build();
-                    entities.add(ecs);
-                }
-            });
-            return entities;
-        } catch (Exception e) {
-            throw new EdsQueryEntitiesException(e.getMessage());
-        }
+                })
+                .toList();
     }
 
     @Override

@@ -20,9 +20,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * @Author baiyi
- * @Date 2024/2/26 10:31
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/2/26 10:31
+ * &#064;Version  1.0
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_CERT)

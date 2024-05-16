@@ -3,26 +3,22 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsVpnRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @Author baiyi
@@ -31,7 +27,7 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_STS_VPN)
-public class EdsAwsVpnAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
+public class EdsAwsVpnAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
 
     public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -40,19 +36,8 @@ public class EdsAwsVpnAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsC
     }
 
     @Override
-    protected List<VpnConnection> listEntities(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        try {
-            EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
-            Set<String> regionIdSet = Sets.newHashSet(aws.getRegionId());
-            regionIdSet.addAll(Optional.of(aws)
-                    .map(EdsAwsConfigModel.Aws::getRegionIds)
-                    .orElse(null));
-            List<VpnConnection> entities = Lists.newArrayList();
-            regionIdSet.forEach(regionId -> entities.addAll(AwsVpnRepo.describeVpnConnections(regionId, aws)));
-            return entities;
-        } catch (Exception e) {
-            throw new EdsQueryEntitiesException(e.getMessage());
-        }
+    protected List<VpnConnection> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+        return AwsVpnRepo.describeVpnConnections(regionId, aws);
     }
 
     @Override
