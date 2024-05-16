@@ -82,7 +82,7 @@ public class GroupingAppExecutor {
             if (edsAsset.getName()
                     .endsWith("-1")) {
                 if (!groups.isEmpty()) {
-                    updateReplicas(edsAsset, groupSpec.getG1(), groups.get(0));
+                    updateReplicas(edsAsset, groupSpec.getG1(), groups.getFirst());
                 }
             }
             if (edsAsset.getName()

@@ -87,7 +87,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(IngressLoadBalancerStatus::getIngress);
         if (optionalIngressLoadBalancerIngresses.isPresent()) {
             IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
-                    .get(0);
+                    .getFirst();
             return toEdsAssetIndex(edsAsset, LB_INGRESS_HOSTNAME, ingressLoadBalancerIngress.getHostname());
         }
         return null;

@@ -84,9 +84,9 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionEdsAssetProvider<Eds
                 .equals(VPC) ? entity.getInstance()
                 .getVpcAttributes()
                 .getPrivateIpAddress()
-                .get(0) : entity.getInstance()
+                .getFirst() : entity.getInstance()
                 .getInnerIpAddress()
-                .get(0);
+                .getFirst();
 
         Date expiredTime = null;
         Optional<String> optionalExpiredTime = Optional.of(entity.getInstance())

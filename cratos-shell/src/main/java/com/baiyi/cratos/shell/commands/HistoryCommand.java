@@ -60,7 +60,7 @@ public class HistoryCommand extends AbstractCommand implements History.Command {
     ) throws IOException {
         List<String> result = new History(helper.getHistory()).history(file);
         if (file != null && result.size() == 1) {
-            return result.get(0);
+            return result.getFirst();
         } else if (displayArray) {
             return result;
         }

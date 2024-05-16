@@ -49,11 +49,11 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
         List<String> list = request.getHeaders()
                 .get(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL);
         if (!CollectionUtils.isEmpty(list)) {
-            String token = list.get(0);
+            String token = list.getFirst();
             UserToken userToken = userTokenFacade.verifyToken(token);
             String username = request.getParameterMap()
                     .get("username")
-                    .get(0);
+                    .getFirst();
             if (!userToken.getUsername()
                     .equals(username)) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);

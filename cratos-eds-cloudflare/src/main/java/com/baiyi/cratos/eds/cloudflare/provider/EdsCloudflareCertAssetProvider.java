@@ -78,7 +78,7 @@ public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider
                 .filter(e -> e.startsWith("*."))
                 .findAny()
                 .orElseGet(() -> entity.getHosts()
-                        .get(0));
+                        .getFirst());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(name)
                 .zoneOf(entity.getZoneId())

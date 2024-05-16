@@ -77,7 +77,7 @@ public class MenuTitleWrapper extends BaseDataTableConverter<MenuVO.Title, MenuT
             MenuTitle preferenceMenuTitle = menuTitles.stream()
                     .filter(MenuTitle::getPreference)
                     .findFirst()
-                    .orElse(menuTitles.get(0));
+                    .orElse(menuTitles.getFirst());
             return preferenceMenuTitle.getTitle();
         }
     }

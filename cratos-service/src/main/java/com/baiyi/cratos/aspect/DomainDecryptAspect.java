@@ -47,7 +47,7 @@ public class DomainDecryptAspect {
             if (CollectionUtils.isEmpty(domains)) {
                 return;
             }
-            if (AopUtils.getTargetClass(domains.get(0))
+            if (AopUtils.getTargetClass(domains.getFirst())
                     .isAnnotationPresent(EncryptedDomain.class)) {
                 domains.forEach(this::operationDomain);
             }
