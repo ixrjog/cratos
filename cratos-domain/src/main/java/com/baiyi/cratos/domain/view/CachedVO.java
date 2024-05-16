@@ -38,6 +38,7 @@ public class CachedVO {
         private Date createTime = new Date();
 
         @Schema(description = "Cache duration(s)")
+        @Builder.Default
         private Long duration = 600L;
 
     }
