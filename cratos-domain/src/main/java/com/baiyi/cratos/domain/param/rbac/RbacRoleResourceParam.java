@@ -70,6 +70,21 @@ public class RbacRoleResourceParam {
     @Data
     @NoArgsConstructor
     @Schema
+    public static class CopyRoleResource {
+
+        @Schema(description = "角色ID")
+        @NotNull
+        private Integer roleId;
+
+        @Schema(description = "角色ID")
+        @NotNull
+        private Integer targetRoleId;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
     public static class DeleteRoleResource implements IToRbacRoleResources {
 
         @Schema(description = "角色ID")

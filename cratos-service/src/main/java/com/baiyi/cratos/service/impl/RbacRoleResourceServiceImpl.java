@@ -45,4 +45,12 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
         return rbacRoleResourceMapper.selectByExample(example);
     }
 
+    @Override
+    public List<RbacRoleResource> queryByRoleId(int roleId) {
+        Example example = new Example(RbacRoleResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", roleId);
+        return rbacRoleResourceMapper.selectByExample(example);
+    }
+
 }

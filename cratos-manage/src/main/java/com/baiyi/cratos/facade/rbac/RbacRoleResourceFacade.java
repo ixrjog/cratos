@@ -13,4 +13,6 @@ public interface RbacRoleResourceFacade {
 
     void deleteRoleResource(RbacRoleResourceParam.DeleteRoleResource deleteRoleResource);
 
+    void copyRoleResource(RbacRoleResourceParam.CopyRoleResource copyRoleResource);
+
 }

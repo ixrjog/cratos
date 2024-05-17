@@ -95,6 +95,13 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Copy role resource")
+    @PostMapping(value = "/role/resource/copy", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> copyRoleResource(@RequestBody @Valid RbacRoleResourceParam.CopyRoleResource copyRoleResource) {
+        rbacRoleResourceFacade.copyRoleResource(copyRoleResource);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Delete role resource")
     @DeleteMapping(value = "/role/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteRoleResource(@RequestBody @Valid RbacRoleResourceParam.DeleteRoleResource deleteRoleResource) {
