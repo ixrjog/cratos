@@ -26,6 +26,7 @@ public enum EdsAssetTypeEnum {
     AWS_SNS_TOPIC("SNS Topic"),
     AWS_SNS_SUBSCRIPTION("SNS Subscription"),
     HUAWEICLOUD_ECS("ECS"),
+    HUAWEICLOUD_IAM_USER("IAM User"),
     CLOUDFLARE_CERT("Certificate"),
     KUBERNETES_NAMESPACE("Namespace"),
     KUBERNETES_DEPLOYMENT("Deployment"),

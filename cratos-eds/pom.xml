@@ -68,6 +68,12 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.baiyi.cratos</groupId>
+            <artifactId>cratos-eds-googlecloud</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 </project>

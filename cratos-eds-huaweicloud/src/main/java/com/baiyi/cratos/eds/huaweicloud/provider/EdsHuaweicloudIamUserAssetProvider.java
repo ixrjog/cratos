@@ -1,0 +1,59 @@
+package com.baiyi.cratos.eds.huaweicloud.provider;
+
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.huaweicloud.repo.HuaweicloudIamRepo;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/5/17 下午2:16
+ * &#064;Version 1.0
+ */
+@Component
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HUAWEICLOUD, assetType = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
+public class EdsHuaweicloudIamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult> {
+
+    public EdsHuaweicloudIamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                              CredentialService credentialService,
+                                              ConfigCredTemplate configCredTemplate,
+                                              EdsAssetIndexFacade edsAssetIndexFacade) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+    }
+
+    @Override
+    protected List<KeystoneListUsersResult> listEntities(
+            ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance) throws EdsQueryEntitiesException {
+        EdsHuaweicloudConfigModel.Huaweicloud huaweicloud = instance.getEdsConfigModel();
+        try {
+            return HuaweicloudIamRepo.listUsers(huaweicloud);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new EdsQueryEntitiesException(e.getMessage());
+        }
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
+                                  KeystoneListUsersResult entity) {
+
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
+                .nameOf(entity.getName())
+                .build();
+    }
+
+}

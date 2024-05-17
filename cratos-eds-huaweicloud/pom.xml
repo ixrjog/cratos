@@ -15,7 +15,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <huaweicloud-sdk.version>3.1.61</huaweicloud-sdk.version>
+        <huaweicloud-sdk.version>3.1.96</huaweicloud-sdk.version>
     </properties>
 
     <dependencies>
@@ -30,6 +30,12 @@
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ecs</artifactId>
+            <version>${huaweicloud-sdk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-iam</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
 

@@ -26,6 +26,7 @@
         <module>cratos-eds-gitlab</module>
         <module>cratos-eds-dingtalk</module>
         <module>cratos-eds-huaweicloud</module>
+        <module>cratos-eds-googlecloud</module>
     </modules>
 
     <properties>
