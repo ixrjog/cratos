@@ -107,6 +107,7 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
             if (businessCredentialList.stream()
                     .noneMatch(e -> serverAccount.getCredentialId()
                             .equals(e.getCredentialId()))) {
+                deleteCredentials(businessCredentialList);
                 BusinessCredential businessCredential = BusinessCredential.builder()
                         .businessId(serverAccount.getId())
                         .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
@@ -115,9 +116,13 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
             }
         } else {
             // 删除
-            if (!CollectionUtils.isEmpty(businessCredentialList)) {
-                businessCredentialList.forEach(e -> businessCredentialService.deleteById(e.getId()));
-            }
+            deleteCredentials(businessCredentialList);
+        }
+    }
+
+    private void deleteCredentials(List<BusinessCredential> businessCredentialList) {
+        if (!CollectionUtils.isEmpty(businessCredentialList)) {
+            businessCredentialList.forEach(e -> businessCredentialService.deleteById(e.getId()));
         }
     }
 
