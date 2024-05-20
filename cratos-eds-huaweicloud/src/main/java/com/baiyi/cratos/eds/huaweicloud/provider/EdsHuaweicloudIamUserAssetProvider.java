@@ -42,7 +42,6 @@ public class EdsHuaweicloudIamUserAssetProvider extends BaseEdsInstanceAssetProv
         try {
             return HuaweicloudIamRepo.listUsers(huaweicloud);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
