@@ -5,10 +5,10 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
+import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.ServerAccountFacade;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
@@ -18,9 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  * @Author baiyi
@@ -35,6 +32,8 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     private final CredentialService credService;
 
     private final BusinessCredentialService businessCredentialService;
+
+    private final BusinessCredentialFacade businessCredentialFacade;
 
     private final ServerAccountService accountService;
 
@@ -98,32 +97,11 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     }
 
     private void updateCredential(ServerAccount serverAccount) {
-        SimpleBusiness query = SimpleBusiness.builder()
+        SimpleBusiness business = SimpleBusiness.builder()
                 .businessId(serverAccount.getId())
                 .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
                 .build();
-        List<BusinessCredential> businessCredentialList = businessCredentialService.selectByBusiness(query);
-        if (IdentityUtil.hasIdentity(serverAccount.getCredentialId())) {
-            if (businessCredentialList.stream()
-                    .noneMatch(e -> serverAccount.getCredentialId()
-                            .equals(e.getCredentialId()))) {
-                deleteCredentials(businessCredentialList);
-                BusinessCredential businessCredential = BusinessCredential.builder()
-                        .businessId(serverAccount.getId())
-                        .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
-                        .build();
-                businessCredentialService.add(businessCredential);
-            }
-        } else {
-            // 删除
-            deleteCredentials(businessCredentialList);
-        }
-    }
-
-    private void deleteCredentials(List<BusinessCredential> businessCredentialList) {
-        if (!CollectionUtils.isEmpty(businessCredentialList)) {
-            businessCredentialList.forEach(e -> businessCredentialService.deleteById(e.getId()));
-        }
+        businessCredentialFacade.updateBusinessCredential(serverAccount.getCredentialId(), business);
     }
 
 }

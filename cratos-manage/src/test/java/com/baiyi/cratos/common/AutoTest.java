@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.configuration.RbacAutoConfiguration;
+import com.baiyi.cratos.configuration.RbacAutoConfigInitializer;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class AutoTest extends BaseUnit {
 
     @Resource
-    private RbacAutoConfiguration rbacResourceAutomaticConfiguration;
+    private RbacAutoConfigInitializer rbacResourceAutomaticConfiguration;
 
     @Test
     void test() {

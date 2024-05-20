@@ -1,6 +1,9 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.generator.BusinessCredential;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -16,5 +19,9 @@ public interface BusinessCredentialFacade {
     void revokeBusinessCredential(int credentialId, BaseBusiness.IBusiness business);
 
     void issueBusinessCredential(int credentialId, BaseBusiness.IBusiness business);
+
+    void deleteBusinessCredentials(List<BusinessCredential> businessCredentialList);
+
+    void updateBusinessCredential(Integer credentialId, BaseBusiness.IBusiness business);
 
 }

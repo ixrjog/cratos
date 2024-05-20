@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
-public class RbacAutoConfiguration implements CommandLineRunner {
+public class RbacAutoConfigInitializer implements CommandLineRunner {
 
     @Resource
     private RequestMappingHandlerMapping handlerMapping;
