@@ -3,16 +3,24 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
 import com.baiyi.cratos.facade.ServerAccountFacade;
+import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.baiyi.cratos.wrapper.ServerAccountWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -26,6 +34,8 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
 
     private final CredentialService credService;
 
+    private final BusinessCredentialService businessCredentialService;
+
     private final ServerAccountService accountService;
 
     private final ServerAccountWrapper serverAccountWrapper;
@@ -35,12 +45,14 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     private static final String ADMIN = "Administrators";
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void addServerAccount(ServerAccountParam.AddServerAccount addServerAccount) {
         ServerAccount serverAccount = addServerAccount.toTarget();
         saveServerAccount(serverAccount);
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void updateServerAccount(ServerAccountParam.UpdateServerAccount updateServerAccount) {
         ServerAccount serverAccount = updateServerAccount.toTarget();
         saveServerAccount(serverAccount);
@@ -81,6 +93,31 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
             accountService.add(serverAccount);
         } else {
             accountService.updateByPrimaryKey(serverAccount);
+        }
+        updateCredential(serverAccount);
+    }
+
+    private void updateCredential(ServerAccount serverAccount) {
+        SimpleBusiness query = SimpleBusiness.builder()
+                .businessId(serverAccount.getId())
+                .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
+                .build();
+        List<BusinessCredential> businessCredentialList = businessCredentialService.selectByBusiness(query);
+        if (IdentityUtil.hasIdentity(serverAccount.getCredentialId())) {
+            if (businessCredentialList.stream()
+                    .noneMatch(e -> serverAccount.getCredentialId()
+                            .equals(e.getCredentialId()))) {
+                BusinessCredential businessCredential = BusinessCredential.builder()
+                        .businessId(serverAccount.getId())
+                        .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
+                        .build();
+                businessCredentialService.add(businessCredential);
+            }
+        } else {
+            // 删除
+            if (!CollectionUtils.isEmpty(businessCredentialList)) {
+                businessCredentialList.forEach(e -> businessCredentialService.deleteById(e.getId()));
+            }
         }
     }
 
