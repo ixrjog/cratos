@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class ServerAccountWrapper extends BaseDataTableConverter<ServerAccountVO.ServerAccount, ServerAccount> implements IBaseWrapper<ServerAccountVO.ServerAccount> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})
     public void wrap(ServerAccountVO.ServerAccount serverAccount) {
     }
 

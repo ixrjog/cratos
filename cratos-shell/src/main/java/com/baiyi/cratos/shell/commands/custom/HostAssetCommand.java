@@ -49,7 +49,7 @@ public class HostAssetCommand extends AbstractCommand {
 
     private final UserService userService;
 
-    public final static String[] ASSET_TABLE_FIELD_NAME = {"EDS Name", "Instance ID", "Region", "Type", "Name", "IP"};
+    public final static String[] ASSET_TABLE_FIELD_NAME = {"ID", "Instance ID", "Name", "IP", "EDS Name", "Region", "Type"};
 
     protected static final int PAGE_FOOTER_SIZE = 6;
 
@@ -65,7 +65,6 @@ public class HostAssetCommand extends AbstractCommand {
     @ShellMethod(key = COMMAND_ASSET_ECS_LIST, value = "List host by ecs asset")
     @ShellMethodAvailability("ecsAssetListAvailability")
     public void ecsList(@ShellOption(help = "Name", defaultValue = "") String name,
-                        @ShellOption(help = "Asset Type", valueProvider = EnumValueProvider.class, defaultValue = ShellOption.NULL) String assetType,
                         @ShellOption(help = "Page", defaultValue = "1") int page) {
         PrettyTable ecsTable = PrettyTable.fieldNames(ASSET_TABLE_FIELD_NAME);
         int rows = helper.terminalSize()
@@ -84,14 +83,20 @@ public class HostAssetCommand extends AbstractCommand {
         }
         Map<Integer, String> edsInstanceMap = Maps.newHashMap();
 
+        int i = 1;
         for (EdsAsset asset : table.getData()) {
             if (!edsInstanceMap.containsKey(asset.getInstanceId())) {
                 EdsInstance edsInstance = edsInstanceService.getById(asset.getInstanceId());
                 edsInstanceMap.put(edsInstance.getId(), edsInstance.getInstanceName());
             }
-            ecsTable.addRow(edsInstanceMap.getOrDefault(asset.getInstanceId(), "-"), asset.getAssetId(),
-                    asset.getRegion(), helper.getColored("ECS", PromptColor.GREEN), asset.getName(),
-                    asset.getAssetKey());
+            String edsName = edsInstanceMap.getOrDefault(asset.getInstanceId(), "-");
+            String instanceId = asset.getAssetId();
+            String region = asset.getRegion();
+            String type = helper.getColored("ECS", PromptColor.GREEN);
+            String serverName = asset.getName();
+            String ip = asset.getAssetKey();
+            ecsTable.addRow(i, instanceId, serverName, ip, edsName, region, type);
+            i++;
         }
         helper.print(ecsTable.toString());
 
