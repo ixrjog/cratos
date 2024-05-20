@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ServerAccount;
+import com.baiyi.cratos.domain.param.server.ServerAccountParam;
 import com.baiyi.cratos.mapper.ServerAccountMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -12,4 +14,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Version 1.0
  */
 public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount>, BaseValidService<ServerAccount, ServerAccountMapper>, SupportBusinessService {
+
+    DataTable<ServerAccount> queryServerAccountPage(ServerAccountParam.ServerAccountPageQuery pageQuery);
+
 }

@@ -34,7 +34,7 @@ public class DomainController {
 
     @Operation(summary = "Update domain")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateUpdate(@RequestBody @Valid DomainParam.UpdateDomain updateDomain) {
+    public HttpResult<Boolean> updateDomain(@RequestBody @Valid DomainParam.UpdateDomain updateDomain) {
         domainFacade.updateDomain(updateDomain);
         return HttpResult.SUCCESS;
     }

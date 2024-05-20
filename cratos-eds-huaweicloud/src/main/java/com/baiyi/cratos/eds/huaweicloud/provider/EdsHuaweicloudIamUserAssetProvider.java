@@ -49,7 +49,6 @@ public class EdsHuaweicloudIamUserAssetProvider extends BaseEdsInstanceAssetProv
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
                                   KeystoneListUsersResult entity) {
-
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .build();

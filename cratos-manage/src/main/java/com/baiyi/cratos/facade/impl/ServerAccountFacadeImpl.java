@@ -2,11 +2,14 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;
+import com.baiyi.cratos.domain.view.server.ServerAccountVO;
 import com.baiyi.cratos.facade.ServerAccountFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.ServerAccountService;
+import com.baiyi.cratos.wrapper.ServerAccountWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +28,8 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
 
     private final ServerAccountService accountService;
 
+    private final ServerAccountWrapper serverAccountWrapper;
+
     private static final String ROOT = "root";
 
     private static final String ADMIN = "Administrators";
@@ -39,6 +44,24 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     public void updateServerAccount(ServerAccountParam.UpdateServerAccount updateServerAccount) {
         ServerAccount serverAccount = updateServerAccount.toTarget();
         saveServerAccount(serverAccount);
+    }
+
+    @Override
+    public void setServerAccountValidById(int id) {
+        accountService.updateValidById(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        // TODO
+        //  accountService.deleteById(id);
+    }
+
+    @Override
+    public DataTable<ServerAccountVO.ServerAccount> queryServerAccountPage(
+            ServerAccountParam.ServerAccountPageQuery pageQuery) {
+        DataTable<ServerAccount> table = accountService.queryServerAccountPage(pageQuery);
+        return serverAccountWrapper.wrapToTarget(table);
     }
 
     private void saveServerAccount(ServerAccount serverAccount) {
