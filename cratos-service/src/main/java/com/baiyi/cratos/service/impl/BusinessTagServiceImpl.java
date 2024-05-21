@@ -75,4 +75,13 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         return businessTagMapper.queryBusinessIdByTag(queryByTag);
     }
 
+    @Override
+    public List<BusinessTag> queryByBusinessTypeAndTagId(String businessType, int tagId) {
+        Example example = new Example(BusinessTag.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", businessType)
+                .andEqualTo("tagId", tagId);
+        return businessTagMapper.selectByExample(example);
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.enums.RemoteManagementProtocolEnum;
+import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;

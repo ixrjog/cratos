@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.enums;
+package com.baiyi.cratos.enums;
 
 /**
  * @Author baiyi

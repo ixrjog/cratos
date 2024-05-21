@@ -6,6 +6,8 @@ import com.baiyi.cratos.mapper.BusinessAssetBindMapper;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/3/12 09:47
@@ -19,5 +21,7 @@ public interface BusinessAssetBindService extends BaseUniqueKeyService<BusinessA
      * @param business
      */
     void deleteByBusiness(BaseBusiness.IBusiness business);
+
+    List<BusinessAssetBind> queryByAssetId(int assetId);
 
 }

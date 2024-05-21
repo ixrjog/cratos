@@ -4,9 +4,11 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.facade.SimpleEdsAccountFacade;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
@@ -16,13 +18,18 @@ import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.commands.AbstractCommand;
 import com.baiyi.cratos.shell.commands.SshShellComponent;
 import com.baiyi.cratos.shell.pagination.TableFooter;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.shell.standard.*;
+import org.springframework.shell.standard.ShellCommandGroup;
+import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
@@ -49,17 +56,21 @@ public class HostAssetCommand extends AbstractCommand {
 
     private final UserService userService;
 
-    public final static String[] ASSET_TABLE_FIELD_NAME = {"ID", "Instance ID", "Name", "IP", "EDS Name", "Region", "Type"};
+    private final SimpleEdsAccountFacade simpleEdsAccountFacade;
+
+    public final static String[] ASSET_TABLE_FIELD_NAME = {"ID", "Instance ID", "Name", "IP", "EDS Name", "Region", "Type", "Login Account"};
 
     protected static final int PAGE_FOOTER_SIZE = 6;
 
     public HostAssetCommand(SshShellHelper helper, SshShellProperties properties, EdsInstanceService edsInstanceService,
-                            EdsAssetService edsAssetService, UserService userService) {
+                            EdsAssetService edsAssetService, UserService userService,
+                            SimpleEdsAccountFacade simpleEdsAccountFacade) {
         super(helper, properties, properties.getCommands()
-                .getAssetHost());
+                .getAsset());
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;
         this.userService = userService;
+        this.simpleEdsAccountFacade = simpleEdsAccountFacade;
     }
 
     @ShellMethod(key = COMMAND_ASSET_ECS_LIST, value = "List host by ecs asset")
@@ -83,6 +94,8 @@ public class HostAssetCommand extends AbstractCommand {
         }
         Map<Integer, String> edsInstanceMap = Maps.newHashMap();
 
+        List<ServerAccount> serverAccounts = simpleEdsAccountFacade.queryServerAccounts();
+
         int i = 1;
         for (EdsAsset asset : table.getData()) {
             if (!edsInstanceMap.containsKey(asset.getInstanceId())) {
@@ -95,7 +108,7 @@ public class HostAssetCommand extends AbstractCommand {
             String type = helper.getColored("ECS", PromptColor.GREEN);
             String serverName = asset.getName();
             String ip = asset.getAssetKey();
-            ecsTable.addRow(i, instanceId, serverName, ip, edsName, region, type);
+            ecsTable.addRow(i, instanceId, serverName, ip, edsName, region, type, toServerAccounts(serverAccounts));
             i++;
         }
         helper.print(ecsTable.toString());
@@ -110,6 +123,24 @@ public class HostAssetCommand extends AbstractCommand {
                 .lang(user.getLang())
                 .build();
         helper.print(pagination.toStr(), PromptColor.GREEN);
+    }
+
+    private String toServerAccounts(List<ServerAccount> serverAccounts) {
+        if (CollectionUtils.isEmpty(serverAccounts)) {
+            return "-";
+        }
+        return Joiner.on(" ")
+                .join(serverAccounts.stream()
+                        .map(this::toServerAccount)
+                        .toList());
+    }
+
+    private String toServerAccount(ServerAccount serverAccount) {
+        if (serverAccount.getSudo()) {
+            return helper.getColored(serverAccount.getName(), PromptColor.RED);
+        } else {
+            return helper.getColored(serverAccount.getName(), PromptColor.GREEN);
+        }
     }
 
 }

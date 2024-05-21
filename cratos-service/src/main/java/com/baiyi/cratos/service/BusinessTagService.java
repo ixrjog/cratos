@@ -32,4 +32,6 @@ public interface BusinessTagService extends BaseBusinessService<BusinessTag>, Ba
 
     List<Integer> queryBusinessIdByTag(BusinessTagParam.QueryByTag queryByTag);
 
+    List<BusinessTag> queryByBusinessTypeAndTagId(String businessType, int tagId);
+
 }
