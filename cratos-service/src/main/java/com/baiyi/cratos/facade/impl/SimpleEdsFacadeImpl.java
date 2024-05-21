@@ -21,9 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SimpleEdsFacadeImpl implements SimpleEdsFacade {
 
-    private final EdsAssetIndexService edsAssetIndexService;
-
     private final EdsAssetService edsAssetService;
+
+    private final EdsAssetIndexService edsAssetIndexService;
 
     private final BusinessAssetBindService businessAssetBindService;
 
