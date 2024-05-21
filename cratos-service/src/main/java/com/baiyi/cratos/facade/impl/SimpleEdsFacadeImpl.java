@@ -29,7 +29,7 @@ public class SimpleEdsFacadeImpl implements SimpleEdsFacade {
 
     @Override
     public void deleteEdsAssetById(Integer id) {
-        if (edsAssetIndexService.getById(id) == null) {
+        if (edsAssetService.getById(id) == null) {
             return;
         }
         // 删除索引
