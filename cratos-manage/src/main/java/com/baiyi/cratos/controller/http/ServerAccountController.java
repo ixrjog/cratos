@@ -53,7 +53,7 @@ public class ServerAccountController {
     }
 
     @Operation(summary = "Delete account by id")
-    @DeleteMapping(value = "/del/by/id", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteServerAccountById(@RequestParam @Valid int id) {
         serverAccountFacade.deleteById(id);
         return HttpResult.SUCCESS;
