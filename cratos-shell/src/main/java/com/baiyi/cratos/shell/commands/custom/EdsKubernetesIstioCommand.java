@@ -64,8 +64,6 @@ public class EdsKubernetesIstioCommand extends AbstractCommand {
 
     public final static String[] TABLE_FIELD_NAME = {"Eds Instance", "Namespace:Deployment", "Istio"};
 
-    protected static final int PAGE_FOOTER_SIZE = 6;
-
     public EdsKubernetesIstioCommand(SshShellHelper helper, SshShellProperties properties,
                                      EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                      EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
@@ -96,8 +94,7 @@ public class EdsKubernetesIstioCommand extends AbstractCommand {
         }
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-
-
+        // 不分页
         EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()
                 .instanceId(edsInstance.getId())
                 .assetType(EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name())
@@ -110,17 +107,14 @@ public class EdsKubernetesIstioCommand extends AbstractCommand {
         }
 
         for (EdsAsset asset : table.getData()) {
-
             Deployment deployment = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(asset.getOriginalModel());
-
             Map<String, String> labels = Optional.ofNullable(deployment)
                     .map(Deployment::getSpec)
                     .map(DeploymentSpec::getTemplate)
                     .map(PodTemplateSpec::getMetadata)
                     .map(ObjectMeta::getLabels)
                     .orElse(Maps.newHashMap());
-
             boolean enabled = false;
             if (labels.containsKey(SIDECAR_ISTIO_IO_INJECT)) {
                 enabled = "true".equals(labels.get(SIDECAR_ISTIO_IO_INJECT));
