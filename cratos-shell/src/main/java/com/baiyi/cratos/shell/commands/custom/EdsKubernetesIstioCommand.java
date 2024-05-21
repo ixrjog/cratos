@@ -109,6 +109,10 @@ public class EdsKubernetesIstioCommand extends AbstractCommand {
         for (EdsAsset asset : table.getData()) {
             Deployment deployment = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(asset.getOriginalModel());
+
+            edsInstanceProviderHolderBuilder.newHolder(
+                    edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()).getProvider().assetLoadAs(asset.getOriginalModel());
+
             Map<String, String> labels = Optional.ofNullable(deployment)
                     .map(Deployment::getSpec)
                     .map(DeploymentSpec::getTemplate)

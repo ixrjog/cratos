@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
+
 /**
  * @Author baiyi
  * @Date 2024/3/12 09:47
@@ -37,6 +40,14 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
         criteria.andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("assetId", record.getAssetId());
         return businessAssetBindMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<BusinessAssetBind> queryByAssetId(int assetId) {
+        Example example = new Example(BusinessAssetBind.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("assetId", assetId);
+        return businessAssetBindMapper.selectByExample(example);
     }
 
 }
