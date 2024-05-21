@@ -20,5 +20,8 @@ package com.baiyi.cratos.shell.listeners;
  * Event types
  */
 public enum SshShellEventType {
-    SESSION_STARTED, SESSION_STOPPED, SESSION_STOPPED_UNEXPECTEDLY
+    SESSION_STARTED,
+    SESSION_STOPPED,
+    SESSION_STOPPED_UNEXPECTEDLY,
+    SESSION_DESTROYED
 }
