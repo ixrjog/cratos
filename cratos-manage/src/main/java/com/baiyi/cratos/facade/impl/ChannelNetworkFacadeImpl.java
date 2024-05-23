@@ -8,7 +8,6 @@ import com.baiyi.cratos.domain.generator.ChannelNetwork;
 import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
 import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.ChannelNetworkFacade;
-import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.ChannelNetworkService;
 import com.baiyi.cratos.wrapper.ChannelNetworkWrapper;
 import lombok.RequiredArgsConstructor;
@@ -29,22 +28,11 @@ public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
 
     private final ChannelNetworkWrapper channelNetworkWrapper;
 
-    private final BusinessTagService businessTagService;
-
     @Override
     @PageQueryByTag(ofType = BusinessTypeEnum.CHANNEL_NETWORK)
     public DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(
             ChannelNetworkParam.ChannelNetworkPageQuery pageQuery) {
-//        if (pageQuery.isQueryByTag()) {
-//            BusinessTagParam.QueryByTag queryByTag = pageQuery.getQueryByTag();
-//            queryByTag.setBusinessType(BusinessTypeEnum.CHANNEL_NETWORK.name());
-//            List<Integer> idList = businessTagService.queryBusinessIdByTag(queryByTag);
-//            pageQuery.setIdList(idList);
-//        } else {
-//            pageQuery.setIdList(Collections.emptyList());
-//        }
-        ChannelNetworkParam.ChannelNetworkPageQueryParam param = pageQuery.toParam();
-        DataTable<ChannelNetwork> table = channelNetworkService.queryChannelNetworkPage(param);
+        DataTable<ChannelNetwork> table = channelNetworkService.queryChannelNetworkPage(pageQuery.toParam());
         return channelNetworkWrapper.wrapToTarget(table);
     }
 
