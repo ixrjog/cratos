@@ -58,7 +58,7 @@ public class RbacAutoConfigInitializer implements CommandLineRunner {
                 .map(CratosModel.AutoConfiguration::getEnabled)
                 .orElse(false);
         if (enabledRbacAutoConfiguration) {
-            log.info("RBAC group & resource auto configuration.");
+            log.info("RBAC auto configuration.");
             start();
         }
     }

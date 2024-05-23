@@ -66,7 +66,7 @@ public class ChannelNetworkParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class ChannelNetworkPageQuery extends PageParam implements BusinessTagParam.IQueryByTag {
+    public static class ChannelNetworkPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
 
         @Schema(description = "查询名称")
         private String queryName;
@@ -77,6 +77,8 @@ public class ChannelNetworkParam {
 
         public ChannelNetworkPageQueryParam toParam() {
             return ChannelNetworkPageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
                     .queryName(queryName)
                     .idList(idList)
                     .build();
@@ -94,7 +96,6 @@ public class ChannelNetworkParam {
         private String queryName;
 
         private List<Integer> idList;
-
 
     }
 

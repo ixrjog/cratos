@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.param.IImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -27,10 +29,36 @@ public class DomainParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class DomainPageQuery extends PageParam {
+    public static class DomainPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
 
         @Schema(description = "查询名称")
         private String queryName;
+
+        private BusinessTagParam.QueryByTag queryByTag;
+
+        private List<Integer> idList;
+
+        public DomainPageQueryParam toParam() {
+            return DomainPageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
+                    .queryName(queryName)
+                    .idList(idList)
+                    .build();
+        }
+
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class DomainPageQueryParam extends PageParam {
+
+        private String queryName;
+
+        private List<Integer> idList;
 
     }
 

@@ -28,7 +28,7 @@ public class RiskEventParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class RiskEventPageQuery extends PageParam implements BusinessTagParam.IQueryByTag {
+    public static class RiskEventPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
 
         @Schema(description = "Query by name")
         private String queryName;
@@ -63,6 +63,12 @@ public class RiskEventParam {
                     .eventIdList(eventIdList)
                     .build();
         }
+
+        @Override
+        public void setIdList(List<Integer> idList) {
+            eventIdList = idList;
+        }
+
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -93,7 +99,7 @@ public class RiskEventParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class RiskEventGraphQuery implements BusinessTagParam.IQueryByTag {
+    public static class RiskEventGraphQuery implements BusinessTagParam.HasQueryByTag {
 
         @NotBlank
         private String year;
@@ -101,6 +107,11 @@ public class RiskEventParam {
         private String quarter;
 
         private BusinessTagParam.QueryByTag queryByTag;
+
+        @Override
+        public void setIdList(List<Integer> idList) {
+            //
+        }
 
     }
 

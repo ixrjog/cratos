@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface DomainMapper extends Mapper<Domain> {
 
-    List<Domain> queryPageByParam(DomainParam.DomainPageQuery pageQuery);
+    List<Domain> queryPageByParam(DomainParam.DomainPageQueryParam pageQuery);
 
 }

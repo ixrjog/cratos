@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,9 +16,11 @@ import java.util.Optional;
  */
 public class BusinessTagParam {
 
-    public interface IQueryByTag {
+    public interface HasQueryByTag {
 
         BusinessTagParam.QueryByTag getQueryByTag();
+
+        void setIdList(List<Integer> idList);
 
         default boolean isQueryByTag() {
             int tagId = Optional.ofNullable(getQueryByTag())

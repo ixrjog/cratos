@@ -1,11 +1,14 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.param.domain.DomainParam;
 import com.baiyi.cratos.domain.view.domain.DomainVO;
 import com.baiyi.cratos.facade.DomainFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.DomainService;
 import com.baiyi.cratos.wrapper.DomainWrapper;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +27,23 @@ public class DomainFacadeImpl implements DomainFacade {
 
     private final DomainService domainService;
 
+    private final BusinessTagService businessTagService;
+
     private final DomainWrapper domainWrapper;
 
     @Override
+    @PageQueryByTag(ofType = BusinessTypeEnum.DOMAIN)
     public DataTable<DomainVO.Domain> queryDomainPage(DomainParam.DomainPageQuery pageQuery) {
-        DataTable<Domain> table = domainService.queryDomainPage(pageQuery);
+//        if (pageQuery.isQueryByTag()) {
+//            BusinessTagParam.QueryByTag queryByTag = pageQuery.getQueryByTag();
+//            queryByTag.setBusinessType(BusinessTypeEnum.DOMAIN.name());
+//            List<Integer> idList = businessTagService.queryBusinessIdByTag(queryByTag);
+//            pageQuery.setIdList(idList);
+//        } else {
+//            pageQuery.setIdList(Collections.emptyList());
+//        }
+        DomainParam.DomainPageQueryParam param = pageQuery.toParam();
+        DataTable<Domain> table = domainService.queryDomainPage(param);
         return domainWrapper.wrapToTarget(table);
     }
 

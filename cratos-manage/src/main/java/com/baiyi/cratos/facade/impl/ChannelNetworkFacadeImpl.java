@@ -1,11 +1,11 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.ChannelAvailableStatusEnum;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
 import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
-import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.ChannelNetworkFacade;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -14,9 +14,6 @@ import com.baiyi.cratos.wrapper.ChannelNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * @Author baiyi
@@ -35,16 +32,17 @@ public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
     private final BusinessTagService businessTagService;
 
     @Override
+    @PageQueryByTag(ofType = BusinessTypeEnum.CHANNEL_NETWORK)
     public DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(
             ChannelNetworkParam.ChannelNetworkPageQuery pageQuery) {
-        if (pageQuery.isQueryByTag()) {
-            BusinessTagParam.QueryByTag queryByTag = pageQuery.getQueryByTag();
-            queryByTag.setBusinessType(BusinessTypeEnum.CHANNEL_NETWORK.name());
-            List<Integer> idList = businessTagService.queryBusinessIdByTag(queryByTag);
-            pageQuery.setIdList(idList);
-        } else {
-            pageQuery.setIdList(Collections.emptyList());
-        }
+//        if (pageQuery.isQueryByTag()) {
+//            BusinessTagParam.QueryByTag queryByTag = pageQuery.getQueryByTag();
+//            queryByTag.setBusinessType(BusinessTypeEnum.CHANNEL_NETWORK.name());
+//            List<Integer> idList = businessTagService.queryBusinessIdByTag(queryByTag);
+//            pageQuery.setIdList(idList);
+//        } else {
+//            pageQuery.setIdList(Collections.emptyList());
+//        }
         ChannelNetworkParam.ChannelNetworkPageQueryParam param = pageQuery.toParam();
         DataTable<ChannelNetwork> table = channelNetworkService.queryChannelNetworkPage(param);
         return channelNetworkWrapper.wrapToTarget(table);

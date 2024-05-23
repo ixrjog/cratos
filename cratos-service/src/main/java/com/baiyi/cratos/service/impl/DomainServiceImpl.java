@@ -30,9 +30,9 @@ public class DomainServiceImpl implements DomainService {
     private final DomainMapper domainMapper;
 
     @Override
-    public DataTable<Domain> queryDomainPage(DomainParam.DomainPageQuery pageQuery) {
-        Page<Domain> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<Domain> data = domainMapper.queryPageByParam(pageQuery);
+    public DataTable<Domain> queryDomainPage(DomainParam.DomainPageQueryParam param) {
+        Page<Domain> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<Domain> data = domainMapper.queryPageByParam(param);
         return new DataTable<>(data, page.getTotal());
     }
 

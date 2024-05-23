@@ -3,7 +3,7 @@
     <!-- Spring Boot 默认日志配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- 日志文件输出位置 -->
-    <property name="LOG_PATH" value="./logs"/>
+    <property name="LOG_PATH" value="${HOME}/logs"/>
     <!-- 日志文件名 -->
     <property name="LOG_FILE" value="${LOG_PATH}/spring-boot.log"/>
     <!-- 归档日志名 -->

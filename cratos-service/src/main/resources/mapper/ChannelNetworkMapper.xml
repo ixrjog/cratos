@@ -22,7 +22,7 @@
         select * from channel_network
         <where>
             <if test="idList != null and idList.size() > 0">
-                and id in
+                id in
                 <foreach open="(" item="id" separator="," close=")" collection="idList">
                     #{id}
                 </foreach>

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/application")
 @Tag(name = "Application")
 @RequiredArgsConstructor
-public class ApplicationController {
+public class   ApplicationController {
 
     @Operation(summary = "按环境查询应用部署详情")
     @PostMapping(value = "/deploy/query", produces = MediaType.APPLICATION_JSON_VALUE)

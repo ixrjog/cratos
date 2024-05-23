@@ -34,7 +34,7 @@ server:
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
-    accept-count: 100
+    accept-count: 150
     max-connections: 200
     max-http-form-post-size: 209715200
     threads:
