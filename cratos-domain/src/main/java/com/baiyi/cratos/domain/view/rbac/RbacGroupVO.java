@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class RbacGroupVO {
 
-    public interface IRbacGroup {
+    public interface HasRbacGroup {
         Integer getRbacGroupId();
 
         void setRbacGroup(Group rbacGroup);

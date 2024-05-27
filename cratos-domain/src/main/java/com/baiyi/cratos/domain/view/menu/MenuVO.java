@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class MenuVO {
 
-    public interface IMenuChildren {
+    public interface HasMenuChildren {
 
         Integer getMenuId();
 
@@ -38,7 +38,7 @@ public class MenuVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Menu extends BaseVO implements IMenuChildren {
+    public static class Menu extends BaseVO implements HasMenuChildren {
 
         @Serial
         private static final long serialVersionUID = 1162467323072243868L;

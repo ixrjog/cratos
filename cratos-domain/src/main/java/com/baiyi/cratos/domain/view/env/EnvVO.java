@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public class EnvVO {
 
-    public interface IEnv {
+    public interface HasEnv {
 
         String getEnvName();
 

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TAG)
-public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implements IBusinessWrapper<TagVO.ITag,TagVO.Tag> {
+public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implements IBusinessWrapper<TagVO.HasTag,TagVO.Tag> {
 
     private final TagService tagService;
 
@@ -28,7 +28,7 @@ public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implement
     }
 
     @Override
-    public void businessWrap(TagVO.ITag iTag) {
+    public void businessWrap(TagVO.HasTag iTag) {
         Tag tag = tagService.getById(iTag.getTagId());
         TagVO.Tag t = convert(tag);
         wrapFromProxy(t);

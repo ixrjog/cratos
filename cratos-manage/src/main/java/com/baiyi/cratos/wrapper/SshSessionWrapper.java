@@ -1,5 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class SshSessionWrapper extends BaseDataTableConverter<SshSessionVO.Session, SshSession> implements IBaseWrapper<SshSessionVO.Session> {
 
     @Override
-    //@BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.SSH_INSTANCE})
     public void wrap(SshSessionVO.Session session) {
     }
 

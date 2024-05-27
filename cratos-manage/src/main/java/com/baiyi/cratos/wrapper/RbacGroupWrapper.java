@@ -28,7 +28,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_RESOURCE;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RBAC_GROUP)
-public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements IBusinessWrapper<RbacGroupVO.IRbacGroup, RbacGroupVO.Group> {
+public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements IBusinessWrapper<RbacGroupVO.HasRbacGroup, RbacGroupVO.Group> {
 
     private final RbacResourceService rbacResourceService;
 
@@ -49,7 +49,7 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
     }
 
     @Override
-    public void businessWrap(RbacGroupVO.IRbacGroup group) {
+    public void businessWrap(RbacGroupVO.HasRbacGroup group) {
         IdentityUtil.validIdentityRun(group.getRbacGroupId())
                 .withTrue(() -> {
                     RbacGroup rbacGroup = rbacGroupService.getById(group.getRbacGroupId());

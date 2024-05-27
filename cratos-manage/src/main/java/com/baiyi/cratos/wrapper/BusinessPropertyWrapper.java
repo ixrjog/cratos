@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.BUSINESS_PROPERTY)
-public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessPropertyVO.BusinessProperty, BusinessProperty> implements IBusinessWrapper<BusinessPropertyVO.IBusinessProperties, BusinessPropertyVO.BusinessProperty> {
+public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessPropertyVO.BusinessProperty, BusinessProperty> implements IBusinessWrapper<BusinessPropertyVO.HasBusinessProperties, BusinessPropertyVO.BusinessProperty> {
 
     private final BusinessPropertyService businessPropertyService;
 
@@ -34,7 +34,7 @@ public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessProp
     }
 
     @Override
-    public void businessWrap(BusinessPropertyVO.IBusinessProperties businessProperties) {
+    public void businessWrap(BusinessPropertyVO.HasBusinessProperties businessProperties) {
         businessProperties.setBusinessProperties(businessPropertyService.selectByBusiness(businessProperties)
                 .stream()
                 .map(bizTag -> {

@@ -28,7 +28,7 @@ public class BusinessTagVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class BusinessTag extends BaseVO implements BaseBusiness.IBusiness, TagVO.ITag, Serializable {
+    public static class BusinessTag extends BaseVO implements BaseBusiness.IBusiness, TagVO.HasTag, Serializable {
 
         @Serial
         private static final long serialVersionUID = 1803833169421392342L;

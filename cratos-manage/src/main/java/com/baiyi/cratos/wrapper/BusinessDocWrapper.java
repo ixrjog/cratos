@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 //@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.BUSINESS_DOC)
-public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.BusinessDoc, BusinessDocument> implements IBusinessWrapper<BusinessDocVO.IBusinessDocs, BusinessDocVO.BusinessDoc> {
+public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.BusinessDoc, BusinessDocument> implements IBusinessWrapper<BusinessDocVO.HasBusinessDocs, BusinessDocVO.BusinessDoc> {
 
     private final BusinessDocumentService businessDocService;
 
@@ -34,7 +34,7 @@ public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.Bus
     }
 
     @Override
-    public void businessWrap(BusinessDocVO.IBusinessDocs businessDocs) {
+    public void businessWrap(BusinessDocVO.HasBusinessDocs businessDocs) {
         businessDocs.setBusinessDocs(businessDocService.selectByBusiness(businessDocs)
                 .stream()
                 .map(bizDoc -> {

@@ -46,7 +46,7 @@ public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> imple
      * 递归
      * @param menuChildren
      */
-    public void recursionWrapMenuChildren(MenuVO.IMenuChildren menuChildren) {
+    public void recursionWrapMenuChildren(MenuVO.HasMenuChildren menuChildren) {
         List<Menu> menus = menuService.querySubMenu(menuChildren.getMenuId());
         if (CollectionUtils.isEmpty(menus)) {
             return;

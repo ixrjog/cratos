@@ -30,7 +30,7 @@ public class EdsConfigVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_CONFIG)
-    public static class EdsConfig extends BaseVO implements CredentialVO.ICredential, Serializable {
+    public static class EdsConfig extends BaseVO implements CredentialVO.HasCredential, Serializable {
 
         @Serial
         private static final long serialVersionUID = 5528314871263301871L;

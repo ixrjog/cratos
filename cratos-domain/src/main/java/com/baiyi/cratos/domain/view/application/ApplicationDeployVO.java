@@ -24,7 +24,6 @@ public class ApplicationDeployVO {
         @Serial
         private static final long serialVersionUID = 9085431251878703977L;
 
-
     }
 
 }

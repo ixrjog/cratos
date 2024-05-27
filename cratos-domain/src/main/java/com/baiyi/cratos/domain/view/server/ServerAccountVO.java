@@ -26,7 +26,7 @@ public class ServerAccountVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
-    public static class ServerAccount extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, CredentialVO.ICredential, Serializable {
+    public static class ServerAccount extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, CredentialVO.HasCredential, Serializable {
 
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;

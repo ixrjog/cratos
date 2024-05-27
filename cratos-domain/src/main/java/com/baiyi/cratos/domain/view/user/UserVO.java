@@ -34,8 +34,7 @@ public class UserVO {
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class User extends BaseVO implements BaseBusiness.IBusinessAnnotate,
             // Business
-            BusinessTagVO.IBusinessTags,
-            BusinessDocVO.IBusinessDocs,
+            BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs,
             RbacRoleVO.IRbacRoles,
             IResourceCount,
             Serializable {

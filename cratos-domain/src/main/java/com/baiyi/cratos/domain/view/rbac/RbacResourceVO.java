@@ -17,7 +17,7 @@ public class RbacResourceVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Resource extends BaseVO implements RbacGroupVO.IRbacGroup {
+    public static class Resource extends BaseVO implements RbacGroupVO.HasRbacGroup {
 
         @Serial
         private static final long serialVersionUID = 1537978025458286103L;

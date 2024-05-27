@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.ENV)
-public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements IBusinessWrapper<EnvVO.IEnv, EnvVO.Env> {
+public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements IBusinessWrapper<EnvVO.HasEnv, EnvVO.Env> {
 
     private final EnvService envService;
 
@@ -30,7 +30,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
     }
 
     @Override
-    public void businessWrap(EnvVO.IEnv iEnv) {
+    public void businessWrap(EnvVO.HasEnv iEnv) {
         if (!StringUtils.hasText(iEnv.getEnvName())) {
             return;
         }

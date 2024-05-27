@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
-public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Credential, Credential> implements IBusinessWrapper<CredentialVO.ICredential, CredentialVO.Credential> {
+public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Credential, Credential> implements IBusinessWrapper<CredentialVO.HasCredential, CredentialVO.Credential> {
 
     private final CredentialService credentialService;
 
@@ -39,7 +39,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     }
 
     @Override
-    public void businessWrap(CredentialVO.ICredential cred) {
+    public void businessWrap(CredentialVO.HasCredential cred) {
         IdentityUtil.validIdentityRun(cred.getCredentialId())
                 .withTrue(()->{
                     Credential credential = credentialService.getById(cred.getCredentialId());

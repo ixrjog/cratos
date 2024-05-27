@@ -26,7 +26,7 @@ public class ChannelNetworkVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.CHANNEL_NETWORK)
     public static class ChannelNetwork extends BaseVO implements BaseBusiness.IBusinessAnnotate,
-            BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
+            BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -4265038663652607939L;

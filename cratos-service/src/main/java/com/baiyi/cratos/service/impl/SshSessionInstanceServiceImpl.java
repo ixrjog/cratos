@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/23 下午1:48
@@ -25,6 +27,14 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
         criteria.andEqualTo("sessionId", record.getSessionId())
                 .andEqualTo("instanceId", record.getInstanceId());
         return sshSessionInstanceMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<SshSessionInstance> queryBySessionId(String sessionId) {
+        Example example = new Example(SshSessionInstance.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sessionId", sessionId);
+        return sshSessionInstanceMapper.selectByExample(example);
     }
 
 }

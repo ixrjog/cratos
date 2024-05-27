@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public class TagVO {
 
-    public interface ITag extends BaseBusiness.IBusiness {
+    public interface HasTag extends BaseBusiness.IBusiness {
 
         Integer getTagId();
 

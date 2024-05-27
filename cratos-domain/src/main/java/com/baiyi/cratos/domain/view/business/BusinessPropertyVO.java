@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class BusinessPropertyVO {
 
-    public interface IBusinessProperties extends BaseBusiness.IBusiness {
+    public interface HasBusinessProperties extends BaseBusiness.IBusiness {
 
         void setBusinessProperties(List<BusinessProperty> businessProperties);
 

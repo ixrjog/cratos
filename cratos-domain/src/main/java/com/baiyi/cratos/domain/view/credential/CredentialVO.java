@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class CredentialVO {
 
-    public interface ICredential {
+    public interface HasCredential {
 
         Integer getCredentialId();
 

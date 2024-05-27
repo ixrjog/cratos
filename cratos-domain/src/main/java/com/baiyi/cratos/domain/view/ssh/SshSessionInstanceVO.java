@@ -16,43 +16,55 @@ import java.util.List;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/5/27 上午11:19
+ * &#064;Date  2024/5/27 上午11:48
  * &#064;Version 1.0
  */
-public class SshSessionVO {
+public class SshSessionInstanceVO {
+
+    public interface HasSessionInstances {
+
+        String getSessionId();
+
+        void setSessionInstances(List<Instance> instances);
+
+        List<Instance> getSessionInstances();
+
+    }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_SESSION)
-    public static class Session extends BaseVO implements SshSessionInstanceVO.HasSessionInstances, Serializable {
+    public static class Instance extends BaseVO implements Serializable {
 
         @Serial
-        private static final long serialVersionUID = -5432624545362080316L;
+        private static final long serialVersionUID = -6573176155485274089L;
 
         private Integer id;
 
         private String sessionId;
 
-        private String username;
+        private String instanceId;
 
-        private String remoteAddr;
+        private String duplicateInstanceId;
 
-        private String sessionStatus;
+        private String instanceType;
 
-        private String serverHostname;
+        private String loginUser;
 
-        private String serverAddr;
+        private String destIp;
 
-        private String sessionType;
+        private Long outputSize;
+
+        private Boolean instanceClosed;
+
+        private String auditPath;
 
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date startTime;
 
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
-
-        private List<SshSessionInstanceVO.Instance> sessionInstances;
 
     }
 

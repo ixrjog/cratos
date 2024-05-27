@@ -29,7 +29,7 @@ public class DomainVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.DOMAIN)
-    public static class Domain extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;

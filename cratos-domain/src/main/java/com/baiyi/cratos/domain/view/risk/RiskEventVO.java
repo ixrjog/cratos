@@ -37,7 +37,7 @@ public class RiskEventVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.RISK_EVENT)
-    public static class Event extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.IBusinessDocs, IRiskEventImpacts, Serializable {
+    public static class Event extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, IRiskEventImpacts, Serializable {
 
         @Serial
         private static final long serialVersionUID = -400794265071626360L;
