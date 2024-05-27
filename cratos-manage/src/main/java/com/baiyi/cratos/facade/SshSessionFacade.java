@@ -1,7 +1,9 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
 import com.baiyi.cratos.domain.param.ssh.SshSessionParam;
+import com.baiyi.cratos.domain.view.ssh.SshCommandVO;
 import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
 
 /**
@@ -12,5 +14,8 @@ import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
 public interface SshSessionFacade {
 
     DataTable<SshSessionVO.Session> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery);
+
+    DataTable<SshCommandVO.Command> querySshCommandPage(
+            SshCommandParam.SshCommandPageQuery pageQuery);
 
 }

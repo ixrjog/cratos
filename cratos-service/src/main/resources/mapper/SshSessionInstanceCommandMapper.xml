@@ -15,4 +15,16 @@
     <result column="input_formatted" jdbcType="LONGVARCHAR" property="inputFormatted" />
     <result column="output" jdbcType="LONGVARCHAR" property="output" />
   </resultMap>
+
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.ssh.SshCommandParam$SshCommandPageQuery"
+          resultMap="BaseResultMap">
+      select * from ssh_session_instance_command
+      <where>
+          ssh_session_instance_id = #{sshSessionInstanceId}
+          <if test="inputFormatted != null and inputFormatted != ''">
+              and input_formatted like "%" #{inputFormatted} "%"
+          </if>
+      </where>
+  </select>
+
 </mapper>

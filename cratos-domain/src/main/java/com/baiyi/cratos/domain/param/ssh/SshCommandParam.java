@@ -9,24 +9,21 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/5/27 上午11:13
+ * &#064;Date  2024/5/27 下午2:06
  * &#064;Version 1.0
  */
-public class SshSessionParam {
+public class SshCommandParam {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class SshSessionPageQuery extends PageParam {
+    public static class SshCommandPageQuery extends PageParam {
 
-        @Schema(description = "查询用户")
-        private String username;
+        private Integer sshSessionInstanceId;
 
-        private String sessionStatus;
-
-        private String sessionType;
+        private String inputFormatted;
 
     }
 

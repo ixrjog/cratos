@@ -19,7 +19,7 @@ import java.util.List;
  * &#064;Date  2024/5/27 上午11:48
  * &#064;Version 1.0
  */
-public class SshSessionInstanceVO {
+public class SshInstanceVO {
 
     public interface HasSessionInstances {
 
@@ -34,7 +34,7 @@ public class SshSessionInstanceVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.SSH_SESSION)
+    @BusinessType(type = BusinessTypeEnum.SSH_INSTANCE)
     public static class Instance extends BaseVO implements Serializable {
 
         @Serial

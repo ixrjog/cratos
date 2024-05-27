@@ -25,7 +25,7 @@ public class SshSessionVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_SESSION)
-    public static class Session extends BaseVO implements SshSessionInstanceVO.HasSessionInstances, Serializable {
+    public static class Session extends BaseVO implements SshInstanceVO.HasSessionInstances, Serializable {
 
         @Serial
         private static final long serialVersionUID = -5432624545362080316L;
@@ -52,7 +52,7 @@ public class SshSessionVO {
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
 
-        private List<SshSessionInstanceVO.Instance> sessionInstances;
+        private List<SshInstanceVO.Instance> sessionInstances;
 
     }
 

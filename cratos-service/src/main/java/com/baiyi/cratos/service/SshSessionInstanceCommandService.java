@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
+import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
 import com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper;
 import com.baiyi.cratos.service.base.BaseService;
 
@@ -10,4 +12,7 @@ import com.baiyi.cratos.service.base.BaseService;
  * &#064;Version 1.0
  */
 public interface SshSessionInstanceCommandService extends BaseService<SshSessionInstanceCommand, SshSessionInstanceCommandMapper> {
+
+    DataTable<SshSessionInstanceCommand> querySshCommandPage(SshCommandParam.SshCommandPageQuery pageQuery);
+
 }

@@ -47,7 +47,8 @@ public enum BusinessTypeEnum {
     RISK_EVENT_IMPACT,
 
     SSH_SESSION,
-    SSH_INSTANCE
+    SSH_INSTANCE,
+    SSH_COMMAND
 
 
 }
