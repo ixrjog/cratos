@@ -25,11 +25,11 @@ public class JSchSessionHolder {
         sessionMap.put(jSchSession.getInstanceId(), jSchSession);
     }
 
-    public static Map<String, JSchSession> getBySessionId(String sessionId) {
+    public static Map<String, JSchSession> getSession(String sessionId) {
         return jSchSessionMap.get(sessionId);
     }
 
-    public static JSchSession getBySessionId(String sessionId, String instanceId) {
+    public static JSchSession getSession(String sessionId, String instanceId) {
         Map<String, JSchSession> sessionMap = jSchSessionMap.get(sessionId);
         if (sessionMap == null) {
             return null;
@@ -50,18 +50,9 @@ public class JSchSessionHolder {
      * @param instanceId
      */
     public static void closeSession(String sessionId, String instanceId) {
-        JSchSession jSchSession = JSchSessionHolder.getBySessionId(sessionId, instanceId);
+        JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         if (jSchSession != null) {
-            if (jSchSession.getChannel() != null) {
-                jSchSession.getChannel().disconnect();
-            }
-            jSchSession.setCommander(null);
-            jSchSession.setChannel(null);
-            jSchSession.setInputToChannel(null);
-            jSchSession.setTermSessionId(null);
-            jSchSession.setSessionOutput(null);
-            jSchSession.setInstanceId(null);
-            jSchSession.setHostSystem(null);
+            jSchSession.preDestruction();
             jSchSession = null;
         }
         removeSession(sessionId, instanceId);

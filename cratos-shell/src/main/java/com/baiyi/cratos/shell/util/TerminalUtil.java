@@ -56,7 +56,7 @@ public class TerminalUtil {
     }
 
     public static void resize(String sessionId, String instanceId, Size size) {
-        JSchSession jSchSession = JSchSessionHolder.getBySessionId(sessionId, instanceId);
+        JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         assert jSchSession != null;
         RemoteInvokeHandler.setChannelPtySize((ChannelShell) jSchSession.getChannel(), size);
     }

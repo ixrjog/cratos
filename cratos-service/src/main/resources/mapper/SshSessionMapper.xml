@@ -27,10 +27,10 @@
               username = #{username}
           </if>
           <if test="sessionStatus != null and sessionStatus != ''">
-              and sessionStatus = #{sessionStatus}
+              and session_status = #{sessionStatus}
           </if>
           <if test="sessionType != null and sessionType != ''">
-              and sessionType = #{sessionType}
+              and session_type = #{sessionType}
           </if>
       </where>
   </select>

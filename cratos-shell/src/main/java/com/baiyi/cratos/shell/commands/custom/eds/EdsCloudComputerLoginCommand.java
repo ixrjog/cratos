@@ -1,6 +1,5 @@
 package com.baiyi.cratos.shell.commands.custom.eds;
 
-import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -69,8 +68,8 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
     public EdsCloudComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
-                                        SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
-                                        SshAuditProperties sshAuditProperties,
+                                        SimpleSshSessionFacade simpleSshSessionFacade,
+                                        CredentialService credentialService, SshAuditProperties sshAuditProperties,
                                         ServerCommandAuditor serverCommandAuditor) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
@@ -85,13 +84,6 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     @ShellAuthentication(resource = "/application/app-grouping")
     public void login(@ShellOption(help = "ID", defaultValue = "1") int id,
                       @ShellOption(help = "Account", defaultValue = "") String account) {
-        ServerSession serverSession = helper.getSshSession();
-        final String sessionId = SshSessionIdMapper.getSessionId(serverSession.getIoSession());
-        // 从上下文中取出
-        SshContext sshContext = SshShellCommandFactory.SSH_THREAD_CONTEXT.get();
-        Terminal terminal = sshContext.getTerminal();
-        ChannelOutputStream out = (ChannelOutputStream) sshContext.getSshShellRunnable()
-                .getOs();
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         EdsAsset edsAsset = computerMapper.get(id);
         if (edsAsset == null) {
@@ -104,6 +96,13 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             helper.print("Account does not exist.", PromptColor.RED);
             return;
         }
+        ServerSession serverSession = helper.getSshSession();
+        final String sessionId = SshSessionIdMapper.getSessionId(serverSession.getIoSession());
+        // 从上下文中取出
+        SshContext sshContext = SshShellCommandFactory.SSH_THREAD_CONTEXT.get();
+        Terminal terminal = sshContext.getTerminal();
+        ChannelOutputStream out = (ChannelOutputStream) sshContext.getSshShellRunnable()
+                .getOs();
         ServerAccount serverAccount = ComputerAssetContext.getAccountContext()
                 .get(account);
         Credential credential = credentialService.getById(serverAccount.getCredentialId());
@@ -133,7 +132,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                         TimeUtil.millisecondsSleep(150L);
                         break;
                     }
-                    doResize(size, terminal, sessionId, sshSessionInstanceId);
+                    tryResize(size, terminal, sessionId, sshSessionInstanceId);
                     int input = terminal.reader()
                             .read(5L);
                     send(sessionId, sshSessionInstanceId, input);
@@ -144,9 +143,8 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
         } catch (SshException e) {
-            String msg = StringFormatter.format("SSH connection error: {}", e.getMessage());
-            log.error(msg);
-            helper.print(msg, PromptColor.RED);
+            log.warn(e.getMessage());
+            helper.print(e.getMessage(), PromptColor.RED);
         } finally {
             serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
             JSchSessionHolder.closeSession(sessionId, sshSessionInstanceId);
@@ -158,7 +156,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 .join(computerAsset.getAssetId(), UUID.randomUUID());
     }
 
-    private void doResize(Size size, Terminal terminal, String sessionId, String instanceId) {
+    private void tryResize(Size size, Terminal terminal, String sessionId, String instanceId) {
         if (!terminal.getSize()
                 .equals(size)) {
             size = terminal.getSize();
@@ -172,14 +170,17 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
      * @param logout
      * @param instant
      */
+    @Deprecated
     private void printLogout(String logout, Instant instant) {
         helper.print(String.format(logout, Duration.between(instant, Instant.now())
                 .getSeconds()), PromptColor.RED);
     }
 
     private boolean isClosed(String sessionId, String instanceId) {
-        JSchSession jSchSession = JSchSessionHolder.getBySessionId(sessionId, instanceId);
-        assert jSchSession != null;
+        JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
+        if (jSchSession == null) {
+            return true;
+        }
         return jSchSession.getChannel()
                 .isClosed();
     }
@@ -188,7 +189,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
         if (input < 0) {
             return;
         }
-        JSchSession jSchSession = JSchSessionHolder.getBySessionId(sessionId, instanceId);
+        JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         if (jSchSession == null) {
             throw new Exception();
         }

@@ -30,15 +30,19 @@ public class JSchSession {
     private OutputStream inputToChannel;
     private Channel channel;
     private HostSystem hostSystem;
-    private static SessionOutput sessionOutput;
+    private SessionOutput sessionOutput;
 
-
-    public void setSessionOutput(SessionOutput sessionOutput) {
-        JSchSession.sessionOutput = sessionOutput;
-    }
-
-    public SessionOutput getSessionOutput() {
-        return JSchSession.sessionOutput;
+    public void preDestruction() {
+        if (this.channel != null) {
+            channel.disconnect();
+            channel = null;
+        }
+        this.commander = null;
+        this.inputToChannel = null;
+        this.termSessionId = null;
+        this.sessionOutput = null;
+        this.instanceId = null;
+        this.hostSystem = null;
     }
 
 }
