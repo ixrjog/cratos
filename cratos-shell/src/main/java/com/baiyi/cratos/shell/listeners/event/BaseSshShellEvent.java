@@ -3,9 +3,8 @@ package com.baiyi.cratos.shell.listeners.event;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
-import com.baiyi.cratos.ssh.core.facade.SshSessionFacade;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
@@ -18,8 +17,11 @@ import java.util.Date;
  */
 public abstract class BaseSshShellEvent implements ISshShellEvent, InitializingBean {
 
-    @Resource
-    protected SshSessionFacade sshSessionFacade;
+    public BaseSshShellEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
+        this.simpleSshSessionFacade = simpleSshSessionFacade;
+    }
+
+    protected final SimpleSshSessionFacade simpleSshSessionFacade;
 
     protected void endSession(SshShellEvent event) {
         String sessionId = SshSessionIdMapper.getSessionId(event.getSession()
@@ -28,13 +30,13 @@ public abstract class BaseSshShellEvent implements ISshShellEvent, InitializingB
         if (!StringUtils.hasText(sessionId)) {
             return;
         }
-        SshSession sshSession = sshSessionFacade.getBySessionId(sessionId);
+        SshSession sshSession = simpleSshSessionFacade.getBySessionId(sessionId);
         if (sshSession == null) {
             return;
         }
         sshSession.setSessionStatus(getEventType());
         sshSession.setEndTime(new Date());
-        sshSessionFacade.updateSshSession(sshSession);
+        simpleSshSessionFacade.updateSshSession(sshSession);
     }
 
     protected void destroySessionData(SshShellEvent event) {

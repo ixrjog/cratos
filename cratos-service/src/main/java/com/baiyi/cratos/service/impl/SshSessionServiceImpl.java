@@ -1,11 +1,19 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.domain.param.ssh.SshSessionParam;
+import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
 import com.baiyi.cratos.mapper.SshSessionMapper;
 import com.baiyi.cratos.service.SshSessionService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -17,6 +25,13 @@ import tk.mybatis.mapper.entity.Example;
 public class SshSessionServiceImpl implements SshSessionService {
 
     private final SshSessionMapper sshSessionMapper;
+
+    @Override
+    public  DataTable<SshSession> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery){
+        Page<SshSession> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<SshSession> data = sshSessionMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
+    }
 
     @Override
     public SshSession getByUniqueKey(SshSession record) {

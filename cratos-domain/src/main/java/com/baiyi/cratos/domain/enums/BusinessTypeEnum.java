@@ -44,7 +44,10 @@ public enum BusinessTypeEnum {
     MENU_TITLE,
 
     RISK_EVENT,
-    RISK_EVENT_IMPACT
+    RISK_EVENT_IMPACT,
+
+    SSH_SESSION,
+    SSH_INSTANCE
 
 
 }

@@ -3,6 +3,7 @@ package com.baiyi.cratos.shell.listeners.event.impl;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SshShellUnexpectedlyEvent extends BaseSshShellEvent {
+
+    public SshShellUnexpectedlyEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
+        super(simpleSshSessionFacade);
+    }
 
     @Override
     public String getEventType() {

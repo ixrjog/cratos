@@ -7,6 +7,7 @@ import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
 import org.apache.sshd.common.session.SessionContext;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SshShellStartedEvent extends BaseSshShellEvent {
+
+    public SshShellStartedEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
+        super(simpleSshSessionFacade);
+    }
 
     @Override
     public String getEventType() {
@@ -38,7 +43,7 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
         SshSession sshSession = SshSessionBuilder.build(sessionId, event.getSession()
                 .getServerSession()
                 .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
-        sshSessionFacade.addSshSession(sshSession);
+        simpleSshSessionFacade.addSshSession(sshSession);
     }
 
 }

@@ -18,4 +18,21 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.ssh.SshSessionParam$SshSessionPageQuery"
+          resultMap="BaseResultMap">
+      select * from ssh_session
+      <where>
+          <if test="username != null and username != ''">
+              username = #{username}
+          </if>
+          <if test="sessionStatus != null and sessionStatus != ''">
+              and sessionStatus = #{sessionStatus}
+          </if>
+          <if test="sessionType != null and sessionType != ''">
+              and sessionType = #{sessionType}
+          </if>
+      </where>
+  </select>
+
 </mapper>

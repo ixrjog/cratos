@@ -19,7 +19,7 @@ import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
-import com.baiyi.cratos.ssh.core.facade.SshSessionFacade;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.core.model.JSchSession;
@@ -57,7 +57,7 @@ import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCom
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class EdsCloudComputerLoginCommand extends AbstractCommand {
 
-    private final SshSessionFacade sshSessionFacade;
+    private final SimpleSshSessionFacade simpleSshSessionFacade;
 
     private final CredentialService credentialService;
 
@@ -69,12 +69,12 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
     public EdsCloudComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
-                                        SshSessionFacade sshSessionFacade, CredentialService credentialService,
+                                        SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
                                         SshAuditProperties sshAuditProperties,
                                         ServerCommandAuditor serverCommandAuditor) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
-        this.sshSessionFacade = sshSessionFacade;
+        this.simpleSshSessionFacade = simpleSshSessionFacade;
         this.credentialService = credentialService;
         this.sshAuditProperties = sshAuditProperties;
         this.serverCommandAuditor = serverCommandAuditor;
@@ -120,7 +120,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, hostSystem,
                     SshSessionInstanceTypeEnum.COMPUTER, auditPath);
 
-            sshSessionFacade.addSshSessionInstance(sshSessionInstance);
+            simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
             // open ssh
             RemoteInvokeHandler.openSSHServer(sessionId, hostSystem, out);
             TerminalUtil.enterRawMode(terminal);
@@ -141,7 +141,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             } catch (Exception e) {
                 // printLogout("Server connection disconnected, session duration %s/s", inst1);
             } finally {
-                sshSessionFacade.closeSshSessionInstance(sshSessionInstance);
+                simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
         } catch (SshException e) {
             String msg = StringFormatter.format("SSH connection error: {}", e.getMessage());

@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.SshSessionInstance;
  * &#064;Date  2024/5/23 下午1:54
  * &#064;Version 1.0
  */
-public interface SshSessionFacade {
+public interface SimpleSshSessionFacade {
 
     // session
     void addSshSession(SshSession sshSession);

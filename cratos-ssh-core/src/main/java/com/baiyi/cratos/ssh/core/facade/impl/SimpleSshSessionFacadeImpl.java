@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.service.SshSessionInstanceService;
 import com.baiyi.cratos.service.SshSessionService;
-import com.baiyi.cratos.ssh.core.facade.SshSessionFacade;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Component
 @RequiredArgsConstructor
-public class SshSessionFacadeImpl implements SshSessionFacade {
+public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
 
     private final SshSessionService sshSessionService;
 
