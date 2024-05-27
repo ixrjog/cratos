@@ -33,7 +33,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
+import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi

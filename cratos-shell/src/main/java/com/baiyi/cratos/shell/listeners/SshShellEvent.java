@@ -16,17 +16,22 @@
 
 package com.baiyi.cratos.shell.listeners;
 
+import com.baiyi.cratos.domain.message.IEventMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.sshd.server.channel.ChannelSession;
+
+import java.io.Serial;
 
 /**
  * Ssh shell event
  */
 @Data
 @AllArgsConstructor
-public class SshShellEvent {
+public class SshShellEvent implements IEventMessage {
 
+    @Serial
+    private static final long serialVersionUID = -8045055731655249141L;
     private SshShellEventType type;
 
     private ChannelSession session;
@@ -34,4 +39,5 @@ public class SshShellEvent {
     public long getSessionId() {
         return session.getServerSession().getIoSession().getId();
     }
+
 }

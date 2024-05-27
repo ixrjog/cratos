@@ -42,7 +42,7 @@ public class BusinessPropertyServiceImpl implements BusinessPropertyService {
         criteria.andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("businessId", record.getBusinessId())
                 .andEqualTo("propertyName", record.getPropertyName());
-        return businessPropertyMapper.selectOneByExample(example);
+        return getMapper().selectOneByExample(example);
     }
 
 }

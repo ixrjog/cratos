@@ -1,7 +1,15 @@
 package com.baiyi.cratos.shell.listeners.event;
 
-import com.baiyi.cratos.shell.context.HostAssetContext;
+import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.shell.context.ComputerAssetContext;
+import com.baiyi.cratos.shell.listeners.SshShellEvent;
+import com.baiyi.cratos.ssh.core.facade.SshSessionFacade;
+import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
 
 /**
  * &#064;Author  baiyi
@@ -10,31 +18,30 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public abstract class BaseSshShellEvent implements ISshShellEvent, InitializingBean {
 
-//    public final static HostInfo HOST_INFO = HostInfo.build();
-//
-//    @Resource
-//    private SimpleTerminalSessionFacade simpleTerminalSessionFacade;
-//
-//    protected void openTerminalSession(SshShellEvent event) {
-//        String sessionId = SessionIdMapper.getSessionId(event.getSession().getServerSession().getIoSession());
-//        SessionContext sc = event.getSession().getSessionContext();
-//        TerminalSession terminalSession = TerminalSessionBuilder.build(
-//                sessionId,
-//                event.getSession().getServerSession().getUsername(),
-//                HOST_INFO,
-//                sc.getRemoteAddress(),
-//                SessionTypeEnum.SSH_SERVER);
-//        simpleTerminalSessionFacade.recordTerminalSession(terminalSession);
-//    }
-//
-//    protected void closeTerminalSession(SshShellEvent event) {
-//        String sessionId = SessionIdMapper.getSessionId(event.getSession().getServerSession().getIoSession());
-//        TerminalSession terminalSession = simpleTerminalSessionFacade.getTerminalSessionBySessionId(sessionId);
-//        simpleTerminalSessionFacade.closeTerminalSessionById(terminalSession.getId());
-//    }
+    @Resource
+    protected SshSessionFacade sshSessionFacade;
 
-    protected void removeContext(){
-        HostAssetContext.remove();
+    protected void endSession(SshShellEvent event) {
+        String sessionId = SshSessionIdMapper.getSessionId(event.getSession()
+                .getServerSession()
+                .getIoSession());
+        if (!StringUtils.hasText(sessionId)) {
+            return;
+        }
+        SshSession sshSession = sshSessionFacade.getBySessionId(sessionId);
+        if (sshSession == null) {
+            return;
+        }
+        sshSession.setSessionStatus(getEventType());
+        sshSession.setEndTime(new Date());
+        sshSessionFacade.updateSshSession(sshSession);
+    }
+
+    protected void destroySessionData(SshShellEvent event) {
+        ComputerAssetContext.remove();
+        SshSessionIdMapper.remove(event.getSession()
+                .getServerSession()
+                .getIoSession());
     }
 
     @Override

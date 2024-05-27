@@ -137,6 +137,9 @@ public class SshShellProperties {
         private CommandProperties actuator = CommandProperties.withAuthorizedRoles(new ArrayList<>(Collections.singletonList(ACTUATOR_ROLE)));
 
         @NestedConfigurationProperty
+        private CommandProperties computer = new CommandProperties();
+
+        @NestedConfigurationProperty
         private CommandProperties asset = new CommandProperties();
 
         @NestedConfigurationProperty

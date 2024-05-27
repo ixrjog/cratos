@@ -27,6 +27,7 @@
         <module>cratos-eds-dingtalk</module>
         <module>cratos-eds-huaweicloud</module>
         <module>cratos-eds-googlecloud</module>
+        <module>cratos-ssh-core</module>
     </modules>
 
     <properties>

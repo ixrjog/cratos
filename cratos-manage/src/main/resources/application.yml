@@ -78,6 +78,13 @@ mybatis:
     map-underscore-to-camel-case: on
 
 ssh:
+  audit:
+    # on 开启审计日志 off 关闭审计日志
+    open: on
+    # 审计日志目录
+    path: ${HOME}/cratos-data/ssh/audit
+  # 默认值 15分钟断开连接
+  timeout: 900
   shell:
     version: 1.0.0
     # simple security

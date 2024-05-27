@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
+import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * @Author baiyi

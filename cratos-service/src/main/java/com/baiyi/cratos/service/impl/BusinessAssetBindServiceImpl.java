@@ -39,7 +39,7 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("assetId", record.getAssetId());
-        return businessAssetBindMapper.selectOneByExample(example);
+        return getMapper().selectOneByExample(example);
     }
 
     @Override

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-import static com.baiyi.cratos.shell.commands.custom.HostAssetCommand.GROUP;
+import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * @Author baiyi

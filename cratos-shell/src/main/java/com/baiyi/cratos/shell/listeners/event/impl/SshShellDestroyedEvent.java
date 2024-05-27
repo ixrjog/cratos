@@ -20,7 +20,8 @@ public class SshShellDestroyedEvent extends BaseSshShellEvent {
 
     @Override
     public void handle(SshShellEvent event) {
-
+        endSession(event);
+        this.destroySessionData(event);
     }
 
 }

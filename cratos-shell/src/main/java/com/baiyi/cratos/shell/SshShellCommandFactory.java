@@ -17,12 +17,15 @@
 package com.baiyi.cratos.shell;
 
 import com.baiyi.cratos.shell.listeners.SshShellListenerService;
+import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.sshd.common.io.IoSession;
 import org.apache.sshd.server.ExitCallback;
 import org.apache.sshd.server.channel.ChannelSession;
 import org.apache.sshd.server.command.Command;
+import org.apache.sshd.server.session.ServerSession;
 import org.jline.reader.Completer;
 import org.jline.reader.LineReader;
 import org.springframework.boot.Banner;
@@ -47,8 +50,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SshShellCommandFactory
-        implements Command {
+public class SshShellCommandFactory implements Command {
 
     public static final ThreadLocal<SshContext> SSH_THREAD_CONTEXT = ThreadLocal.withInitial(() -> null);
 
@@ -82,14 +84,22 @@ public class SshShellCommandFactory
     @Override
     public void start(ChannelSession channelSession, org.apache.sshd.server.Environment sshEnv) {
         SshIO sshIO = SSH_IO_CONTEXT.get();
-        Thread sshThread = new Thread(new ThreadGroup("ssh-shell"), new SshShellRunnable(
-                properties, shellListenerService, shellBanner.orElse(null),
-                shell, lineReader, promptProvider, completer, environment,
-                channelSession, sshEnv, this, sshIO.getIs(), sshIO.getOs(), sshIO.getEc()),
-                "ssh-session-" + System.nanoTime());
+        Thread sshThread = new Thread(new ThreadGroup("ssh-shell"),
+                new SshShellRunnable(properties, shellListenerService, shellBanner.orElse(null), shell, lineReader,
+                        promptProvider, completer, environment, channelSession, sshEnv, this, sshIO.getIs(),
+                        sshIO.getOs(), sshIO.getEc()), "ssh-session-" + System.nanoTime());
         sshThread.start();
         threads.put(channelSession, sshThread);
         log.debug("{}: started [{} session(s) currently active]", channelSession, threads.size());
+
+        // 注入会话ID
+        setSshSession(channelSession);
+    }
+
+    private void setSshSession(ChannelSession channelSession) {
+        ServerSession serverSession = channelSession.getSession();
+        IoSession ioSession = serverSession.getIoSession();
+        SshSessionIdMapper.put(ioSession);
     }
 
     @Override
@@ -108,17 +118,20 @@ public class SshShellCommandFactory
 
     @Override
     public void setExitCallback(ExitCallback ec) {
-        SSH_IO_CONTEXT.get().setEc(ec);
+        SSH_IO_CONTEXT.get()
+                .setEc(ec);
     }
 
     @Override
     public void setInputStream(InputStream is) {
-        SSH_IO_CONTEXT.get().setIs(is);
+        SSH_IO_CONTEXT.get()
+                .setIs(is);
     }
 
     @Override
     public void setOutputStream(OutputStream os) {
-        SSH_IO_CONTEXT.get().setOs(os);
+        SSH_IO_CONTEXT.get()
+                .setOs(os);
     }
 
     /**
@@ -127,7 +140,10 @@ public class SshShellCommandFactory
      * @return current sessions
      */
     public Map<Long, ChannelSession> listSessions() {
-        return threads.keySet().stream()
-                .collect(Collectors.toMap(s -> s.getServerSession().getIoSession().getId(), Function.identity()));
+        return threads.keySet()
+                .stream()
+                .collect(Collectors.toMap(s -> s.getServerSession()
+                        .getIoSession()
+                        .getId(), Function.identity()));
     }
 }

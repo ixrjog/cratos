@@ -8,5 +8,6 @@ package com.baiyi.cratos.common.constants;
 public interface TopicConstants {
 
     String TEST_TOPIC = "TEST_TOPIC";
+    String SSH_SHELL_SESSION_TOPIC = "SSH_SHELL_SESSION_TOPIC";
 
 }

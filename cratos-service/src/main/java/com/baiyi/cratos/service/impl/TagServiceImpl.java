@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService {
         Example example = new Example(Tag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("tagKey", record.getTagKey());
-        return tagMapper.selectOneByExample(example);
+        return getMapper().selectOneByExample(example);
     }
 
 }

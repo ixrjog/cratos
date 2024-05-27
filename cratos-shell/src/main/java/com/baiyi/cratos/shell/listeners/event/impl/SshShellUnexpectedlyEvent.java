@@ -1,6 +1,5 @@
 package com.baiyi.cratos.shell.listeners.event.impl;
 
-import com.baiyi.cratos.shell.context.HostAssetContext;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
@@ -21,7 +20,8 @@ public class SshShellUnexpectedlyEvent extends BaseSshShellEvent {
 
     @Override
     public void handle(SshShellEvent event) {
-        HostAssetContext.remove();
+        endSession(event);
+        this.destroySessionData(event);
     }
 
 }

@@ -1,8 +1,14 @@
 package com.baiyi.cratos.shell.listeners.event.impl;
 
+import com.baiyi.cratos.common.model.CratosHostHolder;
+import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
+import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
+import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
+import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
+import org.apache.sshd.common.session.SessionContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,7 +26,19 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
 
     @Override
     public void handle(SshShellEvent event) {
+        startSession(event);
+    }
 
+    private void startSession(SshShellEvent event) {
+        String sessionId = SshSessionIdMapper.getSessionId(event.getSession()
+                .getServerSession()
+                .getIoSession());
+        SessionContext sc = event.getSession()
+                .getSessionContext();
+        SshSession sshSession = SshSessionBuilder.build(sessionId, event.getSession()
+                .getServerSession()
+                .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
+        sshSessionFacade.addSshSession(sshSession);
     }
 
 }

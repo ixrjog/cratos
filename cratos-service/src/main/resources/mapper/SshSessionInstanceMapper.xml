@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.SshSessionInstanceMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SshSessionInstance">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="session_id" jdbcType="CHAR" property="sessionId" />
+    <result column="instance_id" jdbcType="VARCHAR" property="instanceId" />
+    <result column="duplicate_instance_id" jdbcType="VARCHAR" property="duplicateInstanceId" />
+    <result column="instance_type" jdbcType="VARCHAR" property="instanceType" />
+    <result column="login_user" jdbcType="VARCHAR" property="loginUser" />
+    <result column="dest_ip" jdbcType="VARCHAR" property="destIp" />
+    <result column="output_size" jdbcType="BIGINT" property="outputSize" />
+    <result column="instance_closed" jdbcType="BIT" property="instanceClosed" />
+    <result column="audit_path" jdbcType="VARCHAR" property="auditPath" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>

@@ -66,7 +66,7 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
         criteria.andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("businessId", record.getBusinessId())
                 .andEqualTo("credentialId", record.getCredentialId());
-        return businessCredentialMapper.selectOneByExample(example);
+        return getMapper().selectOneByExample(example);
     }
 
     @Override
