@@ -81,7 +81,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
 
     @ClearScreen
     @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl"}, value = "Login to the computer.")
-    @ShellAuthentication(resource = "/application/app-grouping")
+    @ShellAuthentication(resource = "/computer/login")
     public void login(@ShellOption(help = "ID", defaultValue = "1") int id,
                       @ShellOption(help = "Account", defaultValue = "") String account) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
