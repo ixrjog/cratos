@@ -10,6 +10,6 @@ public enum SshSessionInstanceTypeEnum {
     COMPUTER,
     SERVER,
     CONTAINER_LOG,
-    CONTAINER_TERMINAL
+    CONTAINER_SHELL
 
 }

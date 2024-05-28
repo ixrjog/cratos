@@ -19,9 +19,6 @@ public class ComputerAssetContext {
 
     private static final ThreadLocal<Map<String, ServerAccount>> ACCOUNT_CONTEXT = new ThreadLocal<>();
 
-
-    // List<ServerAccount>
-
     public static void setContext(Map<Integer, EdsAsset> computerContext, List<ServerAccount> serverAccounts) {
         COMPUTER_CONTEXT.set(computerContext);
         if (!CollectionUtils.isEmpty(serverAccounts)) {

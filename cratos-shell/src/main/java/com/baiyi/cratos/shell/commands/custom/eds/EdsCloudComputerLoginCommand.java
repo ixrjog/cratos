@@ -143,7 +143,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
         } catch (SshException e) {
-            log.warn(e.getMessage());
+            log.debug(e.getMessage());
             helper.print(e.getMessage(), PromptColor.RED);
         } finally {
             serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);

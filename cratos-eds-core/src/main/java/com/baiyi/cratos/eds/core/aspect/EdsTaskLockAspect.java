@@ -78,7 +78,7 @@ public class EdsTaskLockAspect {
                 Object result = joinPoint.proceed();
                 //unlock(key);
                 stopWatch.stop();
-                log.info("Execute {} task end, runtime={}/s", providerBeanName, stopWatch.getTotalTimeSeconds());
+                log.info("Execute {} task ended, runtime={}/s", providerBeanName, stopWatch.getTotalTimeSeconds());
                 return result;
             }
         } catch (Exception e) {

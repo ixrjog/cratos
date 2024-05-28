@@ -2,7 +2,7 @@ package com.baiyi.cratos.ssh.core.watch.base;
 
 
 import com.baiyi.cratos.common.util.TimeUtil;
-import com.baiyi.cratos.ssh.core.AuditRecordHelper;
+import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
 import lombok.Data;
@@ -27,6 +27,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
 
     private ByteArrayOutputStream outputStream;
     private SessionOutput sessionOutput;
+    private String auditPath;
 
     private boolean isClosed = false;
 
@@ -57,7 +58,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
             }
         } catch (IOException ignored) {
         } finally {
-            log.debug("Ssh channel output task end: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
+            log.debug("Ssh channel output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());
             SessionOutputUtil.removeOutput(sessionOutput.getSessionId(), sessionOutput.getInstanceId());
         }
@@ -72,7 +73,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
      */
     @Override
     public void record(char[] buf, int off, int len) {
-        AuditRecordHelper.record(sessionOutput.getSessionId(), sessionOutput.getInstanceId(), buf, off, len);
+        SshRecorder.record(auditPath, buf, off, len);
     }
 
     protected byte[] toBytes(char[] chars) {

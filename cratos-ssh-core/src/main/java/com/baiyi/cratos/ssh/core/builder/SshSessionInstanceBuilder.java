@@ -3,8 +3,12 @@ package com.baiyi.cratos.ssh.core.builder;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
+import com.baiyi.cratos.ssh.core.model.PodAssetModel;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodStatus;
 
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -21,6 +25,25 @@ public class SshSessionInstanceBuilder {
                 .instanceId(hostSystem.getInstanceId())
                 .loginUser(hostSystem.getLoginUsername())
                 .destIp(hostSystem.getHost())
+                .outputSize(0L)
+                .startTime(new Date())
+                .instanceType(sshSessionInstanceTypeEnum.name())
+                .instanceClosed(false)
+                .auditPath(auditPath)
+                .build();
+    }
+
+    public static SshSessionInstance build(String sessionId, PodAssetModel podAssetModel, SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
+        final String podIP = Optional.of(podAssetModel)
+                .map(PodAssetModel::getPod)
+                .map(Pod::getStatus)
+                .map(PodStatus::getPodIP)
+                .orElse("-");
+        return SshSessionInstance.builder()
+                .sessionId(sessionId)
+                .instanceId(podAssetModel.getInstanceId())
+                .loginUser("-")
+                .destIp(podIP)
                 .outputSize(0L)
                 .startTime(new Date())
                 .instanceType(sshSessionInstanceTypeEnum.name())

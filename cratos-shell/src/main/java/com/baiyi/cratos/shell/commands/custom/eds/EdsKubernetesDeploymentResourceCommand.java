@@ -46,7 +46,7 @@ import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCom
 @SshShellComponent
 @ShellCommandGroup("Eds Kubernetes Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
-public class EdsKubernetesDeploymentCommand extends AbstractCommand {
+public class EdsKubernetesDeploymentResourceCommand extends AbstractCommand {
 
     public static final String GROUP = "kubernetes-deployment";
 
@@ -62,9 +62,9 @@ public class EdsKubernetesDeploymentCommand extends AbstractCommand {
 
     public final static String[] TABLE_FIELD_NAME = {"Eds Instance", "Namespace", "Deployment", "Container", "Res Limits", "Res Requests"};
 
-    public EdsKubernetesDeploymentCommand(SshShellHelper helper, SshShellProperties properties,
-                                          EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                                          EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+    public EdsKubernetesDeploymentResourceCommand(SshShellHelper helper, SshShellProperties properties,
+                                                  EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
+                                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
         super(helper, properties, properties.getCommands()
                 .getAsset());
         this.edsInstanceService = edsInstanceService;
