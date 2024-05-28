@@ -33,6 +33,7 @@
               and session_type = #{sessionType}
           </if>
       </where>
+      order by id desc
   </select>
 
 </mapper>
