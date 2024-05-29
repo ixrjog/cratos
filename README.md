@@ -1,6 +1,10 @@
 # CRATOS
 > 安全的运维通用开发框架
 
++ OpenJDK 21
++ SpringBoot 3.3.0 (GA)
++ MySql 8+
+
 ---
 # annotation
 
