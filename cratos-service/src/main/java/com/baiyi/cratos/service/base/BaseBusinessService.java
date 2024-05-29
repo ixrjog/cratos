@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface BaseBusinessService<T> extends BaseService<T, Mapper<T>>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
-    List<T> selectByBusiness(BaseBusiness.IBusiness business);
+    List<T> selectByBusiness(BaseBusiness.HasBusiness business);
 
     default void delete(T record) {
         Class<?> targetClass = AopUtils.getTargetClass(record);
@@ -37,7 +37,7 @@ public interface BaseBusinessService<T> extends BaseService<T, Mapper<T>>, BaseB
         }
     }
 
-    default void deleteByBusiness(BaseBusiness.IBusiness business) {
+    default void deleteByBusiness(BaseBusiness.HasBusiness business) {
         selectByBusiness(business).forEach(this::delete);
     }
 

@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "business_tag")
-public class BusinessTag implements BaseBusiness.IBusiness {
+public class BusinessTag implements BaseBusiness.HasBusiness {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

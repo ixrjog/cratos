@@ -37,12 +37,12 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
     @Override
     public void wrap(RbacGroupVO.Group group) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForRbacResource(group))
+                .put(makeResourceCountForRbacResource(group))
                 .build();
         group.setResourceCount(resourceCount);
     }
 
-    private Map<String, Integer> buildResourceCountForRbacResource(RbacGroupVO.Group group) {
+    private Map<String, Integer> makeResourceCountForRbacResource(RbacGroupVO.Group group) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(RBAC_RESOURCE.name(), rbacResourceService.selectCountByGroupId(group.getId()));
         return resourceCount;

@@ -38,7 +38,7 @@ public class BusinessCredentialFacadeImpl implements BusinessCredentialFacade {
     }
 
     @Override
-    public void revokeBusinessCredential(int credentialId, BaseBusiness.IBusiness business) {
+    public void revokeBusinessCredential(int credentialId, BaseBusiness.HasBusiness business) {
         BusinessCredential query = BusinessCredential.builder()
                 .credentialId(credentialId)
                 .businessType(business.getBusinessType())
@@ -51,7 +51,7 @@ public class BusinessCredentialFacadeImpl implements BusinessCredentialFacade {
     }
 
     @Override
-    public void issueBusinessCredential(int credentialId, BaseBusiness.IBusiness business) {
+    public void issueBusinessCredential(int credentialId, BaseBusiness.HasBusiness business) {
         BusinessCredential businessCredential = BusinessCredential.builder()
                 .credentialId(credentialId)
                 .businessType(business.getBusinessType())
@@ -70,7 +70,7 @@ public class BusinessCredentialFacadeImpl implements BusinessCredentialFacade {
     }
 
     @Override
-    public void updateBusinessCredential(Integer credentialId, BaseBusiness.IBusiness business) {
+    public void updateBusinessCredential(Integer credentialId, BaseBusiness.HasBusiness business) {
         List<BusinessCredential> businessCredentialList = businessCredentialService.selectByBusiness(business);
         if (IdentityUtil.hasIdentity(credentialId)) {
             if (businessCredentialList.stream()

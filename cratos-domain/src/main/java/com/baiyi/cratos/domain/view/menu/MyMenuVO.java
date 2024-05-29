@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class MyMenuVO {
 
-    public interface IMyMenuChildren {
+    public interface HasMyMenuChildren {
 
         Integer getMenuId();
 
@@ -29,7 +29,7 @@ public class MyMenuVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class MyMenu extends BaseVO implements IMyMenuChildren {
+    public static class MyMenu extends BaseVO implements HasMyMenuChildren {
 
         public static final List<MyMenu> INVALID = Collections.emptyList();
 

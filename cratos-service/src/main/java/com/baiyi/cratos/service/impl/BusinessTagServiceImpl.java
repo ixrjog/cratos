@@ -29,7 +29,7 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     private final BusinessTagMapper businessTagMapper;
 
     @Override
-    public List<BusinessTag> selectByBusiness(BaseBusiness.IBusiness business) {
+    public List<BusinessTag> selectByBusiness(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())

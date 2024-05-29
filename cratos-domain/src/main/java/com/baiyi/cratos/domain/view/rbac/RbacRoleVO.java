@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class RbacRoleVO {
 
-    public interface IRbacRole {
+    public interface HasRbacRole {
         Integer getRbacRoleId();
         void setRbacRole(Role rbacRole);
     }

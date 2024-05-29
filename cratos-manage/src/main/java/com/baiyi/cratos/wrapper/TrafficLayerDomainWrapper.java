@@ -20,14 +20,14 @@ import java.util.Map;
 import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.TRAFFIC_LAYER_RECORD;
 
 /**
- * @Author baiyi
- * @Date 2024/3/29 13:38
- * @Version 1.0
+ * &#064;Author  baiyi
+ * &#064;Date  2024/3/29 13:38
+ * &#064;Version  1.0
  */
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements IBusinessWrapper<TrafficLayerDomainVO.IDomain, TrafficLayerDomainVO.Domain> {
+public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements IBusinessWrapper<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
 
     private final TrafficLayerDomainService domainService;
 
@@ -43,7 +43,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     }
 
     @Override
-    public void businessWrap(TrafficLayerDomainVO.IDomain iDomain) {
+    public void businessWrap(TrafficLayerDomainVO.HasDomain iDomain) {
         IdentityUtil.validIdentityRun(iDomain.getDomainId())
                 .withTrue(() -> {
                     TrafficLayerDomain trafficLayerDomain = domainService.getById(iDomain.getDomainId());

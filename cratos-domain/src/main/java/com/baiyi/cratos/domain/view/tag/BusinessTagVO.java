@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class BusinessTagVO {
 
-    public interface IBusinessTags extends BaseBusiness.IBusiness {
+    public interface HasBusinessTags extends BaseBusiness.HasBusiness {
 
         void setBusinessTags(List<BusinessTagVO.BusinessTag> businessTags);
 
@@ -28,7 +28,7 @@ public class BusinessTagVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class BusinessTag extends BaseVO implements BaseBusiness.IBusiness, TagVO.HasTag, Serializable {
+    public static class BusinessTag extends BaseVO implements BaseBusiness.HasBusiness, TagVO.HasTag, Serializable {
 
         @Serial
         private static final long serialVersionUID = 1803833169421392342L;

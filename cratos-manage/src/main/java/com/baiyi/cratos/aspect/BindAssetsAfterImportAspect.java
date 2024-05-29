@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.IImportFromAsset;
-import com.baiyi.cratos.domain.view.eds.IToBusinessTarget;
+import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class BindAssetsAfterImportAspect {
                     Integer assetId = importFromAsset.getFromAssetId();
                     IdentityUtil.validIdentityRun(assetId)
                             .withTrue(() -> {
-                                if (businessObject instanceof IToBusinessTarget toBusinessTarget) {
+                                if (businessObject instanceof ToBusinessTarget toBusinessTarget) {
                                     int businessId = toBusinessTarget.getId();
                                     EdsAsset asset = edsAssetService.getById(assetId);
                                     if (asset == null) {

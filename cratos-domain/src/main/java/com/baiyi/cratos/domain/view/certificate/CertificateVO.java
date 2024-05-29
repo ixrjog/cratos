@@ -28,8 +28,7 @@ public class CertificateVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
-    public static class Certificate extends BaseVO implements BaseBusiness.IBusinessAnnotate,
-            BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Certificate extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -799350802297993186L;

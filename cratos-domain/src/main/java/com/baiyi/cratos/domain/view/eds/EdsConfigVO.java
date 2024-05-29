@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 public class EdsConfigVO {
 
-    public interface IEdsConfig {
+    public interface HasEdsConfig {
 
         Integer getConfigId();
 

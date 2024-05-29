@@ -27,7 +27,7 @@ public class BusinessPropertyServiceImpl implements BusinessPropertyService {
     private final BusinessPropertyMapper businessPropertyMapper;
 
     @Override
-    public List<BusinessProperty> selectByBusiness(BaseBusiness.IBusiness business) {
+    public List<BusinessProperty> selectByBusiness(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessProperty.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class BusinessDocVO {
 
-    public interface HasBusinessDocs extends BaseBusiness.IBusiness {
+    public interface HasBusinessDocs extends BaseBusiness.HasBusiness {
 
         void setBusinessDocs(List<BusinessDoc> businessDocs);
 
@@ -28,7 +28,7 @@ public class BusinessDocVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class BusinessDoc extends BaseVO implements BaseBusiness.IBusiness, Serializable {
+    public static class BusinessDoc extends BaseVO implements BaseBusiness.HasBusiness, Serializable {
 
         @Serial
         private static final long serialVersionUID = -6331911356346269736L;

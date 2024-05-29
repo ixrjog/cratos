@@ -27,9 +27,9 @@ public interface CredentialFacade {
      */
     void revokeCredentialById(int id);
 
-    List<Credential> queryCredentialByBusiness(BaseBusiness.IBusiness business);
+    List<Credential> queryCredentialByBusiness(BaseBusiness.HasBusiness business);
 
-    void createBusinessCredential(Credential credential, BaseBusiness.IBusiness business);
+    void createBusinessCredential(Credential credential, BaseBusiness.HasBusiness business);
 
     Credential getUserPasswordCredential(User user);
 

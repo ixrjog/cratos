@@ -43,7 +43,7 @@ public class EdsAssetVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AssetToBusiness<T extends IToBusinessTarget> implements Serializable {
+    public static class AssetToBusiness<T extends ToBusinessTarget> implements Serializable {
 
         @Serial
         private static final long serialVersionUID = -1350874228317416818L;

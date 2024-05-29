@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.business.impl.base;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.domain.view.eds.IToBusinessTarget;
+import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.service.BusinessAssetBindService;
@@ -13,7 +13,7 @@ import jakarta.annotation.Resource;
  * @Date 2024/3/12 10:49
  * @Version 1.0
  */
-public abstract class BaseAssetToBusinessWrapper<B extends IToBusinessTarget, T> implements IAssetToBusinessWrapper<B> {
+public abstract class BaseAssetToBusinessWrapper<B extends ToBusinessTarget, T> implements IAssetToBusinessWrapper<B> {
 
     @Resource
     protected BusinessAssetBindService businessAssetBindService;

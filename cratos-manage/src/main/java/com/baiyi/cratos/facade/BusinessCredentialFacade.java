@@ -16,12 +16,12 @@ public interface BusinessCredentialFacade {
 
     void revokeCredential(int credentialId);
 
-    void revokeBusinessCredential(int credentialId, BaseBusiness.IBusiness business);
+    void revokeBusinessCredential(int credentialId, BaseBusiness.HasBusiness business);
 
-    void issueBusinessCredential(int credentialId, BaseBusiness.IBusiness business);
+    void issueBusinessCredential(int credentialId, BaseBusiness.HasBusiness business);
 
     void deleteBusinessCredentials(List<BusinessCredential> businessCredentialList);
 
-    void updateBusinessCredential(Integer credentialId, BaseBusiness.IBusiness business);
+    void updateBusinessCredential(Integer credentialId, BaseBusiness.HasBusiness business);
 
 }

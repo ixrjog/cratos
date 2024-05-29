@@ -14,7 +14,7 @@ public class BusinessParam {
 
     @Data
     @Schema
-    public static class GetByBusiness implements BaseBusiness.IBusiness {
+    public static class GetByBusiness implements BaseBusiness.HasBusiness {
 
         @NotNull
         private String businessType;
@@ -26,7 +26,7 @@ public class BusinessParam {
 
     @Data
     @Schema
-    public static class QueryByBusinessType implements BaseBusiness.IBusinessType {
+    public static class QueryByBusinessType implements BaseBusiness.HasBusinessType {
 
         @NotNull
         private String businessType;

@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Table(name = "business_document")
-public class BusinessDocument implements BaseBusiness.IBusiness {
+public class BusinessDocument implements BaseBusiness.HasBusiness {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

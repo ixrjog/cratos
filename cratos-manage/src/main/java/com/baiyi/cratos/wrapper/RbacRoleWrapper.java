@@ -42,19 +42,19 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
     @Override
     public void wrap(RbacRoleVO.Role role) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForRbacResource(role))
-                .put(buildResourceCountForUser(role))
+                .put(makeResourceCountForRbacResource(role))
+                .put(makeResourceCountForUser(role))
                 .build();
         role.setResourceCount(resourceCount);
     }
 
-    private Map<String, Integer> buildResourceCountForRbacResource(RbacRoleVO.Role role) {
+    private Map<String, Integer> makeResourceCountForRbacResource(RbacRoleVO.Role role) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(RBAC_RESOURCE.name(), rbacRoleResourceService.selectCountByRoleId(role.getId()));
         return resourceCount;
     }
 
-    private Map<String, Integer> buildResourceCountForUser(RbacRoleVO.Role role) {
+    private Map<String, Integer> makeResourceCountForUser(RbacRoleVO.Role role) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(USER.name(), rbacUserRoleService.selectCountByRoleId(role.getId()));
         return resourceCount;

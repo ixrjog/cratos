@@ -17,7 +17,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 
-import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_RESOURCE;
+import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.SSH_COMMAND;
 
 /**
  * &#064;Author  baiyi
@@ -43,10 +43,10 @@ public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Ins
 
     private Map<String, Integer> makeResourceCountForCommand(SshInstanceVO.Instance instance) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
-        resourceCount.put(RBAC_RESOURCE.name(), commandService.selectCountByInstanceId(instance.getId()));
+        resourceCount.put(SSH_COMMAND.name(), commandService.selectCountByInstanceId(instance.getId()));
         return resourceCount;
     }
-    
+
     @Override
     public void businessWrap(SshInstanceVO.HasSessionInstances hasSessionInstances) {
         List<SshSessionInstance> instances = instanceService.queryBySessionId(hasSessionInstances.getSessionId());

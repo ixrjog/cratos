@@ -12,7 +12,7 @@ public interface BaseBusiness {
     /**
      * 从注解获取BusinessType
      */
-    interface IBusinessAnnotate extends IBusiness, IBusinessTypeAnnotate {
+    interface IBusinessAnnotate extends HasBusiness, IBusinessTypeAnnotate {
         default String getBusinessType() {
             return AopUtils.getTargetClass(this)
                     .getAnnotation(com.baiyi.cratos.domain.annotation.BusinessType.class)
@@ -21,11 +21,11 @@ public interface BaseBusiness {
         }
     }
 
-    interface IBusiness extends IBusinessType {
+    interface HasBusiness extends HasBusinessType {
         Integer getBusinessId();
     }
 
-    interface IBusinessType {
+    interface HasBusinessType {
         String getBusinessType();
     }
 

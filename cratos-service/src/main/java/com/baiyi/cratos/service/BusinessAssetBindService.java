@@ -20,7 +20,7 @@ public interface BusinessAssetBindService extends BaseUniqueKeyService<BusinessA
      *
      * @param business
      */
-    void deleteByBusiness(BaseBusiness.IBusiness business);
+    void deleteByBusiness(BaseBusiness.HasBusiness business);
 
     List<BusinessAssetBind> queryByAssetId(int assetId);
 

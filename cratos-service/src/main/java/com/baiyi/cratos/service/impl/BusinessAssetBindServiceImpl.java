@@ -25,7 +25,7 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
     private final BusinessAssetBindMapper businessAssetBindMapper;
 
     @Override
-    public void deleteByBusiness(BaseBusiness.IBusiness business) {
+    public void deleteByBusiness(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessAssetBind.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())

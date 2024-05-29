@@ -27,7 +27,7 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
     private final BusinessDocumentMapper businessDocumentMapper;
 
     @Override
-    public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
+    public List<BusinessDocument> selectByBusiness(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessDocument.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())

@@ -37,7 +37,7 @@ public class CredentialVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
     @FieldSensitive
-    public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, Serializable {
+    public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, Serializable {
 
         @Serial
         private static final long serialVersionUID = -1000477517427403355L;

@@ -17,7 +17,7 @@ public class RbacUserRoleVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class UserRole extends BaseVO implements RbacRoleVO.IRbacRole {
+    public static class UserRole extends BaseVO implements RbacRoleVO.HasRbacRole {
 
         @Serial
         private static final long serialVersionUID = 7828537753029882531L;

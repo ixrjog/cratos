@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.BUSINESS_TAG)
-public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.BusinessTag, BusinessTag> implements IBusinessWrapper<BusinessTagVO.IBusinessTags, BusinessTagVO.BusinessTag> {
+public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.BusinessTag, BusinessTag> implements IBusinessWrapper<BusinessTagVO.HasBusinessTags, BusinessTagVO.BusinessTag> {
 
     private final BusinessTagService businessTagService;
 
@@ -36,7 +36,7 @@ public class BusinessTagWrapper extends BaseDataTableConverter<BusinessTagVO.Bus
     }
 
     @Override
-    public void businessWrap(BusinessTagVO.IBusinessTags businessTags) {
+    public void businessWrap(BusinessTagVO.HasBusinessTags businessTags) {
         businessTags.setBusinessTags(businessTagService.selectByBusiness(businessTags)
                 .stream()
                 .map(bizTag -> {

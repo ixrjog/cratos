@@ -22,7 +22,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     private final UserPermissionService userPermissionService;
 
     @Override
-    public boolean verify(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum) {
+    public boolean verify(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum) {
         UserPermission uniqueKey = UserPermission.builder()
                 .username(username)
                 .businessType(business.getBusinessType())
@@ -49,7 +49,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
      * @param business
      */
     @Override
-    public void revokeUserBusinessPermission(String username, BaseBusiness.IBusiness business) {
+    public void revokeUserBusinessPermission(String username, BaseBusiness.HasBusiness business) {
         UserPermission uniqueKey = UserPermission.builder()
                 .username(username)
                 .businessType(business.getBusinessType())
@@ -62,7 +62,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     }
 
     @Override
-    public void grantUserBusinessPermission(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime) {
+    public void grantUserBusinessPermission(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime) {
         UserPermission uniqueKey = UserPermission.builder()
                 .username(username)
                 .businessType(business.getBusinessType())

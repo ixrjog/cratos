@@ -25,7 +25,7 @@ public class EdsInstanceVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
-    public static class EdsInstance extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, EdsConfigVO.IEdsConfig, Serializable {
+    public static class EdsInstance extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, EdsConfigVO.HasEdsConfig, Serializable {
 
         @Serial
         private static final long serialVersionUID = -7340773895154204152L;

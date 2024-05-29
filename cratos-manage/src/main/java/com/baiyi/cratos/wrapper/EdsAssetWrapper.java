@@ -48,7 +48,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         }
 
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForAssetIndex(asset))
+                .put(makeResourceCountForAssetIndex(asset))
                 .build();
         asset.setResourceCount(resourceCount);
     }
@@ -66,12 +66,12 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         }
 
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForAssetIndex(asset))
+                .put(makeResourceCountForAssetIndex(asset))
                 .build();
         asset.setResourceCount(resourceCount);
     }
 
-    private Map<String, Integer> buildResourceCountForAssetIndex(EdsAssetVO.Asset asset) {
+    private Map<String, Integer> makeResourceCountForAssetIndex(EdsAssetVO.Asset asset) {
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(EDS_ASSET_INDEX.name(), edsAssetIndexService.selectCountByAssetId(asset.getId()));
         return resourceCount;

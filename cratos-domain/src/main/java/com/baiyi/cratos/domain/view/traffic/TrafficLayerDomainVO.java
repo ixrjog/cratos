@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class TrafficLayerDomainVO {
 
-    public interface IDomain {
+    public interface HasDomain {
 
         Integer getDomainId();
 
@@ -37,7 +37,7 @@ public class TrafficLayerDomainVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-    public static class Domain extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -8990726488134957647L;

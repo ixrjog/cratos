@@ -71,7 +71,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
     }
 
     @Override
-    public List<Credential> queryCredentialByBusiness(BaseBusiness.IBusiness business) {
+    public List<Credential> queryCredentialByBusiness(BaseBusiness.HasBusiness business) {
         List<BusinessCredential> businessCredentials = businessCredentialService.selectByBusiness(business);
         if (CollectionUtils.isEmpty(businessCredentials)) {
             return Collections.emptyList();
@@ -98,7 +98,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
     }
 
     @Override
-    public void createBusinessCredential(Credential credential, BaseBusiness.IBusiness business) {
+    public void createBusinessCredential(Credential credential, BaseBusiness.HasBusiness business) {
         credentialService.add(credential);
         BusinessCredential businessCredential = BusinessCredential.builder()
                 .businessType(business.getBusinessType())

@@ -32,7 +32,7 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
     private final CredentialService credentialService;
 
     @Override
-    public List<BusinessCredential> selectByBusiness(BaseBusiness.IBusiness business) {
+    public List<BusinessCredential> selectByBusiness(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessCredential.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())
@@ -40,7 +40,7 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
         return businessCredentialMapper.selectByExample(example);
     }
 
-    public List<BusinessCredential> selectByKey(BaseBusiness.IBusiness business) {
+    public List<BusinessCredential> selectByKey(BaseBusiness.HasBusiness business) {
         Example example = new Example(BusinessCredential.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", business.getBusinessType())

@@ -12,13 +12,13 @@ import java.util.Date;
  */
 public interface UserPermissionFacade {
 
-    boolean verify(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum);
+    boolean verify(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum);
 
-    void revokeUserBusinessPermission(String username, BaseBusiness.IBusiness business);
+    void revokeUserBusinessPermission(String username, BaseBusiness.HasBusiness business);
 
-    void grantUserBusinessPermission(String username, BaseBusiness.IBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime);
+    void grantUserBusinessPermission(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime);
 
-    default void grantUserBusinessPermission(String username, BaseBusiness.IBusiness business, Date expirationTime) {
+    default void grantUserBusinessPermission(String username, BaseBusiness.HasBusiness business, Date expirationTime) {
         grantUserBusinessPermission(username, business, PermissionRoleEnum.BASE, expirationTime);
     }
 

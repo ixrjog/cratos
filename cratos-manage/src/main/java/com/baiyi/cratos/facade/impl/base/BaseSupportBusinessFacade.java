@@ -11,9 +11,9 @@ import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
  * @Date 2024/2/19 10:56
  * @Version 1.0
  */
-public abstract class BaseSupportBusinessFacade<T extends BaseBusiness.IBusiness> {
+public abstract class BaseSupportBusinessFacade<T extends BaseBusiness.HasBusiness> {
 
-    protected BaseService<?, ?> getBusinessService(BaseBusiness.IBusiness business) {
+    protected BaseService<?, ?> getBusinessService(BaseBusiness.HasBusiness business) {
         SupportBusinessService supportBusinessService = SupportBusinessServiceFactory.getService(business.getBusinessType());
         if (supportBusinessService == null) {
             throw new BusinessException("BusinessType {} does not support business factory.", business.getBusinessType());
@@ -25,11 +25,11 @@ public abstract class BaseSupportBusinessFacade<T extends BaseBusiness.IBusiness
         }
     }
 
-    protected boolean isSupportedBusiness(BaseBusiness.IBusiness business) {
+    protected boolean isSupportedBusiness(BaseBusiness.HasBusiness business) {
         return SupportBusinessServiceFactory.getService(business.getBusinessType()) != null;
     }
 
-    protected void trySupportedBusiness(BaseBusiness.IBusiness business) {
+    protected void trySupportedBusiness(BaseBusiness.HasBusiness business) {
         if (!isSupportedBusiness(business)) {
             throw new BusinessException("BusinessType {} does not support business factory.", business.getBusinessType());
         }

@@ -29,7 +29,7 @@ public class EdsConfigWrapper extends BaseDataTableConverter<EdsConfigVO.EdsConf
         // Eds Instance Registered
     }
 
-    public void wrap(EdsConfigVO.IEdsConfig target) {
+    public void wrap(EdsConfigVO.HasEdsConfig target) {
         EdsConfig edsConfig = edsConfigService.getById(target.getConfigId());
         if (edsConfig != null) {
             target.setEdsConfig(this.wrapToTarget(edsConfig));

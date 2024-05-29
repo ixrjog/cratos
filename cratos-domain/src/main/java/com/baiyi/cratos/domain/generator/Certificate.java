@@ -1,7 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.generator.base.IValid;
-import com.baiyi.cratos.domain.view.eds.IToBusinessTarget;
+import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Certificate implements IValid, IToBusinessTarget {
+public class Certificate implements IValid, ToBusinessTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
