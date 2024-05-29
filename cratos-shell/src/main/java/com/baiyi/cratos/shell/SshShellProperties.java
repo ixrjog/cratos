@@ -16,7 +16,7 @@
 
 package com.baiyi.cratos.shell;
 
-import com.baiyi.cratos.shell.commands.CommandProperties;
+import com.baiyi.cratos.shell.command.CommandProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

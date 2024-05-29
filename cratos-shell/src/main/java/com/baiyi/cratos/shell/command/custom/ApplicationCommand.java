@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom;
+package com.baiyi.cratos.shell.command.custom;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.GroupingUtil;
@@ -9,9 +9,9 @@ import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
-import com.baiyi.cratos.shell.commands.AbstractCommand;
-import com.baiyi.cratos.shell.commands.SshShellComponent;
-import com.baiyi.cratos.shell.commands.custom.executor.GroupingAppExecutor;
+import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
+import com.baiyi.cratos.shell.command.custom.executor.GroupingAppExecutor;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * @Author baiyi

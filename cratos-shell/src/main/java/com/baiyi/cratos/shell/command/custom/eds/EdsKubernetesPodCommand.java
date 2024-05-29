@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom.eds;
+package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.StringFormatter;
@@ -16,8 +16,8 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
-import com.baiyi.cratos.shell.commands.AbstractCommand;
-import com.baiyi.cratos.shell.commands.SshShellComponent;
+import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.PodAssetContext;
 import com.baiyi.cratos.shell.util.TerminalUtil;
 import com.baiyi.cratos.ssh.core.auditor.PodCommandAuditor;
@@ -55,7 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 import static com.baiyi.cratos.ssh.core.util.ChannelShellUtil.DEF_UNICODE;
 
 /**

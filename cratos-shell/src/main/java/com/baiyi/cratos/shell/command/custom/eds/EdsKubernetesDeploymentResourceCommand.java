@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom.eds;
+package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.StringFormatter;
@@ -16,8 +16,8 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
-import com.baiyi.cratos.shell.commands.AbstractCommand;
-import com.baiyi.cratos.shell.commands.SshShellComponent;
+import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Quantity;
@@ -33,7 +33,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom.eds;
+package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.DataTable;
@@ -15,8 +15,8 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
-import com.baiyi.cratos.shell.commands.AbstractCommand;
-import com.baiyi.cratos.shell.commands.SshShellComponent;
+import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.google.common.base.Joiner;
@@ -32,7 +32,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 
-import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * @Author baiyi
@@ -128,14 +128,14 @@ public class EdsCloudComputerListCommand extends AbstractCommand {
         helper.print(pagination.toStr(), PromptColor.GREEN);
     }
 
-    @ShellMethod(key = COMMAND_ALIYUN_ECS_ASSET_LIST, value = "List host by aliyun ecs asset")
-    public void ecsList(@ShellOption(help = "Name", defaultValue = "") String name,
+    @ShellMethod(key = COMMAND_ALIYUN_ECS_ASSET_LIST, value = "List computer asset by aliyun ecs")
+    public void aliyunEcsList(@ShellOption(help = "Name", defaultValue = "") String name,
                         @ShellOption(help = "Page", defaultValue = "1") int page) {
         this.doList(name, page, EdsAssetTypeEnum.ALIYUN_ECS);
     }
 
-    @ShellMethod(key = COMMAND_AWS_EC2_ASSET_LIST, value = "List host by aws ec2 asset")
-    public void ec2List(@ShellOption(help = "Name", defaultValue = "") String name,
+    @ShellMethod(key = COMMAND_AWS_EC2_ASSET_LIST, value = "List computer asset by aws ec2")
+    public void awsEc2List(@ShellOption(help = "Name", defaultValue = "") String name,
                         @ShellOption(help = "Page", defaultValue = "1") int page) {
         this.doList(name, page, EdsAssetTypeEnum.AWS_EC2);
     }

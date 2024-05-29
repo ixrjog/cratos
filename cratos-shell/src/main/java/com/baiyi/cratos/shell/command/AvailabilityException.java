@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baiyi.cratos.shell.commands;
+package com.baiyi.cratos.shell.command;
 
 import java.io.Serial;
 

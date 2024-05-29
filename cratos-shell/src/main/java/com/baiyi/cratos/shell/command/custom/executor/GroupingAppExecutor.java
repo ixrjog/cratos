@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom.executor;
+package com.baiyi.cratos.shell.command.custom.executor;
 
 import com.baiyi.cratos.common.util.GroupingUtil;
 import com.baiyi.cratos.common.util.StringFormatter;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.commands.custom.eds;
+package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.Credential;
@@ -9,8 +9,8 @@ import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
-import com.baiyi.cratos.shell.commands.AbstractCommand;
-import com.baiyi.cratos.shell.commands.SshShellComponent;
+import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.TerminalUtil;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
@@ -42,7 +42,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.baiyi.cratos.shell.commands.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi
