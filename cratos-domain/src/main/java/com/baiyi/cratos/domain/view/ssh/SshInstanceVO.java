@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -35,7 +37,7 @@ public class SshInstanceVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_INSTANCE)
-    public static class Instance extends BaseVO implements Serializable {
+    public static class Instance extends BaseVO implements HasResourceCount, Serializable {
 
         @Serial
         private static final long serialVersionUID = -6573176155485274089L;
@@ -65,6 +67,9 @@ public class SshInstanceVO {
 
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
+
+        @Schema(description = "Resource Count")
+        private Map<String, Integer> resourceCount;
 
     }
 

@@ -36,6 +36,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
+import io.fabric8.kubernetes.client.dsl.LogWatch;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.sshd.common.channel.ChannelOutputStream;
@@ -75,6 +76,8 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
     private static final String COMMAND_POD_LIST = GROUP + "-list";
 
     private static final String COMMAND_POD_LOGIN = GROUP + "-login";
+
+    private static final String COMMAND_POD_VIEW_LOG = GROUP + "-view-log";
 
     private final EdsInstanceService edsInstanceService;
 
@@ -259,6 +262,90 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
         } catch (Exception ignored) {
         } finally {
             podCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
+        }
+    }
+
+    @ClearScreen
+    @ShellMethod(value = "Show kubernetes pod container log [Enter ctrl+c to exit the session]", key = {COMMAND_POD_VIEW_LOG})
+    @ShellAuthentication(resource = "/pod/view/log")
+    public void podLog(@ShellOption(help = "ID", defaultValue = "") Integer id,
+                       @ShellOption(help = "Container", defaultValue = "") String container,
+                       @ShellOption(help = "Tailing Lines", defaultValue = "100") int lines) {
+        // 从上下文中取出
+        SshContext sshContext = SshShellCommandFactory.SSH_THREAD_CONTEXT.get();
+        Terminal terminal = sshContext.getTerminal();
+        Map<Integer, PodAssetModel> podContext = PodAssetContext.getPodContext();
+        PodAssetModel podAssetModel = podContext.get(id);
+        if (StringUtils.hasText(container)) {
+            final String findContainer = container;
+            if (podAssetModel.getPod()
+                    .getSpec()
+                    .getContainers()
+                    .stream()
+                    .noneMatch(e -> findContainer.equals(e.getName()))) {
+                helper.print(StringFormatter.format("The container name '{}' you specified does not exist.", container),
+                        PromptColor.YELLOW);
+                return;
+            }
+        } else {
+            container = podAssetModel.getPod()
+                    .getSpec()
+                    .getContainers()
+                    .getFirst()
+                    .getName();
+        }
+        EdsKubernetesConfigModel.Kubernetes kubernetes = PodAssetContext.getConfigContext();
+        ServerSession serverSession = helper.getSshSession();
+        final String sessionId = SshSessionIdMapper.getSessionId(serverSession.getIoSession());
+        String sshSessionInstanceId = generateInstanceId(podAssetModel, container);
+        podAssetModel.setInstanceId(sshSessionInstanceId);
+        final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
+        try {
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, podAssetModel,
+                    SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
+            simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+            try (KubernetesClient kc = kubernetesClientBuilder.build(
+                    kubernetes); ByteArrayOutputStream baos = new ByteArrayOutputStream(); LogWatch logWatch = kc.pods()
+                    .inNamespace(podAssetModel.acqNamespace())
+                    .withName(podAssetModel.acqName())
+                    .inContainer(container)
+                    .tailingLines(lines)
+                    .watchLog(baos);) {
+                TerminalUtil.enterRawMode(terminal);
+                SessionOutput sessionOutput = new SessionOutput(sessionId, sshSessionInstanceId);
+                // 高速输出日志流
+                WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
+                        auditPath, sshContext.getSshShellRunnable()
+                        .getOs());
+                Thread.ofVirtual()
+                        .start(run);
+                while (true) {
+                    int ch = terminal.reader()
+                            .read(25L);
+                    if (ch != -2) {
+                        if (ch == QUIT) {
+                            run.close();
+                            break;
+                        } else {
+                            terminal.writer()
+                                    .print(helper.getColored("\nInput [ ctrl+c ] end viewing logs.\n",
+                                            PromptColor.GREEN));
+                            terminal.writer()
+                                    .flush();
+                            TimeUtil.millisecondsSleep(200L);
+                        }
+                    }
+                    TimeUtil.millisecondsSleep(25L);
+                }
+            } catch (Exception e) {
+                log.debug(e.getMessage());
+            } finally {
+                simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
+            }
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        } finally {
+            // podCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
         }
     }
 

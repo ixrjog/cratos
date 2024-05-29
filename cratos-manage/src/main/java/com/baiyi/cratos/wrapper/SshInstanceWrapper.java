@@ -4,14 +4,20 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.view.ssh.SshInstanceVO;
+import com.baiyi.cratos.service.SshSessionInstanceCommandService;
 import com.baiyi.cratos.service.SshSessionInstanceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
+
+import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_RESOURCE;
 
 /**
  * &#064;Author  baiyi
@@ -23,17 +29,27 @@ import java.util.List;
 @BusinessType(type = BusinessTypeEnum.SSH_INSTANCE)
 public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Instance, SshSessionInstance> implements IBusinessWrapper<SshInstanceVO.HasSessionInstances, SshInstanceVO.Instance> {
 
-    private final SshSessionInstanceService sshSessionInstanceService;
+    private final SshSessionInstanceService instanceService;
+
+    private final SshSessionInstanceCommandService commandService;
 
     @Override
     public void wrap(SshInstanceVO.Instance instance) {
-        // This is a good idea
+        Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
+                .put(makeResourceCountForCommand(instance))
+                .build();
+        instance.setResourceCount(resourceCount);
     }
 
+    private Map<String, Integer> makeResourceCountForCommand(SshInstanceVO.Instance instance) {
+        Map<String, Integer> resourceCount = Maps.newHashMap();
+        resourceCount.put(RBAC_RESOURCE.name(), commandService.selectCountByInstanceId(instance.getId()));
+        return resourceCount;
+    }
+    
     @Override
     public void businessWrap(SshInstanceVO.HasSessionInstances hasSessionInstances) {
-        List<SshSessionInstance> instances = sshSessionInstanceService.queryBySessionId(
-                hasSessionInstances.getSessionId());
+        List<SshSessionInstance> instances = instanceService.queryBySessionId(hasSessionInstances.getSessionId());
         if (CollectionUtils.isEmpty(instances)) {
             return;
         }

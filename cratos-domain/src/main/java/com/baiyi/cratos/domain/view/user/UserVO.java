@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.annotation.FieldSensitive;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.SensitiveType;
 import com.baiyi.cratos.domain.view.BaseVO;
-import com.baiyi.cratos.domain.view.IResourceCount;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -35,8 +35,7 @@ public class UserVO {
     public static class User extends BaseVO implements BaseBusiness.IBusinessAnnotate,
             // Business
             BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs,
-            RbacRoleVO.IRbacRoles,
-            IResourceCount,
+            RbacRoleVO.IRbacRoles, HasResourceCount,
             Serializable {
 
         @Serial

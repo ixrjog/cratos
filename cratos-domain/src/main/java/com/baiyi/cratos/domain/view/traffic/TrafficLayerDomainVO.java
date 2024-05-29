@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
-import com.baiyi.cratos.domain.view.IResourceCount;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -37,7 +37,7 @@ public class TrafficLayerDomainVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-    public static class Domain extends BaseVO implements IResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Domain extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.IBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
 
         @Serial
         private static final long serialVersionUID = -8990726488134957647L;

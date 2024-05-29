@@ -1,7 +1,7 @@
 package com.baiyi.cratos.domain.view.rbac;
 
 import com.baiyi.cratos.domain.view.BaseVO;
-import com.baiyi.cratos.domain.view.IResourceCount;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +30,7 @@ public class RbacRoleVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class Role extends BaseVO implements IResourceCount {
+    public static class Role extends BaseVO implements HasResourceCount {
 
         @Serial
         private static final long serialVersionUID = -537492408171499126L;

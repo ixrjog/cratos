@@ -1,7 +1,7 @@
 package com.baiyi.cratos.domain.view.eds;
 
 import com.baiyi.cratos.domain.view.BaseVO;
-import com.baiyi.cratos.domain.view.IResourceCount;
+import com.baiyi.cratos.domain.view.HasResourceCount;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -60,7 +60,7 @@ public class EdsAssetVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Asset extends BaseVO implements IResourceCount, Serializable {
+    public static class Asset extends BaseVO implements HasResourceCount, Serializable {
 
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;

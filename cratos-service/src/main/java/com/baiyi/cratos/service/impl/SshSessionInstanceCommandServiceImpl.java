@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
 import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
 import com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper;
@@ -9,6 +10,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -28,6 +30,14 @@ public class SshSessionInstanceCommandServiceImpl implements SshSessionInstanceC
         Page<SshSessionInstanceCommand> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<SshSessionInstanceCommand> data = sshSessionInstanceCommandMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public int selectCountByInstanceId(int sshSessionInstanceId) {
+        Example example = new Example(SshSessionInstanceCommand.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sshSessionInstanceId", sshSessionInstanceId);
+        return sshSessionInstanceCommandMapper.selectCountByExample(example);
     }
 
 }

@@ -15,4 +15,6 @@ public interface SshSessionInstanceCommandService extends BaseService<SshSession
 
     DataTable<SshSessionInstanceCommand> querySshCommandPage(SshCommandParam.SshCommandPageQuery pageQuery);
 
+    int selectCountByInstanceId(int sshSessionInstanceId);
+
 }
