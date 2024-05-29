@@ -10,8 +10,8 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,10 +26,14 @@ import org.springframework.util.StringUtils;
 @Slf4j
 @ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = WebSocketConfig.class)
 @Component
-@RequiredArgsConstructor
 public class SshSessionAuditServer {
 
-    private final SshAuditPlayer sshAuditPlayer;
+    private static SshAuditPlayer sshAuditPlayer;
+
+    @Autowired
+    public void setSshAuditPlayer(SshAuditPlayer sshAuditPlayer) {
+        SshSessionAuditServer.sshAuditPlayer = sshAuditPlayer;
+    }
 
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
@@ -49,7 +53,7 @@ public class SshSessionAuditServer {
         try {
             SimpleState ss = new GsonBuilder().create()
                     .fromJson(message, SimpleState.class);
-            sshAuditPlayer.play(message,session);
+            sshAuditPlayer.play(message, session);
         } catch (Exception ignored) {
         }
     }
