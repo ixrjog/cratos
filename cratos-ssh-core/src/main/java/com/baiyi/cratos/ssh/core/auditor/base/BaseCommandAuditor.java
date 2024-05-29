@@ -63,36 +63,37 @@ public abstract class BaseCommandAuditor {
         String regex = getInputRegex();
         File file = new File(auditPath);
         if (!file.exists()) {
-            log.debug("命令审计文件不存在: sessionId={}, instanceId={}, path={}", sessionId, instanceId, auditPath);
+            log.debug("Ssh instance audit file {} does not exist. sessionId={}, instanceId={}", auditPath, sessionId,
+                    instanceId);
             return;
         }
-        try {
-            LineNumberReader reader = new LineNumberReader(new FileReader(auditPath));
+        // FIXME 多行输入
+        try (LineNumberReader reader = new LineNumberReader(new FileReader(auditPath))) {
             while ((str = reader.readLine()) != null) {
-                if (!str.isEmpty()) {
-                    boolean isInput = Pattern.matches(regex, str);
-                    if (isInput) {
-                        if (builder != null) {
-                            // save
-                            SshSessionInstanceCommand auditCommand = builder.build();
-                            if (auditCommand != null) {
-                                if (!StringUtils.isEmpty(auditCommand.getInputFormatted())) {
-                                    sshSessionInstanceCommandService.add(auditCommand);
-                                }
-                                builder = null;
+                if (str.isEmpty()) {
+                    break;
+                }
+                boolean isInput = Pattern.matches(regex, str);
+                if (isInput) {
+                    if (builder != null) {
+                        // save
+                        SshSessionInstanceCommand auditCommand = builder.build();
+                        if (auditCommand != null) {
+                            if (!StringUtils.isEmpty(auditCommand.getInputFormatted())) {
+                                sshSessionInstanceCommandService.add(auditCommand);
                             }
+                            builder = null;
                         }
-                        builder = builder(sshSessionInstance.getId(), str);
-                    } else {
-                        if (builder != null) {
-                            builder.addOutput(str);
-                        }
+                    }
+                    builder = builder(sshSessionInstance.getId(), str);
+                } else {
+                    if (builder != null) {
+                        builder.addOutput(str);
                     }
                 }
             }
         } catch (IOException e) {
-            log.error("写入命令审计文件错误: sessionId={}, instanceId={}, err={}", sessionId, instanceId,
-                    e.getMessage());
+            log.error("Ssh instance audit write error: {}", e.getMessage());
         }
     }
 
@@ -105,7 +106,7 @@ public abstract class BaseCommandAuditor {
         try {
             this.asyncRecordCommand(instance.getSessionId(), instance.getInstanceId());
         } catch (Exception e) {
-            log.error("记录日志错误: sessionId={}, instanceId={}", instance.getSessionId(), instance.getInstanceId());
+            log.debug(e.getMessage());
         }
     }
 
@@ -118,14 +119,14 @@ public abstract class BaseCommandAuditor {
         return ImmutablePair.of(index1, index2);
     }
 
-    public InstanceCommandBuilder builder(Integer terminalSessionInstanceId, String inputStr) {
+    public InstanceCommandBuilder builder(Integer sshSessionInstanceId, String inputStr) {
         ImmutablePair<Integer, Integer> ip = getIndex(inputStr);
         int index = ip.getLeft() != -1 ? ip.getLeft() : ip.getRight();
         if (index == -1) {
             return null;
         }
         SshSessionInstanceCommand command = SshSessionInstanceCommand.builder()
-                .sshSessionInstanceId(terminalSessionInstanceId)
+                .sshSessionInstanceId(sshSessionInstanceId)
                 .prompt(inputStr.substring(0, index + 1))
                 // 取用户输入
                 .input(inputStr.length() > index + 2 ? inputStr.substring(index + 2) : "")

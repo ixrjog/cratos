@@ -24,8 +24,7 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
     public SshSessionInstance getByUniqueKey(SshSessionInstance record) {
         Example example = new Example(SshSessionInstance.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("sessionId", record.getSessionId())
-                .andEqualTo("instanceId", record.getInstanceId());
+        criteria.andEqualTo("instanceId", record.getInstanceId());
         return sshSessionInstanceMapper.selectOneByExample(example);
     }
 
