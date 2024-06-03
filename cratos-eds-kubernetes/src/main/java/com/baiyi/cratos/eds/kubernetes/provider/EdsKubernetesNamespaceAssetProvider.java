@@ -30,10 +30,12 @@ public class EdsKubernetesNamespaceAssetProvider extends BaseEdsKubernetesAssetP
     private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
 
     public EdsKubernetesNamespaceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             KubernetesNamespaceRepo kubernetesNamespaceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                               CredentialService credentialService,
+                                               ConfigCredTemplate configCredTemplate,
+                                               EdsAssetIndexFacade edsAssetIndexFacade,
+                                               KubernetesNamespaceRepo kubernetesNamespaceRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
         this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
     }
 
@@ -41,6 +43,13 @@ public class EdsKubernetesNamespaceAssetProvider extends BaseEdsKubernetesAssetP
     protected List<Namespace> listEntities(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         return kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
+    }
+
+    @Override
+    protected List<Namespace> listEntities(String namespace,
+                                           ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        // Not supported
+        return List.of();
     }
 
 }

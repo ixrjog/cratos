@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNodeRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -32,8 +33,10 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
     public EdsKubernetesNodeAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
+                                          KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                           KubernetesNodeRepo kubernetesNodeRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
         this.kubernetesNodeRepo = kubernetesNodeRepo;
     }
 
@@ -41,6 +44,12 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
     protected List<Node> listEntities(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         return kubernetesNodeRepo.list(instance.getEdsConfigModel());
+    }
+
+    @Override
+    protected List<Node> listEntities(String namespace,
+                                      ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return List.of();
     }
 
 }

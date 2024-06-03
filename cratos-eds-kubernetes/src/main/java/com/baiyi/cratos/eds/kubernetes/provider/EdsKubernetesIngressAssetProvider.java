@@ -18,7 +18,6 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
-import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +33,6 @@ import java.util.Optional;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_INGRESS)
 public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetProvider<Ingress> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
-
     private final KubernetesIngressRepo kubernetesIngressRepo;
 
     private static final String UNDEFINED_SERVICE = "Undefined Service";
@@ -47,19 +44,15 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                                              EdsAssetIndexFacade edsAssetIndexFacade,
                                              KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                              KubernetesIngressRepo kubernetesIngressRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
-        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
         this.kubernetesIngressRepo = kubernetesIngressRepo;
     }
 
     @Override
-    protected List<Ingress> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<Ingress> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(kubernetesIngressRepo.list(instance.getEdsConfigModel(), e.getMetadata()
-                .getName())));
-        return entities;
+    protected List<Ingress> listEntities(String namespace,
+                                         ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesIngressRepo.list(instance.getEdsConfigModel(), namespace);
     }
 
     @Override

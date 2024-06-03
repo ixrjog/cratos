@@ -29,6 +29,7 @@ import com.baiyi.cratos.ssh.core.model.PodAssetModel;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
 import com.baiyi.cratos.ssh.core.watch.ssh.WatchKubernetesExecShellOutputTask;
+import com.baiyi.cratos.ssh.core.watch.ssh.WatchKubernetesLogOutputTask;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
@@ -235,7 +236,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                         .start(run);
                 // 行模式
                 TerminalUtil.enterRawMode(terminal);
-                while (!listener.isClosed() || serverSession.isClosed()) {
+                while (!listener.isClosed() && !serverSession.isClosed()) {
                     int input = terminal.reader()
                             .read(5L);
                     if (input >= 0) {
@@ -310,16 +311,25 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     .withName(podAssetModel.acqName())
                     .inContainer(container)
                     .tailingLines(lines)
-                    .watchLog(baos);) {
+                    .watchLog(baos)) {
+                // 行模式
                 TerminalUtil.enterRawMode(terminal);
+                ChannelOutputStream out = (ChannelOutputStream) sshContext.getSshShellRunnable()
+                        .getOs();
+                out.setNoDelay(true);
                 SessionOutput sessionOutput = new SessionOutput(sessionId, sshSessionInstanceId);
                 // 高速输出日志流
-                WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
-                        auditPath, sshContext.getSshShellRunnable()
-                        .getOs());
+//                WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
+//                        auditPath, sshContext.getSshShellRunnable()
+//                        .getOs());
+                // 低性能输出日志，为了能实现日志换行
+                WatchKubernetesLogOutputTask run = new WatchKubernetesLogOutputTask(sessionOutput, baos, auditPath,
+                        terminal.writer());
                 Thread.ofVirtual()
                         .start(run);
-                while (true) {
+                while (!serverSession.isClosed()) {
+                    // 避免缓存导致日志截断
+                    terminal.writer().flush();
                     int ch = terminal.reader()
                             .read(25L);
                     if (ch != -2) {

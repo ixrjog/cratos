@@ -2,22 +2,26 @@ package com.baiyi.cratos.eds.kubernetes.provider.base;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Sets;
 import io.fabric8.kubernetes.api.model.HasMetadata;
+import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -25,12 +29,29 @@ import java.util.Optional;
  * @Version 1.0
  */
 @Slf4j
-public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> extends BaseEdsInstanceAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> {
+public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> extends BaseHasNamespaceEdsAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> {
+
+    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
 
     public BaseEdsKubernetesAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade) {
+                                          EdsAssetIndexFacade edsAssetIndexFacade,
+                                          KubernetesNamespaceRepo kubernetesNamespaceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+    }
+
+    @Override
+    protected Set<String> listNamespace(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
+        if (CollectionUtils.isEmpty(namespaces)) {
+            return Sets.newHashSet();
+        }
+        return namespaces.stream()
+                .map(e -> e.getMetadata()
+                        .getName())
+                .collect(Collectors.toSet());
     }
 
     protected String getAssetId(String namespace, String name) {
@@ -39,7 +60,8 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
     }
 
     protected String getAssetId(HasMetadata hasMetadata) {
-        return Joiner.on(":").skipNulls()
+        return Joiner.on(":")
+                .skipNulls()
                 .join(getNamespace(hasMetadata), getName(hasMetadata));
     }
 
@@ -65,45 +87,6 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
         return optionalLabels.map(stringStringMap -> stringStringMap.getOrDefault(key, null))
                 .orElse(null);
     }
-
-//    @Override
-//    public void setConfig(EdsConfig edsConfig) {
-//        if (edsConfig.getCredentialId() == null) {
-//            return;
-//        }
-//
-//        Credential credential = credentialService.getById(edsConfig.getCredentialId());
-//        if (credential == null || !CredentialTypeEnum.KUBE_CONFIG.name()
-//                .equals(credential.getCredentialType())) {
-//            // 凭据为空或类型不匹配
-//            return;
-//        }
-//        EdsKubernetesConfigModel.Kubernetes kubernetes = configLoadAs(edsConfig.getConfigContent());
-//        if (KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
-//                .equals(Optional.of(kubernetes)
-//                        .map(EdsKubernetesConfigModel.Kubernetes::getProvider)
-//                        .orElse(""))) {
-//            log.debug("No need to set configuration files.");
-//            return;
-//        }
-//
-//        String path = Optional.of(kubernetes)
-//                .map(EdsKubernetesConfigModel.Kubernetes::getKubeconfig)
-//                .map(EdsKubernetesConfigModel.Kubeconfig::getPath)
-//                .orElse("");
-//        if (StringUtils.hasText(path)) {
-//            // 注入 ${HOME}
-//            final String kubeconfigPath = SystemEnvUtil.renderEnvHome(kubernetes.getKubeconfig()
-//                    .getPath());
-//            try {
-//                IOUtil.writeFile(credential.getCredential(), Joiner.on("/")
-//                        .join(kubeconfigPath, io.fabric8.kubernetes.client.Config.KUBERNETES_KUBECONFIG_FILE));
-//            } catch (Exception e) {
-//                log.error("Error writing kubeconfig file: {}", e.getMessage());
-//                // throw new KubernetesException("Error writing kubeconfig file: {}", e.getMessage());
-//            }
-//        }
-//    }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, A entity) {

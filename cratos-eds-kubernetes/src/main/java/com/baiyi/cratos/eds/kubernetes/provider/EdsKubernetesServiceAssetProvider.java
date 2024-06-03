@@ -18,7 +18,6 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
-import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.Service;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -36,28 +35,21 @@ import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_SERVICE)
 public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetProvider<Service> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
-
     private final KubernetesServiceRepo kubernetesServiceRepo;
 
     public EdsKubernetesServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                             KubernetesServiceRepo kubernetesServiceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
-        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,KubernetesServiceRepo kubernetesServiceRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
         this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 
     @Override
-    protected List<Service> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<Service> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(kubernetesServiceRepo.list(instance.getEdsConfigModel(), e.getMetadata()
-                .getName())));
-        return entities;
+    protected List<Service> listEntities(String namespace,
+                                         ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesServiceRepo.list(instance.getEdsConfigModel(),namespace);
     }
 
     @Override

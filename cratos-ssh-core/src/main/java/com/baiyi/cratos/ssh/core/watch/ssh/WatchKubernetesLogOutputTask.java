@@ -7,31 +7,33 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 
 /**
- * Kubernetes Exec Shell
+ * Kubernetes Watch Log
  * &#064;Author  baiyi
- * &#064;Date  2024/5/28 上午11:00
+ * &#064;Date  2024/6/3 下午3:56
  * &#064;Version 1.0
  */
 @Slf4j
-public class WatchKubernetesExecShellOutputTask extends AbstractSshChannelOutputTask {
+public class WatchKubernetesLogOutputTask extends AbstractSshChannelOutputTask {
 
-    private final OutputStream channelOutput;
+    private final PrintWriter printWriter;
 
-    public WatchKubernetesExecShellOutputTask(SessionOutput sessionOutput, ByteArrayOutputStream byteArrayOutputStream,
-                                              String auditPath, OutputStream channelOutput) {
+    public WatchKubernetesLogOutputTask(SessionOutput sessionOutput, ByteArrayOutputStream byteArrayOutputStream,
+                                        String auditPath, PrintWriter printWriter) {
         setSessionOutput(sessionOutput);
         setOutputStream(byteArrayOutputStream);
         setAuditPath(auditPath);
-        this.channelOutput = channelOutput;
+
+        this.printWriter = printWriter;
     }
 
     @Override
     public void write(char[] buff, int off, int len) throws IOException {
         char[] outBuff = ArrayUtil.sub(buff, 0, len);
-        this.channelOutput.write(toBytes(outBuff));
+        this.printWriter.write(outBuff);
     }
 
 }
+

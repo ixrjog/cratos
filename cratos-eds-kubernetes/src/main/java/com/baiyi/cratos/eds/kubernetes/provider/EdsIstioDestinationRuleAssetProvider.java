@@ -18,7 +18,6 @@ import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.istio.api.networking.v1alpha3.DestinationRule;
-import io.fabric8.kubernetes.api.model.Namespace;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,26 +31,20 @@ import java.util.List;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DESTINATION_RULE)
 public class EdsIstioDestinationRuleAssetProvider extends BaseEdsKubernetesAssetProvider<DestinationRule> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
-
     public EdsIstioDestinationRuleAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                               CredentialService credentialService,
-                                               ConfigCredTemplate configCredTemplate,
-                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                               KubernetesNamespaceRepo kubernetesNamespaceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
-        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+                                                CredentialService credentialService,
+                                                ConfigCredTemplate configCredTemplate,
+                                                EdsAssetIndexFacade edsAssetIndexFacade,
+                                                KubernetesNamespaceRepo kubernetesNamespaceRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
     }
 
     @Override
-    protected List<DestinationRule> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<DestinationRule> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(IstioDestinationRuleRepo.list(instance.getEdsConfigModel(),
-                e.getMetadata()
-                        .getName())));
-        return entities;
+    protected List<DestinationRule> listEntities(String namespace,
+                                                 ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return IstioDestinationRuleRepo.list(instance.getEdsConfigModel(),
+                namespace);
     }
 
     @Override
@@ -64,4 +57,3 @@ public class EdsIstioDestinationRuleAssetProvider extends BaseEdsKubernetesAsset
     }
 
 }
-

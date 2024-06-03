@@ -19,7 +19,6 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
-import io.fabric8.kubernetes.api.model.Namespace;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -37,9 +36,9 @@ import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT)
 public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
-
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+
+    public static final String REPLICAS = "replicas";
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                 CredentialService credentialService,
@@ -47,22 +46,15 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                                                 EdsAssetIndexFacade edsAssetIndexFacade,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                 KubernetesDeploymentRepo kubernetesDeploymentRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
-        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
     }
 
-    public static final String REPLICAS = "replicas";
-
     @Override
-    protected List<Deployment> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<Deployment> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(kubernetesDeploymentRepo.list(instance.getEdsConfigModel(),
-                e.getMetadata()
-                        .getName())));
-        return entities;
+    protected List<Deployment> listEntities(String namespace,
+                                            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesDeploymentRepo.list(instance.getEdsConfigModel(), namespace);
     }
 
     @Override
@@ -79,7 +71,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
         }
 
         String appName = getMetadataLabel(entity, "app");
-        if(StringUtils.hasText(appName)){
+        if (StringUtils.hasText(appName)) {
             if (StringUtils.hasText(env)) {
                 // 去掉环境后缀
                 if (appName.endsWith("-" + env)) {

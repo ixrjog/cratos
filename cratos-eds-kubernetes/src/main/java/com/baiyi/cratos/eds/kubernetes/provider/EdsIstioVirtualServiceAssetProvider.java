@@ -18,7 +18,6 @@ import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.istio.api.networking.v1alpha3.VirtualService;
-import io.fabric8.kubernetes.api.model.Namespace;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,26 +31,19 @@ import java.util.List;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_VIRTUAL_SERVICE)
 public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetProvider<VirtualService> {
 
-    private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
-
     public EdsIstioVirtualServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                CredentialService credentialService,
-                                                ConfigCredTemplate configCredTemplate,
-                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                                KubernetesNamespaceRepo kubernetesNamespaceRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
-        this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
+                                               CredentialService credentialService,
+                                               ConfigCredTemplate configCredTemplate,
+                                               EdsAssetIndexFacade edsAssetIndexFacade,
+                                               KubernetesNamespaceRepo kubernetesNamespaceRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                kubernetesNamespaceRepo);
     }
 
     @Override
-    protected List<VirtualService> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
-        List<VirtualService> entities = Lists.newArrayList();
-        namespaces.forEach(e -> entities.addAll(IstioVirtualServiceRepo.list(instance.getEdsConfigModel(),
-                e.getMetadata()
-                        .getName())));
-        return entities;
+    protected List<VirtualService> listEntities(String namespace,
+                                                ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return IstioVirtualServiceRepo.list(instance.getEdsConfigModel(), namespace);
     }
 
     @Override
