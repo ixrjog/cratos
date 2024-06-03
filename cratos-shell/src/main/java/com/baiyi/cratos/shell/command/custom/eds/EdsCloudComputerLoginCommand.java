@@ -37,8 +37,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
@@ -82,7 +80,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     @ClearScreen
     @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl"}, value = "Login to the computer.")
     @ShellAuthentication(resource = "/computer/login")
-    public void login(@ShellOption(help = "ID", defaultValue = "1") int id,
+    public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                       @ShellOption(help = "Account", defaultValue = "") String account) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         EdsAsset edsAsset = computerMapper.get(id);
@@ -118,15 +116,15 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             hostSystem.setAuditPath(auditPath);
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, hostSystem,
                     SshSessionInstanceTypeEnum.COMPUTER, auditPath);
-
-            simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-            // open ssh
-            RemoteInvokeHandler.openSSHServer(sessionId, hostSystem, out);
-            TerminalUtil.enterRawMode(terminal);
-            // 无延迟
-            out.setNoDelay(true);
-            Size size = terminal.getSize();
             try {
+                simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+                // open ssh
+                RemoteInvokeHandler.openSSHServer(sessionId, hostSystem, out);
+                TerminalUtil.enterRawMode(terminal);
+                // 无延迟
+                out.setNoDelay(true);
+                Size size = terminal.getSize();
+
                 while (true) {
                     if (isClosed(sessionId, sshSessionInstanceId) || serverSession.isClosed()) {
                         TimeUtil.millisecondsSleep(150L);
@@ -137,16 +135,15 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                             .read(5L);
                     send(sessionId, sshSessionInstanceId, input);
                 }
-            } catch (Exception e) {
-                // printLogout("Server connection disconnected, session duration %s/s", inst1);
+            } catch (Exception ignored) {
             } finally {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
+                serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
             }
-        } catch (SshException e) {
-            log.debug(e.getMessage());
-            helper.print(e.getMessage(), PromptColor.RED);
+        } catch (SshException ex) {
+            log.debug(ex.getMessage());
+            helper.print(ex.getMessage(), PromptColor.RED);
         } finally {
-            serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
             JSchSessionHolder.closeSession(sessionId, sshSessionInstanceId);
         }
     }
@@ -162,18 +159,6 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             size = terminal.getSize();
             TerminalUtil.resize(sessionId, instanceId, size);
         }
-    }
-
-    /**
-     * 打印会话关闭信息
-     *
-     * @param logout
-     * @param instant
-     */
-    @Deprecated
-    private void printLogout(String logout, Instant instant) {
-        helper.print(String.format(logout, Duration.between(instant, Instant.now())
-                .getSeconds()), PromptColor.RED);
     }
 
     private boolean isClosed(String sessionId, String instanceId) {

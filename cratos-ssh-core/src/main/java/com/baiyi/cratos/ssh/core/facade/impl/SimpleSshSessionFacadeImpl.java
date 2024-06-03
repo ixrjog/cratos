@@ -54,7 +54,6 @@ public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
 
     @Override
     public void closeSshSessionInstance(SshSessionInstance sshSessionInstance) {
-        //  TODO serverCommandAudit.recordCommand(terminalSessionInstance);
         sshSessionInstance.setEndTime(new Date());
         sshSessionInstance.setInstanceClosed(true);
         sshSessionInstance.setOutputSize(IOUtil.fileSize(sshSessionInstance.getAuditPath()));

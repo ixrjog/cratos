@@ -9,7 +9,6 @@ import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.springframework.scheduling.annotation.Async;
 
 import java.io.File;
 import java.io.FileReader;
@@ -45,12 +44,14 @@ public abstract class BaseCommandAuditor {
      * @param sessionId
      * @param instanceId
      */
-    @Async
     public void asyncRecordCommand(String sessionId, String instanceId) {
         SshSessionInstance sshSessionInstance = sshSessionInstanceService.getByUniqueKey(SshSessionInstance.builder()
-                .sessionId(sessionId)
+                //.sessionId(sessionId)
                 .instanceId(instanceId)
                 .build());
+        if (sshSessionInstance == null) {
+            return;
+        }
         // 跳过日志审计
         if (SshSessionInstanceTypeEnum.CONTAINER_LOG == SshSessionInstanceTypeEnum.valueOf(
                 sshSessionInstance.getInstanceType())) {
@@ -71,7 +72,7 @@ public abstract class BaseCommandAuditor {
         try (LineNumberReader reader = new LineNumberReader(new FileReader(auditPath))) {
             while ((str = reader.readLine()) != null) {
                 if (str.isEmpty()) {
-                    break;
+                    continue;
                 }
                 boolean isInput = Pattern.matches(regex, str);
                 if (isInput) {
@@ -92,8 +93,8 @@ public abstract class BaseCommandAuditor {
                     }
                 }
             }
-        } catch (IOException e) {
-            log.error("Ssh instance audit write error: {}", e.getMessage());
+        } catch (IOException ex) {
+            log.error("Ssh instance audit write error: {}", ex.getMessage());
         }
     }
 
