@@ -303,7 +303,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
         final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
         try {
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, podAssetModel,
-                    SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
+                    SshSessionInstanceTypeEnum.CONTAINER_LOG, auditPath);
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
             try (KubernetesClient kc = kubernetesClientBuilder.build(
                     kubernetes); ByteArrayOutputStream baos = new ByteArrayOutputStream(); LogWatch logWatch = kc.pods()
@@ -318,7 +318,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                         .getOs();
                 out.setNoDelay(true);
                 SessionOutput sessionOutput = new SessionOutput(sessionId, sshSessionInstanceId);
-                // 高速输出日志流
+                // 高速输出日志流, 不处理换行"\n"导致日志显示不正常
 //                WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
 //                        auditPath, sshContext.getSshShellRunnable()
 //                        .getOs());
