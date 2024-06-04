@@ -35,18 +35,31 @@ public class SshAuditOutputTask implements Runnable {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (!line.isEmpty()) {
-                    send(line + "\n");
+                    sendOutput(line + "\n");
                 }
                 TimeUtil.millisecondsSleep(25L);
             }
-        } catch (IOException ignored) {
+        } catch (IOException ex) {
+            try {
+                sendError(ex.getMessage());
+            } catch (IOException ignored) {
+            }
         }
     }
 
-    private void send(String line) throws IOException {
+    private void sendOutput(String line) throws IOException {
         OutputMessage om = OutputMessage.builder()
                 .instanceId(instanceId)
                 .output(line)
+                .build();
+        session.getBasicRemote()
+                .sendText(om.toString());
+    }
+
+    private void sendError(String error) throws IOException {
+        OutputMessage om = OutputMessage.builder()
+                .instanceId(instanceId)
+                .error(error)
                 .build();
         session.getBasicRemote()
                 .sendText(om.toString());

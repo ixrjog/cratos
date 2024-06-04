@@ -20,6 +20,8 @@ public class OutputMessage {
     private String instanceId;
     private String output;
 
+    private String error;
+
     @Override
     public String toString(){
         return JSONUtil.writeValueAsString(this);

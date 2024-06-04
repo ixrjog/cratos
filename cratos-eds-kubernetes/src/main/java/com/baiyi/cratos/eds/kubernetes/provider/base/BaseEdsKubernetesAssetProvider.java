@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.provider.base;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -99,6 +100,11 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
 
     private Date toUTCDate(String time) {
         return com.baiyi.cratos.common.util.TimeUtil.toDate(time, TimeZoneEnum.UTC);
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }

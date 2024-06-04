@@ -57,14 +57,11 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Service entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
-
         String env = getMetadataLabel(entity, "env");
         if (StringUtils.hasText(env)) {
             indices.add(toEdsAssetIndex(edsAsset, "env", env));
         }
-
         String appName = getMetadataLabel(entity, "app");
         if(StringUtils.hasText(appName)){
             if (StringUtils.hasText(env)) {
@@ -75,7 +72,6 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             }
             indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
-
         return indices;
     }
 

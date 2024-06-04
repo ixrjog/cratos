@@ -319,9 +319,9 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                 out.setNoDelay(true);
                 SessionOutput sessionOutput = new SessionOutput(sessionId, sshSessionInstanceId);
                 // 高速输出日志流, 不处理换行"\n"导致日志显示不正常
-//                WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
-//                        auditPath, sshContext.getSshShellRunnable()
-//                        .getOs());
+                // WatchKubernetesExecShellOutputTask run = new WatchKubernetesExecShellOutputTask(sessionOutput, baos,
+                //      auditPath, sshContext.getSshShellRunnable()
+                //      .getOs());
                 // 低性能输出日志，为了能实现日志换行
                 WatchKubernetesLogOutputTask run = new WatchKubernetesLogOutputTask(sessionOutput, baos, auditPath,
                         terminal.writer());
@@ -329,7 +329,8 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                         .start(run);
                 while (!serverSession.isClosed()) {
                     // 避免缓存导致日志截断
-                    terminal.writer().flush();
+                    terminal.writer()
+                            .flush();
                     int ch = terminal.reader()
                             .read(25L);
                     if (ch != -2) {

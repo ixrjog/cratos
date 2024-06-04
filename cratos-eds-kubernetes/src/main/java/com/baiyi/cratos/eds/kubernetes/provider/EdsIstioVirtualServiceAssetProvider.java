@@ -51,9 +51,7 @@ public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetP
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             VirtualService entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
-
         return indices;
     }
 

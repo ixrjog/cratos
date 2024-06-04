@@ -18,6 +18,8 @@ public class EdsAssetComparer {
             .equal(true)
             .build();
 
+    public static final boolean DIFFERENT = false;
+
     public static final EdsAssetComparer COMPARE_NAME = EdsAssetComparer.builder()
             .comparisonOfName(true)
             .build();
