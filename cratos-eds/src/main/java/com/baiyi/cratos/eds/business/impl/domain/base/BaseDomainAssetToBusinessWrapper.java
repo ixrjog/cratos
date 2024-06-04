@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.business.impl.domain;
+package com.baiyi.cratos.eds.business.impl.domain.base;
 
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;

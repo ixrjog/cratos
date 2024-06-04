@@ -57,7 +57,10 @@ public class EdsGitLabConfigModel {
     @NoArgsConstructor
     @Schema
     public static class SystemHooks {
-        private String token;  // 回调token
+
+        @Schema(description = "回调token")
+        private String token;
+
     }
 
     @Data

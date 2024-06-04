@@ -45,7 +45,8 @@ public enum EdsAssetTypeEnum {
     GITLAB_PROJECT("Project"),
     GITLAB_GROUP("Group"),
     GITLAB_USER("User"),
-    GITLAB_SSHKEY("SSH Key");
+    GITLAB_SSHKEY("SSH Key"),
+    GANDI_DOMAIN("Domain"),;
 
     private final String displayName;
 

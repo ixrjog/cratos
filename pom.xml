@@ -28,6 +28,7 @@
         <module>cratos-eds-huaweicloud</module>
         <module>cratos-eds-googlecloud</module>
         <module>cratos-ssh-core</module>
+        <module>cratos-eds-domain</module>
     </modules>
 
     <properties>
