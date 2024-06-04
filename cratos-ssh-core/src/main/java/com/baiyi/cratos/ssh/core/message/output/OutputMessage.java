@@ -22,6 +22,9 @@ public class OutputMessage {
 
     private String error;
 
+    @Builder.Default
+    private int code = 0;
+
     @Override
     public String toString(){
         return JSONUtil.writeValueAsString(this);

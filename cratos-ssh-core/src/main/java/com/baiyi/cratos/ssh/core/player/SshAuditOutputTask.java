@@ -60,6 +60,7 @@ public class SshAuditOutputTask implements Runnable {
         OutputMessage om = OutputMessage.builder()
                 .instanceId(instanceId)
                 .error(error)
+                .code(1)
                 .build();
         session.getBasicRemote()
                 .sendText(om.toString());
