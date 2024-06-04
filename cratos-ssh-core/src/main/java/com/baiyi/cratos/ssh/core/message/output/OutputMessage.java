@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.core.message.output;
 
 import com.baiyi.cratos.domain.util.JSONUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class OutputMessage {
 
     private String error;
 
+    @Schema(description = "!0 = error")
     @Builder.Default
     private int code = 0;
 
