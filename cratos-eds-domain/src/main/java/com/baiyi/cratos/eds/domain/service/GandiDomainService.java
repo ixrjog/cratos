@@ -16,7 +16,7 @@ public interface GandiDomainService {
 
     /**
      * https://api.gandi.net/docs/domains/
-     * @param apikey Example: Apikey your-api-key
+     * @param authorization Example: Apikey your-api-key
      * @return
      */
     @GetExchange("/v5/domain/domains")

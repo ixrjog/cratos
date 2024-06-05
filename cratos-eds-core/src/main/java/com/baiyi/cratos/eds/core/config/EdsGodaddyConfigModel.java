@@ -17,10 +17,12 @@ public class EdsGodaddyConfigModel {
     @Data
     @NoArgsConstructor
     @Schema(description = "godaddy.com")
-    public static class Gandi implements IEdsConfigModel {
+    public static class Godaddy implements IEdsConfigModel {
 
         @Schema(description = "凭据")
         private Cred cred;
+
+        private String customerId;
 
         private EdsInstance edsInstance;
 

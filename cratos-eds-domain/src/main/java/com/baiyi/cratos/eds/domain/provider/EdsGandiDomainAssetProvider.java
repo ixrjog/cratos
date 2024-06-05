@@ -30,7 +30,6 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     private final GandiDomainRepo gandiDomainRepo;
 
-
     public EdsGandiDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                        EdsAssetIndexFacade edsAssetIndexFacade, GandiDomainRepo gandiDomainRepo) {

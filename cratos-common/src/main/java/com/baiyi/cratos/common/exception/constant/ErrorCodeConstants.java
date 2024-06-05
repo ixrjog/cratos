@@ -13,6 +13,8 @@ public interface ErrorCodeConstants {
 
     int BASE_ERROR = 999;
 
+    int SQL_ERROR = 10000;
+
     int BUSINESS_ERROR = 40000;
 
     int CRED_ERROR = 41000;
