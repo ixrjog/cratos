@@ -1,13 +1,16 @@
 package com.baiyi.cratos.event.listener;
 
 import com.baiyi.cratos.domain.message.IEventMessage;
-import com.baiyi.cratos.event.factory.EventConsumerFactory;
 import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
+import com.baiyi.cratos.event.factory.EventConsumerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -21,12 +24,11 @@ public class EventListener<T extends IEventMessage> implements ApplicationListen
     @Override
     @Async
     public void onApplicationEvent(Event<T> event) {
-        IEventConsumer<T> consumer = EventConsumerFactory.getConsumer(event.getTopic());
-        if (consumer != null) {
-            log.debug("On application event: topic={}", event.getTopic());
-            consumer.onMessage(event);
-        } else {
+        List<IEventConsumer<T>> consumers = EventConsumerFactory.getConsumers(event.getTopic());
+        if (CollectionUtils.isEmpty(consumers)) {
             log.debug("On application event, not consumer: topic={}", event.getTopic());
+        } else {
+            consumers.forEach(consumer -> consumer.onMessage(event));
         }
     }
 

@@ -3,6 +3,7 @@ package com.baiyi.cratos.event.factory;
 import com.baiyi.cratos.domain.message.IEventMessage;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,15 +16,23 @@ public class EventConsumerFactory {
     private EventConsumerFactory() {
     }
 
-    private final static ConcurrentHashMap<String, IEventConsumer<?>> CONTEXT = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<String, List<IEventConsumer<? extends IEventMessage>>> CONTEXT = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T extends IEventMessage> IEventConsumer<T> getConsumer(String topic) {
-        return (IEventConsumer<T>) CONTEXT.get(topic);
+    public static <T extends IEventMessage> List<IEventConsumer<T>> getConsumers(String topic) {
+        List<IEventConsumer<?>> consumers = CONTEXT.get(topic);
+        return consumers.stream()
+                .map(e -> (IEventConsumer<T>) e)
+                .toList();
     }
 
     public static <T extends IEventMessage> void register(IEventConsumer<T> bean) {
-        CONTEXT.put(bean.getTopic(), bean);
+        if (CONTEXT.containsKey(bean.getTopic())) {
+            CONTEXT.get(bean.getTopic())
+                    .add(bean);
+        } else {
+            CONTEXT.put(bean.getTopic(), List.of(bean));
+        }
     }
 
 }
