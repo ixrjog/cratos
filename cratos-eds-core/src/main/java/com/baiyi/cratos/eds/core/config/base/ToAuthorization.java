@@ -38,4 +38,16 @@ public class ToAuthorization {
 
     }
 
+    public interface ToAuthorizationSsoKey {
+
+        String getKey();
+
+        String getSecret();
+
+        default String toSsoKey() {
+            return StringFormatter.arrayFormat("sso-key {}:{}", getKey(), getSecret());
+        }
+
+    }
+
 }
