@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core.config;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.ToAuthorization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,7 @@ public class EdsCloudflareConfigModel {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Cred {
+    public static class Cred implements ToAuthorization.ToAuthorizationBearer {
 
 //        @Schema(description = "X-Auth-Email: 123")
 //        private String apiEmail;
@@ -46,6 +47,10 @@ public class EdsCloudflareConfigModel {
         @Schema(description = "Authorization: Bearer <API_TOKEN>")
         private String apiToken;
 
+        @Override
+        public String getToken() {
+            return apiToken;
+        }
     }
 
 }

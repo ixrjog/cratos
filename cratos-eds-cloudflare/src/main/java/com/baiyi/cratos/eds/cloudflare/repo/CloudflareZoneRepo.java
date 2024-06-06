@@ -3,11 +3,10 @@ package com.baiyi.cratos.eds.cloudflare.repo;
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.repo.base.BaseCloudflareRepo;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.google.common.collect.Lists;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,10 +18,10 @@ import java.util.Map;
  * @Version 1.0
  */
 @Component
-public class CloudflareZoneRepo extends BaseCloudflareRepo {
+@RequiredArgsConstructor
+public class CloudflareZoneRepo {
 
-    @Resource
-    private CloudflareZoneService cloudflareZoneService;
+    private final CloudflareZoneService cloudflareZoneService;
 
     public List<CloudflareZone.Result> listZones(EdsCloudflareConfigModel.Cloudflare cloudflare) {
         List<CloudflareZone.Result> results = Lists.newArrayList();
@@ -31,7 +30,8 @@ public class CloudflareZoneRepo extends BaseCloudflareRepo {
             Map<String, String> param = DictBuilder.newBuilder()
                     .put("page", String.valueOf(page))
                     .build();
-            CloudflareHttpResult<List<CloudflareZone.Result>> rt = cloudflareZoneService.listZones(generateBearer(cloudflare), param);
+            CloudflareHttpResult<List<CloudflareZone.Result>> rt = cloudflareZoneService.listZones(cloudflare.getCred()
+                    .toBearer(), param);
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()
                     .getTotalCount()) {
