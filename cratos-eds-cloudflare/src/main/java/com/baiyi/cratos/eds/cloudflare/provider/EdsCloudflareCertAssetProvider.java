@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -18,11 +18,12 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
-public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
+public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;
 
@@ -47,25 +48,24 @@ public class EdsCloudflareCertAssetProvider extends BaseEdsInstanceAssetProvider
         this.cloudflareCertRepo = cloudflareCertRepo;
     }
 
+    @Override
+    protected Set<String> listNamespace(
+            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+       return cloudflareZoneRepo.listZones(instance.getEdsConfigModel()).stream()
+                .map(CloudflareZone.Result::getId)
+                .collect(Collectors.toSet());
+    }
 
     @Override
-    protected List<CloudflareCert.Certificate> listEntities(
-            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
-        List<CloudflareCert.Certificate> results = Lists.newArrayList();
-        try {
-            // 查询所有的zone
-            List<CloudflareZone.Result> zoneResults = cloudflareZoneRepo.listZones(instance.getEdsConfigModel());
-            if (CollectionUtils.isEmpty(zoneResults)) {
-                return results;
-            }
-            zoneResults.stream()
-                    .map(e -> cloudflareCertRepo.listCertificatePacks(instance.getEdsConfigModel(), e.getId()))
-                    .filter(cRt -> !CollectionUtils.isEmpty(cRt))
-                    .forEach(cRt -> cRt.forEach(c -> results.addAll(c.getCertificates())));
-            return results;
-        } catch (Exception e) {
-            throw new EdsQueryEntitiesException(e.getMessage());
-        }
+    protected List<CloudflareCert.Certificate> listEntities(String namespace,
+                                                            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
+        return cloudflareCertRepo.listCertificatePacks(
+                        instance.getEdsConfigModel(), namespace)
+                .stream()
+                .filter(e -> !CollectionUtils.isEmpty(e.getCertificates()))
+                .flatMap(e -> e.getCertificates()
+                        .stream())
+                .collect(Collectors.toList());
     }
 
     @Override
