@@ -52,11 +52,15 @@ public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAli
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunDomain entity) {
+        // 域名过期状态。取值：1：域名未过期。 2：域名已过期。
+        boolean valid = entity.getExpirationDateStatus()
+                .equals("1");
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDomainName())
                 .nameOf(entity.getDomainName())
                 .descriptionOf(entity.getRemark())
                 .createdTimeOf(new Date(entity.getRegistrationDateLong()))
                 .expiredTimeOf(new Date(entity.getExpirationDateLong()))
+                .validOf(valid)
                 .build();
     }
 

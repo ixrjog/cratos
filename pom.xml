@@ -38,8 +38,8 @@
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <spring-security.version>6.2.3</spring-security.version>
-        <!-- 1.12.565 -->
-        <aws-java-sdk.version>1.12.691</aws-java-sdk.version>
+        <!-- 1.12.736 -->
+        <aws-java-sdk.version>1.12.736</aws-java-sdk.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.13.0</shedlock-spring.version>
     </properties>
@@ -53,52 +53,42 @@
     </parent>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-ldap</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
             <groupId>com.mysql</groupId>
@@ -106,26 +96,22 @@
             <version>8.2.0</version>
             <scope>runtime</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.16</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
         <!-- Shedlock 分布式任务锁 -->
         <!-- https://mvnrepository.com/artifact/net.javacrumbs.shedlock/shedlock-spring -->
         <dependency>
@@ -133,19 +119,16 @@
             <artifactId>shedlock-spring</artifactId>
             <version>${shedlock-spring.version}</version>
         </dependency>
-
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-provider-jdbc-template</artifactId>
             <version>${shedlock-spring.version}</version>
         </dependency>
-
         <!-- 模板引擎 -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
 <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -157,76 +140,64 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>com.unboundid</groupId>
             <artifactId>unboundid-ldapsdk</artifactId>
             <version>6.0.11</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>1.10.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.5</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-
         <!-- 系统信息 -->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>6.4.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>32.0.0-jre</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-
         <!-- https://springdoc.org/v2/ -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi-starter-webmvc.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
             <version>${springdoc-openapi-starter-webmvc.version}</version>
         </dependency>
-
         <!-- yaml工具-->
         <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
         <!-- https://github.com/snakeyaml/snakeyaml -->
@@ -236,13 +207,11 @@
             <artifactId>snakeyaml</artifactId>
             <version>2.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.mwiede</groupId>
             <artifactId>jsch</artifactId>
             <version>0.2.7</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
         <!-- https://github.com/jwtk/jjwt#installation -->
         <dependency>
@@ -250,7 +219,6 @@
             <artifactId>jjwt</artifactId>
             <version>0.12.3</version>
         </dependency>
-
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>
@@ -258,61 +226,49 @@
             <classifier>osx-aarch_64</classifier>
             <version>4.1.109.Final</version>
         </dependency>
-
     </dependencies>
 
     <dependencyManagement>
-
         <dependencies>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-shell</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-eds</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-eds-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
         </dependencies>
-
     </dependencyManagement>
 
     <repositories>
-
         <!-- 代码库 -->
         <repository>
             <id>maven repo</id>
             <url>https://mvnrepository.com/artifact/</url>
         </repository>
-
         <repository>
             <id>maven-ali</id>
             <url>https://maven.aliyun.com/repository/public</url>
@@ -325,7 +281,6 @@
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
         </repository>
-
     </repositories>
 
     <build>
