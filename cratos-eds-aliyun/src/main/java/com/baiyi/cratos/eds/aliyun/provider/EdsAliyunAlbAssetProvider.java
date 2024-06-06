@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 import com.aliyun.alb20200616.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
-import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -18,8 +18,10 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -28,7 +30,7 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ALB)
-public class EdsAliyunAlbAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> {
+public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> {
 
     private final AliyunAlbRepo aliyunAlbRepo;
 
@@ -42,18 +44,21 @@ public class EdsAliyunAlbAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     private static final String DEFAULT_ENDPOINT = "alb.cn-hangzhou.aliyuncs.com";
 
     @Override
-    protected List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listEntities(
+    protected Set<String> listNamespace(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> entities = Lists.newArrayList();
+        List<String> endpoints = Optional.of(instance.getEdsConfigModel())
+                .map(EdsAliyunConfigModel.Aliyun::getAlb)
+                .map(EdsAliyunConfigModel.ALB::getEndpoints)
+                .orElse(Lists.newArrayList(DEFAULT_ENDPOINT));
+        return new HashSet<>(endpoints);
+    }
+
+    @Override
+    protected List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listEntities(
+            String namespace,
+            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<String> endpoints = Optional.of(instance.getEdsConfigModel())
-                    .map(EdsAliyunConfigModel.Aliyun::getAlb)
-                    .map(EdsAliyunConfigModel.ALB::getEndpoints)
-                    .orElse(Lists.newArrayList(DEFAULT_ENDPOINT));
-            for (String endpoint : endpoints) {
-                entities.addAll(aliyunAlbRepo.listAlb(endpoint, instance.getEdsConfigModel()));
-            }
-            return entities;
+            return aliyunAlbRepo.listAlb(namespace, instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

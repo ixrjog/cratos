@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.util.AssetUtil;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 /**
  * @Author baiyi
@@ -53,6 +54,9 @@ public class EdsAssetComparer {
     private boolean comparisonOfCreatedTime = false;
 
     @Builder.Default
+    public boolean comparisonOfOriginalModel = false;
+
+    @Builder.Default
     private boolean equal = false;
 
     public boolean compare(EdsAsset a1, EdsAsset a2) {
@@ -98,6 +102,13 @@ public class EdsAssetComparer {
         if (this.isComparisonOfValid()) {
             return a2.getValid()
                     .equals(a1.getValid());
+        }
+        if (this.isComparisonOfOriginalModel()) {
+            if (!StringUtils.hasText(a1.getOriginalModel())) {
+                return false;
+            }
+            return a1.getOriginalModel()
+                    .equals(a2.getOriginalModel());
         }
         return true;
     }
