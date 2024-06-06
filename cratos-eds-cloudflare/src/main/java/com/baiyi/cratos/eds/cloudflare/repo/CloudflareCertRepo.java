@@ -20,7 +20,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class CloudflareCertRepo {
-    
+
     private final CloudflareCertService certService;
 
     public List<CloudflareCert.Result> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare,
