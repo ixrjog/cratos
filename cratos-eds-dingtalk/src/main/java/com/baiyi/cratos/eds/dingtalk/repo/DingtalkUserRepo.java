@@ -67,5 +67,4 @@ public class DingtalkUserRepo extends BaseDingtalkToken {
         return users;
     }
 
-
 }

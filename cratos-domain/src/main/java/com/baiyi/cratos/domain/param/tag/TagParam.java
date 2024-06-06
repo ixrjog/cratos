@@ -40,7 +40,7 @@ public class TagParam {
 
     @Data
     @Schema
-    public static class UpdateTag implements IToTarget<Tag>  {
+    public static class UpdateTag implements IToTarget<Tag> {
 
         private Integer id;
 

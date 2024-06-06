@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * 表名：ssh_session_instance_command
-*/
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -38,10 +38,10 @@ public class SshSessionInstanceCommand {
     @Column(name = "is_formatted")
     private Boolean isFormatted;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 
     /**

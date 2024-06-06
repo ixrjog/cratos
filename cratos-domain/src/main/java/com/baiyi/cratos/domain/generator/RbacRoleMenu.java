@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * 表名：rbac_role_menu
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -33,9 +33,9 @@ public class RbacRoleMenu {
     @Column(name = "menu_id")
     private Integer menuId;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 }
