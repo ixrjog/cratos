@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.business;
 
-import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

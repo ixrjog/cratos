@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.business;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.eds.core.IEdsInstanceTypeAnnotate;
 import org.springframework.beans.factory.InitializingBean;
 

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.business.impl.base;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.service.BusinessAssetBindService;

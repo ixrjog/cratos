@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.view.eds;
 
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

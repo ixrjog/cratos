@@ -43,7 +43,7 @@ public class BusinessTagVO {
 
         private String tagValue;
 
-        @Schema(description = "ITag")
+        @Schema(description = "HasTag")
         private TagVO.Tag tag;
 
     }

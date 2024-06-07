@@ -1,11 +1,17 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
 import com.baiyi.cratos.mapper.NotificationTemplateMapper;
 import com.baiyi.cratos.service.NotificationTemplateService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -27,4 +33,11 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
         return notificationTemplateMapper.selectOneByExample(example);
     }
 
+    @Override
+    public DataTable<NotificationTemplate> queryNotificationTemplatePage(
+            NotificationTemplateParam.NotificationTemplatePageQuery pageQuery) {
+        Page<NotificationTemplate> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<NotificationTemplate> data = notificationTemplateMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
+    }
 }

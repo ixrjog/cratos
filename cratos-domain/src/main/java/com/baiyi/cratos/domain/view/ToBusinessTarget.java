@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.view.eds;
+package com.baiyi.cratos.domain.view;
 
 /**
  * @Author baiyi

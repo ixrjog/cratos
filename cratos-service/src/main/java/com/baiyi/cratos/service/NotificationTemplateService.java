@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
 import com.baiyi.cratos.mapper.NotificationTemplateMapper;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
@@ -11,5 +13,8 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
  * &#064;Version 1.0
  */
 public interface NotificationTemplateService extends BaseUniqueKeyService<NotificationTemplate>, BaseService<NotificationTemplate, NotificationTemplateMapper> {
+
+    DataTable<NotificationTemplate> queryNotificationTemplatePage(
+            NotificationTemplateParam.NotificationTemplatePageQuery pageQuery);
 
 }

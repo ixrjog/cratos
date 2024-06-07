@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.IImportFromAsset;
-import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetService;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.generator.base.IValid;
-import com.baiyi.cratos.domain.view.eds.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
