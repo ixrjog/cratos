@@ -3,12 +3,14 @@ package com.baiyi.cratos.eds.domain.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsGodaddyConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.domain.model.GodaddyDomain;
 import com.baiyi.cratos.eds.domain.repo.GodaddyDomainRepo;
@@ -32,8 +34,10 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<
 
     public EdsGodaddyDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                         EdsAssetIndexFacade edsAssetIndexFacade, GodaddyDomainRepo godaddyDomainRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                         EdsAssetIndexFacade edsAssetIndexFacade, GodaddyDomainRepo godaddyDomainRepo,
+                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.godaddyDomainRepo = godaddyDomainRepo;
     }
 
@@ -67,6 +71,11 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<
             return false;
         }
         return !"CANCELLED_TRANSFER".equals(status);
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }

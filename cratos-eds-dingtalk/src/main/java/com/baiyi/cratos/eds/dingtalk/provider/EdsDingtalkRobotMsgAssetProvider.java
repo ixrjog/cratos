@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
 import com.baiyi.cratos.eds.dingtalk.repo.DingtalkDepartmentRepo;
@@ -29,11 +30,12 @@ import java.util.List;
 public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg> {
 
     public EdsDingtalkRobotMsgAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                            CredentialService credentialService,
-                                            ConfigCredTemplate configCredTemplate,
+                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                            DingtalkDepartmentRepo dingtalkDepartmentRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                            DingtalkDepartmentRepo dingtalkDepartmentRepo,
+                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
     }
 
     @Override
@@ -45,8 +47,7 @@ public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvid
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance,
                                   DingtalkRobot.Msg entity) {
-        return newEdsAssetBuilder(instance, entity)
-                .build();
+        return newEdsAssetBuilder(instance, entity).build();
     }
 
 }

@@ -18,6 +18,7 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.AssetUtil;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.ConfigUtil;
@@ -25,9 +26,9 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Sets;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -40,7 +41,7 @@ import java.util.Set;
  * @Version 1.0
  */
 @Slf4j
-@Component
+@AllArgsConstructor
 public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
     private final EdsAssetService edsAssetService;
@@ -52,6 +53,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private final ConfigCredTemplate configCredTemplate;
 
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
+
+    private final UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler;
 
     /**
      * 按类型查询本数据源实例资产
@@ -66,15 +69,17 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                 .getId(), edsAssetTypeEnum.name());
     }
 
-    public BaseEdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                        EdsAssetIndexFacade edsAssetIndexFacade) {
-        this.edsAssetService = edsAssetService;
-        this.simpleEdsFacade = simpleEdsFacade;
-        this.credentialService = credentialService;
-        this.configCredTemplate = configCredTemplate;
-        this.edsAssetIndexFacade = edsAssetIndexFacade;
-    }
+//    public BaseEdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+//                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+//                                        EdsAssetIndexFacade edsAssetIndexFacade,
+//                                        UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+//        this.edsAssetService = edsAssetService;
+//        this.simpleEdsFacade = simpleEdsFacade;
+//        this.credentialService = credentialService;
+//        this.configCredTemplate = configCredTemplate;
+//        this.edsAssetIndexFacade = edsAssetIndexFacade;
+//        this.updateBusinessFromAssetHandler = updateBusinessFromAssetHandler;
+//    }
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
@@ -177,9 +182,9 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
             if (!equals(edsAsset, newEdsAsset)) {
                 edsAssetService.updateByPrimaryKey(newEdsAsset);
                 // TODO 更新绑定的资产
+                updateBusinessFromAssetHandler.update(newEdsAsset);
             }
-        }
-        return newEdsAsset;
+        } return newEdsAsset;
     }
 
     /**

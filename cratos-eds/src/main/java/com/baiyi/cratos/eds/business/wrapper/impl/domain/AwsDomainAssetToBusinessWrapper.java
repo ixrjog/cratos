@@ -1,9 +1,9 @@
-package com.baiyi.cratos.eds.business.impl.domain;
+package com.baiyi.cratos.eds.business.wrapper.impl.domain;
 
 import com.amazonaws.services.route53domains.model.DomainSummary;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.eds.business.impl.domain.base.BaseDomainAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.wrapper.impl.domain.base.BaseDomainAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

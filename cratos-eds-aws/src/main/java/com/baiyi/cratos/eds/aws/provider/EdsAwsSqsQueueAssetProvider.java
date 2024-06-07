@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -36,8 +37,9 @@ public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionEdsAssetProvider<E
 
     public EdsAwsSqsQueueAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade, AwsSqsRepo awsSqsRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                       EdsAssetIndexFacade edsAssetIndexFacade, AwsSqsRepo awsSqsRepo,
+                                       UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,updateBusinessFromAssetHandler);
         this.awsSqsRepo = awsSqsRepo;
     }
 

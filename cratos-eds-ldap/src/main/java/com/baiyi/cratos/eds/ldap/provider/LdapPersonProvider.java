@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
@@ -31,21 +32,24 @@ public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConf
     private final LdapPersonRepo ldapPersonRepo;
 
     public LdapPersonProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                             EdsAssetIndexFacade edsAssetIndexFacade, LdapPersonRepo ldapPersonRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                              EdsAssetIndexFacade edsAssetIndexFacade, LdapPersonRepo ldapPersonRepo,
+                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.ldapPersonRepo = ldapPersonRepo;
     }
 
     @Override
-    protected List<LdapPerson.Person> listEntities(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance) throws EdsQueryEntitiesException {
+    protected List<LdapPerson.Person> listEntities(
+            ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance) throws EdsQueryEntitiesException {
         return ldapPersonRepo.queryPerson(instance.getEdsConfigModel());
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance, LdapPerson.Person entity) {
-        return newEdsAssetBuilder(instance, entity)
-                .assetIdOf(entity.getUsername())
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+                                  LdapPerson.Person entity) {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUsername())
                 .nameOf(entity.getDisplayName())
                 .build();
     }

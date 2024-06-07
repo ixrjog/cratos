@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
@@ -32,8 +33,10 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
 
     public LdapGroupProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                             EdsAssetIndexFacade edsAssetIndexFacade, LdapGroupRepo ldapGroupRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                             EdsAssetIndexFacade edsAssetIndexFacade, LdapGroupRepo ldapGroupRepo,
+                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.ldapGroupRepo = ldapGroupRepo;
     }
 

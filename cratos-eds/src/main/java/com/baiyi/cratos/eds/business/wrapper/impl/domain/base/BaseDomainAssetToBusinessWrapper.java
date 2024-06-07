@@ -1,8 +1,8 @@
-package com.baiyi.cratos.eds.business.impl.domain.base;
+package com.baiyi.cratos.eds.business.wrapper.impl.domain.base;
 
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.business.impl.base.BaseAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
 
 /**
  * @Author baiyi

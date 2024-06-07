@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.business;
+package com.baiyi.cratos.eds.business.wrapper;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;

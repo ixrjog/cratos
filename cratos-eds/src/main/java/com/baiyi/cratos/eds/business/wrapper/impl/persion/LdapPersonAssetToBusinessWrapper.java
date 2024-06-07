@@ -1,10 +1,10 @@
-package com.baiyi.cratos.eds.business.impl.persion;
+package com.baiyi.cratos.eds.business.wrapper.impl.persion;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.business.impl.base.BaseAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

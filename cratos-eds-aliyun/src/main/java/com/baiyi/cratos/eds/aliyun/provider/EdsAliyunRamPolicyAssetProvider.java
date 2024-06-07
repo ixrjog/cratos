@@ -15,6 +15,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -43,9 +44,10 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     public EdsAliyunRamPolicyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                           AliyunRamPolicyRepo aliyunRamPolicyRepo,
-                                           AliyunRamUserRepo aliyunRamUserRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                           AliyunRamPolicyRepo aliyunRamPolicyRepo, AliyunRamUserRepo aliyunRamUserRepo,
+                                           UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
     }
@@ -84,7 +86,8 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
                                                       EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            List<ListEntitiesForPolicyResponse.User> users =  aliyunRamUserRepo.listUsersForPolicy( instance.getEdsConfigModel(),entity.getPolicyName(),entity.getPolicyType());
+            List<ListEntitiesForPolicyResponse.User> users = aliyunRamUserRepo.listUsersForPolicy(
+                    instance.getEdsConfigModel(), entity.getPolicyName(), entity.getPolicyType());
             if (!CollectionUtils.isEmpty(users)) {
                 final String policyName = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
                         .join(users.stream()

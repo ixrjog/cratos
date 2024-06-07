@@ -2,8 +2,8 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.business.AssetToBusinessWrapperFactory;
-import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
+import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;

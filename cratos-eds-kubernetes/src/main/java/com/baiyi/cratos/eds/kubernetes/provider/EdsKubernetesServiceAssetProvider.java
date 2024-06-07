@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
@@ -40,16 +41,18 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
     public EdsKubernetesServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,KubernetesServiceRepo kubernetesServiceRepo) {
+                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
+                                             KubernetesServiceRepo kubernetesServiceRepo,
+                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                kubernetesNamespaceRepo);
+                kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
         this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 
     @Override
     protected List<Service> listEntities(String namespace,
                                          ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesServiceRepo.list(instance.getEdsConfigModel(),namespace);
+        return kubernetesServiceRepo.list(instance.getEdsConfigModel(), namespace);
     }
 
     @Override
@@ -63,7 +66,7 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             indices.add(toEdsAssetIndex(edsAsset, "env", env));
         }
         String appName = getMetadataLabel(entity, "app");
-        if(StringUtils.hasText(appName)){
+        if (StringUtils.hasText(appName)) {
             if (StringUtils.hasText(env)) {
                 // 去掉环境后缀
                 if (appName.endsWith("-" + env)) {

@@ -3,12 +3,14 @@ package com.baiyi.cratos.eds.domain.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsGandiConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.domain.model.GandiDomain;
 import com.baiyi.cratos.eds.domain.repo.GandiDomainRepo;
@@ -32,8 +34,10 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     public EdsGandiDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade, GandiDomainRepo gandiDomainRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade);
+                                       EdsAssetIndexFacade edsAssetIndexFacade, GandiDomainRepo gandiDomainRepo,
+                                       UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.gandiDomainRepo = gandiDomainRepo;
     }
 
@@ -41,7 +45,7 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     protected List<GandiDomain.Domain> listEntities(
             ExternalDataSourceInstance<EdsGandiConfigModel.Gandi> instance) throws EdsQueryEntitiesException {
         try {
-           return gandiDomainRepo.queryDomains(instance.getEdsConfigModel());
+            return gandiDomainRepo.queryDomains(instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
@@ -58,6 +62,11 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
                 .expiredTimeOf(entity.getDates()
                         .getRegistryEndsAt())
                 .build();
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }

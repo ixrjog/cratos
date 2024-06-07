@@ -1,9 +1,9 @@
-package com.baiyi.cratos.eds.business.impl.base;
+package com.baiyi.cratos.eds.business.wrapper.impl;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
-import com.baiyi.cratos.eds.business.IAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import jakarta.annotation.Resource;
