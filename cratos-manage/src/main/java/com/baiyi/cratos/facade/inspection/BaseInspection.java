@@ -5,9 +5,9 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -15,6 +15,7 @@ import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 
@@ -28,7 +29,7 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 @Slf4j
-public abstract class BaseInspection {
+public abstract class BaseInspection implements InspectionTask, InitializingBean {
 
     private final NotificationTemplateService notificationTemplateService;
 
@@ -40,6 +41,9 @@ public abstract class BaseInspection {
 
     @Value("${cratos.language:en-us}")
     protected String language;
+
+    @Value("${spring.config.activate.on-profile:dev}")
+    private String onProfile;
 
     public BaseInspection(NotificationTemplateService notificationTemplateService,
                           DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
@@ -86,12 +90,21 @@ public abstract class BaseInspection {
                     .produceConfig(edsConfig);
             try {
                 DingtalkRobot.Msg message = toRobotMsg(getMsg());
-                dingtalkRobotService.send(robot.getToken(), message);
-                providerHolder.importAsset(message);
+                if (onProfile.equals("dev")) {
+                    System.out.println(message);
+                } else {
+                    dingtalkRobotService.send(robot.getToken(), message);
+                    providerHolder.importAsset(message);
+                }
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        InspectionFactory.register(this);
     }
 
 }

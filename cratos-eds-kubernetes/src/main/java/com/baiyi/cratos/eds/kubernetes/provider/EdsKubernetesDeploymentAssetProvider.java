@@ -20,11 +20,17 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
+import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 
@@ -40,6 +46,8 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     public static final String REPLICAS = "replicas";
+
+    public static final String GROUP = "deployment.spec.template.metadata.labels.group";
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                 CredentialService credentialService,
@@ -85,6 +93,17 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
         int replicas = KubeUtil.getReplicas(entity);
         indices.add(toEdsAssetIndex(edsAsset, REPLICAS, replicas));
+
+        // group标签
+        Map<String, String> labels = Optional.of(entity)
+                .map(Deployment::getSpec)
+                .map(DeploymentSpec::getTemplate)
+                .map(PodTemplateSpec::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Maps.newHashMap());
+        if (labels.containsKey("group")) {
+            indices.add(toEdsAssetIndex(edsAsset, GROUP, labels.get("group")));
+        }
         return indices;
     }
 

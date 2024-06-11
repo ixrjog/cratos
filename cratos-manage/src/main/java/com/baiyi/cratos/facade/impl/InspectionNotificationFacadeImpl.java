@@ -1,11 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.facade.InspectionNotificationFacade;
-import com.baiyi.cratos.facade.inspection.CertificateInspection;
-import com.baiyi.cratos.facade.inspection.DomainInspection;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.facade.inspection.InspectionFactory;
+import com.baiyi.cratos.facade.inspection.InspectionTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -14,23 +16,20 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class InspectionNotificationFacadeImpl implements InspectionNotificationFacade {
-
-    private final DomainInspection domainInspection;
-
-    private final CertificateInspection certificateInspection;
 
     @Override
     public void doTask() {
-        try {
-            domainInspection.inspectionTask();
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        List<InspectionTask> tasks = InspectionFactory.getTasks();
+        if (CollectionUtils.isEmpty(tasks)) {
+            return;
         }
+        tasks.forEach(this::doTask);
+    }
 
+    private void doTask(InspectionTask inspectionTask){
         try {
-            certificateInspection.inspectionTask();
+            inspectionTask.inspectionTask();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
