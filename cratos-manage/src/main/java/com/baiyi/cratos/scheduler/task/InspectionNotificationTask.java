@@ -1,7 +1,7 @@
 package com.baiyi.cratos.scheduler.task;
 
 import com.baiyi.cratos.configuration.condition.EnvCondition;
-import com.baiyi.cratos.facade.InspectionNotificationFacade;
+import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -20,12 +20,12 @@ import org.springframework.stereotype.Component;
 @Conditional(EnvCondition.class)
 public class InspectionNotificationTask {
 
-    private final InspectionNotificationFacade inspectionNotificationFacade;
+    // private final InspectionNotificationFacade inspectionNotificationFacade;
 
-    @Scheduled(cron = "0 0 10 * * ?")
+    @Scheduled(cron = "0 11 10 * * ?")
     @SchedulerLock(name = "INSPECTION_NOTIFICATION_TASK", lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void task() {
-        inspectionNotificationFacade.doTask();
+        InspectionFactory.doTask();
     }
 
 }

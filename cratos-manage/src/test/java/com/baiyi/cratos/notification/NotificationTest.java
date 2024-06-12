@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.util.BeetlUtil;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.facade.InspectionNotificationFacade;
+import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import com.baiyi.cratos.service.DomainService;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import jakarta.annotation.Resource;
@@ -30,9 +30,6 @@ public class NotificationTest extends BaseUnit {
     @Resource
     private DomainService domainService;
 
-    @Resource
-    private InspectionNotificationFacade inspectionNotificationFacade;
-
     @Test
     void test() throws IOException {
         NotificationTemplate notificationTemplate = notificationTemplateService.getById(1);
@@ -41,13 +38,12 @@ public class NotificationTest extends BaseUnit {
         String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                 .put("domains", domainList)
                 .build());
-
         System.out.println(msg);
     }
 
     @Test
     void taskTest() {
-        inspectionNotificationFacade.doTask();
+        InspectionFactory.doTask();
     }
 
 }

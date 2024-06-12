@@ -42,8 +42,8 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     @Value("${cratos.language:en-us}")
     protected String language;
 
-    @Value("${spring.config.activate.on-profile:dev}")
-    private String onProfile;
+    @Value("${cratos.notification:NORMAL}")
+    private String notification;
 
     public BaseInspection(NotificationTemplateService notificationTemplateService,
                           DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
@@ -90,7 +90,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
                     .produceConfig(edsConfig);
             try {
                 DingtalkRobot.Msg message = toRobotMsg(getMsg());
-                if (onProfile.equals("dev")) {
+                if (notification.equals("LOCAL")) {
                     System.out.println(message);
                 } else {
                     dingtalkRobotService.send(robot.getToken(), message);

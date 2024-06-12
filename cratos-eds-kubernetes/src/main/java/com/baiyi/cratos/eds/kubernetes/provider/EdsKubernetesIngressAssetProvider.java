@@ -21,6 +21,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,7 +81,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(Ingress::getStatus)
                 .map(IngressStatus::getLoadBalancer)
                 .map(IngressLoadBalancerStatus::getIngress);
-        if (optionalIngressLoadBalancerIngresses.isPresent()) {
+        if (optionalIngressLoadBalancerIngresses.isPresent() && !CollectionUtils.isEmpty(optionalIngressLoadBalancerIngresses.get())) {
             IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
                     .getFirst();
             return toEdsAssetIndex(edsAsset, LB_INGRESS_HOSTNAME, ingressLoadBalancerIngress.getHostname());
