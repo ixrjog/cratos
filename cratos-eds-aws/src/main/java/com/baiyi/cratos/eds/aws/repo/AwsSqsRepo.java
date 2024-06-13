@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.sqs.model.*;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
-import com.baiyi.cratos.eds.aws.client.AmazonSqsService;
+import com.baiyi.cratos.eds.aws.service.AmazonSqsService;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;

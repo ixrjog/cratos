@@ -1,18 +1,22 @@
 package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.cloudwatch.model.*;
-import com.baiyi.cratos.eds.aws.client.AmazonCloudWatchService;
+import com.baiyi.cratos.eds.aws.service.AmazonCloudWatchService;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/1 14:38
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AwsCloudWatchRepo {
 
     public static List<MessageData> getMetricData(String regionId, EdsAwsConfigModel.Aws aws, GetMetricDataRequest request) {

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aws.client;
+package com.baiyi.cratos.eds.aws.service;
 
 import com.baiyi.cratos.eds.aws.model.InstanceModel;
 import org.springframework.web.service.annotation.GetExchange;
