@@ -23,10 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider.REPLICAS;
@@ -47,6 +44,8 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
     public static final String APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION = "APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION";
 
     private static final String MSG_TPL = "{}[{}/{}][{}/{}][{}/{}][{}/{}]<{}>";
+
+    private static final String[] FILTER_LIST = {"oss-chuanyinet-front-static"};
 
     public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
                                                    DingtalkRobotService dingtalkRobotService,
@@ -123,6 +122,11 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
             // 过滤掉 h5应用
             if (appNameIndex.getValue()
                     .endsWith("-h5")) {
+                continue;
+            }
+            if (Arrays.stream(FILTER_LIST)
+                    .anyMatch(s -> appNameIndex.getValue()
+                            .equals(s))) {
                 continue;
             }
             // 获取资产信息
