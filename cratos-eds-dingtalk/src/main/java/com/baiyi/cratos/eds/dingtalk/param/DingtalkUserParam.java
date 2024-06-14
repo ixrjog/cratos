@@ -7,11 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2021/11/29 4:12 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DingtalkUserParam {
 
     /**

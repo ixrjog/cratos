@@ -1,21 +1,22 @@
 package com.baiyi.cratos.common.builder;
 
 import com.google.common.collect.Maps;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2021/6/16 1:24 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DictBuilder {
 
     private final Map<String, String> dict = Maps.newHashMap();
-
-    private DictBuilder() {
-    }
 
     static public DictBuilder newBuilder() {
         return new DictBuilder();

@@ -9,11 +9,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/8 10:13
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsLdapConfigModel {
 
     private static final String RDN = "{}={}";

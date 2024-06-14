@@ -2,19 +2,20 @@ package com.baiyi.cratos.event.factory;
 
 import com.baiyi.cratos.domain.message.IEventMessage;
 import com.baiyi.cratos.event.consumer.IEventConsumer;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/3/20 15:56
  * &#064;Version  1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EventConsumerFactory {
-
-    private EventConsumerFactory() {
-    }
 
     private final static ConcurrentHashMap<String, List<IEventConsumer<? extends IEventMessage>>> CONTEXT = new ConcurrentHashMap<>();
 

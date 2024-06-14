@@ -5,16 +5,20 @@ import com.baiyi.cratos.domain.view.HasResourceCount;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.util.List;
 import java.util.Map;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/1/17 17:20
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacRoleVO {
 
     public interface HasRbacRole {

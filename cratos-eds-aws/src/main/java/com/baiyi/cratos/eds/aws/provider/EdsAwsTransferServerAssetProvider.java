@@ -68,7 +68,6 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionEdsAssetProv
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                   AwsTransferServer.TransferServer entity) {
         return newEdsAssetBuilder(instance, entity)
-                // ARN
                 .assetIdOf(entity.getServer()
                         .getServerId())
                 .nameOf(entity.getServer()

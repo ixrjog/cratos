@@ -8,11 +8,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/5 17:49
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsConfigParam {
 
     @Data

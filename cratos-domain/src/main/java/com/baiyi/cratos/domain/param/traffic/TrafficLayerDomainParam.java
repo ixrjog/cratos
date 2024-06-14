@@ -9,11 +9,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 11:42
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficLayerDomainParam {
 
     @EqualsAndHashCode(callSuper = true)

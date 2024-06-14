@@ -3,12 +3,16 @@ package com.baiyi.cratos.eds.dingtalk.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2021/11/29 3:17 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DingtalkResult {
 
     @Data

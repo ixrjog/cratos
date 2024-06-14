@@ -11,11 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/15 上午11:07
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ServerAccountParam {
 
     @EqualsAndHashCode(callSuper = true)

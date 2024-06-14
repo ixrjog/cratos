@@ -5,17 +5,21 @@ import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/23 下午5:01
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RiskEventGraphVO {
 
     @Data

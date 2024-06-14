@@ -2,10 +2,13 @@ package com.baiyi.cratos.wrapper.factory;
 
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
@@ -13,10 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class BusinessWrapperFactory {
-
-    private BusinessWrapperFactory() {
-    }
 
     private static final Map<String, IBusinessWrapper<?, ?>> CONTEXT = new ConcurrentHashMap<>();
 

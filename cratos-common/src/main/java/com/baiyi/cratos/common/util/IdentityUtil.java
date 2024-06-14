@@ -2,18 +2,19 @@ package com.baiyi.cratos.common.util;
 
 import com.baiyi.cratos.common.fun.HasRun;
 import com.baiyi.cratos.common.fun.ValidRunnableFunction;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/2/6 16:04
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class IdentityUtil {
-
-    private IdentityUtil() {
-    }
 
     public static boolean hasIdentity(Integer id) {
         if (id == null) {

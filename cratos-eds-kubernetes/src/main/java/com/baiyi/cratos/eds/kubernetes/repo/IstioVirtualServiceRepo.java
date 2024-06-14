@@ -5,11 +5,14 @@ import com.baiyi.cratos.eds.kubernetes.client.istio.IstioClientBuilder;
 import io.fabric8.istio.api.networking.v1alpha3.VirtualService;
 import io.fabric8.istio.api.networking.v1alpha3.VirtualServiceList;
 import io.fabric8.istio.client.IstioClient;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
@@ -17,6 +20,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class IstioVirtualServiceRepo {
 
     public static List<VirtualService> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {

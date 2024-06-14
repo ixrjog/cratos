@@ -4,14 +4,18 @@ import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/15 下午5:08
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RiskEventImpactParam {
 
     @Data

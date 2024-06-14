@@ -2,10 +2,13 @@ package com.baiyi.cratos.common.auth.factory;
 
 
 import com.baiyi.cratos.common.auth.IAuthProvider;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
@@ -13,10 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class AuthProviderFactory {
-
-    private AuthProviderFactory() {
-    }
 
     private static final Map<String, IAuthProvider> CONTEXT = new ConcurrentHashMap<>();
 

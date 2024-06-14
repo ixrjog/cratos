@@ -7,11 +7,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/1 16:05
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsCloudflareConfigModel {
 
     // https://developers.cloudflare.com/api/

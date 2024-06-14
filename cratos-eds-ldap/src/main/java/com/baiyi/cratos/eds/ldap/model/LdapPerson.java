@@ -6,11 +6,14 @@ import org.springframework.ldap.odm.annotations.Entry;
 
 import java.util.Date;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/8 10:17
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class LdapPerson {
 
     @Builder

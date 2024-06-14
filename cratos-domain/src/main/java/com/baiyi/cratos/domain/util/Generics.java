@@ -1,4 +1,6 @@
 package com.baiyi.cratos.domain.util;
+import lombok.NoArgsConstructor;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -8,12 +10,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/9 11:43
  * @Version 1.0
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
+@NoArgsConstructor(access = PRIVATE)
 public class Generics {
 
     /**

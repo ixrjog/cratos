@@ -4,15 +4,19 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/19 14:19
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EnvVO {
 
     public interface HasEnv {

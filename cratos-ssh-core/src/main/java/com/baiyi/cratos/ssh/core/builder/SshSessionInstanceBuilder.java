@@ -6,15 +6,19 @@ import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.core.model.PodAssetModel;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodStatus;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.Optional;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/24 上午10:20
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class SshSessionInstanceBuilder {
 
     private static final String DEFAULT_LOGIN_USER = "SYSTEM";

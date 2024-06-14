@@ -3,18 +3,20 @@ package com.baiyi.cratos.eds.core.util;
 import com.baiyi.cratos.common.util.YamlUtil;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.google.gson.JsonSyntaxException;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2021/6/18 5:07 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AssetUtil {
-
-    private AssetUtil(){}
 
     public static boolean equals(String var1, String var2) {
         if (StringUtils.isEmpty(var1)) {

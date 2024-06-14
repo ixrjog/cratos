@@ -3,15 +3,19 @@ package com.baiyi.cratos.eds.aws.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/11 下午2:44
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class InstanceModel {
 
     @Data

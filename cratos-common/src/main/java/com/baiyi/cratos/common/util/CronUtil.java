@@ -1,21 +1,22 @@
 package com.baiyi.cratos.common.util;
 
 import com.google.common.collect.Lists;
+import lombok.NoArgsConstructor;
 import org.springframework.scheduling.support.CronExpression;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2022/3/23 17:34
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CronUtil {
-
-    private CronUtil() {
-    }
 
     private static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 

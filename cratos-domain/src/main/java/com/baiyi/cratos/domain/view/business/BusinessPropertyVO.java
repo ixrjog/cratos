@@ -5,16 +5,20 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/22 10:18
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class BusinessPropertyVO {
 
     public interface HasBusinessProperties extends BaseBusiness.HasBusiness {

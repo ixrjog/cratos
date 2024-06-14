@@ -9,11 +9,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 17:04
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficLayerRecordParam {
 
     public interface IToTrafficLayerRecord {

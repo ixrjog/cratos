@@ -1,5 +1,6 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -8,15 +9,15 @@ import org.beetl.core.resource.StringTemplateResourceLoader;
 import java.io.IOException;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/7 下午4:42
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class BeetlUtil {
-
-    private BeetlUtil() {
-    }
 
     /**
      * 渲染模板

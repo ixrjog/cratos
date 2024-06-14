@@ -11,11 +11,14 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/18 下午1:43
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AppGroupSpec {
 
     @Data

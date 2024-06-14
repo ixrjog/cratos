@@ -4,11 +4,14 @@ import lombok.*;
 import org.springframework.ldap.odm.annotations.Attribute;
 import org.springframework.ldap.odm.annotations.Entry;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/8 10:16
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class LdapGroup {
 
     @Data

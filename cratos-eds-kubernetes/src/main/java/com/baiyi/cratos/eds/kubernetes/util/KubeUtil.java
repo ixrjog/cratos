@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.PodSpec;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -14,15 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/23 下午3:41
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class KubeUtil {
-
-    private KubeUtil() {
-    }
 
     public static int getReplicas(Deployment deployment) {
         return Optional.of(deployment)

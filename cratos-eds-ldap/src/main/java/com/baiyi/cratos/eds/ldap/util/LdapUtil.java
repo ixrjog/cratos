@@ -4,16 +4,17 @@ import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.google.common.base.Joiner;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/8 10:26
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class LdapUtil {
-
-    private LdapUtil() {
-    }
 
     public static String toUserRDN(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
         return Joiner.on("=").join(ldapConfig.getUser().getId(), person.getUsername());

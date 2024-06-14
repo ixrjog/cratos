@@ -8,11 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/5 17:11
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsInstanceParam {
 
     @EqualsAndHashCode(callSuper = true)

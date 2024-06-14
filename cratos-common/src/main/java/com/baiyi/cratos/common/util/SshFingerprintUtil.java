@@ -4,17 +4,18 @@ import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/19 下午5:38
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class SshFingerprintUtil {
-
-    private SshFingerprintUtil() {
-    }
 
     public static String calcFingerprint(String privateKey, String publicKey) {
         String fingerprint = "-";

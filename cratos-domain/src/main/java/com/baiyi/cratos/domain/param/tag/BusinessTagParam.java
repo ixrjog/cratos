@@ -5,15 +5,19 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/1/5 17:54
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class BusinessTagParam {
 
     public interface HasQueryByTag {

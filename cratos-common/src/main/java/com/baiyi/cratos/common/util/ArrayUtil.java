@@ -1,13 +1,18 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2023/7/26 09:24
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ArrayUtil {
 
     public static char[] sub(char[] array, int start, int end) {

@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2023/9/14 14:13
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ExampleVO {
 
     @Data

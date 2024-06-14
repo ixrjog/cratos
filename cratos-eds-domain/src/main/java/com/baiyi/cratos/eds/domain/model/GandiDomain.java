@@ -13,11 +13,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/6/4 下午2:56
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GandiDomain {
 
     @Data

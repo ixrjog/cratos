@@ -11,11 +11,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/28 14:53
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsAssetVO {
 
     @Data

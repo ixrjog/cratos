@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/21 11:24
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsGitLabConfigModel {
 
     @Data

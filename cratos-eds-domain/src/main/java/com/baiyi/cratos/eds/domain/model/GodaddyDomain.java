@@ -10,11 +10,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/6/5 下午3:11
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GodaddyDomain {
 
     private final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";

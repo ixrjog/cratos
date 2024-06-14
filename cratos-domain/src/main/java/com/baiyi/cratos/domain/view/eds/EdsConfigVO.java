@@ -7,15 +7,19 @@ import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/2/5 17:51
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsConfigVO {
 
     public interface HasEdsConfig {

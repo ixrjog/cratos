@@ -11,11 +11,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/1 09:46
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CachedVO {
 
     public interface ICached {

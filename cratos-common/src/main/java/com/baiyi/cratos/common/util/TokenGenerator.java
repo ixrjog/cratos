@@ -1,16 +1,18 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.util.UUID;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/1/16 10:07
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TokenGenerator {
-
-    private TokenGenerator() {
-    }
 
     public static String generateToken() {
         UUID uuid = UUID.randomUUID();

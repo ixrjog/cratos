@@ -1,18 +1,19 @@
 package com.baiyi.cratos.common.util;
 
 import com.google.common.base.Joiner;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.helpers.MessageFormatter;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2023/7/14 13:23
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class StringFormatter {
-
-    private StringFormatter() {
-    }
 
     public static String arrayFormat(String str, Object... args) {
         return MessageFormatter.arrayFormat(str, args)

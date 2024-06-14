@@ -1,16 +1,17 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/26 上午10:18
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AliyunAlbClient {
-
-    private AliyunAlbClient() {
-    }
 
     /**
      * 使用AK&SK初始化账号Client

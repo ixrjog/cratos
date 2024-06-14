@@ -6,12 +6,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/22 10:38
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class BusinessPropertyParam {
 
     @Data

@@ -16,11 +16,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/15 下午3:25
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RiskEventVO {
 
     public interface IRiskEventImpacts {

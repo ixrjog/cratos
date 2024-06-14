@@ -12,11 +12,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/7 下午3:32
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class MenuParam {
 
     @Data

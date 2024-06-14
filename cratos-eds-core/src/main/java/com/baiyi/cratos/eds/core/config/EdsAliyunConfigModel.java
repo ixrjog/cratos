@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Set;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/26 10:52
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsAliyunConfigModel {
 
     @Data

@@ -12,11 +12,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/21 11:27
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ChannelNetworkParam {
 
     @Data

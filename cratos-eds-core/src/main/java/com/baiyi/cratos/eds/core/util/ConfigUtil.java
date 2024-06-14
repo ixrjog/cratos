@@ -4,17 +4,18 @@ import com.baiyi.cratos.common.util.YamlUtil;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.gson.JsonSyntaxException;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/2/27 14:12
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ConfigUtil {
-
-    private ConfigUtil() {
-    }
 
     /**
      * https://stackabuse.com/reading-and-writing-yaml-files-in-java-with-snakeyaml/

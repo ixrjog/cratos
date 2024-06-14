@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/15 上午10:09
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AwsSqs {
 
     @Data

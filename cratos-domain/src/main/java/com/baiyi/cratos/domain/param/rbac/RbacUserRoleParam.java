@@ -5,12 +5,16 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/18 16:03
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacUserRoleParam {
 
     @Data

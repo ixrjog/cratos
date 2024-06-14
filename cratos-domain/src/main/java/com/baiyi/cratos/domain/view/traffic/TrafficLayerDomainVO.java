@@ -15,11 +15,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 11:32
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficLayerDomainVO {
 
     public interface HasDomain {

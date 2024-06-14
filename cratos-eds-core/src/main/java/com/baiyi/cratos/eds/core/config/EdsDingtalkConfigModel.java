@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/5/6 上午10:39
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsDingtalkConfigModel {
 
     @Data

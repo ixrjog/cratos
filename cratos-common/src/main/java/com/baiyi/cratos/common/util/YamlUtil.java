@@ -1,21 +1,22 @@
 package com.baiyi.cratos.common.util;
 
 import com.google.gson.JsonSyntaxException;
+import lombok.NoArgsConstructor;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.representer.Representer;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2023/3/29 13:45
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class YamlUtil {
-
-    private YamlUtil() {
-    }
 
     /**
      * 2.0

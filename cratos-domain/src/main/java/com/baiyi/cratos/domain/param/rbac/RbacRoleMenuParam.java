@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/8 下午3:13
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacRoleMenuParam {
 
     public interface IToRoleMenus {

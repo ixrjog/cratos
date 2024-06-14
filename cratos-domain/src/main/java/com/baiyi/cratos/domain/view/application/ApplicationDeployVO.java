@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/20 上午10:59
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ApplicationDeployVO {
 
     @EqualsAndHashCode(callSuper = true)

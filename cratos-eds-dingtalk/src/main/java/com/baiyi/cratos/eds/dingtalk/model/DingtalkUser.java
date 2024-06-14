@@ -11,11 +11,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2021/11/29 4:20 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DingtalkUser {
 
     @EqualsAndHashCode(callSuper = true)

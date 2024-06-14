@@ -5,21 +5,22 @@ import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.domain20180129.AsyncClient;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import darabonba.core.client.ClientOverrideConfiguration;
+import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.util.Optional;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/26 上午10:19
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AliyunDomainAsyncClient {
 
     private static final String ENDPOINT_OVERRIDE = "domain.aliyuncs.com";
-
-    private AliyunDomainAsyncClient() {
-    }
 
     public static AsyncClient createClient(EdsAliyunConfigModel.Aliyun aliyun) {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()

@@ -11,11 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/27 11:25
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacResourceParam {
 
     @Data

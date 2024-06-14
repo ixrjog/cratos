@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.gitlab.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -11,12 +12,15 @@ import org.gitlab4j.api.models.*;
 import java.util.List;
 import java.util.Optional;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/21 11:43
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class GitLabProjectRepo {
 
     public static final int ITEMS_PER_PAGE = 20;

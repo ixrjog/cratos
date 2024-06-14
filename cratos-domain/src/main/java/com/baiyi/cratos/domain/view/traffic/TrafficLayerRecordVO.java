@@ -17,11 +17,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 11:34
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficLayerRecordVO {
 
     public interface IRecord {

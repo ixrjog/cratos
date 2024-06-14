@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/7 10:06
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsKubernetesConfigModel {
 
     @Data

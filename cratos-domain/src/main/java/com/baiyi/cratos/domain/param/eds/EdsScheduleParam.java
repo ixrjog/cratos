@@ -6,11 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/11 11:04
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsScheduleParam {
 
     @Data

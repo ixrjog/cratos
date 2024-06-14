@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/23 下午6:00
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GraphVO {
 
     @Data

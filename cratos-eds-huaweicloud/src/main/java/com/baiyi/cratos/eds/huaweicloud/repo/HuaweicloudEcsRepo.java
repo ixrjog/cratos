@@ -8,9 +8,12 @@ import com.huaweicloud.sdk.ecs.v2.EcsClient;
 import com.huaweicloud.sdk.ecs.v2.model.ListServersDetailsRequest;
 import com.huaweicloud.sdk.ecs.v2.model.ListServersDetailsResponse;
 import com.huaweicloud.sdk.ecs.v2.model.ServerDetail;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
@@ -18,6 +21,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class HuaweicloudEcsRepo {
 
     private static final int LIMIT = 100;

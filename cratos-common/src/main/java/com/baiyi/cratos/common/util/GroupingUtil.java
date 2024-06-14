@@ -1,18 +1,19 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/4/19 上午10:16
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GroupingUtil {
-
-    private GroupingUtil() {
-    }
 
     public static void grouping(int total, List<Integer> groups) {
         int remaining = total;

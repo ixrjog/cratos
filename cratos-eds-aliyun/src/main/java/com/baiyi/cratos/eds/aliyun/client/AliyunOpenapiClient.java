@@ -2,12 +2,16 @@ package com.baiyi.cratos.eds.aliyun.client;
 
 import com.aliyun.teaopenapi.models.Config;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/2/26 11:36
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AliyunOpenapiClient {
 
     public static com.aliyun.cas20200407.Client createClient(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {

@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/11 下午3:24
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AwsEc2 {
 
     @Data

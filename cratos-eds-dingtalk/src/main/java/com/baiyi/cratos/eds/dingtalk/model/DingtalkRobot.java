@@ -10,11 +10,14 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/8 上午10:25
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DingtalkRobot {
 
     @Data

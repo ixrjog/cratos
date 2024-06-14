@@ -1,19 +1,20 @@
 package com.baiyi.cratos.service.factory.credential;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/2/6 10:00
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CredentialHolderFactory {
-
-    private CredentialHolderFactory() {
-    }
 
     @Getter
     private static final Map<String, ICredentialHolder> CONTEXT = new ConcurrentHashMap<>();

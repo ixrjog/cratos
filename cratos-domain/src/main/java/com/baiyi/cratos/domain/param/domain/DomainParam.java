@@ -17,11 +17,14 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/28 上午10:01
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DomainParam {
 
     @EqualsAndHashCode(callSuper = true)

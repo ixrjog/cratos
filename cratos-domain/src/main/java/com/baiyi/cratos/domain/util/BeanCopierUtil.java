@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.util;
 
 import com.google.common.collect.MapMaker;
+import lombok.NoArgsConstructor;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.util.CollectionUtils;
 
@@ -8,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2020/1/7 1:52 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class BeanCopierUtil {
-
-    private BeanCopierUtil() {
-    }
 
     private static final Map<String, BeanCopier> BEAN_COPIER_MAP = new MapMaker().initialCapacity(32).concurrencyLevel(32).makeMap();
 

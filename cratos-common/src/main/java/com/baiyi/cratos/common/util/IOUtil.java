@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.util;
 
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -8,11 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-@Slf4j
-public class IOUtil {
+import static lombok.AccessLevel.PRIVATE;
 
-    private IOUtil() {
-    }
+@Slf4j
+@NoArgsConstructor(access = PRIVATE)
+public class IOUtil {
 
     public static final String COMMENT_SIGN = "#";
 

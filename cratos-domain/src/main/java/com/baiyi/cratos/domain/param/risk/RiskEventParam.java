@@ -15,12 +15,15 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 
 /**
  * @Author baiyi
  * @Date 2024/4/15 下午3:16
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RiskEventParam {
 
     @EqualsAndHashCode(callSuper = true)

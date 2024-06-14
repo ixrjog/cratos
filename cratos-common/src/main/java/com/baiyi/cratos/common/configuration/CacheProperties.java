@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2022/9/27 09:58
  * @Version 1.0
  */
-
+@NoArgsConstructor(access = PRIVATE)
 public class CacheProperties {
 
     @Builder

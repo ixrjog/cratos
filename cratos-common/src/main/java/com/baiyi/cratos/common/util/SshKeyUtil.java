@@ -3,8 +3,11 @@ package com.baiyi.cratos.common.util;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.KeyPair;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
@@ -12,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class SshKeyUtil {
 
     /**

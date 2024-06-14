@@ -2,19 +2,20 @@ package com.baiyi.cratos.eds.kubernetes.client;
 
 import com.baiyi.cratos.eds.kubernetes.client.provider.IKubernetesClientProvider;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/27 11:19
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class KubernetesClientProviderFactory {
-
-    private KubernetesClientProviderFactory() {
-    }
 
     private static final Map<String, IKubernetesClientProvider> CONTEXT = new ConcurrentHashMap<>();
 

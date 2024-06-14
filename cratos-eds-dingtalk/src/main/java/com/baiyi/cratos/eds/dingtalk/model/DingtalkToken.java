@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2021/11/29 3:04 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DingtalkToken {
 
     @EqualsAndHashCode(callSuper = true)

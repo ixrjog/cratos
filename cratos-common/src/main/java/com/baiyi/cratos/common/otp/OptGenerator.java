@@ -3,6 +3,7 @@ package com.baiyi.cratos.common.otp;
 import com.baiyi.cratos.common.exception.OtpException;
 import com.baiyi.cratos.common.util.Base32StringUtil;
 import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
+import lombok.NoArgsConstructor;
 import org.slf4j.helpers.MessageFormatter;
 
 import javax.crypto.KeyGenerator;
@@ -15,15 +16,15 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/19 17:26
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class OptGenerator {
-
-    private OptGenerator() {
-    }
 
     // 30s
     private static final Duration DURATION = Duration.ofSeconds(30L);

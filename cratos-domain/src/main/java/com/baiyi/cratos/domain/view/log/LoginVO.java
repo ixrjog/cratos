@@ -6,11 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/10 11:37
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class LoginVO {
 
     @Data

@@ -7,14 +7,18 @@ import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersRequest;
 import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResponse;
 import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/17 下午1:48
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class HuaweicloudIamRepo {
 
     public static List<KeystoneListUsersResult> listUsers(

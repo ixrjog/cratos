@@ -11,11 +11,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/14 17:24
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacRoleResourceParam {
 
     public interface IToRbacRoleResources {

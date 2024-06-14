@@ -50,7 +50,7 @@ public class EdsAwsVpnAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAws
                 .stream()
                 .filter(e -> "Name".equals(e.getKey()))
                 .findAny();
-        String name = optionalTag.isPresent() ? optionalTag.get()
+        final String name = optionalTag.isPresent() ? optionalTag.get()
                 .getValue() : entity.getVpnConnectionId();
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpnConnectionId())
                 .nameOf(name)

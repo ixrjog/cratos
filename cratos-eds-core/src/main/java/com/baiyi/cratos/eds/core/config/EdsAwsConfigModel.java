@@ -9,11 +9,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/1 11:11
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsAwsConfigModel {
 
     @Data

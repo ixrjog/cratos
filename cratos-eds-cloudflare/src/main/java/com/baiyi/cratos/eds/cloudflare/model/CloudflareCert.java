@@ -3,15 +3,19 @@ package com.baiyi.cratos.eds.cloudflare.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/1 18:05
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CloudflareCert {
 
     @Data

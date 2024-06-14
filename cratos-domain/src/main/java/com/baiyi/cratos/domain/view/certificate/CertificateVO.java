@@ -11,17 +11,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/3 11:30
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CertificateVO {
 
     @EqualsAndHashCode(callSuper = true)

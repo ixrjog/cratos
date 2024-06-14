@@ -8,11 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/31 10:24
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RbacGroupParam {
 
     @Data

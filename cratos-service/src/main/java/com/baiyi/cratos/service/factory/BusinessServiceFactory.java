@@ -1,10 +1,13 @@
 package com.baiyi.cratos.service.factory;
 
 import com.baiyi.cratos.service.base.BaseBusinessService;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
@@ -12,10 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public class BusinessServiceFactory {
-
-    private BusinessServiceFactory() {
-    }
 
     private static final Map<String, BaseBusinessService<?>> CONTEXT = new ConcurrentHashMap<>();
 

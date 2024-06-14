@@ -8,11 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/10 11:38
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class LoginParam {
 
     @Builder

@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 
 import java.io.Serial;
@@ -18,11 +19,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/4/28 上午10:18
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class DomainVO {
 
     @EqualsAndHashCode(callSuper = true)

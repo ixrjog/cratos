@@ -1,15 +1,19 @@
 package com.baiyi.cratos.eds.gitlab.client;
 
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import lombok.NoArgsConstructor;
 import org.gitlab4j.api.GitLabApi;
 
 import java.util.Optional;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * @Author baiyi
  * @Date 2024/3/21 11:22
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GitLabApiFactory {
 
     // Set the connect timeout to 1 second and the read timeout to 5 seconds

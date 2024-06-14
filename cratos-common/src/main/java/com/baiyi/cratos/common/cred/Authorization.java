@@ -10,11 +10,14 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.nio.charset.StandardCharsets;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2021/5/18 4:28 下午
  * @Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class Authorization {
 
     public interface IToBasic {
