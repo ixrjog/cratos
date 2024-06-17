@@ -20,7 +20,6 @@ import java.io.PrintStream;
 @AllArgsConstructor
 public class SshSession {
 
-
     private String sessionId;
     /**
      * 服务器唯一id
@@ -28,7 +27,6 @@ public class SshSession {
      */
     private String instanceId;
     private PrintStream commander;
-
 
     private OutputStream inputToChannel;
     private Channel channel;

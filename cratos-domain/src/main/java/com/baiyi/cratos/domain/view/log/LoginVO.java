@@ -1,10 +1,14 @@
 package com.baiyi.cratos.domain.view.log;
 
+import com.baiyi.cratos.domain.constant.Global;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -28,6 +32,11 @@ public class LoginVO {
         private String name;
         private String uuid;
         private String token;
+
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        private Date expiredTime;
+
+        private Long maxAge;
 
     }
 

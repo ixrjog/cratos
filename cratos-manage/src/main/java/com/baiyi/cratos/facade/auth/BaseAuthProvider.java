@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.auth;
 
 import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
@@ -12,11 +13,10 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.domain.param.login.LoginParam;
 import com.baiyi.cratos.facade.UserTokenFacade;
-import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.UserService;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.List;
@@ -24,25 +24,16 @@ import java.util.List;
 import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
 import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
 
-/**
- * @Author baiyi
- * @Date 2024/1/10 13:46
- * @Version 1.0
- */
-
+@AllArgsConstructor
 public abstract class BaseAuthProvider implements IAuthProvider, InitializingBean {
 
-    @Resource
-    private UserTokenFacade userTokenFacade;
+    private final UserTokenFacade userTokenFacade;
 
-    @Resource
-    private UserService userService;
+    private final UserService userService;
 
-    @Resource
-    private BusinessCredentialService businessCredentialService;
+    private final BusinessCredentialService businessCredentialService;
 
-    @Resource
-    private CredentialService credentialService;
+    private final CredentialService credentialService;
 
     @Override
     public void afterPropertiesSet() {

@@ -26,6 +26,7 @@ public enum EdsAssetTypeEnum {
     AWS_SNS_TOPIC("SNS Topic"),
     AWS_SNS_SUBSCRIPTION("SNS Subscription"),
     AWS_TRANSFER_SERVER("Transfer Server"),
+    AWS_CLOUDFRONT_DISTRIBUTION("CloudFront Distribution"),
     HUAWEICLOUD_ECS("ECS"),
     HUAWEICLOUD_IAM_USER("IAM User"),
     CLOUDFLARE_CERT("Certificate"),

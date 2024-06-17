@@ -14,9 +14,12 @@ import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.auth.BaseAuthProvider;
+import com.baiyi.cratos.service.BusinessCredentialService;
+import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +34,6 @@ import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class LdapAuthProvider extends BaseAuthProvider {
 
     private final LdapClient ldapClient;
@@ -39,6 +41,15 @@ public class LdapAuthProvider extends BaseAuthProvider {
     private final EdsFacade edsFacade;
 
     private final EdsConfigService edsConfigService;
+
+    public LdapAuthProvider(UserTokenFacade userTokenFacade, UserService userService,
+                            BusinessCredentialService businessCredentialService, CredentialService credentialService,
+                            LdapClient ldapClient, EdsFacade edsFacade, EdsConfigService edsConfigService) {
+        super(userTokenFacade, userService, businessCredentialService, credentialService);
+        this.ldapClient = ldapClient;
+        this.edsFacade = edsFacade;
+        this.edsConfigService = edsConfigService;
+    }
 
     @Override
     public String getName() {
@@ -56,7 +67,8 @@ public class LdapAuthProvider extends BaseAuthProvider {
         for (EdsInstance edsLdapInstance : edsLdapInstances) {
             EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
             if (edsConfig != null) {
-                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(), edsConfig);
+                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
+                        edsConfig);
                 boolean pass = ldapClient.verifyLogin(ldap, credential);
                 if (pass) {
                     UserToken userToken = revokeAndIssueNewToken(loginParam);
@@ -81,7 +93,8 @@ public class LdapAuthProvider extends BaseAuthProvider {
         for (EdsInstance edsLdapInstance : edsLdapInstances) {
             EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
             if (edsConfig != null) {
-                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(), edsConfig);
+                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
+                        edsConfig);
                 boolean pass = ldapClient.verifyLogin(ldap, credential);
                 if (pass) {
                     return true;

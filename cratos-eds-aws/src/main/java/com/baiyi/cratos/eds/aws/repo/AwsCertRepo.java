@@ -27,7 +27,6 @@ public class AwsCertRepo {
         while (true) {
             ListCertificatesResult result = AmazonAcmService.buildAWSCertificateManager(regionId, aws)
                     .listCertificates(request);
-
             certificateSummaryList.addAll(result.getCertificateSummaryList());
             if (StringUtils.hasText(result.getNextToken())) {
                 request.setNextToken(result.getNextToken());
