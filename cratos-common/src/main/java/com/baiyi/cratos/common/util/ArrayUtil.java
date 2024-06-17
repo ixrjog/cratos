@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class ArrayUtil {
+public final class ArrayUtil {
 
     public static char[] sub(char[] array, int start, int end) {
         int length = Array.getLength(array);

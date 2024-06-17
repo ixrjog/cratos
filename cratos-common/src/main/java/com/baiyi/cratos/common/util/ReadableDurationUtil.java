@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @Date 2024/2/27 11:19
  * @Version 1.0
  */
-public class ReadableDurationUtil {
+public final class ReadableDurationUtil {
 
     private static final Pattern ISO8601 = Pattern.compile("^[+\\-]?P.*$");
     private static final Pattern SIMPLE = Pattern.compile("^([+\\-]?\\d+)([a-zA-Z]{0,2})$");

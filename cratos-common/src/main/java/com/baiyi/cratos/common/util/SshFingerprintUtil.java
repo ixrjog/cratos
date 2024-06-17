@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class SshFingerprintUtil {
+public final class SshFingerprintUtil {
 
     public static String calcFingerprint(String privateKey, String publicKey) {
         String fingerprint = "-";

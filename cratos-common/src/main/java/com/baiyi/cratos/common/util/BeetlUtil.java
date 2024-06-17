@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class BeetlUtil {
+public final class BeetlUtil {
 
     /**
      * 渲染模板

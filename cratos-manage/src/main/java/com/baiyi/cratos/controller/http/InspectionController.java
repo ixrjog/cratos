@@ -4,11 +4,13 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,6 +29,13 @@ public class InspectionController {
     @GetMapping(value = "/notification/send", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> sendInspectionNotification() {
         InspectionFactory.doTask();
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Send inspection notification by name")
+    @GetMapping(value = "/notification/send/by/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> sendInspectionNotificationByName(@RequestParam @Valid String name) {
+        InspectionFactory.doTask(name);
         return HttpResult.SUCCESS;
     }
 

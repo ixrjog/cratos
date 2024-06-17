@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * @Date 2024/1/19 17:24
  * @Version 1.0
  */
-public class Base32StringUtil {
+public final class Base32StringUtil {
 
     // singleton
 
@@ -32,20 +32,21 @@ public class Base32StringUtil {
 
     private static final String SEPARATOR = "-";
 
-    protected Base32StringUtil(String alphabet) {
+    private Base32StringUtil(String alphabet) {
         // 32 alpha-numeric characters.
         DIGITS = alphabet.toCharArray();
         MASK = DIGITS.length - 1;
         SHIFT = Integer.numberOfTrailingZeros(DIGITS.length);
         CHAR_MAP = Maps.newHashMap();
-        IntStream.range(0, DIGITS.length).forEach(i -> CHAR_MAP.put(DIGITS[i], i));
+        IntStream.range(0, DIGITS.length)
+                .forEach(i -> CHAR_MAP.put(DIGITS[i], i));
     }
 
     public static byte[] decode(String encoded) throws OtpException.DecodingException {
         return getInstance().decodeInternal(encoded);
     }
 
-    protected byte[] decodeInternal(String encoded) throws OtpException.DecodingException {
+    private byte[] decodeInternal(String encoded) throws OtpException.DecodingException {
         // Remove whitespace and separators
         encoded = encoded.trim()
                 .replaceAll(SEPARATOR, "")
@@ -86,7 +87,7 @@ public class Base32StringUtil {
         return getInstance().encodeInternal(data);
     }
 
-    protected String encodeInternal(byte[] data) {
+    private String encodeInternal(byte[] data) {
         if (data.length == 0) {
             return "";
         }

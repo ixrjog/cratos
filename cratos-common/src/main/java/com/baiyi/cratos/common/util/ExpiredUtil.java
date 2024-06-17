@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class ExpiredUtil {
+public final class ExpiredUtil {
 
     /**
      * 是否过期

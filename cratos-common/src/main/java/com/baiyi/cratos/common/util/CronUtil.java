@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class CronUtil {
+public final class CronUtil {
 
     private static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 

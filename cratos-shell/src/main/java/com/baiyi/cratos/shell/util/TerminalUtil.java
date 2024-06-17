@@ -17,6 +17,11 @@ import java.util.EnumSet;
  */
 public class TerminalUtil {
 
+    private static final int OFF = 0;
+
+    private static final int ON = 1;
+
+
     private TerminalUtil() {
     }
 
@@ -49,9 +54,9 @@ public class TerminalUtil {
         // one input byte is enough to return from read, inter-character timer off
         // VMIN 1 / VTIME 0 / VINTR 0
         // http://unixwiz.net/techtips/termios-vmin-vtime.html
-        newAttr.setControlChar(Attributes.ControlChar.VMIN, 1);
-        newAttr.setControlChar(Attributes.ControlChar.VTIME, 0);
-        newAttr.setControlChar(Attributes.ControlChar.VINTR, 0);
+        newAttr.setControlChar(Attributes.ControlChar.VMIN, ON);
+        newAttr.setControlChar(Attributes.ControlChar.VTIME, OFF);
+        newAttr.setControlChar(Attributes.ControlChar.VINTR, OFF);
         terminal.setAttributes(newAttr);
     }
 

@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class IOUtil {
+public final class IOUtil {
 
     public static final String COMMENT_SIGN = "#";
 

@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class YamlUtil {
+public final class YamlUtil {
 
     /**
      * 2.0

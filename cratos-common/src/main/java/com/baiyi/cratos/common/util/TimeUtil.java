@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2024/3/1 09:58
  * @Version 1.0
  */
-public class TimeUtil {
+public final class TimeUtil {
 
     public static final String YEAR = "yyyy";
 

@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class TokenGenerator {
+public final class TokenGenerator {
 
     public static String generateToken() {
         UUID uuid = UUID.randomUUID();

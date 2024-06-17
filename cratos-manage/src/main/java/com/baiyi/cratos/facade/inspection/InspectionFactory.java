@@ -27,6 +27,8 @@ public class InspectionFactory {
     }
 
     public static void register(InspectionTask bean) {
+        log.debug("InspectionFactory Registered: {}", bean.getClass()
+                .getSimpleName());
         CONTEXT.put(bean.getClass()
                 .getSimpleName(), bean);
     }
@@ -37,6 +39,14 @@ public class InspectionFactory {
         }
         InspectionFactory.getTasks()
                 .forEach(InspectionFactory::doTask);
+    }
+
+    public static void doTask(String name){
+        if (CONTEXT.isEmpty()) {
+            return;
+        }
+        InspectionFactory.getTasks().stream().filter(e -> e.getClass().getSimpleName().equals(name)).findFirst().ifPresent(
+                InspectionTask::inspectionTask);
     }
 
     private static void doTask(InspectionTask inspectionTask) {

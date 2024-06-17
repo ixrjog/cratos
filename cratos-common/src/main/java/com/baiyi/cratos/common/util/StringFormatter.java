@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class StringFormatter {
+public final class StringFormatter {
 
     public static String arrayFormat(String str, Object... args) {
         return MessageFormatter.arrayFormat(str, args)
