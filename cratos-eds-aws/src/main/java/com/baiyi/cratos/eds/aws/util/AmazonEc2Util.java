@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class AmazonEc2Util {
+public final class AmazonEc2Util {
 
     public static String getInstanceName(List<Tag> tags) {
         return tags.stream().filter(tag -> tag.getKey().equals("Name")).findFirst().map(Tag::getValue).orElse("");

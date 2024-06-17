@@ -15,7 +15,7 @@ import java.util.EnumSet;
  * @Date 2021/6/7 9:55 上午
  * @Version 1.0
  */
-public class TerminalUtil {
+public final class TerminalUtil {
 
     private static final int OFF = 0;
 

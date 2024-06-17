@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class SqlHelper {
+public final class SqlHelper {
 
     public static String toLike(String queryName) {
         return Joiner.on("")

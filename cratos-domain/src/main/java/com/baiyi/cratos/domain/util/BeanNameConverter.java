@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class BeanNameConverter {
+public final class BeanNameConverter {
 
     public static String serviceImplNameToMapperName(String serviceImplSimpleName) {
         return StringUtils.uncapitalize(serviceImplSimpleName.replace("ServiceImpl", "Mapper"));

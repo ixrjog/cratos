@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 @NoArgsConstructor(access = PRIVATE)
-public class Generics {
+public final class Generics {
 
     /**
      * 查找类对象clazz绑定的genericClass声明的泛型参数

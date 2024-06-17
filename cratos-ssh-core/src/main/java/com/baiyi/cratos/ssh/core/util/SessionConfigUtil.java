@@ -8,7 +8,7 @@ import com.jcraft.jsch.Session;
  * @Date 2021/6/3 9:52 上午
  * @Version 1.0
  */
-public class SessionConfigUtil {
+public final class SessionConfigUtil {
 
     private static final int SERVER_ALIVE_INTERVAL = 60 * 1000;
     public static final int SESSION_TIMEOUT = 60000;

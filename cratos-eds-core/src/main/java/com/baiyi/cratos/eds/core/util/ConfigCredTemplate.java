@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class ConfigCredTemplate {
+public final class ConfigCredTemplate {
 
     private static final String CREDENTIAL = "CRED_";
 

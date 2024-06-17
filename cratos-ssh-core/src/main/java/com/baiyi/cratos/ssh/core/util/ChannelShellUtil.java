@@ -7,7 +7,7 @@ import com.jcraft.jsch.ChannelShell;
  * @Date 2021/6/3 9:59 上午
  * @Version 1.0
  */
-public class ChannelShellUtil {
+public final class ChannelShellUtil {
 
     /**
      * zh_CN.UTF-8  en_US.UTF-8 zh_CN.GB231

@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class AssetUtil {
+public final class AssetUtil {
 
     public static boolean equals(String var1, String var2) {
         if (StringUtils.isEmpty(var1)) {
