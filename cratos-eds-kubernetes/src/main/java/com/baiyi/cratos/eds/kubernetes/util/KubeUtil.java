@@ -39,6 +39,7 @@ public class KubeUtil {
 
     /**
      * 从Deployment中找出应用容器
+     *
      * @param deployment
      * @return
      */
@@ -102,6 +103,33 @@ public class KubeUtil {
                 .getNamespace();
         // 移除环境后缀
         return org.apache.commons.lang3.StringUtils.removeEnd(app, "-" + env);
+    }
+
+    private static String getAppNameOfV2(Deployment deployment) {
+        String deploymentName = deployment.getMetadata()
+                .getName();
+        Optional<Map<String, String>> optionalLabels = Optional.of(deployment)
+                .map(Deployment::getMetadata)
+                .map(ObjectMeta::getLabels);
+
+        if (optionalLabels.isEmpty()) {
+            return deploymentName;
+        }
+
+        if (optionalLabels.get()
+                .containsKey("app")) {
+            final String app = optionalLabels.get()
+                    .get("app");
+            final String env = optionalLabels.get()
+                    .containsKey("env") ? optionalLabels.get()
+                    .get("env") : deployment.getMetadata()
+                    .getNamespace();
+            // 移除环境后缀
+            return org.apache.commons.lang3.StringUtils.removeEnd(app, "-" + env);
+        } else {
+            return deploymentName;
+        }
+
     }
 
 }
