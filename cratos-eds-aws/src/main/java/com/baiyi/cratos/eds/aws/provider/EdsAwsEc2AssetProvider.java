@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.aws.model.InstanceModel;
 import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.aws.repo.Ec2InstancesRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EC2)
-public class EdsAwsEc2AssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
+public class EdsAwsEc2AssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
 
     private final Ec2InstancesRepo ec2InstancesRepo;
 

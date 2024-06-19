@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.ec2.model.Tag;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsVpnRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_STS_VPN)
-public class EdsAwsVpnAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
+public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
 
     public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,

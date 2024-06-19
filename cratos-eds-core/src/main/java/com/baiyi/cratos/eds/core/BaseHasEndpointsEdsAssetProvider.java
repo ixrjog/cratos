@@ -15,12 +15,12 @@ import java.util.Set;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/6/3 下午2:07
+ * &#064;Date  2024/6/19 下午3:48
  * &#064;Version 1.0
  */
-public abstract class BaseHasNamespaceEdsAssetProvider<C extends IEdsConfigModel, A> extends BaseMultipleSourcesEdsAssetProvider<C, A> {
+public abstract class BaseHasEndpointsEdsAssetProvider<C extends IEdsConfigModel, A> extends BaseMultipleSourcesEdsAssetProvider<C, A> {
 
-    public BaseHasNamespaceEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public BaseHasEndpointsEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                             EdsAssetIndexFacade edsAssetIndexFacade,
                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
@@ -28,15 +28,15 @@ public abstract class BaseHasNamespaceEdsAssetProvider<C extends IEdsConfigModel
                 updateBusinessFromAssetHandler);
     }
 
-    abstract protected Set<String> listNamespace(
+    abstract protected Set<String> listEndpoints(
             ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
     @Override
     protected Set<String> getSources(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException {
-        return listNamespace(instance);
+        return listEndpoints(instance);
     }
 
-    abstract protected List<A> listEntities(String namespace,
+    abstract protected List<A> listEntities(String endpoint,
                                             ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
 }

@@ -7,7 +7,7 @@ import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ECS)
-public class EdsAliyunEcsAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
+public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
 
     private final AliyunEcsRepo aliyunEcsRepo;
 

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.huaweicloud.provider;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HUAWEICLOUD, assetType = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
-public class EdsHuaweicloudEcsAssetProvider extends BaseHasRegionEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HuaweicloudEcs.Ecs> {
+public class EdsHuaweicloudEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HuaweicloudEcs.Ecs> {
 
     public EdsHuaweicloudEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,

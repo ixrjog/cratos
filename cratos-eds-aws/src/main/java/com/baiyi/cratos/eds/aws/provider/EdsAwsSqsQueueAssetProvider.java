@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsSqs;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsSqsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SQS_QUEUE)
-public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
+public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
 
     private final AwsSqsRepo awsSqsRepo;
 

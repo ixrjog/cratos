@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.provider;
 
 import com.amazonaws.services.certificatemanager.model.CertificateSummary;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsCertRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_CERT)
-public class EdsAwsCertAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
+public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
 
     public EdsAwsCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                    CredentialService credentialService, ConfigCredTemplate configCredTemplate,

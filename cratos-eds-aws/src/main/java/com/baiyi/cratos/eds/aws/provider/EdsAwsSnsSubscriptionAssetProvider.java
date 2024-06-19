@@ -4,7 +4,7 @@ import com.amazonaws.services.sns.model.Subscription;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aws.model.AwsSns;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SNS_SUBSCRIPTION)
-public class EdsAwsSnsSubscriptionAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Subscription> {
+public class EdsAwsSnsSubscriptionAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Subscription> {
 
     private final AwsSnsRepo awsSnsRepo;
 

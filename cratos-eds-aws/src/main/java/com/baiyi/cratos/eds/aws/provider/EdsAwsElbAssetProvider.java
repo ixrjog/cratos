@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.provider;
 
 import com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsElbRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_ELB)
-public class EdsAwsElbAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, LoadBalancer> {
+public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, LoadBalancer> {
 
     public EdsAwsElbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,

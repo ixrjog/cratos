@@ -5,7 +5,7 @@ import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsTransferServer;
 import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_TRANSFER_SERVER)
-public class EdsAwsTransferServerAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> {
+public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> {
 
     public EdsAwsTransferServerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,

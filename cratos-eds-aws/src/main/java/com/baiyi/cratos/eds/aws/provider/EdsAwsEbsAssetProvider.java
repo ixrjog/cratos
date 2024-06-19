@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.ec2.model.Volume;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsEbsRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EBS)
-public class EdsAwsEbsAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, Volume> {
+public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, Volume> {
 
     private final AwsEbsRepo ebsRepo;
 

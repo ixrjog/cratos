@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.provider;
 import com.amazonaws.services.sns.model.Topic;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsSns;
-import com.baiyi.cratos.eds.core.BaseHasRegionEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SNS_TOPIC)
-public class EdsAwsSnsTopicAssetProvider extends BaseHasRegionEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Topic> {
+public class EdsAwsSnsTopicAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Topic> {
 
     private final AwsSnsRepo awsSnsRepo;
 

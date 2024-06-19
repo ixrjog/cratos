@@ -36,6 +36,8 @@ public class EdsAliyunConfigModel {
 
         private ALB alb;
 
+        private OSS oss;
+
         private Domain domain;
 
         private EdsInstance edsInstance;
@@ -63,6 +65,15 @@ public class EdsAliyunConfigModel {
     @NoArgsConstructor
     @Schema
     public static class ALB {
+
+        private List<String> endpoints;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class OSS {
 
         private List<String> endpoints;
 
