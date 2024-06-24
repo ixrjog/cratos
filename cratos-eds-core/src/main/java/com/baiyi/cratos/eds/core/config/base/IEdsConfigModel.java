@@ -1,6 +1,9 @@
 package com.baiyi.cratos.eds.core.config.base;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.eds.core.exception.EdsConfigException;
+
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -12,5 +15,11 @@ public interface IEdsConfigModel {
     EdsInstance getEdsInstance();
 
     void setEdsInstance(EdsInstance edsInstance);
+
+    default int getConfigId() {
+        return Optional.of(getEdsInstance())
+                .map(EdsInstance::getConfigId)
+                .orElseThrow(() -> new EdsConfigException("No configId specified for instance."));
+    }
 
 }

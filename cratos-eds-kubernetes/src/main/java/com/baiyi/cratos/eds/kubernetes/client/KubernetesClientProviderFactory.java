@@ -19,7 +19,6 @@ public class KubernetesClientProviderFactory {
 
     private static final Map<String, IKubernetesClientProvider> CONTEXT = new ConcurrentHashMap<>();
 
-
     public static void register(IKubernetesClientProvider providerBean) {
         CONTEXT.put(providerBean.getName(), providerBean);
     }

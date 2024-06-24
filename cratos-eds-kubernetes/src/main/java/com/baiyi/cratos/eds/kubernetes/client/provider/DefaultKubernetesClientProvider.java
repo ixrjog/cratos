@@ -3,7 +3,6 @@ package com.baiyi.cratos.eds.kubernetes.client.provider;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
@@ -12,8 +11,6 @@ import com.baiyi.cratos.service.EdsConfigService;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -41,17 +38,7 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
     }
 
     public io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        // setProperties(kubernetes);
-//        return new ConfigBuilder().withTrustCerts(true)
-//                // .withWebsocketTimeout(KubeClient.Config.WEBSOCKET_TIMEOUT)
-//                // .withConnectionTimeout(KubeClient.Config.CONNECTION_TIMEOUT)
-//                // .withRequestTimeout(KubeClient.Config.REQUEST_TIMEOUT)
-//                .build();
-        int configId = Optional.of(kubernetes)
-                .map(EdsKubernetesConfigModel.Kubernetes::getEdsInstance)
-                .map(EdsInstance::getConfigId)
-                .orElseThrow(() -> new EdsConfigException("No configId specified for kubernetes."));
-
+        int configId = kubernetes.getConfigId();
         EdsConfig edsConfig = edsConfigService.getById(configId);
         if (edsConfig == null) {
             throw new EdsConfigException("No config specified for kubernetes.");
