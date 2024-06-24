@@ -17,6 +17,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_RAM_USER("RAM User"),
     ALIYUN_RAM_POLICY("RAM Policy"),
     ALIYUN_OSS_BUCKET("OSS Bucket"),
+
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),
     AWS_ELB("ELB"),
@@ -28,9 +29,13 @@ public enum EdsAssetTypeEnum {
     AWS_SNS_SUBSCRIPTION("SNS Subscription"),
     AWS_TRANSFER_SERVER("Transfer Server"),
     AWS_CLOUDFRONT_DISTRIBUTION("CloudFront Distribution"),
+    AWS_S3_BUCKET("S3 Bucket"),
+
     HUAWEICLOUD_ECS("ECS"),
     HUAWEICLOUD_IAM_USER("IAM User"),
+
     CLOUDFLARE_CERT("Certificate"),
+
     KUBERNETES_NAMESPACE("Namespace"),
     KUBERNETES_DEPLOYMENT("Deployment"),
     KUBERNETES_INGRESS("Ingress"),
@@ -38,6 +43,7 @@ public enum EdsAssetTypeEnum {
     KUBERNETES_NODE("Node"),
     KUBERNETES_VIRTUAL_SERVICE("VirtualService"),
     KUBERNETES_DESTINATION_RULE("DestinationRule"),
+
     LDAP_PERSON("Person"),
     LDAP_GROUP("Group"),
 
@@ -49,7 +55,9 @@ public enum EdsAssetTypeEnum {
     GITLAB_GROUP("Group"),
     GITLAB_USER("User"),
     GITLAB_SSHKEY("SSH Key"),
+
     GANDI_DOMAIN("Domain"),
+
     GODADDY_DOMAIN("Domain");
 
     private final String displayName;

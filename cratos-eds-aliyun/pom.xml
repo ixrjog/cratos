@@ -95,6 +95,12 @@
             <version>3.17.4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.aliyun.openservices/aliyun-log -->
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>aliyun-log</artifactId>
+            <version>0.6.107</version>
+        </dependency>
 
     </dependencies>
 

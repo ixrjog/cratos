@@ -83,6 +83,12 @@
             <version>${aws-java-sdk.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

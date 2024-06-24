@@ -23,7 +23,6 @@ public class AwsRoute53Repo {
 
     public static List<HostedZone> listHostedZones(EdsAwsConfigModel.Aws aws) {
         ListHostedZonesRequest request = new ListHostedZonesRequest();
-
         List<HostedZone> hostedZones = Lists.newArrayList();
         while (true) {
             ListHostedZonesResult result = AmazonRoute53Service.buildAmazonRoute53(aws)

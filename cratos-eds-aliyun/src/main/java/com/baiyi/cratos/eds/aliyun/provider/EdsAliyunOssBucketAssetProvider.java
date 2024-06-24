@@ -55,13 +55,11 @@ public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetPro
     @Override
     protected List<Bucket> listEntities(String endpoint,
                                         ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-
         return AliyunOssRepo.listBuckets(endpoint, instance.getEdsConfigModel());
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, Bucket entity) {
-
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .nameOf(entity.getName())
                 .assetKeyOf(Joiner.on(".")
