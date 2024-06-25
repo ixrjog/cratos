@@ -34,7 +34,6 @@ public class AmazonEksClientProvider implements IKubernetesClientProvider {
     public KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         setProperties(kubernetes);
         io.fabric8.kubernetes.client.Config config = buildConfig(kubernetes);
-
         return new io.fabric8.kubernetes.client.KubernetesClientBuilder().withConfig(config)
                 .build();
     }

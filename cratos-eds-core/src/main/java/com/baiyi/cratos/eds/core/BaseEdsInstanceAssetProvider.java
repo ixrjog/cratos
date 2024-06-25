@@ -69,18 +69,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                 .getId(), edsAssetTypeEnum.name());
     }
 
-//    public BaseEdsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-//                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-//                                        EdsAssetIndexFacade edsAssetIndexFacade,
-//                                        UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
-//        this.edsAssetService = edsAssetService;
-//        this.simpleEdsFacade = simpleEdsFacade;
-//        this.credentialService = credentialService;
-//        this.configCredTemplate = configCredTemplate;
-//        this.edsAssetIndexFacade = edsAssetIndexFacade;
-//        this.updateBusinessFromAssetHandler = updateBusinessFromAssetHandler;
-//    }
-
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;

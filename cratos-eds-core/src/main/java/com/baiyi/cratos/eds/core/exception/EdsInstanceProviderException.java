@@ -20,8 +20,8 @@ public class EdsInstanceProviderException extends BaseException {
 
     @Serial
     private static final long serialVersionUID = 4960440315329465465L;
-    private int code;
 
+    private int code;
 
     public EdsInstanceProviderException(String message) {
         super(message);

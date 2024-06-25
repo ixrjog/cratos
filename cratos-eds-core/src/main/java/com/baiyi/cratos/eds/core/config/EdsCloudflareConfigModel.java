@@ -17,8 +17,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class EdsCloudflareConfigModel {
 
-    // https://developers.cloudflare.com/api/
-
+    /**
+     * https://developers.cloudflare.com/api/
+     */
     public static final String CLIENT_API = "https://api.cloudflare.com/client/v4";
 
     @Data
@@ -37,15 +38,6 @@ public class EdsCloudflareConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationBearer {
-
-//        @Schema(description = "X-Auth-Email: 123")
-//        private String apiEmail;
-//
-//        @Schema(description = "X-Auth-Key: 123")
-//        private String apiKey;
-//
-//        @Schema(description = "X-Auth-User-Service-Key: 123")
-//        private String userServiceKey;
 
         @Schema(description = "Authorization: Bearer <API_TOKEN>")
         private String apiToken;

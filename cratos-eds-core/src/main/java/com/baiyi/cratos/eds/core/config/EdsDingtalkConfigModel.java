@@ -64,5 +64,4 @@ public class EdsDingtalkConfigModel {
         private Set<Long> deptIds;
     }
 
-
 }
