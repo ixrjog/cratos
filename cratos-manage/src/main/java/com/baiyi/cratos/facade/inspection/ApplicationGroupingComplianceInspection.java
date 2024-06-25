@@ -16,6 +16,7 @@ import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,103 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
 
     private static final String MSG_TPL = "{}[{}/{}][{}/{}][{}/{}][{}/{}]<{}>";
 
-    private static final String[] FILTER_LIST = {"oss-chuanyinet-front-static"};
+    private static final String FILTER_LIST = """
+            oss-chuanyinet-front-static
+            ng-fcmb-channel
+            ng-wooshpay-channel
+            tz-tigozantel-channel
+            ng-new-onexbet-channel
+            ng-coralpay-channel
+            ng-blusalt-channel
+            ng-surebet247-channel
+            ng-airtel-channel
+            ng-accessbet-channel
+            ng-baxi-channel
+            ng-stanbic-channel
+            ng-mtnbucket-channel
+            ng-cgate-channel
+            ng-dml-channel
+            ng-ekedc-channel
+            gh-gtb-channel
+            ng-ninemobile-channel
+            ke-ipay-channel
+            ng-mono-channel
+            ng-kuda-channel
+            ng-betano-channel
+            ke-creditinfo-channel
+            ng-oasis-channel
+            ng-nibss-channel
+            ng-axa-channel
+            ng-dojah-channel
+            ng-betgr8-channel
+            ng-nomi-channel
+            tz-selcom-biller-channel
+            ng-kedc-channel
+            ng-credequity-channel
+            tz-tigopesa-channel
+            tz-halopesa-channel
+            tz-halotel-channel
+            ng-betwinner-channel
+            gh-gtb-transfer-channel
+            tz-airtel-ussd-channel
+            tz-selcom-channel
+            ng-nibsskyc-channel
+            ng-sporty-channel
+            ng-postpay-channel
+            ng-africa365-channel
+            ng-fidelity-channel
+            ng-nairabet-channel
+            ng-betbaba-channel
+            tz-vodacom-channel
+            ng-betbonanza-channel
+            ng-new-qrios-channel
+            ng-globucketdata-channel
+            ng-wgb-channel
+            finance-channels
+            ng-irecharge-channel
+            ng-buypower-channel
+            ng-oneloop-channel
+            flutterwave
+            ng-tripsdotcom-channel
+            ng-wajegame-channel
+            ke-cellulantt-channel
+            ng-new-buypower-channel
+            ng-vertofx-channel
+            ng-onexbet-channel
+            ng-fdc-channel
+            gh-ecg-channel
+            ng-betnaija-channel
+            ng-geniex-channel
+            tz-creditinfo-channel
+            ng-jedc-channel
+            tz-airtel-channel
+            ng-hydrogen-channel
+            gh-uba-itex-channel
+            ng-monokyc-channel
+            ng-smile-channel
+            tz-infobip-channel
+            file-master
+            ng-common-callback
+            tecno-sms
+            tecno-mail
+            tecno-front
+            open-api
+            send-money
+            basic-uid-service
+            account-history
+            data-portrait-center
+            data-center-c
+            data-monitor
+            scene-directlink-product
+            data-view
+            user-portrait
+            data-carrier-b
+            data-carrier-c
+            data-buriedpoint-collect
+            metersphere
+            palmpay-docs
+            """;
+
 
     public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
                                                    DingtalkRobotService dingtalkRobotService,
@@ -113,6 +210,11 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
                 .build());
     }
 
+    public List<String> toFilterList() {
+        return Lists.newArrayList(Splitter.on("\n")
+                .split(FILTER_LIST)).stream().filter(StringUtils::hasText).toList();
+    }
+
     public Map<String, AppGroupSpec.GroupSpec> getGroupMap() {
         List<EdsAssetIndex> appNameIndices = edsAssetIndexService.queryIndexByName(APP_NAME);
         Map<String, AppGroupSpec.GroupSpec> groupingMap = Maps.newHashMap();
@@ -124,7 +226,7 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
                     .endsWith("-h5")) {
                 continue;
             }
-            if (Arrays.stream(FILTER_LIST)
+            if (toFilterList().stream()
                     .anyMatch(s -> appNameIndex.getValue()
                             .equals(s))) {
                 continue;
