@@ -61,7 +61,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
             String namespace,
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return aliyunAlbRepo.listAlb(namespace, instance.getEdsConfigModel());
+            return aliyunAlbRepo.listLoadBalancers(namespace, instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

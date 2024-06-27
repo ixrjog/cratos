@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AliyunAlbRepo {
 
-    public List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listAlb(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    public List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listLoadBalancers(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         ListLoadBalancersRequest request = new ListLoadBalancersRequest();
         List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> albList = Lists.newArrayList();
         com.aliyun.alb20200616.Client client = AliyunAlbClient.createClient(endpoint, aliyun);

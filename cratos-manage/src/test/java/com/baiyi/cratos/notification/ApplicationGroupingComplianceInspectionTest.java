@@ -14,10 +14,8 @@ import java.util.List;
  */
 public class ApplicationGroupingComplianceInspectionTest extends BaseUnit {
 
-
     @Resource
     private ApplicationGroupingComplianceInspection applicationGroupingComplianceInspection;
-
 
     @Test
     void test() {
