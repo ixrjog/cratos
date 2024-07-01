@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade.proxy;
 
-import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
@@ -14,7 +13,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -23,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.LB_INGRESS_HOSTNAME;
+import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.SOURCE_IP;
 import static com.baiyi.cratos.wrapper.EdsAssetWrapper.SKIP_LOAD_ASSET;
 
 /**
@@ -47,7 +46,7 @@ public class TrafficLayerProxy {
 
     public static final String RULES = "RULES";
 
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
+    //@Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")
     public TrafficLayerRecordVO.OriginServer buildOriginServer(String recordName, String originServerName) {
         // 查找所有的索引
         List<EdsAsset> ingressAssets = edsAssetIndexFacade.queryAssetIndexByValue(originServerName)
@@ -58,7 +57,7 @@ public class TrafficLayerProxy {
         if (!CollectionUtils.isEmpty(ingressAssets)) {
             Map<String, List<EdsAssetVO.Index>> indexMap = Maps.newHashMap();
             ingressAssets.stream()
-                    .map(albAsset -> edsAssetIndexFacade.queryAssetIndexById(albAsset.getId()))
+                    .map(ingressAsset -> edsAssetIndexFacade.queryAssetIndexById(ingressAsset.getId()))
                     .flatMap(Collection::stream)
                     .forEach(index -> putMap(details, index, recordName));
         }
@@ -71,16 +70,25 @@ public class TrafficLayerProxy {
     private void putMap(Map<String, List<EdsAssetVO.Index>> details, EdsAssetIndex index, String recordName) {
         if (LB_INGRESS_HOSTNAME.equals(index.getName())) {
             details.put(HOSTNAME, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
-        } else {
-            // 过滤掉其他域名
-            if (index.getName()
-                    .startsWith(recordName)) {
-                if (details.containsKey(RULES)) {
-                    details.get(RULES)
-                            .add(edsAssetIndexWrapper.wrapToTarget(index));
-                } else {
-                    details.put(RULES, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
-                }
+            return;
+        }
+        // 过滤掉其他域名
+        if (index.getName()
+                .startsWith(recordName)) {
+            if (details.containsKey(RULES)) {
+                details.get(RULES)
+                        .add(edsAssetIndexWrapper.wrapToTarget(index));
+            } else {
+                details.put(RULES, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
+            }
+            return;
+        }
+        if (SOURCE_IP.equals(index.getName())) {
+            if (details.containsKey(SOURCE_IP)) {
+                details.get(SOURCE_IP)
+                        .add(edsAssetIndexWrapper.wrapToTarget(index));
+            } else {
+                details.put(SOURCE_IP, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
             }
         }
     }

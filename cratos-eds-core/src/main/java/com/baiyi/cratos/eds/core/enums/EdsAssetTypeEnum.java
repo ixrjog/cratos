@@ -17,6 +17,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_RAM_USER("RAM User"),
     ALIYUN_RAM_POLICY("RAM Policy"),
     ALIYUN_OSS_BUCKET("OSS Bucket"),
+    ALIYUN_ARMS_TRACE_APPS("ARMS Trace Apps"),
 
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),

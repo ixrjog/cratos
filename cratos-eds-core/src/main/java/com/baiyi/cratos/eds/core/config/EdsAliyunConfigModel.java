@@ -42,6 +42,8 @@ public class EdsAliyunConfigModel {
 
         private EdsInstance edsInstance;
 
+        private ARMS arms;
+
     }
 
     @Data
@@ -85,6 +87,19 @@ public class EdsAliyunConfigModel {
     public static class Domain {
 
         private String endpoint;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class ARMS {
+
+        private String regionId;
+
+        private String endpoint;
+
+        private String home;
 
     }
 

@@ -12,6 +12,9 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
+import com.baiyi.cratos.eds.kubernetes.model.AckIngressConditionsModel;
+import com.baiyi.cratos.eds.kubernetes.model.EksIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
@@ -22,8 +25,10 @@ import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -40,6 +45,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private static final String UNDEFINED_SERVICE = "Undefined Service";
 
     public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
+
+    public static final String SOURCE_IP = "alb.ingress.kubernetes.io/conditions.source-ip";
 
     public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -73,7 +80,30 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
         // namespace
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
+        // 注解
+        indices.add(getEdsAssetIndexSourceIP(instance, edsAsset, entity));
         return indices;
+    }
+
+    private EdsAssetIndex getEdsAssetIndexSourceIP(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            Ingress entity) {
+        Map<String, String> AnnotationMap = entity.getMetadata()
+                .getAnnotations();
+        // True EKS
+        boolean providerType = KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
+                .equals(instance.getEdsConfigModel()
+                        .getProvider());
+        // alb.ingress.kubernetes.io/conditions.source-ip-example
+        return AnnotationMap.keySet()
+                .stream()
+                .filter(key -> key.startsWith("alb.ingress.kubernetes.io/conditions."))
+                .map(key -> providerType ? EksIngressConditionsModel.getSourceIP(
+                        AnnotationMap.get(key)) : AckIngressConditionsModel.getSourceIP(AnnotationMap.get(key)))
+                .filter(StringUtils::hasText)
+                .findFirst()
+                .map(sourceIP -> toEdsAssetIndex(edsAsset, SOURCE_IP, sourceIP))
+                .orElse(null);
     }
 
     private EdsAssetIndex getEdsAssetIndexOfLoadBalancer(EdsAsset edsAsset, Ingress entity) {
@@ -81,7 +111,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(Ingress::getStatus)
                 .map(IngressStatus::getLoadBalancer)
                 .map(IngressLoadBalancerStatus::getIngress);
-        if (optionalIngressLoadBalancerIngresses.isPresent() && !CollectionUtils.isEmpty(optionalIngressLoadBalancerIngresses.get())) {
+        if (optionalIngressLoadBalancerIngresses.isPresent() && !CollectionUtils.isEmpty(
+                optionalIngressLoadBalancerIngresses.get())) {
             IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
                     .getFirst();
             return toEdsAssetIndex(edsAsset, LB_INGRESS_HOSTNAME, ingressLoadBalancerIngress.getHostname());

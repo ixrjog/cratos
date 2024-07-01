@@ -4,10 +4,12 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
+import com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.wrapper.TrafficLayerRecordWrapper;
+import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,7 +41,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
     public final static String[] RULE_TABLE_FIELD_NAME = {"Ingress Rule", "Kubernetes Service"};
 
     @Override
-    public TrafficLayerRecordVO.RecordDetails queryRecordDetails(TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
+    public TrafficLayerRecordVO.RecordDetails queryRecordDetails(
+            TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
         TrafficLayerDomainRecord uniqueKey = queryRecordDetails.toTrafficLayerRecord();
         TrafficLayerDomainRecord trafficLayerDomainRecord = recordService.getByUniqueKey(uniqueKey);
         if (trafficLayerDomainRecord == null) {
@@ -47,7 +50,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
 
         }
         TrafficLayerRecordVO.Record record = recordWrapper.wrapToTarget(trafficLayerDomainRecord);
-        TrafficLayerRecordVO.OriginServer originServer = trafficLayerProxy.buildOriginServer(trafficLayerDomainRecord.getRecordName(), trafficLayerDomainRecord.getOriginServer());
+        TrafficLayerRecordVO.OriginServer originServer = trafficLayerProxy.buildOriginServer(
+                trafficLayerDomainRecord.getRecordName(), trafficLayerDomainRecord.getOriginServer());
         return TrafficLayerRecordVO.RecordDetails.builder()
                 .recordId(trafficLayerDomainRecord.getId())
                 .record(record)
@@ -56,7 +60,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .build();
     }
 
-    private TrafficLayerRecordVO.TableDetails buildTableDetails(TrafficLayerRecordVO.Record record, TrafficLayerRecordVO.OriginServer originServer) {
+    private TrafficLayerRecordVO.TableDetails buildTableDetails(TrafficLayerRecordVO.Record record,
+                                                                TrafficLayerRecordVO.OriginServer originServer) {
         return TrafficLayerRecordVO.TableDetails.builder()
                 .recordTable(toRecordTableStr(record))
                 .lbTable(toLbTableStr(originServer))
@@ -71,7 +76,21 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .ifPresent(stringListMap -> {
                     if (stringListMap.containsKey(RULES)) {
                         stringListMap.get(RULES)
-                                .forEach(e -> ingressRuleTable.addRow(e.getName(), e.getValue()));
+                                .forEach(e -> {
+                                    if (originServer.getDetails()
+                                            .containsKey(EdsKubernetesIngressAssetProvider.SOURCE_IP)) {
+                                        String sourceIP = originServer.getDetails()
+                                                .get(EdsKubernetesIngressAssetProvider.SOURCE_IP)
+                                                .getFirst()
+                                                .getValue();
+                                        final String sourceIPWrap = Joiner.on("")
+                                                .join("[", sourceIP, "]");
+                                        ingressRuleTable.addRow(Joiner.on(" ")
+                                                .join(e.getName(), sourceIPWrap), e.getValue());
+                                    } else {
+                                        ingressRuleTable.addRow(e.getName(), e.getValue());
+                                    }
+                                });
                     }
                 });
         return ingressRuleTable.toString();
@@ -81,7 +100,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
         PrettyTable lbTable = PrettyTable.fieldNames(LB_TABLE_FIELD_NAME);
         Optional.of(originServer)
                 .map(TrafficLayerRecordVO.OriginServer::getOrigins)
-                .ifPresent(assets -> assets.forEach(e -> lbTable.addRow(e.getName(), e.getAssetKey(), e.getAssetType())));
+                .ifPresent(
+                        assets -> assets.forEach(e -> lbTable.addRow(e.getName(), e.getAssetKey(), e.getAssetType())));
         return lbTable.toString();
     }
 
@@ -89,7 +109,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
         // Record Table
         PrettyTable recordTable = PrettyTable.fieldNames(RECORD_TABLE_FIELD_NAME);
         Optional.of(record)
-                .ifPresent(e -> recordTable.addRow(e.getRecordName(), e.getEnvName(), e.getRouteTrafficTo(), e.getOriginServer()));
+                .ifPresent(e -> recordTable.addRow(e.getRecordName(), e.getEnvName(), e.getRouteTrafficTo(),
+                        e.getOriginServer()));
         return recordTable.toString();
     }
 

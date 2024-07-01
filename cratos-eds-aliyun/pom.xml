@@ -102,6 +102,13 @@
             <version>0.6.107</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.aliyun/alibabacloud-arms20190808 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-arms20190808</artifactId>
+            <version>4.0.22</version>
+        </dependency>
+
     </dependencies>
 
 </project>
