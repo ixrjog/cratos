@@ -34,7 +34,7 @@ public class NotificationTemplateController {
 
     @Operation(summary = "Add notification template")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> AddNotificationTemplate(
+    public HttpResult<Boolean> addNotificationTemplate(
             @RequestBody @Valid NotificationTemplateParam.AddNotificationTemplate addNotificationTemplate) {
         notificationTemplateFacade.addNotificationTemplate(addNotificationTemplate);
         return HttpResult.SUCCESS;
