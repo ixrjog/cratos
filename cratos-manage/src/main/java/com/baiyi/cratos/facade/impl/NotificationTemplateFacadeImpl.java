@@ -33,6 +33,14 @@ public class NotificationTemplateFacadeImpl implements NotificationTemplateFacad
     }
 
     @Override
+    public void addNotificationTemplate(NotificationTemplateParam.AddNotificationTemplate addNotificationTemplate) {
+        NotificationTemplate notificationTemplate = addNotificationTemplate.toTarget();
+        if (notificationTemplateService.getByUniqueKey(notificationTemplate) == null) {
+            notificationTemplateService.add(notificationTemplate);
+        }
+    }
+
+    @Override
     public void updateNotificationTemplate(
             NotificationTemplateParam.UpdateNotificationTemplate updateNotificationTemplate) {
         NotificationTemplate notificationTemplate = updateNotificationTemplate.toTarget();

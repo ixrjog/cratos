@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.aliyun.openservices</groupId>
             <artifactId>aliyun-log</artifactId>
-            <version>0.6.107</version>
+            <version>0.6.108</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.aliyun/alibabacloud-arms20190808 -->

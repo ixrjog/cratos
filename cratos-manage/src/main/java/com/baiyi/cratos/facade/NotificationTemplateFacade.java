@@ -14,6 +14,8 @@ public interface NotificationTemplateFacade {
     DataTable<NotificationTemplateVO.NotificationTemplate> queryNotificationTemplatePage(
             NotificationTemplateParam.NotificationTemplatePageQuery pageQuery);
 
+    void addNotificationTemplate(NotificationTemplateParam.AddNotificationTemplate addNotificationTemplate);
+
     void updateNotificationTemplate(NotificationTemplateParam.UpdateNotificationTemplate updateNotificationTemplate);
 
 }

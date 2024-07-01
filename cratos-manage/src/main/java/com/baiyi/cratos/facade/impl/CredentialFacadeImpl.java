@@ -167,6 +167,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
 
     @Override
     public void deleteById(int id) {
+        // try
         getById(id);
         // 删除所有关联的业务凭据
         List<BusinessCredential> businessCredentials = businessCredentialService.queryByCredentialId(id);

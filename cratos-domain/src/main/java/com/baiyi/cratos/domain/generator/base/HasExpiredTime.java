@@ -7,7 +7,7 @@ import java.util.Date;
  * @Date 2024/1/24 17:11
  * @Version 1.0
  */
-public interface IExpiredTime {
+public interface HasExpiredTime {
 
     Date getExpiredTime();
 

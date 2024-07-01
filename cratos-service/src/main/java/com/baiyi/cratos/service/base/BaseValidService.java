@@ -1,6 +1,6 @@
 package com.baiyi.cratos.service.base;
 
-import com.baiyi.cratos.domain.generator.base.IExpiredTime;
+import com.baiyi.cratos.domain.generator.base.HasExpiredTime;
 import com.baiyi.cratos.domain.generator.base.IValid;
 import com.baiyi.cratos.exception.DaoServiceException;
 import tk.mybatis.mapper.common.Mapper;
@@ -26,7 +26,7 @@ public interface BaseValidService<T extends IValid, M extends Mapper<T>> extends
             throw new DaoServiceException("Domain field valid is empty.");
         }
         // 过期处理
-        if (record instanceof IExpiredTime expiredTime) {
+        if (record instanceof HasExpiredTime expiredTime) {
             if ((expiredTime.getExpiredTime()
                     .getTime() - System.currentTimeMillis()) <= 0 && !record.getValid()) {
                 // 过期

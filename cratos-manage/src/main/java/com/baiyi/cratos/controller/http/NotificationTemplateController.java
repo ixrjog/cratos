@@ -2,7 +2,6 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.env.EnvParam;
 import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
 import com.baiyi.cratos.domain.view.template.NotificationTemplateVO;
 import com.baiyi.cratos.facade.NotificationTemplateFacade;
@@ -33,8 +32,15 @@ public class NotificationTemplateController {
         return new HttpResult<>(notificationTemplateFacade.queryNotificationTemplatePage(pageQuery));
     }
 
+    @Operation(summary = "Add notification template")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> AddNotificationTemplate(
+            @RequestBody @Valid NotificationTemplateParam.AddNotificationTemplate addNotificationTemplate) {
+        notificationTemplateFacade.addNotificationTemplate(addNotificationTemplate);
+        return HttpResult.SUCCESS;
+    }
 
-    @Operation(summary = "Update env")
+    @Operation(summary = "Update notification template")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateNotificationTemplate(
             @RequestBody @Valid NotificationTemplateParam.UpdateNotificationTemplate updateNotificationTemplate) {
