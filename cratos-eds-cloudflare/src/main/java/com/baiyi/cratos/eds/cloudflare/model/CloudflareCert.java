@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
+import static com.baiyi.cratos.domain.constant.Global.ISO8601_S6;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -38,7 +39,7 @@ public class CloudflareCert {
         private String certificateAuthority;
 
         @JsonProperty("created_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date createdOn;
 
     }
@@ -63,15 +64,15 @@ public class CloudflareCert {
         private String zoneId;
 
         @JsonProperty("uploaded_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date uploadedOn;
 
         @JsonProperty("modified_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date modifiedOn;
 
         @JsonProperty("expires_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date expiresOn;
 
     }

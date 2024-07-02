@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.domain.constant.Global.ISO8601;
+import static com.baiyi.cratos.domain.constant.Global.*;
 
 /**
  * &#064;Author  baiyi
@@ -75,7 +75,7 @@ public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsA
                     .regionOf(entity.getRegionId())
                     .zoneOf(entity.getZoneId())
                     .createdTimeOf(TimeUtil.strToDate(entity.getCreationTime(), ISO8601))
-                    .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), "yyyy-MM-dd'T'HH:mm'Z'"))
+                    .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), ISO8601_1))
                     .build();
         } catch (Exception ex) {
             throw new EdsAssetConversionException(ex.getMessage());

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import static com.baiyi.cratos.domain.constant.Global.ISO8601_S6;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -45,17 +46,17 @@ public class CloudflareZone {
 
         // "modified_on": "2023-12-06T06:21:51.455654Z"
         @JsonProperty("modified_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date modifiedOn;
 
         // "created_on": "2023-12-06T06:15:12.630995Z"
         @JsonProperty("created_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date createdOn;
 
         // "activated_on": "2023-12-06T06:21:28.472800Z",
         @JsonProperty("activated_on")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+        @JsonFormat(pattern = ISO8601_S6)
         private Date activatedOn;
 
     }
