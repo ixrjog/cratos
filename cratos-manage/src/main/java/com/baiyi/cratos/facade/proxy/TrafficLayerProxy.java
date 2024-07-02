@@ -17,11 +17,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.LB_INGRESS_HOSTNAME;
-import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.SOURCE_IP;
 import static com.baiyi.cratos.wrapper.EdsAssetWrapper.SKIP_LOAD_ASSET;
 
 /**
@@ -61,6 +62,12 @@ public class TrafficLayerProxy {
                     .flatMap(Collection::stream)
                     .forEach(index -> putMap(details, index, recordName));
         }
+        // 转发规则排序
+        if (details.containsKey(RULES)) {
+            details.computeIfPresent(RULES, (k, indices) -> indices.stream()
+                    .sorted(Comparator.comparing(EdsAssetVO.Index::getValue))
+                    .collect(Collectors.toList()));
+        }
         return TrafficLayerRecordVO.OriginServer.builder()
                 .origins(buildOrigins(originServerName))
                 .details(details)
@@ -80,15 +87,6 @@ public class TrafficLayerProxy {
                         .add(edsAssetIndexWrapper.wrapToTarget(index));
             } else {
                 details.put(RULES, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
-            }
-            return;
-        }
-        if (SOURCE_IP.equals(index.getName())) {
-            if (details.containsKey(SOURCE_IP)) {
-                details.get(SOURCE_IP)
-                        .add(edsAssetIndexWrapper.wrapToTarget(index));
-            } else {
-                details.put(SOURCE_IP, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
             }
         }
     }

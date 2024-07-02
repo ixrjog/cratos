@@ -1,12 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.table.PrettyTable;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
-import com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.wrapper.TrafficLayerRecordWrapper;
 import com.google.common.base.Joiner;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.SOURCE_IP;
 import static com.baiyi.cratos.facade.proxy.TrafficLayerProxy.RULES;
 
 /**
@@ -33,6 +35,8 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
     private final TrafficLayerRecordWrapper recordWrapper;
 
     private final TrafficLayerProxy trafficLayerProxy;
+
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public final static String[] RECORD_TABLE_FIELD_NAME = {"Record Name", "Env Name", "Route Traffic To", "Origin Server"};
 
@@ -77,18 +81,19 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                     if (stringListMap.containsKey(RULES)) {
                         stringListMap.get(RULES)
                                 .forEach(e -> {
-                                    if (originServer.getDetails()
-                                            .containsKey(EdsKubernetesIngressAssetProvider.SOURCE_IP)) {
-                                        String sourceIP = originServer.getDetails()
-                                                .get(EdsKubernetesIngressAssetProvider.SOURCE_IP)
-                                                .getFirst()
-                                                .getValue();
+                                    EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
+                                            .instanceId(e.getInstanceId())
+                                            .assetId(e.getAssetId())
+                                            .name(SOURCE_IP)
+                                            .build();
+                                    EdsAssetIndex sourceIPIndex = edsAssetIndexService.getByUniqueKey(uniqueKey);
+                                    if (sourceIPIndex == null) {
+                                        ingressRuleTable.addRow(e.getName(), e.getValue());
+                                    } else {
                                         final String sourceIPWrap = Joiner.on("")
-                                                .join("[", sourceIP, "]");
+                                                .join("[", sourceIPIndex.getValue(), "]");
                                         ingressRuleTable.addRow(Joiner.on(" ")
                                                 .join(e.getName(), sourceIPWrap), e.getValue());
-                                    } else {
-                                        ingressRuleTable.addRow(e.getName(), e.getValue());
                                     }
                                 });
                     }

@@ -44,6 +44,8 @@ public class EdsAliyunConfigModel {
 
         private ARMS arms;
 
+        private MongoDB mongoDB;
+
     }
 
     @Data
@@ -100,6 +102,15 @@ public class EdsAliyunConfigModel {
         private String endpoint;
 
         private String home;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class MongoDB {
+
+        private List<String> endpoints;
 
     }
 
