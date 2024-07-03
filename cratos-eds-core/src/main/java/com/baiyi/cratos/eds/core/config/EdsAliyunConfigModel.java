@@ -46,6 +46,8 @@ public class EdsAliyunConfigModel {
 
         private MongoDB mongoDB;
 
+        private ONS ons;
+
     }
 
     @Data
@@ -109,6 +111,26 @@ public class EdsAliyunConfigModel {
     @NoArgsConstructor
     @Schema
     public static class MongoDB {
+
+        private List<String> endpoints;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class ONS {
+
+        private RocketMQ v5;
+
+        private RocketMQ v4;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class RocketMQ {
 
         private List<String> endpoints;
 

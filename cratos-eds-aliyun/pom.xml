@@ -115,6 +115,13 @@
             <version>7.0.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.aliyun/rocketmq20220801 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>rocketmq20220801</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
     </dependencies>
 
 </project>
