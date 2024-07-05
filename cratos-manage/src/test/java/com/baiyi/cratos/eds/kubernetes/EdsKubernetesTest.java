@@ -4,12 +4,20 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesIngressRepo;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import io.fabric8.kubernetes.api.model.Container;
+import io.fabric8.kubernetes.api.model.EnvVar;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -26,8 +34,13 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     public static final int CONFIG_ACK_PRE = 13;
 
+    public static final int CONFIG_ACK_PROD = 14;
+
     @Resource
     private KubernetesIngressRepo kubernetesIngressRepo;
+
+    @Resource
+    private KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     private static final String ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE = "alb.ingress.kubernetes.io/backend-keepalive";
 
@@ -77,7 +90,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(104 , EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(104, EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, "dev");
         for (Ingress ingress : ingressList) {
             // 打印Ingress注解配置
@@ -86,6 +99,34 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
                     .getName(), ingress.getMetadata()
                     .getAnnotations()));
         }
+    }
+
+    @Test
+    void test2() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(105, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "prod");
+        if (CollectionUtils.isEmpty(deploymentList)) {
+            return;
+        }
+        for (Deployment deployment : deploymentList) {
+            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            if (optionalContainer.isEmpty()) {
+                System.out.println(StringFormatter.format("Deployment {} 没找到应用容器", deployment.getMetadata()
+                        .getName()));
+            } else {
+                Container container = optionalContainer.get();
+                Optional<EnvVar> optionalEnvVar = container.getEnv()
+                        .stream()
+                        .filter(e -> StringUtils.hasText(e.getValue()) && e.getValue()
+                                .contains("-javaagent:/pp-agent/arms-agent.jar"))
+                        .findAny();
+                if (optionalEnvVar.isPresent()) {
+                    System.out.println(StringFormatter.arrayFormat("Deployment {} , {}", deployment.getMetadata()
+                            .getName(), "有pp-agent"));
+                }
+            }
+        }
+
     }
 
 }
