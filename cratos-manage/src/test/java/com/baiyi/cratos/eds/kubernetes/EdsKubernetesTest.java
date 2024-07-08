@@ -103,7 +103,9 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test2() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(105, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        // ACK-PROD 101
+        // EKS-PROD 105
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "prod");
         if (CollectionUtils.isEmpty(deploymentList)) {
             return;
