@@ -63,4 +63,13 @@ public class TrafficLayerDomainParam {
 
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class QueryDomainEnv {
+
+        private Integer domainId;
+
+    }
+
 }

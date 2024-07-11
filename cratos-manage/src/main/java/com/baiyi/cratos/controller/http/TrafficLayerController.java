@@ -4,17 +4,19 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
-import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
-import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
+import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -58,6 +60,12 @@ public class TrafficLayerController {
     public HttpResult<Boolean> deleteTrafficLayerDomainById(@RequestParam @Valid int id) {
         domainFacade.deleteById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query traffic layer domain env")
+    @PostMapping(value = "/domain/env/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<TrafficLayerDomainVO.DomainEnv>> queryTrafficLayerDomainEnv(@RequestBody @Valid TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
+        return new HttpResult<>(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
     }
 
     @Operation(summary = "Pagination query traffic layer record")

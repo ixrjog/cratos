@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 11:03
@@ -18,5 +20,8 @@ public interface TrafficLayerDomainFacade {
     void updateTrafficLayerDomain(TrafficLayerDomainParam.UpdateDomain updateDomain);
 
     void deleteById(int id);
+
+    List<TrafficLayerDomainVO.DomainEnv> queryTrafficLayerDomainEnv(
+            TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv);
 
 }
