@@ -26,6 +26,8 @@ import java.util.Optional;
  */
 public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
 
+    public static final int CONFIG_ACK_FE = 9;
+
     public static final int CONFIG_ACK_DEV = 10;
 
     public static final int CONFIG_ACK_DAILY = 11;
@@ -129,6 +131,23 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
             }
         }
 
+    }
+
+    @Test
+    void UpdateDefaultReplicas() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(99, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "daily");
+        deploymentList.forEach(deployment -> {
+            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            if (optionalContainer.isPresent()) {
+                Container container = optionalContainer.get();
+                if (container.getImage().startsWith("acr-frankfurt.chuanyinet.com/public/nginx")) {
+                    System.err.println(deployment.getMetadata().getName());
+                    deployment.getSpec().setReplicas(0);
+                    kubernetesDeploymentRepo.update(cfg, deployment);
+                }
+            }
+        });
     }
 
 }
