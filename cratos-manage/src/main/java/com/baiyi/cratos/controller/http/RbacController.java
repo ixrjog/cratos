@@ -115,6 +115,13 @@ public class RbacController {
         return new HttpResult<>(rbacResourceFacade.queryResourcePage(pageQuery));
     }
 
+    @Operation(summary = "Add resource")
+    @PostMapping(value = "/resource/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addResource(@RequestBody @Valid RbacResourceParam.AddResource addResource) {
+        rbacResourceFacade.addResource(addResource);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update resource")
     @PutMapping(value = "/resource/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateResource(@RequestBody @Valid RbacResourceParam.UpdateResource updateResource) {

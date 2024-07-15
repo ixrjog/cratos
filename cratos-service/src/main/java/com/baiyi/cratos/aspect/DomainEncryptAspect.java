@@ -48,7 +48,6 @@ public class DomainEncryptAspect {
             return;
         }
         operationDomain(joinPoint.getArgs()[0], ENCRYPT);
-
     }
 
     @After(value = "@annotation(domainEncrypt)")

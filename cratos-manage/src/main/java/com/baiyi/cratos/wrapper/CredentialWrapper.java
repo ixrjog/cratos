@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static com.baiyi.cratos.domain.constant.Global.NOT_APPLICABLE;
+
 /**
  * @Author baiyi
  * @Date 2024/1/9 18:58
@@ -35,13 +37,13 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     public void wrap(CredentialVO.Credential credential) {
         // tips
         ICredProvider iCredProvider = CredProviderFactory.getCredProvider(credential.getCredentialType());
-        credential.setTips(iCredProvider != null ? iCredProvider.getDesc() : "n/a");
+        credential.setTips(iCredProvider != null ? iCredProvider.getDesc() : NOT_APPLICABLE);
     }
 
     @Override
     public void businessWrap(CredentialVO.HasCredential cred) {
         IdentityUtil.validIdentityRun(cred.getCredentialId())
-                .withTrue(()->{
+                .withTrue(() -> {
                     Credential credential = credentialService.getById(cred.getCredentialId());
                     if (credential == null) {
                         return;

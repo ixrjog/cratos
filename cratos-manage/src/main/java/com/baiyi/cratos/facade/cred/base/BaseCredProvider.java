@@ -12,6 +12,8 @@ import org.apache.commons.text.StringSubstitutor;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.baiyi.cratos.domain.constant.Global.NOT_APPLICABLE;
+
 /**
  * @Author baiyi
  * @Date 2024/2/29 14:48
@@ -24,11 +26,12 @@ public abstract class BaseCredProvider implements ICredProvider {
     @Override
     public String getDesc() {
         if (listCredInjectionNameEnums().length == 0) {
-            return "n/a";
+            return NOT_APPLICABLE;
         } else {
             return Joiner.on("、")
                     .join(Arrays.stream(listCredInjectionNameEnums())
-                            .map(e -> "${" + e.name() + "}").toList());
+                            .map(e -> "${" + e.name() + "}")
+                            .toList());
         }
     }
 

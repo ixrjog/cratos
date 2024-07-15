@@ -49,6 +49,14 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
     }
 
     @Override
+    public void addResource(RbacResourceParam.AddResource addResource) {
+        RbacResource rbacResource = addResource.toTarget();
+        if (rbacResourceService.getByUniqueKey(rbacResource) == null) {
+            rbacResourceService.add(rbacResource);
+        }
+    }
+
+    @Override
     public void updateResource(RbacResourceParam.UpdateResource updateResource) {
         RbacResource rbacResource = rbacResourceService.getById(updateResource.getId());
         if (rbacResource != null) {
@@ -66,7 +74,8 @@ public class RbacResourceFacadeImpl implements RbacResourceFacade {
     }
 
     @Override
-    public DataTable<RbacResourceVO.Resource> queryRoleResourcePage(RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
+    public DataTable<RbacResourceVO.Resource> queryRoleResourcePage(
+            RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
         DataTable<RbacResource> table = rbacResourceService.queryRoleResourcePageByParam(pageQuery);
         return rbacResourceWrapper.wrapToTarget(table);
     }

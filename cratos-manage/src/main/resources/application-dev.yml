@@ -34,9 +34,9 @@ spring:
       on-profile:
         - dev
   datasource:
-    url: jdbc:mysql://172.19.0.128:3306/cratos-prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useInformationSchema=true&tinyInt1isBit=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://172.19.1.147:3306/cratos-prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useInformationSchema=true&tinyInt1isBit=true&nullCatalogMeansCurrent=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: cratos
-    password: ENC(WsXO1UZ84J+HM5RKunlujJ6+BUyCdgvBov3uFNz8UZGEHqHPQrUaESfbZ3eLBbez)
+    password: ENC(nM5dGT70+lk67XzXtjXFyq8g/yQSP4KB)
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
