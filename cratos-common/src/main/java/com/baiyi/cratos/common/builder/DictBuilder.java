@@ -29,6 +29,13 @@ public class DictBuilder {
         return this;
     }
 
+    public DictBuilder put(String name, Integer value) {
+        if (value != null) {
+            this.dict.put(name, String.valueOf(value));
+        }
+        return this;
+    }
+
     public DictBuilder put(Map<String, String> dict) {
         if (dict != null) {
             this.dict.putAll(dict);

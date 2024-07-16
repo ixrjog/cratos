@@ -76,6 +76,12 @@
 
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
+            <artifactId>cratos-eds-harbor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.core.config.base;
 
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.google.common.io.BaseEncoding;
 import org.springframework.util.StringUtils;
 
 /**
@@ -48,6 +49,24 @@ public class ToAuthorization {
             return StringFormatter.arrayFormat("sso-key {}:{}", getKey(), getSecret());
         }
 
+    }
+
+    public interface ToAuthorizationBasic {
+
+        String getUsername();
+
+        String getPassword();
+
+        default String toBasic() {
+            String basic = getUsername() + ":" + getPassword();
+            return StringFormatter.format("Basic {}", toBase64(basic));
+        }
+
+    }
+
+    private static String toBase64(String basic) {
+        return BaseEncoding.base64()
+                .encode(basic.getBytes());
     }
 
 }

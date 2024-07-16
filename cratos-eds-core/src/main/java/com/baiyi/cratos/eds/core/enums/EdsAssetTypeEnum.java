@@ -25,70 +25,48 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ONS_V5_CONSUMER_GROUP_SUBSCRIPTION("ONS(5.0) Subscription"),
 
     AWS_CERT("Certificate"),
-
     AWS_STS_VPN("Site-to-Site VPN"),
-
     AWS_ELB("ELB"),
-
     AWS_EC2("EC2"),
-
     AWS_EBS("EBS"),
-
     AWS_DOMAIN("Domain"),
-
     AWS_SQS_QUEUE("SQS Queue"),
-
     AWS_SNS_TOPIC("SNS Topic"),
-
     AWS_SNS_SUBSCRIPTION("SNS Subscription"),
-
     AWS_TRANSFER_SERVER("Transfer Server"),
-
     AWS_CLOUDFRONT_DISTRIBUTION("CloudFront Distribution"),
-
     AWS_S3_BUCKET("S3 Bucket"),
 
     HUAWEICLOUD_ECS("ECS"),
-
     HUAWEICLOUD_IAM_USER("IAM User"),
 
     CLOUDFLARE_CERT("Certificate"),
 
     KUBERNETES_NAMESPACE("Namespace"),
-
     KUBERNETES_DEPLOYMENT("Deployment"),
-
     KUBERNETES_INGRESS("Ingress"),
-
     KUBERNETES_SERVICE("Service"),
-
     KUBERNETES_NODE("Node"),
-
     KUBERNETES_VIRTUAL_SERVICE("VirtualService"),
-
     KUBERNETES_DESTINATION_RULE("DestinationRule"),
 
     LDAP_PERSON("Person"),
-
     LDAP_GROUP("Group"),
 
     DINGTALK_USER("User"),
-
     DINGTALK_DEPARTMENT("Department"),
-
     DINGTALK_ROBOT_MSG("RobotMsg"),
 
     GITLAB_PROJECT("Project"),
-
     GITLAB_GROUP("Group"),
-
     GITLAB_USER("User"),
-
     GITLAB_SSHKEY("SSH Key"),
-
     GANDI_DOMAIN("Domain"),
 
-    GODADDY_DOMAIN("Domain");
+    GODADDY_DOMAIN("Domain"),
+
+    HARBOR_PROJECT("Harbor Project"),
+    HARBOR_REPOSITORY("Harbor Repository");
 
     private final String displayName;
 

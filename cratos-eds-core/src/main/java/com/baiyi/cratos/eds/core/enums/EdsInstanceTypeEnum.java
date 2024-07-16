@@ -23,7 +23,9 @@ public enum EdsInstanceTypeEnum {
     DINGTALK_APP,
     DINGTALK_ROBOT,
     GANDI,
-    GODADDY;
+    GODADDY,
+    // https://goharbor.io/
+    HARBOR;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()
