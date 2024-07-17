@@ -11,6 +11,7 @@ import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
+import com.baiyi.cratos.shell.command.custom.eds.handler.WatchTerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.TerminalUtil;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
@@ -29,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.channel.ChannelOutputStream;
 import org.apache.sshd.server.session.ServerSession;
-import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.shell.standard.ShellCommandGroup;
@@ -81,7 +81,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl"}, value = "Login to the computer.")
     @ShellAuthentication(resource = "/computer/login")
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
-                      @ShellOption(help = "Account", defaultValue = "") String account) {
+                              @ShellOption(help = "Account", defaultValue = "") String account) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         EdsAsset edsAsset = computerMapper.get(id);
         if (edsAsset == null) {
@@ -116,6 +116,10 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
             hostSystem.setAuditPath(auditPath);
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, hostSystem,
                     SshSessionInstanceTypeEnum.COMPUTER, auditPath);
+            // Watch signal
+            WatchTerminalSignalHandler watchTerminalSignalHandler = new WatchTerminalSignalHandler(sessionId,
+                    sshSessionInstanceId, terminal);
+            Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 // open ssh
@@ -123,20 +127,22 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 TerminalUtil.enterRawMode(terminal);
                 // 无延迟
                 out.setNoDelay(true);
-                Size size = terminal.getSize();
 
                 while (true) {
                     if (isClosed(sessionId, sshSessionInstanceId) || serverSession.isClosed()) {
                         TimeUtil.millisecondsSleep(150L);
                         break;
                     }
-                    tryResize(size, terminal, sessionId, sshSessionInstanceId);
+                    //  tryResize(size, terminal, sessionId, sshSessionInstanceId);
                     int input = terminal.reader()
                             .read(5L);
                     send(sessionId, sshSessionInstanceId, input);
                 }
             } catch (Exception ignored) {
             } finally {
+                if (prevHandler != null) {
+                    terminal.handle(Terminal.Signal.WINCH, prevHandler);
+                }
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
                 serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
             }
@@ -151,14 +157,6 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     private String generateInstanceId(EdsAsset computerAsset) {
         return Joiner.on("#")
                 .join(computerAsset.getAssetId(), UUID.randomUUID());
-    }
-
-    private void tryResize(Size size, Terminal terminal, String sessionId, String instanceId) {
-        if (!terminal.getSize()
-                .equals(size)) {
-            size = terminal.getSize();
-            TerminalUtil.resize(sessionId, instanceId, size);
-        }
     }
 
     private boolean isClosed(String sessionId, String instanceId) {
