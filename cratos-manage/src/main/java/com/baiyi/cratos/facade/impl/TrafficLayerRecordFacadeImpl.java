@@ -27,7 +27,10 @@ public class TrafficLayerRecordFacadeImpl implements TrafficLayerRecordFacade {
 
     @Override
     public void addTrafficLayerRecord(TrafficLayerRecordParam.AddRecord addRecord) {
-        recordService.add(addRecord.toTarget());
+        TrafficLayerDomainRecord trafficLayerDomainRecord = addRecord.toTarget();
+        if (recordService.getByUniqueKey(trafficLayerDomainRecord) == null) {
+            recordService.add(addRecord.toTarget());
+        }
     }
 
     @Override
