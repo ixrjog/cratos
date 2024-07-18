@@ -11,6 +11,8 @@ import org.jline.terminal.Terminal;
  */
 public class WatchTerminalSignalHandler implements Terminal.SignalHandler {
 
+    // https://en.wikipedia.org/wiki/Signal_(IPC)#SIGWINCH
+
     private final Size size = new Size();
 
     private final String sessionId;
