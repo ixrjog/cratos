@@ -37,6 +37,7 @@ public class UpdateCertFromAssetProvider extends BaseUpdateBusinessFromAssetProv
     @Override
     protected void updateBusiness(EdsAsset asset, Certificate business) {
         business.setExpiredTime(asset.getExpiredTime());
+        business.setNotAfter(asset.getExpiredTime());
         certificateService.updateByPrimaryKey(business);
     }
 
