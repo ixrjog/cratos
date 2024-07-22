@@ -23,6 +23,8 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ONS_V5_TOPIC("ONS(5.0) Topic"),
     ALIYUN_ONS_V5_CONSUMER_GROUP("ONS(5.0) ConsumerGroup"),
     ALIYUN_ONS_V5_CONSUMER_GROUP_SUBSCRIPTION("ONS(5.0) Subscription"),
+    ALIYUN_ACR_INSTANCE("ACR Instance"),
+    ALIYUN_ACR_NAMESPACE("ACR Namespace"),
 
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),

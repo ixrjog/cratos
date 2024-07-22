@@ -40,7 +40,7 @@
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <spring-security.version>6.2.3</spring-security.version>
         <!-- 1.12.736 -->
-        <aws-java-sdk.version>1.12.736</aws-java-sdk.version>
+        <aws-java-sdk.version>1.12.761</aws-java-sdk.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.13.0</shedlock-spring.version>
     </properties>

@@ -1,6 +1,6 @@
-package com.baiyi.cratos.eds.aliyun.provider;
+package com.baiyi.cratos.eds.aliyun.provider.ons;
 
-import com.aliyun.rocketmq20220801.models.ListConsumerGroupsResponseBody;
+import com.aliyun.rocketmq20220801.models.ListTopicsResponseBody;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -30,22 +30,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.eds.aliyun.provider.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
+import static com.baiyi.cratos.eds.aliyun.provider.ons.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/7/3 上午11:45
+ * &#064;Date  2024/7/3 上午10:57
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP)
-public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> {
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC)
+public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> {
 
-    public EdsAliyunOnsV5ConsumerGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                    CredentialService credentialService,
-                                                    ConfigCredTemplate configCredTemplate,
-                                                    EdsAssetIndexFacade edsAssetIndexFacade,
-                                                    UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+    public EdsAliyunOnsV5TopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                            EdsAssetIndexFacade edsAssetIndexFacade,
+                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
     }
@@ -62,9 +61,9 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> listEntities(String endpoint,
-                                                                                                       ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> results = Lists.newArrayList();
+    protected List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> listEntities(String endpoint,
+                                                                                       ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+        List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> results = Lists.newArrayList();
         try {
             List<EdsAsset> edsAssetsOnsInstances = queryByInstanceAssets(instance,
                     EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE);
@@ -72,10 +71,10 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
                 return Collections.emptyList();
             } else {
                 for (EdsAsset edsAssetsOnsInstance : edsAssetsOnsInstances) {
-                    List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> consumerGroups = AliyunOnsV5Repo.listConsumerGroups(
+                    List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> topics = AliyunOnsV5Repo.listTopics(
                             endpoint, instance.getEdsConfigModel(), edsAssetsOnsInstance.getAssetId());
-                    if (!CollectionUtils.isEmpty(consumerGroups)) {
-                        results.addAll(consumerGroups);
+                    if (!CollectionUtils.isEmpty(topics)) {
+                        results.addAll(topics);
                     }
                 }
             }
@@ -87,13 +86,14 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                  ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
+                                  ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
-                    .join(entity.getInstanceId(), entity.getConsumerGroupId());
-            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getConsumerGroupId())
-                    .nameOf(entity.getConsumerGroupId())
+                    .join(entity.getInstanceId(), entity.getTopicName());
+            return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getTopicName())
+                    .nameOf(entity.getTopicName())
                     .assetKeyOf(key)
+                    .kindOf(entity.getMessageType())
                     .regionOf(entity.getRegionId())
                     .createdTimeOf(TimeUtil.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
                     .descriptionOf(entity.getRemark())
@@ -107,7 +107,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset,
-                                                      ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
+                                                      ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(toEdsAssetIndex(edsAsset, ONS_INSTANCE_ID, entity.getInstanceId()));

@@ -54,4 +54,6 @@ public interface EdsFacade {
 
     List<EdsAssetVO.Index> queryAssetIndexByAssetId(int assetId);
 
+    EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey);
+
 }

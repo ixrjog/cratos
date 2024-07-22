@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.aliyun.alb20200616.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunAlbRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunLoadBalancersRepo;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
@@ -33,11 +33,11 @@ import java.util.Set;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ALB)
 public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> {
 
-    private final AliyunAlbRepo aliyunAlbRepo;
+    private final AliyunLoadBalancersRepo aliyunAlbRepo;
 
     public EdsAliyunAlbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade, AliyunAlbRepo aliyunAlbRepo,
+                                     EdsAssetIndexFacade edsAssetIndexFacade, AliyunLoadBalancersRepo aliyunAlbRepo,
                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);

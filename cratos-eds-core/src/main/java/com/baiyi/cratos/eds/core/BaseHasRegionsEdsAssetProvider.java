@@ -43,12 +43,8 @@ public abstract class BaseHasRegionsEdsAssetProvider<C extends HasRegionModel & 
     @Override
     protected List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException {
         C configModel = instance.getEdsConfigModel();
-        Set<String> regionIdSet = Sets.newHashSet(configModel.getRegionId());
-        if (configModel.getRegionIds() != null) {
-            regionIdSet.addAll(configModel.getRegionIds());
-        }
         List<A> entities = Lists.newArrayList();
-        regionIdSet.forEach(regionId -> {
+        getRegionSet(configModel).forEach(regionId -> {
             try {
                 List<A> regionEntities = listEntities(regionId, configModel);
                 if (!CollectionUtils.isEmpty(regionEntities)) {
@@ -59,6 +55,14 @@ public abstract class BaseHasRegionsEdsAssetProvider<C extends HasRegionModel & 
             }
         });
         return entities;
+    }
+
+    protected Set<String> getRegionSet(C configModel) {
+        Set<String> regionIdSet = Sets.newHashSet(configModel.getRegionId());
+        if (configModel.getRegionIds() != null) {
+            regionIdSet.addAll(configModel.getRegionIds());
+        }
+        return regionIdSet;
     }
 
     abstract protected List<A> listEntities(String regionId, C configModel) throws EdsQueryEntitiesException;

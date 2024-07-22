@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aliyun.provider;
+package com.baiyi.cratos.eds.aliyun.provider.ons;
 
 import com.aliyun.rocketmq20220801.models.ListConsumerGroupSubscriptionsResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.eds.aliyun.provider.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
+import static com.baiyi.cratos.eds.aliyun.provider.ons.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
 
 /**
  * &#064;Author  baiyi

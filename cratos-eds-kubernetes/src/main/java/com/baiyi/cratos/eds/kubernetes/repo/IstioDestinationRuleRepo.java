@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class IstioDestinationRuleRepo {
 
     public static List<DestinationRule> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (IstioClient ic = IstioClientBuilder.build(kubernetes)) {
+        try (final IstioClient ic = IstioClientBuilder.build(kubernetes)) {
             DestinationRuleList destinationRuleList = ic.v1alpha3()
                     .destinationRules()
                     .inNamespace(namespace)

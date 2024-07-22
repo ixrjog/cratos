@@ -25,7 +25,7 @@ public class KubernetesIngressRepo {
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.network()
                     .v1()
                     .ingresses()
@@ -39,7 +39,7 @@ public class KubernetesIngressRepo {
     }
 
     public List<Ingress> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.network()
                     .v1()
                     .ingresses()
@@ -53,7 +53,7 @@ public class KubernetesIngressRepo {
     }
 
     public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Ingress ingress = toIngress(kc, content);
             return kc.network()
                     .v1()
@@ -69,7 +69,7 @@ public class KubernetesIngressRepo {
     }
 
     public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Ingress ingress = toIngress(kc, content);
             return kc.network()
                     .v1()
@@ -85,7 +85,7 @@ public class KubernetesIngressRepo {
     }
 
     public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, Ingress ingress) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.network()
                     .v1()
                     .ingresses()

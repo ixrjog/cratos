@@ -120,6 +120,18 @@ public class EdsInstanceParam {
     }
 
     @Data
+    @NoArgsConstructor
+    @Schema
+    public static class QueryAssetByUniqueKey {
+        @NotNull
+        private Integer instanceId;
+        @NotNull
+        private String assetType;
+        @NotNull
+        private String assetKey;
+    }
+
+    @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor

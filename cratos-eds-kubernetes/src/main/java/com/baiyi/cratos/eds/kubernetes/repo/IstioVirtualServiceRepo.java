@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class IstioVirtualServiceRepo {
 
     public static List<VirtualService> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (IstioClient ic = IstioClientBuilder.build(kubernetes)) {
+        try (final IstioClient ic = IstioClientBuilder.build(kubernetes)) {
             VirtualServiceList virtualServiceList = ic.v1alpha3()
                     .virtualServices()
                     .inNamespace(namespace)

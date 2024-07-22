@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsCertRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -54,6 +55,12 @@ public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsA
                 .createdTimeOf(entity.getNotBefore())
                 .expiredTimeOf(entity.getNotAfter())
                 .build();
+    }
+
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }

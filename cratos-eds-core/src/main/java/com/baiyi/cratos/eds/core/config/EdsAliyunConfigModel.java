@@ -48,6 +48,8 @@ public class EdsAliyunConfigModel {
 
         private ONS ons;
 
+        private ACR acr;
+
     }
 
     @Data
@@ -113,6 +115,15 @@ public class EdsAliyunConfigModel {
     public static class MongoDB {
 
         private List<String> endpoints;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class ACR {
+
+        private List<String> regionIds;
 
     }
 

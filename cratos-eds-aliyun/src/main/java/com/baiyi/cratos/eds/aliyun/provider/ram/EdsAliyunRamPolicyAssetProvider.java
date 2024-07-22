@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aliyun.provider;
+package com.baiyi.cratos.eds.aliyun.provider.ram;
 
 import com.aliyuncs.ram.model.v20150501.*;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;

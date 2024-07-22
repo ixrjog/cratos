@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 @Component
 @RequiredArgsConstructor
-public class AliyunAlbRepo {
+public class AliyunLoadBalancersRepo {
 
     public List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listLoadBalancers(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         ListLoadBalancersRequest request = new ListLoadBalancersRequest();

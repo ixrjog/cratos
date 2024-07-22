@@ -34,7 +34,7 @@ public class KubernetesPodRepo {
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             DeploymentList deploymentList = kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -51,7 +51,7 @@ public class KubernetesPodRepo {
 
     public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
                           @NonNull String deploymentName) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Map<String, String> matchLabels = kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -77,7 +77,7 @@ public class KubernetesPodRepo {
     }
 
     public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,@NonNull String namespace, Map<String, String> labels) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             PodList podList = kc.pods()
                     .inNamespace(namespace)
                     .withLabels(labels)

@@ -23,9 +23,10 @@ public class KubernetesNodeRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public  List<Node> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            NodeList nodeList = kc.nodes().list();
+    public List<Node> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            NodeList nodeList = kc.nodes()
+                    .list();
             return nodeList.getItems();
         } catch (Exception e) {
             log.warn(e.getMessage());

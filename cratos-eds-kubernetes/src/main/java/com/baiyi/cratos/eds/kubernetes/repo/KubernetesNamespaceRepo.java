@@ -28,7 +28,7 @@ public class KubernetesNamespaceRepo {
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     public List<Namespace> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             NamespaceList namespaceList = kc.namespaces()
                     .list();
             return namespaceList.getItems()
@@ -42,7 +42,7 @@ public class KubernetesNamespaceRepo {
     }
 
     public Namespace get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.namespaces()
                     .withName(namespace)
                     .get();

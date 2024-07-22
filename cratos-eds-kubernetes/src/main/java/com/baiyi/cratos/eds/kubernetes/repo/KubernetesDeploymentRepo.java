@@ -69,7 +69,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Deployment deployment = toDeployment(kc, content);
             // 删除资源版本
             deployment.getMetadata()
@@ -85,7 +85,7 @@ public class KubernetesDeploymentRepo {
         // 删除资源版本
         deployment.getMetadata()
                 .setResourceVersion(null);
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -98,7 +98,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, Deployment deployment) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -119,7 +119,8 @@ public class KubernetesDeploymentRepo {
      * @param replicas
      * @throws KubernetesDeploymentException
      */
-    public void scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name, int replicas) throws KubernetesDeploymentException {
+    public void scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
+                      int replicas) throws KubernetesDeploymentException {
         Deployment deployment = get(kubernetes, namespace, name);
         final Integer nowReplicas = Optional.ofNullable(deployment)
                 .map(Deployment::getSpec)
@@ -129,7 +130,7 @@ public class KubernetesDeploymentRepo {
         if (nowReplicas >= replicas) {
             throw new KubernetesDeploymentException("只能扩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
         }
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -150,7 +151,8 @@ public class KubernetesDeploymentRepo {
      * @param replicas
      * @throws KubernetesDeploymentException
      */
-    public void reduce(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name, int replicas) throws KubernetesDeploymentException {
+    public void reduce(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
+                       int replicas) throws KubernetesDeploymentException {
         Deployment deployment = get(kubernetes, namespace, name);
         final Integer nowReplicas = Optional.ofNullable(deployment)
                 .map(Deployment::getSpec)
@@ -163,7 +165,7 @@ public class KubernetesDeploymentRepo {
         if (replicas >= nowReplicas) {
             throw new KubernetesDeploymentException("只能缩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
         }
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -176,7 +178,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Deployment deployment = toDeployment(kc, content);
             return kc.apps()
                     .deployments()
@@ -191,7 +193,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
@@ -205,7 +207,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             DeploymentList deploymentList = kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -224,7 +226,7 @@ public class KubernetesDeploymentRepo {
         // 删除资源版本
         deployment.getMetadata()
                 .setResourceVersion(null);
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
@@ -238,7 +240,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public Deployment get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
                     .deployments()
                     .inNamespace(namespace)
@@ -251,7 +253,7 @@ public class KubernetesDeploymentRepo {
     }
 
     public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             kc.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()

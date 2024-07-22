@@ -30,11 +30,13 @@ import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -211,8 +213,8 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(
-                importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(importInstanceAsset.getInstanceId(),
+                importInstanceAsset.getAssetType());
         providerHolder.importAssets();
     }
 
@@ -279,6 +281,12 @@ public class EdsFacadeImpl implements EdsFacade {
                 .stream()
                 .map(edsAssetIndexWrapper::wrapToTarget)
                 .toList();
+    }
+
+    @Override
+    public EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
+        //TODO
+        return null;
     }
 
 }
