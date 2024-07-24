@@ -13,11 +13,8 @@ public class ApplicationGroupingModel {
     @Data
     @Builder
     public static class ApplicationGrouping {
-
         String appName;
-
         String grouping;
-
     }
 
 }

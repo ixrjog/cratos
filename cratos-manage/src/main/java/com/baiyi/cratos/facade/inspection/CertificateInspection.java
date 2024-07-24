@@ -31,6 +31,10 @@ public class CertificateInspection extends BaseInspection {
 
     private static final int CERTIFICATE_EXPIRY_DAYS = 30;
 
+    private static final String CERTIFICATES_FIELD = "certificates";
+
+    private static final String EXPIRY_DAYS_FIELD = "expiryDays";
+
     public static final String CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION = "CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public CertificateInspection(NotificationTemplateService notificationTemplateService,
@@ -47,8 +51,8 @@ public class CertificateInspection extends BaseInspection {
         Date expiry = ExpiredUtil.generateExpirationTime(CERTIFICATE_EXPIRY_DAYS, TimeUnit.DAYS);
         List<Certificate> certificateList = certificateService.queryByLessThanExpiry(expiry);
         return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put("certificates", certificateList)
-                .put("expiryDays", CERTIFICATE_EXPIRY_DAYS)
+                .put(CERTIFICATES_FIELD, certificateList)
+                .put(EXPIRY_DAYS_FIELD, CERTIFICATE_EXPIRY_DAYS)
                 .build());
     }
 

@@ -33,6 +33,10 @@ public class DomainInspection extends BaseInspection {
 
     private final DomainService domainService;
 
+    private static final String DOMAINS_FIELD = "domains";
+
+    private static final String EXPIRY_DAYS_FIELD = "expiryDays";
+
     public DomainInspection(NotificationTemplateService notificationTemplateService,
                             DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
                             EdsConfigService edsConfigService, DomainService domainService) {
@@ -46,8 +50,8 @@ public class DomainInspection extends BaseInspection {
         Date expiry = ExpiredUtil.generateExpirationTime(DOMAIN_EXPIRY_DAYS, TimeUnit.DAYS);
         List<Domain> domainList = domainService.queryByLessThanExpiry(expiry);
         return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put("domains", domainList)
-                .put("expiryDays", DOMAIN_EXPIRY_DAYS)
+                .put(DOMAINS_FIELD, domainList)
+                .put(EXPIRY_DAYS_FIELD, DOMAIN_EXPIRY_DAYS)
                 .build());
     }
 

@@ -143,7 +143,6 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
             palmpay-docs
             """;
 
-
     public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
                                                    DingtalkRobotService dingtalkRobotService,
                                                    EdsInstanceHelper edsInstanceHelper,

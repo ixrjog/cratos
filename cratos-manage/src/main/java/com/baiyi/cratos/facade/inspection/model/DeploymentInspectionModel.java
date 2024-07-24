@@ -13,11 +13,8 @@ public class DeploymentInspectionModel {
     @Data
     @Builder
     public static class Deployment {
-
         String instanceName;
-
         String name;
-
     }
 
 }
