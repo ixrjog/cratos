@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.resource;
 
 import com.baiyi.cratos.eds.kubernetes.resource.autoscaler.AdvancedHorizontalPodAutoscalerSpec;
+import com.baiyi.cratos.eds.kubernetes.resource.autoscaler.AdvancedHorizontalPodAutoscalerStatus;
 import io.fabric8.kubernetes.api.model.Namespaced;
 import io.fabric8.kubernetes.client.CustomResource;
 import io.fabric8.kubernetes.model.annotation.Group;
@@ -15,7 +16,7 @@ import java.io.Serial;
  */
 @Version(AdvancedHorizontalPodAutoscaler.VERSION)
 @Group(AdvancedHorizontalPodAutoscaler.GROUP)
-public class AdvancedHorizontalPodAutoscaler extends CustomResource<AdvancedHorizontalPodAutoscalerSpec, Void> implements Namespaced {
+public class AdvancedHorizontalPodAutoscaler extends CustomResource<AdvancedHorizontalPodAutoscalerSpec, AdvancedHorizontalPodAutoscalerStatus> implements Namespaced {
 
     @Serial
     private static final long serialVersionUID = 6747132942568070503L;
