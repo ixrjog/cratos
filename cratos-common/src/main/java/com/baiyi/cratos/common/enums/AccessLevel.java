@@ -22,4 +22,12 @@ public enum AccessLevel {
         this.level = level;
     }
 
+    public static boolean isAdmin(int level) {
+        return level >= ADMIN.level;
+    }
+
+    public static boolean isOps(int level) {
+        return level >= OPS.level;
+    }
+
 }

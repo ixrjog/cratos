@@ -15,7 +15,6 @@ import java.io.InputStream;
  */
 public class GoogleCloudIamRepo {
 
-
     private static final String key = """
             {
              ...

@@ -30,7 +30,9 @@ public enum CredentialTypeEnum {
     SSL_CERTIFICATES("SSL certificates"),
     OTP("OTP"),
     // 字典
-    DICTIONARY("Dictionary");
+    DICTIONARY("Dictionary"),
+    // https://cloud.google.com/docs/authentication/application-default-credentials?hl=zh-cn
+    GOOGLE_ADC("Google Application Default Credentials");
 
     private final String displayName;
 
