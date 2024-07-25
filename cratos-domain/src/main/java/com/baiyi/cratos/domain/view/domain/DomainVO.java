@@ -34,37 +34,25 @@ public class DomainVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.DOMAIN)
     public static class Domain extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
-
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;
-
         private Integer id;
-
         private String name;
-
         private Boolean valid;
-
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date registrationTime;
-
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiry;
-
         private String domainType;
-
         private String comment;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
         @Schema(description = "Business Tags")
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
-        List<BusinessDocVO.BusinessDoc> businessDocs;
-
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
     }
 
 }

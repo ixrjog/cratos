@@ -22,15 +22,12 @@ public class ScheduleVO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Job {
-
         private String name;
         private String group;
         private String status;
         private String description;
         private String cronExpression;
-
         private List<String> executionTime;
-
     }
 
 }

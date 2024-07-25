@@ -18,13 +18,10 @@ public class ApplicationParam {
     @Data
     @Schema
     public static class QueryApplicationDeploy {
-
         @NotNull
         private Integer applicationId;
-
         @NotNull
         private Integer envType;
-
     }
 
 }

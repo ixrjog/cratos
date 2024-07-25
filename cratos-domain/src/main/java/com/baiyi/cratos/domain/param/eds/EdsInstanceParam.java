@@ -24,64 +24,42 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class InstancePageQuery extends PageParam {
-
         @Schema(description = "Query by name")
         private String queryName;
-
         @Schema(description = "Query by edsType")
         private String edsType;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class RegisterInstance implements IToTarget<EdsInstance> {
-
         // private Integer id;
-
         @NotNull(message = "Parameter 'instanceName' cannot be empty.")
         private String instanceName;
-
         // private String instanceType;
-
         private String kind;
-
         private String version;
-
         private Boolean valid;
-
         @NotNull(message = "Parameter 'configId' cannot be empty.")
         private Integer configId;
-
         private String url;
-
         private String comment;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class UpdateInstance implements IToTarget<EdsInstance> {
-
         private Integer id;
-
         @NotNull(message = "Parameter 'instanceName' cannot be empty.")
         private String instanceName;
-
         // private String instanceType;
-
         private String kind;
-
         private String version;
-
         private Boolean valid;
-
         private String url;
-
         private String comment;
-
     }
 
     @Data
@@ -90,14 +68,10 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class ImportInstanceAsset {
-
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
-
         // private String instanceType;
-
         private String assetType;
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -106,17 +80,12 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class AssetPageQuery extends PageParam {
-
         private Integer instanceId;
-
         @Schema(description = "Query by name")
         private String queryName;
-
         @Schema(description = "Query by assetType")
         private String assetType;
-
         private Boolean valid;
-
     }
 
     @Data
@@ -137,12 +106,9 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class DeleteInstanceAsset {
-
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
-
         private String assetType;
-
     }
 
 }

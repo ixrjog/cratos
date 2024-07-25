@@ -28,13 +28,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class SshInstanceVO {
 
     public interface HasSessionInstances {
-
         String getSessionId();
-
         void setSessionInstances(List<Instance> instances);
-
         List<Instance> getSessionInstances();
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -42,39 +38,24 @@ public class SshInstanceVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_INSTANCE)
     public static class Instance extends BaseVO implements HasResourceCount, Serializable {
-
         @Serial
         private static final long serialVersionUID = -6573176155485274089L;
-
         private Integer id;
-
         private String sessionId;
-
         private String instanceId;
-
         private String duplicateInstanceId;
-
         private String instanceType;
-
         private String loginUser;
-
         private String destIp;
-
         private Long outputSize;
-
         private Boolean instanceClosed;
-
         private String auditPath;
-
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date startTime;
-
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
-
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;
-
     }
 
 }

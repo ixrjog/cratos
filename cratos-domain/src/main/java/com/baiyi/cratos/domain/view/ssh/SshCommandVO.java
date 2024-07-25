@@ -26,24 +26,15 @@ public class SshCommandVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_COMMAND)
     public static class Command extends BaseVO implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 6289635292393271645L;
-
         private Integer id;
-
         private Integer sshSessionInstanceId;
-
         private String prompt;
-
         private Boolean isFormatted;
-
         private String input;
-
         private String inputFormatted;
-
         private String output;
-
     }
 
 }

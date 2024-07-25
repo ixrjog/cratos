@@ -23,14 +23,10 @@ public class SshSessionParam {
     @NoArgsConstructor
     @Schema
     public static class SshSessionPageQuery extends PageParam {
-
         @Schema(description = "查询用户")
         private String username;
-
         private String sessionStatus;
-
         private String sessionType;
-
     }
 
 }

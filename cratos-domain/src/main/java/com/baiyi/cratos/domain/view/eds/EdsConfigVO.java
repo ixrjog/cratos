@@ -23,11 +23,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class EdsConfigVO {
 
     public interface HasEdsConfig {
-
         Integer getConfigId();
-
         void setEdsConfig(EdsConfig edsConfig);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -35,32 +32,19 @@ public class EdsConfigVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_CONFIG)
     public static class EdsConfig extends BaseVO implements CredentialVO.HasCredential, Serializable {
-
         @Serial
         private static final long serialVersionUID = 5528314871263301871L;
-
         private Integer id;
-
         private String name;
-
         private String edsType;
-
         private String version;
-
         private Boolean valid;
-
         private Integer credentialId;
-
         private Integer instanceId;
-
         private String url;
-
         private String configContent;
-
         private String comment;
-
         private CredentialVO.Credential credential;
-
     }
 
 }

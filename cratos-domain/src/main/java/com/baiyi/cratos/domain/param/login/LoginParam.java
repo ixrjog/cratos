@@ -24,15 +24,11 @@ public class LoginParam {
     @Schema
     @AllArgsConstructor
     public static class Login {
-
         @NotBlank(message = "用户名不能为空")
         private String username;
-
         private String password;
-
         @Schema(description = "One Time Password")
         private String otp;
-
         public boolean isEmptyPassword() {
             return StringUtils.isEmpty(password);
         }

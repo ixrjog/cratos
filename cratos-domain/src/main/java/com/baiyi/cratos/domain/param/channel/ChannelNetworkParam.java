@@ -27,19 +27,12 @@ public class ChannelNetworkParam {
     @NoArgsConstructor
     @Schema
     public static class AddChannelNetwork implements IToTarget<ChannelNetwork> {
-
         private String name;
-
         private String channelKey;
-
         private Boolean valid;
-
         private String channelStatus;
-
         private String availableStatus;
-
         private String comment;
-
     }
 
     @Data
@@ -47,21 +40,13 @@ public class ChannelNetworkParam {
     @NoArgsConstructor
     @Schema
     public static class UpdateChannelNetwork implements IToTarget<ChannelNetwork> {
-
         private Integer id;
-
         private String name;
-
         private String channelKey;
-
         private Boolean valid;
-
         private String channelStatus;
-
         private String availableStatus;
-
         private String comment;
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -70,14 +55,10 @@ public class ChannelNetworkParam {
     @NoArgsConstructor
     @Schema
     public static class ChannelNetworkPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
-
         @Schema(description = "查询名称")
         private String queryName;
-
         private BusinessTagParam.QueryByTag queryByTag;
-
         private List<Integer> idList;
-
         public ChannelNetworkPageQueryParam toParam() {
             return ChannelNetworkPageQueryParam.builder()
                     .page(getPage())
@@ -86,7 +67,6 @@ public class ChannelNetworkParam {
                     .idList(idList)
                     .build();
         }
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -95,11 +75,8 @@ public class ChannelNetworkParam {
     @NoArgsConstructor
     @Schema
     public static class ChannelNetworkPageQueryParam extends PageParam {
-
         private String queryName;
-
         private List<Integer> idList;
-
     }
 
 }

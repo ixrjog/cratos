@@ -11,15 +11,11 @@ import java.util.List;
 @Schema
 @Data
 public class DataTable<T> {
-
     public final static DataTable EMPTY = new DataTable<>();
-
     @Schema(description = "分页数据")
     private List<T> data;
-
     @Schema(description = "当前页码")
     private int nowPage;
-
     @Schema(description = "总记录数")
     private long totalNum;
 

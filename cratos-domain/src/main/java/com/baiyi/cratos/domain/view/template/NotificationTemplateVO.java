@@ -24,23 +24,14 @@ public class NotificationTemplateVO {
     public static class NotificationTemplate extends BaseVO  {
         @Serial
         private static final long serialVersionUID = 5468140178995933859L;
-
         private Integer id;
-
         private String name;
-
         private String notificationTemplateKey;
-
         private String notificationTemplateType;
-
         private String title;
-
         private String consumer;
-
         private String lang;
-
         private String content;
-
         private String comment;
     }
 

@@ -26,18 +26,14 @@ public class LoginVO {
     @Schema
     @Builder
     public static class Login {
-
         private String username;
         @Schema(description = "DisplayName")
         private String name;
         private String uuid;
         private String token;
-
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
-
         private Long maxAge;
-
     }
 
 }

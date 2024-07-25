@@ -31,39 +31,25 @@ public class ServerAccountVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
     public static class ServerAccount extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, CredentialVO.HasCredential, Serializable {
-
         @Serial
         private static final long serialVersionUID = -7504148829629508983L;
-
         private Integer id;
-
         private String name;
-
         private String username;
-
         private Integer credentialId;
-
         private Boolean sudo;
-
         private String protocol;
-
         private Boolean valid;
-
         private String comment;
-
         private CredentialVO.Credential credential;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
         @Schema(description = "Business Tags")
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
-        List<BusinessDocVO.BusinessDoc> businessDocs;
-
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
     }
 
 }

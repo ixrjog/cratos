@@ -26,6 +26,8 @@ public class GCPTest extends BaseUnit {
 
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialPath));
 
+        Storage storage = StorageOp
+
 
         credentials.refreshIfExpired();
         AccessToken token = credentials.getAccessToken();
@@ -35,7 +37,7 @@ public class GCPTest extends BaseUnit {
         System.out.println(token.getTokenValue());
 
     }
-    
+
     @Test
     void test() throws IOException {
         GoogleCloudIamRepo.test1();

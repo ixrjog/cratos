@@ -43,61 +43,48 @@ public class RbacRoleResourceParam {
     @NoArgsConstructor
     @Schema
     public static class RoleResourcePageQuery extends PageParam {
-
         @Schema(description = "资源组ID")
         private Integer groupId;
-
         @Schema(description = "角色ID")
         private Integer roleId;
-
         @Schema(description = "是否在角色中")
         private Boolean inRole;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class AddRoleResource implements IToRbacRoleResources {
-
         @Schema(description = "角色ID")
         @NotNull
         private Integer roleId;
-
         @Schema(description = "资源ID")
         @NotEmpty
         private List<Integer> resourceIds;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class CopyRoleResource {
-
         @Schema(description = "角色ID")
         @NotNull
         private Integer roleId;
-
         @Schema(description = "角色ID")
         @NotNull
         private Integer targetRoleId;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class DeleteRoleResource implements IToRbacRoleResources {
-
         @Schema(description = "角色ID")
         @NotNull
         private Integer roleId;
-
         @Schema(description = "资源ID")
         @NotEmpty
         private List<Integer> resourceIds;
-
     }
 
 }

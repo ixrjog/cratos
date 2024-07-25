@@ -16,14 +16,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KubernetesDeploymentResponse<T> {
-
     private T body;
-
     private String messageType;
-
     @Override
     public String toString() {
         return JSONUtil.writeValueAsString(this);
     }
-
 }

@@ -22,29 +22,19 @@ public class RbacResourceVO {
     @Data
     @Schema
     public static class Resource extends BaseVO implements RbacGroupVO.HasRbacGroup {
-
         @Serial
         private static final long serialVersionUID = 1537978025458286103L;
-
         private Integer id;
-
         private Integer groupId;
-
         private String resourceName;
-
         private String comment;
-
         private Boolean valid;
-
         private Boolean uiPoint;
-
         private RbacGroupVO.Group rbacGroup;
-
         @Override
         public Integer getRbacGroupId() {
             return groupId;
         }
-
     }
 
 }

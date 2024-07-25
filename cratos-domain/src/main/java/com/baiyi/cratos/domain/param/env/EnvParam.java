@@ -29,53 +29,36 @@ public class EnvParam {
     @NoArgsConstructor
     @Schema
     public static class EnvPageQuery extends PageParam {
-
         @Schema(description = "Query by name")
         private String queryName;
-
     }
 
     @Data
     @Schema
     public static class AddEnv implements IToTarget<Env> {
-
         @NotBlank
         private String envName;
-
         @NotBlank
         private String color;
-
         @NotBlank
         private String promptColor;
-
         @NotNull
         private Integer seq;
-
         @NotNull
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     public static class UpdateEnv implements IToTarget<Env> {
-
         private Integer id;
-
         private String envName;
-
         private String color;
-
         private String promptColor;
-
         private Integer seq;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
 }

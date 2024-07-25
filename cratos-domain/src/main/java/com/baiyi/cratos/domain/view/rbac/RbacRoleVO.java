@@ -35,23 +35,15 @@ public class RbacRoleVO {
     @Data
     @Schema
     public static class Role extends BaseVO implements HasResourceCount {
-
         @Serial
         private static final long serialVersionUID = -537492408171499126L;
-
         private Integer id;
-
         private String roleName;
-
         private Integer accessLevel;
-
         private Boolean workOrderVisible;
-
         private String comment;
-
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;
-
     }
 
 }

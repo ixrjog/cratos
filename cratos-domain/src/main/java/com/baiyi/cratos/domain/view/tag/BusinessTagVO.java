@@ -22,34 +22,23 @@ import static lombok.AccessLevel.PRIVATE;
 public class BusinessTagVO {
 
     public interface HasBusinessTags extends BaseBusiness.HasBusiness {
-
         void setBusinessTags(List<BusinessTagVO.BusinessTag> businessTags);
-
         List<BusinessTagVO.BusinessTag> getBusinessTags();
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     public static class BusinessTag extends BaseVO implements BaseBusiness.HasBusiness, TagVO.HasTag, Serializable {
-
         @Serial
         private static final long serialVersionUID = 1803833169421392342L;
-
         private Integer id;
-
         private String businessType;
-
         private Integer businessId;
-
         private Integer tagId;
-
         private String tagValue;
-
         @Schema(description = "HasTag")
         private TagVO.Tag tag;
-
     }
 
 }

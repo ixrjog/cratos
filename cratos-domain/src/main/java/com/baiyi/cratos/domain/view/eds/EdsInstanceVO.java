@@ -30,44 +30,27 @@ public class EdsInstanceVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
     public static class EdsInstance extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, EdsConfigVO.HasEdsConfig, Serializable {
-
         @Serial
         private static final long serialVersionUID = -7340773895154204152L;
-
         private Integer id;
-
         private String instanceName;
-
         private String edsType;
-
         private String kind;
-
         private String version;
-
         private Boolean valid;
-
         private Integer configId;
-
         private String url;
-
         private String comment;
-
         @Schema(description = "Eds Instance Registered")
         private boolean registered;
-
         private EdsConfigVO.EdsConfig edsConfig;
-
         private Set<String> assetTypes;
-
         private List<EdsAssetTypeVO.Type> instanceAssetTypes;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
     }
 
 }

@@ -20,37 +20,28 @@ public class RbacUserRoleParam {
     @Data
     @Schema
     public static class AddUserRole implements IToTarget<RbacUserRole> {
-
         @NotNull(message = "Username must be specified.")
         private String username;
-
         @NotNull(message = "RoleId must be specified.")
         private Integer roleId;
-
     }
 
     @Data
     @Schema
     public static class DeleteUserRole implements IToTarget<RbacUserRole> {
-
         @NotNull(message = "Username must be specified.")
         private String username;
-
         @NotNull(message = "RoleId must be specified.")
         private Integer roleId;
-
     }
 
     @Data
     @Schema
     public static class VerifyUserRoleResourcePermission {
-
         @NotNull(message = "Username must be specified.")
         private String username;
-
         @NotNull(message = "ResourceId must be specified.")
         private Integer resourceId;
-
     }
 
 }

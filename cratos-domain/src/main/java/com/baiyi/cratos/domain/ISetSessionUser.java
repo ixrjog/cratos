@@ -6,7 +6,5 @@ package com.baiyi.cratos.domain;
  * @Version 1.0
  */
 public interface ISetSessionUser {
-
     void setSessionUser(String username);
-
 }

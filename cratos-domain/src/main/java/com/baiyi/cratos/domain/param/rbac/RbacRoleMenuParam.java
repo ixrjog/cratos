@@ -40,11 +40,8 @@ public class RbacRoleMenuParam {
     @Data
     @Schema
     public static class AddRoleMenu implements IToTarget<RbacRoleMenu> {
-
         private Integer roleId;
-
         private Integer menuId;
-
     }
 
     @Data
@@ -52,13 +49,10 @@ public class RbacRoleMenuParam {
     @AllArgsConstructor
     @Schema
     public static class SaveRoleMenu implements IToRoleMenus {
-
         @NotNull
         private Integer roleId;
-
         @NotNull
         private List<Integer> menuIds;
-
     }
 
 }

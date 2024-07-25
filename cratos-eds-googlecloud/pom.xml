@@ -39,7 +39,8 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-<!--        <dependency>-->
+
+        <!--        <dependency>-->
 <!--            <groupId>com.google.cloud</groupId>-->
 <!--            <artifactId>google-iam-admin</artifactId>-->
 <!--        </dependency>-->
@@ -57,7 +58,7 @@
         <dependency>
             <groupId>com.google.auth</groupId>
             <artifactId>google-auth-library-oauth2-http</artifactId>
-            <version>1.40.0</version>
+            <version>1.24.0</version>
         </dependency>
 
     </dependencies>

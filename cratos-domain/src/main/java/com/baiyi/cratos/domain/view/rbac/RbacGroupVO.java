@@ -22,7 +22,6 @@ public class RbacGroupVO {
 
     public interface HasRbacGroup {
         Integer getRbacGroupId();
-
         void setRbacGroup(Group rbacGroup);
     }
 
@@ -30,21 +29,14 @@ public class RbacGroupVO {
     @Data
     @Schema
     public static class Group extends BaseVO implements HasResourceCount {
-
         @Serial
         private static final long serialVersionUID = 7404729006872174030L;
-
         private Integer id;
-
         private String groupName;
-
         private String base;
-
         private String comment;
-
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;
-
     }
 
 }
