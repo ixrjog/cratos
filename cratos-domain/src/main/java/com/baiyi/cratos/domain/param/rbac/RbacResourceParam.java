@@ -28,50 +28,33 @@ public class RbacResourceParam {
     @NoArgsConstructor
     @Schema
     public static class ResourcePageQuery extends PageParam {
-
         private String queryName;
-
         private Boolean valid;
-
         private Integer groupId;
-
     }
 
     @Data
     @Schema
     public static class AddResource implements IToTarget<RbacResource> {
-
         @NotNull(message = "The GroupID must be specified.")
         private Integer groupId;
-
         private String resourceName;
-
         private String comment;
-
         private Boolean valid;
-
         private Boolean uiPoint;
-
     }
 
     @Data
     @Schema
     public static class UpdateResource implements IToTarget<RbacResource> {
-
         @NotNull(message = "The ID must be specified.")
         private Integer id;
-
         @NotNull(message = "The GroupID must be specified.")
         private Integer groupId;
-
         private String resourceName;
-
         private String comment;
-
         private Boolean valid;
-
         private Boolean uiPoint;
-
     }
 
 }

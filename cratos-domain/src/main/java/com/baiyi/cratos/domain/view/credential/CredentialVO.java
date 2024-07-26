@@ -29,11 +29,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class CredentialVO {
 
     public interface HasCredential {
-
         Integer getCredentialId();
-
         void setCredential(Credential cred);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -42,48 +39,31 @@ public class CredentialVO {
     @BusinessType(type = BusinessTypeEnum.CREDENTIAL)
     @FieldSensitive
     public static class Credential extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, Serializable {
-
         @Serial
         private static final long serialVersionUID = -1000477517427403355L;
-
         private Integer id;
-
         private String title;
-
         private String credentialType;
-
         private String username;
-
         private String fingerprint;
-
         @FieldSensitive(type = SensitiveType.ERASE)
         private String credential;
-
         @FieldSensitive(type = SensitiveType.ERASE)
         private String credential2;
-
         @FieldSensitive(type = SensitiveType.ERASE)
         private String passphrase;
-
         private Boolean privateCredential;
-
         private Boolean valid;
-
         private String comment;
-
         private String tips;
-
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
         private Date expiredTime;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
     }
 
 }

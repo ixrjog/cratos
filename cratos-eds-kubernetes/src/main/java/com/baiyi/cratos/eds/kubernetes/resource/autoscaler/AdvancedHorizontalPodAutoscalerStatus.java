@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.resource.autoscaler;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 import lombok.AllArgsConstructor;
@@ -17,17 +16,15 @@ import java.util.List;
  * &#064;Date  2024/7/24 上午11:32
  * &#064;Version 1.0
  */
-@JsonDeserialize(using = JsonDeserializer.None.class)
+@JsonDeserialize
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({"currentMetrics", "currentReplicas", "desiredReplicas", "maxReplicas", "minReplicas", "periodicity", "targetMetric", "targetRef"})
 public class AdvancedHorizontalPodAutoscalerStatus implements KubernetesResource {
-
     @Serial
     private static final long serialVersionUID = 6239896154624539409L;
-
     private List<CurrentMetric> currentMetrics;
     private Integer currentReplicas;
     private Integer desiredReplicas;

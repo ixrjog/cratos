@@ -25,24 +25,17 @@ public class RbacGroupParam {
     @NoArgsConstructor
     @Schema
     public static class GroupPageQuery extends PageParam {
-
         private String queryName;
-
     }
 
     @Data
     @Schema
     public static class UpdateGroup implements IToTarget<RbacGroup> {
-
         @NotNull(message = "The ID must be specified.")
         private Integer id;
-
         private String groupName;
-
         private String base;
-
         private String comment;
-
     }
 
 }

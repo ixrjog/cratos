@@ -16,16 +16,12 @@ import java.util.Date;
  */
 @Data
 public class BaseVO implements Serializable {
-
     @Serial
     private static final long serialVersionUID = 7289480709427236439L;
-
     @Schema(description = "Create time")
     @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date createTime;
-
     @Schema(description = "Update time")
     @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
     private Date updateTime;
-
 }

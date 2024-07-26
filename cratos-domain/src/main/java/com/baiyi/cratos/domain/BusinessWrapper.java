@@ -5,15 +5,10 @@ import lombok.Data;
 
 @Data
 public class BusinessWrapper<T> {
-
     public final static BusinessWrapper<Boolean> SUCCESS = new BusinessWrapper<>();
-
     private T body = null;
-
     private boolean success ;
-
     private int code;
-
     private String desc;
 
     public BusinessWrapper(T body) {

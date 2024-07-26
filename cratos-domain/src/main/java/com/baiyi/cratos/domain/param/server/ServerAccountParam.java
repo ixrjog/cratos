@@ -27,63 +27,43 @@ public class ServerAccountParam {
     @NoArgsConstructor
     @Schema
     public static class ServerAccountPageQuery extends PageParam {
-
         @Schema(description = "查询名称")
         private String queryName;
-
         private Boolean valid;
-
         private String protocol;
-
     }
 
     @Data
     @Schema
     public static class AddServerAccount implements IToTarget<ServerAccount> {
-
         private Integer id;
-
         @NotBlank
         private String name;
-
         @NotBlank
         private String username;
-
         private Integer credentialId;
-
         private Boolean sudo;
-
         @NotBlank
         private String protocol;
-
         @NotNull
         private Boolean valid;
-
         private String comment;
     }
 
     @Data
     @Schema
     public static class UpdateServerAccount implements IToTarget<ServerAccount> {
-
         private Integer id;
-
         @NotBlank
         private String name;
-
         @NotBlank
         private String username;
-
         private Integer credentialId;
-
         private Boolean sudo;
-
         @NotBlank
         private String protocol;
-
         @NotNull
         private Boolean valid;
-
         private String comment;
     }
 

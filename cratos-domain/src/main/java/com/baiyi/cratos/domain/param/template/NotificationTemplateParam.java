@@ -32,47 +32,28 @@ public class NotificationTemplateParam {
     @Data
     @Schema
     public static class AddNotificationTemplate implements IToTarget<NotificationTemplate> {
-
         private String name;
-
         private String notificationTemplateKey;
-
         private String notificationTemplateType;
-
         private String title;
-
         private String consumer;
-
         private String lang;
-
         private String content;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     public static class UpdateNotificationTemplate implements IToTarget<NotificationTemplate> {
-
         private Integer id;
-
         private String name;
-
         private String notificationTemplateKey;
-
         private String notificationTemplateType;
-
         private String title;
-
         private String consumer;
-
         private String lang;
-
         private String content;
-
         private String comment;
-
     }
 
 }

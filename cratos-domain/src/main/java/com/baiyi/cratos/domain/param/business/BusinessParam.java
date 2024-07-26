@@ -19,22 +19,17 @@ public class BusinessParam {
     @Data
     @Schema
     public static class GetByBusiness implements BaseBusiness.HasBusiness {
-
         @NotNull
         private String businessType;
-
         @NotNull
         private Integer businessId;
-
     }
 
     @Data
     @Schema
     public static class QueryByBusinessType implements BaseBusiness.HasBusinessType {
-
         @NotNull
         private String businessType;
-
     }
 
 }

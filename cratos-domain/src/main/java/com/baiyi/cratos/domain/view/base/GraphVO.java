@@ -21,13 +21,11 @@ public class GraphVO {
     @NoArgsConstructor
     @Schema
     public static class SimpleData implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -7198696996237859795L;
         @Schema(name = "别名")
         private String cName;
         private Integer value;
-
     }
 
 }

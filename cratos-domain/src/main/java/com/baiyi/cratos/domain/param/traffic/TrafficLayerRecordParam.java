@@ -20,11 +20,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class TrafficLayerRecordParam {
 
     public interface IToTrafficLayerRecord {
-
         Integer getDomainId();
-
         String getEnvName();
-
         default TrafficLayerDomainRecord toTrafficLayerRecord() {
             return TrafficLayerDomainRecord.builder()
                     .domainId(getDomainId())
@@ -40,12 +37,9 @@ public class TrafficLayerRecordParam {
     @NoArgsConstructor
     @Schema
     public static class RecordPageQuery extends PageParam {
-
         @Schema(description = "Query by name")
         private String queryName;
-
         private Integer domainId;
-
     }
 
     @Data
@@ -54,57 +48,37 @@ public class TrafficLayerRecordParam {
     @NoArgsConstructor
     @Schema
     public static class QueryRecordDetails implements IToTrafficLayerRecord {
-
         @NotNull
         private Integer domainId;
-
         @NotBlank
         private String envName;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class AddRecord implements IToTarget<TrafficLayerDomainRecord> {
-
         private Integer domainId;
-
         private String envName;
-
         private String recordName;
-
         private String routeTrafficTo;
-
         private String originServer;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class UpdateRecord implements IToTarget<TrafficLayerDomainRecord> {
-
         private Integer id;
-
         private Integer domainId;
-
         private String envName;
-
         private String recordName;
-
         private String routeTrafficTo;
-
         private String originServer;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
 }

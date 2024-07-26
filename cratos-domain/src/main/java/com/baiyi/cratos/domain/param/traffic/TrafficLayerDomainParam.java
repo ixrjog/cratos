@@ -25,51 +25,36 @@ public class TrafficLayerDomainParam {
     @NoArgsConstructor
     @Schema
     public static class DomainPageQuery extends PageParam {
-
         @Schema(description = "Query by name")
         private String queryName;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class AddDomain implements IToTarget<TrafficLayerDomain> {
-
         private String name;
-
         private String domain;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class UpdateDomain implements IToTarget<TrafficLayerDomain> {
-
         private Integer id;
-
         private String name;
-
         private String domain;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class QueryDomainEnv {
-
         private Integer domainId;
-
     }
 
 }

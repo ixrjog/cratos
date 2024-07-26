@@ -27,9 +27,7 @@ public class MenuParam {
     @NoArgsConstructor
     @Schema
     public static class QueryMyMenu {
-
         private String lang;
-
     }
 
     @Data
@@ -37,11 +35,8 @@ public class MenuParam {
     @NoArgsConstructor
     @Schema
     public static class QueryUserMenu {
-
         private String username;
-
         private String lang;
-
     }
 
     @Data
@@ -51,46 +46,31 @@ public class MenuParam {
     @NoArgsConstructor
     @Schema
     public static class MenuPageQuery extends PageParam {
-
         private String queryName;
-
         @Schema(description = "MAIN, SUB")
         private String menuType;
-
         private Integer parentId;
-
         private String lang;
-
     }
 
     @Data
     @Schema
     public static class UpdateMenu implements IToTarget<Menu>, IToTitles {
-
         private Integer id;
-
         @NotBlank
         private String name;
-
         private String icon;
-
         @NotBlank
         private String link;
-
         @NotNull
         private Integer seq;
-
         @NotNull
         private Integer parentId;
-
         @NotNull
         private Boolean valid;
-
         @NotBlank
         private String menuType;
-
         private List<Title> titles;
-
     }
 
     public interface IToTitles {
@@ -108,43 +88,29 @@ public class MenuParam {
     @Data
     @Schema
     public static class AddMenu implements IToTarget<Menu>, IToTitles {
-
         @NotBlank
         private String name;
-
         private String icon;
-
         @NotBlank
         private String link;
-
         @NotNull
         private Integer seq;
-
         @NotNull
         private Integer parentId;
-
         @NotNull
         private Boolean valid;
-
         @NotBlank
         private String menuType;
-
         private List<Title> titles;
-
     }
 
     @Data
     @Schema
     public static class Title implements IToTarget<MenuTitle> {
-
         private Integer menuId;
-
         private String title;
-
         private String lang;
-
         private Boolean preference;
-
     }
 
 }

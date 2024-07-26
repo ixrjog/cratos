@@ -32,26 +32,16 @@ public class RiskEventParam {
     @NoArgsConstructor
     @Schema
     public static class RiskEventPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
-
         @Schema(description = "Query by name")
         private String queryName;
-
         private String year;
-
         private String quarter;
-
         private Integer weeks;
-
         private String states;
-
         private Boolean valid;
-
         private Boolean sla;
-
         private BusinessTagParam.QueryByTag queryByTag;
-
         private List<Integer> eventIdList;
-
         public RiskEventPageQueryParam toParam() {
             return RiskEventPageQueryParam.builder()
                     .queryName(queryName)
@@ -80,96 +70,60 @@ public class RiskEventParam {
     @NoArgsConstructor
     @Schema
     public static class RiskEventPageQueryParam extends PageParam {
-
         private String queryName;
-
         private String year;
-
         private String quarter;
-
         private Integer weeks;
-
         private String states;
-
         private Boolean valid;
-
         private Boolean sla;
-
         private List<Integer> eventIdList;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class RiskEventGraphQuery implements BusinessTagParam.HasQueryByTag {
-
         @NotBlank
         private String year;
-
         private String quarter;
-
         private BusinessTagParam.QueryByTag queryByTag;
-
         @Override
         public void setIdList(List<Integer> idList) {
             //
         }
-
     }
 
     @Data
     @Schema
     public static class AddRiskEvent implements IToTarget<RiskEvent> {
-
         private Integer id;
-
         private String name;
-
         @NotNull
         private Date eventTime;
-
         private String states;
-
         private String year;
-
         private String quarter;
-
         private Integer weeks;
-
         private String color;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     public static class UpdateRiskEvent implements IToTarget<RiskEvent> {
-
         private Integer id;
-
         private String name;
-
         @NotNull
         private Date eventTime;
-
         private String states;
-
         private String year;
-
         private String quarter;
-
         private Integer weeks;
-
         private String color;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
 }

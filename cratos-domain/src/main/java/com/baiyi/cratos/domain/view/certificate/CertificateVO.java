@@ -33,51 +33,35 @@ public class CertificateVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
     public static class Certificate extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
-
         @Serial
         private static final long serialVersionUID = -799350802297993186L;
-
         private Integer id;
-
         private String certificateId;
-
         private String name;
-
         @Schema(description = "域名")
         private String domainName;
-
         @Schema(description = "证书类型")
         private String certificateType;
-
         @Schema(description = "有效")
         private Boolean valid;
-
         @Schema(description = "算法")
         private String keyAlgorithm;
-
         @Schema(description = "不早于")
         private Date notBefore;
-
         @Schema(description = "不晚于")
         private Date notAfter;
-
         private String comment;
-
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
         @Schema(description = "Business Tags")
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
-        List<BusinessDocVO.BusinessDoc> businessDocs;
-
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
     }
 
 }

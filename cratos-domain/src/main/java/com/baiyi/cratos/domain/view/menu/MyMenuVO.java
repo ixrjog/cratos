@@ -21,52 +21,33 @@ import static lombok.AccessLevel.PRIVATE;
 public class MyMenuVO {
 
     public interface HasMyMenuChildren {
-
         Integer getMenuId();
-
         String getLang();
-
         void setChildren(List<MyMenuVO.MyMenu> children);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     public static class MyMenu extends BaseVO implements HasMyMenuChildren {
-
         public static final List<MyMenu> INVALID = Collections.emptyList();
-
         @Serial
         private static final long serialVersionUID = 1162467323072243868L;
-
         private Integer id;
-
         private String name;
-
         private String title;
-
         private String lang;
-
         private String icon;
-
         private String link;
-
         private Integer seq;
-
         private Integer parentId;
-
         private Boolean valid;
-
         private String menuType;
-
         private List<MyMenuVO.MyMenu> children;
-
         @Override
         public Integer getMenuId() {
             return id;
         }
-
     }
 
 }

@@ -23,10 +23,8 @@ public class ApplicationDeployVO {
     @NoArgsConstructor
     @Schema
     public static class Deploy extends BaseVO  {
-
         @Serial
         private static final long serialVersionUID = 9085431251878703977L;
-
     }
 
 }

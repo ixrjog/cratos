@@ -27,7 +27,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class TrafficLayerDomainVO {
 
     public interface HasDomain {
-
         Integer getDomainId();
 
         void setDomain(Domain domain);
@@ -42,33 +41,22 @@ public class TrafficLayerDomainVO {
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
     public static class Domain extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
-
         @Serial
         private static final long serialVersionUID = -8990726488134957647L;
-
         private Integer id;
-
         private String name;
-
         private String domain;
-
         private Boolean valid;
-
         private String comment;
-
         private Map<String, Integer> resourceCount;
-
         @Override
         public Integer getBusinessId() {
             return id;
         }
-
         @Schema(description = "Business Tags")
-        List<BusinessTagVO.BusinessTag> businessTags;
-
+        private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
-        List<BusinessDocVO.BusinessDoc> businessDocs;
-
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -78,16 +66,11 @@ public class TrafficLayerDomainVO {
     @NoArgsConstructor
     @Schema
     public static class DomainEnv extends EnvVO.Env implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 4193131699641687394L;
-
         private String envName;
-
         private Boolean valid;
-
         private Integer seq;
-
     }
 
 }

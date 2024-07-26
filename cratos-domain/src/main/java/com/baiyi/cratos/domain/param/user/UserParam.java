@@ -32,10 +32,8 @@ public class UserParam {
     @NoArgsConstructor
     @Schema
     public static class UserPageQuery extends PageParam {
-
         @Schema(description = "查询名称")
         private String queryName;
-
     }
 
     @Data
@@ -43,43 +41,25 @@ public class UserParam {
     @Builder
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class AddUser implements IToTarget<User>, IImportFromAsset {
-
         private Integer id;
-
         private String username;
-
         private String uuid;
-
         private String name;
-
         private String displayName;
-
         private String email;
-
         private Boolean valid;
-
         private Date lastLogin;
-
         private String mobilePhone;
-
         private Integer otp;
-
         private String createdBy;
-
         private String source;
-
         private String lang;
-
         private String password;
-
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
-
         private String comment;
-
         @Schema(description = "Import from assetId")
         private Integer fromAssetId;
-
     }
 
     @Data
@@ -87,40 +67,23 @@ public class UserParam {
     @Builder
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class UpdateUser implements IToTarget<User> {
-
         private Integer id;
-
         private String username;
-
         private String uuid;
-
         private String name;
-
         private String displayName;
-
         private String email;
-
         private Boolean valid;
-
         private Date lastLogin;
-
         private String mobilePhone;
-
         private Integer otp;
-
         private String createdBy;
-
         private String source;
-
         private String lang;
-
         private String password;
-
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
-
         private String comment;
-
     }
 
     @Data
@@ -128,57 +91,36 @@ public class UserParam {
     @Builder
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class UpdateMy implements IToTarget<User> {
-
         private Integer id;
-
         private String username;
-
         private String uuid;
-
         private String name;
-
         private String displayName;
-
         private String email;
-
         private Boolean valid;
-
         private Date lastLogin;
-
         private String mobilePhone;
-
         private Integer otp;
-
         private String createdBy;
-
         private String source;
-
         private String lang;
-
         private String password;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     @Builder
     public static class ResetPassword {
-
         private String password;
-
     }
 
     @Data
     @Schema
     @Builder
     public static class UpdatePassword {
-
         private String username;
-
         private String password;
-
     }
 
 }

@@ -6,7 +6,5 @@ package com.baiyi.cratos.domain.view;
  * @Version 1.0
  */
 public interface ToBusinessTarget {
-
     Integer getId();
-
 }

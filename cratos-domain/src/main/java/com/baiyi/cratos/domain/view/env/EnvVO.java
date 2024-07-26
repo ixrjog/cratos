@@ -20,35 +20,23 @@ import static lombok.AccessLevel.PRIVATE;
 public class EnvVO {
 
     public interface HasEnv {
-
         String getEnvName();
-
         void setEnv(Env env);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     public static class Env extends BaseVO implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 4975003120740382381L;
-
         private Integer id;
-
         private String envName;
-
         private String color;
-
         private String promptColor;
-
         private Integer seq;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
 }

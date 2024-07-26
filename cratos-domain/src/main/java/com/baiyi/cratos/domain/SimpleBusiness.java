@@ -11,9 +11,6 @@ import lombok.Data;
 @Data
 @Builder
 public class SimpleBusiness implements BaseBusiness.HasBusiness {
-
     private String businessType;
-
     private Integer businessId;
-
 }

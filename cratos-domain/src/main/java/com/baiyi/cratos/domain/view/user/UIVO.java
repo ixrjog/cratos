@@ -17,9 +17,7 @@ public class UIVO {
     @Data
     @Schema
     public static class UI {
-
       //  private List<MenuVO.Menu> menuInfo;
-
     }
 
 }

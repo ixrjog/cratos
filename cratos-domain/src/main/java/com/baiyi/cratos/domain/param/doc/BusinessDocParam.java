@@ -20,25 +20,15 @@ public class BusinessDocParam {
     @Data
     @Schema
     public static class AddBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
-
         private Integer id;
-
         private String businessType;
-
         private Integer businessId;
-
         private String documentType;
-
         private String name;
-
         private Integer seq;
-
         private String comment;
-
         private String content;
-
         private String author;
-
         @Override
         public void setSessionUser(String username) {
             this.author = username;
@@ -48,30 +38,19 @@ public class BusinessDocParam {
     @Data
     @Schema
     public static class UpdateBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
-
         private Integer id;
-
         private String businessType;
-
         private Integer businessId;
-
         private String documentType;
-
         private String name;
-
         private Integer seq;
-
         private String comment;
-
         private String content;
-
         private String lastEditor;
-
         @Override
         public void setSessionUser(String username) {
             this.lastEditor = username;
         }
-
     }
 
 }

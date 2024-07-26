@@ -1,6 +1,5 @@
 package com.baiyi.cratos.eds.kubernetes.resource.autoscaler;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.fabric8.kubernetes.api.model.KubernetesResource;
 import lombok.AllArgsConstructor;
@@ -16,16 +15,14 @@ import java.util.List;
  * &#064;Date  2024/7/22 下午2:02
  * &#064;Version 1.0
  */
-@JsonDeserialize(using = JsonDeserializer.None.class)
+@JsonDeserialize
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdvancedHorizontalPodAutoscalerSpec implements KubernetesResource {
-
     @Serial
     private static final long serialVersionUID = -7419791738322145247L;
-
     private String scaleStrategy;
     private List<Metric> metrics;
     private ScaleTargetRef scaleTargetRef;

@@ -8,7 +8,5 @@ import com.baiyi.cratos.domain.BaseBusiness;
  * @Version 1.0
  */
 public interface IImportFromAsset extends BaseBusiness.IBusinessTypeAnnotate {
-
     Integer getFromAssetId();
-
 }

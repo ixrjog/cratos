@@ -22,23 +22,16 @@ public class RbacUserRoleVO {
     @Data
     @Schema
     public static class UserRole extends BaseVO implements RbacRoleVO.HasRbacRole {
-
         @Serial
         private static final long serialVersionUID = 7828537753029882531L;
-
         private Integer id;
-
         private String username;
-
         private Integer roleId;
-
         private RbacRoleVO.Role rbacRole;
-
         @Override
         public Integer getRbacRoleId() {
             return roleId;
         }
-
     }
 
 }

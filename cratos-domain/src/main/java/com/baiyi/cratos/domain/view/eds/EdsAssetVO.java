@@ -27,19 +27,13 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     public static class ToBusiness implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 8963852386777447343L;
-
         private String businessType;
-
         private Integer businessId;
-
         private Integer assetId;
-
         @Schema(description = "已绑定")
         private Boolean bind;
-
     }
 
     @Data
@@ -48,14 +42,10 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     public static class AssetToBusiness<T extends ToBusinessTarget> implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -1350874228317416818L;
-
         private ToBusiness toBusiness;
-
-        T target;
-
+        private T target;
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -65,50 +55,28 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     public static class Asset extends BaseVO implements HasResourceCount, Serializable {
-
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;
-
         private Integer id;
-
         private Integer parentId;
-
         private Integer instanceId;
-
         private String name;
-
         private String assetId;
-
         private String assetKey;
-
         private String assetType;
-
         private String kind;
-
         private String version;
-
         private Boolean valid;
-
         private String region;
-
         private String zone;
-
         private String assetStatus;
-
         private Date createdTime;
-
         private Date expiredTime;
-
         private String originalModel;
-
         private Object originalAsset;
-
         private String description;
-
         private ToBusiness toBusiness;
-
         private Map<String, Integer> resourceCount;
-
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -118,22 +86,14 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     public static class Index extends BaseVO implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -7612746160295687836L;
-
         private Integer id;
-
         private Integer instanceId;
-
         private Integer assetId;
-
         private String name;
-
         private String value;
-
         private String comment;
-
     }
 
 }

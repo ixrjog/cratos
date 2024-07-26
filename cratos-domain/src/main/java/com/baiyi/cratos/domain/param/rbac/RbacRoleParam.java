@@ -28,43 +28,30 @@ public class RbacRoleParam {
     @NoArgsConstructor
     @Schema
     public static class RolePageQuery extends PageParam {
-
         private String roleName;
-
     }
 
     @Data
     @Schema
     public static class UpdateRole implements IToTarget<RbacRole> {
-
         @NotNull(message = "The ID must be specified.")
         private Integer id;
-
         private String roleName;
-
         private Integer accessLevel;
-
         private Boolean workOrderVisible;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     public static class AddRole implements IToTarget<RbacRole> {
-
         @NotNull
         private String roleName;
-
         @NotNull
         private Integer accessLevel;
-
         @NotNull
         private Boolean workOrderVisible;
-
         private String comment;
-
     }
 
 }

@@ -8,7 +8,5 @@ import java.util.Map;
  * @Version 1.0
  */
 public interface HasResourceCount {
-
     void setResourceCount(Map<String, Integer> resourceCount);
-
 }

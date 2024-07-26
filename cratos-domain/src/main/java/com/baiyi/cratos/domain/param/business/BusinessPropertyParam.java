@@ -21,51 +21,37 @@ public class BusinessPropertyParam {
     @Data
     @Schema
     public static class SaveBusinessProperty implements IToTarget<BusinessProperty> {
-
         private Integer id;
-
         @NotBlank(message = "BusinessType must be specified.")
         private String businessType;
-
         @NotNull(message = "BusinessId must be specified.")
         private Integer businessId;
-
         @NotBlank(message = "PropertyName must be specified.")
         private String propertyName;
-
         @NotBlank(message = "PropertyValue must be specified.")
         private String propertyValue;
-
     }
 
     @Data
     @Schema
     public static class AddBusinessProperty implements IToTarget<BusinessProperty> {
-
         @NotBlank(message = "BusinessType must be specified.")
         private String businessType;
-
         @NotNull(message = "BusinessId must be specified.")
         private Integer businessId;
-
         @NotBlank(message = "PropertyName must be specified.")
         private String propertyName;
-
         @NotBlank(message = "PropertyValue must be specified.")
         private String propertyValue;
-
     }
 
     @Data
     @Schema
     public static class UpdateBusinessProperty implements IToTarget<BusinessProperty> {
-
         @NotNull(message = "ID must be specified.")
         private Integer id;
-
         @NotBlank(message = "PropertyValue must be specified.")
         private String propertyValue;
-
     }
 
 }

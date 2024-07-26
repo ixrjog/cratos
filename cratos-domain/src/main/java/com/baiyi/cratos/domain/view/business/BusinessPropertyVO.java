@@ -22,29 +22,20 @@ import static lombok.AccessLevel.PRIVATE;
 public class BusinessPropertyVO {
 
     public interface HasBusinessProperties extends BaseBusiness.HasBusiness {
-
         void setBusinessProperties(List<BusinessProperty> businessProperties);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     public static class BusinessProperty extends BaseVO implements BaseBusiness.HasBusiness, Serializable {
-
         @Serial
         private static final long serialVersionUID = -4162849944226063024L;
-
         private Integer id;
-
         private String businessType;
-
         private Integer businessId;
-
         private String propertyName;
-
         private String propertyValue;
-
     }
 
 }

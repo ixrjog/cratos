@@ -24,15 +24,11 @@ public class ExampleVO {
     @AllArgsConstructor
     @Schema
     public static class HelloWorld {
-
         public static final HelloWorld EXAMPLE = HelloWorld.builder().build();
-
         @Builder.Default
         private String msg = "Hello World!";
-
         @Builder.Default
         private Date requestTime = new Date();
-
     }
 
 }

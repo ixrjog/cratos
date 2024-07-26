@@ -21,49 +21,29 @@ public class RiskEventImpactParam {
     @Data
     @Schema
     public static class AddRiskEventImpact implements IToTarget<RiskEventImpact> {
-
         private Integer id;
-
         private Integer riskEventId;
-
         private String content;
-
         private Date startTime;
-
         private Date endTime;
-
         private Boolean sla;
-
         private Integer cost;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
     @Data
     @Schema
     public static class UpdateRiskEventImpact implements IToTarget<RiskEventImpact> {
-
         private Integer id;
-
         private Integer riskEventId;
-
         private String content;
-
         private Date startTime;
-
         private Date endTime;
-
         private Boolean sla;
-
         private Integer cost;
-
         private Boolean valid;
-
         private String comment;
-
     }
 
 }

@@ -44,60 +44,39 @@ public class UserVO {
 
         @Serial
         private static final long serialVersionUID = 7642003154901654181L;
-
         private Integer id;
-
         private String username;
-
         private String uuid;
-
         private String name;
-
         private String displayName;
-
         @FieldSensitive(type = SensitiveType.EMAIL)
         private String email;
-
         private Boolean valid;
-
         @Schema(description = "最后登录时间")
         private Date lastLogin;
-
         @FieldSensitive(type = SensitiveType.MOBILE_PHONE)
         private String mobilePhone;
-
         private Integer otp;
-
         private String createdBy;
-
         private String source;
-
         @FieldSensitive(type = SensitiveType.PASSWORD)
         private String password;
-
         private String comment;
-
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
-
         @Override
         public Integer getBusinessId() {
             return this.id;
         }
-
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
-
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
-
         @Schema(description = "Rbac Roles")
         private List<RbacRoleVO.Role> rbacRoles;
-
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;
-
     }
 
 }

@@ -23,11 +23,8 @@ public class SshCommandParam {
     @NoArgsConstructor
     @Schema
     public static class SshCommandPageQuery extends PageParam {
-
         private Integer sshSessionInstanceId;
-
         private String inputFormatted;
-
     }
 
 }
