@@ -24,34 +24,14 @@ public class GCPTest extends BaseUnit {
     void test1() throws IOException {
 
         String credentialPath = "/Users/zl/cratos-data/key.json";
-
-        //  InputStream targetStream = IOUtils.toInputStream(credential, StandardCharsets.UTF_8.name());
-
-        // GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream );
-
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
-
-        IAMSettings settings =
-                IAMSettings.newBuilder()
-                        .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-                        .build();
-        IAMClient client = IAMClient.create(settings);
-
-       IAMClient.ListServiceAccountsPagedResponse response =  client.listServiceAccounts(PROJECT_NAME);
-
-        System.out.println(response);
-
-        Storage storage = StorageOp
-
-
-//
-//        credentials.refreshIfExpired();
-//        AccessToken token = credentials.getAccessToken();
-//        // OR
-//        //AccessToken token = credentials.refreshAccessToken();
-//
-//        System.out.println(token.getTokenValue());
-
+        IAMSettings settings = IAMSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
+        try (IAMClient client = IAMClient.create(settings)) {
+            IAMClient.ListServiceAccountsPagedResponse response = client.listServiceAccounts(PROJECT_NAME);
+            System.out.println(response);
+        }
     }
 
     @Test
