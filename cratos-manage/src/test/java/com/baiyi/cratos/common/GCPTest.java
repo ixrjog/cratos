@@ -6,6 +6,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.certificatemanager.v1.CertificateManagerClient;
 import com.google.cloud.certificatemanager.v1.CertificateManagerSettings;
+import com.google.cloud.certificatemanager.v1.LocationName;
 import com.google.cloud.iam.admin.v1.IAMClient;
 import com.google.cloud.iam.admin.v1.IAMSettings;
 import com.google.iam.admin.v1.ListRolesRequest;
@@ -21,6 +22,7 @@ import java.io.IOException;
  */
 public class GCPTest extends BaseUnit {
 
+    private final static String PROJECT_ID = "palmpay-nigeria";
     private final static String PROJECT_NAME = "projects/palmpay-nigeria";
 
     @Test
@@ -50,7 +52,8 @@ public class GCPTest extends BaseUnit {
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
                 .build();
         try (CertificateManagerClient client = CertificateManagerClient.create(settings)) {
-           CertificateManagerClient.ListCertificatesPagedResponse listCertificatesPagedResponse=  client.listCertificates(PROJECT_NAME);
+            LocationName parent = LocationName.of("palmpay-nigeria", "global");
+            CertificateManagerClient.ListCertificatesPagedResponse listCertificatesPagedResponse=  client.listCertificates(parent);
             System.out.println(listCertificatesPagedResponse);
         }
     }
