@@ -1,35 +1,54 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
-import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.certificatemanager.v1.CertificateManagerClient;
-import com.google.cloud.certificatemanager.v1.CertificateManagerSettings;
-import com.google.cloud.certificatemanager.v1.LocationName;
+import com.baiyi.cratos.eds.googlecloud.builder.CertificateManagerSettingsBuilder;
+import com.google.api.client.util.Lists;
+import com.google.cloud.certificatemanager.v1.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/7/29 上午10:32
  * &#064;Version 1.0
  */
+@Component
+@RequiredArgsConstructor
 public class GoogleCloudCredentialsRepo {
 
+    private final CertificateManagerSettingsBuilder googleCredentialsBuilder;
 
-    public static void listCertificates(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
-        String credentialPath = "/Users/zl/cratos-data/key.json";
-        GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
-        CertificateManagerSettings settings = CertificateManagerSettings.newBuilder()
-                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+    private static final int PAGE_SIZE = 10;
+
+    public List<Certificate> listCertificates(String location,
+                                              EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
+        CertificateManagerSettings settings = googleCredentialsBuilder.buildCertificateManagerSettings(googleCloud);
+        LocationName locationName = LocationName.of(googleCloud.getProject()
+                .getId(), location);
+        ListCertificatesRequest request = ListCertificatesRequest.newBuilder()
+                .setParent(locationName.getLocation())
+                .setPageSize(PAGE_SIZE)
                 .build();
+        List<Certificate> certificates = Lists.newArrayList();
         try (CertificateManagerClient client = CertificateManagerClient.create(settings)) {
-            LocationName parent = LocationName.of("palmpay-nigeria", "global");
-            CertificateManagerClient.ListCertificatesPagedResponse listCertificatesPagedResponse = client.listCertificates(
-                    parent);
-            System.out.println(listCertificatesPagedResponse);
+            // "global"
+            while (true) {
+                CertificateManagerClient.ListCertificatesPagedResponse response = client.listCertificates(request);
+                if (response.getPage()
+                        .getPageElementCount() == 0) {
+                    return certificates;
+                }
+                List<Certificate> list = response.getPage()
+                        .streamAll()
+                        .toList();
+                certificates.addAll(list);
+                if (list.size() < PAGE_SIZE) {
+                    return certificates;
+                }
+            }
         }
     }
 
