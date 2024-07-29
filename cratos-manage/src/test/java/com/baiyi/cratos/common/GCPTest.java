@@ -1,9 +1,15 @@
 package com.baiyi.cratos.common;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.eds.googlecloud.repo.GoogleCloudIamRepo;
-import com.google.auth.oauth2.AccessToken;
+import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.certificatemanager.v1.CertificateManagerClient;
+import com.google.cloud.certificatemanager.v1.CertificateManagerSettings;
+import com.google.cloud.certificatemanager.v1.LocationName;
+import com.google.cloud.iam.admin.v1.IAMClient;
+import com.google.cloud.iam.admin.v1.IAMSettings;
+import com.google.iam.admin.v1.ListRolesRequest;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
@@ -16,30 +22,54 @@ import java.io.IOException;
  */
 public class GCPTest extends BaseUnit {
 
-    public static void test1() throws IOException {
+    private final static String PROJECT_ID = "palmpay-nigeria";
+    private final static String PROJECT_NAME = "projects/palmpay-nigeria";
 
-        String credentialPath = "/Users/liangjian/cratos-data/palmpay-nigeria-3b0d6496b7e4.json";
+    @Test
+    void test1() throws IOException {
+        String credentialPath = "/Users/zl/cratos-data/key.json";
+        GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
+        IAMSettings settings = IAMSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
+        try (IAMClient client = IAMClient.create(settings)) {
+            IAMClient.ListServiceAccountsPagedResponse listServiceAccountsPagedResponse = client.listServiceAccounts(PROJECT_NAME);
+            System.out.println(listServiceAccountsPagedResponse);
 
+<<<<<<< HEAD
         //  InputStream targetStream = IOUtils.toInputStream(credential, StandardCharsets.UTF_8.name());
 
         // GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream );
 
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialPath));
+=======
+            ListRolesRequest listRolesRequest = ListRolesRequest.newBuilder().setParent(PROJECT_NAME).build();
+            IAMClient.ListRolesPagedResponse listRolesResponse = client.listRoles(listRolesRequest);
+            System.out.println(listRolesResponse);
+        }
+    }
+>>>>>>> 612552cf8d6fd59ca9df65bc5e88956a68df37f2
 
 
-        credentials.refreshIfExpired();
-        AccessToken token = credentials.getAccessToken();
-        // OR
-        //AccessToken token = credentials.refreshAccessToken();
 
-        System.out.println(token.getTokenValue());
-
+    @Test
+    void certificateTest1() throws IOException {
+        String credentialPath = "/Users/zl/cratos-data/key.json";
+        GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
+        CertificateManagerSettings settings = CertificateManagerSettings.newBuilder()
+                .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+                .build();
+        try (CertificateManagerClient client = CertificateManagerClient.create(settings)) {
+            LocationName parent = LocationName.of("palmpay-nigeria", "global");
+            CertificateManagerClient.ListCertificatesPagedResponse listCertificatesPagedResponse=  client.listCertificates(parent);
+            System.out.println(listCertificatesPagedResponse);
+        }
     }
 
     @Test
     void test() throws IOException {
-        GoogleCloudIamRepo.test1();
-       // GoogleCloudIamRepo.test2();
+//        GoogleCloudIamRepo.test1();
+        // GoogleCloudIamRepo.test2();
     }
 
 }
