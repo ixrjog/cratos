@@ -23,8 +23,9 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ONS_V5_TOPIC("ONS(5.0) Topic"),
     ALIYUN_ONS_V5_CONSUMER_GROUP("ONS(5.0) ConsumerGroup"),
     ALIYUN_ONS_V5_CONSUMER_GROUP_SUBSCRIPTION("ONS(5.0) Subscription"),
-    ALIYUN_ACR_INSTANCE("ACR Instance"),
     ALIYUN_ACR_NAMESPACE("ACR Namespace"),
+    ALIYUN_ACR_INSTANCE("ACR Instance"),
+    ALIYUN_ACR_REPOSITORY("ACR Repository"),
 
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),
@@ -38,6 +39,7 @@ public enum EdsAssetTypeEnum {
     AWS_TRANSFER_SERVER("Transfer Server"),
     AWS_CLOUDFRONT_DISTRIBUTION("CloudFront Distribution"),
     AWS_S3_BUCKET("S3 Bucket"),
+    AWS_ECR_REPOSITORY("ECR Repository"),
 
     HUAWEICLOUD_ECS("ECS"),
     HUAWEICLOUD_IAM_USER("IAM User"),
@@ -51,6 +53,7 @@ public enum EdsAssetTypeEnum {
     KUBERNETES_NODE("Node"),
     KUBERNETES_VIRTUAL_SERVICE("VirtualService"),
     KUBERNETES_DESTINATION_RULE("DestinationRule"),
+    KUBERNETES_ALIBABACLOUD_AUTOSCALER("Alibabacloud Autoscaler"),
 
     LDAP_PERSON("Person"),
     LDAP_GROUP("Group"),

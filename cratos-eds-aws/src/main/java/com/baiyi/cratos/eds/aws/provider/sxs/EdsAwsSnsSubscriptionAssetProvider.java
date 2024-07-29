@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aws.provider;
+package com.baiyi.cratos.eds.aws.provider.sxs;
 
 import com.amazonaws.services.sns.model.Subscription;
 import com.baiyi.cratos.domain.generator.EdsAsset;

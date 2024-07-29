@@ -130,7 +130,6 @@ public class AliyunAcrRepo {
         return response.getDomains();
     }
 
-
     // Repository
     public List<ListRepositoryResponse.RepositoriesItem> listRepository(String regionId,
                                                                         EdsAliyunConfigModel.Aliyun aliyun,

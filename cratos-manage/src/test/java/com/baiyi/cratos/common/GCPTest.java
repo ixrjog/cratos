@@ -26,8 +26,6 @@ public class GCPTest extends BaseUnit {
 
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialPath));
 
-        Storage storage = StorageOp
-
 
         credentials.refreshIfExpired();
         AccessToken token = credentials.getAccessToken();

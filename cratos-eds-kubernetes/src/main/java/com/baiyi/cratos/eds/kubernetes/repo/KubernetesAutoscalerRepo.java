@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/7/22 下午1:40
@@ -32,6 +34,18 @@ public class KubernetesAutoscalerRepo {
                             .getNamespace())
                     .resource(autoscaler)
                     .create();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    public List<Resource<AdvancedHorizontalPodAutoscaler>> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            MixedOperation<AdvancedHorizontalPodAutoscaler, AdvancedHorizontalPodAutoscalerList, Resource<AdvancedHorizontalPodAutoscaler>> autoscalerClient = kc.resources(
+                    AdvancedHorizontalPodAutoscaler.class, AdvancedHorizontalPodAutoscalerList.class);
+            return autoscalerClient.inNamespace(namespace)
+                    .resources().toList();
         } catch (Exception e) {
             log.warn(e.getMessage());
             throw e;

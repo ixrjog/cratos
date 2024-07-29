@@ -4,6 +4,7 @@ import com.aliyuncs.cr.model.v20181201.ListNamespaceResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -36,6 +37,8 @@ import java.util.List;
 public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, ListNamespaceResponse.NamespacesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
+
+    private static final String ACR_INSTANCE_ID = "acr.instanceId";
 
     public EdsAliyunAcrNamespaceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                               CredentialService credentialService,
@@ -79,6 +82,18 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                                      EdsAsset edsAsset,
+                                                      ListNamespaceResponse.NamespacesItem entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        try {
+            indices.add(toEdsAssetIndex(edsAsset, ACR_INSTANCE_ID, entity.getInstanceId()));
+        } catch (Exception ignored) {
+        }
+        return indices;
     }
 
 }
