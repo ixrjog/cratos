@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common;
 
 import com.baiyi.cratos.BaseUnit;
+import com.google.api.client.util.Sets;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -12,18 +13,16 @@ import com.google.cloud.iam.admin.v1.IAMSettings;
 import com.google.cloud.resourcemanager.v3.ProjectName;
 import com.google.cloud.resourcemanager.v3.ProjectsClient;
 import com.google.cloud.resourcemanager.v3.ProjectsSettings;
-import com.google.iam.v1.Binding;
 import com.google.iam.v1.GetIamPolicyRequest;
-import com.google.iam.v1.GetPolicyOptions;
 import com.google.iam.v1.Policy;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -85,23 +84,27 @@ public class GCPTest extends BaseUnit {
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
                 .build();
         try (ProjectsClient client = ProjectsClient.create(settings)) {
-            GetPolicyOptions options = GetPolicyOptions.newBuilder()
-                    .build();
             GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()
                     .setResource(ProjectName.of(PROJECT_ID).toString())
                     .build();
             Policy policy = client.getIamPolicy(request);
 
+
+            Set<String> members = Sets.newHashSet();
+            policy.getBindingsList().forEach(binding -> members.addAll(binding.getMembersList()));
+
             Map<String, List<String>> memberRolesMap = new HashMap<>();
 
             // Populate the map with members and roles from the policy bindings
-            for (Binding binding : policy.getBindingsList()) {
-                String role = binding.getRole();
-                for (String member : binding.getMembersList()) {
-                    memberRolesMap.computeIfAbsent(member, k -> new ArrayList<>()).add(role);
-                }
-            }
-            System.err.println(memberRolesMap);
+//            for (Binding binding : policy.getBindingsList()) {
+//                String role = binding.getRole();
+//                for (String member : binding.getMembersList()) {
+//                    memberRolesMap.computeIfAbsent(member, k -> new ArrayList<>()).add(role);
+//                }
+//            }
+//            System.err.println(memberRolesMap);
+
+            System.err.println(members);
         }
     }
 
