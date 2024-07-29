@@ -42,8 +42,6 @@ public class GCPTest extends BaseUnit {
         }
     }
 
-
-
     @Test
     void certificateTest1() throws IOException {
         String credentialPath = "/Users/zl/cratos-data/key.json";

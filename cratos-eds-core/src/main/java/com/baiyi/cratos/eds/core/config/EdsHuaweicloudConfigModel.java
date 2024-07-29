@@ -23,33 +23,23 @@ public class EdsHuaweicloudConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Huaweicloud implements HasRegionModel, IEdsConfigModel {
-
         private String version;
         // default
         private String regionId;
-
         private Set<String> regionIds;
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred {
-
         private String uid;
-
         private String username;
-
         private String accessKey;
-
         private String secretKey;
-
     }
 
 }

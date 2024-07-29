@@ -24,14 +24,10 @@ public class EdsHarborConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Harbor implements IEdsConfigModel {
-
         private String version;
-
         private String url;
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private EdsInstance edsInstance;
 
         public String acqUrl() {
@@ -41,17 +37,14 @@ public class EdsHarborConfigModel {
                 return null;
             }
         }
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationBasic {
-
         @Schema(description = "authorization: Basic <USERNAME:TOKEN -> Base64>")
         private String username;
-
         private String token;
 
         @Override

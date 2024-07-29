@@ -22,84 +22,60 @@ public class EdsKubernetesConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Kubernetes implements IEdsConfigModel {
-
         private String version;
-
         private String provider;
-
         @Schema(description = "Amazon EKS cred")
         private AmazonEks amazonEks;
-
         private Kubeconfig kubeconfig;
-
         private Filter filter;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class AmazonEks {
-
         private String region;
-
         private String clusterName;
-
         private String url;
-
         private Cred cred;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred {
-
         private String accessKey;
-
         private String secretKey;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Kubeconfig {
-
         private String path;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Filter {
-
         private Namespace namespace;
-
         private Container container;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Namespace {
-
         private List<String> exclude;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Container {
-
         private List<String> exclude;
-
     }
 
 }

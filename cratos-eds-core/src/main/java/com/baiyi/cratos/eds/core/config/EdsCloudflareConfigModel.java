@@ -26,22 +26,17 @@ public class EdsCloudflareConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Cloudflare implements IEdsConfigModel {
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationBearer {
-
         @Schema(description = "Authorization: Bearer <API_TOKEN>")
         private String apiToken;
-
         @Override
         public String getToken() {
             return apiToken;

@@ -24,127 +24,90 @@ public class EdsAliyunConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Aliyun implements HasRegionModel, IEdsConfigModel {
-
         private String version;
         // default
         private String regionId;
-
         private Set<String> regionIds;
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private ALB alb;
-
         private OSS oss;
-
         private Domain domain;
-
         private EdsInstance edsInstance;
-
         private ARMS arms;
-
         private MongoDB mongoDB;
-
         private ONS ons;
-
         private ACR acr;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred {
-
         private String uid;
-
         private String name;
-
         private String company;
-
         private String accessKeyId;
-
         private String accessKeySecret;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class ALB {
-
         private List<String> endpoints;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class OSS {
-
         private List<String> endpoints;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Domain {
-
         private String endpoint;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class ARMS {
-
         private String regionId;
-
         private String endpoint;
-
         private String home;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class MongoDB {
-
         private List<String> endpoints;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class ACR {
-
         private List<String> regionIds;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class ONS {
-
         private RocketMQ v5;
-
         private RocketMQ v4;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class RocketMQ {
-
         private List<String> endpoints;
-
     }
 
 }

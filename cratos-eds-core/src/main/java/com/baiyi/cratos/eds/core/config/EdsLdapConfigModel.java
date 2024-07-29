@@ -25,13 +25,11 @@ public class EdsLdapConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Ldap implements IEdsConfigModel {
-
         private String url;
         private String base;
         private LdapManage manager; // 管理员账户
         private LdapUser user;
         private LdapGroup group;
-
         private EdsInstance edsInstance;
 
         public String buildUserDn(String username) {

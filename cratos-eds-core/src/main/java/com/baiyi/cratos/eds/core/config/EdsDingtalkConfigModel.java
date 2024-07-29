@@ -22,27 +22,21 @@ public class EdsDingtalkConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Dingtalk implements IEdsConfigModel {
-
         private String version;
         private String url;
         private String company;
         private String corpId;
         private DingtalkApp app;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Robot implements IEdsConfigModel {
-
         private String token;
         private String desc;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data

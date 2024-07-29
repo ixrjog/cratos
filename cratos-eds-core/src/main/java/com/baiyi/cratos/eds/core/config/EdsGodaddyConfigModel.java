@@ -21,27 +21,20 @@ public class EdsGodaddyConfigModel {
     @NoArgsConstructor
     @Schema(description = "godaddy.com")
     public static class Godaddy implements IEdsConfigModel {
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private String customerId;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationSsoKey {
-
         @Schema(description = "Authorization: sso-key <Key:Secret>")
         private String key;
-
         @Schema(description = "Authorization: sso-key <Key:Secret>")
         private String secret;
-
     }
 
 }

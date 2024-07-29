@@ -23,44 +23,30 @@ public class EdsAwsConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Aws implements HasRegionModel, IEdsConfigModel {
-
         private Cred cred;
-
         private String regionId;
-
         private Set<String> regionIds;
-
         private Ec2 ec2;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred {
-
         private String id;
-
         private String name;
-
         @Schema(description = "可选项公司")
         private String company;
-
         private String accessKey;
-
         private String secretKey;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Ec2 {
-
         private String instances;
-
     }
 
 }

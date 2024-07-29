@@ -21,30 +21,23 @@ public class EdsGandiConfigModel {
     @NoArgsConstructor
     @Schema(description = "gandi.net")
     public static class Gandi implements IEdsConfigModel {
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationBearer, ToAuthorization.ToAuthorizationApikey {
-
         @Schema(description = "Authorization: Bearer <AccessToken>")
         private String accessToken;
-
         @Schema(description = "Authorization: Apikey <Apikey>")
         private String apikey;
-
         @Override
         public String getToken() {
             return accessToken;
         }
-
     }
 
 }

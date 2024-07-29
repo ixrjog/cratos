@@ -23,58 +23,46 @@ public class EdsGitLabConfigModel {
     @NoArgsConstructor
     @Schema
     public static class GitLab implements IEdsConfigModel {
-
         private Api api;
         private SystemHooks systemHooks;
         private GitFlow gitFlow;
-
         @Schema(description = "凭据")
         private Cred cred;
-
         private EdsInstance edsInstance;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Cred {
-
         private String token;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class Api {
-
         private String version;
         private Integer connectTimeout;
         private Integer readTimeout;
         private String url;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class SystemHooks {
-
         @Schema(description = "回调token")
         private String token;
-
     }
 
     @Data
     @NoArgsConstructor
     @Schema
     public static class GitFlow {
-
         private Boolean enabled;
         @Schema(description = "环境分支限制")
         private Map<String, List<String>> filter;
-
     }
 
 }
