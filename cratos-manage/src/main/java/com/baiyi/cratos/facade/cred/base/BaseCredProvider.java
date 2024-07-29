@@ -21,7 +21,9 @@ import static com.baiyi.cratos.domain.constant.Global.NOT_APPLICABLE;
  */
 public abstract class BaseCredProvider implements ICredProvider {
 
-    abstract protected CredInjectionNameEnum[] listCredInjectionNameEnums();
+    protected CredInjectionNameEnum[] listCredInjectionNameEnums() {
+        return new CredInjectionNameEnum[]{};
+    }
 
     @Override
     public String getDesc() {

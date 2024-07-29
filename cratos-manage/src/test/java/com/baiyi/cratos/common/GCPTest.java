@@ -36,19 +36,11 @@ public class GCPTest extends BaseUnit {
             IAMClient.ListServiceAccountsPagedResponse listServiceAccountsPagedResponse = client.listServiceAccounts(PROJECT_NAME);
             System.out.println(listServiceAccountsPagedResponse);
 
-<<<<<<< HEAD
-        //  InputStream targetStream = IOUtils.toInputStream(credential, StandardCharsets.UTF_8.name());
-
-        // GoogleCredentials credentials = GoogleCredentials.fromStream(targetStream );
-
-        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialPath));
-=======
             ListRolesRequest listRolesRequest = ListRolesRequest.newBuilder().setParent(PROJECT_NAME).build();
             IAMClient.ListRolesPagedResponse listRolesResponse = client.listRoles(listRolesRequest);
             System.out.println(listRolesResponse);
         }
     }
->>>>>>> 612552cf8d6fd59ca9df65bc5e88956a68df37f2
 
 
 

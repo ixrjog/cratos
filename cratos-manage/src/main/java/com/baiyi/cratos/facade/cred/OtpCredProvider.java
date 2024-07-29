@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.cred;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
-import com.baiyi.cratos.common.cred.CredInjectionNameEnum;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.facade.cred.base.BaseCredProvider;
@@ -18,10 +17,6 @@ public class OtpCredProvider extends BaseCredProvider {
     @Override
     public CredentialTypeEnum getType() {
         return CredentialTypeEnum.OTP;
-    }
-
-    protected CredInjectionNameEnum[] listCredInjectionNameEnums() {
-        return new CredInjectionNameEnum[]{};
     }
 
     @Override
