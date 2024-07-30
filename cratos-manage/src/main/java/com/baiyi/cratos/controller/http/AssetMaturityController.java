@@ -39,14 +39,14 @@ public class AssetMaturityController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Update domain")
+    @Operation(summary = "Update assetMaturity")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateDomain(@RequestBody @Valid AssetMaturityParam.UpdateAssetMaturity updateAssetMaturity) {
+    public HttpResult<Boolean> updateAssetMaturity(@RequestBody @Valid AssetMaturityParam.UpdateAssetMaturity updateAssetMaturity) {
         assetMaturityFacade.updateAssetMaturity(updateAssetMaturity);
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Update domain valid")
+    @Operation(summary = "Update assetMaturity valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setAssetMaturityValidById(@RequestParam @Valid int id) {
         assetMaturityFacade.setAssetMaturityValidById(id);
