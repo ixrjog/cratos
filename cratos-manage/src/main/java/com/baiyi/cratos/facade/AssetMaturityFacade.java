@@ -20,4 +20,6 @@ public interface AssetMaturityFacade {
 
     void updateAssetMaturity(AssetMaturityParam.UpdateAssetMaturity updateAssetMaturity);
 
+    void deleteById(int id);
+
 }

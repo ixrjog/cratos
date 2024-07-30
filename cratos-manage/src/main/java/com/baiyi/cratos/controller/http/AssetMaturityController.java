@@ -48,8 +48,15 @@ public class AssetMaturityController {
 
     @Operation(summary = "Update assetMaturity valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setAssetMaturityValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setAssetMaturityValidById(@RequestParam int id) {
         assetMaturityFacade.setAssetMaturityValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete assetMaturity by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteAssetMaturityById(@RequestParam int id) {
+        assetMaturityFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
 

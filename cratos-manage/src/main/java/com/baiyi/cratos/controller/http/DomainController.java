@@ -41,7 +41,7 @@ public class DomainController {
 
     @Operation(summary = "Update domain valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setDomainValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setDomainValidById(@RequestParam int id) {
         domainFacade.setDomainValidById(id);
         return HttpResult.SUCCESS;
     }
@@ -54,7 +54,7 @@ public class DomainController {
 
     @Operation(summary = "Delete domain by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteDomainById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteDomainById(@RequestParam int id) {
         domainFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

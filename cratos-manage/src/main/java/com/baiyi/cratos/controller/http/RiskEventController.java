@@ -39,7 +39,7 @@ public class RiskEventController {
 
     @Operation(summary = "Get risk event")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<RiskEventVO.Event> getRiskEventById(@RequestParam @Valid int id) {
+    public HttpResult<RiskEventVO.Event> getRiskEventById(@RequestParam int id) {
         return new HttpResult<>(riskEventFacade.getRiskEventById(id));
     }
 
@@ -73,7 +73,7 @@ public class RiskEventController {
 
     @Operation(summary = "Delete risk event impact by id")
     @DeleteMapping(value = "/impact/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteRiskEventImpactById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteRiskEventImpactById(@RequestParam int id) {
         riskEventFacade.deleteRiskEventImpactById(id);
         return HttpResult.SUCCESS;
     }

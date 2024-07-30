@@ -55,14 +55,14 @@ public class CredentialController {
 
     @Operation(summary = "Update credential valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setCredentialValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setCredentialValidById(@RequestParam int id) {
         credentialFacade.setCredentialValidById(id);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Delete credential by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteCredentialById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteCredentialById(@RequestParam int id) {
         credentialFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

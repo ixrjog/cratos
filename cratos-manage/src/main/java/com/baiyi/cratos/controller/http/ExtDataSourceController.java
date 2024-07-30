@@ -100,14 +100,14 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Update eds config valid")
     @PutMapping(value = "/config/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setEdsConfigValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setEdsConfigValidById(@RequestParam int id) {
         edsFacade.setEdsConfigValidById(id);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Delete eds config by id")
     @DeleteMapping(value = "/config/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteEdsConfigById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteEdsConfigById(@RequestParam int id) {
         edsFacade.deleteEdsConfigById(id);
         return HttpResult.SUCCESS;
     }
@@ -137,14 +137,14 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Delete eds asset by id")
     @DeleteMapping(value = "/asset/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteEdsAssetById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteEdsAssetById(@RequestParam int id) {
         edsFacade.deleteEdsAssetById(id);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Query eds asset index by id")
     @GetMapping(value = "/asset/index/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam @Valid int assetId) {
+    public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam int assetId) {
         return new HttpResult<>(edsFacade.queryAssetIndexByAssetId(assetId));
     }
 

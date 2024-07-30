@@ -62,7 +62,7 @@ public class MenuController {
 
     @Operation(summary = "Delete menu by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteMenuById(@RequestParam @Valid int menuId) {
+    public HttpResult<Boolean> deleteMenuById(@RequestParam int menuId) {
         menuFacade.deleteMenuById(menuId);
         return HttpResult.SUCCESS;
     }
@@ -81,7 +81,7 @@ public class MenuController {
 
     @Operation(summary = "Get role menu by id")
     @GetMapping(value = "/role/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<RoleMenuVO.RoleMenu> getRoleMenuByRoleId(@RequestParam @Valid int roleId, @Valid String lang) {
+    public HttpResult<RoleMenuVO.RoleMenu> getRoleMenuByRoleId(@RequestParam int roleId, @Valid String lang) {
         return new HttpResult<>(roleMenuFacade.getRoleMenu(roleId, lang));
     }
 

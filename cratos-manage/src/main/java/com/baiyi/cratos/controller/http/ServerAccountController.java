@@ -41,7 +41,7 @@ public class ServerAccountController {
 
     @Operation(summary = "Update account valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setServerAccountValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setServerAccountValidById(@RequestParam int id) {
         serverAccountFacade.setServerAccountValidById(id);
         return HttpResult.SUCCESS;
     }
@@ -54,7 +54,7 @@ public class ServerAccountController {
 
     @Operation(summary = "Delete account by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteServerAccountById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteServerAccountById(@RequestParam int id) {
         serverAccountFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

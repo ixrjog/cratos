@@ -49,7 +49,7 @@ public class BusinessDocController {
 
     @Operation(summary = "Delete businessDoc by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteBusinessDocById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteBusinessDocById(@RequestParam int id) {
         businessDocFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

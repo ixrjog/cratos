@@ -44,7 +44,7 @@ public class TagController {
 
     @Operation(summary = "Update tag valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setTagValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setTagValidById(@RequestParam int id) {
         tagFacade.setTagValidById(id);
         return HttpResult.SUCCESS;
     }
@@ -63,7 +63,7 @@ public class TagController {
 
     @Operation(summary = "Delete tag by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteTagById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteTagById(@RequestParam int id) {
         tagFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

@@ -41,7 +41,7 @@ public class CertificateController {
 
     @Operation(summary = "Update certificate valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setCertificateValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setCertificateValidById(@RequestParam int id) {
         certificateFacade.setCertificateValidById(id);
         return HttpResult.SUCCESS;
     }
@@ -61,7 +61,7 @@ public class CertificateController {
 
     @Operation(summary = "Delete certificate by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteCertificateById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteCertificateById(@RequestParam int id) {
         certificateFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

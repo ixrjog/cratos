@@ -41,7 +41,7 @@ public class ChannelNetworkController {
 
     @Operation(summary = "Update channelNetwork valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setChannelNetworkValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setChannelNetworkValidById(@RequestParam int id) {
         channelNetworkFacade.setChannelNetworkValidById(id);
         return HttpResult.SUCCESS;
     }
@@ -54,7 +54,7 @@ public class ChannelNetworkController {
 
     @Operation(summary = "Delete channelNetwork by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteChannelNetworkById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteChannelNetworkById(@RequestParam int id) {
         channelNetworkFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

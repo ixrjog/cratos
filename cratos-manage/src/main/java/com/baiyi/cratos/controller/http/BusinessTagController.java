@@ -62,7 +62,7 @@ public class BusinessTagController {
 
     @Operation(summary = "Delete businessTag by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteBusinessTagById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteBusinessTagById(@RequestParam int id) {
         businessTagFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

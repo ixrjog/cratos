@@ -64,7 +64,7 @@ public class RbacController {
 
     @Operation(summary = "Delete role by id")
     @DeleteMapping(value = "/role/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteRoleById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteRoleById(@RequestParam int id) {
         rbacRoleFacade.deleteRoleById(id);
         return HttpResult.SUCCESS;
     }
@@ -131,14 +131,14 @@ public class RbacController {
 
     @Operation(summary = "Update resource valid")
     @PutMapping(value = "/resource/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setResourceValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setResourceValidById(@RequestParam int id) {
         rbacResourceFacade.setResourceValidById(id);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Delete resource by id")
     @DeleteMapping(value = "/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteResourceById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteResourceById(@RequestParam int id) {
         rbacResourceFacade.deleteResourceById(id);
         return HttpResult.SUCCESS;
     }

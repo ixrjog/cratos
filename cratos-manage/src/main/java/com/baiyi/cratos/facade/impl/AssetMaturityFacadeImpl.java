@@ -51,4 +51,9 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
         assetMaturityService.updateByPrimaryKey(assetMaturity);
     }
 
+    @Override
+    public void deleteById(int id) {
+        assetMaturityService.deleteById(id);
+    }
+
 }

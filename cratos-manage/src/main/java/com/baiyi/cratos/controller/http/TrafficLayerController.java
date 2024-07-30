@@ -57,7 +57,7 @@ public class TrafficLayerController {
 
     @Operation(summary = "Delete traffic layer domain by id")
     @DeleteMapping(value = "/domain/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteTrafficLayerDomainById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteTrafficLayerDomainById(@RequestParam int id) {
         domainFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
@@ -90,7 +90,7 @@ public class TrafficLayerController {
 
     @Operation(summary = "Delete traffic layer record by id")
     @DeleteMapping(value = "/record/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteTrafficLayerRecordById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> deleteTrafficLayerRecordById(@RequestParam int id) {
         recordFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }

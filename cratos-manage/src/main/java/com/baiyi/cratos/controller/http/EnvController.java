@@ -33,7 +33,7 @@ public class EnvController {
 
     @Operation(summary = "Update env valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> setEnvValidById(@RequestParam @Valid int id) {
+    public HttpResult<Boolean> setEnvValidById(@RequestParam int id) {
         envFacade.setEnvValidById(id);
         return HttpResult.SUCCESS;
     }
