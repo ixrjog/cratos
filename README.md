@@ -2,7 +2,7 @@
 > 安全的运维通用开发框架
 
 + OpenJDK 21
-+ SpringBoot 3.3.0 (GA)
++ SpringBoot 3.3.2 (GA)
 + MySql 8+
 
 ---
