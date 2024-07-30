@@ -1,9 +1,9 @@
 package com.baiyi.cratos.eds.core.config;
 
-import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
+import com.google.iam.admin.v1.ProjectName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,7 +51,7 @@ public class EdsGoogleCloudConfigModel {
             if (!StringUtils.hasText(getId())) {
                 throw new EdsConfigException("project id cannot be empty.");
             }
-            return StringFormatter.format("projects/{}", getId());
+            return ProjectName.of(getId()).toString();
         }
 
     }

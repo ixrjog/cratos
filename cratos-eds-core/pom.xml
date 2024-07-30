@@ -40,6 +40,12 @@
             <artifactId>aws-java-sdk-core</artifactId>
             <version>${aws-java-sdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>proto-google-iam-admin-v1</artifactId>
+            <version>3.41.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

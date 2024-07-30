@@ -77,7 +77,12 @@
             <artifactId>google-cloud-certificate-manager</artifactId>
             <version>0.49.0</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-resourcemanager</artifactId>
+            <version>1.48.0</version>
+        </dependency>
 
     </dependencies>
 
