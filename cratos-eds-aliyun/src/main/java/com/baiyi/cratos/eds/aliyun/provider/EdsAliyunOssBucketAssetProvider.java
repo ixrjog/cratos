@@ -20,7 +20,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -49,7 +48,7 @@ public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetPro
                 .map(ExternalDataSourceInstance::getEdsConfigModel)
                 .map(EdsAliyunConfigModel.Aliyun::getOss)
                 .map(EdsAliyunConfigModel.OSS::getEndpoints)
-                .orElse(Collections.emptyList()));
+                .orElse(List.of()));
     }
 
     @Override

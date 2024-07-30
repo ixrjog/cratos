@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public class GoogleCloudCredentialsRepo {
+public class GoogleCloudCredentialRepo {
 
     private final CertificateManagerSettingsBuilder googleCredentialsBuilder;
 
@@ -29,7 +29,7 @@ public class GoogleCloudCredentialsRepo {
         LocationName locationName = LocationName.of(googleCloud.getProject()
                 .getId(), location);
         ListCertificatesRequest request = ListCertificatesRequest.newBuilder()
-                .setParent(locationName.getLocation())
+                .setParent(locationName.toString())
                 .setPageSize(PAGE_SIZE)
                 .build();
         List<Certificate> certificates = Lists.newArrayList();

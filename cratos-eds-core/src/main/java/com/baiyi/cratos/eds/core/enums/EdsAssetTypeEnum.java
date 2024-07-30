@@ -71,7 +71,9 @@ public enum EdsAssetTypeEnum {
     GODADDY_DOMAIN("Domain"),
 
     HARBOR_PROJECT("Harbor Project"),
-    HARBOR_REPOSITORY("Harbor Repository");
+    HARBOR_REPOSITORY("Harbor Repository"),
+
+    GOOGLECLOUD_CERTIFICATE("Certificate");
 
     private final String displayName;
 
