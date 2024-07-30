@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
-import com.baiyi.cratos.eds.googlecloud.builder.CertificateManagerSettingsBuilder;
+import com.baiyi.cratos.eds.googlecloud.builder.GoogleCloudCertificateManagerSettingsBuilder;
 import com.google.api.client.util.Lists;
 import com.google.cloud.certificatemanager.v1.*;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoogleCloudCredentialRepo {
 
-    private final CertificateManagerSettingsBuilder googleCredentialsBuilder;
+    private final GoogleCloudCertificateManagerSettingsBuilder googleCredentialsBuilder;
 
     private static final int PAGE_SIZE = 10;
 

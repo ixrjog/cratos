@@ -19,11 +19,10 @@ import java.nio.charset.StandardCharsets;
  * @Date 2024/7/29 下午4:57
  * @Since 1.0
  */
-
 @Component
-public class ProjectSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
+public class GoogleCloudProjectSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
 
-    public ProjectSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
+    public GoogleCloudProjectSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
         super(edsConfigService, credentialService);
     }
 
@@ -36,4 +35,5 @@ public class ProjectSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
                 .build();
     }
+
 }

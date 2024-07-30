@@ -20,9 +20,9 @@ import java.nio.charset.StandardCharsets;
  * &#064;Version 1.0
  */
 @Component
-public class CertificateManagerSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
+public class GoogleCloudCertificateManagerSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
 
-    public CertificateManagerSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
+    public GoogleCloudCertificateManagerSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
         super(edsConfigService, credentialService);
     }
 
