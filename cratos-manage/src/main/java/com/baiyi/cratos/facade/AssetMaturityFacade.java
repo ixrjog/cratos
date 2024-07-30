@@ -1,0 +1,23 @@
+package com.baiyi.cratos.facade;
+
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/7/30 下午2:19
+ * &#064;Version 1.0
+ */
+public interface AssetMaturityFacade {
+
+    DataTable<AssetMaturityVO.AssetMaturity> queryAssetMaturityPage(
+            AssetMaturityParam.AssetMaturityPageQuery pageQuery);
+
+    void setAssetMaturityValidById(int id);
+
+    void addAssetMaturity(AssetMaturityParam.AddAssetMaturity addAssetMaturity);
+
+    void updateAssetMaturity(AssetMaturityParam.UpdateAssetMaturity updateAssetMaturity);
+
+}
