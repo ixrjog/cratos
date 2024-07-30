@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 @Component
 @RequiredArgsConstructor
-public class GoogleCloudAccountRepo {
+public class GoogleCloudIamRepo {
 
     private final GoogleCloudIAMSettingsBuilder googleCloudIAMSettingsBuilder;
 

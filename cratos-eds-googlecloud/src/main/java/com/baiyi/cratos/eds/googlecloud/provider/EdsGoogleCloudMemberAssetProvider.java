@@ -1,0 +1,68 @@
+package com.baiyi.cratos.eds.googlecloud.provider;
+
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
+import com.baiyi.cratos.eds.googlecloud.repo.GoogleCloudProjectRepo;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+/**
+ * @Author 修远
+ * @Date 2024/7/30 上午11:16
+ * @Since 1.0
+ */
+
+@Component
+@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GOOGLECLOUD, assetType = EdsAssetTypeEnum.GOOGLECLOUD_MEMBER)
+public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleMemberModel.Member> {
+
+    private final GoogleCloudProjectRepo googleCloudProjectRepo;
+
+    public EdsGoogleCloudMemberAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                                  CredentialService credentialService,
+                                                  ConfigCredTemplate configCredTemplate,
+                                                  EdsAssetIndexFacade edsAssetIndexFacade,
+                                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                                  GoogleCloudProjectRepo googleCloudProjectRepo) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
+        this.googleCloudProjectRepo = googleCloudProjectRepo;
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance,
+                                  GoogleMemberModel.Member entity) throws EdsAssetConversionException {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
+                .assetKeyOf(entity.getName())
+                .nameOf(entity.getName())
+                .kindOf(entity.getType())
+                .build();
+    }
+
+    @Override
+    protected List<GoogleMemberModel.Member> listEntities(
+            ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance) throws EdsQueryEntitiesException {
+        try {
+            return googleCloudProjectRepo.listMembers(instance.getEdsConfigModel()).stream()
+                    .map(GoogleMemberModel::toMember).toList();
+        } catch (Exception e) {
+            throw new EdsQueryEntitiesException(e.getMessage());
+        }
+    }
+
+}
