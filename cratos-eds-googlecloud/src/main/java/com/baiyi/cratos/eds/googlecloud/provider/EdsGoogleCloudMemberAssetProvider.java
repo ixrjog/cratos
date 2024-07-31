@@ -1,8 +1,10 @@
 package com.baiyi.cratos.eds.googlecloud.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -17,6 +19,8 @@ import com.baiyi.cratos.eds.googlecloud.repo.GoogleCloudProjectRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,11 +38,11 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
     private final GoogleCloudProjectRepo googleCloudProjectRepo;
 
     public EdsGoogleCloudMemberAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                  CredentialService credentialService,
-                                                  ConfigCredTemplate configCredTemplate,
-                                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                                  GoogleCloudProjectRepo googleCloudProjectRepo) {
+                                             CredentialService credentialService,
+                                             ConfigCredTemplate configCredTemplate,
+                                             EdsAssetIndexFacade edsAssetIndexFacade,
+                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                             GoogleCloudProjectRepo googleCloudProjectRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
         this.googleCloudProjectRepo = googleCloudProjectRepo;
@@ -51,6 +55,7 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
                 .assetKeyOf(entity.getName())
                 .nameOf(entity.getName())
                 .kindOf(entity.getType())
+                .descriptionOf(entity.getType())
                 .build();
     }
 
@@ -58,11 +63,26 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
     protected List<GoogleMemberModel.Member> listEntities(
             ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance) throws EdsQueryEntitiesException {
         try {
-            return googleCloudProjectRepo.listMembers(instance.getEdsConfigModel()).stream()
-                    .map(GoogleMemberModel::toMember).toList();
+            return googleCloudProjectRepo.listMembers(instance.getEdsConfigModel())
+                    .entrySet().stream().map(e ->
+                            GoogleMemberModel.toMember(e.getKey(), e.getValue())
+                    ).toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance, EdsAsset edsAsset,
+            GoogleMemberModel.Member entity) {
+        String roles = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+                .join(entity.getRoles().stream().map(role -> role.split("/")[1]).toList());
+        return Lists.newArrayList(toEdsAssetIndex(edsAsset, "role", roles));
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
+    }
 }

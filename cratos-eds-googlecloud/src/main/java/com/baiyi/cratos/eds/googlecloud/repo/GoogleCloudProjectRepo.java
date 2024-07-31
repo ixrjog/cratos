@@ -7,12 +7,12 @@ import com.google.cloud.resourcemanager.v3.ProjectsClient;
 import com.google.cloud.resourcemanager.v3.ProjectsSettings;
 import com.google.iam.v1.GetIamPolicyRequest;
 import com.google.iam.v1.Policy;
+import com.google.iam.v1.Binding;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author 修远
@@ -26,7 +26,7 @@ public class GoogleCloudProjectRepo {
 
     private final GoogleCloudProjectSettingsBuilder projectSettingsBuilder;
 
-    public List<String> listMembers(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
+    public Map<String,List<String>>listMembers(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
         try (ProjectsClient client = ProjectsClient.create(settings)) {
             GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()
@@ -35,7 +35,15 @@ public class GoogleCloudProjectRepo {
             Policy policy = client.getIamPolicy(request);
             Set<String> members = Sets.newHashSet();
             policy.getBindingsList().forEach(binding -> members.addAll(binding.getMembersList()));
-            return members.stream().toList();
+
+            Map<String, List<String>> memberRolesMap = new HashMap<>();
+            for (Binding binding : policy.getBindingsList()) {
+                String role = binding.getRole();
+                for (String member : binding.getMembersList()) {
+                    memberRolesMap.computeIfAbsent(member, k -> new ArrayList<>()).add(role);
+                }
+            }
+            return memberRolesMap;
         }
     }
 }
