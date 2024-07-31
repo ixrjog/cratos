@@ -12,11 +12,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties
 public class BaseAuditMessage implements HasState {
-
     private String state;
-
     private String sessionId;
-
     private String instanceId;
-
 }
