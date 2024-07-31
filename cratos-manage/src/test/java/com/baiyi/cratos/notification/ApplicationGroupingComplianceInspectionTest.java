@@ -1,7 +1,7 @@
 package com.baiyi.cratos.notification;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.facade.inspection.ApplicationGroupingComplianceInspection;
+import com.baiyi.cratos.facade.inspection.impl.ApplicationGroupingComplianceInspection;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 

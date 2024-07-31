@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.inspection;
+package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.BeetlUtil;
@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.facade.inspection.model.DeploymentInspectionModel;
 import com.baiyi.cratos.service.*;
 import com.google.api.client.util.Lists;

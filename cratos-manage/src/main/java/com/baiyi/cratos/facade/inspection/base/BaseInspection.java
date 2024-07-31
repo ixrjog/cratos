@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.inspection;
+package com.baiyi.cratos.facade.inspection.base;
 
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -10,6 +10,8 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.facade.inspection.InspectionFactory;
+import com.baiyi.cratos.facade.inspection.InspectionTask;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.gson.Gson;

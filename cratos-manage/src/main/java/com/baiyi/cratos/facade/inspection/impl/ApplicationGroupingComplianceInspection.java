@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.inspection;
+package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.BeetlUtil;
@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.EdsInstanceHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
+import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.facade.inspection.model.ApplicationGroupingModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
