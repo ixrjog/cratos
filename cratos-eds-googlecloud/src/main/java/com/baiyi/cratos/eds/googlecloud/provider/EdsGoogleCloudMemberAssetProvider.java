@@ -21,6 +21,7 @@ import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,8 +39,7 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
     private final GoogleCloudProjectRepo googleCloudProjectRepo;
 
     public EdsGoogleCloudMemberAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService,
-                                             ConfigCredTemplate configCredTemplate,
+                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
                                              GoogleCloudProjectRepo googleCloudProjectRepo) {
@@ -64,9 +64,10 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
             ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance) throws EdsQueryEntitiesException {
         try {
             return googleCloudProjectRepo.listMembers(instance.getEdsConfigModel())
-                    .entrySet().stream().map(e ->
-                            GoogleMemberModel.toMember(e.getKey(), e.getValue())
-                    ).toList();
+                    .entrySet()
+                    .stream()
+                    .map(e -> GoogleMemberModel.toMember(e.getKey(), e.getValue()))
+                    .toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
@@ -76,9 +77,14 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
     protected List<EdsAssetIndex> toEdsAssetIndexList(
             ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance, EdsAsset edsAsset,
             GoogleMemberModel.Member entity) {
+        // "roles/"
         String roles = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
-                .join(entity.getRoles().stream().map(role -> role.split("/")[1]).toList());
-        return Lists.newArrayList(toEdsAssetIndex(edsAsset, "role", roles));
+                .join(entity.getRoles()
+                        .stream()
+                        .map(role -> StringUtils.substring(role, 6))
+                        .sorted()
+                        .toList());
+        return Lists.newArrayList(toEdsAssetIndex(edsAsset, "roles", roles));
     }
 
     @Override
