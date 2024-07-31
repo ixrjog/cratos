@@ -48,3 +48,19 @@ public interface IToTarget<T> {
 
 }
 ```
+
+#### BusinessTag & BusinessDoc
+```Java
+// extends SupportBusinessService
+public interface DomainService extends BaseValidService<Domain, DomainMapper>, BaseUniqueKeyService<Domain>, SupportBusinessService, BaseQueryByExpiryService<Domain> {
+    // ...
+}
+
+@Service
+@RequiredArgsConstructor
+// 增加注解
+@BusinessType(type = BusinessTypeEnum.DOMAIN)
+public class DomainServiceImpl implements DomainService {
+    // ...
+}
+```
