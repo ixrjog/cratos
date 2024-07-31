@@ -26,30 +26,24 @@ public class DingtalkUser {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UserResult extends DingtalkResponse.Query implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 1310342064103970801L;
         private Result result;
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     public static class Result extends DingtalkResponse.Result implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 1969240191452753519L;
         private List<User> list;
-
     }
 
     @Data
     public static class User implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -2450600254937294425L;
         private String username; // 转换类处理
-
         @JsonProperty("dept_order")
         private Long deptOrder;
         private Boolean leader;
@@ -80,32 +74,6 @@ public class DingtalkUser {
         @JsonProperty("state_code")
         private String stateCode;
         private String email;
-
-//        @Override
-//        public AssetContainer toAssetContainer(DatasourceInstance dsInstance) {
-//            DatasourceInstanceAsset asset = DatasourceInstanceAsset.builder()
-//                    .instanceUuid(dsInstance.getUuid())
-//                    .assetId(this.userid)
-//                    .name(this.name)
-//                    .assetKey(this.unionid)
-//                    .assetKey2(this.email)
-//                    .assetType(DsAssetTypeConstants.DINGTALK_USER.name())
-//                    .description(this.title)
-//                    .isActive(this.active)
-//                    .kind("user")
-//                    .build();
-//            return AssetContainerBuilder.newBuilder()
-//                    .paramAsset(asset)
-//                    .paramProperty("username", this.username)
-//                    .paramProperty("mobile", this.mobile)
-//                    .paramProperty("leader", this.leader)
-//                    .paramProperty("avatar", this.avatar)
-//                    .paramProperty("boss", this.boss)
-//                    .paramProperty("admin", this.admin)
-//                    .paramProperty("jobNumber", this.jobNumber)
-//                    .build();
-//        }
-
     }
 
 }

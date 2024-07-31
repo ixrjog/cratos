@@ -27,10 +27,12 @@ public class EdsInstanceProviderHolder<C extends IEdsConfigModel, A> {
     @Schema(description = "Eds Provider")
     private EdsInstanceAssetProvider<C, A> provider;
 
+    @Schema(description = "导入所有资产")
     public void importAssets() {
         provider.importAssets(instance);
     }
 
+    @Schema(description = "导入单个资产")
     public void importAsset(A asset) {
         provider.importAsset(instance, asset);
     }

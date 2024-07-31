@@ -16,9 +16,6 @@ import org.gitlab4j.api.models.SshKey;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SshKeyData {
-
     private String username;
-
     private SshKey sshKey;
-
 }

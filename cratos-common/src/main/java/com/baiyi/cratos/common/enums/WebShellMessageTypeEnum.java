@@ -11,19 +11,13 @@ import lombok.Getter;
 public enum WebShellMessageTypeEnum {
 
     INIT,
-
     HEARTBEAT,
-
     INPUT,
     INPUT_ALL,
-
     DUPLICATE_SESSION,
-
     RESIZE,
-
     CLOSE,
     LOGOUT,
-
     PLAY
 
 }

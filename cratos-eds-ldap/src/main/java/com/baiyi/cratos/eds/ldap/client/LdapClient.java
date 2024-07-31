@@ -134,7 +134,6 @@ public class LdapClient {
         final String userId = ldapConfig.getUser().getId();
         final String userBaseDN = ldapConfig.getUser().getDn();
         final String userObjectClass = ldapConfig.getUser().getObjectClass();
-
         try {
             final String rdn = LdapUtil.toUserRDN(ldapConfig, person);
             final String dn = Joiner.on(",").skipNulls().join(rdn, userBaseDN);

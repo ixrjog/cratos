@@ -83,7 +83,4 @@ public class DingtalkWebClientConfiguration {
         return factory.createClient(DingtalkRobotService.class);
     }
 
-
-
-
 }

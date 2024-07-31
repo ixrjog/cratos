@@ -21,13 +21,10 @@ public class LdapGroup {
     @ToString
     @Entry(objectClasses = {"groupOfUniqueNames"})
     public static class Group {
-
         @Attribute
         private String groupId;
-
         @Attribute(name = "cn")
         private String groupName;
-
     }
 
 }

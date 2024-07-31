@@ -21,11 +21,8 @@ public class HuaweicloudEcs {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Ecs {
-
         private String regionId;
-
         private ServerDetail serverDetail;
-
     }
 
 }

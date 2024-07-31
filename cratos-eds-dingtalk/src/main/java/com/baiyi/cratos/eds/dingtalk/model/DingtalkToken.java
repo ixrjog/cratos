@@ -24,13 +24,10 @@ public class DingtalkToken {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TokenResult extends DingtalkResponse.BaseMsg implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 3927595287613794126L;
-
         @JsonProperty("access_token")
         private String accessToken;
-
         @JsonProperty("expires_in")
         private Integer expiresIn; // 过期时间 单位秒
     }

@@ -26,11 +26,9 @@ public class DingtalkDepartmentParam {
     @NoArgsConstructor
     @Schema
     public static class ListSubDepartmentId {
-
         @Builder.Default
         @JsonProperty("dept_id")
         private Long deptId = 1L;
-
     }
 
     /**
@@ -42,14 +40,11 @@ public class DingtalkDepartmentParam {
     @NoArgsConstructor
     @Schema
     public static class GetDepartment {
-
         @Builder.Default
         @JsonProperty("dept_id")
         private Long deptId = 1L;
-
         @Builder.Default
         private String language ="zh_CN";
-
     }
 
 }

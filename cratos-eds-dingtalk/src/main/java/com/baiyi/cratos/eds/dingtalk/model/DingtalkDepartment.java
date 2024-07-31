@@ -25,7 +25,6 @@ public class DingtalkDepartment {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DepartmentSubIdResult extends DingtalkResult.Query implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 8776879385196041038L;
         private Result result;
@@ -33,7 +32,6 @@ public class DingtalkDepartment {
 
     @Data
     public static class Result implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -7264362835671584691L;
         @JsonProperty("dept_id_list")
@@ -45,7 +43,6 @@ public class DingtalkDepartment {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class GetDepartmentResult extends DingtalkResult.Query implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 536273783194486923L;
         private Department result;
@@ -56,10 +53,8 @@ public class DingtalkDepartment {
      */
     @Data
     public static class Department implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -5297487050997934333L;
-
         @JsonProperty("dept_id")
         private Long deptId;
         private String name;

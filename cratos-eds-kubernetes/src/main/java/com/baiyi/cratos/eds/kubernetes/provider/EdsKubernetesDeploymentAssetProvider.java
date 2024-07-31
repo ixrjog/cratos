@@ -72,14 +72,11 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
-
         String env = getMetadataLabel(entity, "env");
         if (StringUtils.hasText(env)) {
             indices.add(toEdsAssetIndex(edsAsset, "env", env));
         }
-
         String appName = getMetadataLabel(entity, "app");
         if (StringUtils.hasText(appName)) {
             if (StringUtils.hasText(env)) {

@@ -12,16 +12,12 @@ import java.util.List;
 public class BaseIngressConditionsModel {
 
     public interface HasSourceIpConfig {
-
         SourceIpConfig getSourceIpConfig();
-
     }
 
     @Data
     public static class SourceIpConfig {
-
         private List<String> values;
-
     }
 
 }

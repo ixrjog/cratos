@@ -17,29 +17,23 @@ public class DingtalkResult {
 
     @Data
     public static class BaseMsg {
-
         private Integer errcode;
         private String errmsg;
-
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     public static class Query extends BaseMsg {
-
         @JsonProperty("request_id")
         private String requestId;
-
     }
 
     @Data
     public static class Result {
-
         @JsonProperty("next_cursor")
         private Integer nextCursor;
         @JsonProperty("has_more")
         private Boolean hasMore;
-
     }
 
 }

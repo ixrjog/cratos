@@ -26,10 +26,8 @@ public class DingtalkRobot {
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Msg implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -1330295729619695061L;
-
         @Builder.Default
         private String msgtype = "markdown";
         private Markdown markdown;
@@ -42,14 +40,11 @@ public class DingtalkRobot {
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Markdown implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 6237326242957780232L;
-
         @Builder.Default
         private String title = "监控告警";
         private String text;
-
     }
 
     @Data
@@ -58,10 +53,8 @@ public class DingtalkRobot {
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class At implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 4405701355850234429L;
-
         private List<String> atMobiles;
         @Builder.Default
         private Boolean isAtAll = false;

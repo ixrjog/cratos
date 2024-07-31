@@ -14,10 +14,7 @@ public enum TrafficLayerResourceTypeEnum {
     DDOS("DDoS"),
     WAF("WAF"),
     CLOUDFLARE("CloudFlare"),
-
-    DOMAIN("Domain")
-
-    ;
+    DOMAIN("Domain");
 
     private final String displayName;
 

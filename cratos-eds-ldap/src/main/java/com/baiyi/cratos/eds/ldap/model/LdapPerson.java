@@ -28,19 +28,16 @@ public class LdapPerson {
          */
         @Attribute
         private String personId;
-
         /**
          * 用户名
          */
         @Attribute(name = "cn")
         private String username;
-
         /**
          * 显示名
          */
         @Attribute(name = "displayName")
         private String displayName;
-
         /**
          * 电话
          */
@@ -51,13 +48,11 @@ public class LdapPerson {
          */
         @Attribute(name = "mail")
         private String email;
-
         /**
          * 工号
          */
         @Attribute(name = "jobNo")
         private String jobNo;
-
         /**
          * 证件类型
          */
@@ -68,10 +63,8 @@ public class LdapPerson {
          */
         @Attribute(name = "certificateNo")
         private String certNo;
-
         @Attribute(name = "userPassword")
         private String userPassword;
-
         @Attribute
         protected Date createTime;
 
@@ -80,22 +73,18 @@ public class LdapPerson {
          */
         @Attribute
         protected Date updateTime;
-
         /**
          * 状态
          */
         @Attribute
         protected Integer status;
-
         @Attribute
         protected Integer disOrder;
-
         /**
          * 工作单位
          */
         @Attribute
         private String company;
-
     }
 
 }
