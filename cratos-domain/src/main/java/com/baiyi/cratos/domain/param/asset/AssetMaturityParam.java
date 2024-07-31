@@ -5,6 +5,8 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.domain.DomainParam;
+import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -31,9 +34,19 @@ public class AssetMaturityParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class AssetMaturityPageQuery extends PageParam {
+    public static class AssetMaturityPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @Schema(description = "Query by name")
         private String queryName;
+        private BusinessTagParam.QueryByTag queryByTag;
+        private List<Integer> idList;
+        public DomainParam.DomainPageQueryParam toParam() {
+            return DomainParam.DomainPageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
+                    .queryName(queryName)
+                    .idList(idList)
+                    .build();
+        }
     }
 
     @Data

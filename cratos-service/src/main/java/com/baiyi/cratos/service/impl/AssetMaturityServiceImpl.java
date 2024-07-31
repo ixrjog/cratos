@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
@@ -24,6 +26,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.ASSET_MATURITY)
 public class AssetMaturityServiceImpl implements AssetMaturityService {
 
     private final AssetMaturityMapper assetMaturityMapper;
