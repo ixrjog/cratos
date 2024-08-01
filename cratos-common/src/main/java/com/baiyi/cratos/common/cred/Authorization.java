@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.jasypt.contrib.org.apache.commons.codec_1_3.binary.Base64;
 
 import java.nio.charset.StandardCharsets;
 

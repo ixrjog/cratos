@@ -40,4 +40,5 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
         List<NotificationTemplate> data = notificationTemplateMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
     }
+
 }
