@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface AssetMaturityMapper extends Mapper<AssetMaturity> {
 
-    List<AssetMaturity> queryPageByParam(AssetMaturityParam.AssetMaturityPageQuery pageQuery);
+    List<AssetMaturity> queryPageByParam(AssetMaturityParam.AssetMaturityPageQueryParam pageQuery);
 
 }

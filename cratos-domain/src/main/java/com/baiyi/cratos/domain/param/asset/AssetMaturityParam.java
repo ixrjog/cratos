@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
-import com.baiyi.cratos.domain.param.domain.DomainParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,14 +38,24 @@ public class AssetMaturityParam {
         private String queryName;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
-        public DomainParam.DomainPageQueryParam toParam() {
-            return DomainParam.DomainPageQueryParam.builder()
+        public AssetMaturityPageQueryParam toParam() {
+            return AssetMaturityPageQueryParam.builder()
                     .page(getPage())
                     .length(getLength())
                     .queryName(queryName)
                     .idList(idList)
                     .build();
         }
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class AssetMaturityPageQueryParam extends PageParam {
+        private String queryName;
+        private List<Integer> idList;
     }
 
     @Data

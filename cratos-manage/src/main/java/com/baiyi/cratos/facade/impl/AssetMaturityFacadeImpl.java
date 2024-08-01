@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
@@ -26,9 +28,10 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
     private final AssetMaturityWrapper assetMaturityWrapper;
 
     @Override
+    @PageQueryByTag(ofType = BusinessTypeEnum.ASSET_MATURITY)
     public DataTable<AssetMaturityVO.AssetMaturity> queryAssetMaturityPage(
             AssetMaturityParam.AssetMaturityPageQuery pageQuery) {
-        DataTable<AssetMaturity> table = assetMaturityService.queryAssetMaturityPage(pageQuery);
+        DataTable<AssetMaturity> table = assetMaturityService.queryAssetMaturityPage(pageQuery.toParam());
         return assetMaturityWrapper.wrapToTarget(table);
     }
 

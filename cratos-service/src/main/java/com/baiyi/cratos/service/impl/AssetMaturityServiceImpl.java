@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -49,10 +50,17 @@ public class AssetMaturityServiceImpl implements AssetMaturityService {
     }
 
     @Override
-    public DataTable<AssetMaturity> queryAssetMaturityPage(AssetMaturityParam.AssetMaturityPageQuery pageQuery) {
+    public DataTable<AssetMaturity> queryAssetMaturityPage(AssetMaturityParam.AssetMaturityPageQueryParam pageQuery) {
         Page<AssetMaturity> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<AssetMaturity> data = assetMaturityMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    // 删除用证书关联的业务标签、凭据
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        assetMaturityMapper.deleteByPrimaryKey(id);
     }
 
 }
