@@ -169,7 +169,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
             newEdsAsset.setId(edsAsset.getId());
             if (!equals(edsAsset, newEdsAsset)) {
                 edsAssetService.updateByPrimaryKey(newEdsAsset);
-                // TODO 更新绑定的资产
+                // 更新绑定的资产
                 updateBusinessFromAssetHandler.update(newEdsAsset);
             }
         } return newEdsAsset;
