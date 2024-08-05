@@ -28,6 +28,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collections;
 import java.util.List;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_USERS;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/9 下午4:50
@@ -93,7 +95,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
                         .join(users.stream()
                                 .map(ListEntitiesForPolicyResponse.User::getUserName)
                                 .toList());
-                indices.add(toEdsAssetIndex(edsAsset, "ram.users", policyName));
+                indices.add(toEdsAssetIndex(edsAsset, ALIYUN_RAM_USERS, policyName));
             }
         } catch (Exception ignored) {
         }

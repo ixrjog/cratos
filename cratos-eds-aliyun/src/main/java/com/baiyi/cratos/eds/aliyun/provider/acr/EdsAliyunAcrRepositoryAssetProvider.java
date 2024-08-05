@@ -28,6 +28,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ACR_INSTANCE_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ACR_REPO_NAMESPACE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/7/25 上午10:40
@@ -38,10 +41,6 @@ import java.util.*;
 public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListRepositoryResponse.RepositoriesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
-
-    private static final String ACR_INSTANCE_ID = "acr.instanceId";
-
-    private static final String ACR_REPO_NAMESPACE = "acr.repo.namespace";
 
     public EdsAliyunAcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
@@ -99,8 +98,8 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
                                                       ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ACR_INSTANCE_ID, entity.getInstanceId()));
-            indices.add(toEdsAssetIndex(edsAsset, ACR_REPO_NAMESPACE, entity.getRepoNamespaceName()));
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_REPO_NAMESPACE, entity.getRepoNamespaceName()));
         } catch (Exception ignored) {
         }
         return indices;

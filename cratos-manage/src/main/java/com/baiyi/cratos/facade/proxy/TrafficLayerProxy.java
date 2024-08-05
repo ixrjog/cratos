@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.LB_INGRESS_HOSTNAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME;
 import static com.baiyi.cratos.wrapper.EdsAssetWrapper.SKIP_LOAD_ASSET;
 
 /**
@@ -75,7 +75,7 @@ public class TrafficLayerProxy {
     }
 
     private void putMap(Map<String, List<EdsAssetVO.Index>> details, EdsAssetIndex index, String recordName) {
-        if (LB_INGRESS_HOSTNAME.equals(index.getName())) {
+        if (KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME.equals(index.getName())) {
             details.put(HOSTNAME, Lists.newArrayList(edsAssetIndexWrapper.wrapToTarget(index)));
             return;
         }

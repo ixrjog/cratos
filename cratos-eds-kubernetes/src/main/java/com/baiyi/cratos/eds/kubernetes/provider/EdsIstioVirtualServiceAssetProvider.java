@@ -23,6 +23,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_NAMESPACE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/14 下午3:02
@@ -53,7 +55,7 @@ public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetP
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             VirtualService entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
+        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         return indices;
     }
 

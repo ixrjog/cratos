@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider.GROUP;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_GROUP;
 
 /**
  * &#064;Author  baiyi
@@ -83,7 +83,7 @@ public class DeploymentGroupLabelInspection extends BaseInspection {
             EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
                     .instanceId(e.getInstanceId())
                     .assetId(e.getId())
-                    .name(GROUP)
+                    .name(KUBERNETES_GROUP)
                     .build();
             if (edsAssetIndexService.getByUniqueKey(uniqueKey) == null) {
                 deploymentList.add(DeploymentInspectionModel.Deployment.builder()

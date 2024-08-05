@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.eds.aliyun.provider.ons.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -86,7 +86,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                         EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
                                 .instanceId(endpointConsumerGroup.getInstanceId())
                                 .assetId(endpointConsumerGroup.getId())
-                                .name(ONS_INSTANCE_ID)
+                                .name(ALIYUN_ONS_INSTANCE_ID)
                                 .build();
                         EdsAssetIndex onsInstanceIndex = edsAssetIndexService.getByUniqueKey(uniqueKey);
                         if (onsInstanceIndex == null) {
@@ -141,10 +141,10 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                                                       EdsAsset edsAsset, AliyunOnsV5.ConsumerGroupSubscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ONS_INSTANCE_ID, entity.getInstanceId()));
-            indices.add(toEdsAssetIndex(edsAsset, "ons.consumerGroupId", entity.getConsumerGroupSubscription()
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_CONSUMER_GROUP_ID, entity.getConsumerGroupSubscription()
                     .getConsumerGroupId()));
-            indices.add(toEdsAssetIndex(edsAsset, "ons.topicName", entity.getConsumerGroupSubscription()
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_TOPIC_NAME, entity.getConsumerGroupSubscription()
                     .getTopicName()));
         } catch (Exception ignored) {
         }

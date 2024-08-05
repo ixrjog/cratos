@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+
 /**
  * @Author baiyi
  * @Date 2024/5/6 下午2:23
@@ -84,15 +86,6 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
                 .map(e -> Long.valueOf(e.getAssetId()))
                 .collect(Collectors.toSet());
     }
-
-    private static final String PREFIX = "dingtalk.user.";
-
-    public static final String DINGTALK_USER_USERNAME = PREFIX + "username";
-    public static final String DINGTALK_USER_MOBILE = PREFIX + "mobile";
-    public static final String DINGTALK_USER_LEADER = PREFIX + "leader";
-    public static final String DINGTALK_USER_AVATAR = PREFIX + "avatar";
-    public static final String DINGTALK_USER_BOSS = PREFIX + "boss";
-    public static final String DINGTALK_USER_JOB_NUMBER = PREFIX + "jobNumber";
 
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(

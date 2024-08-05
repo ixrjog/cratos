@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.eds.aliyun.provider.ons.EdsAliyunOnsV5InstanceAssetProvider.ONS_INSTANCE_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ONS_INSTANCE_ID;
 
 /**
  * &#064;Author  baiyi
@@ -110,7 +110,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
                                                       ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ONS_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
         } catch (Exception ignored) {
         }
         return indices;

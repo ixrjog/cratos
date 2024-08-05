@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * @Author baiyi
@@ -44,10 +45,6 @@ import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
-
-    public static final String REPLICAS = "replicas";
-
-    public static final String GROUP = "deployment.spec.template.metadata.labels.group";
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                 CredentialService credentialService,
@@ -72,7 +69,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
+        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         String env = getMetadataLabel(entity, "env");
         if (StringUtils.hasText(env)) {
             indices.add(toEdsAssetIndex(edsAsset, "env", env));
@@ -89,7 +86,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
         }
 
         int replicas = KubeUtil.getReplicas(entity);
-        indices.add(toEdsAssetIndex(edsAsset, REPLICAS, replicas));
+        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
 
         // group标签
         Map<String, String> labels = Optional.of(entity)
@@ -99,7 +96,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                 .map(ObjectMeta::getLabels)
                 .orElse(Maps.newHashMap());
         if (labels.containsKey("group")) {
-            indices.add(toEdsAssetIndex(edsAsset, GROUP, labels.get("group")));
+            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
         }
         return indices;
     }

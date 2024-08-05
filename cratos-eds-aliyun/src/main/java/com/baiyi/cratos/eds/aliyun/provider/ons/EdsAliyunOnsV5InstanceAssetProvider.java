@@ -35,8 +35,6 @@ import java.util.Set;
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE)
 public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListInstancesResponseBody.ListInstancesResponseBodyDataList> {
 
-    public static final String ONS_INSTANCE_ID = "ons.instanceId";
-
     public EdsAliyunOnsV5InstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,

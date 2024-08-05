@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesIngressAssetProvider.SOURCE_IP;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_SOURCE_IP;
 import static com.baiyi.cratos.facade.proxy.TrafficLayerProxy.RULES;
 
 /**
@@ -84,7 +84,7 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                                     EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
                                             .instanceId(e.getInstanceId())
                                             .assetId(e.getAssetId())
-                                            .name(SOURCE_IP)
+                                            .name(KUBERNETES_INGRESS_SOURCE_IP)
                                             .build();
                                     EdsAssetIndex sourceIPIndex = edsAssetIndexService.getByUniqueKey(uniqueKey);
                                     if (sourceIPIndex == null) {

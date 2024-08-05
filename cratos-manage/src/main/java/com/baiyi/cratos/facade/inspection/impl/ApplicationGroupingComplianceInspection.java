@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
-import static com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider.REPLICAS;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
 /**
  * &#064;Author  baiyi
@@ -259,7 +259,7 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
 
             Optional<EdsAssetIndex> replicasIndexOptional = assetIndices.stream()
                     .filter(e -> e.getName()
-                            .equals(REPLICAS))
+                            .equals(KUBERNETES_REPLICAS))
                     .findFirst();
             if (replicasIndexOptional.isEmpty()) {
                 continue;

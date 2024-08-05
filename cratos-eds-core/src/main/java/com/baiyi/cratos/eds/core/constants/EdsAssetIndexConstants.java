@@ -1,0 +1,51 @@
+package com.baiyi.cratos.eds.core.constants;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/8/5 下午2:04
+ * &#064;Version 1.0
+ */
+public interface EdsAssetIndexConstants {
+
+    String ALIYUN_ACR_INSTANCE_ID = "acr.instanceId";
+    String ALIYUN_ACR_REPO_NAMESPACE = "acr.repo.namespace";
+
+    String ALIYUN_ONS_INSTANCE_ID = "ons.instanceId";
+    String ALIYUN_ONS_CONSUMER_GROUP_ID = "ons.consumerGroupId";
+    String ALIYUN_ONS_TOPIC_NAME = "ons.topicName";
+
+    String ALIYUN_RAM_USERS = "ram.users";
+    String ALIYUN_RAM_POLICIES = "ram.policies";
+
+    String ALIYUN_REDIS_PRIVATE_IP = "redis.privateIp";
+    String ALIYUN_REDIS_INSTANCE_CLASS = "redis.instanceClass";
+    String ALIYUN_REDIS_CONNECTION_DOMAIN = "redis.connectionDomain";
+
+    String AWS_SNS_SUBSCRIPTION_ENDPOINT = "endpoint";
+    String AWS_SNS_SUBSCRIPTION_TOPIC_ARN = "topic.arn";
+    String AWS_SNS_SUBSCRIPTION_PROTOCOL = "protocol";
+
+    String DINGTALK_DEPT_PARENT_ID = "dingtalk.department.parentId";
+    String DINGTALK_USER_USERNAME = "dingtalk.username";
+    String DINGTALK_USER_MOBILE = "dingtalk.mobile";
+    String DINGTALK_USER_LEADER = "dingtalk.leader";
+    String DINGTALK_USER_AVATAR = "dingtalk.avatar";
+    String DINGTALK_USER_BOSS = "dingtalk.boss";
+    String DINGTALK_USER_JOB_NUMBER = "dingtalk.jobNumber";
+
+    String KUBERNETES_NAMESPACE = "namespace";
+
+    String KUBERNETES_REPLICAS = "replicas";
+    String KUBERNETES_GROUP = "deployment.spec.template.metadata.labels.group";
+    String KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
+    String KUBERNETES_INGRESS_SOURCE_IP = "alb.ingress.kubernetes.io/conditions.source-ip";
+
+    String KUBERNETES_NODE_CPU = "status.capacity.cpu";
+    String KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE = "status.capacity.ephemeral-storage";
+    String KUBERNETES_NODE_CAPACITY_MEMORY = "status.capacity.memory";
+
+
+
+
+
+}

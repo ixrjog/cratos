@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/15 下午2:27
@@ -90,12 +92,11 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseHasRegionsEdsAssetPr
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                                       EdsAsset edsAsset, AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, "endpoint", entity.getSubscription()
+        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
                 .getEndpoint()));
-        indices.add(toEdsAssetIndex(edsAsset, "topic.arn", entity.getSubscription()
+        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
                 .getTopicArn()));
-        indices.add(toEdsAssetIndex(edsAsset, "protocol", entity.getSubscription()
-                .getProtocol()));
+        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription().getProtocol()));
         return indices;
     }
 

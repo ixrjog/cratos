@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+
 /**
  * @Author baiyi
  * @Date 2024/3/28 11:29
@@ -43,10 +45,6 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private final KubernetesIngressRepo kubernetesIngressRepo;
 
     private static final String UNDEFINED_SERVICE = "Undefined Service";
-
-    public static final String LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
-
-    public static final String SOURCE_IP = "alb.ingress.kubernetes.io/conditions.source-ip";
 
     public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -79,7 +77,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         // loadBalancer
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
         // namespace
-        indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
+        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         // 注解
         indices.add(getEdsAssetIndexSourceIP(instance, edsAsset, entity));
         return indices;
@@ -102,7 +100,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                         AnnotationMap.get(key)) : AckIngressConditionsModel.getSourceIP(AnnotationMap.get(key)))
                 .filter(StringUtils::hasText)
                 .findFirst()
-                .map(sourceIP -> toEdsAssetIndex(edsAsset, SOURCE_IP, sourceIP))
+                .map(sourceIP -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_SOURCE_IP, sourceIP))
                 .orElse(null);
     }
 
@@ -115,7 +113,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 optionalIngressLoadBalancerIngresses.get())) {
             IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
                     .getFirst();
-            return toEdsAssetIndex(edsAsset, LB_INGRESS_HOSTNAME, ingressLoadBalancerIngress.getHostname());
+            return toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME,
+                    ingressLoadBalancerIngress.getHostname());
         }
         return null;
     }

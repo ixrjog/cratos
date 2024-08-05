@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTALK_DEPT_PARENT_ID;
+
 /**
  * @Author baiyi
  * @Date 2024/5/6 上午10:49
@@ -37,8 +39,6 @@ import java.util.Set;
 public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkDepartment.Department> {
 
     private static final long DEPT_ROOT_ID = 1L;
-
-    public static final String DINGTALK_DEPT_PARENT_ID = "dingtalk.department.parentId";
 
     private final DingtalkDepartmentRepo dingtalkDepartmentRepo;
 

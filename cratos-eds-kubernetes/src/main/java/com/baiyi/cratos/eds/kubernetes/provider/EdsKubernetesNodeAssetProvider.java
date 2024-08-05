@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/14 下午2:43
@@ -82,14 +84,15 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Map<String, Quantity> quantityMap = optionalMap.get();
         if (quantityMap.containsKey("cpu")) {
-            indices.add(toEdsAssetIndex(edsAsset, "status.capacity.cpu", formatQuantity(quantityMap.get("cpu"))));
+            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CPU, formatQuantity(quantityMap.get("cpu"))));
         }
         if (quantityMap.containsKey("ephemeral-storage")) {
-            indices.add(toEdsAssetIndex(edsAsset, "status.capacity.ephemeral-storage",
+            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE,
                     formatQuantity(quantityMap.get("ephemeral-storage"))));
         }
         if (quantityMap.containsKey("memory")) {
-            indices.add(toEdsAssetIndex(edsAsset, "status.capacity.memory", formatQuantity(quantityMap.get("memory"))));
+            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_MEMORY,
+                    formatQuantity(quantityMap.get("memory"))));
         }
         return indices;
     }

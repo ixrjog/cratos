@@ -57,7 +57,6 @@ public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsA
                 .build();
     }
 
-
     @Override
     protected boolean equals(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;

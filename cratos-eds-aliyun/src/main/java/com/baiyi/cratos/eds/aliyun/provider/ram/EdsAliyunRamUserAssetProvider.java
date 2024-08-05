@@ -30,6 +30,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.Collections;
 import java.util.List;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/9 下午4:10
@@ -48,7 +50,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                                          EdsAssetIndexFacade edsAssetIndexFacade, AliyunRamUserRepo aliyunRamUserRepo,
                                          AliyunRamPolicyRepo aliyunRamPolicyRepo,
                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade, updateBusinessFromAssetHandler);
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
     }
@@ -95,7 +98,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                         .join(policies.stream()
                                 .map(ListPoliciesForUserResponse.Policy::getPolicyName)
                                 .toList());
-                indices.add(toEdsAssetIndex(edsAsset, "ram.policies", policyName));
+                indices.add(toEdsAssetIndex(edsAsset, ALIYUN_RAM_POLICIES, policyName));
             }
         } catch (Exception ignored) {
         }

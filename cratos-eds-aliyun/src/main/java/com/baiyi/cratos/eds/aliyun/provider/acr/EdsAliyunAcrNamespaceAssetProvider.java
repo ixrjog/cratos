@@ -27,6 +27,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.List;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ACR_INSTANCE_ID;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/7/22 上午10:52
@@ -37,8 +39,6 @@ import java.util.List;
 public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, ListNamespaceResponse.NamespacesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
-
-    private static final String ACR_INSTANCE_ID = "acr.instanceId";
 
     public EdsAliyunAcrNamespaceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                               CredentialService credentialService,
@@ -86,11 +86,10 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset,
-                                                      ListNamespaceResponse.NamespacesItem entity) {
+                                                      EdsAsset edsAsset, ListNamespaceResponse.NamespacesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ACR_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
         } catch (Exception ignored) {
         }
         return indices;
