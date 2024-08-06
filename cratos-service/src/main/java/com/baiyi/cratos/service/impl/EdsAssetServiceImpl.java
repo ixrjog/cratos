@@ -48,6 +48,16 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType,String region) {
+        Example example = new Example(EdsAsset.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("instanceId", instanceId)
+                .andEqualTo("assetType", assetType)
+                .andEqualTo("region", region);
+        return edsAssetMapper.selectByExample(example);
+    }
+
+    @Override
     public List<EdsAsset> queryAssetByParam(String assetKey, String assetType) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();

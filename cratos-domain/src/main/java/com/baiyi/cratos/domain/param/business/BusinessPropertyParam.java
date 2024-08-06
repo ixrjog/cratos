@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.business;
 
+import com.baiyi.cratos.domain.annotation.ApiModelPropertyPro;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessProperty;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,6 +25,8 @@ public class BusinessPropertyParam {
     public static class SaveBusinessProperty implements IToTarget<BusinessProperty> {
         private Integer id;
         @NotBlank(message = "BusinessType must be specified.")
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
         @NotNull(message = "BusinessId must be specified.")
         private Integer businessId;
@@ -36,6 +40,8 @@ public class BusinessPropertyParam {
     @Schema
     public static class AddBusinessProperty implements IToTarget<BusinessProperty> {
         @NotBlank(message = "BusinessType must be specified.")
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
         @NotNull(message = "BusinessId must be specified.")
         private Integer businessId;

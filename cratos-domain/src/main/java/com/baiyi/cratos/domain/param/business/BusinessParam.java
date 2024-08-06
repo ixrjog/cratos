@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.param.business;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.annotation.ApiModelPropertyPro;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -20,6 +22,8 @@ public class BusinessParam {
     @Schema
     public static class GetByBusiness implements BaseBusiness.HasBusiness {
         @NotNull
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
         @NotNull
         private Integer businessId;
@@ -29,6 +33,8 @@ public class BusinessParam {
     @Schema
     public static class QueryByBusinessType implements BaseBusiness.HasBusinessType {
         @NotNull
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
     }
 

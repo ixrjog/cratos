@@ -69,6 +69,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                 .getId(), edsAssetTypeEnum.name());
     }
 
+    protected List<EdsAsset> queryByInstanceAssets(ExternalDataSourceInstance<C> instance,
+                                                   EdsAssetTypeEnum edsAssetTypeEnum, String region) {
+        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
+                .getId(), edsAssetTypeEnum.name(), region);
+    }
+
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
@@ -172,7 +178,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                 // 更新绑定的资产
                 updateBusinessFromAssetHandler.update(newEdsAsset);
             }
-        } return newEdsAsset;
+        }
+        return newEdsAsset;
     }
 
     /**

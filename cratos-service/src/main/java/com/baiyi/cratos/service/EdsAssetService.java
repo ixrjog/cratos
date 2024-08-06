@@ -18,6 +18,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset>, BaseSer
 
     List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType);
 
+    List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType,String region);
+
     DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery);
 
     List<EdsAsset> queryAssetByParam(String assetKey, String assetType);

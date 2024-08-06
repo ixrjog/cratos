@@ -52,5 +52,4 @@ public enum BusinessTypeEnum {
     SSH_INSTANCE,
     SSH_COMMAND
 
-
 }

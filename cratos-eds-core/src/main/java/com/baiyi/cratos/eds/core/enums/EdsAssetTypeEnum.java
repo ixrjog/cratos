@@ -27,6 +27,8 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ACR_INSTANCE("ACR Instance"),
     ALIYUN_ACR_REPOSITORY("ACR Repository"),
     ALIYUN_REDIS("Redis"),
+    ALIYUN_RDS_INSTANCE("RDS Instance"),
+    ALIYUN_RDS_DATABASE("RDS DB"),
 
     AWS_CERT("Certificate"),
     AWS_STS_VPN("Site-to-Site VPN"),

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.param.doc;
 
 import com.baiyi.cratos.domain.ISetSessionUser;
+import com.baiyi.cratos.domain.annotation.ApiModelPropertyPro;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,6 +23,8 @@ public class BusinessDocParam {
     @Schema
     public static class AddBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
         private Integer id;
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
         private Integer businessId;
         private String documentType;
@@ -39,6 +43,8 @@ public class BusinessDocParam {
     @Schema
     public static class UpdateBusinessDoc implements IToTarget<BusinessDocument>, ISetSessionUser {
         private Integer id;
+        @Schema(description = "Obtain from the enumeration class 'BusinessTypeEnum'")
+        @ApiModelPropertyPro(value = BusinessTypeEnum.class)
         private String businessType;
         private Integer businessId;
         private String documentType;
