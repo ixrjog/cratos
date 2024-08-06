@@ -17,7 +17,6 @@ public class AliyunArms {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TraceApps {
-
         private Long appId;
         private String appName;
         private Long createTime;
@@ -31,7 +30,6 @@ public class AliyunArms {
         private String type;
         private Long updateTime;
         private String userId;
-
     }
 
     @Data
