@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,17 +36,22 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
         // Wrap Eds Config
         edsConfigWrapper.wrap(edsInstance);
         edsInstance.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType()));
-        List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType())
+        List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(
+                        edsInstance.getEdsType())
                 .stream()
-                .map(e -> {
-                    EdsAssetTypeEnum type = EdsAssetTypeEnum.valueOf(e);
-                    return EdsAssetTypeVO.Type.builder()
-                            .type(type.name())
-                            .displayName(type.getDisplayName())
-                            .build();
-                })
+                .map(this::toType)
+                .sorted(Comparator.comparingInt(EdsAssetTypeVO.Type::getSeq))
                 .toList();
         edsInstance.setInstanceAssetTypes(instanceAssetTypes);
+    }
+
+    private EdsAssetTypeVO.Type toType(String name) {
+        EdsAssetTypeEnum type = EdsAssetTypeEnum.valueOf(name);
+        return EdsAssetTypeVO.Type.builder()
+                .type(type.name())
+                .displayName(type.getDisplayName())
+                .seq(type.getSeq())
+                .build();
     }
 
 }

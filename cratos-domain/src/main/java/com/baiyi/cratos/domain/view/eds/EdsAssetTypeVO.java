@@ -29,6 +29,7 @@ public class EdsAssetTypeVO {
         private static final long serialVersionUID = -8261828006913399570L;
         private String type;
         private String displayName;
+        private Integer seq;
     }
 
 }
