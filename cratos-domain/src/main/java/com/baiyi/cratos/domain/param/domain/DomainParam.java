@@ -37,6 +37,7 @@ public class DomainParam {
         private String queryName;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
+
         public DomainPageQueryParam toParam() {
             return DomainPageQueryParam.builder()
                     .page(getPage())

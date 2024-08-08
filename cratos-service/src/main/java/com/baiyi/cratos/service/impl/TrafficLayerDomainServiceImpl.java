@@ -8,11 +8,9 @@ import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainMapper;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
-import com.baiyi.cratos.util.SqlHelper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -39,15 +37,9 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
     }
 
     @Override
-    public DataTable<TrafficLayerDomain> queryPageByParam(TrafficLayerDomainParam.DomainPageQuery pageQuery) {
+    public DataTable<TrafficLayerDomain> queryPageByParam(TrafficLayerDomainParam.DomainPageQueryParam pageQuery) {
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        Example example = new Example(TrafficLayerDomain.class);
-        if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
-            Example.Criteria criteria = example.createCriteria();
-            criteria.andLike("domain", SqlHelper.toLike(pageQuery.getQueryName()));
-        }
-        //example.setOrderByClause("create_time");
-        List<TrafficLayerDomain> data = trafficLayerDomainMapper.selectByExample(example);
+        List<TrafficLayerDomain> data = trafficLayerDomainMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
     }
 

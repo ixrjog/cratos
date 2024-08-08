@@ -1,7 +1,9 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.TrafficLayerException;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
@@ -39,8 +41,9 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
     private final EnvService envService;
 
     @Override
+    @PageQueryByTag(ofType = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
     public DataTable<TrafficLayerDomainVO.Domain> queryDomainPage(TrafficLayerDomainParam.DomainPageQuery pageQuery) {
-        DataTable<TrafficLayerDomain> table = domainService.queryPageByParam(pageQuery);
+        DataTable<TrafficLayerDomain> table = domainService.queryPageByParam(pageQuery.toParam());
         return domainWrapper.wrapToTarget(table);
     }
 
