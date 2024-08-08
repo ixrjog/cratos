@@ -74,20 +74,22 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
         return envService.selectAll()
                 .stream()
                 .filter(Env::getValid)
-                .map(e -> {
-                    TrafficLayerDomainRecord uniqueKey = TrafficLayerDomainRecord.builder()
-                            .envName(e.getEnvName())
-                            .domainId(queryDomainEnv.getDomainId())
-                            .build();
-                    boolean valid = recordService.getByUniqueKey(uniqueKey) != null;
-                    return TrafficLayerDomainVO.DomainEnv.builder()
-                            .envName(e.getEnvName())
-                            .seq(e.getSeq())
-                            .valid(valid )
-                            .build();
-                })
+                .map(e -> toTrafficLayerDomainEnv(queryDomainEnv.getDomainId(), e))
                 .sorted(Comparator.comparing(TrafficLayerDomainVO.DomainEnv::getSeq))
                 .collect(Collectors.toList());
+    }
+
+    private TrafficLayerDomainVO.DomainEnv toTrafficLayerDomainEnv(int domainId, Env env) {
+        TrafficLayerDomainRecord uniqueKey = TrafficLayerDomainRecord.builder()
+                .envName(env.getEnvName())
+                .domainId(domainId)
+                .build();
+        boolean valid = recordService.getByUniqueKey(uniqueKey) != null;
+        return TrafficLayerDomainVO.DomainEnv.builder()
+                .envName(env.getEnvName())
+                .seq(env.getSeq())
+                .valid(valid)
+                .build();
     }
 
 }
