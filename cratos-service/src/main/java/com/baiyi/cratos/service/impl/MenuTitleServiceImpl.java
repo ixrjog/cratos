@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.mapper.MenuTitleMapper;
 import com.baiyi.cratos.service.MenuTitleService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -24,7 +25,7 @@ public class MenuTitleServiceImpl implements MenuTitleService {
     private final MenuTitleMapper menuTitleMapper;
 
     @Override
-    public MenuTitle getByUniqueKey(MenuTitle record) {
+    public MenuTitle getByUniqueKey(@NonNull MenuTitle record) {
         Example example = new Example(MenuTitle.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("menuId", record.getMenuId())

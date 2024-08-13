@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.mapper.RbacRoleResourceMapper;
 import com.baiyi.cratos.service.RbacRoleResourceService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -29,7 +30,7 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
     }
 
     @Override
-    public RbacRoleResource getByUniqueKey(RbacRoleResource record) {
+    public RbacRoleResource getByUniqueKey(@NonNull RbacRoleResource record) {
         Example example = new Example(RbacRoleResource.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("roleId", record.getRoleId())

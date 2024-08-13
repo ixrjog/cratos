@@ -8,6 +8,7 @@ import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.util.SqlHelper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getByUniqueKey(Tag record) {
+    public Tag getByUniqueKey(@NonNull Tag record) {
         Example example = new Example(Tag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("tagKey", record.getTagKey());

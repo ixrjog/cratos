@@ -9,6 +9,7 @@ import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     private final EdsAssetMapper edsAssetMapper;
 
     @Override
-    public EdsAsset getByUniqueKey(EdsAsset record) {
+    public EdsAsset getByUniqueKey(@NonNull EdsAsset record) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("instanceId", record.getInstanceId())

@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.mapper.RbacUserRoleMapper;
 import com.baiyi.cratos.service.RbacUserRoleService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -45,7 +46,7 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
     }
 
     @Override
-    public RbacUserRole getByUniqueKey(RbacUserRole record) {
+    public RbacUserRole getByUniqueKey(@NonNull RbacUserRole record) {
         Example example = new Example(RbacUserRole.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", record.getUsername())

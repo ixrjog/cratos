@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -21,7 +22,7 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     private final EdsAssetIndexMapper edsAssetIndexMapper;
 
     @Override
-    public EdsAssetIndex getByUniqueKey(EdsAssetIndex record) {
+    public EdsAssetIndex getByUniqueKey(@NonNull EdsAssetIndex record) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("instanceId", record.getInstanceId())
@@ -47,7 +48,18 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryIndexByName(String name) {
+    public List<EdsAssetIndex> queryInstanceIndexByNameAndValue(@NonNull Integer instanceId, @NonNull String name,
+                                                                @NonNull String value) {
+        Example example = new Example(EdsAssetIndex.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("instanceId", instanceId)
+                .andEqualTo("name", name)
+                .andEqualTo("value", value);
+        return edsAssetIndexMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryIndexByName(@NonNull String name) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", name);
@@ -55,7 +67,7 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryIndexByValue(String value) {
+    public List<EdsAssetIndex> queryIndexByValue(@NonNull String value) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("value", value);
@@ -63,12 +75,18 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryIndexByNameAndValue(String name, String value) {
+    public List<EdsAssetIndex> queryIndexByNameAndValue(@NonNull String name, @NonNull String value) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", name)
                 .andEqualTo("value", value);
         return edsAssetIndexMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryIndexByParam(@NonNull Integer instanceId,
+                                                 @NonNull String value, @NonNull String assetType) {
+        return edsAssetIndexMapper.queryIndexByParam(instanceId, value, assetType);
     }
 
 }

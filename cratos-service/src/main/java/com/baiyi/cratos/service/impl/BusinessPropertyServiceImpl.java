@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessProperty;
 import com.baiyi.cratos.mapper.BusinessPropertyMapper;
 import com.baiyi.cratos.service.BusinessPropertyService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class BusinessPropertyServiceImpl implements BusinessPropertyService {
     }
 
     @Override
-    public BusinessProperty getByUniqueKey(BusinessProperty record) {
+    public BusinessProperty getByUniqueKey(@NonNull BusinessProperty record) {
         Example example = new Example(BusinessProperty.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", record.getBusinessType())

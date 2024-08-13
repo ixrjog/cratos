@@ -11,6 +11,7 @@ import com.baiyi.cratos.mapper.UserMapper;
 import com.baiyi.cratos.service.UserService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByUniqueKey(User record) {
+    public User getByUniqueKey(@NonNull User record) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("username", record.getUsername());

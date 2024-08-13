@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
-import com.baiyi.cratos.facade.ServerAccountFacade;
+import com.baiyi.cratos.facade.server.ServerAccountFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

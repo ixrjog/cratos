@@ -7,6 +7,7 @@ import com.baiyi.cratos.mapper.SshSessionMapper;
 import com.baiyi.cratos.service.SshSessionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -32,7 +33,7 @@ public class SshSessionServiceImpl implements SshSessionService {
     }
 
     @Override
-    public SshSession getByUniqueKey(SshSession record) {
+    public SshSession getByUniqueKey(@NonNull SshSession record) {
         Example example = new Example(SshSession.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sessionId", record.getSessionId());

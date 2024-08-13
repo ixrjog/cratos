@@ -9,6 +9,7 @@ import com.baiyi.cratos.mapper.ServerAccountMapper;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -28,7 +29,7 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     private final ServerAccountMapper serverAccountMapper;
 
     @Override
-    public ServerAccount getByUniqueKey(ServerAccount record) {
+    public ServerAccount getByUniqueKey(@NonNull ServerAccount record) {
         Example example = new Example(ServerAccount.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());

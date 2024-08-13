@@ -11,6 +11,7 @@ import com.baiyi.cratos.mapper.AssetMaturityMapper;
 import com.baiyi.cratos.service.AssetMaturityService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class AssetMaturityServiceImpl implements AssetMaturityService {
     private final AssetMaturityMapper assetMaturityMapper;
 
     @Override
-    public AssetMaturity getByUniqueKey(AssetMaturity record) {
+    public AssetMaturity getByUniqueKey(@NonNull AssetMaturity record) {
         Example example = new Example(AssetMaturity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());

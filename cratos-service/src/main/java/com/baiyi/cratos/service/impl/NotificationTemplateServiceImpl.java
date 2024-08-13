@@ -7,6 +7,7 @@ import com.baiyi.cratos.mapper.NotificationTemplateMapper;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -25,7 +26,7 @@ public class NotificationTemplateServiceImpl implements NotificationTemplateServ
     private final NotificationTemplateMapper notificationTemplateMapper;
 
     @Override
-    public NotificationTemplate getByUniqueKey(NotificationTemplate record) {
+    public NotificationTemplate getByUniqueKey(@NonNull NotificationTemplate record) {
         Example example = new Example(NotificationTemplate.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("notificationTemplateKey", record.getNotificationTemplateKey())

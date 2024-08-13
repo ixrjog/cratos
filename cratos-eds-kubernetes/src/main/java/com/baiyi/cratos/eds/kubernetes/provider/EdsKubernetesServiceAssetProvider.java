@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.provider;
 
+import com.baiyi.cratos.common.util.AbstractUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -19,13 +20,19 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Service;
+import io.fabric8.kubernetes.api.model.ServiceSpec;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ENV;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_SERVICE_SELECTOR;
 
 /**
  * &#064;Author  baiyi
@@ -61,12 +68,17 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             Service entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
-        String env = getMetadataLabel(entity, "env");
+        String env = getMetadataLabel(entity, ENV);
         if (StringUtils.hasText(env)) {
-            indices.add(toEdsAssetIndex(edsAsset, "env", env));
+            indices.add(toEdsAssetIndex(edsAsset, ENV, env));
         }
-        String appName = getMetadataLabel(entity, "app");
-        if (StringUtils.hasText(appName)) {
+        // 选择器
+        Map<String, String> selector = Optional.of(entity)
+                .map(Service::getSpec)
+                .map(ServiceSpec::getSelector)
+                .orElse(Maps.newHashMap());
+        if (selector.containsKey("app")) {
+            String appName = selector.get("app");
             if (StringUtils.hasText(env)) {
                 // 去掉环境后缀
                 if (appName.endsWith("-" + env)) {
@@ -75,6 +87,7 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             }
             indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
+        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_SERVICE_SELECTOR, AbstractUtil.mapToString(selector)));
         return indices;
     }
 

@@ -69,6 +69,7 @@ public class EdsInstanceParam {
     @Schema
     public static class ImportInstanceAsset {
         @Schema(description = "Eds Instance ID")
+        @NotNull
         private Integer instanceId;
         // private String instanceType;
         private String assetType;
@@ -80,6 +81,7 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class AssetPageQuery extends PageParam {
+        @NotNull
         private Integer instanceId;
         @Schema(description = "Query by name")
         private String queryName;

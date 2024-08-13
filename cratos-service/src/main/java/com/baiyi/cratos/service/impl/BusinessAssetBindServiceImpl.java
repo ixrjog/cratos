@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.mapper.BusinessAssetBindMapper;
 import com.baiyi.cratos.service.BusinessAssetBindService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
     }
 
     @Override
-    public BusinessAssetBind getByUniqueKey(BusinessAssetBind record) {
+    public BusinessAssetBind getByUniqueKey(@NonNull BusinessAssetBind record) {
         Example example = new Example(BusinessAssetBind.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", record.getBusinessType())

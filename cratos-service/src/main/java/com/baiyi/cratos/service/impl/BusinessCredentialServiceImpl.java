@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.mapper.BusinessCredentialMapper;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,7 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
     }
 
     @Override
-    public BusinessCredential getByUniqueKey(BusinessCredential record) {
+    public BusinessCredential getByUniqueKey(@NonNull BusinessCredential record) {
         Example example = new Example(BusinessCredential.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", record.getBusinessType())

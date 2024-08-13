@@ -10,6 +10,7 @@ import com.baiyi.cratos.mapper.MenuMapper;
 import com.baiyi.cratos.service.MenuService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -29,7 +30,7 @@ public class MenuServiceImpl implements MenuService {
     private final MenuMapper menuMapper;
 
     @Override
-    public Menu getByUniqueKey(Menu record) {
+    public Menu getByUniqueKey(@NonNull Menu record) {
         Example example = new Example(Menu.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());

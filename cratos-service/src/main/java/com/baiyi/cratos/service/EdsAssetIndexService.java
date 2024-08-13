@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -18,10 +19,16 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     int selectCountByAssetId(int assetId);
 
-    List<EdsAssetIndex> queryIndexByName(String name);
+    List<EdsAssetIndex> queryInstanceIndexByNameAndValue(@NonNull Integer instanceId, @NonNull String name,
+                                                         @NonNull String value);
 
-    List<EdsAssetIndex> queryIndexByValue(String value);
+    List<EdsAssetIndex> queryIndexByName(@NonNull String name);
 
-    List<EdsAssetIndex> queryIndexByNameAndValue(String name, String value);
+    List<EdsAssetIndex> queryIndexByValue(@NonNull String value);
+
+    List<EdsAssetIndex> queryIndexByNameAndValue(@NonNull String name, @NonNull String value);
+
+    List<EdsAssetIndex> queryIndexByParam(@NonNull Integer instanceId, @NonNull String value,
+                                          @NonNull String assetType);
 
 }

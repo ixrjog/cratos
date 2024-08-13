@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.mapper.SshSessionInstanceMapper;
 import com.baiyi.cratos.service.SshSessionInstanceService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -21,7 +22,7 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
     private final SshSessionInstanceMapper sshSessionInstanceMapper;
 
     @Override
-    public SshSessionInstance getByUniqueKey(SshSessionInstance record) {
+    public SshSessionInstance getByUniqueKey(@NonNull SshSessionInstance record) {
         Example example = new Example(SshSessionInstance.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("instanceId", record.getInstanceId());

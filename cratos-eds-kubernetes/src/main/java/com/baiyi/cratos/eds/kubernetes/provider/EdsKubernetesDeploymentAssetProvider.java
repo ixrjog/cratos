@@ -70,9 +70,9 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
-        String env = getMetadataLabel(entity, "env");
+        String env = getMetadataLabel(entity, ENV);
         if (StringUtils.hasText(env)) {
-            indices.add(toEdsAssetIndex(edsAsset, "env", env));
+            indices.add(toEdsAssetIndex(edsAsset, ENV, env));
         }
         String appName = getMetadataLabel(entity, "app");
         if (StringUtils.hasText(appName)) {

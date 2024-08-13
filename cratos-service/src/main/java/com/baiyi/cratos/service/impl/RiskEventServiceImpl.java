@@ -11,6 +11,7 @@ import com.baiyi.cratos.mapper.RiskEventMapper;
 import com.baiyi.cratos.service.RiskEventService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -30,7 +31,7 @@ public class RiskEventServiceImpl implements RiskEventService {
     private final RiskEventMapper riskEventMapper;
 
     @Override
-    public RiskEvent getByUniqueKey(RiskEvent record) {
+    public RiskEvent getByUniqueKey(@NonNull RiskEvent record) {
         Example example = new Example(RiskEvent.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());

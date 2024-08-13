@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.base;
 
 import com.baiyi.cratos.annotation.DomainDecrypt;
+import lombok.NonNull;
 
 /**
  * @Author baiyi
@@ -10,6 +11,6 @@ import com.baiyi.cratos.annotation.DomainDecrypt;
 public interface BaseUniqueKeyService<T> {
 
     @DomainDecrypt
-    T getByUniqueKey(T record);
+    T getByUniqueKey(@NonNull T record);
 
 }

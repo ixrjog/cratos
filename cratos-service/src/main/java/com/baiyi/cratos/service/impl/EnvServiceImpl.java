@@ -9,6 +9,7 @@ import com.baiyi.cratos.mapper.EnvMapper;
 import com.baiyi.cratos.service.EnvService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -35,7 +36,7 @@ public class EnvServiceImpl implements EnvService {
     }
 
     @Override
-    public Env getByUniqueKey(Env record) {
+    public Env getByUniqueKey(@NonNull Env record) {
         Example example = new Example(Env.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("envName", record.getEnvName());

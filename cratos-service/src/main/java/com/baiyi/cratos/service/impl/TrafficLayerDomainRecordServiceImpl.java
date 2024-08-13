@@ -11,6 +11,7 @@ import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.util.SqlHelper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
     }
 
     @Override
-    public TrafficLayerDomainRecord getByUniqueKey(TrafficLayerDomainRecord record) {
+    public TrafficLayerDomainRecord getByUniqueKey(@NonNull TrafficLayerDomainRecord record) {
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("domainId", record.getDomainId())

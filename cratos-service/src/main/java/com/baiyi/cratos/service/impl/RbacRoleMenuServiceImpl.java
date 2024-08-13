@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.RbacRoleMenu;
 import com.baiyi.cratos.mapper.RbacRoleMenuMapper;
 import com.baiyi.cratos.service.RbacRoleMenuService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -21,7 +22,7 @@ public class RbacRoleMenuServiceImpl implements RbacRoleMenuService {
     private final RbacRoleMenuMapper rbacRoleMenuMapper;
 
     @Override
-    public RbacRoleMenu getByUniqueKey(RbacRoleMenu record) {
+    public RbacRoleMenu getByUniqueKey(@NonNull RbacRoleMenu record) {
         Example example = new Example(RbacRoleMenu.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("roleId", record.getRoleId())

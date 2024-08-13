@@ -10,6 +10,7 @@ import com.baiyi.cratos.mapper.TrafficLayerDomainMapper;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -29,7 +30,7 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
     private final TrafficLayerDomainMapper trafficLayerDomainMapper;
 
     @Override
-    public TrafficLayerDomain getByUniqueKey(TrafficLayerDomain record) {
+    public TrafficLayerDomain getByUniqueKey(@NonNull TrafficLayerDomain record) {
         Example example = new Example(TrafficLayerDomain.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("domain", record.getDomain());

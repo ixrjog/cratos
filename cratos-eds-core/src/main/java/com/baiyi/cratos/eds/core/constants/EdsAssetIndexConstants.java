@@ -33,7 +33,10 @@ public interface EdsAssetIndexConstants {
     String DINGTALK_USER_BOSS = "dingtalk.boss";
     String DINGTALK_USER_JOB_NUMBER = "dingtalk.jobNumber";
 
+    String ENV = "env";
+
     String KUBERNETES_NAMESPACE = "namespace";
+    String KUBERNETES_SERVICE_SELECTOR = "kubernetes.service.selector";
 
     String KUBERNETES_REPLICAS = "replicas";
     String KUBERNETES_GROUP = "deployment.spec.template.metadata.labels.group";

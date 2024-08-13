@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.EdsAssetIndexMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.EdsAssetIndex">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="instance_id" jdbcType="INTEGER" property="instanceId" />
-    <result column="asset_id" jdbcType="INTEGER" property="assetId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="value" jdbcType="VARCHAR" property="value" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.EdsAssetIndex">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="instance_id" jdbcType="INTEGER" property="instanceId"/>
+        <result column="asset_id" jdbcType="INTEGER" property="assetId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryIndexByParam"
+            resultMap="BaseResultMap">
+        select a0.*
+        from eds_asset_index a0
+                 join eds_asset a1 on a0.asset_id = a1.id
+        where a0.instance_id = #{instanceId}
+          and a1.asset_type = #{assetType}
+          and a0.value = #{value}
+    </select>
+
 </mapper>

@@ -13,6 +13,7 @@ import com.baiyi.cratos.service.factory.credential.CredentialHolderFactory;
 import com.baiyi.cratos.service.factory.credential.ICredentialHolder;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -47,7 +48,7 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
     }
 
     @Override
-    public EdsConfig getByUniqueKey(EdsConfig record) {
+    public EdsConfig getByUniqueKey(@NonNull EdsConfig record) {
         Example example = new Example(EdsInstance.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());

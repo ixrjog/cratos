@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
-import com.baiyi.cratos.facade.ServerAccountFacade;
+import com.baiyi.cratos.facade.server.ServerAccountFacade;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.ServerAccountService;

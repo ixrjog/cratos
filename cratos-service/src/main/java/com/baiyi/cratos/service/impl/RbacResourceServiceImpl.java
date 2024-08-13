@@ -8,6 +8,7 @@ import com.baiyi.cratos.mapper.RbacResourceMapper;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -26,7 +27,7 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     private final RbacResourceMapper rbacResourceMapper;
 
     @Override
-    public RbacResource getByUniqueKey(RbacResource record) {
+    public RbacResource getByUniqueKey(@NonNull RbacResource record) {
         Example example = new Example(RbacResource.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("resourceName", record.getResourceName());

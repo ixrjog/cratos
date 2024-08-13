@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.facade.server;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.server.ServerAccountParam;

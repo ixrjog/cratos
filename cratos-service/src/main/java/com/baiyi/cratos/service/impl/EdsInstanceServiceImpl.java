@@ -9,6 +9,7 @@ import com.baiyi.cratos.mapper.EdsInstanceMapper;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -35,7 +36,7 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     }
 
     @Override
-    public EdsInstance getByUniqueKey(EdsInstance record) {
+    public EdsInstance getByUniqueKey(@NonNull EdsInstance record) {
         Example example = new Example(EdsInstance.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("instanceName", record.getInstanceName());

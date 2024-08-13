@@ -7,6 +7,7 @@ import com.baiyi.cratos.mapper.RbacGroupMapper;
 import com.baiyi.cratos.service.RbacGroupService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -32,7 +33,7 @@ public class RbacGroupServiceImpl implements RbacGroupService {
     }
 
     @Override
-    public RbacGroup getByUniqueKey(RbacGroup record) {
+    public RbacGroup getByUniqueKey(@NonNull RbacGroup record) {
         Example example = new Example(RbacGroup.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("groupName", record.getGroupName());

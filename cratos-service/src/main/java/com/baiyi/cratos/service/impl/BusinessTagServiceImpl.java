@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public BusinessTag getByUniqueKey(BusinessTag record) {
+    public BusinessTag getByUniqueKey(@NonNull BusinessTag record) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("businessType", record.getBusinessType())

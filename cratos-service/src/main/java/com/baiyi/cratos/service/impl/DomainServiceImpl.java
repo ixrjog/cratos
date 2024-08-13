@@ -10,6 +10,7 @@ import com.baiyi.cratos.mapper.DomainMapper;
 import com.baiyi.cratos.service.DomainService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -37,7 +38,7 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
-    public Domain getByUniqueKey(Domain record) {
+    public Domain getByUniqueKey(@NonNull Domain record) {
         Example example = new Example(Domain.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());
