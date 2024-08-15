@@ -121,7 +121,7 @@ public class TrafficLayerController {
 
     @Operation(summary = "Query traffic layer ingress details")
     @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
+    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
         return new HttpResult<>(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
     }
