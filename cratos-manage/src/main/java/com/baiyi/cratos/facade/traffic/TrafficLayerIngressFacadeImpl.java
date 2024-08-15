@@ -38,7 +38,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
 
     private static final int MAX_SIZE = 5;
 
-    public final static String[] INGRESS_TABLE_FIELD_NAME = {"Kubernetes", "Namespace:Ingress", "Service", "Load Balancer"};
+    public final static String[] INGRESS_TABLE_FIELD_NAME = {"Kubernetes", "Namespace:Ingress", "Rule", "Service", "Load Balancer"};
 
     @Override
     public TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
@@ -55,9 +55,10 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                 EdsInstance edsInstance = instanceService.getById(edsAsset.getInstanceId());
                 final String kubernetesInstance = edsInstance.getInstanceName();
                 final String ingress = edsAsset.getAssetKey();
+                final String rule = index.getName();
                 final String service = index.getValue();
                 final String lb = getIngressLBName(index);
-                ingressTable.addRow(kubernetesInstance, ingress, service, lb);
+                ingressTable.addRow(kubernetesInstance, ingress, rule, service, lb);
             }
         });
         return TrafficLayerIngressVO.IngressDetails.builder()

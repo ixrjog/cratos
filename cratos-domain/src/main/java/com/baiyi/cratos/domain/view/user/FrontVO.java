@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -12,12 +14,14 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class UIVO {
+public class FrontVO {
 
     @Data
     @Schema
-    public static class UI {
-      //  private List<MenuVO.Menu> menuInfo;
+    public static class Front {
+        @Schema(description = "RBAC group")
+        private String group;
+        private Map<String, Boolean> pointMap;
     }
 
 }

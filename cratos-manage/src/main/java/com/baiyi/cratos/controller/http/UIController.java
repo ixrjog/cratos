@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.view.user.UIVO;
+import com.baiyi.cratos.domain.view.user.FrontVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class UIController {
 
     @Operation(summary = "Get UI")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<UIVO.UI> getUI() {
+    public HttpResult<FrontVO.Front> getUI() {
         // TODO
         return null;
     }

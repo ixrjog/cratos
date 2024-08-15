@@ -28,9 +28,7 @@ public class TrafficLayerDomainVO {
 
     public interface HasDomain {
         Integer getDomainId();
-
         void setDomain(Domain domain);
-
     }
 
     @EqualsAndHashCode(callSuper = true)
