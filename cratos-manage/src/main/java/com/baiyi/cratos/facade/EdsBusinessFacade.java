@@ -11,6 +11,6 @@ import com.baiyi.cratos.domain.view.eds.EdsBusinessVO;
 public interface EdsBusinessFacade {
 
     EdsBusinessVO.KubernetesInstanceResource queryKubernetesInstanceResource(
-            EdsBusinessParam.KubernetesInstanceResourceQuery kubernetesInstanceResourceQuery);
+            final EdsBusinessParam.KubernetesInstanceResourceQuery kubernetesInstanceResourceQuery);
 
 }

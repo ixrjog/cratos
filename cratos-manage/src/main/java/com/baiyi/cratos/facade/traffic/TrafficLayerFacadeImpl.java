@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;

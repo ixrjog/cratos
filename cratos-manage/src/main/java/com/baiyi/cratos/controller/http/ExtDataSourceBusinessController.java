@@ -27,6 +27,11 @@ public class ExtDataSourceBusinessController {
 
     private final EdsBusinessFacade edsBusinessFacade;
 
+    /**
+     * 使用appName查询Kubernetes实例中所有的关联资源, Service、Deployment、Ingress
+     * @param kubernetesInstanceResourceQuery
+     * @return
+     */
     @Operation(summary = "Query eds kubernetes instance resource")
     @GetMapping(value = "/kubernetes/resource/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsBusinessVO.KubernetesInstanceResource> queryKubernetesInstanceResource(

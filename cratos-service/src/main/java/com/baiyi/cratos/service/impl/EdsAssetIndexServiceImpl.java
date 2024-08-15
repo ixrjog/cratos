@@ -84,9 +84,15 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryIndexByParam(@NonNull Integer instanceId,
-                                                 @NonNull String value, @NonNull String assetType) {
+    public List<EdsAssetIndex> queryIndexByParam(@NonNull Integer instanceId, @NonNull String value,
+                                                 @NonNull String assetType) {
         return edsAssetIndexMapper.queryIndexByParam(instanceId, value, assetType);
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryIndexByParam(@NonNull String namePrefix, @NonNull String assetType, int size) {
+        int limit = Math.min(size, 100);
+        return edsAssetIndexMapper.queryIndexByNamePrefixAndAssetType(namePrefix, assetType, limit);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;

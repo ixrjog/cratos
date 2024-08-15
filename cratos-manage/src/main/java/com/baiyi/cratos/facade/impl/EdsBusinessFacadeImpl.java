@@ -43,7 +43,7 @@ public class EdsBusinessFacadeImpl implements EdsBusinessFacade {
 
     @Override
     public EdsBusinessVO.KubernetesInstanceResource queryKubernetesInstanceResource(
-            EdsBusinessParam.KubernetesInstanceResourceQuery kubernetesInstanceResourceQuery) {
+            final EdsBusinessParam.KubernetesInstanceResourceQuery kubernetesInstanceResourceQuery) {
         final int instanceId = kubernetesInstanceResourceQuery.getInstanceId();
         // 查询实例下所有的APP_NAME匹配的索引
         List<EdsAssetIndex> indices = indexService.queryInstanceIndexByNameAndValue(

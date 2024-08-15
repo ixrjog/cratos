@@ -25,4 +25,15 @@
           and a0.value = #{value}
     </select>
 
+    <select id="queryIndexByNamePrefixAndAssetType"
+            resultMap="BaseResultMap">
+        select a0.*
+        from eds_asset_index a0
+                 join eds_asset a1 on a0.asset_id = a1.id
+        where
+          a1.asset_type = #{assetType}
+          and a0.name like #{namePrefix} "%"
+          limit #{limit}
+    </select>
+
 </mapper>

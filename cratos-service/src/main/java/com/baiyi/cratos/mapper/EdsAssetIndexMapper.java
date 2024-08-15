@@ -8,7 +8,11 @@ import java.util.List;
 
 public interface EdsAssetIndexMapper extends Mapper<EdsAssetIndex> {
 
-    List<EdsAssetIndex> queryIndexByParam(@Param("instanceId") Integer instanceId,
-                                          @Param("value") String value, @Param("assetType") String assetType);
+    List<EdsAssetIndex> queryIndexByParam(@Param("instanceId") Integer instanceId, @Param("value") String value,
+                                          @Param("assetType") String assetType);
+
+    List<EdsAssetIndex> queryIndexByNamePrefixAndAssetType(@Param("namePrefix") String namePrefix,
+                                                           @Param("assetType") String assetType,
+                                                           @Param("limit") Integer limit);
 
 }
