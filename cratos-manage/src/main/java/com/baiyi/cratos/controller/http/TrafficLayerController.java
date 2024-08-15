@@ -3,11 +3,14 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.param.traffic.TrafficLayerIngressParam;
 import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
+import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
+import com.baiyi.cratos.facade.TrafficLayerIngressFacade;
 import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,9 +38,12 @@ public class TrafficLayerController {
 
     private final TrafficLayerFacade trafficLayerFacade;
 
+    private final TrafficLayerIngressFacade trafficLayerIngressFacade;
+
     @Operation(summary = "Pagination query traffic layer domain")
     @PostMapping(value = "/domain/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<TrafficLayerDomainVO.Domain>> queryTrafficLayerDomainPage(@RequestBody @Valid TrafficLayerDomainParam.DomainPageQuery pageQuery) {
+    public HttpResult<DataTable<TrafficLayerDomainVO.Domain>> queryTrafficLayerDomainPage(
+            @RequestBody @Valid TrafficLayerDomainParam.DomainPageQuery pageQuery) {
         return new HttpResult<>(domainFacade.queryDomainPage(pageQuery));
     }
 
@@ -50,7 +56,8 @@ public class TrafficLayerController {
 
     @Operation(summary = "Update traffic layer domain")
     @PutMapping(value = "/domain/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateTrafficLayerDomain(@RequestBody @Valid TrafficLayerDomainParam.UpdateDomain updateDomain) {
+    public HttpResult<Boolean> updateTrafficLayerDomain(
+            @RequestBody @Valid TrafficLayerDomainParam.UpdateDomain updateDomain) {
         domainFacade.updateTrafficLayerDomain(updateDomain);
         return HttpResult.SUCCESS;
     }
@@ -64,13 +71,15 @@ public class TrafficLayerController {
 
     @Operation(summary = "Query traffic layer domain env")
     @PostMapping(value = "/domain/env/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<TrafficLayerDomainVO.DomainEnv>> queryTrafficLayerDomainEnv(@RequestBody @Valid TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
+    public HttpResult<List<TrafficLayerDomainVO.DomainEnv>> queryTrafficLayerDomainEnv(
+            @RequestBody @Valid TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
         return new HttpResult<>(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
     }
 
     @Operation(summary = "Pagination query traffic layer record")
     @PostMapping(value = "/record/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<TrafficLayerRecordVO.Record>> queryTrafficLayerRecordPage(@RequestBody @Valid TrafficLayerRecordParam.RecordPageQuery pageQuery) {
+    public HttpResult<DataTable<TrafficLayerRecordVO.Record>> queryTrafficLayerRecordPage(
+            @RequestBody @Valid TrafficLayerRecordParam.RecordPageQuery pageQuery) {
         return new HttpResult<>(recordFacade.queryRecordPage(pageQuery));
     }
 
@@ -83,7 +92,8 @@ public class TrafficLayerController {
 
     @Operation(summary = "Update traffic layer record")
     @PutMapping(value = "/record/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateTrafficLayerRecord(@RequestBody @Valid TrafficLayerRecordParam.UpdateRecord updateRecord) {
+    public HttpResult<Boolean> updateTrafficLayerRecord(
+            @RequestBody @Valid TrafficLayerRecordParam.UpdateRecord updateRecord) {
         recordFacade.updateTrafficLayerRecord(updateRecord);
         return HttpResult.SUCCESS;
     }
@@ -97,8 +107,16 @@ public class TrafficLayerController {
 
     @Operation(summary = "Query traffic layer record details")
     @PostMapping(value = "/record/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(@RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
+    public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(
+            @RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
         return new HttpResult<>(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
+    }
+
+    @Operation(summary = "Query traffic layer ingress details")
+    @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
+            @RequestBody @Valid TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
+        return new HttpResult<>(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
     }
 
 }
