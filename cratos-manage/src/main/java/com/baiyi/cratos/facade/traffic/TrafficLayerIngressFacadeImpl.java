@@ -64,6 +64,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
         PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
+        List<String> names = Lists.newArrayList();
         indices.forEach(index -> {
             EdsAsset edsAsset = assetService.getById(index.getAssetId());
             if (edsAsset != null) {
@@ -73,11 +74,13 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                 final String rule = index.getName();
                 final String service = index.getValue();
                 final String lb = getIngressLBName(index);
+                names.add(ingress);
                 ingressTable.addRow(kubernetesInstance, ingress, rule, service, lb);
             }
         });
         return TrafficLayerIngressVO.IngressDetails.builder()
                 .ingressTable(ingressTable.toString())
+                .names(names)
                 .build();
     }
 
