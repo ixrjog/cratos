@@ -24,4 +24,14 @@ public class TrafficLayerIngressParam {
         private String queryHost;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryIngressDetails {
+        @NotBlank
+        private String name;
+    }
+
 }

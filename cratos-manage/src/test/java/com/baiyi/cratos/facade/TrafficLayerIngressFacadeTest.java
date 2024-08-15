@@ -23,12 +23,19 @@ public class TrafficLayerIngressFacadeTest extends BaseUnit {
                 // tz-pos-dev.palmpay-inc.com
                 .queryHost("tz-pos-dev.palmpay-inc.com")
                 .build();
-
-
         TrafficLayerIngressVO.IngressDetails details = trafficLayerIngressFacade.queryIngressHostDetails(
                 queryIngressHostDetails);
-
         System.out.println(details);
-
     }
+
+    @Test
+    void test2() {
+        TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails = TrafficLayerIngressParam.QueryIngressDetails.builder()
+                .name("dev:ingress-plc-dev")
+                .build();
+        TrafficLayerIngressVO.IngressDetails details = trafficLayerIngressFacade.queryIngressDetails(
+                queryIngressDetails);
+        System.out.println(details);
+    }
+
 }

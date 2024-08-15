@@ -13,4 +13,7 @@ public interface TrafficLayerIngressFacade {
     TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
             TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails);
 
+    TrafficLayerIngressVO.IngressDetails queryIngressDetails(
+            TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails);
+
 }

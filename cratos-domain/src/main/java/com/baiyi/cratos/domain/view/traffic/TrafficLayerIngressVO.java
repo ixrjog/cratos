@@ -27,6 +27,11 @@ public class TrafficLayerIngressVO {
         public static final IngressDetails EMPTY = IngressDetails.builder()
                 .build();
         private String ingressTable;
+
+        @Override
+        public String toString() {
+            return ingressTable;
+        }
     }
 
 }

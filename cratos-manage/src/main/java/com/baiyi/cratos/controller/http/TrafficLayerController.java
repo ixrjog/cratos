@@ -112,11 +112,18 @@ public class TrafficLayerController {
         return new HttpResult<>(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
     }
 
-    @Operation(summary = "Query traffic layer ingress details")
-    @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Query traffic layer ingress host details")
+    @PostMapping(value = "/ingress/host/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
         return new HttpResult<>(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
+    }
+
+    @Operation(summary = "Query traffic layer ingress details")
+    @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
+            @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
+        return new HttpResult<>(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
     }
 
 }
