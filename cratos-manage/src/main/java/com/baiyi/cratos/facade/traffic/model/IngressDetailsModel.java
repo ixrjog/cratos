@@ -28,13 +28,11 @@ public class IngressDetailsModel {
         private String rule;
         private String service;
         private String lb;
-
         @Override
         public int compareTo(@NonNull IngressEntry o) {
             return service.compareTo(o.getService());
         }
     }
-
 
     @Data
     @Builder
@@ -42,11 +40,9 @@ public class IngressDetailsModel {
     @NoArgsConstructor
     public static class IngressEntries {
         private List<IngressEntry> entries = Lists.newArrayList();
-
         public void add(IngressEntry ingressEntry) {
             entries.add(ingressEntry);
         }
-
         @Override
         public String toString() {
             PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
