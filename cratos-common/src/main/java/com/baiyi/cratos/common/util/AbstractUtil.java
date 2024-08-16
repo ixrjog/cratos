@@ -1,10 +1,7 @@
 package com.baiyi.cratos.common.util;
 
 import com.google.common.base.Joiner;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +32,7 @@ public class AbstractUtil {
         }
 
         @Override
-        public int compareTo(Entry o) {
+        public int compareTo(@NonNull Entry o) {
             return key.compareTo(o.getKey());
         }
     }

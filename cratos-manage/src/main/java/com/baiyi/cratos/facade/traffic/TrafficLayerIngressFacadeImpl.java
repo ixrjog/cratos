@@ -8,23 +8,24 @@ import com.baiyi.cratos.domain.param.traffic.TrafficLayerIngressParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.TrafficLayerIngressFacade;
+import com.baiyi.cratos.facade.traffic.model.IngressDetailsModel;
+import com.baiyi.cratos.facade.traffic.util.IngressIndexDetailsUtil;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.api.client.util.Lists;
 import com.google.api.client.util.Sets;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_NAMESPACE;
 
 /**
  * &#064;Author  baiyi
@@ -105,58 +106,39 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
         PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
+        List<IngressDetailsModel.IngressEntry> ingressEntries = Lists.newArrayList();
         ingressAssets.forEach(asset -> {
             EdsInstance edsInstance = instanceService.getById(asset.getInstanceId());
             final String kubernetesInstance = edsInstance.getInstanceName();
             final String ingress = asset.getAssetKey();
             List<EdsAssetIndex> indices = indexService.queryIndexByAssetId(asset.getId());
-            IngressIndexDetails ingressIndexDetails = toIngressIndexDetails(indices);
+            IngressDetailsModel.IngressIndexDetails ingressIndexDetails = IngressIndexDetailsUtil.toIngressIndexDetails(indices);
             if (!CollectionUtils.isEmpty(ingressIndexDetails.getRules())) {
                 ingressIndexDetails.getRules()
                         .forEach(ruleIndex -> {
                             final String rule = ruleIndex.getName();
                             final String service = ruleIndex.getValue();
                             final String lb = Optional.of(ingressIndexDetails)
-                                    .map(IngressIndexDetails::getHostname)
+                                    .map(IngressDetailsModel.IngressIndexDetails::getHostname)
                                     .map(EdsAssetIndex::getValue)
                                     .orElse("null");
-                            ingressTable.addRow(kubernetesInstance, ingress, rule, service, lb);
+                            IngressDetailsModel.IngressEntry.builder()
+                                    .kubernetes(kubernetesInstance)
+                                    .ingress(ingress)
+                                    .rule(rule)
+                                    .service(service)
+                                    .lb(lb)
+                                    .build();
                         });
             }
         });
+        Collections.sort(ingressEntries);
+        ingressEntries.forEach(
+                ingressEntry -> ingressTable.addRow(ingressEntry.getKubernetes(), ingressEntry.getIngress(),
+                        ingressEntry.getRule(), ingressEntry.getService(), ingressEntry.getLb()));
         return TrafficLayerIngressVO.IngressDetails.builder()
                 .ingressTable(ingressTable.toString())
                 .build();
-    }
-
-    public static IngressIndexDetails toIngressIndexDetails(List<EdsAssetIndex> indices) {
-        IngressIndexDetails details = IngressIndexDetails.builder()
-                .build();
-        indices.forEach(e -> {
-            if (KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME.equals(e.getName())) {
-                details.setHostname(e);
-                return;
-            }
-            if (KUBERNETES_NAMESPACE.equals(e.getName())) {
-                details.setNamespace(e);
-                return;
-            }
-            details.getRules()
-                    .add(e);
-        });
-        return details;
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class IngressIndexDetails {
-        private EdsAssetIndex namespace;
-        @Schema(description = "loadBalancer.ingress.hostname")
-        private EdsAssetIndex hostname;
-        @Builder.Default
-        private List<EdsAssetIndex> rules = Lists.newArrayList();
     }
 
 }
