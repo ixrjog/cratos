@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -28,7 +28,7 @@ public class TrafficLayerIngressVO {
         public static final IngressDetails EMPTY = IngressDetails.builder()
                 .build();
         private String ingressTable;
-        private List<String> names;
+        private Set<String> names;
 
         @Override
         public String toString() {

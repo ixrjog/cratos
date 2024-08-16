@@ -12,6 +12,7 @@ import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.api.client.util.Lists;
+import com.google.api.client.util.Sets;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_NAMESPACE;
@@ -64,7 +66,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
         PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
-        List<String> names = Lists.newArrayList();
+        Set<String> names = Sets.newHashSet();
         indices.forEach(index -> {
             EdsAsset edsAsset = assetService.getById(index.getAssetId());
             if (edsAsset != null) {
