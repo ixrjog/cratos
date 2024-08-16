@@ -13,14 +13,12 @@ import com.baiyi.cratos.facade.traffic.util.IngressIndexDetailsUtil;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.google.api.client.util.Lists;
 import com.google.api.client.util.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -105,8 +103,8 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
         if (CollectionUtils.isEmpty(ingressAssets)) {
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
-        PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
-        List<IngressDetailsModel.IngressEntry> ingressEntries = Lists.newArrayList();
+        IngressDetailsModel.IngressEntries ingressEntries = IngressDetailsModel.IngressEntries.builder()
+                .build();
         ingressAssets.forEach(asset -> {
             EdsInstance edsInstance = instanceService.getById(asset.getInstanceId());
             final String kubernetesInstance = edsInstance.getInstanceName();
@@ -133,12 +131,8 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                         });
             }
         });
-        Collections.sort(ingressEntries);
-        ingressEntries.forEach(
-                ingressEntry -> ingressTable.addRow(ingressEntry.getKubernetes(), ingressEntry.getIngress(),
-                        ingressEntry.getRule(), ingressEntry.getService(), ingressEntry.getLb()));
         return TrafficLayerIngressVO.IngressDetails.builder()
-                .ingressTable(ingressTable.toString())
+                .ingressTable(ingressEntries.toString())
                 .build();
     }
 
