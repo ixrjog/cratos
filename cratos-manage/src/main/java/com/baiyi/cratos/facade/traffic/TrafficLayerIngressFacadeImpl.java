@@ -112,7 +112,8 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             final String kubernetesInstance = edsInstance.getInstanceName();
             final String ingress = asset.getAssetKey();
             List<EdsAssetIndex> indices = indexService.queryIndexByAssetId(asset.getId());
-            IngressDetailsModel.IngressIndexDetails ingressIndexDetails = IngressIndexDetailsUtil.toIngressIndexDetails(indices);
+            IngressDetailsModel.IngressIndexDetails ingressIndexDetails = IngressIndexDetailsUtil.toIngressIndexDetails(
+                    indices);
             if (!CollectionUtils.isEmpty(ingressIndexDetails.getRules())) {
                 ingressIndexDetails.getRules()
                         .forEach(ruleIndex -> {
@@ -122,13 +123,13 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                                     .map(IngressDetailsModel.IngressIndexDetails::getHostname)
                                     .map(EdsAssetIndex::getValue)
                                     .orElse("null");
-                            IngressDetailsModel.IngressEntry.builder()
+                            ingressEntries.add(IngressDetailsModel.IngressEntry.builder()
                                     .kubernetes(kubernetesInstance)
                                     .ingress(ingress)
                                     .rule(rule)
                                     .service(service)
                                     .lb(lb)
-                                    .build();
+                                    .build());
                         });
             }
         });
