@@ -41,7 +41,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
 
     private final EdsInstanceService instanceService;
 
-    private static final int MAX_SIZE = 5;
+    private static final int MAX_SIZE = 25;
 
     public final static String[] INGRESS_TABLE_FIELD_NAME = {"Kubernetes", "Namespace:Ingress", "Rule", "Service", "Load Balancer"};
 
@@ -54,7 +54,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
      * +------------+---------------------+---------------------------------+---------+-------------------------------------------------------------------+
      *
      * @param queryIngressHostDetails
-     * @return
+     * @return TrafficLayerIngressVO.IngressDetails
      */
     @Override
     public TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
