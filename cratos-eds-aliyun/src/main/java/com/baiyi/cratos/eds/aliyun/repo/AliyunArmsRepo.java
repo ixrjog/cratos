@@ -43,6 +43,7 @@ public class AliyunArmsRepo {
                     .getTraceApps();
         } catch (Exception ex) {
             log.debug(ex.getMessage());
+            Thread.currentThread().interrupt();
             throw ex;
         }
     }
