@@ -18,72 +18,39 @@
     </properties>
 
     <dependencyManagement>
-
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>com.google.cloud</groupId>-->
-<!--                <artifactId>libraries-bom</artifactId>-->
-<!--                <version>26.39.0</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-
     </dependencyManagement>
 
     <dependencies>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-
-        <!--        <dependency>-->
-<!--            <groupId>com.google.cloud</groupId>-->
-<!--            <artifactId>google-iam-admin</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>com.google.cloud</groupId>-->
-<!--            <artifactId>google-iam-policy</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>com.google.cloud</groupId>-->
-<!--            <artifactId>google-identity-accesscontextmanager</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>3.25.3</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.auth</groupId>
             <artifactId>google-auth-library-oauth2-http</artifactId>
             <version>1.23.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-iam-admin</artifactId>
             <version>3.41.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-certificate-manager</artifactId>
             <version>0.49.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-resourcemanager</artifactId>
             <version>1.48.0</version>
         </dependency>
-
     </dependencies>
 
 </project>

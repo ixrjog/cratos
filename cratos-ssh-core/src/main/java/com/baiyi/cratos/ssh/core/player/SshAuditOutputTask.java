@@ -39,9 +39,9 @@ public class SshAuditOutputTask implements Runnable {
                 }
                 TimeUtil.millisecondsSleep(25L);
             }
-        } catch (IOException | InterruptedException ioEx) {
+        } catch (IOException ex) {
             try {
-                sendError(ioEx.getMessage());
+                sendError(ex.getMessage());
             } catch (IOException ignored) {
             }
         }

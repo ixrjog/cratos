@@ -107,14 +107,12 @@ public final class TimeUtil {
         return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
     }
 
-    public static void millisecondsSleep(long m) throws InterruptedException {
+    public static void millisecondsSleep(long m) {
         try {
             TimeUnit.MILLISECONDS.sleep(m);
         } catch (InterruptedException iEx) {
-            if (Thread.currentThread()
-                    .isInterrupted()) {
-                throw new InterruptedException();
-            }
+            Thread.currentThread()
+                    .interrupt();
         }
     }
 

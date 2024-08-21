@@ -20,39 +20,31 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-shell</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
     <profiles>
         <profile>
             <id>local</id>
-            <!--            <activation>-->
-            <!--                <activeByDefault>true</activeByDefault>-->
-            <!--            </activation>-->
             <properties>
                 <env>local</env>
             </properties>
@@ -141,7 +133,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <!--跳过test begin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
