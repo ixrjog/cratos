@@ -18,6 +18,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
  * &#064;Date  2024/7/1 上午10:56
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS)
 public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunArms.TraceApps> {
@@ -48,6 +50,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                     instance.getEdsConfigModel());
             return BeanCopierUtil.copyListProperties(appsList, AliyunArms.TraceApps.class);
         } catch (Exception e) {
+            log.debug(e.getMessage());
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }

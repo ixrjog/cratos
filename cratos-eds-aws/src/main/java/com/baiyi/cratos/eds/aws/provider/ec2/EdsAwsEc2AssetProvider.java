@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aws.provider;
+package com.baiyi.cratos.eds.aws.provider.ec2;
 
 import com.amazonaws.services.ec2.model.Instance;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -84,7 +84,7 @@ public class EdsAwsEc2AssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
                 // ARN
                 .assetIdOf(entity.getInstance()
                         .getInstanceId())
-                .nameOf(AmazonEc2Util.getInstanceName(entity.getInstance()
+                .nameOf(AmazonEc2Util.getName(entity.getInstance()
                         .getTags()))
                 .assetKeyOf(entity.getInstance()
                         .getPrivateIpAddress())

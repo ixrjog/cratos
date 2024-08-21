@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aws.provider;
+package com.baiyi.cratos.eds.aws.provider.ec2;
 
 import com.amazonaws.services.ec2.model.Volume;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -51,7 +51,7 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Volume entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
-                .nameOf(AmazonEc2Util.getInstanceName(entity.getTags()))
+                .nameOf(AmazonEc2Util.getName(entity.getTags()))
                 .kindOf(entity.getVolumeType())
                 .zoneOf(entity.getAvailabilityZone())
                 .createdTimeOf(entity.getCreateTime())

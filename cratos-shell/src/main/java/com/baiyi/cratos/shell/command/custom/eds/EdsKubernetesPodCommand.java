@@ -254,9 +254,9 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     }
                     tryResize(size, terminal, execWatch);
                 }
-            } catch (Exception e) {
-                log.debug(e.getMessage());
-                helper.print(e.getMessage(), PromptColor.RED);
+            } catch (Exception ex) {
+                log.debug(ex.getMessage());
+                helper.print(ex.getMessage(), PromptColor.RED);
             } finally {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }

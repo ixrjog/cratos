@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.util;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2024/3/1 09:58
  * @Version 1.0
  */
+@Slf4j
 public final class TimeUtil {
 
     public static final String YEAR = "yyyy";
@@ -105,10 +107,14 @@ public final class TimeUtil {
         return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds);
     }
 
-    public static void millisecondsSleep(long m) {
+    public static void millisecondsSleep(long m) throws InterruptedException {
         try {
             TimeUnit.MILLISECONDS.sleep(m);
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException iEx) {
+            if (Thread.currentThread()
+                    .isInterrupted()) {
+                throw new InterruptedException();
+            }
         }
     }
 

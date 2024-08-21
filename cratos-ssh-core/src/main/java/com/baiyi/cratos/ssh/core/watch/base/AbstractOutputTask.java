@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +48,8 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
                 writeAndRecord(outBuff, 0, outBuff.length);
                 TimeUtil.millisecondsSleep(10L);
             }
-        } catch (IOException ignored) {
+        } catch (Exception ex) {
+            log.debug(ex.getMessage(), ex);
         } finally {
             log.debug("Watch server output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());

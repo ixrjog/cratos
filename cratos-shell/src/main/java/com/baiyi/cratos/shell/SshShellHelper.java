@@ -660,6 +660,7 @@ public class SshShellHelper {
             } while (op == null || !op.equals(EXIT));
         } catch (InterruptedException ie) {
             // Do nothing
+            log.debug(ie.getMessage());
         } finally {
             terminal.setAttributes(attr);
             if (prevHandler != null) {

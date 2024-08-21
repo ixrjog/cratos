@@ -21,13 +21,27 @@ public class AwsEc2 {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Ec2 {
-
         private String regionId;
-
         private Instance instance;
-
         private InstanceModel.EC2InstanceType instanceType;
+    }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Vpc {
+        private String regionId;
+        private com.amazonaws.services.ec2.model.Vpc vpc;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Subnet {
+        private String regionId;
+        private com.amazonaws.services.ec2.model.Subnet subnet;
     }
 
 }

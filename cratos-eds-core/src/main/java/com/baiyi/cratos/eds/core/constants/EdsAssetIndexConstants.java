@@ -47,8 +47,10 @@ public interface EdsAssetIndexConstants {
     String KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE = "status.capacity.ephemeral-storage";
     String KUBERNETES_NODE_CAPACITY_MEMORY = "status.capacity.memory";
 
-
-
-
+    String VPC_ID = "vpc.id";
+    String VPC_CIDR_BLOCK = "vpc.cidr-block";
+    String VIRTUAL_SWITCH_CIDR_BLOCK = "virtual-switch.cidr-block";
+    String SUBNET_CIDR_BLOCK = "subnet.cidr-block";
+    String VPC_CIDRS = "vpc.cidrs";
 
 }
