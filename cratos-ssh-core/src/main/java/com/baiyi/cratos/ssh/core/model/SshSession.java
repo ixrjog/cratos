@@ -32,6 +32,10 @@ public class SshSession {
     private static SessionOutput sessionOutput;
 
     public void setSessionOutput(SessionOutput sessionOutput) {
+       setOutput(sessionOutput);
+    }
+
+    private static void setOutput(SessionOutput sessionOutput) {
         SshSession.sessionOutput = sessionOutput;
     }
 

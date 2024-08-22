@@ -1,6 +1,5 @@
 package com.baiyi.cratos.ssh.core.player;
 
-import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.ssh.core.message.output.OutputMessage;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author baiyi
@@ -37,13 +37,16 @@ public class SshAuditOutputTask implements Runnable {
                 if (!line.isEmpty()) {
                     sendOutput(line + "\n");
                 }
-                TimeUtil.millisecondsSleep(25L);
+                TimeUnit.MILLISECONDS.sleep(25L);
             }
-        } catch (IOException ex) {
+        } catch (IOException ioException) {
             try {
-                sendError(ex.getMessage());
+                sendError(ioException.getMessage());
             } catch (IOException ignored) {
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread()
+                    .interrupt();
         }
     }
 

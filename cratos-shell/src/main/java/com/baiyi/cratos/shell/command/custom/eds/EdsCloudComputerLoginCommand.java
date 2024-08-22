@@ -1,6 +1,5 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
-import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
@@ -37,8 +36,10 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
@@ -130,7 +131,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
 
                 while (true) {
                     if (isClosed(sessionId, sshSessionInstanceId) || serverSession.isClosed()) {
-                        TimeUtil.millisecondsSleep(150L);
+                        TimeUnit.MILLISECONDS.sleep(150L);
                         break;
                     }
                     //  tryResize(size, terminal, sessionId, sshSessionInstanceId);
@@ -138,7 +139,11 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                             .read(5L);
                     send(sessionId, sshSessionInstanceId, input);
                 }
-            } catch (Exception ignored) {
+            } catch (InterruptedException e) {
+                Thread.currentThread()
+                        .interrupt();
+            } catch (IOException ioException) {
+                log.debug(ioException.getMessage(), ioException);
             } finally {
                 if (prevHandler != null) {
                     terminal.handle(Terminal.Signal.WINCH, prevHandler);
@@ -168,13 +173,13 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 .isClosed();
     }
 
-    private void send(String sessionId, String instanceId, int input) throws Exception {
+    private void send(String sessionId, String instanceId, int input) throws NullPointerException {
         if (input < 0) {
             return;
         }
         JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         if (jSchSession == null) {
-            throw new Exception();
+            throw new NullPointerException("jSchSession is null.");
         }
         char ch = (char) input;
         jSchSession.getCommander()

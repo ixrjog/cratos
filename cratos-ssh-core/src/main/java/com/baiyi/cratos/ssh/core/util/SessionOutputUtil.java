@@ -28,6 +28,10 @@ public class SessionOutputUtil {
 
     @Autowired
     private void setRedisUtil(RedisUtil redisUtil) {
+        setRedis(redisUtil);
+    }
+
+    private static void setRedis(RedisUtil redisUtil) {
         SessionOutputUtil.redisUtil = redisUtil;
     }
 
@@ -44,7 +48,8 @@ public class SessionOutputUtil {
     public static void removeUserSession(String sessionId) {
         UserSessionsOutput userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionId);
         if (userSessionsOutput != null) {
-            userSessionsOutput.getSessionOutputMap().clear();
+            userSessionsOutput.getSessionOutputMap()
+                    .clear();
         }
         USER_SESSIONS_OUTPUT_MAP.remove(sessionId);
     }
@@ -58,7 +63,8 @@ public class SessionOutputUtil {
     public static void removeOutput(String sessionId, String instanceId) {
         UserSessionsOutput userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionId);
         if (userSessionsOutput != null) {
-            userSessionsOutput.getSessionOutputMap().remove(instanceId);
+            userSessionsOutput.getSessionOutputMap()
+                    .remove(instanceId);
         }
     }
 
@@ -73,7 +79,8 @@ public class SessionOutputUtil {
             USER_SESSIONS_OUTPUT_MAP.put(sessionOutput.getSessionId(), new UserSessionsOutput());
             userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionOutput.getSessionId());
         }
-        userSessionsOutput.getSessionOutputMap().put(sessionOutput.getInstanceId(), sessionOutput);
+        userSessionsOutput.getSessionOutputMap()
+                .put(sessionOutput.getInstanceId(), sessionOutput);
     }
 
     /**
@@ -90,7 +97,9 @@ public class SessionOutputUtil {
         if (userSessionsOutput != null) {
             Map<String, SessionOutput> sessionOutputMap = userSessionsOutput.getSessionOutputMap();
             if (sessionOutputMap.containsKey(instanceId)) {
-                sessionOutputMap.get(instanceId).getOutput().append(value, offset, count);
+                sessionOutputMap.get(instanceId)
+                        .getOutput()
+                        .append(value, offset, count);
             }
         }
     }
@@ -98,7 +107,8 @@ public class SessionOutputUtil {
     public static SessionOutput getSessionOutput(String sessionId, String instanceId) {
         UserSessionsOutput userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionId);
         if (userSessionsOutput != null) {
-            return userSessionsOutput.getSessionOutputMap().get(instanceId);
+            return userSessionsOutput.getSessionOutputMap()
+                    .get(instanceId);
         }
         return null;
     }
@@ -113,19 +123,23 @@ public class SessionOutputUtil {
         List<SessionOutput> outputList = Lists.newArrayList();
         UserSessionsOutput userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionId);
         if (userSessionsOutput != null) {
-            userSessionsOutput.getSessionOutputMap().keySet().forEach(instanceId -> {
-                //get output chars and set to output
-                try {
-                    SessionOutput sessionOutput = userSessionsOutput.getSessionOutputMap().get(instanceId);
-                    if (sessionOutput != null && sessionOutput.getOutput() != null
-                            && StringUtils.isNotEmpty(sessionOutput.getOutput())) {
-                        outputList.add(sessionOutput);
-                        userSessionsOutput.getSessionOutputMap().put(instanceId, new SessionOutput(sessionId, sessionOutput));
-                    }
-                } catch (Exception ex) {
-                    log.error(ex.toString(), ex);
-                }
-            });
+            userSessionsOutput.getSessionOutputMap()
+                    .keySet()
+                    .forEach(instanceId -> {
+                        //get output chars and set to output
+                        try {
+                            SessionOutput sessionOutput = userSessionsOutput.getSessionOutputMap()
+                                    .get(instanceId);
+                            if (sessionOutput != null && sessionOutput.getOutput() != null && StringUtils.isNotEmpty(
+                                    sessionOutput.getOutput())) {
+                                outputList.add(sessionOutput);
+                                userSessionsOutput.getSessionOutputMap()
+                                        .put(instanceId, new SessionOutput(sessionId, sessionOutput));
+                            }
+                        } catch (Exception ex) {
+                            log.error(ex.toString(), ex);
+                        }
+                    });
         }
         return outputList;
     }
@@ -139,16 +153,21 @@ public class SessionOutputUtil {
      */
     @Deprecated
     private static void record(String sessionId, String instanceId, SessionOutput sessionOutput) {
-        String outputStr = sessionOutput.getOutput().toString();
+        String outputStr = sessionOutput.getOutput()
+                .toString();
         String auditLog;
 
         // 输出太多截断
-        if (sessionOutput.getOutput().length() > 1024) {
-            auditLog = sessionOutput.getOutput().substring(0, subOutputLine(outputStr)) + "\r\n";
+        if (sessionOutput.getOutput()
+                .length() > 1024) {
+            auditLog = sessionOutput.getOutput()
+                    .substring(0, subOutputLine(outputStr)) + "\r\n";
         } else {
-            auditLog = sessionOutput.getOutput().toString();
+            auditLog = sessionOutput.getOutput()
+                    .toString();
         }
-        String cacheKey = Joiner.on("_").join(sessionId, instanceId, "auditLog");
+        String cacheKey = Joiner.on("_")
+                .join(sessionId, instanceId, "auditLog");
         String logRepo;
         if (redisUtil.hasKey(cacheKey)) {
             logRepo = redisUtil.get(cacheKey) + auditLog;

@@ -32,6 +32,10 @@ public class SshSessionAuditServer {
 
     @Autowired
     public void setSshAuditPlayer(SshAuditPlayer sshAuditPlayer) {
+        setPlayer(sshAuditPlayer);
+    }
+
+    private static void setPlayer(SshAuditPlayer sshAuditPlayer) {
         SshSessionAuditServer.sshAuditPlayer = sshAuditPlayer;
     }
 

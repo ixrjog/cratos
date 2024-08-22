@@ -27,6 +27,10 @@ public class ImportAssetJob extends QuartzJobBean {
 
     @Autowired
     public void setEdsFacade(EdsFacade edsFacade) {
+        setFacade(edsFacade);
+    }
+
+    private static void setFacade(EdsFacade edsFacade) {
         ImportAssetJob.edsFacade = edsFacade;
     }
 

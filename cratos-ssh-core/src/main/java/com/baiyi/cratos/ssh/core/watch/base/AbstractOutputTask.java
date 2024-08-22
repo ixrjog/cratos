@@ -1,6 +1,5 @@
 package com.baiyi.cratos.ssh.core.watch.base;
 
-import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
@@ -8,9 +7,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author baiyi
@@ -29,7 +30,7 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
 
     private static final int BUFF_SIZE = 1024 * 8;
 
-    public AbstractOutputTask(SessionOutput sessionOutput, InputStream outFromChannel,String auditPath) {
+    public AbstractOutputTask(SessionOutput sessionOutput, InputStream outFromChannel, String auditPath) {
         setSessionOutput(sessionOutput);
         setOutFromChannel(outFromChannel);
         setAuditPath(auditPath);
@@ -46,10 +47,13 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
             while ((read = br.read(buff)) != -1) {
                 char[] outBuff = com.baiyi.cratos.common.util.ArrayUtil.sub(buff, 0, read);
                 writeAndRecord(outBuff, 0, outBuff.length);
-                TimeUtil.millisecondsSleep(10L);
+                TimeUnit.MILLISECONDS.sleep(10L);
             }
-        } catch (Exception ex) {
-            log.debug(ex.getMessage(), ex);
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread()
+                    .interrupt();
+        } catch (IOException ioException) {
+            log.debug(ioException.getMessage(), ioException);
         } finally {
             log.debug("Watch server output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());

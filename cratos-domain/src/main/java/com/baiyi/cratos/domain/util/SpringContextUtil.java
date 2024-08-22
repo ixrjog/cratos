@@ -16,9 +16,13 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
 
+    private static void setContext(ApplicationContext context) {
+        SpringContextUtil.context = context;
+    }
+
     @Override
     public void setApplicationContext(@NonNull ApplicationContext context) throws BeansException {
-        SpringContextUtil.context = context;
+        setContext(context);
     }
 
     public static <T> T getBean(Class<T> clazz) {
@@ -31,7 +35,8 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     // 获取当前环境
     public static String getActiveProfile() {
-        return context.getEnvironment().getActiveProfiles()[0];
+        return context.getEnvironment()
+                .getActiveProfiles()[0];
     }
 
 }

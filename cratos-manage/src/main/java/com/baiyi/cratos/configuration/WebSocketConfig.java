@@ -30,7 +30,7 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
 
     @Autowired
     public void setUserTokenFacade(UserTokenFacade userTokenFacade) {
-        WebSocketConfig.userTokenFacade = userTokenFacade;
+        setFacade(userTokenFacade);
     }
 
     @Bean
@@ -38,8 +38,13 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
         return new ServerEndpointExporter();
     }
 
+    private static void setFacade(UserTokenFacade userTokenFacade) {
+        WebSocketConfig.userTokenFacade = userTokenFacade;
+    }
+
     /**
      * WebSocket 鉴权
+     *
      * @param config
      * @param request
      * @param response

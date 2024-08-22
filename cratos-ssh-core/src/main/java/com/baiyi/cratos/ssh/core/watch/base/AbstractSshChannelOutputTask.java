@@ -1,7 +1,6 @@
 package com.baiyi.cratos.ssh.core.watch.base;
 
 
-import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
@@ -11,9 +10,11 @@ import org.apache.commons.io.input.ClosedInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author baiyi
@@ -41,7 +42,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
         SessionOutputUtil.addOutput(this.sessionOutput);
         try {
             while (!isClosed) {
-                TimeUtil.millisecondsSleep(25L);
+                TimeUnit.MILLISECONDS.sleep(25L);
                 InputStream ins = outputStream.toInputStream();
                 if (ins instanceof ClosedInputStream) {
                     continue;
@@ -55,8 +56,11 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
                     writeAndRecord(buff, 0, read);
                 }
             }
-        } catch (Exception ex) {
-            log.debug(ex.getMessage());
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread()
+                    .interrupt();
+        } catch (IOException ioException) {
+            log.debug(ioException.getMessage(), ioException);
         } finally {
             log.debug("Ssh channel output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());

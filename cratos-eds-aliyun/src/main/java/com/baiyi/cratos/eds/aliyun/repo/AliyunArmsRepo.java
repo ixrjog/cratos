@@ -25,13 +25,13 @@ import java.util.concurrent.ExecutionException;
 public class AliyunArmsRepo {
 
     public static List<ListTraceAppsResponseBody.TraceApps> listTraceApps(
-            EdsAliyunConfigModel.Aliyun aliyun) throws ExecutionException, InterruptedException {
+            EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         return listTraceApps(aliyun.getArms()
                 .getRegionId(), aliyun);
     }
 
     public static List<ListTraceAppsResponseBody.TraceApps> listTraceApps(String regionId,
-                                                                          EdsAliyunConfigModel.Aliyun aliyun) throws ExecutionException, InterruptedException {
+                                                                          EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         List<ListTraceAppsResponseBody.TraceApps> result = Lists.newArrayList();
         try (AsyncClient client = AliyunArmsClient.buildAsyncClient(regionId, aliyun)) {
             ListTraceAppsRequest listProjectsRequest = ListTraceAppsRequest.builder()
@@ -41,10 +41,13 @@ public class AliyunArmsRepo {
             return response.get()
                     .getBody()
                     .getTraceApps();
-        } catch (Exception ex) {
-            log.debug(ex.getMessage());
-            Thread.currentThread().interrupt();
-            throw ex;
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread()
+                    .interrupt();
+            throw interruptedException;
+        } catch (ExecutionException executionException) {
+            log.debug(executionException.getMessage());
+            throw executionException;
         }
     }
 

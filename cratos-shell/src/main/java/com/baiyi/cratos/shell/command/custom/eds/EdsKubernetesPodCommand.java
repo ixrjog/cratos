@@ -2,7 +2,6 @@ package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.StringFormatter;
-import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -51,10 +50,12 @@ import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 import static com.baiyi.cratos.ssh.core.util.ChannelShellUtil.DEF_UNICODE;
@@ -248,7 +249,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                                 .flush();
                         if (input == EOF) {
                             // 等待退出，避免sh残留
-                            TimeUtil.millisecondsSleep(200L);
+                            TimeUnit.MILLISECONDS.sleep(200L);
                             break;
                         }
                     }
@@ -343,17 +344,18 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                                             PromptColor.GREEN));
                             terminal.writer()
                                     .flush();
-                            TimeUtil.millisecondsSleep(200L);
+                            TimeUnit.MILLISECONDS.sleep(200L);
                         }
                     }
-                    TimeUtil.millisecondsSleep(25L);
+                    TimeUnit.MILLISECONDS.sleep(25L);
                 }
-            } catch (Exception e) {
-                log.debug(e.getMessage());
+            } catch (InterruptedException e) {
+                Thread.currentThread()
+                        .interrupt();
             } finally {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             log.debug(e.getMessage());
         } finally {
             // podCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
