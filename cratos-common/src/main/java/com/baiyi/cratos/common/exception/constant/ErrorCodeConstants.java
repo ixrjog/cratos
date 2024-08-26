@@ -31,4 +31,6 @@ public interface ErrorCodeConstants {
 
     int RISK_EVENT_ERROR = 47000;
 
+    int ASSET_TO_BUSINESS_ERROR = 48000;
+
 }

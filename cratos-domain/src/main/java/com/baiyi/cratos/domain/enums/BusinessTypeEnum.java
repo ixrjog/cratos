@@ -19,6 +19,8 @@ public enum BusinessTypeEnum {
     USER,
     DOMAIN,
 
+    GLOBAL_NETWORK,
+
     ASSET_MATURITY,
 
     // RBAC

@@ -34,4 +34,3 @@ public class InvalidCredentialException extends BaseException {
     }
 
 }
-
