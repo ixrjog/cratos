@@ -255,13 +255,15 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     }
                     tryResize(size, terminal, execWatch);
                 }
-            } catch (Exception ex) {
-                log.debug(ex.getMessage());
-                helper.print(ex.getMessage(), PromptColor.RED);
+            } catch (IOException ioException) {
+                log.debug(ioException.getMessage());
+                helper.print(ioException.getMessage(), PromptColor.RED);
             } finally {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
-        } catch (Exception ignored) {
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread()
+                    .interrupt();
         } finally {
             podCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
         }
@@ -349,14 +351,14 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     }
                     TimeUnit.MILLISECONDS.sleep(25L);
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread()
-                        .interrupt();
+            } catch (IOException ioException) {
+                log.debug(ioException.getMessage(), ioException);
             } finally {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
             }
-        } catch (IOException e) {
-            log.debug(e.getMessage());
+        } catch (InterruptedException interruptedException) {
+            Thread.currentThread()
+                    .interrupt();
         } finally {
             // podCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
         }

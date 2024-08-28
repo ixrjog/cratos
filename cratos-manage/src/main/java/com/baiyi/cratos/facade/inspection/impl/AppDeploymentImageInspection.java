@@ -96,7 +96,7 @@ public class AppDeploymentImageInspection extends BaseInspection {
             return Maps.newHashMap();
         }
         Map<String, List<DeploymentImageModel.DeploymentImage>> deploymentImageMap = Maps.newHashMap();
-        for (EdsAsset e : assets) {
+        assets.forEach(e -> {
             EdsAssetIndex appNameUniqueKey = EdsAssetIndex.builder()
                     .instanceId(e.getInstanceId())
                     .assetId(e.getId())
@@ -104,11 +104,10 @@ public class AppDeploymentImageInspection extends BaseInspection {
                     .build();
             EdsAssetIndex appNameIndex = edsAssetIndexService.getByUniqueKey(appNameUniqueKey);
             if (appNameIndex == null) {
-                continue;
+                return;
             }
             final String appName = appNameIndex.getValue();
             Deployment deployment = getAssetModel(BeanCopierUtil.copyProperties(e, EdsAssetVO.Asset.class));
-
             Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
             if (optionalContainer.isPresent()) {
                 DeploymentImageModel.DeploymentImage image = DeploymentImageModel.DeploymentImage.builder()
@@ -126,8 +125,7 @@ public class AppDeploymentImageInspection extends BaseInspection {
                     deploymentImageMap.put(appName, images);
                 }
             }
-        }
-
+        });
         return deploymentImageMap;
     }
 

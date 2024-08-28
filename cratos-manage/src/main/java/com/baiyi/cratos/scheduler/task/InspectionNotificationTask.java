@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Conditional(EnvCondition.class)
 public class InspectionNotificationTask {
 
-    @Scheduled(cron = "0 45 9 * * ?")
+    @Scheduled(cron = "0 30 9 * * ?")
     @SchedulerLock(name = "INSPECTION_NOTIFICATION_TASK", lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void task() {
         InspectionFactory.doTask();
