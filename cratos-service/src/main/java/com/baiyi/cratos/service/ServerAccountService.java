@@ -13,7 +13,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Date 2024/3/22 15:48
  * @Version 1.0
  */
-public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount>, BaseValidService<ServerAccount, ServerAccountMapper>, SupportBusinessService {
+public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount, ServerAccountMapper>, BaseValidService<ServerAccount, ServerAccountMapper>, SupportBusinessService {
 
     DataTable<ServerAccount> queryServerAccountPage(ServerAccountParam.ServerAccountPageQuery pageQuery);
 

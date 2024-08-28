@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.business.BusinessParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import com.baiyi.cratos.service.base.BaseBusinessService;
-import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import com.baiyi.cratos.service.base.HasUniqueKey;
 
 import java.util.List;
 
@@ -14,12 +14,11 @@ import java.util.List;
  * @Date 2024/1/5 10:10
  * @Version 1.0
  */
-public interface BusinessTagService extends BaseBusinessService<BusinessTag>, BaseUniqueKeyService<BusinessTag> {
+public interface BusinessTagService extends BaseBusinessService<BusinessTag>, HasUniqueKey<BusinessTag> {
 
     int selectCountByTagId(int tagId);
 
     /**
-     *
      * @param businessTypeEnum
      * @param tagIds
      * @return businessIds

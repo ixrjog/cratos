@@ -13,7 +13,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Date 2024/3/29 10:39
  * @Version 1.0
  */
-public interface TrafficLayerDomainService extends BaseUniqueKeyService<TrafficLayerDomain>, BaseValidService<TrafficLayerDomain, TrafficLayerDomainMapper>, SupportBusinessService {
+public interface TrafficLayerDomainService extends BaseUniqueKeyService<TrafficLayerDomain, TrafficLayerDomainMapper>, BaseValidService<TrafficLayerDomain, TrafficLayerDomainMapper>, SupportBusinessService {
 
     DataTable<TrafficLayerDomain> queryPageByParam(TrafficLayerDomainParam.DomainPageQueryParam pageQuery);
 

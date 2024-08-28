@@ -12,7 +12,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Date 2024/1/2 13:28
  * @Version 1.0
  */
-public interface TagService extends BaseUniqueKeyService<Tag>, BaseValidService<Tag, TagMapper> {
+public interface TagService extends BaseUniqueKeyService<Tag, TagMapper>, BaseValidService<Tag, TagMapper> {
 
     DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery);
 

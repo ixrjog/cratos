@@ -13,7 +13,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * &#064;Date  2024/8/26 10:30
  * &#064;Version 1.0
  */
-public interface GlobalNetworkService extends BaseValidService<GlobalNetwork, GlobalNetworkMapper>, BaseUniqueKeyService<GlobalNetwork>, SupportBusinessService {
+public interface GlobalNetworkService extends BaseValidService<GlobalNetwork, GlobalNetworkMapper>, BaseUniqueKeyService<GlobalNetwork, GlobalNetworkMapper>, SupportBusinessService {
 
     DataTable<GlobalNetwork> queryGlobalNetworkPage(GlobalNetworkParam.GlobalNetworkPageQueryParam param);
 

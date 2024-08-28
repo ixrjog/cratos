@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.mapper.UserTokenMapper;
 import com.baiyi.cratos.service.UserTokenService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -43,7 +44,7 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
     @Override
-    public UserToken getByUniqueKey(UserToken record) {
+    public UserToken getByUniqueKey(@NonNull UserToken record) {
         return getByToken(record.getToken());
     }
 

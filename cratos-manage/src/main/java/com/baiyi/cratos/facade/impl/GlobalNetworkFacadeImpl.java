@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.annotation.PageQueryByTag;
-import com.baiyi.cratos.common.exception.SqlException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
@@ -45,9 +44,6 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @BindAssetsAfterImport
     public GlobalNetwork addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork) {
         GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
-        if (globalNetworkService.getByUniqueKey(globalNetwork) != null) {
-            throw new SqlException("Union key conflict.");
-        }
         globalNetworkService.add(globalNetwork);
         return globalNetwork;
     }

@@ -12,7 +12,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Date 2024/3/19 14:27
  * @Version 1.0
  */
-public interface EnvService extends BaseUniqueKeyService<Env>, BaseValidService<Env, EnvMapper> {
+public interface EnvService extends BaseUniqueKeyService<Env, EnvMapper>, BaseValidService<Env, EnvMapper> {
 
     DataTable<Env> queryEnvPage(EnvParam.EnvPageQuery pageQuery);
 

@@ -14,7 +14,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * &#064;Date  2024/7/30 下午1:42
  * &#064;Version 1.0
  */
-public interface AssetMaturityService extends BaseUniqueKeyService<AssetMaturity>, BaseValidService<AssetMaturity, AssetMaturityMapper>, SupportBusinessService, BaseQueryByExpiryService<AssetMaturity> {
+public interface AssetMaturityService extends BaseUniqueKeyService<AssetMaturity, AssetMaturityMapper>, BaseValidService<AssetMaturity, AssetMaturityMapper>, SupportBusinessService, BaseQueryByExpiryService<AssetMaturity> {
 
     DataTable<AssetMaturity> queryAssetMaturityPage(AssetMaturityParam.AssetMaturityPageQueryParam pageQuery);
 

@@ -47,8 +47,7 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     public List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
         return businessTagMapper.queryTagIdByBusinessType(getByBusinessType);
     }
-
-    @Override
+    
     public BusinessTag getByUniqueKey(@NonNull BusinessTag record) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();

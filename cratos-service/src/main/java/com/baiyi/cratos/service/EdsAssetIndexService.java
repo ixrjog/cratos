@@ -2,7 +2,6 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
-import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import lombok.NonNull;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @Date 2024/3/27 14:33
  * @Version 1.0
  */
-public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex>, BaseService<EdsAssetIndex, EdsAssetIndexMapper> {
+public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex, EdsAssetIndexMapper> {
 
     List<EdsAssetIndex> queryIndexByAssetId(int assetId);
 

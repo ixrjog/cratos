@@ -14,7 +14,7 @@ import java.util.List;
  * @Date 2024/4/7 下午3:07
  * @Version 1.0
  */
-public interface MenuService extends BaseUniqueKeyService<Menu>, BaseValidService<Menu, MenuMapper> {
+public interface MenuService extends BaseUniqueKeyService<Menu, MenuMapper>, BaseValidService<Menu, MenuMapper> {
 
     DataTable<Menu> queryMenuPage(MenuParam.MenuPageQuery pageQuery);
 

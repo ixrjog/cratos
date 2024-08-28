@@ -15,7 +15,7 @@ import java.util.List;
  * @Date 2024/2/5 17:55
  * @Version 1.0
  */
-public interface EdsConfigService extends BaseUniqueKeyService<EdsConfig>, BaseValidService<EdsConfig, EdsConfigMapper>, SupportBusinessService {
+public interface EdsConfigService extends BaseUniqueKeyService<EdsConfig, EdsConfigMapper>, BaseValidService<EdsConfig, EdsConfigMapper>, SupportBusinessService {
 
     DataTable<EdsConfig> queryEdsConfigPage(EdsConfigParam.EdsConfigPageQuery pageQuery);
 

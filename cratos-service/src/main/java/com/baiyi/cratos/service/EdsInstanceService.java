@@ -15,7 +15,7 @@ import java.util.List;
  * @Date 2024/2/5 16:51
  * @Version 1.0
  */
-public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance>, BaseValidService<EdsInstance, EdsInstanceMapper>, SupportBusinessService {
+public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance, EdsInstanceMapper>, BaseValidService<EdsInstance, EdsInstanceMapper>, SupportBusinessService {
 
     DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 

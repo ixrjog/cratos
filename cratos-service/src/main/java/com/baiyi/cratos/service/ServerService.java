@@ -11,5 +11,5 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * &#064;Date  2024/8/12 上午10:36
  * &#064;Version 1.0
  */
-public interface ServerService extends BaseUniqueKeyService<Server>, BaseValidService<Server, ServerMapper>, SupportBusinessService {
+public interface ServerService extends BaseUniqueKeyService<Server, ServerMapper>, BaseValidService<Server, ServerMapper>, SupportBusinessService {
 }

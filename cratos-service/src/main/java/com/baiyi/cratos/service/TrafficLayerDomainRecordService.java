@@ -12,7 +12,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * @Date 2024/3/29 10:40
  * @Version 1.0
  */
-public interface TrafficLayerDomainRecordService extends BaseUniqueKeyService<TrafficLayerDomainRecord>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
+public interface TrafficLayerDomainRecordService extends BaseUniqueKeyService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
 
     DataTable<TrafficLayerDomainRecord> queryPageByParam(TrafficLayerRecordParam.RecordPageQuery pageQuery);
 

@@ -13,7 +13,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Date 2024/1/10 10:19
  * @Version 1.0
  */
-public interface UserService extends BaseUniqueKeyService<User>, BaseValidService<User, UserMapper>, SupportBusinessService {
+public interface UserService extends BaseUniqueKeyService<User, UserMapper>, BaseValidService<User, UserMapper>, SupportBusinessService {
 
     DataTable<User> queryUserPage(UserParam.UserPageQuery pageQuery);
 

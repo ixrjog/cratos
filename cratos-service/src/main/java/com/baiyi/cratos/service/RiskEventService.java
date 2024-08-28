@@ -16,7 +16,7 @@ import java.util.List;
  * @Date 2024/4/15 下午3:19
  * @Version 1.0
  */
-public interface RiskEventService extends BaseUniqueKeyService<RiskEvent>, BaseValidService<RiskEvent, RiskEventMapper>, SupportBusinessService {
+public interface RiskEventService extends BaseUniqueKeyService<RiskEvent, RiskEventMapper>, BaseValidService<RiskEvent, RiskEventMapper>, SupportBusinessService {
 
     DataTable<RiskEvent> queryRiskEventPage(RiskEventParam.RiskEventPageQueryParam param);
 

@@ -14,7 +14,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * @Date 2024/4/28 上午9:58
  * @Version 1.0
  */
-public interface DomainService extends BaseValidService<Domain, DomainMapper>, BaseUniqueKeyService<Domain>, SupportBusinessService, BaseQueryByExpiryService<Domain> {
+public interface DomainService extends BaseValidService<Domain, DomainMapper>, BaseUniqueKeyService<Domain, DomainMapper>, SupportBusinessService, BaseQueryByExpiryService<Domain> {
 
     DataTable<Domain> queryDomainPage(DomainParam.DomainPageQueryParam param);
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2024/1/22 17:26
  * @Version 1.0
  */
-public interface RbacUserRoleService extends BaseUniqueKeyService<RbacUserRole>, BaseService<RbacUserRole, RbacUserRoleMapper> {
+public interface RbacUserRoleService extends BaseUniqueKeyService<RbacUserRole, RbacUserRoleMapper>, BaseService<RbacUserRole, RbacUserRoleMapper> {
 
     List<RbacUserRole> queryByUsername(String username);
 
