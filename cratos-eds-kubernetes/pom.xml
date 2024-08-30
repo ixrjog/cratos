@@ -16,11 +16,10 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- https://github.com/fabric8io/kubernetes-client -->
-        <fabric8-sdk.version>6.13.1</fabric8-sdk.version>
+        <fabric8-sdk.version>6.13.3</fabric8-sdk.version>
     </properties>
 
     <dependencies>
-
         <!-- https://github.com/fabric8io/kubernetes-client -->
         <!-- https://mvnrepository.com/artifact/io.fabric8/kubernetes-client -->
         <!--suppress VulnerableLibrariesLocal -->
@@ -29,27 +28,23 @@
             <artifactId>kubernetes-client</artifactId>
             <version>${fabric8-sdk.version}</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/io.fabric8/kubernetes-model -->
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-model</artifactId>
             <version>${fabric8-sdk.version}</version>
         </dependency>
-
         <!--  https://search.maven.org/artifact/io.fabric8/istio-client/6.9.0/jar?eh= -->
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>istio-client</artifactId>
             <version>${fabric8-sdk.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
 </project>

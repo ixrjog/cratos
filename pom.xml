@@ -40,7 +40,7 @@
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <spring-security.version>6.2.3</spring-security.version>
         <!-- 1.12.736 -->
-        <aws-java-sdk.version>1.12.761</aws-java-sdk.version>
+        <aws-java-sdk.version>1.12.770</aws-java-sdk.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.13.0</shedlock-spring.version>
     </properties>
@@ -94,14 +94,14 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.2.0</version>
+            <version>9.0.0</version>
             <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.23</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
