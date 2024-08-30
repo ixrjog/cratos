@@ -139,7 +139,7 @@ public class UserFacadeImpl implements UserFacade {
     public void updateUser(UserParam.UpdateUser updateUser) {
         User user = userService.getById(updateUser.getId());
         Optional.ofNullable(userService.getById(updateUser.getId()))
-                .orElseThrow(() -> new UserException("User id={} does not exist.", updateUser.getId()));
+                .orElseThrow(() -> new UserException("User does not exist. userId={}", updateUser.getId()));
         // 设置允许更新的属性
         user.setName(updateUser.getName());
         user.setDisplayName(updateUser.getDisplayName());

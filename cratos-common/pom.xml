@@ -19,20 +19,17 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.14</version>
         </dependency>
-
         <!-- OPT -->
         <!-- https://mvnrepository.com/artifact/com.eatthepath/java-otp -->
         <dependency>
@@ -40,7 +37,6 @@
             <artifactId>java-otp</artifactId>
             <version>0.4.0</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -48,14 +44,18 @@
             <version>2.16.1</version>
             <scope>compile</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.ibeetl/beetl -->
         <dependency>
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl</artifactId>
             <version>3.16.2.RELEASE</version>
         </dependency>
-
+        <!-- https://github.com/dromara/hutool -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.31</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -29,9 +29,7 @@ public class BusinessPropertyFacadeImpl implements BusinessPropertyFacade {
                 .propertyName(propertyName)
                 .build();
         BusinessProperty businessProperty = businessPropertyService.getByUniqueKey(uniqueKey);
-        if (businessProperty != null) {
-            businessPropertyService.deleteById(businessProperty.getId());
-        }
+        businessPropertyService.deleteById(businessProperty.getId());
     }
 
     @Override

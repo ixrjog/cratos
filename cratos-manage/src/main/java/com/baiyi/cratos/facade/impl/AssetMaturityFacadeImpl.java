@@ -43,9 +43,7 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
     @Override
     public void addAssetMaturity(AssetMaturityParam.AddAssetMaturity addAssetMaturity) {
         AssetMaturity assetMaturity = addAssetMaturity.toTarget();
-        if (assetMaturityService.getByUniqueKey(assetMaturity) == null) {
-            assetMaturityService.add(assetMaturity);
-        }
+        assetMaturityService.add(assetMaturity);
     }
 
     @Override

@@ -74,15 +74,12 @@ public class MenuParam {
     }
 
     public interface IToTitles {
-
         List<Title> getTitles();
-
         default List<MenuTitle> toTitles() {
             return getTitles().stream()
                     .map(IToTarget::toTarget)
                     .toList();
         }
-
     }
 
     @Data

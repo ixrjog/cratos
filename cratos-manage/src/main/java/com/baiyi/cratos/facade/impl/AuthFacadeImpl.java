@@ -44,7 +44,6 @@ public class AuthFacadeImpl implements AuthFacade {
     public LoginVO.Login login(LoginParam.Login loginParam) {
         IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
                 .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
-
         User user = Optional.ofNullable(userService.getByUsername(loginParam.getUsername()))
                 .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
 
