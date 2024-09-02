@@ -45,7 +45,9 @@ public class BusinessCredentialFacadeImpl implements BusinessCredentialFacade {
                 .businessId(business.getBusinessId())
                 .build();
         BusinessCredential businessCredential = businessCredentialService.getByUniqueKey(query);
-        businessCredentialService.deleteById(businessCredential.getId());
+        if (businessCredential != null) {
+            businessCredentialService.deleteById(businessCredential.getId());
+        }
     }
 
     @Override
@@ -55,7 +57,9 @@ public class BusinessCredentialFacadeImpl implements BusinessCredentialFacade {
                 .businessType(business.getBusinessType())
                 .businessId(business.getBusinessId())
                 .build();
-        businessCredentialService.add(businessCredential);
+        if (businessCredentialService.getByUniqueKey(businessCredential) == null) {
+            businessCredentialService.add(businessCredential);
+        }
     }
 
     @Override
