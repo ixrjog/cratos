@@ -7,6 +7,6 @@ package com.baiyi.cratos.wrapper.base;
  */
 public interface IBaseWrapper<T> {
 
-    void wrap(T t);
+    void wrap(T vo);
 
 }

@@ -2,14 +2,12 @@ package com.baiyi.cratos.domain.param.network;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.GlobalNetwork;
+import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
+import com.baiyi.cratos.domain.param.IImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,24 +17,24 @@ import java.util.List;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/9/2 17:31
+ * &#064;Date  2024/8/26 10:36
  * &#064;Version 1.0
  */
-public class GlobalNetworkParam {
+public class GlobalNetworkSubnetParam {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class GlobalNetworkPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
+    public static class GlobalNetworkSubnetPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @Schema(description = "查询名称")
         private String queryName;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
 
-        public GlobalNetworkParam.GlobalNetworkPageQueryParam toParam() {
-            return GlobalNetworkParam.GlobalNetworkPageQueryParam.builder()
+        public GlobalNetworkSubnetPageQueryParam toParam() {
+            return GlobalNetworkSubnetPageQueryParam.builder()
                     .page(getPage())
                     .length(getLength())
                     .queryName(queryName)
@@ -50,43 +48,43 @@ public class GlobalNetworkParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class GlobalNetworkPageQueryParam extends PageParam {
+    public static class GlobalNetworkSubnetPageQueryParam extends PageParam {
         private String queryName;
         private List<Integer> idList;
     }
 
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
-    public static class AddGlobalNetwork implements IToTarget<GlobalNetwork> {
-        @Null
+    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
+    public static class AddGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, IImportFromAsset {
         private Integer id;
-        @NotBlank
         private String name;
-        @NotBlank
         private String mainName;
-        @NotBlank
+        private String mainType;
+        private Integer mainId;
         private String cidrBlock;
         private Integer resourceTotal;
         private Boolean valid;
         private String comment;
+        @Schema(description = "Import from assetId")
+        private Integer fromAssetId;
     }
 
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
-    public static class UpdateGlobalNetwork implements IToTarget<GlobalNetwork> {
-        @NotNull
+    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
+    public static class UpdateGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, IImportFromAsset {
         private Integer id;
-        @NotBlank
         private String name;
-        @NotBlank
         private String mainName;
-        @NotBlank
+        private String mainType;
+        private Integer mainId;
         private String cidrBlock;
         private Integer resourceTotal;
         private Boolean valid;
         private String comment;
+        @Schema(description = "Import from assetId")
+        private Integer fromAssetId;
     }
 
 }

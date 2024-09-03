@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class SshCommandWrapper extends BaseDataTableConverter<SshCommandVO.Command, SshSessionInstanceCommand> implements IBaseWrapper<SshCommandVO.Command> {
 
     @Override
-    public void wrap(SshCommandVO.Command command) {
+    public void wrap(SshCommandVO.Command vo) {
     }
 
 }

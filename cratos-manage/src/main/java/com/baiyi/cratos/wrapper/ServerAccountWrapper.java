@@ -22,7 +22,7 @@ public class ServerAccountWrapper extends BaseDataTableConverter<ServerAccountVO
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})
-    public void wrap(ServerAccountVO.ServerAccount serverAccount) {
+    public void wrap(ServerAccountVO.ServerAccount vo) {
     }
 
 }

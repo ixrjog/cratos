@@ -30,19 +30,19 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
-    public void wrap(EdsInstanceVO.EdsInstance edsInstance) {
+    public void wrap(EdsInstanceVO.EdsInstance vo) {
         // Eds Instance Registered
-        edsInstance.setRegistered(edsInstance.getConfigId() != null);
+        vo.setRegistered(vo.getConfigId() != null);
         // Wrap Eds Config
-        edsConfigWrapper.wrap(edsInstance);
-        edsInstance.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(edsInstance.getEdsType()));
+        edsConfigWrapper.wrap(vo);
+        vo.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(vo.getEdsType()));
         List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(
-                        edsInstance.getEdsType())
+                        vo.getEdsType())
                 .stream()
                 .map(this::toType)
                 .sorted(Comparator.comparingInt(EdsAssetTypeVO.Type::getSeq))
                 .toList();
-        edsInstance.setInstanceAssetTypes(instanceAssetTypes);
+        vo.setInstanceAssetTypes(instanceAssetTypes);
     }
 
     private EdsAssetTypeVO.Type toType(String name) {

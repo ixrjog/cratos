@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class NotificationTemplateWrapper extends BaseDataTableConverter<NotificationTemplateVO.NotificationTemplate, NotificationTemplate> implements IBaseWrapper<NotificationTemplateVO.NotificationTemplate> {
 
     @Override
-    public void wrap(NotificationTemplateVO.NotificationTemplate notificationTemplate) {
+    public void wrap(NotificationTemplateVO.NotificationTemplate vo) {
     }
 
 }

@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/8/26 10:57
+ * &#064;Date  2024/9/3 11:32
  * &#064;Version 1.0
  */
 @Slf4j
@@ -30,7 +29,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
 
     @Override
     @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK)
-    public DataTable<GlobalNetworkVO.GlobalNetwork> queryGlobalNetworkPage(GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
+    public DataTable<GlobalNetworkVO.Network> queryGlobalNetworkPage(
+            GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
         DataTable<GlobalNetwork> table = globalNetworkService.queryGlobalNetworkPage(pageQuery.toParam());
         return globalNetworkWrapper.wrapToTarget(table);
     }
@@ -41,21 +41,14 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     }
 
     @Override
-    @BindAssetsAfterImport
-    public GlobalNetwork addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork) {
-        GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
+    public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetworkSubnet) {
+        GlobalNetwork globalNetwork = addGlobalNetworkSubnet.toTarget();
         globalNetworkService.add(globalNetwork);
-        return globalNetwork;
     }
 
     @Override
     public void updateGlobalNetwork(GlobalNetworkParam.UpdateGlobalNetwork updateGlobalNetwork) {
         GlobalNetwork globalNetwork = globalNetworkService.getById(updateGlobalNetwork.getId());
-        if (globalNetwork == null) {
-            return;
-        }
-        globalNetwork.setName(updateGlobalNetwork.getName());
-        globalNetwork.setComment(updateGlobalNetwork.getComment());
         globalNetworkService.updateByPrimaryKey(globalNetwork);
     }
 

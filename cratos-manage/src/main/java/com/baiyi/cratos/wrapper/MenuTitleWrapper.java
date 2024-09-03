@@ -30,7 +30,7 @@ public class MenuTitleWrapper extends BaseDataTableConverter<MenuVO.Title, MenuT
     private final MenuTitleService menuTitleService;
 
     @Override
-    public void wrap(MenuVO.Title title) {
+    public void wrap(MenuVO.Title vo) {
     }
 
     public void wrap(MenuVO.Menu menu) {

@@ -22,7 +22,7 @@ public class DomainWrapper extends BaseDataTableConverter<DomainVO.Domain, Domai
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
-    public void wrap(DomainVO.Domain domain) {
+    public void wrap(DomainVO.Domain vo) {
     }
 
 }

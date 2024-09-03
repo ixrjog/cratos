@@ -2,7 +2,7 @@ package com.baiyi.cratos.domain.param.network;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.GlobalNetwork;
+import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
@@ -19,27 +19,29 @@ import java.util.List;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/9/2 17:31
+ * &#064;Date  2024/9/2 16:22
  * &#064;Version 1.0
  */
-public class GlobalNetworkParam {
+public class GlobalNetworkPlanningParam {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class GlobalNetworkPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
+    public static class GlobalNetworkPlanningPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @Schema(description = "查询名称")
         private String queryName;
+        private Integer networkId;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
 
-        public GlobalNetworkParam.GlobalNetworkPageQueryParam toParam() {
-            return GlobalNetworkParam.GlobalNetworkPageQueryParam.builder()
+        public GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQueryParam toParam() {
+            return GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQueryParam.builder()
                     .page(getPage())
                     .length(getLength())
                     .queryName(queryName)
+                    .networkId(networkId)
                     .idList(idList)
                     .build();
         }
@@ -50,41 +52,44 @@ public class GlobalNetworkParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class GlobalNetworkPageQueryParam extends PageParam {
+    public static class GlobalNetworkPlanningPageQueryParam extends PageParam {
         private String queryName;
+        private Integer networkId;
         private List<Integer> idList;
     }
 
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
-    public static class AddGlobalNetwork implements IToTarget<GlobalNetwork> {
+    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
+    public static class AddGlobalNetworkPlanning  implements IToTarget<GlobalNetworkPlanning> {
         @Null
         private Integer id;
+        @NotNull
+        private Integer networkId;
         @NotBlank
         private String name;
         @NotBlank
-        private String mainName;
-        @NotBlank
         private String cidrBlock;
         private Integer resourceTotal;
+        @NotNull
         private Boolean valid;
         private String comment;
     }
 
     @Data
     @Schema
-    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
-    public static class UpdateGlobalNetwork implements IToTarget<GlobalNetwork> {
+    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
+    public static class UpdateGlobalNetworkPlanning  implements IToTarget<GlobalNetworkPlanning> {
         @NotNull
         private Integer id;
+        @NotNull
+        private Integer networkId;
         @NotBlank
         private String name;
         @NotBlank
-        private String mainName;
-        @NotBlank
         private String cidrBlock;
         private Integer resourceTotal;
+        @NotNull
         private Boolean valid;
         private String comment;
     }

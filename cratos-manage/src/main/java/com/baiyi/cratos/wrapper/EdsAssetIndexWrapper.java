@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class EdsAssetIndexWrapper extends BaseDataTableConverter<EdsAssetVO.Index, EdsAssetIndex> implements IBaseWrapper<EdsAssetVO.Index> {
 
     @Override
-    public void wrap(EdsAssetVO.Index index) {
+    public void wrap(EdsAssetVO.Index vo) {
     }
 
 }

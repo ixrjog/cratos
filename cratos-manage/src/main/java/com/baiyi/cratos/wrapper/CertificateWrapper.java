@@ -22,7 +22,7 @@ public class CertificateWrapper extends BaseDataTableConverter<CertificateVO.Cer
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
-    public void wrap(CertificateVO.Certificate certificate) {
+    public void wrap(CertificateVO.Certificate vo) {
         // This is a good idea
     }
 

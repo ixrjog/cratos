@@ -12,17 +12,20 @@ import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/8/26 11:10
+ * &#064;Date  2024/9/3 13:47
  * &#064;Version 1.0
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.GlobalNetwork, GlobalNetwork> implements IBaseWrapper<GlobalNetworkVO.GlobalNetwork> {
+public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.Network, GlobalNetwork> implements IBaseWrapper<GlobalNetworkVO.Network> {
+
+    private final GlobalNetworkPlanningWrapper globalNetworkPlanningWrapper;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
-    public void wrap(GlobalNetworkVO.GlobalNetwork globalNetwork) {
+    public void wrap(GlobalNetworkVO.Network vo) {
+        globalNetworkPlanningWrapper.wrap(vo);
     }
 
 }

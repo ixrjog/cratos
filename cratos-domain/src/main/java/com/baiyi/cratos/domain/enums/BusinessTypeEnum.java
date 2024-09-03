@@ -20,6 +20,8 @@ public enum BusinessTypeEnum {
     DOMAIN,
 
     GLOBAL_NETWORK,
+    GLOBAL_NETWORK_PLANNING,
+    GLOBAL_NETWORK_SUBNET,
 
     ASSET_MATURITY,
 

@@ -20,7 +20,7 @@ public class TrafficLayerRecordWrapper extends BaseDataTableConverter<TrafficLay
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.ENV, BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN})
-    public void wrap(TrafficLayerRecordVO.Record record) {
+    public void wrap(TrafficLayerRecordVO.Record vo) {
     }
 
 }

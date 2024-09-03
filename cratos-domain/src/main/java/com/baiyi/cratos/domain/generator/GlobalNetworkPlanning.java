@@ -7,24 +7,24 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 表名：global_network
+ * 表名：global_network_planning
  * 表注释：`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
- * `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- */
+ *           `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+*/
 @Data
-@Table(name = "global_network")
-public class GlobalNetwork implements IValid {
+@Table(name = "global_network_planning")
+public class GlobalNetworkPlanning implements IValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "network_id")
+    private Integer networkId;
 
     /**
      * 名称
      */
     private String name;
-
-    @Column(name = "main_name")
-    private String mainName;
 
     @Column(name = "cidr_block")
     private String cidrBlock;

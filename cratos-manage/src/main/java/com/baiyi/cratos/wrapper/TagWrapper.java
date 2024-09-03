@@ -23,7 +23,7 @@ public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implement
     private final TagService tagService;
 
     @Override
-    public void wrap(TagVO.Tag tag) {
+    public void wrap(TagVO.Tag vo) {
         // This is a good idea
     }
 

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.business.wrapper.impl.network.base;
 
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.GlobalNetwork;
+import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.exception.AssetToBusinessException;
 import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseGlobalNetworkAssetToBusinessWrapper<B> extends BaseAssetToBusinessWrapper<GlobalNetwork, B> {
+public abstract class BaseGlobalNetworkAssetToBusinessWrapper<B> extends BaseAssetToBusinessWrapper<GlobalNetworkSubnet, B> {
 
     private final EdsInstanceService edsInstanceService;
 
@@ -58,10 +58,10 @@ public abstract class BaseGlobalNetworkAssetToBusinessWrapper<B> extends BaseAss
     abstract protected String getCidrBlock(EdsAssetVO.Asset asset);
 
     @Override
-    protected GlobalNetwork getTarget(EdsAssetVO.Asset asset) {
+    protected GlobalNetworkSubnet getTarget(EdsAssetVO.Asset asset) {
         //   AliyunVirtualSwitch.Switch model = getAssetModel(asset);
         MainModel.Main main = getMain(asset);
-        return GlobalNetwork.builder()
+        return GlobalNetworkSubnet.builder()
                 .name(asset.getName())
                 .mainName(main.getName())
                 .mainType(main.getType())

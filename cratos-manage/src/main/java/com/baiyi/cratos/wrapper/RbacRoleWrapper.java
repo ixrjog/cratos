@@ -40,12 +40,12 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
     private final RbacUserRoleService rbacUserRoleService;
 
     @Override
-    public void wrap(RbacRoleVO.Role role) {
+    public void wrap(RbacRoleVO.Role vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(makeResourceCountForRbacResource(role))
-                .put(makeResourceCountForUser(role))
+                .put(makeResourceCountForRbacResource(vo))
+                .put(makeResourceCountForUser(vo))
                 .build();
-        role.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     private Map<String, Integer> makeResourceCountForRbacResource(RbacRoleVO.Role role) {

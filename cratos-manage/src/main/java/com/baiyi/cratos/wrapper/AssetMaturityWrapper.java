@@ -22,7 +22,7 @@ public class AssetMaturityWrapper extends BaseDataTableConverter<AssetMaturityVO
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
-    public void wrap(AssetMaturityVO.AssetMaturity assetMaturity) {
+    public void wrap(AssetMaturityVO.AssetMaturity vo) {
     }
 
 }

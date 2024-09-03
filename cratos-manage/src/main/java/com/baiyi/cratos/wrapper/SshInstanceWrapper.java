@@ -34,11 +34,11 @@ public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Ins
     private final SshSessionInstanceCommandService commandService;
 
     @Override
-    public void wrap(SshInstanceVO.Instance instance) {
+    public void wrap(SshInstanceVO.Instance vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(makeResourceCountForCommand(instance))
+                .put(makeResourceCountForCommand(vo))
                 .build();
-        instance.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     private Map<String, Integer> makeResourceCountForCommand(SshInstanceVO.Instance instance) {

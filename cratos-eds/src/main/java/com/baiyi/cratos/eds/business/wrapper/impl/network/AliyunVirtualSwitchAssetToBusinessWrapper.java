@@ -22,7 +22,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VIRTUAL
  * &#064;Version 1.0
  */
 @Component
-@BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
+@BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_VIRTUAL_SWITCH)
 public class AliyunVirtualSwitchAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<AliyunVirtualSwitch.Switch> {
 

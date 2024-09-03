@@ -22,7 +22,7 @@ public class RbacResourceWrapper extends BaseDataTableConverter<RbacResourceVO.R
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.RBAC_GROUP})
-    public void wrap(RbacResourceVO.Resource resource) {
+    public void wrap(RbacResourceVO.Resource vo) {
     }
 
 }

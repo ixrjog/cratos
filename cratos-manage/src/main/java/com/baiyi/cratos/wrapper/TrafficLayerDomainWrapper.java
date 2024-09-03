@@ -35,11 +35,11 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
-    public void wrap(TrafficLayerDomainVO.Domain domain) {
+    public void wrap(TrafficLayerDomainVO.Domain vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildResourceCountForRecord(domain))
+                .put(buildResourceCountForRecord(vo))
                 .build();
-        domain.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     @Override

@@ -33,11 +33,11 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
     @Override
     @Sensitive
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RBAC_ROLE})
-    public void wrap(UserVO.User user) {
+    public void wrap(UserVO.User vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(buildRbacUserRoleResourceCount(user))
+                .put(buildRbacUserRoleResourceCount(vo))
                 .build();
-        user.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     private Map<String, Integer> buildRbacUserRoleResourceCount(UserVO.User user) {

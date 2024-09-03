@@ -34,10 +34,10 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     @Sensitive
-    public void wrap(CredentialVO.Credential credential) {
+    public void wrap(CredentialVO.Credential vo) {
         // tips
-        ICredProvider iCredProvider = CredProviderFactory.getCredProvider(credential.getCredentialType());
-        credential.setTips(iCredProvider != null ? iCredProvider.getDesc() : NOT_APPLICABLE);
+        ICredProvider iCredProvider = CredProviderFactory.getCredProvider(vo.getCredentialType());
+        vo.setTips(iCredProvider != null ? iCredProvider.getDesc() : NOT_APPLICABLE);
     }
 
     @Override

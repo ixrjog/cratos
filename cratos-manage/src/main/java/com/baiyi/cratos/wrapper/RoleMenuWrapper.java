@@ -33,17 +33,17 @@ public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Men
     private final RbacRoleMenuService roleMenuService;
 
     @Override
-    public void wrap(RoleMenuVO.Menu roleMenu) {
+    public void wrap(RoleMenuVO.Menu vo) {
         RbacRoleMenu uniqueKey = RbacRoleMenu.builder()
-                .roleId(roleMenu.getRoleId())
-                .menuId(roleMenu.getId())
+                .roleId(vo.getRoleId())
+                .menuId(vo.getId())
                 .build();
-        roleMenu.setIsChecked(roleMenuService.getByUniqueKey(uniqueKey) != null);
-        roleMenu.setTitle(roleMenu.getName());
-        roleMenu.setDisabled(!roleMenu.getValid());
-        roleMenu.setOpen(true);
-        menuTitleWrapper.wrap(roleMenu);
-        recursionWrapRoleMenuChildren(roleMenu);
+        vo.setIsChecked(roleMenuService.getByUniqueKey(uniqueKey) != null);
+        vo.setTitle(vo.getName());
+        vo.setDisabled(!vo.getValid());
+        vo.setOpen(true);
+        menuTitleWrapper.wrap(vo);
+        recursionWrapRoleMenuChildren(vo);
     }
 
     public void recursionWrapRoleMenuChildren(RoleMenuVO.Menu roleMenu) {

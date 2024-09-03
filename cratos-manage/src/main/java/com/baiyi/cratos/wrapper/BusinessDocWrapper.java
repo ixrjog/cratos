@@ -29,7 +29,7 @@ public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.Bus
     private final BusinessDocumentService businessDocService;
 
     @Override
-    public void wrap(BusinessDocVO.BusinessDoc businessDoc) {
+    public void wrap(BusinessDocVO.BusinessDoc vo) {
         // This is a good idea
     }
 

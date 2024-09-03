@@ -26,7 +26,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
     private final EnvService envService;
 
     @Override
-    public void wrap(EnvVO.Env env) {
+    public void wrap(EnvVO.Env vo) {
     }
 
     @Override

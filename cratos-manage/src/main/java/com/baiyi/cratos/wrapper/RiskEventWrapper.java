@@ -24,7 +24,7 @@ public class RiskEventWrapper extends BaseDataTableConverter<RiskEventVO.Event, 
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})
-    public void wrap(RiskEventVO.Event event) {
+    public void wrap(RiskEventVO.Event vo) {
     }
 
 }

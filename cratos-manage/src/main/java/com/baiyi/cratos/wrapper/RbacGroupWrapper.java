@@ -35,11 +35,11 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
     private final RbacGroupService rbacGroupService;
 
     @Override
-    public void wrap(RbacGroupVO.Group group) {
+    public void wrap(RbacGroupVO.Group vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(makeResourceCountForRbacResource(group))
+                .put(makeResourceCountForRbacResource(vo))
                 .build();
-        group.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     private Map<String, Integer> makeResourceCountForRbacResource(RbacGroupVO.Group group) {

@@ -22,7 +22,7 @@ public class SshSessionWrapper extends BaseDataTableConverter<SshSessionVO.Sessi
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.SSH_INSTANCE})
-    public void wrap(SshSessionVO.Session session) {
+    public void wrap(SshSessionVO.Session vo) {
     }
 
 }

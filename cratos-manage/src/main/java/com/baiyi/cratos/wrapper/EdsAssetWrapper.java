@@ -36,21 +36,21 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     public static final boolean SKIP_LOAD_ASSET = true;
 
     @Override
-    public void wrap(EdsAssetVO.Asset asset) {
-        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(asset.getInstanceId(), asset.getAssetType());
+    public void wrap(EdsAssetVO.Asset vo) {
+        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(vo.getInstanceId(), vo.getAssetType());
         // TODO 是否要序列化对象？
-        asset.setOriginalAsset(edsInstanceProviderHolder.getProvider()
-                .assetLoadAs(asset.getOriginalModel()));
+        vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
+                .assetLoadAs(vo.getOriginalModel()));
         // ToBusiness
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(vo.getAssetType());
         if (assetToBusinessWrapper != null) {
-            assetToBusinessWrapper.wrap(asset);
+            assetToBusinessWrapper.wrap(vo);
         }
 
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
-                .put(makeResourceCountForAssetIndex(asset))
+                .put(makeResourceCountForAssetIndex(vo))
                 .build();
-        asset.setResourceCount(resourceCount);
+        vo.setResourceCount(resourceCount);
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {

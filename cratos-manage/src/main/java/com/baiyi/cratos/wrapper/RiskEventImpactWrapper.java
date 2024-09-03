@@ -35,13 +35,13 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
-    public void wrap(RiskEventVO.Impact impact) {
-        if (impact.getCost() != 0) {
+    public void wrap(RiskEventVO.Impact vo) {
+        if (vo.getCost() != 0) {
             RiskEventVO.CostDetail costDetail = RiskEventVO.CostDetail.builder()
-                    .cost(impact.getCost())
-                    .costDesc(TimeUtil.convertSecondsToHMS(impact.getCost()))
+                    .cost(vo.getCost())
+                    .costDesc(TimeUtil.convertSecondsToHMS(vo.getCost()))
                     .build();
-            impact.setCostDetail(costDetail);
+            vo.setCostDetail(costDetail);
         }
     }
 
