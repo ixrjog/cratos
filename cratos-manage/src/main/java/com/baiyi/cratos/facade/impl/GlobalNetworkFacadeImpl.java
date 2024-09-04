@@ -7,11 +7,13 @@ import com.baiyi.cratos.domain.generator.GlobalNetwork;
 import com.baiyi.cratos.domain.param.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
+import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.service.GlobalNetworkService;
 import com.baiyi.cratos.wrapper.GlobalNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * &#064;Author  baiyi
@@ -26,6 +28,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     private final GlobalNetworkService globalNetworkService;
 
     private final GlobalNetworkWrapper globalNetworkWrapper;
+
+    private final GlobalNetworkPlanningFacade globalNetworkPlanningFacade;
 
     @Override
     @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK)
@@ -53,7 +57,9 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(int id) {
+        globalNetworkPlanningFacade.removeNetwork(id);
         globalNetworkService.deleteById(id);
     }
 

@@ -25,6 +25,12 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class GlobalNetworkVO {
 
+    public interface HasNetwork {
+        Integer getNetworkId();
+
+        void setNetwork(Network network);
+    }
+
     public interface HasPlannings {
         Integer getNetworkId();
 
@@ -67,7 +73,7 @@ public class GlobalNetworkVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
-    public static class Planning extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Planning extends BaseVO implements BaseBusiness.IBusinessAnnotate, HasNetwork, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = -8446398754921903111L;
         private Integer id;
@@ -77,6 +83,7 @@ public class GlobalNetworkVO {
         private Integer resourceTotal;
         private Boolean valid;
         private String comment;
+        private Network network;
 
         @Override
         public Integer getBusinessId() {

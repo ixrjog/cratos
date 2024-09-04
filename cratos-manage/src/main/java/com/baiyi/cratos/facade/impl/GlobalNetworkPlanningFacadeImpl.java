@@ -12,6 +12,9 @@ import com.baiyi.cratos.wrapper.GlobalNetworkPlanningWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -31,7 +34,8 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
     @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
     public DataTable<GlobalNetworkVO.Planning> queryGlobalNetworkPlanningPage(
             GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQuery pageQuery) {
-        DataTable<GlobalNetworkPlanning> table = globalNetworkPlanningService.queryGlobalNetworkPlanningPage(pageQuery.toParam());
+        DataTable<GlobalNetworkPlanning> table = globalNetworkPlanningService.queryGlobalNetworkPlanningPage(
+                pageQuery.toParam());
         return globalNetworkPlanningWrapper.wrapToTarget(table);
     }
 
@@ -42,9 +46,22 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
     }
 
     @Override
-    public void updateGlobalNetworkPlanning(GlobalNetworkPlanningParam.UpdateGlobalNetworkPlanning updateGlobalNetworkPlanning) {
+    public void updateGlobalNetworkPlanning(
+            GlobalNetworkPlanningParam.UpdateGlobalNetworkPlanning updateGlobalNetworkPlanning) {
         GlobalNetworkPlanning globalNetworkPlanning = updateGlobalNetworkPlanning.toTarget();
         globalNetworkPlanningService.updateByPrimaryKey(globalNetworkPlanning);
+    }
+
+    @Override
+    public void removeNetwork(int networkId) {
+        List<GlobalNetworkPlanning> plannings = globalNetworkPlanningService.queryByNetworkId(networkId);
+        if (CollectionUtils.isEmpty(plannings)) {
+            return;
+        }
+        for (GlobalNetworkPlanning planning : plannings) {
+            planning.setNetworkId(0);
+            globalNetworkPlanningService.updateByPrimaryKey(planning);
+        }
     }
 
 }

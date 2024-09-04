@@ -21,5 +21,4 @@ public interface GlobalNetworkFacade {
 
     void deleteById(int id);
 
-
 }

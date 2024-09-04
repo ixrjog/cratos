@@ -19,4 +19,6 @@ public interface GlobalNetworkPlanningFacade {
     void updateGlobalNetworkPlanning(
             GlobalNetworkPlanningParam.UpdateGlobalNetworkPlanning updateGlobalNetworkPlanning);
 
+    void removeNetwork(int networkId);
+
 }

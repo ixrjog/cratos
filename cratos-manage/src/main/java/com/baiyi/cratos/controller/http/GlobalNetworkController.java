@@ -58,6 +58,13 @@ public class GlobalNetworkController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete global network by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteGlobalNetworkById(@RequestParam int id) {
+        globalNetworkFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
     // ---------- Planning
 
     @Operation(summary = "Pagination query global network planning")

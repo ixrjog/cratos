@@ -1,11 +1,13 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
+import com.baiyi.cratos.service.GlobalNetworkService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,14 +20,27 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.Network, GlobalNetwork> implements IBaseWrapper<GlobalNetworkVO.Network> {
+@BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
+public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.Network, GlobalNetwork> implements IBusinessWrapper<GlobalNetworkVO.HasNetwork,GlobalNetworkVO.Network> {
 
-    private final GlobalNetworkPlanningWrapper globalNetworkPlanningWrapper;
+    private final GlobalNetworkService globalNetworkService;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Network vo) {
-        globalNetworkPlanningWrapper.wrap(vo);
+    }
+
+
+    @Override
+    public void businessWrap(GlobalNetworkVO.HasNetwork hasNetwork) {
+        if (hasNetwork.getNetworkId() <= 0) {
+            return;
+        }
+        GlobalNetwork globalNetwork = globalNetworkService.getById(hasNetwork.getNetworkId());
+        if (globalNetwork == null) {
+            return;
+        }
+        hasNetwork.setNetwork(this.wrapToTarget(globalNetwork));
     }
 
 }
