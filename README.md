@@ -1,66 +1,32 @@
 # CRATOS
-> 安全的运维通用开发框架
+> A secure general development framework for operations and maintenance
 
 + OpenJDK 21
-+ SpringBoot 3.3.2 (GA)
++ SpringBoot 3.3.3 (GA)
 + MySql 8+
 
----
-# annotation
+#### Multi external data source management
 
-#### Domain加解密注解使用
-```
-@DomainDecrypt DomainClass
-@FieldEncrypt  Domain字段中使用
-@DomainDecrypt Service的方法中解密Domain(在BaseService接口中默认实现)
-@DomainEncrypt Service的方法中加密Domain(在BaseService接口中默认实现)
-```
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/001.jpg" width="830"></img>
 
-```
-    @Override
-    @DomainDecrypt
-    public List<BusinessDocument> selectByBusiness(BaseBusiness.IBusiness business) {
-       ...
-    }
-```
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/002.jpg" width="830"></img>
 
-#### View脱敏注解使用
-```
-@FieldSensitive VO字段中使用
-@Sensitive Wrapper的方法中使用
-```
+#### Data source management, configuration management
 
-#### 反射说明
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/003.jpg" width="830"></img>
 
-+ 获取范型接口实现类的对象类型
-```Java
-public interface IToTarget<T> {
+#### Data source asset management
 
-    default T toTarget() {
-        return BeanCopierUtil.copyProperties(this, getTargetClazz());
-    }
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/004.jpg" width="830"></img>
 
-    default Class<T> getTargetClazz() {
-        //  return (Class<T>) AopUtils.getTargetClass(this).getAnnotation(TargetClazz.class).clazz();
-        // 反射获取范型T的具体类型
-        return Generics.find(this.getClass(), IToTarget.class, 0);
-    }
+#### Traffic layer management (ALB/ELB & Ingress Rules)
 
-}
-```
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/005.jpg" width="830"></img>
 
-#### BusinessTag & BusinessDoc
-```Java
-// extends SupportBusinessService
-public interface DomainService extends BaseValidService<Domain, DomainMapper>, BaseUniqueKeyService<Domain>, SupportBusinessService, BaseQueryByExpiryService<Domain> {
-    // ...
-}
+#### SSH terminal (Command mode)
 
-@Service
-@RequiredArgsConstructor
-// 增加注解
-@BusinessType(type = BusinessTypeEnum.DOMAIN)
-public class DomainServiceImpl implements DomainService {
-    // ...
-}
-```
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/006.jpg" width="830"></img>
+
+#### Command Mode Asset Management
+
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/007.jpg" width="830"></img>
