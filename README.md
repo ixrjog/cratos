@@ -25,7 +25,7 @@
 
 #### SSH terminal (Command mode)
 
-<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/006.jpg" width="830"></img>
+<img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/006.png" width="830"></img>
 
 #### Command Mode Asset Management
 
