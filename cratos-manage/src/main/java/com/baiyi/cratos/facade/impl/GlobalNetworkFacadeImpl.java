@@ -47,8 +47,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     }
 
     @Override
-    public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetworkSubnet) {
-        GlobalNetwork globalNetwork = addGlobalNetworkSubnet.toTarget();
+    public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork) {
+        GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
         int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
         globalNetwork.setResourceTotal(resourceTotal);
         globalNetworkService.add(globalNetwork);
@@ -56,7 +56,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
 
     @Override
     public void updateGlobalNetwork(GlobalNetworkParam.UpdateGlobalNetwork updateGlobalNetwork) {
-        GlobalNetwork globalNetwork = globalNetworkService.getById(updateGlobalNetwork.getId());
+        GlobalNetwork globalNetwork = updateGlobalNetwork.toTarget();
         int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
         globalNetwork.setResourceTotal(resourceTotal);
         globalNetworkService.updateByPrimaryKey(globalNetwork);
