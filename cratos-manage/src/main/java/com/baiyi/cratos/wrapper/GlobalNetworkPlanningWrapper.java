@@ -38,7 +38,7 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
         List<GlobalNetworkPlanning> globalNetworkPlannings = globalNetworkPlanningService.queryByNetworkId(
                 hasPlannings.getNetworkId());
         hasPlannings.setPlannings(globalNetworkPlannings.stream()
-                .map(this::wrapToTarget)
+                .map(this::convert)
                 .collect(Collectors.toList()));
     }
 

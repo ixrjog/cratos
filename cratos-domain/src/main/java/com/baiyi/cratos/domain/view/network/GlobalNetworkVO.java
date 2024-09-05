@@ -67,13 +67,14 @@ public class GlobalNetworkVO {
         public Integer getNetworkId() {
             return id;
         }
+
     }
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
-    public static class Planning extends BaseVO implements BaseBusiness.IBusinessAnnotate, HasNetwork, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Planning extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = -8446398754921903111L;
         private Integer id;
@@ -83,6 +84,7 @@ public class GlobalNetworkVO {
         private Integer resourceTotal;
         private Boolean valid;
         private String comment;
+
         private Network network;
 
         @Override
