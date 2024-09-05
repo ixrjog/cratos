@@ -57,6 +57,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public void updateGlobalNetwork(GlobalNetworkParam.UpdateGlobalNetwork updateGlobalNetwork) {
         GlobalNetwork globalNetwork = globalNetworkService.getById(updateGlobalNetwork.getId());
+        int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
+        globalNetwork.setResourceTotal(resourceTotal);
         globalNetworkService.updateByPrimaryKey(globalNetwork);
     }
 

@@ -67,7 +67,6 @@ public class GlobalNetworkVO {
         public Integer getNetworkId() {
             return id;
         }
-
     }
 
     @EqualsAndHashCode(callSuper = true)
