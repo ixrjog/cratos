@@ -90,6 +90,14 @@ public class GlobalNetworkController {
         return HttpResult.SUCCESS;
     }
 
+
+    @Operation(summary = "Delete global network planning by id")
+    @DeleteMapping(value = "/planning/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteGlobalNetworkPlanningById(@RequestParam int id) {
+        globalNetworkPlanningFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
     // ---------- Subnet
 
     @Operation(summary = "Add global network subnet")

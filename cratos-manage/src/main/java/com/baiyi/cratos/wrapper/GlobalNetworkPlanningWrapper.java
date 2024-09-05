@@ -1,12 +1,13 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.service.GlobalNetworkPlanningService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,18 +23,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalNetworkVO.Planning, GlobalNetworkPlanning> implements IBaseWrapper<GlobalNetworkVO.Planning> {
+@BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
+public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalNetworkVO.Planning, GlobalNetworkPlanning> implements IBusinessWrapper<GlobalNetworkVO.HasPlannings, GlobalNetworkVO.Planning> {
 
     private final GlobalNetworkPlanningService globalNetworkPlanningService;
-
-    private final GlobalNetworkWrapper globalNetworkWrapper;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.GLOBAL_NETWORK, BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Planning vo) {
     }
 
-    public void wrap(GlobalNetworkVO.HasPlannings hasPlannings) {
+    @Override
+    public void businessWrap(GlobalNetworkVO.HasPlannings hasPlannings) {
         List<GlobalNetworkPlanning> globalNetworkPlannings = globalNetworkPlanningService.queryByNetworkId(
                 hasPlannings.getNetworkId());
         hasPlannings.setPlannings(globalNetworkPlannings.stream()

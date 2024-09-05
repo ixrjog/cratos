@@ -21,15 +21,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
-public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.Network, GlobalNetwork> implements IBusinessWrapper<GlobalNetworkVO.HasNetwork,GlobalNetworkVO.Network> {
+public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO.Network, GlobalNetwork> implements IBusinessWrapper<GlobalNetworkVO.HasNetwork, GlobalNetworkVO.Network> {
 
     private final GlobalNetworkService globalNetworkService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.GLOBAL_NETWORK_PLANNING, BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Network vo) {
     }
-
 
     @Override
     public void businessWrap(GlobalNetworkVO.HasNetwork hasNetwork) {

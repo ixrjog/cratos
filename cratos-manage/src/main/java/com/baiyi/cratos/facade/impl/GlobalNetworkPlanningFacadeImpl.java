@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/9/2 16:51
@@ -62,6 +61,11 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
             planning.setNetworkId(0);
             globalNetworkPlanningService.updateByPrimaryKey(planning);
         }
+    }
+
+    @Override
+    public void deleteById(int id) {
+        globalNetworkPlanningService.deleteById(id);
     }
 
 }

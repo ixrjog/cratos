@@ -2,6 +2,7 @@ package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.util.NetworkUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,6 +47,14 @@ public class NetworkUtilTest extends BaseUnit {
 //      for (String s : list){
 //          System.out.println(s);
 //      }
+    }
+
+    //         int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
+    @Test
+    void test2() {
+        String mask = "192.168.0.0/24";
+        int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(mask, "/"));
+        System.out.println(resourceTotal);
     }
 
 }

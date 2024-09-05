@@ -21,4 +21,6 @@ public interface GlobalNetworkPlanningFacade {
 
     void removeNetwork(int networkId);
 
+    void deleteById(int id);
+
 }

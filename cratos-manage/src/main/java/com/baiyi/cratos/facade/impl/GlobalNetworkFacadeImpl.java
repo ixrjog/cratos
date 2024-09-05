@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
@@ -12,6 +13,7 @@ import com.baiyi.cratos.service.GlobalNetworkService;
 import com.baiyi.cratos.wrapper.GlobalNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetworkSubnet) {
         GlobalNetwork globalNetwork = addGlobalNetworkSubnet.toTarget();
+        int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
+        globalNetwork.setResourceTotal(resourceTotal);
         globalNetworkService.add(globalNetwork);
     }
 
