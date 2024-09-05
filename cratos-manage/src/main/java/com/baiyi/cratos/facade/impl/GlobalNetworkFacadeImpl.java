@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
-import com.baiyi.cratos.common.util.NetworkUtil;
+import com.baiyi.cratos.common.util.IpUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
@@ -49,7 +49,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork) {
         GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
-        int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(), "/"));
+        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(), "/"));
         globalNetwork.setResourceTotal(resourceTotal);
         globalNetworkService.add(globalNetwork);
     }

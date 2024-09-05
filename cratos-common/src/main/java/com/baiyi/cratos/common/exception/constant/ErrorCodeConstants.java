@@ -33,4 +33,6 @@ public interface ErrorCodeConstants {
 
     int ASSET_TO_BUSINESS_ERROR = 48000;
 
+    int GLOBAL_NETWORK_ERROR = 49000;
+
 }

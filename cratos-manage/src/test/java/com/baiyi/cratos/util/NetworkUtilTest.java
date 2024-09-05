@@ -1,7 +1,7 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.NetworkUtil;
+import com.baiyi.cratos.common.util.IpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +16,14 @@ public class NetworkUtilTest extends BaseUnit {
     void test() {
         String ip = "172.31.0.4";//ip
         String mask = "24";//位数，如果只知道子网掩码不知道位数的话在参考getMaskMap()方法
-        String subMark = NetworkUtil.getMaskMap(mask);
+        String subMark = IpUtil.getMaskMap(mask);
         System.out.println("子网掩码为：" + subMark);
         //获得起始IP和终止IP的方法（包含网络地址和广播地址）
-        String startIp = NetworkUtil.getBeginIpStr(ip, mask);
-        String endIp = NetworkUtil.getEndIpStr(ip, mask);
+        String startIp = IpUtil.getBeginIpStr(ip, mask);
+        String endIp = IpUtil.getEndIpStr(ip, mask);
         System.out.println("起始IP：" + startIp + "终止IP：" + endIp);
         //根据位数查询IP数量
-        int ipCount = NetworkUtil.getIpCount("24");
+        int ipCount = IpUtil.getIpCount("24");
         System.out.println("ip个数：" + ipCount);
         //获得起始IP和终止IP的方法（不包含网络地址和广播地址）
         String subStart = startIp.split("\\.")[0] + "." + startIp.split("\\.")[1] + "." + startIp.split("\\.")[2] + ".";
@@ -33,14 +33,14 @@ public class NetworkUtilTest extends BaseUnit {
         System.out.println("起始IP：" + startIp + "终止IP：" + endIp);
 
         //判断一个IP是否属于某个网段
-        boolean flag = NetworkUtil.isInRange("10.2.0.0", "10.3.0.0/17");
+        boolean flag = IpUtil.isInRange("10.2.0.0", "10.3.0.0/17");
         System.out.println(flag);
 
         //判断是否是一个IP
-        System.out.println(NetworkUtil.isIP("192.168.1.0"));
+        System.out.println(IpUtil.isIP("192.168.1.0"));
 
         //把ip转换为数字(mysql中inet_aton()的实现)
-        System.out.println(NetworkUtil.ipToDouble("192.168.1.1"));
+        System.out.println(IpUtil.ipToDouble("192.168.1.1"));
 
         //打印IP段所有IP（IP过多会内存溢出）
 //      List<String> list = parseIpMaskRange(ip, mask);
@@ -53,7 +53,7 @@ public class NetworkUtilTest extends BaseUnit {
     @Test
     void test2() {
         String mask = "192.168.0.0/24";
-        int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(mask, "/"));
+        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(mask, "/"));
         System.out.println(resourceTotal);
     }
 
