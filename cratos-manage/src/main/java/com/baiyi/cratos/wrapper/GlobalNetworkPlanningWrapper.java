@@ -1,6 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
@@ -13,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -39,7 +39,15 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
                 hasPlannings.getNetworkId());
         hasPlannings.setPlannings(globalNetworkPlannings.stream()
                 .map(this::convert)
-                .collect(Collectors.toList()));
+                .toList());
+    }
+
+    @Override
+    public DataTable<GlobalNetworkVO.Planning> wrapToTarget(DataTable<GlobalNetworkPlanning> dataTable) {
+        return new DataTable<>(dataTable.getData()
+                .stream()
+                .map(this::convert)
+                .toList(), dataTable.getTotalNum());
     }
 
 }
