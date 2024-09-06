@@ -21,4 +21,7 @@ public interface GlobalNetworkFacade {
 
     void deleteById(int id);
 
+    GlobalNetworkVO.NetworkDetails queryGlobalNetworkDetails(
+            GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails);
+
 }

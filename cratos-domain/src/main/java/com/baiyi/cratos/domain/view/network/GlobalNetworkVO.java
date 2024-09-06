@@ -7,9 +7,7 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -123,6 +121,42 @@ public class GlobalNetworkVO {
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @Schema
+    @Builder
+    @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
+    public static class NetworkDetails extends BaseVO implements HasNetwork, Serializable {
+        @Serial
+        private static final long serialVersionUID = 5608213392998501622L;
+        private Integer networkId;
+        private Network network;
+        private List<PlanningDetails> planningDetails;
+
+        @Override
+        public Integer getNetworkId() {
+            return networkId;
+        }
+    }
+
+    @Data
+    @Schema
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PlanningDetails implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -482940254546269293L;
+        private Integer id;
+        private Integer networkId;
+        private String name;
+        private String cidrBlock;
+        private Integer resourceTotal;
+        private Boolean valid;
+        private String comment;
+
+        private String subnetTable;
     }
 
 }

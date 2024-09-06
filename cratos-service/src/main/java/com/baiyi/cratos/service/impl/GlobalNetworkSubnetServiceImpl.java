@@ -46,6 +46,14 @@ public class GlobalNetworkSubnetServiceImpl implements GlobalNetworkSubnetServic
     }
 
     @Override
+    public List<GlobalNetworkSubnet> queryByValid() {
+        Example example = new Example(GlobalNetworkSubnet.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("valid", true);
+        return globalNetworkSubnetMapper.selectByExample(example);
+    }
+
+    @Override
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
         globalNetworkSubnetMapper.deleteByPrimaryKey(id);

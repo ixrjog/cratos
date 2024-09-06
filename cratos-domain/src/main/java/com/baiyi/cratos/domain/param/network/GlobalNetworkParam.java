@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -87,6 +88,14 @@ public class GlobalNetworkParam {
         private Integer resourceTotal;
         private Boolean valid;
         private String comment;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class QueryGlobalNetworkDetails {
+        @NotNull
+        private Integer id;
     }
 
 }

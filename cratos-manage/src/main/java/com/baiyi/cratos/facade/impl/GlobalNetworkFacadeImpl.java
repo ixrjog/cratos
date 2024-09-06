@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.service.GlobalNetworkService;
+import com.baiyi.cratos.wrapper.GlobalNetworkDetailsWrapper;
 import com.baiyi.cratos.wrapper.GlobalNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     private final GlobalNetworkWrapper globalNetworkWrapper;
 
     private final GlobalNetworkPlanningFacade globalNetworkPlanningFacade;
+
+    private final GlobalNetworkDetailsWrapper globalNetworkDetailsWrapper;
 
     @Override
     @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK)
@@ -68,6 +71,16 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     public void deleteById(int id) {
         globalNetworkPlanningFacade.removeNetwork(id);
         globalNetworkService.deleteById(id);
+    }
+
+    @Override
+    public GlobalNetworkVO.NetworkDetails queryGlobalNetworkDetails(
+            GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails) {
+        GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
+                .networkId(queryGlobalNetworkDetails.getId())
+                .build();
+        globalNetworkDetailsWrapper.wrap(networkDetails);
+        return networkDetails;
     }
 
 }

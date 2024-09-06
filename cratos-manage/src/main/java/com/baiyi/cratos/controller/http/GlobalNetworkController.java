@@ -65,6 +65,13 @@ public class GlobalNetworkController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Query global network details")
+    @PostMapping(value = "/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<GlobalNetworkVO.NetworkDetails> queryGlobalNetworkDetails(
+            @RequestBody @Valid GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails) {
+        return new HttpResult<>(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
+    }
+
     // ---------- Planning
 
     @Operation(summary = "Pagination query global network planning")
