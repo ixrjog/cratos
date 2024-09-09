@@ -1,12 +1,14 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
-import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.GlobalNetwork;
 import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.service.GlobalNetworkPlanningService;
+import com.baiyi.cratos.service.GlobalNetworkService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +30,15 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
 
     private final GlobalNetworkPlanningService globalNetworkPlanningService;
 
+    private final GlobalNetworkService globalNetworkService;
+
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.GLOBAL_NETWORK, BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Planning vo) {
+        GlobalNetwork globalNetwork = globalNetworkService.getById(vo.getNetworkId());
+        if (globalNetwork != null) {
+            vo.setNetwork(BeanCopierUtil.copyProperties(globalNetwork, GlobalNetworkVO.Network.class));
+        }
     }
 
     @Override
@@ -40,14 +48,6 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
         hasPlannings.setPlannings(globalNetworkPlannings.stream()
                 .map(this::convert)
                 .toList());
-    }
-
-    @Override
-    public DataTable<GlobalNetworkVO.Planning> wrapToTarget(DataTable<GlobalNetworkPlanning> dataTable) {
-        return new DataTable<>(dataTable.getData()
-                .stream()
-                .map(this::convert)
-                .toList(), dataTable.getTotalNum());
     }
 
 }
