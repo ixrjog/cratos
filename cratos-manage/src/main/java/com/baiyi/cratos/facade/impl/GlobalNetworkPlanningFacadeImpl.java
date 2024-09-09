@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
+import com.baiyi.cratos.common.util.IpUtil;
 import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -15,6 +16,7 @@ import com.baiyi.cratos.service.GlobalNetworkService;
 import com.baiyi.cratos.wrapper.GlobalNetworkPlanningWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -50,6 +52,8 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
         GlobalNetworkPlanning globalNetworkPlanning = addGlobalNetworkPlanning.toTarget();
         // 需要判断子网
         tryNetwork(globalNetworkPlanning);
+        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetworkPlanning.getCidrBlock(), "/"));
+        globalNetworkPlanning.setResourceTotal(resourceTotal);
         globalNetworkPlanningService.add(globalNetworkPlanning);
     }
 
@@ -58,6 +62,8 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
             GlobalNetworkPlanningParam.UpdateGlobalNetworkPlanning updateGlobalNetworkPlanning) {
         GlobalNetworkPlanning globalNetworkPlanning = updateGlobalNetworkPlanning.toTarget();
         tryNetwork(globalNetworkPlanning);
+        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetworkPlanning.getCidrBlock(), "/"));
+        globalNetworkPlanning.setResourceTotal(resourceTotal);
         globalNetworkPlanningService.updateByPrimaryKey(globalNetworkPlanning);
     }
 
