@@ -35,6 +35,7 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Planning vo) {
+        // 不使用BusinessWrapper避免循环注入
         GlobalNetwork globalNetwork = globalNetworkService.getById(vo.getNetworkId());
         if (globalNetwork != null) {
             vo.setNetwork(BeanCopierUtil.copyProperties(globalNetwork, GlobalNetworkVO.Network.class));
