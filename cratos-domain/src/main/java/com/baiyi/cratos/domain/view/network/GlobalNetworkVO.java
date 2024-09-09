@@ -127,6 +127,8 @@ public class GlobalNetworkVO {
     @Data
     @Schema
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK)
     public static class NetworkDetails extends BaseVO implements HasNetwork, Serializable {
         @Serial
