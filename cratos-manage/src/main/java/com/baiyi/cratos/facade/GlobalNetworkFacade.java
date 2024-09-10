@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/9/3 11:32
@@ -23,5 +25,7 @@ public interface GlobalNetworkFacade {
 
     GlobalNetworkVO.NetworkDetails queryGlobalNetworkDetails(
             GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails);
+
+    List<GlobalNetworkVO.NetworkDetails> getGlobalNetworkAllDetails();
 
 }

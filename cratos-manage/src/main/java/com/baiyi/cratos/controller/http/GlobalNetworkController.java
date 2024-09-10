@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/8/26 10:43
@@ -72,6 +74,12 @@ public class GlobalNetworkController {
         return new HttpResult<>(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
     }
 
+    @Operation(summary = "Query global network all details")
+    @GetMapping(value = "/all/details/get",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<GlobalNetworkVO.NetworkDetails>> getGlobalNetworkAllDetails() {
+        return new HttpResult<>(globalNetworkFacade.getGlobalNetworkAllDetails());
+    }
+
     // ---------- Planning
 
     @Operation(summary = "Pagination query global network planning")
@@ -96,7 +104,6 @@ public class GlobalNetworkController {
         globalNetworkPlanningFacade.updateGlobalNetworkPlanning(updateGlobalNetworkPlanning);
         return HttpResult.SUCCESS;
     }
-
 
     @Operation(summary = "Delete global network planning by id")
     @DeleteMapping(value = "/planning/del", produces = MediaType.APPLICATION_JSON_VALUE)

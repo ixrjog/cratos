@@ -35,6 +35,16 @@ public class GlobalNetworkVO {
         void setPlannings(List<Planning> plannings);
     }
 
+    public interface HasCidrBlock {
+        String getCidrBlock();
+    }
+
+    public interface CidrBlockComparable extends HasCidrBlock, Comparable<HasCidrBlock> {
+        default int compareTo(@NonNull HasCidrBlock o) {
+            return getCidrBlock().compareTo(o.getCidrBlock());
+        }
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
@@ -99,7 +109,7 @@ public class GlobalNetworkVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-    public static class Subnet extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Subnet extends BaseVO implements CidrBlockComparable, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
         @Serial
         private static final long serialVersionUID = 7872000380929970531L;
         private Integer id;
@@ -121,6 +131,7 @@ public class GlobalNetworkVO {
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -147,7 +158,7 @@ public class GlobalNetworkVO {
     @Schema
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PlanningDetails implements Serializable {
+    public static class PlanningDetails implements CidrBlockComparable, Serializable {
         @Serial
         private static final long serialVersionUID = -482940254546269293L;
         private Integer id;
@@ -159,6 +170,7 @@ public class GlobalNetworkVO {
         private String comment;
 
         private String subnetTable;
+
     }
 
 }

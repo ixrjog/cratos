@@ -25,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author 修远
@@ -83,7 +84,7 @@ public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvi
                         .stream()
                         .map(role -> StringUtils.substring(role, 6))
                         .sorted()
-                        .toList());
+                        .collect(Collectors.toList()));
         return Lists.newArrayList(toEdsAssetIndex(edsAsset, "roles", roles));
     }
 

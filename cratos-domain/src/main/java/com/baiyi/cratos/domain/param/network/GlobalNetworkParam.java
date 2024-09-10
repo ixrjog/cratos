@@ -10,9 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -91,6 +89,9 @@ public class GlobalNetworkParam {
 
     @Data
     @Schema
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class QueryGlobalNetworkDetails {
         @NotNull
         private Integer id;

@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -81,6 +84,21 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
                 .build();
         globalNetworkDetailsWrapper.wrap(networkDetails);
         return networkDetails;
+    }
+
+    @Override
+    public List<GlobalNetworkVO.NetworkDetails> getGlobalNetworkAllDetails() {
+        List<GlobalNetwork> networks = globalNetworkService.queryByValid();
+        if (CollectionUtils.isEmpty(networks)) {
+            return List.of();
+        }
+        return networks.stream().map(e->{
+            GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
+                    .networkId(e.getId())
+                    .build();
+            globalNetworkDetailsWrapper.wrap(networkDetails);
+            return networkDetails;
+        }).toList();
     }
 
 }

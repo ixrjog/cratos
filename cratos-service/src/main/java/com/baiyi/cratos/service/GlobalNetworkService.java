@@ -8,6 +8,8 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/9/2 17:27
@@ -16,5 +18,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
 public interface GlobalNetworkService extends BaseValidService<GlobalNetwork, GlobalNetworkMapper>, BaseUniqueKeyService<GlobalNetwork, GlobalNetworkMapper>, SupportBusinessService {
 
     DataTable<GlobalNetwork> queryGlobalNetworkPage(GlobalNetworkParam.GlobalNetworkPageQueryParam param);
+
+    List<GlobalNetwork> queryByValid();
 
 }

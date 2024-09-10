@@ -38,11 +38,19 @@ public class GlobalNetworkServiceImpl implements GlobalNetworkService {
 
     @Override
     public GlobalNetwork getByUniqueKey(@NonNull GlobalNetwork record) {
-        Example example = new Example(GlobalNetworkSubnet.class);
+        Example example = new Example(GlobalNetwork.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName())
                 .andEqualTo("cidrBlock", record.getCidrBlock());
         return globalNetworkMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<GlobalNetwork> queryByValid() {
+        Example example = new Example(GlobalNetwork.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("valid", true);
+        return globalNetworkMapper.selectByExample(example);
     }
 
 }
