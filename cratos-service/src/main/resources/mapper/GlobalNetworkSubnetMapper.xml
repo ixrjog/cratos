@@ -10,6 +10,9 @@
     <result column="main_name" jdbcType="VARCHAR" property="mainName" />
     <result column="main_type" jdbcType="VARCHAR" property="mainType" />
     <result column="main_id" jdbcType="INTEGER" property="mainId" />
+    <result column="subnet_key" jdbcType="VARCHAR" property="subnetKey" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="zone" jdbcType="VARCHAR" property="zone" />
     <result column="cidr_block" jdbcType="VARCHAR" property="cidrBlock" />
     <result column="resource_total" jdbcType="INTEGER" property="resourceTotal" />
     <result column="valid" jdbcType="BIT" property="valid" />
@@ -32,6 +35,7 @@
               and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" )
           </if>
       </where>
+      order by cidr_block
   </select>
 
 </mapper>

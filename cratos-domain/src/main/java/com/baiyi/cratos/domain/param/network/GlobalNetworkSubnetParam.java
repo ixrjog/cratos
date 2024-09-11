@@ -62,6 +62,9 @@ public class GlobalNetworkSubnetParam {
         private String mainName;
         private String mainType;
         private Integer mainId;
+        private String subnetKey;
+        private String region;
+        private String zone;
         private String cidrBlock;
         private Integer resourceTotal;
         private Boolean valid;
@@ -79,6 +82,9 @@ public class GlobalNetworkSubnetParam {
         private String mainName;
         private String mainType;
         private Integer mainId;
+        private String subnetKey;
+        private String region;
+        private String zone;
         private String cidrBlock;
         private Integer resourceTotal;
         private Boolean valid;

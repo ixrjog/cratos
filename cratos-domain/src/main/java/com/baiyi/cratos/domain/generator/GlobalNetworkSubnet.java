@@ -42,6 +42,13 @@ public class GlobalNetworkSubnet implements IValid, ToBusinessTarget {
     @Column(name = "main_type")
     private String mainType;
 
+    @Column(name = "subnet_key")
+    private String subnetKey;
+
+    private String region;
+
+    private String zone;
+
     /**
      * 主体ID
      */

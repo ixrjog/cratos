@@ -33,6 +33,7 @@
               and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" )
           </if>
       </where>
+      order by cidr_block
   </select>
 
 </mapper>
