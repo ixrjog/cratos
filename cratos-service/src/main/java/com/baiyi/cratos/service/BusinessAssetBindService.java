@@ -23,4 +23,6 @@ public interface BusinessAssetBindService extends BaseUniqueKeyService<BusinessA
 
     List<BusinessAssetBind> queryByAssetId(int assetId);
 
+    List<BusinessAssetBind> queryByBusiness(BaseBusiness.HasBusiness business);
+
 }

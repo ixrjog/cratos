@@ -116,6 +116,9 @@ public class GlobalNetworkVO {
         private String name;
         private String mainName;
         private String mainType;
+        private String subnetKey;
+        private String region;
+        private String zone;
         private Integer mainId;
         private String cidrBlock;
         private Integer resourceTotal;

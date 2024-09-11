@@ -51,4 +51,13 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
         return businessAssetBindMapper.selectByExample(example);
     }
 
+    @Override
+    public List<BusinessAssetBind> queryByBusiness(BaseBusiness.HasBusiness business) {
+        Example example = new Example(BusinessAssetBind.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", business.getBusinessType())
+                .andEqualTo("businessId", business.getBusinessId());
+        return businessAssetBindMapper.selectByExample(example);
+    }
+
 }
