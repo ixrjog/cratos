@@ -134,7 +134,6 @@ public class GlobalNetworkVO {
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
-
     }
 
     @EqualsAndHashCode(callSuper = true)

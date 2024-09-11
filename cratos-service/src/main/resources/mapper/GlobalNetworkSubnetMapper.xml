@@ -32,7 +32,7 @@
               </foreach>
           </if>
           <if test="queryName != null and queryName != ''">
-              and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" )
+              and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" or subnet_key like "%" #{queryName} "%" )
           </if>
       </where>
       order by cidr_block
