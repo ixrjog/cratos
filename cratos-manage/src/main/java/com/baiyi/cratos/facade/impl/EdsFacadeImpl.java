@@ -177,6 +177,7 @@ public class EdsFacadeImpl implements EdsFacade {
                             }
                         });
         EdsConfig edsConfig = updateEdsConfig.toTarget();
+        edsConfig.setInstanceId(dbEdsConfig.getInstanceId());
         edsConfigService.updateByPrimaryKey(edsConfig);
         EdsInstanceProviderFactory.setConfig(edsConfig.getEdsType(), edsConfig);
     }

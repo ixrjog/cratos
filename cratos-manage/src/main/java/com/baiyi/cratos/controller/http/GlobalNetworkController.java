@@ -80,6 +80,13 @@ public class GlobalNetworkController {
         return new HttpResult<>(globalNetworkFacade.getGlobalNetworkAllDetails());
     }
 
+    @Operation(summary = "Update global network valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setGlobalNetworkValidById(@RequestParam int id) {
+        globalNetworkFacade.setGlobalNetworkValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
     // ---------- Planning
 
     @Operation(summary = "Pagination query global network planning")
