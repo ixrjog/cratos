@@ -9,14 +9,12 @@ import com.baiyi.cratos.domain.view.env.EnvVO;
  * @Date 2024/3/19 14:16
  * @Version 1.0
  */
-public interface EnvFacade {
+public interface EnvFacade extends HasSetValid {
 
     DataTable<EnvVO.Env> queryEnvPage(EnvParam.EnvPageQuery pageQuery);
 
     void updateEnv(EnvParam.UpdateEnv updateEnv);
 
     void addEnv(EnvParam.AddEnv addEnv);
-
-    void setEnvValidById(int id);
 
 }

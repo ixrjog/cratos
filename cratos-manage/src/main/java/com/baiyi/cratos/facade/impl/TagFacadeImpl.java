@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.facade.TagFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.TagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,11 +61,6 @@ public class TagFacadeImpl implements TagFacade {
     }
 
     @Override
-    public void setTagValidById(int id) {
-        tagService.updateValidById(id);
-    }
-
-    @Override
     public List<TagVO.Tag> queryTagByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
         List<Integer> tagIds = businessTagService.queryTagIdByBusinessType(getByBusinessType);
         if (CollectionUtils.isEmpty(tagIds)) {
@@ -76,4 +72,8 @@ public class TagFacadeImpl implements TagFacade {
                 .toList();
     }
 
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return tagService;
+    }
 }

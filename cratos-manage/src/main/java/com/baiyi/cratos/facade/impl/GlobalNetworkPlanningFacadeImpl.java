@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.service.GlobalNetworkPlanningService;
 import com.baiyi.cratos.service.GlobalNetworkService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.GlobalNetworkPlanningWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +94,11 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
     @Override
     public void deleteById(int id) {
         globalNetworkPlanningService.deleteById(id);
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return globalNetworkPlanningService;
     }
 
 }

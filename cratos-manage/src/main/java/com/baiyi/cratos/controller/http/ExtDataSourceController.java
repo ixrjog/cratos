@@ -101,7 +101,7 @@ public class ExtDataSourceController {
     @Operation(summary = "Update eds config valid")
     @PutMapping(value = "/config/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setEdsConfigValidById(@RequestParam int id) {
-        edsFacade.setEdsConfigValidById(id);
+        edsFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

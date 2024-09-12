@@ -42,7 +42,7 @@ public class ServerAccountController {
     @Operation(summary = "Update account valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setServerAccountValidById(@RequestParam int id) {
-        serverAccountFacade.setServerAccountValidById(id);
+        serverAccountFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

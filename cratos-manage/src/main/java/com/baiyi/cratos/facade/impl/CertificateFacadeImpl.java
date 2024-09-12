@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.param.certificate.CertificateParam;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import com.baiyi.cratos.facade.CertificateFacade;
 import com.baiyi.cratos.service.CertificateService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CertificateWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,10 +56,8 @@ public class CertificateFacadeImpl implements CertificateFacade {
         certificateService.deleteById(id);
     }
 
-
     @Override
-    public void setCertificateValidById(int id) {
-        certificateService.updateValidById(id);
+    public BaseValidService<?, ?> getValidService() {
+        return certificateService;
     }
-
 }

@@ -70,7 +70,7 @@ public class UserController {
     @Operation(summary = "Update user valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setUserValidById(@RequestParam int id) {
-        userFacade.setUserValidById(id);
+        userFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

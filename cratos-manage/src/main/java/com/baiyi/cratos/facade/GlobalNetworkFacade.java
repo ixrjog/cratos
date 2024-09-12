@@ -11,15 +11,13 @@ import java.util.List;
  * &#064;Date  2024/9/3 11:32
  * &#064;Version 1.0
  */
-public interface GlobalNetworkFacade {
+public interface GlobalNetworkFacade extends HasSetValid {
 
     void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork);
 
     void updateGlobalNetwork(GlobalNetworkParam.UpdateGlobalNetwork updateGlobalNetwork);
 
     DataTable<GlobalNetworkVO.Network> queryGlobalNetworkPage(GlobalNetworkParam.GlobalNetworkPageQuery pageQuery);
-
-    void setGlobalNetworkValidById(int id);
 
     void deleteById(int id);
 

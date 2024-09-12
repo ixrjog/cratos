@@ -13,6 +13,7 @@ import com.baiyi.cratos.facade.server.ServerAccountFacade;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.ServerAccountService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.ServerAccountWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,11 +59,6 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
     }
 
     @Override
-    public void setServerAccountValidById(int id) {
-        accountService.updateValidById(id);
-    }
-
-    @Override
     public void deleteById(int id) {
         // TODO
         //  accountService.deleteById(id);
@@ -104,4 +100,8 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
         businessCredentialFacade.updateBusinessCredential(serverAccount.getCredentialId(), business);
     }
 
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return accountService;
+    }
 }

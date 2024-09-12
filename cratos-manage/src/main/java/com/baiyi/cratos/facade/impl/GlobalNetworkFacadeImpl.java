@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.service.GlobalNetworkService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.GlobalNetworkDetailsWrapper;
 import com.baiyi.cratos.wrapper.GlobalNetworkWrapper;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +46,6 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
             GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
         DataTable<GlobalNetwork> table = globalNetworkService.queryGlobalNetworkPage(pageQuery.toParam());
         return globalNetworkWrapper.wrapToTarget(table);
-    }
-
-    @Override
-    public void setGlobalNetworkValidById(int id) {
-        globalNetworkService.updateValidById(id);
     }
 
     @Override
@@ -99,6 +95,11 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
             globalNetworkDetailsWrapper.wrap(networkDetails);
             return networkDetails;
         }).toList();
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return globalNetworkService;
     }
 
 }

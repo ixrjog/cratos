@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.service.EnvService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.EnvWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,8 +51,8 @@ public class EnvFacadeImpl implements EnvFacade {
     }
 
     @Override
-    public void setEnvValidById(int id) {
-        envService.updateValidById(id);
+    public BaseValidService<?, ?> getValidService() {
+        return envService;
     }
 
 }

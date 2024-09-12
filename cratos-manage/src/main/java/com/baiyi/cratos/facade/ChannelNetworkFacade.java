@@ -9,11 +9,10 @@ import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
  * @Date 2024/2/21 11:17
  * @Version 1.0
  */
-public interface ChannelNetworkFacade {
+public interface ChannelNetworkFacade extends HasSetValid {
 
-    void setChannelNetworkValidById(int id);
-
-    DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(ChannelNetworkParam.ChannelNetworkPageQuery pageQuery);
+    DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(
+            ChannelNetworkParam.ChannelNetworkPageQuery pageQuery);
 
     void addChannelNetwork(ChannelNetworkParam.AddChannelNetwork addChannelNetwork);
 

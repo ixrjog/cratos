@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
 import com.baiyi.cratos.facade.AssetMaturityFacade;
 import com.baiyi.cratos.service.AssetMaturityService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.AssetMaturityWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,6 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
     }
 
     @Override
-    public void setAssetMaturityValidById(int id) {
-        assetMaturityService.updateValidById(id);
-    }
-
-    @Override
     public void addAssetMaturity(AssetMaturityParam.AddAssetMaturity addAssetMaturity) {
         AssetMaturity assetMaturity = addAssetMaturity.toTarget();
         if (assetMaturityService.getByUniqueKey(assetMaturity) == null) {
@@ -59,4 +55,8 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
         assetMaturityService.deleteById(id);
     }
 
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return assetMaturityService;
+    }
 }

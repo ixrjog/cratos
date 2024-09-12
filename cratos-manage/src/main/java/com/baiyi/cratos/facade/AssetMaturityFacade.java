@@ -9,12 +9,10 @@ import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
  * &#064;Date  2024/7/30 下午2:19
  * &#064;Version 1.0
  */
-public interface AssetMaturityFacade {
+public interface AssetMaturityFacade extends HasSetValid {
 
     DataTable<AssetMaturityVO.AssetMaturity> queryAssetMaturityPage(
             AssetMaturityParam.AssetMaturityPageQuery pageQuery);
-
-    void setAssetMaturityValidById(int id);
 
     void addAssetMaturity(AssetMaturityParam.AddAssetMaturity addAssetMaturity);
 

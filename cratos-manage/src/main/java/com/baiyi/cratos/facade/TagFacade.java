@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2024/1/2 17:39
  * @Version 1.0
  */
-public interface TagFacade {
+public interface TagFacade extends HasSetValid {
 
     void addTag(TagParam.AddTag addTag);
 
@@ -21,8 +21,6 @@ public interface TagFacade {
     DataTable<TagVO.Tag> queryTagPage(TagParam.TagPageQuery pageQuery);
 
     void deleteById(int id);
-
-    void setTagValidById(int id);
 
     List<TagVO.Tag> queryTagByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType);
 

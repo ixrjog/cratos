@@ -19,6 +19,7 @@ import com.baiyi.cratos.facade.validator.credential.CredentialValidatorFactory;
 import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -52,11 +53,6 @@ public class CredentialFacadeImpl implements CredentialFacade {
     public DataTable<CredentialVO.Credential> queryCredentialPage(CredentialParam.CredentialPageQuery pageQuery) {
         DataTable<Credential> table = credentialService.queryCredentialPage(pageQuery);
         return credentialWrapper.wrapToTarget(table);
-    }
-
-    @Override
-    public void setCredentialValidById(int id) {
-        credentialService.updateValidById(id);
     }
 
     // 查询用户有效的凭据
@@ -184,6 +180,11 @@ public class CredentialFacadeImpl implements CredentialFacade {
             throw new InvalidCredentialException("The credential do not exist.");
         }
         return credential;
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return credentialService;
     }
 
 }

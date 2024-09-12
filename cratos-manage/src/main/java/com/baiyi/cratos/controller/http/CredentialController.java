@@ -56,7 +56,7 @@ public class CredentialController {
     @Operation(summary = "Update credential valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setCredentialValidById(@RequestParam int id) {
-        credentialFacade.setCredentialValidById(id);
+        credentialFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

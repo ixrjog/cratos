@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.param.domain.DomainParam;
 import com.baiyi.cratos.domain.view.domain.DomainVO;
 import com.baiyi.cratos.facade.DomainFacade;
 import com.baiyi.cratos.service.DomainService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.DomainWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +38,6 @@ public class DomainFacadeImpl implements DomainFacade {
     }
 
     @Override
-    public void setDomainValidById(int id) {
-        domainService.updateValidById(id);
-    }
-
-    @Override
     @BindAssetsAfterImport
     public Domain addDomain(DomainParam.AddDomain addDomain) {
         Domain domain = addDomain.toTarget();
@@ -66,6 +62,11 @@ public class DomainFacadeImpl implements DomainFacade {
     @Override
     public void deleteById(int id) {
         domainService.deleteById(id);
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return domainService;
     }
 
 }

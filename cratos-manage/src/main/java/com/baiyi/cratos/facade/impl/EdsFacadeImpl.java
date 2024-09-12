@@ -26,6 +26,7 @@ import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
@@ -183,11 +184,6 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
-    public void setEdsConfigValidById(int id) {
-        edsConfigService.updateValidById(id);
-    }
-
-    @Override
     public void deleteEdsConfigById(int id) {
         EdsConfig edsConfig = edsConfigService.getById(id);
         IdentityUtil.tryIdentity(edsConfig.getInstanceId())
@@ -288,6 +284,11 @@ public class EdsFacadeImpl implements EdsFacade {
     public EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
         //TODO
         return null;
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return edsConfigService;
     }
 
 }

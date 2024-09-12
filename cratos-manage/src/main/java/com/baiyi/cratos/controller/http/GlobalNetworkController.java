@@ -83,7 +83,7 @@ public class GlobalNetworkController {
     @Operation(summary = "Update global network valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setGlobalNetworkValidById(@RequestParam int id) {
-        globalNetworkFacade.setGlobalNetworkValidById(id);
+        globalNetworkFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 
@@ -116,6 +116,13 @@ public class GlobalNetworkController {
     @DeleteMapping(value = "/planning/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteGlobalNetworkPlanningById(@RequestParam int id) {
         globalNetworkPlanningFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update global network planning valid")
+    @PutMapping(value = "/planning/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setGlobalNetworkPlanningValidById(@RequestParam int id) {
+        globalNetworkPlanningFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

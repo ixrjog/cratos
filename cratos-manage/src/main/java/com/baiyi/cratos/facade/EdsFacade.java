@@ -16,7 +16,7 @@ import java.util.List;
  * @Date 2024/2/5 17:07
  * @Version 1.0
  */
-public interface EdsFacade {
+public interface EdsFacade extends HasSetValid {
 
     DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
@@ -33,8 +33,6 @@ public interface EdsFacade {
     void addEdsConfig(EdsConfigParam.AddEdsConfig addEdsConfig);
 
     void updateEdsConfig(EdsConfigParam.UpdateEdsConfig updateEdsConfig);
-
-    void setEdsConfigValidById(int id);
 
     void deleteEdsConfigById(int id);
 

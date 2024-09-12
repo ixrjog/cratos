@@ -42,7 +42,7 @@ public class DomainController {
     @Operation(summary = "Update domain valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setDomainValidById(@RequestParam int id) {
-        domainFacade.setDomainValidById(id);
+        domainFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

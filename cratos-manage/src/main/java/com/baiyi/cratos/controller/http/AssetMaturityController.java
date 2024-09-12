@@ -49,7 +49,7 @@ public class AssetMaturityController {
     @Operation(summary = "Update assetMaturity valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setAssetMaturityValidById(@RequestParam int id) {
-        assetMaturityFacade.setAssetMaturityValidById(id);
+        assetMaturityFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

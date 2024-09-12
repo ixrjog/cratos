@@ -13,7 +13,7 @@ import java.util.List;
  * @Date 2024/1/10 10:15
  * @Version 1.0
  */
-public interface UserFacade {
+public interface UserFacade extends HasSetValid {
 
     DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery);
 
@@ -24,8 +24,6 @@ public interface UserFacade {
     void resetUserPassword(UserParam.ResetPassword resetPassword);
 
     void resetUserPassword(String username, UserParam.ResetPassword resetPassword);
-
-    void setUserValidById(int id);
 
     void updateUser(UserParam.UpdateUser updateUser);
 

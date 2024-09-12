@@ -45,7 +45,7 @@ public class TagController {
     @Operation(summary = "Update tag valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setTagValidById(@RequestParam int id) {
-        tagFacade.setTagValidById(id);
+        tagFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

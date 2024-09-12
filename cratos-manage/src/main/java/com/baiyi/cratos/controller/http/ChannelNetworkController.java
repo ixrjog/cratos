@@ -42,7 +42,7 @@ public class ChannelNetworkController {
     @Operation(summary = "Update channelNetwork valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setChannelNetworkValidById(@RequestParam int id) {
-        channelNetworkFacade.setChannelNetworkValidById(id);
+        channelNetworkFacade.setValidById(id);
         return HttpResult.SUCCESS;
     }
 

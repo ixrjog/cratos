@@ -14,11 +14,9 @@ import java.util.List;
  * @Date 2024/1/9 18:35
  * @Version 1.0
  */
-public interface CredentialFacade {
+public interface CredentialFacade extends HasSetValid {
 
     DataTable<CredentialVO.Credential> queryCredentialPage(CredentialParam.CredentialPageQuery pageQuery);
-
-    void setCredentialValidById(int id);
 
     /**
      * 吊销凭据

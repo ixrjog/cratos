@@ -10,15 +10,13 @@ import com.baiyi.cratos.domain.view.domain.DomainVO;
  * @Date 2024/4/28 上午10:17
  * @Version 1.0
  */
-public interface DomainFacade {
+public interface DomainFacade extends HasSetValid {
 
     Domain addDomain(DomainParam.AddDomain addDomain);
 
     void updateDomain(DomainParam.UpdateDomain updateDomain);
 
     DataTable<DomainVO.Domain> queryDomainPage(DomainParam.DomainPageQuery pageQuery);
-
-    void setDomainValidById(int id);
 
     void deleteById(int id);
 

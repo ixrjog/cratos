@@ -16,6 +16,7 @@ import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
@@ -131,11 +132,6 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    public void setUserValidById(int id) {
-        userService.updateValidById(id);
-    }
-
-    @Override
     public void updateUser(UserParam.UpdateUser updateUser) {
         User user = userService.getById(updateUser.getId());
         Optional.ofNullable(userService.getById(updateUser.getId()))
@@ -176,6 +172,11 @@ public class UserFacadeImpl implements UserFacade {
         return getUserPubKeyCredentials(username).stream()
                 .map(credentialWrapper::wrapToTarget)
                 .toList();
+    }
+
+    @Override
+    public BaseValidService<?, ?> getValidService() {
+        return userService;
     }
 
 }
