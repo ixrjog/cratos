@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProvider;
+import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProcessor;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.CertificateService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
-public class UpdateCertFromAssetProvider extends BaseUpdateBusinessFromAssetProvider<Certificate> {
+public class UpdateCertFromAssetProcessor extends BaseUpdateBusinessFromAssetProcessor<Certificate> {
 
     private final CertificateService certificateService;
 
-    public UpdateCertFromAssetProvider(BusinessAssetBindService businessAssetBindService,
-                                       CertificateService certificateService) {
+    public UpdateCertFromAssetProcessor(BusinessAssetBindService businessAssetBindService,
+                                        CertificateService certificateService) {
         super(businessAssetBindService);
         this.certificateService = certificateService;
     }

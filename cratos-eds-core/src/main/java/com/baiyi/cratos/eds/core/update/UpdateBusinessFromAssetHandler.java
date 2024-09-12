@@ -2,7 +2,6 @@ package com.baiyi.cratos.eds.core.update;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,7 @@ public class UpdateBusinessFromAssetHandler {
     }
 
     private void update(EdsAsset asset, BusinessAssetBind businessAssetBind) {
-        IUpdateBusinessFromAssetProvider provider = UpdateBusinessFromAssetProviderFactory.getProvider(
+        IUpdateBusinessFromAssetProcessor provider = UpdateBusinessFromAssetProcessorFactory.getProvider(
                 businessAssetBind.getBusinessType());
         if (provider != null) {
             provider.update(asset, businessAssetBind);

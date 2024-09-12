@@ -31,7 +31,7 @@ public class GlobalNetworkDetailsWrapper {
 
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
 
-    public final static String[] SUBNET_TABLE_FIELD_NAME = {"Main Name", "Main Type", "Name", "CIDR Block", "Resource", "Comment"};
+    public final static String[] SUBNET_TABLE_FIELD_NAME = {"Main Name", "Main Type", "Name", "Subnet Key", "Region", "Zone", "CIDR Block", "Resource", "Comment"};
 
     public void wrap(GlobalNetworkVO.NetworkDetails networkDetails) {
         globalNetworkWrapper.businessWrap(networkDetails);
@@ -40,7 +40,9 @@ public class GlobalNetworkDetailsWrapper {
         if (CollectionUtils.isEmpty(plannings)) {
             return;
         }
-        List<GlobalNetworkVO.Subnet> subnets = globalNetworkSubnetService.queryByValid().stream().map(e-> BeanCopierUtil.copyProperties(e, GlobalNetworkVO.Subnet.class))
+        List<GlobalNetworkVO.Subnet> subnets = globalNetworkSubnetService.queryByValid()
+                .stream()
+                .map(e -> BeanCopierUtil.copyProperties(e, GlobalNetworkVO.Subnet.class))
                 .sorted()
                 .collect(Collectors.toList());
         networkDetails.setPlanningDetails(plannings.stream()
@@ -56,8 +58,8 @@ public class GlobalNetworkDetailsWrapper {
         PrettyTable subnetTable = PrettyTable.fieldNames(SUBNET_TABLE_FIELD_NAME);
         allSubnets.stream()
                 .filter(e -> NetworkUtil.inNetwork(planning.getCidrBlock(), e.getCidrBlock()))
-                .forEach(e -> subnetTable.addRow(e.getMainName(), e.getMainType(), e.getName(), e.getCidrBlock(),
-                        e.getResourceTotal(), e.getComment()));
+                .forEach(e -> subnetTable.addRow(e.getMainName(), e.getMainType(), e.getName(), e.getSubnetKey(),
+                        e.getRegion(), e.getZone(), e.getCidrBlock(), e.getResourceTotal(), e.getComment()));
         planningDetails.setSubnetTable(subnetTable.toString());
         return planningDetails;
     }

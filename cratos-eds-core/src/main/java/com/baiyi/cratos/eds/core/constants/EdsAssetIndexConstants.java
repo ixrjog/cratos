@@ -51,6 +51,7 @@ public interface EdsAssetIndexConstants {
     String VPC_CIDR_BLOCK = "vpc.cidr-block";
     String VIRTUAL_SWITCH_CIDR_BLOCK = "virtual-switch.cidr-block";
     String SUBNET_CIDR_BLOCK = "subnet.cidr-block";
+    String SUBNET_AVAILABLE_IP_ADDRESS_COUNT ="subnet.availableIpAddressCount";
     String VPC_CIDRS = "vpc.cidrs";
 
 }

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProvider;
+import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProcessor;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.DomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
-public class UpdateDomainFromAssetProvider extends BaseUpdateBusinessFromAssetProvider<Domain> {
+public class UpdateDomainFromAssetProcessor extends BaseUpdateBusinessFromAssetProcessor<Domain> {
 
     private final DomainService domainService;
 
-    public UpdateDomainFromAssetProvider(BusinessAssetBindService businessAssetBindService,
-                                         DomainService domainService) {
+    public UpdateDomainFromAssetProcessor(BusinessAssetBindService businessAssetBindService,
+                                          DomainService domainService) {
         super(businessAssetBindService);
         this.domainService = domainService;
     }

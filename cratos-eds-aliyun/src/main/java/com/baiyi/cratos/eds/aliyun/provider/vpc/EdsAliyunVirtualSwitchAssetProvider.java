@@ -27,8 +27,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VIRTUAL_SWITCH_CIDR_BLOCK;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -102,6 +101,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK , entity.getVirtualSwitch().getCidrBlock()));
         indices.add(toEdsAssetIndex(edsAsset, VPC_ID , entity.getVirtualSwitch().getVpcId()));
+        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch().getAvailableIpAddressCount()));
         return indices;
     }
 

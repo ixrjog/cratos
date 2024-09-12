@@ -10,7 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
  * &#064;Date  2024/6/7 上午11:24
  * &#064;Version 1.0
  */
-public interface IUpdateBusinessFromAssetProvider extends BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
+public interface IUpdateBusinessFromAssetProcessor extends BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
     void update(EdsAsset asset, BusinessAssetBind businessAssetBind);
 

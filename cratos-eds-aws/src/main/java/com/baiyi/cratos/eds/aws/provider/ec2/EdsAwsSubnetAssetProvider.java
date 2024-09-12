@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_AVAILABLE_IP_ADDRESS_COUNT;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_CIDR_BLOCK;
 
 /**
@@ -84,6 +85,7 @@ public class EdsAwsSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
                 .getCidrBlock()));
+        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT , entity.getSubnet().getAvailableIpAddressCount()));
         return indices;
     }
 
