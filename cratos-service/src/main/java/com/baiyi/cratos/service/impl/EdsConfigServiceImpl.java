@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
 import com.baiyi.cratos.mapper.EdsConfigMapper;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -41,7 +40,7 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
 
     @Override
     public List<EdsConfig> queryByEdsType(String edsType) {
-        Example example = new Example(EdsInstance.class);
+        Example example = new Example(EdsConfig.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("edsType", edsType);
         return edsConfigMapper.selectByExample(example);
@@ -49,7 +48,7 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
 
     @Override
     public EdsConfig getByUniqueKey(@NonNull EdsConfig record) {
-        Example example = new Example(EdsInstance.class);
+        Example example = new Example(EdsConfig.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());
         return edsConfigMapper.selectOneByExample(example);
@@ -57,7 +56,7 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
 
     @Override
     public int countByCredentialId(int credentialId) {
-        Example example = new Example(EdsInstance.class);
+        Example example = new Example(EdsConfig.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("credentialId", credentialId);
         return edsConfigMapper.selectCountByExample(example);
