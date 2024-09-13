@@ -60,3 +60,10 @@ $ java -Xms2048m -Xmx2048m -Xmn1024m -Xss256k \
  -Djasypt.encryptor.password={YOUR_SECRET_KEY} \
  -jar ./cratos-manage-prod.jar
 ```
+
+#### Robot calls API
+```bash
+$ curl -X 'GET' \
+'http://127.0.0.1:8081/api/user/username/get?username=baiyi' \
+-H 'content-type: application/json' -H "Authorization: Robot {ROBOT_TOKEN}" 
+```
