@@ -4,13 +4,11 @@ import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
-import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.generator.RbacRole;
-import com.baiyi.cratos.domain.generator.RbacRoleResource;
-import com.baiyi.cratos.domain.generator.UserToken;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.RbacFacade;
+import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
@@ -44,6 +42,8 @@ public class RbacFacadeImpl implements RbacFacade {
     private final RbacResourceService rbacResourceService;
 
     private final UserTokenFacade userTokenFacade;
+
+    private final RobotFacade robotFacade;
 
     private final RbacRoleFacade rbacRoleFacade;
 
@@ -81,6 +81,48 @@ public class RbacFacadeImpl implements RbacFacade {
         }
         // 校验用户是否可以访问资源路径
         if (!userTokenFacade.verifyResourceAuthorizedToToken(token, resource)) {
+            // 管理员跳过验证
+            if (!verifyRoleAccessLevel(AccessLevel.ADMIN, token)) {
+                throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);
+            }
+        }
+    }
+
+    @Override
+    public void verifyResourceAccessPermissions(UserToken userToken, String resource) {
+        if (!StringUtils.hasText(userToken.getToken())) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
+        }
+        String token = userToken.getToken();
+        RbacResource rbacResource = Optional.ofNullable(rbacResourceFacade.getByResource(resource))
+                .orElseThrow(() -> new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST));
+        if (!rbacResource.getValid()) {
+            // 登录用户即可访问
+            return;
+        }
+        // 校验用户是否可以访问资源路径
+        if (!userTokenFacade.verifyResourceAuthorizedToToken(token, resource)) {
+            // 管理员跳过验证
+            if (!verifyRoleAccessLevel(AccessLevel.ADMIN, token)) {
+                throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);
+            }
+        }
+    }
+
+    @Override
+    public void verifyResourceAccessPermissions(Robot robot, String resource){
+        if (!StringUtils.hasText(robot.getToken())) {
+            throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
+        }
+        String token = robot.getToken();
+        RbacResource rbacResource = Optional.ofNullable(rbacResourceFacade.getByResource(resource))
+                .orElseThrow(() -> new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST));
+        if (!rbacResource.getValid()) {
+            // 登录用户即可访问
+            return;
+        }
+        // 校验用户是否可以访问资源路径
+        if (!robotFacade.verifyResourceAuthorizedToToken(token, resource)) {
             // 管理员跳过验证
             if (!verifyRoleAccessLevel(AccessLevel.ADMIN, token)) {
                 throw new AuthorizationException(ErrorEnum.AUTHORIZATION_FAILURE);

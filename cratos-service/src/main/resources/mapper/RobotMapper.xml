@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.RobotMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Robot">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="token" jdbcType="CHAR" property="token"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="countResourcesAuthorizedByToken" parameterType="string" resultType="int">
+        select count(*)
+        from robot a0
+                 join rbac_user_role a1 on a0.username = a1.username and a0.token = #{token}
+                 join rbac_role_resource a2 on a1.role_id = a2.role_id
+                 join rbac_resource a3 on a2.resource_id = a3.id and a3.resource_name = #{resource}
+    </select>
+
+</mapper>

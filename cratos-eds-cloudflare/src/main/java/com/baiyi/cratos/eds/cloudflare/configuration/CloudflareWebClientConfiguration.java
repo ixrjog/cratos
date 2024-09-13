@@ -47,7 +47,6 @@ public class CloudflareWebClientConfiguration {
 
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-
                 .build();
         return factory.createClient(CloudflareCertService.class);
     }
