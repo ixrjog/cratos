@@ -1,14 +1,29 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.common.exception.RobotException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.Robot;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.robot.RobotParam;
+import com.baiyi.cratos.domain.view.robot.RobotVO;
 import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.service.RobotService;
+import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.wrapper.RobotTokenWrapper;
+import com.baiyi.cratos.wrapper.RobotWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
@@ -21,6 +36,15 @@ import org.springframework.stereotype.Component;
 public class RobotFacadeImpl implements RobotFacade {
 
     private final RobotService robotService;
+    private final RobotWrapper robotWrapper;
+    private final RobotTokenWrapper robotTokenWrapper;
+    private final UserService userService;
+
+    @Override
+    public DataTable<RobotVO.Robot> queryRobotPage(RobotParam.RobotPageQuery pageQuery) {
+        DataTable<Robot> table = robotService.queryRobotPage(pageQuery);
+        return robotWrapper.wrapToTarget(table);
+    }
 
     @Override
     public Robot verifyToken(String token) {
@@ -46,7 +70,62 @@ public class RobotFacadeImpl implements RobotFacade {
 
     @Override
     public boolean verifyResourceAuthorizedToToken(String token, String resource) {
-        return  robotService.countResourcesAuthorizedByToken(token, resource) > 0;
+        return robotService.countResourcesAuthorizedByToken(token, resource) > 0;
+    }
+
+    @Override
+    public List<RobotVO.Robot> queryRobotByUsername(String username) {
+        if (!StringUtils.hasText(username)) {
+            return List.of();
+        }
+        return robotService.queryByUsername(username)
+                .stream()
+                .map(robotWrapper::wrapToTarget)
+                .toList();
+    }
+
+    /**
+     * 管理员新增
+     *
+     * @param addRobot
+     */
+    @Override
+    @SetSessionUserToParam(desc = "set CreatedBy")
+    public RobotVO.RobotToken addRobot(RobotParam.AddRobot addRobot) {
+        Robot robot = addRobot.toTarget();
+        User user = userService.getByUsername(robot.getUsername());
+        if (user == null) {
+            throw new RobotException("The user does not exist, please check the username {}.", robot.getUsername());
+        }
+        if (!user.getValid()) {
+            throw new RobotException("Robots cannot be attached to invalid user {}.", robot.getUsername());
+        }
+        robot.setToken(IdentityUtil.randomUUID());
+        robot.setValid(true);
+        if (robot.getExpiredTime() == null) {
+            robot.setExpiredTime(
+                    new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(366L * 3, TimeUnit.DAYS)));
+        }
+        robotService.add(robot);
+        return robotTokenWrapper.wrapToTarget(robot);
+    }
+
+    /**
+     * 用户申请
+     *
+     * @param applyRobot
+     * @return
+     */
+    @Override
+    @SetSessionUserToParam(desc = "set CreatedBy")
+    public RobotVO.RobotToken applyRobot(RobotParam.ApplyRobot applyRobot) {
+        Robot robot = applyRobot.toTarget();
+        robot.setToken(IdentityUtil.randomUUID());
+        robot.setValid(true);
+        // 1年后过期
+        robot.setExpiredTime(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(366L, TimeUnit.DAYS)));
+        robotService.add(robot);
+        return robotTokenWrapper.wrapToTarget(robot);
     }
 
 }

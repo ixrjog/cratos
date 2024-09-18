@@ -35,4 +35,6 @@ public interface ErrorCodeConstants {
 
     int GLOBAL_NETWORK_ERROR = 49000;
 
+    int ROBOT_ERROR = 50000;
+
 }

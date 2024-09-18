@@ -1,9 +1,13 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Robot;
+import com.baiyi.cratos.domain.param.robot.RobotParam;
 import com.baiyi.cratos.mapper.RobotMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -12,6 +16,10 @@ import com.baiyi.cratos.service.base.BaseValidService;
  */
 public interface RobotService  extends BaseUniqueKeyService<Robot, RobotMapper>, BaseValidService<Robot, RobotMapper> {
 
+    DataTable<Robot> queryRobotPage(RobotParam.RobotPageQuery pageQuery);
+
     int countResourcesAuthorizedByToken(String token, String resource);
+
+    List<Robot> queryByUsername(String username);
 
 }

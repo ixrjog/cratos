@@ -25,4 +25,15 @@
                  join rbac_resource a3 on a2.resource_id = a3.id and a3.resource_name = #{resource}
     </select>
 
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.robot.RobotParam$RobotPageQuery"
+            resultMap="BaseResultMap">
+        select * from robot
+        <where>
+            <if test="queryName != null and queryName != ''">
+                name like "%" #{queryName} "%" or username like "%" #{queryName} "%"
+            </if>
+        </where>
+    </select>
+
 </mapper>
