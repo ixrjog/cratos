@@ -16,6 +16,6 @@ import java.lang.annotation.*;
 public @interface UserBusinessResourceAuthentication {
 
     @Schema(description = "SpEL username, 不指定从SecurityContextHolder获取")
-    String username();
+    String ofUsername();
 
 }

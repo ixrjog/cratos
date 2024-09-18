@@ -23,12 +23,16 @@ public class CloudflareWebClientConfiguration {
     @Bean
     public CloudflareZoneService cloudflareZoneService() {
         HttpClient httpClient = HttpClient.create()
+                // 走代理
+//                .proxy(proxy ->
+//                    proxy.type(ProxyProvider.Proxy.SOCKS5).address(new InetSocketAddress("10.10.10.10", 80)))
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
 
         WebClient webClient = WebClient.builder()
                 .baseUrl(EdsCloudflareConfigModel.CLIENT_API)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
                 .build();

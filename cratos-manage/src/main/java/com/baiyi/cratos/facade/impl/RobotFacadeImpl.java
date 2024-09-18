@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.PreVerifyPermissionsFromParam;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.RobotException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
@@ -18,6 +20,8 @@ import com.baiyi.cratos.wrapper.RobotTokenWrapper;
 import com.baiyi.cratos.wrapper.RobotWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -91,6 +95,7 @@ public class RobotFacadeImpl implements RobotFacade {
      */
     @Override
     @SetSessionUserToParam(desc = "set CreatedBy")
+    @PreVerifyPermissionsFromParam(ofUsername = "#addRobot.username", accessLevel = AccessLevel.OPS)
     public RobotVO.RobotToken addRobot(RobotParam.AddRobot addRobot) {
         Robot robot = addRobot.toTarget();
         User user = userService.getByUsername(robot.getUsername());
@@ -126,6 +131,23 @@ public class RobotFacadeImpl implements RobotFacade {
         robot.setExpiredTime(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(366L, TimeUnit.DAYS)));
         robotService.add(robot);
         return robotTokenWrapper.wrapToTarget(robot);
+    }
+
+    @Override
+    public void revokeRobot(RobotParam.RevokeRobot revokeRobot) {
+        Robot robot = robotService.getById(revokeRobot.getId());
+        if (!robot.getValid()) {
+            return;
+        }
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        String sessionUsername = authentication.getName();
+        if (!StringUtils.hasText(sessionUsername)) {
+            throw new RobotException("The current session user is invalid.");
+        }
+
+        robot.setValid(false);
+        robotService.updateByPrimaryKey(robot);
     }
 
 }

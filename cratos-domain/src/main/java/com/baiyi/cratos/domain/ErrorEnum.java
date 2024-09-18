@@ -26,6 +26,8 @@ public enum ErrorEnum {
     AUTHENTICATION_RESOURCE_NOT_EXIST(403, "The resource path does not exist."),
     AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION(401, "Invalid identity authentication provider configuration."),
     INCORRECT_USERNAME_OR_PASSWORD(401, "Incorrect username or password."),
+    UNABLE_TO_OBTAIN_USERNAME(400,"Unable to obtain username."),
+    INVALID_TARGET_USER(400,"Invalid target user."),
 
     // 鉴权
     AUTHORIZATION_FAILURE(403, "Unauthorized access to current resources."),

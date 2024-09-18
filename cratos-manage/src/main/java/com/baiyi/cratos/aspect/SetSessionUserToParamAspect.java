@@ -7,6 +7,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 @Slf4j
 @Aspect
 @Component
+@Order(Integer.MIN_VALUE)
 public class SetSessionUserToParamAspect {
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.SetSessionUserToParam)")

@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -74,6 +75,13 @@ public class RobotParam {
             this.username = username;
             this.createdBy = username;
         }
+    }
+
+    @Data
+    @Schema
+    public static class RevokeRobot {
+        @NotNull
+        private Integer id;
     }
 
 }
