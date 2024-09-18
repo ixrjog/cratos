@@ -52,4 +52,11 @@ public class RobotController {
         return new HttpResult<>(robotFacade.applyRobot(applyRobot));
     }
 
+    @Operation(summary = "Revoke robot")
+    @PutMapping(value = "/revoke", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> revokeRobot(@RequestBody @Valid RobotParam.RevokeRobot revokeRobot) {
+        robotFacade.revokeRobot(revokeRobot);
+        return HttpResult.SUCCESS;
+    }
+
 }

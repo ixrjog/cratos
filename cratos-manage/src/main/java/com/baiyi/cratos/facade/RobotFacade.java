@@ -26,4 +26,6 @@ public interface RobotFacade {
 
     RobotVO.RobotToken applyRobot(RobotParam.ApplyRobot applyRobot);
 
+    void revokeRobot(RobotParam.RevokeRobot revokeRobot);
+
 }
