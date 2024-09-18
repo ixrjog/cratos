@@ -20,7 +20,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @RestController
-@RequestMapping("/api/robot/")
+@RequestMapping("/api/robot")
 @Tag(name = "Robot")
 @RequiredArgsConstructor
 public class RobotController {

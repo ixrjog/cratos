@@ -43,7 +43,6 @@ public class RobotParam {
         private String token;
         private Boolean valid;
         private String createdBy;
-        @Null
         private Date expiredTime;
         private String comment;
 
@@ -65,7 +64,6 @@ public class RobotParam {
         private String token;
         private Boolean valid;
         private String createdBy;
-        @Null
         private Date expiredTime;
         private String comment;
 
