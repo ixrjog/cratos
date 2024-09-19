@@ -1,7 +1,9 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.exception.GlobalNetworkException;
 import com.baiyi.cratos.common.util.IpUtil;
+import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
@@ -51,9 +53,15 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public void addGlobalNetwork(GlobalNetworkParam.AddGlobalNetwork addGlobalNetwork) {
         GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
-        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(), "/"));
-        globalNetwork.setResourceTotal(resourceTotal);
-        globalNetworkService.add(globalNetwork);
+        final String cidrBlock = globalNetwork.getCidrBlock()
+                .trim();
+        try {
+            int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
+            globalNetwork.setResourceTotal(resourceTotal);
+            globalNetworkService.add(globalNetwork);
+        } catch (Exception e) {
+            throw new GlobalNetworkException("The format of cidrBlock={} is incorrect.", cidrBlock);
+        }
     }
 
     @Override
@@ -88,13 +96,38 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
         if (CollectionUtils.isEmpty(networks)) {
             return List.of();
         }
-        return networks.stream().map(e->{
-            GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
-                    .networkId(e.getId())
-                    .build();
-            globalNetworkDetailsWrapper.wrap(networkDetails);
-            return networkDetails;
-        }).toList();
+        return networks.stream()
+                .map(e -> {
+                    GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
+                            .networkId(e.getId())
+                            .build();
+                    globalNetworkDetailsWrapper.wrap(networkDetails);
+                    return networkDetails;
+                })
+                .toList();
+    }
+
+    @Override
+    public List<GlobalNetworkVO.Network> checkGlobalNetworkById(int id) {
+        GlobalNetwork globalNetwork = globalNetworkService.getById(id);
+        if (globalNetwork == null) {
+            return List.of();
+        }
+        return globalNetworkService.queryByValid()
+                .stream()
+                .filter(e -> {
+                    if (id == e.getId()) {
+                        return false;
+                    }
+                    return NetworkUtil.inNetwork(e.getCidrBlock(), globalNetwork.getCidrBlock());
+                }).map(globalNetworkWrapper::wrapToTarget).toList();
+    }
+
+    @Override
+    public List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock) {
+        return globalNetworkService.queryByValid()
+                .stream()
+                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidrBlock)).map(globalNetworkWrapper::wrapToTarget).toList();
     }
 
     @Override

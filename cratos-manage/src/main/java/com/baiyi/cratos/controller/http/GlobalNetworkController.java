@@ -12,6 +12,7 @@ import com.baiyi.cratos.facade.GlobalNetworkSubnetFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +76,7 @@ public class GlobalNetworkController {
     }
 
     @Operation(summary = "Query global network all details")
-    @GetMapping(value = "/all/details/get",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all/details/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.NetworkDetails>> getGlobalNetworkAllDetails() {
         return new HttpResult<>(globalNetworkFacade.getGlobalNetworkAllDetails());
     }
@@ -85,6 +86,19 @@ public class GlobalNetworkController {
     public HttpResult<Boolean> setGlobalNetworkValidById(@RequestParam int id) {
         globalNetworkFacade.setValidById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Check global network by id")
+    @GetMapping(value = "/id/check", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkById(@RequestParam int id) {
+        return new HttpResult<>(globalNetworkFacade.checkGlobalNetworkById(id));
+    }
+
+    @Operation(summary = "Check global network by cidr-block")
+    @GetMapping(value = "/cidr-block/check", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkByCidrBlock(
+            @RequestParam @Valid @NotBlank String cidrBlock) {
+        return new HttpResult<>(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
     }
 
     // ---------- Planning

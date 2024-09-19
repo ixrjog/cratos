@@ -3,6 +3,7 @@ package com.baiyi.cratos.exception;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serial;
 
@@ -14,6 +15,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
+@Slf4j
 public class DaoServiceException extends RuntimeException{
 
     @Serial
@@ -24,6 +26,7 @@ public class DaoServiceException extends RuntimeException{
     public DaoServiceException(String message) {
         super(message);
         this.code = 40001;
+        log.debug(message);
     }
 
 }

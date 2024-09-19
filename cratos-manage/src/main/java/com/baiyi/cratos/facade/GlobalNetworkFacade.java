@@ -26,4 +26,8 @@ public interface GlobalNetworkFacade extends HasSetValid {
 
     List<GlobalNetworkVO.NetworkDetails> getGlobalNetworkAllDetails();
 
+    List<GlobalNetworkVO.Network> checkGlobalNetworkById(int id);
+
+    List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock);
+
 }

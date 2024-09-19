@@ -21,7 +21,11 @@ public interface BaseUniqueKeyService<T, M extends Mapper<T>> extends BaseServic
         if (getByUniqueKey(record) != null) {
             throw new DaoServiceException("Union key conflict.");
         }
-        getMapper().insert(record);
+        try {
+            getMapper().insert(record);
+        } catch (Exception e) {
+            throw new DaoServiceException(e.getMessage());
+        }
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Slf4j
 @Aspect
 @Component
-@Order(Integer.MIN_VALUE)
+@Order(Integer.MAX_VALUE - 1)
 public class SetSessionUserToParamAspect {
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.SetSessionUserToParam)")

@@ -63,9 +63,15 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
             GlobalNetworkPlanningParam.UpdateGlobalNetworkPlanning updateGlobalNetworkPlanning) {
         GlobalNetworkPlanning globalNetworkPlanning = updateGlobalNetworkPlanning.toTarget();
         tryNetwork(globalNetworkPlanning);
-        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetworkPlanning.getCidrBlock(), "/"));
-        globalNetworkPlanning.setResourceTotal(resourceTotal);
-        globalNetworkPlanningService.updateByPrimaryKey(globalNetworkPlanning);
+        final String cidrBlock = globalNetworkPlanning.getCidrBlock()
+                .trim();
+        try {
+            int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
+            globalNetworkPlanning.setResourceTotal(resourceTotal);
+            globalNetworkPlanningService.updateByPrimaryKey(globalNetworkPlanning);
+        } catch (Exception e) {
+            throw new GlobalNetworkException("The format of cidrBlock={} is incorrect.", cidrBlock);
+        }
     }
 
     private void tryNetwork(GlobalNetworkPlanning globalNetworkPlanning) {
