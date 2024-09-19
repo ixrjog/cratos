@@ -93,18 +93,17 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public List<GlobalNetworkVO.NetworkDetails> getGlobalNetworkAllDetails() {
         List<GlobalNetwork> networks = globalNetworkService.queryByValid();
-        if (CollectionUtils.isEmpty(networks)) {
-            return List.of();
-        }
-        return networks.stream()
-                .map(e -> {
-                    GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
-                            .networkId(e.getId())
-                            .build();
-                    globalNetworkDetailsWrapper.wrap(networkDetails);
-                    return networkDetails;
-                })
+        return CollectionUtils.isEmpty(networks) ? List.of() : networks.stream()
+                .map(this::buildNetworkDetails)
                 .toList();
+    }
+
+    private GlobalNetworkVO.NetworkDetails buildNetworkDetails(GlobalNetwork globalNetwork) {
+        GlobalNetworkVO.NetworkDetails networkDetails = GlobalNetworkVO.NetworkDetails.builder()
+                .networkId(globalNetwork.getId())
+                .build();
+        globalNetworkDetailsWrapper.wrap(networkDetails);
+        return networkDetails;
     }
 
     @Override
@@ -115,19 +114,18 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
         }
         return globalNetworkService.queryByValid()
                 .stream()
-                .filter(e -> {
-                    if (id == e.getId()) {
-                        return false;
-                    }
-                    return NetworkUtil.inNetwork(e.getCidrBlock(), globalNetwork.getCidrBlock());
-                }).map(globalNetworkWrapper::wrapToTarget).toList();
+                .filter(e -> id != e.getId() && NetworkUtil.inNetwork(e.getCidrBlock(), globalNetwork.getCidrBlock()))
+                .map(globalNetworkWrapper::wrapToTarget)
+                .toList();
     }
 
     @Override
     public List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock) {
         return globalNetworkService.queryByValid()
                 .stream()
-                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidrBlock)).map(globalNetworkWrapper::wrapToTarget).toList();
+                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidrBlock))
+                .map(globalNetworkWrapper::wrapToTarget)
+                .toList();
     }
 
     @Override
