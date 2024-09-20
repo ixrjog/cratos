@@ -25,6 +25,7 @@ public class DingtalkRobot {
     @AllArgsConstructor
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @SuppressWarnings("SpellCheckingInspection")
     public static class Msg implements Serializable {
         @Serial
         private static final long serialVersionUID = -1330295729619695061L;

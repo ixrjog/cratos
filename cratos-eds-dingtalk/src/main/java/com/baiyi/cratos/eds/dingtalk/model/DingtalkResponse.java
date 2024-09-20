@@ -16,6 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class DingtalkResponse {
 
     @Data
+    @SuppressWarnings("SpellCheckingInspection")
     public static class BaseMsg {
         private Integer errcode;
         private String errmsg;
