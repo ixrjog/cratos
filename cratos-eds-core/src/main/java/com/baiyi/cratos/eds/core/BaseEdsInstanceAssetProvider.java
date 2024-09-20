@@ -45,15 +45,10 @@ import java.util.Set;
 public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
     private final EdsAssetService edsAssetService;
-
     private final SimpleEdsFacade simpleEdsFacade;
-
     protected final CredentialService credentialService;
-
     private final ConfigCredTemplate configCredTemplate;
-
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
-
     private final UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler;
 
     /**

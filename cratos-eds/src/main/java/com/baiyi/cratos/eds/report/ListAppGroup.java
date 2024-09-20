@@ -31,7 +31,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 public class ListAppGroup {
 
     private final EdsAssetIndexService indexService;
-
     private final EdsAssetService assetService;
 
     public void doReport() {

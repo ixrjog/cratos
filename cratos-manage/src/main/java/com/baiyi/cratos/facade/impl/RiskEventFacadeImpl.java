@@ -36,9 +36,7 @@ import static com.baiyi.cratos.common.util.TimeUtil.YEAR;
 public class RiskEventFacadeImpl implements RiskEventFacade {
 
     private final RiskEventService riskEventService;
-
     private final RiskEventImpactService impactService;
-
     private final RiskEventWrapper riskEventWrapper;
 
     @Override

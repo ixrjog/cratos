@@ -34,11 +34,8 @@ import java.util.List;
 public abstract class BaseInspection implements InspectionTask, InitializingBean {
 
     private final NotificationTemplateService notificationTemplateService;
-
     private final DingtalkRobotService dingtalkRobotService;
-
     protected final EdsInstanceHelper edsInstanceHelper;
-
     private final EdsConfigService edsConfigService;
 
     @Value("${cratos.language:en-us}")

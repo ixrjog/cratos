@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class TrafficLayerRecordFacadeImpl implements TrafficLayerRecordFacade {
 
     private final TrafficLayerDomainRecordService recordService;
-
     private final TrafficLayerRecordWrapper recordWrapper;
 
     @Override

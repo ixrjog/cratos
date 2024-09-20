@@ -36,9 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 public class EdsBusinessFacadeImpl implements EdsBusinessFacade {
 
     private final EdsAssetIndexService indexService;
-
     private final EdsAssetService edsAssetService;
-
     private final EdsAssetWrapper edsAssetWrapper;
 
     @Override

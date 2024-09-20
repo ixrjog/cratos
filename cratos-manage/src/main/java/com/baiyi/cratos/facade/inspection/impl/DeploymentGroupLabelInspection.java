@@ -35,17 +35,12 @@ public class DeploymentGroupLabelInspection extends BaseInspection {
     public static final String DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION = "DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION";
 
     private final EdsInstanceService edsInstanceService;
-
     private final EdsAssetService edsAssetService;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     private static final int ACK_PROD_INSTANCE_ID = 101;
-
     private static final int EKS_PROD_INSTANCE_ID = 105;
-
     private static final String[] FILTER_LIST = {"prod:istio-ingressgateway", "prod:posp-nginx", "prod:config-server", "prod:config-server-nairabox", "prod:config-server-tecno"};
-
     private static final String DEPLOYMENTS_FIELD = "deployments";
 
     public DeploymentGroupLabelInspection(NotificationTemplateService notificationTemplateService,

@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
 
     private final AssetMaturityService assetMaturityService;
-
     private final AssetMaturityWrapper assetMaturityWrapper;
 
     @Override

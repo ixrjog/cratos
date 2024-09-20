@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 public class GlobalNetworkSubnetFacadeImpl implements GlobalNetworkSubnetFacade {
 
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
-
     private final GlobalNetworkSubnetWrapper globalNetworkSubnetWrapper;
 
     @Override

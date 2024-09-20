@@ -44,9 +44,7 @@ import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
 public class CredentialFacadeImpl implements CredentialFacade {
 
     private final CredentialService credentialService;
-
     private final BusinessCredentialService businessCredentialService;
-
     private final CredentialWrapper credentialWrapper;
 
     @Override

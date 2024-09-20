@@ -30,9 +30,7 @@ import java.util.stream.Collectors;
 public class MenuFacadeImpl implements MenuFacade {
 
     private final MenuService menuService;
-
     private final MenuTitleService menuTitleService;
-
     private final MenuWrapper menuWrapper;
 
     @Override

@@ -34,9 +34,7 @@ import java.util.List;
 public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFacade {
 
     private final GlobalNetworkPlanningService globalNetworkPlanningService;
-
     private final GlobalNetworkService globalNetworkService;
-
     private final GlobalNetworkPlanningWrapper globalNetworkPlanningWrapper;
 
     @Override

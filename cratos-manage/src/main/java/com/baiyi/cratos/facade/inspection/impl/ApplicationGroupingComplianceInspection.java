@@ -40,13 +40,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 public class ApplicationGroupingComplianceInspection extends BaseInspection {
 
     private final EdsAssetService edsAssetService;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     public static final String APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION = "APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION";
-
     private static final String MSG_TPL = "{}[{}/{}][{}/{}][{}/{}][{}/{}]<{}>";
-
     private static final String FILTER_LIST = """
             oss-chuanyinet-front-static
             ng-fcmb-channel

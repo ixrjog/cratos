@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 public class DomainFacadeImpl implements DomainFacade {
 
     private final DomainService domainService;
-
     private final DomainWrapper domainWrapper;
 
     @Override

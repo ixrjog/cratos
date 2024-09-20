@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 public class ToAuthorization {
 
     public interface ToAuthorizationBearer {
-
         String getToken();
 
         default String toBearer() {
@@ -26,7 +25,6 @@ public class ToAuthorization {
     }
 
     public interface ToAuthorizationApikey {
-
         String getApikey();
 
         default String toApikey() {
@@ -40,9 +38,7 @@ public class ToAuthorization {
     }
 
     public interface ToAuthorizationSsoKey {
-
         String getKey();
-
         String getSecret();
 
         default String toSsoKey() {
@@ -52,9 +48,7 @@ public class ToAuthorization {
     }
 
     public interface ToAuthorizationBasic {
-
         String getUsername();
-
         String getPassword();
 
         default String toBasic() {

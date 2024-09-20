@@ -28,14 +28,11 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class DomainInspection extends BaseInspection {
 
-    private static final int DOMAIN_EXPIRY_DAYS = 60;
-
-    public static final String DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION = "DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION";
-
     private final DomainService domainService;
 
+    private static final int DOMAIN_EXPIRY_DAYS = 60;
+    public static final String DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION = "DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION";
     private static final String DOMAINS_FIELD = "domains";
-
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
     public DomainInspection(NotificationTemplateService notificationTemplateService,

@@ -31,17 +31,12 @@ import static com.baiyi.cratos.facade.proxy.TrafficLayerProxy.RULES;
 public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
 
     private final TrafficLayerDomainRecordService recordService;
-
     private final TrafficLayerRecordWrapper recordWrapper;
-
     private final TrafficLayerProxy trafficLayerProxy;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     public final static String[] RECORD_TABLE_FIELD_NAME = {"Record Name", "Env Name", "Route Traffic To", "Origin Server"};
-
     public final static String[] LB_TABLE_FIELD_NAME = {"Load Balancer Name", "DNS Name", "Load Balancer Provider"};
-
     public final static String[] RULE_TABLE_FIELD_NAME = {"Ingress Rule", "Kubernetes Service"};
 
     @Override

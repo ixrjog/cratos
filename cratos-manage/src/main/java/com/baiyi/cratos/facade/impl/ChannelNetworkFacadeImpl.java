@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component;
 public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
 
     private final ChannelNetworkService channelNetworkService;
-
     private final ChannelNetworkWrapper channelNetworkWrapper;
 
     @Override

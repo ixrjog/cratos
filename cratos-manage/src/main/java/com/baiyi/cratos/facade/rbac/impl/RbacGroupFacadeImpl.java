@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class RbacGroupFacadeImpl implements RbacGroupFacade {
 
     private final RbacGroupService rbacGroupService;
-
     private final RbacGroupWrapper rbacGroupWrapper;
 
     @Override

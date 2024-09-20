@@ -40,14 +40,11 @@ import java.util.concurrent.TimeUnit;
 public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;
-
     private final UserWrapper userWrapper;
-
     private final CredentialFacade credentialFacade;
+    private final CredentialWrapper credentialWrapper;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
-
-    private final CredentialWrapper credentialWrapper;
 
     @Override
     public DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) {

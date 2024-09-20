@@ -27,11 +27,8 @@ import org.springframework.stereotype.Component;
 public class SshSessionFacadeImpl implements SshSessionFacade {
 
     private final SshSessionService sshSessionService;
-
     private final SshSessionInstanceCommandService sshCommandService;
-
     private final SshSessionWrapper sshSessionWrapper;
-
     private final SshCommandWrapper sshCommandWrapper;
 
     @Override

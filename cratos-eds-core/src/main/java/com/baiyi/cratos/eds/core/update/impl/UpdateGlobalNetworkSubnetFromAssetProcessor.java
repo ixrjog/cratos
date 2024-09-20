@@ -26,7 +26,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
 public class UpdateGlobalNetworkSubnetFromAssetProcessor extends BaseUpdateBusinessFromAssetProcessor<GlobalNetworkSubnet> {
 
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     public UpdateGlobalNetworkSubnetFromAssetProcessor(BusinessAssetBindService businessAssetBindService,

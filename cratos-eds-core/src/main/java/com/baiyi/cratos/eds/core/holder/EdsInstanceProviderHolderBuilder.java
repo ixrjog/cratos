@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 public class EdsInstanceProviderHolderBuilder {
 
     private final EdsInstanceService edsInstanceService;
-
     private final EdsConfigService edsConfigService;
 
     public EdsInstanceProviderHolder<?, ?> newHolder(Integer instanceId, String assetType) {

@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
 public class RoleMenuFacadeImpl implements RoleMenuFacade {
 
     private final MenuService menuService;
-
     private final RbacRoleMenuService roleMenuService;
-
     private final RoleMenuWrapper menuWrapper;
 
     public RoleMenuVO.RoleMenu getRoleMenu(int roleId, String lang) {

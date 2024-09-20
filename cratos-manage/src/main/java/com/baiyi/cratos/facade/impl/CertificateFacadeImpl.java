@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 public class CertificateFacadeImpl implements CertificateFacade {
 
     private final CertificateService certificateService;
-
     private final CertificateWrapper certificateWrapper;
 
     @Override

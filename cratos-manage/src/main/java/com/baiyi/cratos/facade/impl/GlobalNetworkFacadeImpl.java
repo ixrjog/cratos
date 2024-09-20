@@ -35,11 +35,8 @@ import java.util.List;
 public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
 
     private final GlobalNetworkService globalNetworkService;
-
     private final GlobalNetworkWrapper globalNetworkWrapper;
-
     private final GlobalNetworkPlanningFacade globalNetworkPlanningFacade;
-
     private final GlobalNetworkDetailsWrapper globalNetworkDetailsWrapper;
 
     @Override
@@ -55,6 +52,9 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
         GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
         final String cidrBlock = globalNetwork.getCidrBlock()
                 .trim();
+        if (!NetworkUtil.isValidIpRange(cidrBlock)) {
+            throw new GlobalNetworkException("cidrBlock is invalid.");
+        }
         try {
             int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
             globalNetwork.setResourceTotal(resourceTotal);

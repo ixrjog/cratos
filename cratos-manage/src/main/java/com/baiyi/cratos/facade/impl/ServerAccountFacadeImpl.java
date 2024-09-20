@@ -31,17 +31,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServerAccountFacadeImpl implements ServerAccountFacade {
 
     private final CredentialService credService;
-
     private final BusinessCredentialService businessCredentialService;
-
     private final BusinessCredentialFacade businessCredentialFacade;
-
     private final ServerAccountService accountService;
-
     private final ServerAccountWrapper serverAccountWrapper;
 
     private static final String ROOT = "root";
-
     private static final String ADMIN = "Administrators";
 
     @Override

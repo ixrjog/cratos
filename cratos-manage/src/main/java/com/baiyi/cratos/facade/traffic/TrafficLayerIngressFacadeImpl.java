@@ -36,13 +36,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade {
 
     private final EdsAssetIndexService indexService;
-
     private final EdsAssetService assetService;
-
     private final EdsInstanceService instanceService;
 
     private static final int MAX_SIZE = 25;
-
     public final static String[] INGRESS_TABLE_FIELD_NAME = {"Kubernetes", "Namespace:Ingress", "Rule", "Service", "Load Balancer"};
 
     /**

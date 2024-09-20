@@ -26,9 +26,7 @@ import java.util.stream.Collectors;
 public class RbacRoleFacadeImpl implements RbacRoleFacade {
 
     private final RbacRoleService rbacRoleService;
-
     private final RbacUserRoleService rbacUserRoleService;
-
     private final RbacRoleWrapper rbacRoleWrapper;
 
     @Override

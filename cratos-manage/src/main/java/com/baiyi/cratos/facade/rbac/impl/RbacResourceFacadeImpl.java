@@ -29,9 +29,7 @@ import java.util.List;
 public class RbacResourceFacadeImpl implements RbacResourceFacade {
 
     private final RbacResourceService rbacResourceService;
-
     private final RbacResourceWrapper rbacResourceWrapper;
-
     private final RbacRoleResourceService rbacRoleResourceService;
 
     @Override

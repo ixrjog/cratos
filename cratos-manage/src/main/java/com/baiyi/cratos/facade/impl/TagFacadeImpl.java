@@ -30,9 +30,7 @@ import java.util.List;
 public class TagFacadeImpl implements TagFacade {
 
     private final TagService tagService;
-
     private final BusinessTagService businessTagService;
-
     private final TagWrapper tagWrapper;
 
     @Override

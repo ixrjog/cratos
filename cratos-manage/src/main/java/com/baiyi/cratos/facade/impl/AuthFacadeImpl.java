@@ -37,7 +37,6 @@ public class AuthFacadeImpl implements AuthFacade {
     private String provider;
 
     private final UserService userService;
-
     private final UserTokenFacade userTokenFacade;
 
     @Override

@@ -31,11 +31,8 @@ public class AssetMaturityInspection extends BaseInspection {
     private final AssetMaturityService assetMaturityService;
 
     private static final int ASSET_MATURITY_EXPIRY_DAYS = 30;
-
     private static final String ASSET_MATURITIES_FIELD = "assetMaturities";
-
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
-
     public static final String CUSTOM_ASSET_EXPIRATION_INSPECTION_NOTIFICATION = "CUSTOM_ASSET_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public AssetMaturityInspection(NotificationTemplateService notificationTemplateService,

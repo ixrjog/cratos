@@ -36,15 +36,11 @@ import static com.baiyi.cratos.wrapper.EdsAssetWrapper.SKIP_LOAD_ASSET;
 public class TrafficLayerProxy {
 
     private final EdsAssetService assetService;
-
     private final EdsAssetWrapper edsAssetWrapper;
-
     private final EdsAssetIndexFacade edsAssetIndexFacade;
-
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
 
     public static final String HOSTNAME = "HOSTNAME";
-
     public static final String RULES = "RULES";
 
     //@Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_10M, key = "'TRAFFIC:LAYER:V3:RECORD:'+ #recordName + ':ORIGIN:' + #originServerName", unless = "#result == null")

@@ -50,23 +50,14 @@ import java.util.Optional;
 public class EdsFacadeImpl implements EdsFacade {
 
     private final EdsInstanceService edsInstanceService;
-
     private final EdsAssetService edsAssetService;
-
     private final EdsInstanceWrapper edsInstanceWrapper;
-
     private final EdsConfigService edsConfigService;
-
     private final EdsConfigWrapper edsConfigWrapper;
-
     private final BusinessCredentialFacade businessCredentialFacade;
-
     private final EdsAssetWrapper edsAssetWrapper;
-
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-
     private final EdsAssetIndexService edsAssetIndexService;
-
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
 
     @Override

@@ -38,17 +38,11 @@ import static com.baiyi.cratos.domain.constant.Global.ROLE_FOUNDER_NAME;
 public class RbacFacadeImpl implements RbacFacade {
 
     private final RbacResourceFacade rbacResourceFacade;
-
     private final RbacResourceService rbacResourceService;
-
     private final UserTokenFacade userTokenFacade;
-
     private final RobotFacade robotFacade;
-
     private final RbacRoleFacade rbacRoleFacade;
-
     private final RbacRoleResourceService rbacRoleResourceService;
-
     private final RbacRoleWrapper rbacRoleWrapper;
 
     @Override

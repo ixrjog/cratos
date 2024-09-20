@@ -46,5 +46,4 @@ public class SshUsernameWithKeyPairCredValidator extends BaseFingerprintAlgorith
         rules.verify(credential);
     }
 
-
 }

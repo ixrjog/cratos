@@ -42,15 +42,11 @@ public class AppDeploymentImageInspection extends BaseInspection {
     public static final String APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION = "APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION";
 
     private final EdsAssetService edsAssetService;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     private static final int ACK_PROD_INSTANCE_ID = 101;
-
     private static final int EKS_PROD_INSTANCE_ID = 105;
-
     private static final String APPS_FIELD = "apps";
-
     private static final String[] FILTER_LIST = {"-1", "-2", "-3", "-4"};
 
     public AppDeploymentImageInspection(NotificationTemplateService notificationTemplateService,

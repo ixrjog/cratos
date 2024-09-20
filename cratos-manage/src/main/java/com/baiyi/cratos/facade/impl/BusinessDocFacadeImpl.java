@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDocument> implements BusinessDocFacade {
 
     private final BusinessDocumentService businessDocService;
-
     private final BusinessDocWrapper businessDocWrapper;
 
     @Override

@@ -32,7 +32,6 @@ import java.util.Optional;
 public class EdsScheduleFacadeImpl implements EdsScheduleFacade {
 
     private final SchedulerService schedulerService;
-
     private final EdsInstanceService instanceService;
 
     public static final String IMPORT_ASSET_JOB = "IMPORT_ASSET_JOB";

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class NotificationTemplateFacadeImpl implements NotificationTemplateFacade {
 
     private final NotificationTemplateService notificationTemplateService;
-
     private final NotificationTemplateWrapper notificationTemplateWrapper;
 
     @Override

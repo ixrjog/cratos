@@ -30,11 +30,8 @@ import java.util.Optional;
 public class MyMenuFacadeImpl implements MyMenuFacade {
 
     private final MenuService menuService;
-
     private final RbacRoleMenuService rbacRoleMenuService;
-
     private final MyMenuWrapper myMenuWrapper;
-
     private final UserService userService;
 
     @Value("${cratos.language:en-us}")

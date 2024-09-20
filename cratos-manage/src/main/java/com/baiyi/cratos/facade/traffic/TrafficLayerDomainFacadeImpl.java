@@ -33,11 +33,8 @@ import java.util.stream.Collectors;
 public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
 
     private final TrafficLayerDomainService domainService;
-
     private final TrafficLayerDomainRecordService recordService;
-
     private final TrafficLayerDomainWrapper domainWrapper;
-
     private final EnvService envService;
 
     @Override

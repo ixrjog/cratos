@@ -29,9 +29,7 @@ import java.util.stream.Collectors;
 public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag> implements BusinessTagFacade {
 
     private final BusinessTagService businessTagService;
-
     private final BusinessTagWrapper businessTagWrapper;
-
     private final TagService tagService;
 
     @Override

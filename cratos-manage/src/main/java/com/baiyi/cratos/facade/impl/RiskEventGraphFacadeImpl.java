@@ -40,11 +40,8 @@ import static com.baiyi.cratos.common.util.TimeUtil.THE_NUMBER_OF_SECONDS_IN_A_D
 public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private final RiskEventService eventService;
-
     private final TagService tagService;
-
     private final RiskEventImpactService impactService;
-
     private final BusinessTagService businessTagService;
 
     private static final String FIN_LOSSES_TAG = "FinLosses";

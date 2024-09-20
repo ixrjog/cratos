@@ -31,11 +31,8 @@ public class CertificateInspection extends BaseInspection {
     private final CertificateService certificateService;
 
     private static final int CERTIFICATE_EXPIRY_DAYS = 30;
-
     private static final String CERTIFICATES_FIELD = "certificates";
-
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
-
     public static final String CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION = "CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public CertificateInspection(NotificationTemplateService notificationTemplateService,

@@ -26,21 +26,13 @@ public class AppGroupSpec {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class GroupSpec {
-
         private String appName;
-
         private String env;
-
         private Group canary;
-
         private Group g1;
-
         private Group g2;
-
         private Group g3;
-
         private Group g4;
-
         private Specifications specifications;
 
         public int countTotalReplicas() {
@@ -59,16 +51,12 @@ public class AppGroupSpec {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Group {
-
         private String name;
-
         private Integer replicas;
-
         public String acqDesc() {
             return Joiner.on("|")
                     .join(name, replicas);
         }
-
     }
 
     @Data
@@ -76,13 +64,10 @@ public class AppGroupSpec {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Specifications {
-
         @Builder.Default
         private List<Integer> groups = Lists.newArrayList();
-
         // Compliant with specifications
         private Boolean isCompliant;
-
         private String desc;
 
         private void doGrouping(int total, List<Integer> groups) {
