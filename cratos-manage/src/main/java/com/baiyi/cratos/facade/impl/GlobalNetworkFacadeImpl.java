@@ -121,9 +121,13 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
 
     @Override
     public List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock) {
+        final String cidr = cidrBlock.trim();
+        if (!NetworkUtil.isValidIpRange(cidr)) {
+            throw new GlobalNetworkException("cidrBlock is invalid.");
+        }
         return globalNetworkService.queryByValid()
                 .stream()
-                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidrBlock))
+                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidr))
                 .map(globalNetworkWrapper::wrapToTarget)
                 .toList();
     }

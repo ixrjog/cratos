@@ -19,32 +19,27 @@
     </properties>
 
     <dependencies>
-
         <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-vpc -->
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-vpc</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ecs</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-iam</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
 </project>

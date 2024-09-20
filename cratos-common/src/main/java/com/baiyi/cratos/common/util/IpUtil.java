@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -88,10 +89,11 @@ public class IpUtil {
         String[] ipToList = ipTo.split("\\.");
         int[] int_ipf = new int[4];
         int[] int_ipt = new int[4];
-        for (int i = 0; i < 4; i++) {
-            int_ipf[i] = Integer.parseInt(ipFromList[i]);
-            int_ipt[i] = Integer.parseInt(ipToList[i]);
-        }
+        IntStream.range(0, 4)
+                .forEach(i -> {
+                    int_ipf[i] = Integer.parseInt(ipFromList[i]);
+                    int_ipt[i] = Integer.parseInt(ipToList[i]);
+                });
         for (int A = int_ipf[0]; A <= int_ipt[0]; A++) {
             for (int B = (A == int_ipf[0] ? int_ipf[1] : 0); B <= (A == int_ipt[0] ? int_ipt[1] : 255); B++) {
                 for (int C = (B == int_ipf[1] ? int_ipf[2] : 0); C <= (B == int_ipt[1] ? int_ipt[2] : 255); C++) {
@@ -118,7 +120,7 @@ public class IpUtil {
         return s1 + "." + s2 + "." + s3 + "." + s4;
     }
 
-      /**
+    /**
      * 把xx.xx.xx.xx类型的转为long类型的
      *
      * @param ip
@@ -127,12 +129,12 @@ public class IpUtil {
     public static Long getIpFromString(String ip) {
         long ipLong = 0L;
         String ipTemp = ip;
+        ipLong = Long.parseLong(ipTemp.substring(0, ipTemp.indexOf('.')));
+        ipTemp = ipTemp.substring(ipTemp.indexOf('.') + 1);
         ipLong = ipLong * 256 + Long.parseLong(ipTemp.substring(0, ipTemp.indexOf('.')));
-        ipTemp = ipTemp.substring(ipTemp.indexOf('.') + 1, ipTemp.length());
+        ipTemp = ipTemp.substring(ipTemp.indexOf(".") + 1);
         ipLong = ipLong * 256 + Long.parseLong(ipTemp.substring(0, ipTemp.indexOf('.')));
-        ipTemp = ipTemp.substring(ipTemp.indexOf(".") + 1, ipTemp.length());
-        ipLong = ipLong * 256 + Long.parseLong(ipTemp.substring(0, ipTemp.indexOf('.')));
-        ipTemp = ipTemp.substring(ipTemp.indexOf('.') + 1, ipTemp.length());
+        ipTemp = ipTemp.substring(ipTemp.indexOf('.') + 1);
         ipLong = ipLong * 256 + Long.parseLong(ipTemp);
         return ipLong;
     }

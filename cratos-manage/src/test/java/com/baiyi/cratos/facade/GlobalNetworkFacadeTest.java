@@ -66,7 +66,12 @@ public class GlobalNetworkFacadeTest extends BaseUnit {
                         }
                     }
                 });
+    }
 
+    @Test
+    void test3() {
+        List<GlobalNetworkVO.Network> networks = globalNetworkFacade.checkGlobalNetworkByCidrBlock("172.16.0.0/16");
+        System.out.println(networks);
     }
 
 }
