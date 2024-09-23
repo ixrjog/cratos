@@ -81,11 +81,11 @@ public class RobotParam {
         @NotNull
         private Integer id;
         @Null
-        private String username;
+        private String operatingBy;
 
         @Override
         public void setSessionUser(String username) {
-            this.username = username;
+            this.operatingBy = username;
         }
     }
 

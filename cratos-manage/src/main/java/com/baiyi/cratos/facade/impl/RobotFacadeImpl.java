@@ -137,7 +137,7 @@ public class RobotFacadeImpl implements RobotFacade {
 
     @Override
     @SetSessionUserToParam(desc = "set OperatingBy")
-    @PreVerifyPermissionsFromParam(ofUsername = "#revokeRobot.username", accessLevel = AccessLevel.OPS)
+    @PreVerifyPermissionsFromParam(ofUsername = "#revokeRobot.operatingBy", accessLevel = AccessLevel.OPS)
     public void revokeRobot(RobotParam.RevokeRobot revokeRobot) {
         Robot robot = robotService.getById(revokeRobot.getId());
         if (!robot.getValid()) {
