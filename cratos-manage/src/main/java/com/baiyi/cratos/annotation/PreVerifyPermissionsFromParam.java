@@ -22,7 +22,7 @@ public @interface PreVerifyPermissionsFromParam {
     @Schema(description = "SpEL username")
     String ofUsername();
 
-    AccessLevel accessLevel() default AccessLevel.BASE;
+    AccessLevel accessLevel() default AccessLevel.ADMIN;
 
     ErrorEnum rejectMessage() default AUTHENTICATION_FAILED;
 
