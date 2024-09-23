@@ -32,6 +32,7 @@ public class RobotVO {
         @FieldSensitive(type = SensitiveType.PASSWORD)
         private String token;
         private Boolean valid;
+        private Boolean trail;
         private String createdBy;
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)

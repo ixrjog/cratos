@@ -97,7 +97,7 @@ public class RobotFacadeImpl implements RobotFacade {
      */
     @Override
     @SetSessionUserToParam(desc = "set CreatedBy")
-    @PreVerifyPermissionsFromParam(ofUsername = "#addRobot.username", accessLevel = AccessLevel.OPS)
+    @PreVerifyPermissionsFromParam(ofUsername = "#addRobot.createdBy", accessLevel = AccessLevel.OPS)
     public RobotVO.RobotToken addRobot(RobotParam.AddRobot addRobot) {
         Robot robot = addRobot.toTarget();
         User user = userService.getByUsername(robot.getUsername());
