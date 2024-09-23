@@ -46,6 +46,7 @@ public class RobotParam {
         private String createdBy;
         private Date expiredTime;
         private String comment;
+
         @Override
         public void setSessionUser(String username) {
             this.createdBy = username;
@@ -66,6 +67,7 @@ public class RobotParam {
         private String createdBy;
         private Date expiredTime;
         private String comment;
+
         @Override
         public void setSessionUser(String username) {
             this.username = username;
@@ -75,9 +77,16 @@ public class RobotParam {
 
     @Data
     @Schema
-    public static class RevokeRobot {
+    public static class RevokeRobot implements ISetSessionUser {
         @NotNull
         private Integer id;
+        @Null
+        private String username;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
     }
 
 }

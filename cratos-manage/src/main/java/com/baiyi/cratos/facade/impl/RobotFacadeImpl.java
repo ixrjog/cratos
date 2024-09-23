@@ -7,6 +7,7 @@ import com.baiyi.cratos.common.exception.RobotException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.Robot;
@@ -18,6 +19,7 @@ import com.baiyi.cratos.service.RobotService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.RobotTokenWrapper;
 import com.baiyi.cratos.wrapper.RobotWrapper;
+import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -134,6 +136,8 @@ public class RobotFacadeImpl implements RobotFacade {
     }
 
     @Override
+    @SetSessionUserToParam(desc = "set OperatingBy")
+    @PreVerifyPermissionsFromParam(ofUsername = "#revokeRobot.username", accessLevel = AccessLevel.OPS)
     public void revokeRobot(RobotParam.RevokeRobot revokeRobot) {
         Robot robot = robotService.getById(revokeRobot.getId());
         if (!robot.getValid()) {
@@ -145,8 +149,10 @@ public class RobotFacadeImpl implements RobotFacade {
         if (!StringUtils.hasText(sessionUsername)) {
             throw new RobotException("The current session user is invalid.");
         }
-
         robot.setValid(false);
+        robot.setComment(Joiner.on("|")
+                .skipNulls()
+                .join(robot.getComment(), StringFormatter.format("User {} revokes robot token.", sessionUsername)));
         robotService.updateByPrimaryKey(robot);
     }
 
