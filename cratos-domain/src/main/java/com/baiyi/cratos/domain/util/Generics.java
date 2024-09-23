@@ -1,14 +1,13 @@
 package com.baiyi.cratos.domain.util;
+
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -34,13 +33,11 @@ public final class Generics {
             return null;
         }
         List<Type> types = getGenericTypes(clazz);
-        for (Type type : types) {
-            Class genericType = find(type, genericClass, index);
-            if (genericType != null) {
-                return genericType;
-            }
-        }
-        return null;
+        return types.stream()
+                .map(type -> find(type, genericClass, index))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -91,7 +88,8 @@ public final class Generics {
                 Type rawType = pType.getRawType();
                 if (rawType instanceof Class rawClass) {
                     Map<String, Type> map = transfer(pType, typeMap);
-                    Type[] typeArray = map.values().toArray(new Type[0]);
+                    Type[] typeArray = map.values()
+                            .toArray(new Type[0]);
                     if (rawClass == genericClass) {
                         Type realType = typeArray[index];
                         if (realType instanceof Class) {
@@ -134,12 +132,12 @@ public final class Generics {
      * @return
      */
     private static Map<String, Type> combine(Type[] typeArguments, Class rawClass) {
-        Map<String, Type> map = new LinkedHashMap<>(typeArguments.length);
+        Map<String, Type> map;
         TypeVariable[] typeParameters = rawClass.getTypeParameters();
-        for (int i = 0; i < typeParameters.length; i++) {
-            map.put(typeParameters[i].getName(), typeArguments[i]);
-        }
-        return map;
+        return IntStream.range(0, typeParameters.length)
+                .boxed()
+                .collect(Collectors.toMap(i -> typeParameters[i].getName(), i -> typeArguments[i], (a, b) -> b,
+                        () -> new LinkedHashMap<>(typeArguments.length)));
     }
 
     /**
@@ -153,15 +151,16 @@ public final class Generics {
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         TypeVariable[] typeParameters = ((Class) parameterizedType.getRawType()).getTypeParameters();
         Map<String, Type> map = new LinkedHashMap<>();
-        for (int i = 0; i < actualTypeArguments.length; i++) {
-            Type type = actualTypeArguments[i];
-            if (type instanceof TypeVariable) {
-                String variableName = ((TypeVariable) type).getName();
-                map.put(variableName, typeMap.get(variableName));
-            } else {
-                map.put(typeParameters[i].getName(), type);
-            }
-        }
+        IntStream.range(0, actualTypeArguments.length)
+                .forEach(i -> {
+                    Type type = actualTypeArguments[i];
+                    if (type instanceof TypeVariable) {
+                        String variableName = ((TypeVariable) type).getName();
+                        map.put(variableName, typeMap.get(variableName));
+                    } else {
+                        map.put(typeParameters[i].getName(), type);
+                    }
+                });
         return map;
     }
 

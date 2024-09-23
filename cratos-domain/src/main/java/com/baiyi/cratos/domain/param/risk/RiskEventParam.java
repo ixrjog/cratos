@@ -56,12 +56,10 @@ public class RiskEventParam {
                     .eventIdList(eventIdList)
                     .build();
         }
-
         @Override
         public void setIdList(List<Integer> idList) {
             eventIdList = idList;
         }
-
     }
 
     @EqualsAndHashCode(callSuper = true)

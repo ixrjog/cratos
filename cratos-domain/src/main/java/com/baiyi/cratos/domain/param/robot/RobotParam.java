@@ -46,7 +46,6 @@ public class RobotParam {
         private String createdBy;
         private Date expiredTime;
         private String comment;
-
         @Override
         public void setSessionUser(String username) {
             this.createdBy = username;
@@ -67,7 +66,6 @@ public class RobotParam {
         private String createdBy;
         private Date expiredTime;
         private String comment;
-
         @Override
         public void setSessionUser(String username) {
             this.username = username;

@@ -28,7 +28,6 @@ public class TrafficLayerRecordParam {
                     .envName(getEnvName())
                     .build();
         }
-
     }
 
     @EqualsAndHashCode(callSuper = true)

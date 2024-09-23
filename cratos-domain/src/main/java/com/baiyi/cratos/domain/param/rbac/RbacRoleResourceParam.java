@@ -22,11 +22,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class RbacRoleResourceParam {
 
     public interface IToRbacRoleResources {
-
         Integer getRoleId();
-
         List<Integer> getResourceIds();
-
         default List<RbacRoleResource> toRbacRoleResources() {
             return getResourceIds().stream()
                     .map(resourceId -> RbacRoleResource.builder()
@@ -35,7 +32,6 @@ public class RbacRoleResourceParam {
                             .build())
                     .toList();
         }
-
     }
 
     @Data

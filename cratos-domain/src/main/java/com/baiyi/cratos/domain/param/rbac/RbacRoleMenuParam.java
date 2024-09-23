@@ -21,11 +21,8 @@ import static lombok.AccessLevel.PRIVATE;
 public class RbacRoleMenuParam {
 
     public interface IToRoleMenus {
-
         List<Integer> getMenuIds();
-
         Integer getRoleId();
-
         default List<RbacRoleMenu> toRoleMenus() {
             return getMenuIds().stream()
                     .map(e -> RbacRoleMenu.builder()
@@ -34,7 +31,6 @@ public class RbacRoleMenuParam {
                             .build())
                     .toList();
         }
-
     }
 
     @Data

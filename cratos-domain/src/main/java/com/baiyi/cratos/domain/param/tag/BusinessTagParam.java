@@ -21,18 +21,14 @@ import static lombok.AccessLevel.PRIVATE;
 public class BusinessTagParam {
 
     public interface HasQueryByTag {
-
         BusinessTagParam.QueryByTag getQueryByTag();
-
         void setIdList(List<Integer> idList);
-
         default boolean isQueryByTag() {
             int tagId = Optional.ofNullable(getQueryByTag())
                     .map(BusinessTagParam.QueryByTag::getTagId)
                     .orElse(0);
             return tagId != 0;
         }
-
     }
 
     @Data

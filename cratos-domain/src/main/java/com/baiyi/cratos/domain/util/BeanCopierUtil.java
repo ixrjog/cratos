@@ -58,7 +58,7 @@ public final class BeanCopierUtil {
         if (CollectionUtils.isEmpty(source)) {
             return new ArrayList<>();
         }
-        List<T> target = new ArrayList<T>();
+        List<T> target = new ArrayList<>();
         for (Object obj : source) {
             T targetObject;
             try {
