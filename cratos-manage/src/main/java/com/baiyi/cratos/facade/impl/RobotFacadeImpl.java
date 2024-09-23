@@ -129,6 +129,7 @@ public class RobotFacadeImpl implements RobotFacade {
         Robot robot = applyRobot.toTarget();
         robot.setToken(IdentityUtil.randomUUID());
         robot.setValid(true);
+        robot.setTrail(true);
         // 1年后过期
         robot.setExpiredTime(new Date(System.currentTimeMillis() + TimeUnit.MILLISECONDS.convert(366L, TimeUnit.DAYS)));
         robotService.add(robot);

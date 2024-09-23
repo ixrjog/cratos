@@ -42,6 +42,8 @@ public class Robot implements IValid {
      */
     private Boolean valid;
 
+    private Boolean trail;
+
     /**
      * 创建者
      */

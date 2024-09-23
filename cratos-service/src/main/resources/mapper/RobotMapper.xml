@@ -10,6 +10,7 @@
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="token" jdbcType="CHAR" property="token"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="trail" jdbcType="BIT" property="trail"/>
         <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
         <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
