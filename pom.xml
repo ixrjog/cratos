@@ -30,6 +30,7 @@
         <module>cratos-ssh-core</module>
         <module>cratos-eds-domain</module>
         <module>cratos-eds-harbor</module>
+        <module>cratos-ssh-crystal</module>
     </modules>
 
     <properties>

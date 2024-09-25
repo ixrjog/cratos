@@ -7,6 +7,8 @@ package com.baiyi.cratos.ssh.core.enums;
  */
 public enum SshSessionTypeEnum {
 
-    SSH_SERVER
+    SSH_SERVER,
+    WEB_SHELL,
+    WEB_KUBERNETES_SHELL
 
 }
