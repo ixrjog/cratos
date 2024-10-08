@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Domain implements IValid, ToBusinessTarget {
+public class Domain implements HasValid, ToBusinessTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

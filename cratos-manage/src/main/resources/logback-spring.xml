@@ -5,7 +5,7 @@
     <!-- 日志文件输出位置 -->
     <property name="LOG_PATH" value="${HOME}/logs"/>
     <!-- 日志文件名 -->
-    <property name="LOG_FILE" value="${LOG_PATH}/spring-boot.log"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/cratos.log"/>
     <!-- 归档日志名 -->
     <property name="FILE_NAME_PATTERN" value="${LOG_FILE}-%d{yyyyMMdd}.%i.gz"/>
     <!-- 在启动时清除历史日志 -->
@@ -30,7 +30,6 @@
     <property name="FILE_LOG_CHARSET" value="UTF-8"/>
     <!-- 日志文件输出级别 -->
     <property name="FILE_LOG_THRESHOLD" value="INFO"/>
-
 
     <!-- 日志输出到控制台 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

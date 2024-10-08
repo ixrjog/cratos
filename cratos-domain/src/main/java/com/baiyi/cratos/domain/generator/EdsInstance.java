@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "eds_instance")
-public class EdsInstance implements IValid {
+public class EdsInstance implements HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

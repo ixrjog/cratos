@@ -5,7 +5,7 @@ package com.baiyi.cratos.domain.generator.base;
  * @Date 2024/1/23 17:16
  * @Version 1.0
  */
-public interface IValid {
+public interface HasValid {
 
     Boolean getValid();
 

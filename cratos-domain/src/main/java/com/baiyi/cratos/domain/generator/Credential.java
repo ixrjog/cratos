@@ -3,7 +3,7 @@ package com.baiyi.cratos.domain.generator;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import com.baiyi.cratos.domain.generator.base.HasExpiredTime;
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @EncryptedDomain
-public class Credential implements IValid, HasExpiredTime {
+public class Credential implements HasValid, HasExpiredTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

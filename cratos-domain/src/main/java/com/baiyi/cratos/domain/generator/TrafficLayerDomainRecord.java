@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "traffic_layer_domain_record")
-public class TrafficLayerDomainRecord implements IValid {
+public class TrafficLayerDomainRecord implements HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

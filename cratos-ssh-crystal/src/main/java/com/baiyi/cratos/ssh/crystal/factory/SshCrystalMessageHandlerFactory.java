@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.crystal.factory;
 
 import com.baiyi.cratos.ssh.core.SshCrystalMessageHandler;
+import com.baiyi.cratos.ssh.core.enums.MessageState;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -17,7 +18,8 @@ public class SshCrystalMessageHandlerFactory {
     static Map<String, SshCrystalMessageHandler> context = new ConcurrentHashMap<>();
 
     public static SshCrystalMessageHandler getByState(String state) {
-        return context.get(state);
+        SshCrystalMessageHandler handler = context.get(state);
+        return handler != null ? handler : context.get(MessageState.UNKNOWN.name());
     }
 
     public static void register(SshCrystalMessageHandler bean) {

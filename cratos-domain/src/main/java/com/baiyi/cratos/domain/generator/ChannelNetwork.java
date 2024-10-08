@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Table(name = "channel_network")
-public class ChannelNetwork implements IValid {
+public class ChannelNetwork implements HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

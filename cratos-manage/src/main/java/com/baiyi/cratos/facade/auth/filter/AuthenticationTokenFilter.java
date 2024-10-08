@@ -55,8 +55,8 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         // 资源路径
         final String resource = request.getServletPath();
-        // 白名单
-        if (cratosConfiguration.isTheResourceInTheWhiteList(resource)) {
+        // 白名单 resource is on the whitelist
+        if (cratosConfiguration.isWhitelistResource(resource)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -69,40 +69,33 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         // Bearer
-        String secret = request.getHeader(AUTHORIZATION);
+        String headerAuthorization = request.getHeader(AUTHORIZATION);
         try {
-            if (!StringUtils.hasText(secret)) {
+            if (!StringUtils.hasText(headerAuthorization)) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
             }
-            if (secret.startsWith("Bearer ")) {
-                // 验证令牌是否有效
-                String token = secret.substring(7);
-                UserToken userToken = userTokenFacade.verifyToken(token);
-                rbacFacade.verifyResourceAccessPermissions(userToken, resource);
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userToken.getUsername(), null);
-                SecurityContextHolder.getContext()
-                        .setAuthentication(usernamePasswordAuthenticationToken);
-                log.debug("Login username={}", SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName());
-                filterChain.doFilter(request, response);
-            } else if (secret.startsWith("Robot ")) {
-                // 先验证token是否有效
-                String token = secret.substring(6);
-                Robot robot = robotFacade.verifyToken(token);
-                rbacFacade.verifyResourceAccessPermissions(robot, resource);
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        robot.getUsername(), null);
-                SecurityContextHolder.getContext()
-                        .setAuthentication(usernamePasswordAuthenticationToken);
-                log.debug("Login robot username={}", SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName());
-                filterChain.doFilter(request, response);
-            } else {
+            if (!headerAuthorization.startsWith("Bearer ") && !headerAuthorization.startsWith("Robot ")) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
             }
+            String username = "";
+            if (headerAuthorization.startsWith("Bearer ")) {
+                // 验证令牌是否有效
+                String token = headerAuthorization.substring(7);
+                UserToken userToken = userTokenFacade.verifyToken(token);
+                rbacFacade.verifyResourceAccessPermissions(userToken, resource);
+                username = userToken.getUsername();
+            } else if (headerAuthorization.startsWith("Robot ")) {
+                // 先验证token是否有效
+                String token = headerAuthorization.substring(6);
+                Robot robot = robotFacade.verifyToken(token);
+                rbacFacade.verifyResourceAccessPermissions(robot, resource);
+                username = robot.getUsername();
+            }
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    username, null);
+            SecurityContextHolder.getContext()
+                    .setAuthentication(usernamePasswordAuthenticationToken);
+            filterChain.doFilter(request, response);
         } catch (AuthenticationException authenticationException) {
             // 认证
             handleExceptionResult(response, HttpServletResponse.SC_UNAUTHORIZED,

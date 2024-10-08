@@ -25,7 +25,7 @@ public class CratosConfiguration {
 
     private CratosModel.Credential credential;
 
-    public boolean isTheResourceInTheWhiteList(String resourceName) {
+    public boolean isWhitelistResource(String resourceName) {
         List<String> resources = Optional.of(auth)
                 .map(CratosModel.Auth::getWhite)
                 .map(CratosModel.White::getResources)

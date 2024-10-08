@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
-import com.baiyi.cratos.domain.generator.base.IValid;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 @Table(name = "global_network")
-public class GlobalNetwork implements IValid {
+public class GlobalNetwork implements HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

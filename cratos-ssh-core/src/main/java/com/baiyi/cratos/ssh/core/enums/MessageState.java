@@ -19,7 +19,8 @@ public enum MessageState {
     RESIZE("改变窗体"),
     CLOSE("关闭会话(登出所有服务器)"),
     LOGOUT("登出服务器"),
-    BATCH_COMMAND("批量命令");
+    BATCH_COMMAND("批量命令"),
+    UNKNOWN("未知的");
 
     private final String desc;
 

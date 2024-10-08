@@ -18,6 +18,8 @@ public class SshMessage {
         private Integer height;
     }
 
+    public static final BaseMessage UNKNOWN_MESSAGE = BaseMessage.builder().build();
+
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -30,9 +32,6 @@ public class SshMessage {
 
         private String id;
         private String state;
-        // 0 普通账户 1 管理员账户
-        private Integer loginType;
-        private boolean isAdmin;
         private Terminal terminal;
 
         @Override
@@ -78,6 +77,7 @@ public class SshMessage {
     public static class Login extends BaseMessage {
         // private Set<ServerNode> serverNodes;
         // private String token;
+        private Integer serverAccountId;
     }
 
     @EqualsAndHashCode(callSuper = true)
