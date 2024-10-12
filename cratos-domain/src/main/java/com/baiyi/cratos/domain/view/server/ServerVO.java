@@ -25,6 +25,12 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class ServerVO {
 
+    public interface HasServer {
+        String getName();
+        String getInstanceId();
+        String getRemoteMgmtIp();
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema

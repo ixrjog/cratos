@@ -19,21 +19,21 @@ import reactor.netty.http.client.HttpClient;
 public class AwsWebClientConfiguration {
 
     // https://tedivm.github.io/ec2details/api/ec2instances.json
-
     private static final String BASE_URL = "https://tedivm.github.io";
+
+    // buffer
+    private static final int BUFFER_SIZE = 16 * 1024 * 1024;
 
     @Bean
     public Ec2InstancesService ec2InstancesService() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
 
-        // buffer
-        final int bufferSize = 16 * 1024 * 1024;
-
         WebClient webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(bufferSize))
+                .codecs(codecs -> codecs.defaultCodecs()
+                        .maxInMemorySize(BUFFER_SIZE))
                 .build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)

@@ -33,7 +33,7 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
     public static class ApplicationView {
         private String name;
         @Builder.Default
-        private Map<String, Integer> replicasMap = Maps.newHashMap();
+        private Map<String, Integer> envReplicasMap = Maps.newHashMap();
     }
 
     @Resource
@@ -50,23 +50,28 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         makeDeployments(96, "test", viewMap);
         // EKS-SIT | gray
         makeDeployments(106, "gray", viewMap);
+        // EKS-PRE | pre
+        makeDeployments(115, "pre", viewMap);
         // EKS-PROD
         makeDeployments(105, "prod", viewMap);
         viewMap.keySet()
                 .forEach(k -> {
                     Integer dev = viewMap.get(k)
-                            .getReplicasMap()
+                            .getEnvReplicasMap()
                             .getOrDefault("ci", 0);
                     Integer daily = viewMap.get(k)
-                            .getReplicasMap()
+                            .getEnvReplicasMap()
                             .getOrDefault("daily", 0);
                     Integer gray = viewMap.get(k)
-                            .getReplicasMap()
+                            .getEnvReplicasMap()
                             .getOrDefault("gray", 0);
+                    Integer pre = viewMap.get(k)
+                            .getEnvReplicasMap()
+                            .getOrDefault("pre", 0);
                     Integer prod = viewMap.get(k)
-                            .getReplicasMap()
+                            .getEnvReplicasMap()
                             .getOrDefault("prod", 0);
-                    String s = StringFormatter.arrayFormat("{} : dev={} daily={} gray={} prod={}", k, dev, daily, gray,
+                    String s = StringFormatter.arrayFormat("{} | {} | {} | {} | {} | {} ", k, dev, daily, gray, pre,
                             prod);
                     System.out.println(s);
                 });
@@ -75,7 +80,6 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
     private void makeDeployments(int instanceId, String namespace, Map<String, ApplicationView> viewMap) {
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(instanceId,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-
         assets.forEach(asset -> {
             EdsAssetIndex appNameUniqueKey = EdsAssetIndex.builder()
                     .instanceId(instanceId)
@@ -91,7 +95,6 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
                         .build();
                 EdsAssetIndex namespaceIndex = edsAssetIndexService.getByUniqueKey(namespaceUniqueKey);
                 if (namespaceIndex != null) {
-
                     EdsAssetIndex replicasUniqueKey = EdsAssetIndex.builder()
                             .instanceId(instanceId)
                             .assetId(asset.getId())
@@ -99,27 +102,21 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
                             .build();
                     EdsAssetIndex replicasIndex = edsAssetIndexService.getByUniqueKey(replicasUniqueKey);
                     int replicas = replicasIndex != null ? Integer.parseInt(replicasIndex.getValue()) : 0;
-
                     if (viewMap.containsKey(appNameIndex.getValue())) {
                         viewMap.get(appNameIndex.getValue())
-                                .getReplicasMap()
+                                .getEnvReplicasMap()
                                 .put(namespace, replicas);
                     } else {
                         ApplicationView view = ApplicationView.builder()
                                 .name(appNameIndex.getValue())
                                 .build();
-                        view.getReplicasMap()
+                        view.getEnvReplicasMap()
                                 .put(namespace, replicas);
                         viewMap.put(appNameIndex.getValue(), view);
                     }
                 }
-
             }
-
-
         });
-
-
     }
 
 }

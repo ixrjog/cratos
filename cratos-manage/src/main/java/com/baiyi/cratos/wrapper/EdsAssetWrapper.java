@@ -30,7 +30,6 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
 public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, EdsAsset> implements IBaseWrapper<EdsAssetVO.Asset> {
 
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-
     private final EdsAssetIndexService edsAssetIndexService;
 
     public static final boolean SKIP_LOAD_ASSET = true;
