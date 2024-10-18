@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -29,6 +30,7 @@ public class EdsHuaweicloudConfigModel {
         private Set<String> regionIds;
         @Schema(description = "凭据")
         private Cred cred;
+        private List<Project> projects;
         private EdsInstance edsInstance;
     }
 
@@ -40,6 +42,14 @@ public class EdsHuaweicloudConfigModel {
         private String username;
         private String accessKey;
         private String secretKey;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Project {
+        private String name;
+        private String id;
     }
 
 }

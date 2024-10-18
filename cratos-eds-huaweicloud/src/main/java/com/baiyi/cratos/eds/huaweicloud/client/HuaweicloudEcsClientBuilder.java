@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.client;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.huaweicloud.util.HuaweicloudProjectUtil;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
 import com.huaweicloud.sdk.ecs.v2.EcsClient;
@@ -26,7 +27,8 @@ public class HuaweicloudEcsClientBuilder {
         BasicCredentials auth = new BasicCredentials().withAk(huaweicloud.getCred()
                         .getAccessKey())
                 .withSk(huaweicloud.getCred()
-                        .getSecretKey());
+                        .getSecretKey())
+                .withProjectId(HuaweicloudProjectUtil.findProjectId(regionId,huaweicloud));
         return EcsClient.newBuilder()
                 .withHttpConfig(config)
                 .withCredential(auth)

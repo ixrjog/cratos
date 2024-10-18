@@ -58,22 +58,20 @@ public class EdsHuaweicloudEcsAssetProvider extends BaseHasRegionsEdsAssetProvid
     private List<HuaweicloudEcs.Ecs> toEcs(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
                                            List<ServerDetail> serverDetails) {
         return serverDetails.stream()
-                .map(e -> HuaweicloudEcs.Ecs.builder()
-                        .regionId(regionId)
-                        .serverDetail(e)
-                        .build())
+                .map(e -> HuaweicloudEcs.toEcs(regionId, e)
+                )
                 .toList();
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
                                   HuaweicloudEcs.Ecs entity) {
-        Map<String, List<ServerAddress>> addMap = entity.getServerDetail()
+        Map<String, List<HuaweicloudEcs.ServerAddress>> addMap = entity.getServerDetail()
                 .getAddresses();
         String privateIp = "";
         for (String key : addMap.keySet()) {
-            for (ServerAddress serverAdd : addMap.get(key)) {
-                if (ServerAddress.OsEXTIPSTypeEnum.FIXED == serverAdd.getOsEXTIPSType()) {
+            for (HuaweicloudEcs.ServerAddress serverAdd : addMap.get(key)) {
+                if (ServerAddress.OsEXTIPSTypeEnum.FIXED.getValue().equals(serverAdd.getOsEXTIPSType()))  {
                     privateIp = serverAdd.getAddr();
                 }
             }

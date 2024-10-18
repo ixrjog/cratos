@@ -54,6 +54,7 @@ public class EdsHuaweicloudIamUserAssetProvider extends BaseEdsInstanceAssetProv
                                   KeystoneListUsersResult entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
+                .validOf(entity.getEnabled())
                 .build();
     }
 

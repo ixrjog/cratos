@@ -44,7 +44,6 @@ public class CrystalFacadeImpl implements CrystalFacade {
     public List<ServerAccountVO.ServerAccount> getServerAccountOptions(int size) {
         ServerAccountParam.ServerAccountPageQuery pageQuery = ServerAccountParam.ServerAccountPageQuery.builder()
                 .protocol(RemoteManagementProtocolEnum.SSH.name())
-                .valid(true)
                 .page(1)
                 .length(size == 0 ? SIZE : size)
                 .build();
