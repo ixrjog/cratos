@@ -24,6 +24,7 @@ spring:
     # 设置缓冲时间 默认30s
     timeout-per-shutdown-phase: 45s
 
+
 # 开发环境配置
 server:
   # 服务端口
@@ -57,6 +58,8 @@ cratos:
         - /api/log/login
         # WebSocket独立鉴权
         - /socket/
+        # health
+        - /actuator
 
 mapper:
   mappers:

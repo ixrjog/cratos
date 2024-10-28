@@ -15,30 +15,44 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <huaweicloud-sdk.version>3.1.117</huaweicloud-sdk.version>
+        <huaweicloud-sdk.version>3.1.118</huaweicloud-sdk.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.baiyi.cratos</groupId>
+            <artifactId>cratos-eds-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-vpc -->
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-vpc</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-ecs -->
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-ecs</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-iam -->
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-iam</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-ccm -->
         <dependency>
-            <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-eds-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-ccm</artifactId>
+            <version>${huaweicloud-sdk.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.huaweicloud.sdk/huaweicloud-sdk-scm -->
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-scm</artifactId>
+            <version>${huaweicloud-sdk.version}</version>
         </dependency>
     </dependencies>
 

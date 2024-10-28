@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.huaweicloud.client;
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
 import com.huaweicloud.sdk.core.auth.GlobalCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
+import com.huaweicloud.sdk.core.region.Region;
 import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.region.IamRegion;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class HuaweicloudIamClientBuilder {
         // 配置客户端属性
         HttpConfig config = HttpConfig.getDefaultHttpConfig();
         config.withIgnoreSSLVerification(true);
+        Region region = IamRegion.valueOf(regionId);
         GlobalCredentials globalCredentials = new GlobalCredentials().withAk(huaweicloud.getCred()
                         .getAccessKey())
                 .withSk(huaweicloud.getCred()
@@ -30,7 +32,7 @@ public class HuaweicloudIamClientBuilder {
         return IamClient.newBuilder()
                 .withHttpConfig(config)
                 .withCredential(globalCredentials)
-                .withRegion(IamRegion.valueOf(regionId))
+                .withRegion(region)
                 .build();
     }
 
