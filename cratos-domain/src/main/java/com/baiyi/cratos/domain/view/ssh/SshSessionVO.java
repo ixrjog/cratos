@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.HasDurationTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class SshSessionVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.SSH_SESSION)
-    public static class Session extends BaseVO implements SshInstanceVO.HasSessionInstances, Serializable {
+    public static class Session extends BaseVO implements SshInstanceVO.HasSessionInstances, HasDurationTime, Serializable {
         @Serial
         private static final long serialVersionUID = -5432624545362080316L;
         private Integer id;
@@ -45,6 +46,7 @@ public class SshSessionVO {
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date endTime;
         private List<SshInstanceVO.Instance> sessionInstances;
+        private String durationTime;
     }
 
 }
