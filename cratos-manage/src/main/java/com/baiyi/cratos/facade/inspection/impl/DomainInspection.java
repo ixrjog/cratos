@@ -30,7 +30,7 @@ public class DomainInspection extends BaseInspection {
 
     private final DomainService domainService;
 
-    private static final int DOMAIN_EXPIRY_DAYS = 60;
+    private static final int DOMAIN_EXPIRY_DAYS = 30;
     public static final String DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION = "DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION";
     private static final String DOMAINS_FIELD = "domains";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
