@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,7 +28,8 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
                 .build();
     }
 
-    public static <C extends IEdsConfigModel, A> EdsAssetBuilder<C, A> newBuilder(ExternalDataSourceInstance<C> instance, A entity) {
+    public static <C extends IEdsConfigModel, A> EdsAssetBuilder<C, A> newBuilder(
+            ExternalDataSourceInstance<C> instance, A entity) {
         return new EdsAssetBuilder<>(instance, entity);
     }
 
@@ -96,6 +98,11 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return this;
     }
 
+    public EdsAssetBuilder<C, A> createdTimeOf(OffsetDateTime createdTime) {
+        edsAsset.setCreatedTime(Date.from(createdTime.toInstant()));
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> createdTimeOf(Date createdTime) {
         edsAsset.setCreatedTime(createdTime);
         return this;
@@ -111,6 +118,13 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
     public EdsAssetBuilder<C, A> expiredTimeOf(Date expiredTime) {
         if (expiredTime != null) {
             edsAsset.setExpiredTime(expiredTime);
+        }
+        return this;
+    }
+
+    public EdsAssetBuilder<C, A> expiredTimeOf(OffsetDateTime expiredTime) {
+        if (expiredTime != null) {
+            edsAsset.setExpiredTime(Date.from(expiredTime.toInstant()));
         }
         return this;
     }

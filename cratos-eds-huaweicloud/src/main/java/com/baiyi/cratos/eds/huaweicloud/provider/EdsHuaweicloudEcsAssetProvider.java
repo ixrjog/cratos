@@ -52,10 +52,10 @@ public class EdsHuaweicloudEcsAssetProvider extends BaseHasRegionsEdsAssetProvid
         if (CollectionUtils.isEmpty(serverDetails)) {
             return Collections.emptyList();
         }
-        return toEcs(regionId, configModel, serverDetails);
+        return toEntities(regionId, configModel, serverDetails);
     }
 
-    private List<HuaweicloudEcs.Ecs> toEcs(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
+    private List<HuaweicloudEcs.Ecs> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
                                            List<ServerDetail> serverDetails) {
         return serverDetails.stream()
                 .map(e -> HuaweicloudEcs.toEcs(regionId, e)

@@ -51,6 +51,8 @@ public enum EdsAssetTypeEnum {
     HUAWEICLOUD_ECS("ECS", 0),
     HUAWEICLOUD_IAM_USER("IAM User", 0),
     HUAWEICLOUD_SCM_CERT("Certificate", 0),
+    HUAWEICLOUD_VPC("VPC", 0),
+    HUAWEICLOUD_SUBNET("Subnet", 0),
 
     CLOUDFLARE_CERT("Certificate", 0),
 

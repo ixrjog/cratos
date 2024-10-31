@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.configuration.WebSocketConfig;
 import com.baiyi.cratos.domain.ssh.SimpleState;
+import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.player.SshAuditPlayer;
 import com.google.gson.GsonBuilder;
 import jakarta.websocket.OnError;
@@ -57,7 +58,18 @@ public class SshSessionAuditServer {
         try {
             SimpleState ss = new GsonBuilder().create()
                     .fromJson(message, SimpleState.class);
-            sshAuditPlayer.play(message, session);
+            // 简单处理，不使用工厂
+            if (MessageState.HEARTBEAT.name()
+                    .equals(ss.getState())) {
+                log.debug("Heartbeat received.");
+                return;
+            }
+            if (MessageState.PLAY.name()
+                    .equals(ss.getState())) {
+                sshAuditPlayer.play(message, session);
+                return;
+            }
+            log.warn("Ssh session audit play state={} error.", ss.getState());
         } catch (Exception ignored) {
         }
     }

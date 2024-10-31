@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core.facade.impl;
 
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,30 +33,34 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
         }
         Map<String, EdsAssetIndex> assetIndexMap = getEdsAssetIndexMap(assetId);
         edsAssetIndexList.forEach(e -> {
-            if (e != null) {
-                if (assetIndexMap.containsKey(e.getName())) {
-                    EdsAssetIndex edsAssetIndex = assetIndexMap.get(e.getName());
-                    if (!edsAssetIndex.getValue()
-                            .equals(e.getValue())) {
-                        edsAssetIndex.setValue(e.getValue());
-                        edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);
-                    }
-                    assetIndexMap.remove(e.getName());
-                } else {
-                    try {
-                        edsAssetIndexService.add(e);
-                        log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(),
-                                e.getValue());
-                    } catch (DuplicateKeyException duplicateKeyException) {
-                        log.debug("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
-                                e.getName(), e.getValue());
-                    }
-                }
+            if (e == null) {
+                return;
             }
+            saveAssetIndex(assetIndexMap, e);
         });
         assetIndexMap.keySet()
                 .forEach(key -> edsAssetIndexService.deleteById(assetIndexMap.get(key)
                         .getId()));
+    }
+
+    private void saveAssetIndex(Map<String, EdsAssetIndex> assetIndexMap, EdsAssetIndex e) {
+        if (assetIndexMap.containsKey(e.getName())) {
+            EdsAssetIndex edsAssetIndex = assetIndexMap.get(e.getName());
+            if (!edsAssetIndex.getValue()
+                    .equals(e.getValue())) {
+                edsAssetIndex.setValue(e.getValue());
+                edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);
+            }
+            assetIndexMap.remove(e.getName());
+        } else {
+            try {
+                edsAssetIndexService.add(e);
+                log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
+            } catch (DuplicateKeyException | DaoServiceException sqlException) {
+                log.debug("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
+                        e.getName(), e.getValue());
+            }
+        }
     }
 
     private Map<String, EdsAssetIndex> getEdsAssetIndexMap(int assetId) {

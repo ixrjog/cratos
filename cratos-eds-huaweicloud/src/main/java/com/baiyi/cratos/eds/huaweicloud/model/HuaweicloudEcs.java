@@ -125,7 +125,6 @@ public class HuaweicloudEcs {
         private Server serverDetail;
     }
 
-
     @Data
     @Builder
     @AllArgsConstructor
