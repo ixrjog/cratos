@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="robot">
+        <table tableName="kubernetes_resource_template_member">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

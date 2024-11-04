@@ -79,7 +79,7 @@ public class SshCrystalSocketServer {
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)
-    public void onMessage(String message, Session session) {
+    public void onMessage(Session session, String message) {
         if (!session.isOpen() || !StringUtils.hasText(message)) {
             return;
         }

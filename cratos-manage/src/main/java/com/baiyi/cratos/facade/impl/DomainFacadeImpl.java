@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.annotation.PageQueryByTag;
-import com.baiyi.cratos.common.exception.SqlException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Domain;
@@ -40,9 +39,6 @@ public class DomainFacadeImpl implements DomainFacade {
     @BindAssetsAfterImport
     public Domain addDomain(DomainParam.AddDomain addDomain) {
         Domain domain = addDomain.toTarget();
-        if (domainService.getByUniqueKey(domain) != null) {
-            throw new SqlException("Union key conflict.");
-        }
         domainService.add(domain);
         return domain;
     }

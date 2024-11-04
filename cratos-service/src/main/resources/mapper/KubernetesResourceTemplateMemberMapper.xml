@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.KubernetesResourceTemplateMemberMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="namespace" jdbcType="VARCHAR" property="namespace" />
+    <result column="kind" jdbcType="VARCHAR" property="kind" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="custom" jdbcType="LONGVARCHAR" property="custom" />
+    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
+  </resultMap>
+</mapper>
