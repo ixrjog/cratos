@@ -33,6 +33,8 @@ public class KubernetesResourceTemplate implements HasValid {
     @Column(name = "api_version")
     private String apiVersion;
 
+    private String custom;
+
     /**
      * 有效
      */

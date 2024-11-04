@@ -9,6 +9,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="template_key" jdbcType="VARCHAR" property="templateKey"/>
         <result column="api_version" jdbcType="VARCHAR" property="apiVersion"/>
+        <result column="custom" jdbcType="VARCHAR" property="custom"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>

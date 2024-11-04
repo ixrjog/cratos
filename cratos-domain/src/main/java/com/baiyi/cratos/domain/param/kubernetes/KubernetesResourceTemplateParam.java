@@ -60,13 +60,10 @@ public class KubernetesResourceTemplateParam {
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
     public static class AddTemplate implements IToTarget<KubernetesResourceTemplate> {
         private String name;
-        private String envName;
         private String templateKey;
         private String apiVersion;
-        private String kind;
         private Boolean valid;
         private String custom;
-        private String content;
         private String comment;
     }
 
@@ -76,13 +73,10 @@ public class KubernetesResourceTemplateParam {
     public static class UpdateTemplate implements IToTarget<KubernetesResourceTemplate> {
         private Integer id;
         private String name;
-        private String envName;
         private String templateKey;
         private String apiVersion;
-        private String kind;
         private Boolean valid;
         private String custom;
-        private String content;
         private String comment;
     }
 

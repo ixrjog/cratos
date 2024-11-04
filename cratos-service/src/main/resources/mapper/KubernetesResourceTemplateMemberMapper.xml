@@ -16,4 +16,5 @@
     <result column="custom" jdbcType="LONGVARCHAR" property="custom" />
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
+
 </mapper>
