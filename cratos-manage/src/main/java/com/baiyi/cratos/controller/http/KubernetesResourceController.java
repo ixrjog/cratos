@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
+import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +28,8 @@ public class KubernetesResourceController {
 
     private final KubernetesResourceTemplateFacade templateFacade;
 
+    private final KubernetesResourceTemplateMemberFacade templateMemberFacade;
+
     @Operation(summary = "Query kubernetes resource options")
     @GetMapping(value = "/kind/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getResourceKindOptions() {
@@ -42,14 +45,16 @@ public class KubernetesResourceController {
 
     @Operation(summary = "Add kubernetes resource template")
     @PostMapping(value = "/template/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addTemplate(@RequestBody @Valid KubernetesResourceTemplateParam.AddTemplate addTemplate) {
+    public HttpResult<Boolean> addTemplate(
+            @RequestBody @Valid KubernetesResourceTemplateParam.AddTemplate addTemplate) {
         templateFacade.addTemplate(addTemplate);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Update kubernetes resource template")
     @PutMapping(value = "/template/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateTemplate(@RequestBody @Valid KubernetesResourceTemplateParam.UpdateTemplate updateTemplate) {
+    public HttpResult<Boolean> updateTemplate(
+            @RequestBody @Valid KubernetesResourceTemplateParam.UpdateTemplate updateTemplate) {
         templateFacade.updateTemplate(updateTemplate);
         return HttpResult.SUCCESS;
     }
@@ -65,6 +70,29 @@ public class KubernetesResourceController {
     @DeleteMapping(value = "/template/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteTemplateById(@RequestParam int id) {
         templateFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    // Member
+    @Operation(summary = "Pagination query kubernetes resource template")
+    @PostMapping(value = "/member/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<KubernetesResourceTemplateVO.Member>> queryMemberPage(
+            @RequestBody @Valid KubernetesResourceTemplateParam.MemberPageQuery pageQuery) {
+        return new HttpResult<>(templateMemberFacade.queryMemberPage(pageQuery));
+    }
+
+    @Operation(summary = "Add kubernetes resource template member")
+    @PostMapping(value = "/member/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addMember(@RequestBody @Valid KubernetesResourceTemplateParam.AddMember addMember) {
+        templateMemberFacade.addMember(addMember);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update kubernetes resource template member")
+    @PostMapping(value = "/member/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addMember(
+            @RequestBody @Valid KubernetesResourceTemplateParam.UpdateMember updateMember) {
+        templateMemberFacade.updateMember(updateMember);
         return HttpResult.SUCCESS;
     }
 

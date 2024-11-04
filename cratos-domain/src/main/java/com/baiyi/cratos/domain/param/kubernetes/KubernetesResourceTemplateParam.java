@@ -3,10 +3,13 @@ package com.baiyi.cratos.domain.param.kubernetes;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
+import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -76,6 +79,47 @@ public class KubernetesResourceTemplateParam {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
+        private String custom;
+        private String comment;
+    }
+
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @EqualsAndHashCode(callSuper = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class MemberPageQuery extends PageParam {
+        @NotNull
+        private Integer templateId;
+        private String namespace;
+        private String kind;
+        private String queryName;
+    }
+
+    @Data
+    @Schema
+    @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
+    public static class AddMember implements IToTarget<KubernetesResourceTemplateMember> {
+        private Integer templateId;
+        private String namespace;
+        private String kind;
+        private Boolean valid;
+        private String content;
+        private String custom;
+        private String comment;
+    }
+
+    @Data
+    @Schema
+    @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
+    public static class UpdateMember implements IToTarget<KubernetesResourceTemplateMember> {
+        private Integer id;
+        private Integer templateId;
+        private String namespace;
+        private String kind;
+        private Boolean valid;
+        private String content;
         private String custom;
         private String comment;
     }

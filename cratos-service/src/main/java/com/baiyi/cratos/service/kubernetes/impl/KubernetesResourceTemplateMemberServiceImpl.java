@@ -1,8 +1,13 @@
 package com.baiyi.cratos.service.kubernetes.impl;
 
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
+import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.mapper.KubernetesResourceTemplateMemberMapper;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +33,15 @@ public class KubernetesResourceTemplateMemberServiceImpl implements KubernetesRe
         criteria.andEqualTo("templateId", record.getTemplateId())
                 .andEqualTo("namespace", record.getNamespace());
         return getMapper().selectOneByExample(example);
+    }
+
+    @Override
+    public DataTable<KubernetesResourceTemplateMember> queryMemberPage(
+            KubernetesResourceTemplateParam.MemberPageQuery pageQuery) {
+        Page<KubernetesResourceTemplateMember> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<KubernetesResourceTemplateMember> data = kubernetesResourceTemplateMemberMapper.queryPageByParam(
+                pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
     @Override

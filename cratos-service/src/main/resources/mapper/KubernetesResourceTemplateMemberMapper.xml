@@ -17,4 +17,22 @@
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
 
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam$MemberPageQuery"
+          resultMap="BaseResultMap">
+      select * from kubernetes_resource_template_member
+      <where>
+          template_id = #{template_id}
+          <if test="kind != null and kind != ''">
+              and kind = #{kind}
+          </if>
+          <if test="namespace != null and namespace != ''">
+              and namespace = #{namespace}
+          </if>
+          <if test="queryName != null and queryName != ''">
+              and name like "%" #{queryName} "%"
+          </if>
+      </where>
+  </select>
+
 </mapper>
