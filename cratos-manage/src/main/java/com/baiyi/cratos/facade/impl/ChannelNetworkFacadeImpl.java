@@ -29,7 +29,7 @@ public class ChannelNetworkFacadeImpl implements ChannelNetworkFacade {
     private final ChannelNetworkWrapper channelNetworkWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.CHANNEL_NETWORK)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.CHANNEL_NETWORK)
     public DataTable<ChannelNetworkVO.ChannelNetwork> queryChannelNetworkPage(
             ChannelNetworkParam.ChannelNetworkPageQuery pageQuery) {
         DataTable<ChannelNetwork> table = channelNetworkService.queryChannelNetworkPage(pageQuery.toParam());

@@ -29,7 +29,7 @@ public class DomainFacadeImpl implements DomainFacade {
     private final DomainWrapper domainWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.DOMAIN)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.DOMAIN)
     public DataTable<DomainVO.Domain> queryDomainPage(DomainParam.DomainPageQuery pageQuery) {
         DataTable<Domain> table = domainService.queryDomainPage(pageQuery.toParam());
         return domainWrapper.wrapToTarget(table);

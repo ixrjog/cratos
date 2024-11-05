@@ -38,7 +38,7 @@ public class PageQueryByTagAspect {
                 .forEach(hasQueryByTag -> {
                     if (hasQueryByTag.isQueryByTag()) {
                         BusinessTagParam.QueryByTag queryByTag = hasQueryByTag.getQueryByTag();
-                        queryByTag.setBusinessType(pageQueryByTag.ofType()
+                        queryByTag.setBusinessType(pageQueryByTag.typeOf()
                                 .name());
                         List<Integer> idList = businessTagService.queryBusinessIdByTag(queryByTag);
                         hasQueryByTag.setIdList(idList);

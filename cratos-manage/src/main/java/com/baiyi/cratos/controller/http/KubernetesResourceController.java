@@ -43,6 +43,20 @@ public class KubernetesResourceController {
         return new HttpResult<>(templateFacade.queryTemplatePage(pageQuery));
     }
 
+    @Operation(summary = "Get kubernetes resource template")
+    @GetMapping(value = "/template/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<KubernetesResourceTemplateVO.Template> getTemplateById(int id) {
+        return new HttpResult<>(templateFacade.getTemplateById(id));
+    }
+
+    @Operation(summary = "Copy kubernetes resource template")
+    @PostMapping(value = "/template/copy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> copyTemplate(
+            @RequestBody @Valid KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
+        templateFacade.copyTemplate(copyTemplate);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add kubernetes resource template")
     @PostMapping(value = "/template/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addTemplate(

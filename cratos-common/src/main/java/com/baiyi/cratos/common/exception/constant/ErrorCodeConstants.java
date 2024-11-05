@@ -37,4 +37,5 @@ public interface ErrorCodeConstants {
 
     int ROBOT_ERROR = 50000;
 
+    int KUBERNETES_RESOURCE_TEMPLATE = 51000;
 }

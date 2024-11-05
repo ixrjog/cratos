@@ -1,7 +1,10 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.generator.base.HasValid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +13,9 @@ import java.util.Date;
  * 表名：kubernetes_resource_template
 */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "kubernetes_resource_template")
 public class KubernetesResourceTemplate implements HasValid {
     @Id

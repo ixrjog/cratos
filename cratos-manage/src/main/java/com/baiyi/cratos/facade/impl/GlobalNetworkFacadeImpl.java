@@ -40,7 +40,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     private final GlobalNetworkDetailsWrapper globalNetworkDetailsWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.GLOBAL_NETWORK)
     public DataTable<GlobalNetworkVO.Network> queryGlobalNetworkPage(
             GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
         DataTable<GlobalNetwork> table = globalNetworkService.queryGlobalNetworkPage(pageQuery.toParam());

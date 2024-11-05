@@ -40,7 +40,7 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
     private final RiskEventWrapper riskEventWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.RISK_EVENT)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.RISK_EVENT)
     public DataTable<RiskEventVO.Event> queryRiskEventPage(RiskEventParam.RiskEventPageQuery pageQuery) {
         DataTable<RiskEvent> table = riskEventService.queryRiskEventPage(pageQuery.toParam());
         return riskEventWrapper.wrapToTarget(table);

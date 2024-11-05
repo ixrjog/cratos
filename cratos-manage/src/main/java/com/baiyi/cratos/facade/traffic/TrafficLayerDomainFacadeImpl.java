@@ -38,7 +38,7 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
     private final EnvService envService;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
     public DataTable<TrafficLayerDomainVO.Domain> queryDomainPage(TrafficLayerDomainParam.DomainPageQuery pageQuery) {
         DataTable<TrafficLayerDomain> table = domainService.queryPageByParam(pageQuery.toParam());
         return domainWrapper.wrapToTarget(table);

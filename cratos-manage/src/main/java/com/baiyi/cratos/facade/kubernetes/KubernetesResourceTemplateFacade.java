@@ -15,6 +15,8 @@ public interface KubernetesResourceTemplateFacade {
     DataTable<KubernetesResourceTemplateVO.Template> queryTemplatePage(
             KubernetesResourceTemplateParam.TemplatePageQuery pageQuery);
 
+    KubernetesResourceTemplateVO.Template getTemplateById(int id);
+
     void addTemplate(KubernetesResourceTemplateParam.AddTemplate addTemplate);
 
     void updateTemplate(KubernetesResourceTemplateParam.UpdateTemplate updateTemplate);
@@ -22,5 +24,7 @@ public interface KubernetesResourceTemplateFacade {
     void setValidById(int id);
 
     void deleteById(int id);
+
+    KubernetesResourceTemplateVO.Template copyTemplate(KubernetesResourceTemplateParam.CopyTemplate copyTemplate);
 
 }

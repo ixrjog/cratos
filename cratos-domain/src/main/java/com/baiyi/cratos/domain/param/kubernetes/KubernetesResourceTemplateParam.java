@@ -59,6 +59,16 @@ public class KubernetesResourceTemplateParam {
     }
 
     @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class CopyTemplate {
+        private Integer templateId;
+        private String templateName;
+        private String templateKey;
+    }
+
+    @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
     public static class AddTemplate implements IToTarget<KubernetesResourceTemplate> {

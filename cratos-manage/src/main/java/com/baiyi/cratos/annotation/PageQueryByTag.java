@@ -16,6 +16,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface PageQueryByTag {
 
-    BusinessTypeEnum ofType();
+    BusinessTypeEnum typeOf();
 
 }

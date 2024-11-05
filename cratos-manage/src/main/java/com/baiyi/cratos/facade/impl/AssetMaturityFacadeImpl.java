@@ -28,7 +28,7 @@ public class AssetMaturityFacadeImpl implements AssetMaturityFacade {
     private final AssetMaturityWrapper assetMaturityWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.ASSET_MATURITY)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.ASSET_MATURITY)
     public DataTable<AssetMaturityVO.AssetMaturity> queryAssetMaturityPage(
             AssetMaturityParam.AssetMaturityPageQuery pageQuery) {
         DataTable<AssetMaturity> table = assetMaturityService.queryAssetMaturityPage(pageQuery.toParam());

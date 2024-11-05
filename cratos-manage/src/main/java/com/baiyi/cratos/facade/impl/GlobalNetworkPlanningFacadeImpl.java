@@ -38,7 +38,7 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
     private final GlobalNetworkPlanningWrapper globalNetworkPlanningWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.GLOBAL_NETWORK_PLANNING)
     public DataTable<GlobalNetworkVO.Planning> queryGlobalNetworkPlanningPage(
             GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQuery pageQuery) {
         DataTable<GlobalNetworkPlanning> table = globalNetworkPlanningService.queryGlobalNetworkPlanningPage(

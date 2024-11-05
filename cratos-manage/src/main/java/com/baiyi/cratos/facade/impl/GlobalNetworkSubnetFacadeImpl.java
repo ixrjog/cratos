@@ -28,7 +28,7 @@ public class GlobalNetworkSubnetFacadeImpl implements GlobalNetworkSubnetFacade 
     private final GlobalNetworkSubnetWrapper globalNetworkSubnetWrapper;
 
     @Override
-    @PageQueryByTag(ofType = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
+    @PageQueryByTag(typeOf = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
     public DataTable<GlobalNetworkVO.Subnet> queryGlobalNetworkSubnetPage(
             GlobalNetworkSubnetParam.GlobalNetworkSubnetPageQuery pageQuery) {
         DataTable<GlobalNetworkSubnet> table = globalNetworkSubnetService.queryGlobalNetworkSubnetPage(pageQuery.toParam());
