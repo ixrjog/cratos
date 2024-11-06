@@ -40,12 +40,14 @@ public class KubernetesAutoscalerRepo {
         }
     }
 
-    public List<Resource<AdvancedHorizontalPodAutoscaler>> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+    public List<Resource<AdvancedHorizontalPodAutoscaler>> list(EdsKubernetesConfigModel.Kubernetes kubernetes,
+                                                                String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             MixedOperation<AdvancedHorizontalPodAutoscaler, AdvancedHorizontalPodAutoscalerList, Resource<AdvancedHorizontalPodAutoscaler>> autoscalerClient = kc.resources(
                     AdvancedHorizontalPodAutoscaler.class, AdvancedHorizontalPodAutoscalerList.class);
             return autoscalerClient.inNamespace(namespace)
-                    .resources().toList();
+                    .resources()
+                    .toList();
         } catch (Exception e) {
             log.warn(e.getMessage());
             throw e;

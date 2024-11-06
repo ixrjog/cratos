@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.impl;
 
+import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
@@ -26,14 +26,14 @@ public class KubernetesResourceTemplateMemberFacadeImpl implements KubernetesRes
     @Override
     public DataTable<KubernetesResourceTemplateVO.Member> queryMemberPage(
             KubernetesResourceTemplateParam.MemberPageQuery pageQuery) {
-        DataTable<KubernetesResourceTemplateMember> table =  templateMemberService.queryMemberPage(
-                pageQuery);
+        DataTable<KubernetesResourceTemplateMember> table = templateMemberService.queryMemberPage(pageQuery);
         return templateMemberWrapper.wrapToTarget(table);
     }
 
     @Override
     public void addMember(KubernetesResourceTemplateParam.AddMember addMember) {
         KubernetesResourceTemplateMember member = addMember.toTarget();
+        KubernetesResourceKindEnum.checkKind(addMember.getKind());
         templateMemberService.add(member);
     }
 
@@ -55,7 +55,7 @@ public class KubernetesResourceTemplateMemberFacadeImpl implements KubernetesRes
 
     @Override
     public void deleteById(int id) {
-        // TODO
+        templateMemberService.deleteById(id);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.common.enums;
 
+import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 
 import java.util.Arrays;
@@ -15,16 +16,27 @@ public enum KubernetesResourceKindEnum {
 
     DEPLOYMENT,
     SERVICE,
-    INGRESS;
+    INGRESS,
+    CUSTOM_RESOURCE;
 
-    public static OptionsVO.Options toOptions(){
-        List<OptionsVO.Option> optionList = Arrays.stream(KubernetesResourceKindEnum.values()).map(e -> OptionsVO.Option.builder()
-                .label(e.name())
-                .value(e.name())
-                .build()).collect(Collectors.toList());
+    public static OptionsVO.Options toOptions() {
+        List<OptionsVO.Option> optionList = Arrays.stream(KubernetesResourceKindEnum.values())
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e.name())
+                        .value(e.name())
+                        .build())
+                .collect(Collectors.toList());
         return OptionsVO.Options.builder()
                 .options(optionList)
                 .build();
+    }
+
+    public static void checkKind(String kind) {
+        try {
+            KubernetesResourceKindEnum.valueOf(kind);
+        } catch (IllegalArgumentException e) {
+            throw new KubernetesResourceTemplateException("The kind is invalid.");
+        }
     }
 
 }

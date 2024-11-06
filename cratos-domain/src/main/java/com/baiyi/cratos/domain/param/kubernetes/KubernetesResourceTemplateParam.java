@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -111,9 +112,13 @@ public class KubernetesResourceTemplateParam {
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
     public static class AddMember implements IToTarget<KubernetesResourceTemplateMember> {
+        @NotNull
         private Integer templateId;
+        @NotBlank
         private String namespace;
+        @NotBlank
         private String kind;
+        @NotBlank
         private Boolean valid;
         private String content;
         private String custom;
@@ -124,11 +129,16 @@ public class KubernetesResourceTemplateParam {
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
     public static class UpdateMember implements IToTarget<KubernetesResourceTemplateMember> {
+        @NotNull
         private Integer id;
+        @NotNull
         private Integer templateId;
+        @NotBlank
         private String namespace;
         private String kind;
+        @NotBlank
         private Boolean valid;
+        @NotBlank
         private String content;
         private String custom;
         private String comment;

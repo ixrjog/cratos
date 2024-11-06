@@ -110,4 +110,18 @@ public class KubernetesResourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update kubernetes resource template member valid")
+    @PutMapping(value = "/member/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setMemberValidById(@RequestParam int id) {
+        templateMemberFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete kubernetes resource template member by id")
+    @DeleteMapping(value = "/member/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteMemberById(@RequestParam int id) {
+        templateMemberFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }
