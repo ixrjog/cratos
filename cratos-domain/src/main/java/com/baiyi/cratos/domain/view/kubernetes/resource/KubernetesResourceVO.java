@@ -23,7 +23,7 @@ public class KubernetesResourceVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE)
-    public static class Resource extends BaseVO implements BaseBusiness.IBusinessAnnotate, Serializable {
+    public static class Resource extends BaseVO implements BaseBusiness.IBusinessAnnotate, KubernetesResourceTemplateVO.HasCustom, Serializable {
         @Serial
         private static final long serialVersionUID = -251077676162336074L;
         private Integer id;
@@ -38,6 +38,7 @@ public class KubernetesResourceVO {
         private String custom;
         private String comment;
         private EdsAssetVO.Asset asset;
+
         @Override
         public Integer getBusinessId() {
             return id;

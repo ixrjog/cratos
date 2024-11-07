@@ -22,6 +22,10 @@ import java.util.Map;
  */
 public class KubernetesResourceTemplateVO {
 
+    public interface HasCustom {
+        String getCustom();
+    }
+
     public interface HasTemplateMembers {
         Integer getTemplateId();
 
@@ -32,7 +36,7 @@ public class KubernetesResourceTemplateVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
-    public static class Template extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasTemplateMembers, Serializable {
+    public static class Template extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasCustom, HasTemplateMembers, Serializable {
         @Serial
         private static final long serialVersionUID = 3286509085603209860L;
         private Integer id;
@@ -64,7 +68,7 @@ public class KubernetesResourceTemplateVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
-    public static class Member extends BaseVO implements BaseBusiness.IBusinessAnnotate, Serializable {
+    public static class Member extends BaseVO implements BaseBusiness.IBusinessAnnotate, HasCustom, Serializable {
         @Serial
         private static final long serialVersionUID = 7534387127199381328L;
         private Integer id;
