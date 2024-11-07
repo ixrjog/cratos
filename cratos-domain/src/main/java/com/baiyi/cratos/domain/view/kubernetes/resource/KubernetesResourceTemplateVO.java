@@ -40,6 +40,7 @@ public class KubernetesResourceTemplateVO {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
+        private String custom;
         private String comment;
 
         @Override
