@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.domain.DataTable;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTempla
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
+import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
 import com.baiyi.cratos.wrapper.kubernetes.KubernetesResourceTemplateWrapper;
@@ -36,6 +38,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     private final KubernetesResourceTemplateService kubernetesResourceTemplateService;
     private final KubernetesResourceTemplateWrapper kubernetesResourceTemplateWrapper;
     private final KubernetesResourceTemplateMemberService kubernetesResourceTemplateMemberService;
+    private final KubernetesResourceService kubernetesResourceService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
@@ -115,6 +118,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     }
 
     @Override
+    @SetSessionUserToParam(desc = "set CreatedBy")
     public void createResourceByTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
@@ -122,13 +126,13 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 createResourceByTemplate.getTemplateId(), true);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
-                createResourceByTemplate(member, templateCustom);
+                createResourceByTemplate(member, templateCustom, createResourceByTemplate.getCreatedBy());
             }
         }
     }
 
     private void createResourceByTemplate(KubernetesResourceTemplateMember member,
-                                          KubernetesResourceTemplateCustom.Custom templateCustom) {
+                                          KubernetesResourceTemplateCustom.Custom templateCustom, String createdBy) {
         KubernetesResourceTemplateCustom.Custom mainCustom = KubernetesResourceTemplateCustom.loadAs(
                 member.getCustom());
         KubernetesResourceTemplateCustom.Custom memberCustom = KubernetesResourceTemplateCustom.merge(templateCustom,
@@ -141,10 +145,14 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .memberId(member.getId())
                 .assetId(edsAsset.getId())
                 .kind(member.getKind())
-                .name(null)
+                .name(edsAsset.getName())
+                .namespace(member.getNamespace())
                 .custom(templateCustom.dump())
-               // .edsInstanceId(provider.ge)
+                .edsInstanceId(provider.findOf(member.getNamespace(), templateCustom)
+                        .getId())
+                .createdBy(createdBy)
                 .build();
+        kubernetesResourceService.add(resource);
     }
 
     private KubernetesResourceTemplateCustom.Custom getCustom(

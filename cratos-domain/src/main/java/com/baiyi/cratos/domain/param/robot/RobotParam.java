@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.param.robot;
 
-import com.baiyi.cratos.domain.ISetSessionUser;
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.generator.Robot;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -34,7 +34,7 @@ public class RobotParam {
 
     @Data
     @Schema
-    public static class AddRobot implements IToTarget<Robot>, ISetSessionUser {
+    public static class AddRobot implements IToTarget<Robot>, HasSessionUser {
         @Null
         private Integer id;
         private String name;
@@ -56,7 +56,7 @@ public class RobotParam {
 
     @Data
     @Schema
-    public static class ApplyRobot implements IToTarget<Robot>, ISetSessionUser {
+    public static class ApplyRobot implements IToTarget<Robot>, HasSessionUser {
         @Null
         private Integer id;
         private String name;
@@ -79,7 +79,7 @@ public class RobotParam {
 
     @Data
     @Schema
-    public static class RevokeRobot implements ISetSessionUser {
+    public static class RevokeRobot implements HasSessionUser {
         @NotNull
         private Integer id;
         @Null
