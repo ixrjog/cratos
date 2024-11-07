@@ -36,7 +36,7 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
 
     @Override
     public EdsAsset produce(KubernetesResourceTemplateMember member, KubernetesResourceTemplateCustom.Custom custom) {
-        KubernetesResourceTemplateCustom.KubernetesInstance instance = selectOf(member.getNamespace(), custom);
+        KubernetesResourceTemplateCustom.KubernetesInstance instance = findOf(member.getNamespace(), custom);
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(instance);
         try {
             String content = BeetlUtil.renderTemplate2(member.getContent(), custom.getData());
@@ -55,17 +55,11 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
 
     protected KubernetesResourceTemplateCustom.KubernetesInstance selectOf(String namespace,
                                                                            KubernetesResourceTemplateCustom.Custom custom) {
-        if (StringUtils.hasText(namespace)) {
-            throw new KubernetesResourceTemplateException("The namespace is empty.");
+        KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance = findOf(namespace, custom);
+        if (kubernetesInstance == null) {
+            throw new KubernetesResourceTemplateException("No Kubernetes instance found.");
         }
-        for (KubernetesResourceTemplateCustom.KubernetesInstance instance : custom.getInstances()) {
-            for (String e : instance.getNamespaces()) {
-                if (namespace.equals(e)) {
-                    return instance;
-                }
-            }
-        }
-        throw new KubernetesResourceTemplateException("No Kubernetes instance found.");
+        return kubernetesInstance;
     }
 
     protected EdsInstance getEdsInstance(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {

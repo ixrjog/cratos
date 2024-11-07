@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.kubernetes;
 
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
@@ -73,9 +74,15 @@ public class KubernetesResourceTemplateParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class CreateResourceByTemplate {
+    public static class CreateResourceByTemplate implements HasSessionUser {
         private Integer templateId;
         private String custom;
+        private String createdBy;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.createdBy = username;
+        }
     }
 
     @Data

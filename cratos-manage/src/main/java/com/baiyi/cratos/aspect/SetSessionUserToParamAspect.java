@@ -1,7 +1,7 @@
 package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
-import com.baiyi.cratos.domain.ISetSessionUser;
+import com.baiyi.cratos.domain.HasSessionUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,12 +32,12 @@ public class SetSessionUserToParamAspect {
     @Before(value = "@annotation(setSessionUserToParam)")
     public void beforeAdvice(JoinPoint joinPoint, SetSessionUserToParam setSessionUserToParam) {
         Arrays.stream(joinPoint.getArgs())
-                .filter(arg -> arg instanceof ISetSessionUser)
-                .map(arg -> (ISetSessionUser) arg)
-                .forEach(iAuthor -> {
+                .filter(arg -> arg instanceof HasSessionUser)
+                .map(arg -> (HasSessionUser) arg)
+                .forEach(author -> {
                     Authentication authentication = SecurityContextHolder.getContext()
                             .getAuthentication();
-                    iAuthor.setSessionUser(authentication.getName());
+                    author.setSessionUser(authentication.getName());
                 });
     }
 
