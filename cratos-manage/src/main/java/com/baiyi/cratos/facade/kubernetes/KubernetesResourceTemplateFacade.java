@@ -27,4 +27,6 @@ public interface KubernetesResourceTemplateFacade {
 
     KubernetesResourceTemplateVO.Template copyTemplate(KubernetesResourceTemplateParam.CopyTemplate copyTemplate);
 
+    void createResourceByTemplate(KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate);
+
 }

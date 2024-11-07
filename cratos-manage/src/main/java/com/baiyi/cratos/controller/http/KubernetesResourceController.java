@@ -3,9 +3,12 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceParam;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
+import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceVO;
+import com.baiyi.cratos.facade.kubernetes.KubernetesResourceFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +33,8 @@ public class KubernetesResourceController {
 
     private final KubernetesResourceTemplateMemberFacade templateMemberFacade;
 
+    private final KubernetesResourceFacade resourceFacade;
+
     @Operation(summary = "Query kubernetes resource options")
     @GetMapping(value = "/kind/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getResourceKindOptions() {
@@ -51,9 +56,16 @@ public class KubernetesResourceController {
 
     @Operation(summary = "Copy kubernetes resource template")
     @PostMapping(value = "/template/copy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> copyTemplate(
+    public HttpResult<KubernetesResourceTemplateVO.Template> copyTemplate(
             @RequestBody @Valid KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
-        templateFacade.copyTemplate(copyTemplate);
+        return new HttpResult<>(templateFacade.copyTemplate(copyTemplate));
+    }
+
+    @Operation(summary = "Create kubernetes resource by template")
+    @PostMapping(value = "/template/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> createResourceByTemplate(
+            @RequestBody @Valid KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
+        templateFacade.createResourceByTemplate(createResourceByTemplate);
         return HttpResult.SUCCESS;
     }
 
@@ -121,6 +133,21 @@ public class KubernetesResourceController {
     @DeleteMapping(value = "/member/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteMemberById(@RequestParam int id) {
         templateMemberFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    // Resource
+    @Operation(summary = "Pagination query kubernetes resource")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<KubernetesResourceVO.Resource>> queryResourcePage(
+            @RequestBody @Valid KubernetesResourceParam.ResourcePageQuery pageQuery) {
+        return new HttpResult<>(resourceFacade.queryResourcePage(pageQuery));
+    }
+
+    @Operation(summary = "Delete kubernetes resource by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteResourceById(@RequestParam int id) {
+        resourceFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
 

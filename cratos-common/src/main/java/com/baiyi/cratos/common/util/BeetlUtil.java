@@ -38,4 +38,15 @@ public final class BeetlUtil {
         return t.render();
     }
 
+    public static String renderTemplate2(String template, Map<String, String> contentMap) throws IOException {
+        // 初始化代码
+        StringTemplateResourceLoader resourceLoader = new StringTemplateResourceLoader();
+        Configuration cfg = Configuration.defaultConfiguration();
+        GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
+        // 获取模板
+        Template t = gt.getTemplate(template);
+        t.binding(contentMap);
+        return t.render();
+    }
+
 }

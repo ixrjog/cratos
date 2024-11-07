@@ -2,13 +2,18 @@ package com.baiyi.cratos.facade.kubernetes.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
+import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.KubernetesResource;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
+import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
+import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
 import com.baiyi.cratos.wrapper.kubernetes.KubernetesResourceTemplateWrapper;
@@ -107,6 +112,50 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
             }
         }
         return this.getTemplateById(copyTemplate.getTemplateId());
+    }
+
+    @Override
+    public void createResourceByTemplate(
+            KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
+        KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
+        List<KubernetesResourceTemplateMember> members = kubernetesResourceTemplateMemberService.queryMemberByTemplateId(
+                createResourceByTemplate.getTemplateId(), true);
+        if (!CollectionUtils.isEmpty(members)) {
+            for (KubernetesResourceTemplateMember member : members) {
+                createResourceByTemplate(member, templateCustom);
+            }
+        }
+    }
+
+    private void createResourceByTemplate(KubernetesResourceTemplateMember member,
+                                          KubernetesResourceTemplateCustom.Custom templateCustom) {
+        KubernetesResourceTemplateCustom.Custom mainCustom = KubernetesResourceTemplateCustom.loadAs(
+                member.getCustom());
+        KubernetesResourceTemplateCustom.Custom memberCustom = KubernetesResourceTemplateCustom.merge(templateCustom,
+                mainCustom);
+        KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
+        EdsAsset edsAsset = provider.produce(member, memberCustom);
+        // 资产关联
+        KubernetesResource resource = KubernetesResource.builder()
+                .templateId(member.getTemplateId())
+                .memberId(member.getId())
+                .assetId(edsAsset.getId())
+                .kind(member.getKind())
+                .name(null)
+                .custom(templateCustom.dump())
+               // .edsInstanceId(provider.ge)
+                .build();
+    }
+
+    private KubernetesResourceTemplateCustom.Custom getCustom(
+            KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
+        KubernetesResourceTemplateCustom.Custom userCustom = KubernetesResourceTemplateCustom.loadAs(
+                createResourceByTemplate.getCustom());
+        KubernetesResourceTemplate kubernetesResourceTemplate = kubernetesResourceTemplateService.getById(
+                createResourceByTemplate.getTemplateId());
+        KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
+                kubernetesResourceTemplate);
+        return KubernetesResourceTemplateCustom.merge(userCustom, templateCustom);
     }
 
 }
