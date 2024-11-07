@@ -73,6 +73,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         }
         kubernetesResourceTemplate.setName(updateTemplate.getName());
         kubernetesResourceTemplate.setApiVersion(updateTemplate.getApiVersion());
+        kubernetesResourceTemplate.setCustom(updateTemplate.getCustom());
         kubernetesResourceTemplateService.updateByPrimaryKey(kubernetesResourceTemplate);
     }
 

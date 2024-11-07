@@ -71,6 +71,8 @@ public class KubernetesResourceTemplateCustom {
         private Map<String, String> data = Maps.newHashMap();
         @Builder.Default
         private List<KubernetesInstance> instances = Lists.newArrayList();
+        @Builder.Default
+        private List<Strategy> strategies = Lists.newArrayList();
     }
 
     @Data
@@ -81,6 +83,15 @@ public class KubernetesResourceTemplateCustom {
         private String name;
         private Integer id;
         private List<String> namespaces;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Strategy {
+        private String name;
+        private String value;
     }
 
 }

@@ -79,7 +79,6 @@ public class KubernetesResourceTemplateVO {
         private String content;
         private String custom;
         private String comment;
-
         private Integer seq;
 
         @Override
