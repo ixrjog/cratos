@@ -22,7 +22,7 @@
             resultMap="BaseResultMap">
         select * from kubernetes_resource_template_member
         <where>
-            template_id = #{template_id}
+            template_id = #{templateId}
             <if test="kind != null and kind != ''">
                 and kind = #{kind}
             </if>
