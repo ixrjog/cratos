@@ -31,10 +31,15 @@
           <if test="namespace != null and namespace != ''">
               and namespace = #{namespace}
           </if>
-          <if test="queryName != null and queryName != ''">
-              and name like "%" #{queryName} "%"
-              order by replace(name, #{queryName}, '')
-          </if>
+          <choose>
+              <when test="queryName != null and queryName != ''">
+                  and name like "%" #{queryName} "%"
+                  order by replace(name, #{queryName}, ''), id desc
+              </when>
+              <otherwise>
+                  order by id desc
+              </otherwise>
+          </choose>
       </where>
   </select>
 
