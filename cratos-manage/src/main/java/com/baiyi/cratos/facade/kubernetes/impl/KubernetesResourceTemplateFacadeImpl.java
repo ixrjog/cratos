@@ -45,8 +45,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     @PageQueryByTag(typeOf = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
     public DataTable<KubernetesResourceTemplateVO.Template> queryTemplatePage(
             KubernetesResourceTemplateParam.TemplatePageQuery pageQuery) {
-        DataTable<KubernetesResourceTemplate> table = templateService.queryTemplatePage(
-                pageQuery.toParam());
+        DataTable<KubernetesResourceTemplate> table = templateService.queryTemplatePage(pageQuery.toParam());
         return templateWrapper.wrapToTarget(table);
     }
 
@@ -67,8 +66,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
 
     @Override
     public void updateTemplate(KubernetesResourceTemplateParam.UpdateTemplate updateTemplate) {
-        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
-                updateTemplate.getId());
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(updateTemplate.getId());
         if (kubernetesResourceTemplate == null) {
             return;
         }
@@ -84,16 +82,25 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(int id) {
-        // TODO
+        KubernetesResourceTemplate template = templateService.getById(id);
+        if (template == null) {
+            return;
+        }
+        templateMemberService.queryMemberByTemplateId(id)
+                .forEach(member -> {
+                    templateMemberService.deleteById(member.getId());
+                });
+
+        templateService.deleteById(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public KubernetesResourceTemplateVO.Template copyTemplate(
             KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
-        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
-                copyTemplate.getTemplateId());
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(copyTemplate.getTemplateId());
         if (kubernetesResourceTemplate == null) {
             throw new KubernetesResourceTemplateException("Template does not exist.");
         }

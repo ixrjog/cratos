@@ -1,6 +1,9 @@
 package com.baiyi.cratos.service.kubernetes.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.mapper.KubernetesResourceTemplateMapper;
@@ -21,12 +24,14 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
 public class KubernetesResourceTemplateServiceImpl implements KubernetesResourceTemplateService {
 
     private final KubernetesResourceTemplateMapper kubernetesResourceTemplateMapper;
 
     @Override
-    public DataTable<KubernetesResourceTemplate> queryTemplatePage(KubernetesResourceTemplateParam.TemplatePageQueryParam param){
+    public DataTable<KubernetesResourceTemplate> queryTemplatePage(
+            KubernetesResourceTemplateParam.TemplatePageQueryParam param) {
         Page<KubernetesResourceTemplate> page = PageHelper.startPage(param.getPage(), param.getLength());
         List<KubernetesResourceTemplate> data = kubernetesResourceTemplateMapper.queryPageByParam(param);
         return new DataTable<>(data, page.getTotal());
@@ -38,6 +43,11 @@ public class KubernetesResourceTemplateServiceImpl implements KubernetesResource
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("templateKey", record.getName());
         return getMapper().selectOneByExample(example);
+    }
+
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        kubernetesResourceTemplateMapper.deleteByPrimaryKey(id);
     }
 
 }
