@@ -47,7 +47,6 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
                     edsInstance.getId());
             return holder.getProvider()
                     .importAsset(holder.getInstance(), asset);
-
         } catch (IOException ioException) {
             throw new KubernetesResourceTemplateException(ioException.getMessage());
         }

@@ -1,6 +1,7 @@
-package com.baiyi.cratos.eds.kubernetes.repo;
+package com.baiyi.cratos.eds.kubernetes.repo.impl;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesResourceRepo;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesDeploymentException;
 import com.google.common.collect.Maps;
@@ -30,7 +31,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesDeploymentRepo {
+public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployment> {
 
     public static final String REDEPLOY_TIMESTAMP = "redeploy-timestamp";
 
@@ -68,9 +69,10 @@ public class KubernetesDeploymentRepo {
         update(kubernetes, deployment);
     }
 
+    @Override
     public Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = toDeployment(kc, content);
+            Deployment deployment = loadAs(kc, content);
             // 删除资源版本
             deployment.getMetadata()
                     .setResourceVersion(null);
@@ -179,7 +181,7 @@ public class KubernetesDeploymentRepo {
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = toDeployment(kc, content);
+            Deployment deployment = loadAs(kc, content);
             return kc.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
@@ -206,6 +208,7 @@ public class KubernetesDeploymentRepo {
         }
     }
 
+    @Override
     public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             DeploymentList deploymentList = kc.apps()
@@ -239,6 +242,7 @@ public class KubernetesDeploymentRepo {
         }
     }
 
+    @Override
     public Deployment get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.apps()
@@ -252,13 +256,13 @@ public class KubernetesDeploymentRepo {
         }
     }
 
-    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    @Override
+    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment resource) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             kc.apps()
                     .deployments()
-                    .inNamespace(deployment.getMetadata()
-                            .getNamespace())
-                    .resource(deployment)
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
                     .delete();
         } catch (Exception e) {
             log.warn(e.getMessage());
@@ -266,7 +270,23 @@ public class KubernetesDeploymentRepo {
         }
     }
 
-    private Deployment toDeployment(KubernetesClient kubernetesClient, String content) {
+    @Override
+    public Deployment find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            Deployment resource = loadAs(kc, content);
+            return kc.apps()
+                    .deployments()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public Deployment loadAs(KubernetesClient kubernetesClient, String content) {
         InputStream is = new ByteArrayInputStream(content.getBytes());
         return kubernetesClient.apps()
                 .deployments()

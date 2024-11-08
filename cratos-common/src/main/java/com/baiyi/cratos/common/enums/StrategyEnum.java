@@ -7,6 +7,7 @@ package com.baiyi.cratos.common.enums;
  */
 public enum StrategyEnum {
 
+    REWRITE_ENV_WITH_NAMESPACE,
     WIPE_THE_HOST_ENV_SUFFIX
 
 }

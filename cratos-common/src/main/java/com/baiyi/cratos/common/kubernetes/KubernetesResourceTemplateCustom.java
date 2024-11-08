@@ -92,6 +92,7 @@ public class KubernetesResourceTemplateCustom {
     public static class Strategy {
         private String name;
         private String value;
+        private Integer order;
     }
 
 }

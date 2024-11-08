@@ -15,6 +15,7 @@ import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTempla
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
+import com.baiyi.cratos.facade.kubernetes.provider.strategy.CustomStrategyFactory;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
@@ -35,38 +36,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceTemplateFacade {
 
-    private final KubernetesResourceTemplateService kubernetesResourceTemplateService;
-    private final KubernetesResourceTemplateWrapper kubernetesResourceTemplateWrapper;
-    private final KubernetesResourceTemplateMemberService kubernetesResourceTemplateMemberService;
-    private final KubernetesResourceService kubernetesResourceService;
+    private final KubernetesResourceTemplateService templateService;
+    private final KubernetesResourceTemplateWrapper templateWrapper;
+    private final KubernetesResourceTemplateMemberService templateMemberService;
+    private final KubernetesResourceService resourceService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
     public DataTable<KubernetesResourceTemplateVO.Template> queryTemplatePage(
             KubernetesResourceTemplateParam.TemplatePageQuery pageQuery) {
-        DataTable<KubernetesResourceTemplate> table = kubernetesResourceTemplateService.queryTemplatePage(
+        DataTable<KubernetesResourceTemplate> table = templateService.queryTemplatePage(
                 pageQuery.toParam());
-        return kubernetesResourceTemplateWrapper.wrapToTarget(table);
+        return templateWrapper.wrapToTarget(table);
     }
 
     @Override
     public KubernetesResourceTemplateVO.Template getTemplateById(int id) {
-        KubernetesResourceTemplate template = kubernetesResourceTemplateService.getById(id);
+        KubernetesResourceTemplate template = templateService.getById(id);
         if (template == null) {
             throw new KubernetesResourceTemplateException("Template does not exist.");
         }
-        return kubernetesResourceTemplateWrapper.wrapToTarget(template);
+        return templateWrapper.wrapToTarget(template);
     }
 
     @Override
     public void addTemplate(KubernetesResourceTemplateParam.AddTemplate addTemplate) {
         KubernetesResourceTemplate kubernetesResourceTemplate = addTemplate.toTarget();
-        kubernetesResourceTemplateService.add(kubernetesResourceTemplate);
+        templateService.add(kubernetesResourceTemplate);
     }
 
     @Override
     public void updateTemplate(KubernetesResourceTemplateParam.UpdateTemplate updateTemplate) {
-        KubernetesResourceTemplate kubernetesResourceTemplate = kubernetesResourceTemplateService.getById(
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
                 updateTemplate.getId());
         if (kubernetesResourceTemplate == null) {
             return;
@@ -74,12 +75,12 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         kubernetesResourceTemplate.setName(updateTemplate.getName());
         kubernetesResourceTemplate.setApiVersion(updateTemplate.getApiVersion());
         kubernetesResourceTemplate.setCustom(updateTemplate.getCustom());
-        kubernetesResourceTemplateService.updateByPrimaryKey(kubernetesResourceTemplate);
+        templateService.updateByPrimaryKey(kubernetesResourceTemplate);
     }
 
     @Override
     public void setValidById(int id) {
-        kubernetesResourceTemplateService.updateValidById(id);
+        templateService.updateValidById(id);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     @Transactional(rollbackFor = Exception.class)
     public KubernetesResourceTemplateVO.Template copyTemplate(
             KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
-        KubernetesResourceTemplate kubernetesResourceTemplate = kubernetesResourceTemplateService.getById(
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
                 copyTemplate.getTemplateId());
         if (kubernetesResourceTemplate == null) {
             throw new KubernetesResourceTemplateException("Template does not exist.");
@@ -105,14 +106,14 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .comment(kubernetesResourceTemplate.getComment())
                 .valid(true)
                 .build();
-        kubernetesResourceTemplateService.add(newTemplate);
+        templateService.add(newTemplate);
         // copy members
-        List<KubernetesResourceTemplateMember> members = kubernetesResourceTemplateMemberService.queryMemberByTemplateId(
+        List<KubernetesResourceTemplateMember> members = templateMemberService.queryMemberByTemplateId(
                 copyTemplate.getTemplateId(), true);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
                 member.setTemplateId(newTemplate.getId());
-                kubernetesResourceTemplateMemberService.add(member);
+                templateMemberService.add(member);
             }
         }
         return this.getTemplateById(copyTemplate.getTemplateId());
@@ -123,7 +124,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     public void createResourceByTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
-        List<KubernetesResourceTemplateMember> members = kubernetesResourceTemplateMemberService.queryMemberByTemplateId(
+        List<KubernetesResourceTemplateMember> members = templateMemberService.queryMemberByTemplateId(
                 createResourceByTemplate.getTemplateId(), true);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
@@ -138,6 +139,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 member.getCustom());
         KubernetesResourceTemplateCustom.Custom memberCustom = KubernetesResourceTemplateCustom.merge(templateCustom,
                 mainCustom);
+        // 自定义策略工程重写
+        CustomStrategyFactory.rewrite(member, memberCustom);
         KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
         EdsAsset edsAsset = provider.produce(member, memberCustom);
         // 资产关联
@@ -153,14 +156,14 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                         .getId())
                 .createdBy(createdBy)
                 .build();
-        kubernetesResourceService.add(resource);
+        resourceService.add(resource);
     }
 
     private KubernetesResourceTemplateCustom.Custom getCustom(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
         KubernetesResourceTemplateCustom.Custom userCustom = KubernetesResourceTemplateCustom.loadAs(
                 createResourceByTemplate.getCustom());
-        KubernetesResourceTemplate kubernetesResourceTemplate = kubernetesResourceTemplateService.getById(
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
                 createResourceByTemplate.getTemplateId());
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 kubernetesResourceTemplate);

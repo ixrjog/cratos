@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesDeploymentRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.impl.KubernetesDeploymentRepo;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;

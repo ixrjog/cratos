@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesServiceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.impl.KubernetesServiceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
