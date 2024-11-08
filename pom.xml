@@ -39,7 +39,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
-        <spring-security.version>6.2.3</spring-security.version>
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
+        <spring-security.version>6.3.4</spring-security.version>
         <!-- 1.12.736 -->
         <aws-java-sdk.version>1.12.761</aws-java-sdk.version>
         <!--  net.javacrumbs.shedlock-->

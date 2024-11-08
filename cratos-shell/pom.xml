@@ -19,20 +19,17 @@
     </properties>
 
     <dependencies>
-
         <!-- For ed25519 support -->
         <dependency>
             <groupId>net.i2p.crypto</groupId>
             <artifactId>eddsa</artifactId>
             <version>0.3.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-ssh-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
 
 </project>

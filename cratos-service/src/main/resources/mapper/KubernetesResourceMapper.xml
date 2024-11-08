@@ -24,23 +24,22 @@
           parameterType="com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceParam$ResourcePageQuery"
           resultMap="BaseResultMap">
       select * from kubernetes_resource
-      <where>
-          <if test="kind != null and kind != ''">
-              and kind = #{kind}
-          </if>
-          <if test="namespace != null and namespace != ''">
-              and namespace = #{namespace}
-          </if>
-          <choose>
-              <when test="queryName != null and queryName != ''">
-                  and name like "%" #{queryName} "%"
-                  order by replace(name, #{queryName}, ''), id desc
-              </when>
-              <otherwise>
-                  order by id desc
-              </otherwise>
-          </choose>
-      </where>
+      where 1 = 1
+      <if test="kind != null and kind != ''">
+          and kind = #{kind}
+      </if>
+      <if test="namespace != null and namespace != ''">
+          and namespace = #{namespace}
+      </if>
+      <choose>
+          <when test="queryName != null and queryName != ''">
+              and name like "%" #{queryName} "%"
+              order by replace(name, #{queryName}, ''), id desc
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
   </select>
 
 </mapper>
