@@ -12,6 +12,7 @@
         <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="locked" jdbcType="BIT" property="locked"/>
         <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin"/>
         <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone"/>
         <result column="otp" jdbcType="INTEGER" property="otp"/>

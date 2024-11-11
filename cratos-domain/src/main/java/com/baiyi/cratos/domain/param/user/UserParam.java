@@ -48,6 +48,7 @@ public class UserParam {
         private String displayName;
         private String email;
         private Boolean valid;
+        private Boolean locked;
         private Date lastLogin;
         private String mobilePhone;
         private Integer otp;
@@ -74,6 +75,7 @@ public class UserParam {
         private String displayName;
         private String email;
         private Boolean valid;
+        private Boolean locked;
         private Date lastLogin;
         private String mobilePhone;
         private Integer otp;

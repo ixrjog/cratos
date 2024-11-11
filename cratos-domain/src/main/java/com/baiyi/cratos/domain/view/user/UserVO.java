@@ -65,6 +65,7 @@ public class UserVO {
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
+        private Boolean locked;
         @Override
         public Integer getBusinessId() {
             return this.id;

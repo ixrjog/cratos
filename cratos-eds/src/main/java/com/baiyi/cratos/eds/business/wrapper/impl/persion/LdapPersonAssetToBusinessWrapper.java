@@ -33,6 +33,7 @@ public class LdapPersonAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
                 .email(model.getEmail())
                 .mobilePhone(model.getMobile())
                 .valid(true)
+                .locked(false)
                 .build();
     }
 

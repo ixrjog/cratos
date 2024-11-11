@@ -35,7 +35,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     private final EnvService envService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER}, atBefore = true)
+    @BusinessWrapper(atBefore = true, ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 vo.getCustom());
@@ -57,19 +57,21 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
                 .forEach(namespaces::addAll);
         return Lists.newArrayList(namespaces)
                 .stream()
-                .map(e -> {
-                    Env uniqueKey = Env.builder()
-                            .envName(e)
-                            .build();
-                    Env env = envService.getByUniqueKey(uniqueKey);
-                    return KubernetesResourceTemplateCustom.SortableNamespace.builder()
-                            .namespace(e)
-                            .order(env != null ? env.getSeq() : Integer.MAX_VALUE)
-                            .build();
-                })
+                .map(this::toSortableNamespace)
                 .sorted(Comparator.comparingInt(KubernetesResourceTemplateCustom.SortableNamespace::getOrder))
                 .map(KubernetesResourceTemplateCustom.SortableNamespace::getNamespace)
                 .toList();
+    }
+
+    private KubernetesResourceTemplateCustom.SortableNamespace toSortableNamespace(String namespace) {
+        Env uniqueKey = Env.builder()
+                .envName(namespace)
+                .build();
+        Env env = envService.getByUniqueKey(uniqueKey);
+        return KubernetesResourceTemplateCustom.SortableNamespace.builder()
+                .namespace(namespace)
+                .order(env != null ? env.getSeq() : Integer.MAX_VALUE)
+                .build();
     }
 
     private Set<String> getKinds(KubernetesResourceTemplateVO.Template vo) {

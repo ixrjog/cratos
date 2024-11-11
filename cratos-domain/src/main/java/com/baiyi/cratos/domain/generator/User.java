@@ -55,6 +55,8 @@ public class User implements HasValid, ToBusinessTarget {
      */
     private Boolean valid;
 
+    private Boolean locked;
+
     /**
      * 最后登录时间
      */
