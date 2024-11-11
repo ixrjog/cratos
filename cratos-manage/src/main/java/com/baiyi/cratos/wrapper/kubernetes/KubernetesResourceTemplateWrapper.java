@@ -15,6 +15,7 @@ import com.google.api.client.util.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -72,7 +73,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     }
 
     private Set<String> getKinds(KubernetesResourceTemplateVO.Template vo) {
-        return vo.getMembers() == null ? Sets.newHashSet() : vo.getMembers()
+        return CollectionUtils.isEmpty(vo.getMembers()) ? Sets.newHashSet() : vo.getMembers()
                 .keySet();
     }
 

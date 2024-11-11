@@ -30,7 +30,7 @@ public class BusinessWrapperAspect {
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.BusinessWrapper)")
     public void annotationPoint() {
     }
-    
+
     private void run(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
         Object business = joinPoint.getArgs()[0];
         // 未指定types则从类注解中获取BusinessType
