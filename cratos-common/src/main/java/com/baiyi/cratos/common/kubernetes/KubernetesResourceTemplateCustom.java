@@ -93,6 +93,15 @@ public class KubernetesResourceTemplateCustom {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class SortableNamespace  {
+        String namespace;
+        int order;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Strategy {
         private String name;
         private String value;

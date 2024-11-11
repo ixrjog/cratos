@@ -48,7 +48,7 @@ public class KubernetesResourceTemplateVO {
         private String custom;
         private String comment;
 
-        private Set<String> namespaces;
+        private List<String> namespaces;
         private Set<String> kinds;
 
         @Override
