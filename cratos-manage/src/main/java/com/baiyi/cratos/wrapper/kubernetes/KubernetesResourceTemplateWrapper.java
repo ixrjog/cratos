@@ -32,10 +32,12 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 vo.getCustom());
         vo.setNamespaces(getNamespaces(templateCustom));
+        vo.setKinds(getKinds(vo));
     }
 
     /**
      * 从所有数据源实例中获取Namespaces
+     *
      * @param templateCustom
      * @return
      */
@@ -48,4 +50,9 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
         return namespaces;
     }
 
+    private Set<String> getKinds(KubernetesResourceTemplateVO.Template vo) {
+        return vo.getMembers()
+                .keySet();
+    }
+    
 }
