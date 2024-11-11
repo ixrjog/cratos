@@ -29,13 +29,23 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
-        KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(vo.getCustom());
+        KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
+                vo.getCustom());
+        vo.setNamespaces(getNamespaces(templateCustom));
+    }
+
+    /**
+     * 从所有数据源实例中获取Namespaces
+     * @param templateCustom
+     * @return
+     */
+    private Set<String> getNamespaces(KubernetesResourceTemplateCustom.Custom templateCustom) {
         Set<String> namespaces = Sets.newHashSet();
         templateCustom.getInstances()
                 .stream()
                 .map(KubernetesResourceTemplateCustom.KubernetesInstance::getNamespaces)
                 .forEach(namespaces::addAll);
-        vo.setNamespaces(namespaces);
+        return namespaces;
     }
 
 }
