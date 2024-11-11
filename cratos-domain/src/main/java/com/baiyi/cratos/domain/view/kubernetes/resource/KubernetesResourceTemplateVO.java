@@ -14,6 +14,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -46,6 +47,9 @@ public class KubernetesResourceTemplateVO {
         private Boolean valid;
         private String custom;
         private String comment;
+
+        private Set<String> namespaces;
+        private Set<String> kinds;
 
         @Override
         public Integer getBusinessId() {

@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -71,6 +73,10 @@ public class KubernetesResourceTemplateCustom {
         private Map<String, String> data = Maps.newHashMap();
         @Builder.Default
         private List<KubernetesInstance> instances = Lists.newArrayList();
+        @Builder.Default
+        private Set<String> namespaces = Sets.newHashSet();
+        @Builder.Default
+        private Set<String> kinds = Sets.newHashSet();
         @Builder.Default
         private List<Strategy> strategies = Lists.newArrayList();
     }

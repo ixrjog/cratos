@@ -1,15 +1,19 @@
 package com.baiyi.cratos.wrapper.kubernetes;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.google.api.client.util.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -25,6 +29,13 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
+        KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(vo.getCustom());
+        Set<String> namespaces = Sets.newHashSet();
+        templateCustom.getInstances()
+                .stream()
+                .map(KubernetesResourceTemplateCustom.KubernetesInstance::getNamespaces)
+                .forEach(namespaces::addAll);
+        vo.setNamespaces(namespaces);
     }
 
 }
