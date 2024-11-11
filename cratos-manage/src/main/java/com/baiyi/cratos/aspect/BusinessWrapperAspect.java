@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Component;
@@ -29,12 +30,12 @@ public class BusinessWrapperAspect {
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.BusinessWrapper)")
     public void annotationPoint() {
     }
-
-    @After(value = "@annotation(businessWrapper)")
-    public void afterAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
+    
+    private void run(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
         Object business = joinPoint.getArgs()[0];
         // 未指定types则从类注解中获取BusinessType
-        BusinessTypeEnum[] types = businessWrapper.ofTypes().length != 0 ? businessWrapper.ofTypes() : new BusinessTypeEnum[]{AopUtils.getTargetClass(joinPoint.getTarget())
+        BusinessTypeEnum[] types = businessWrapper.ofTypes().length != 0 ? businessWrapper.ofTypes() : new BusinessTypeEnum[]{AopUtils.getTargetClass(
+                        joinPoint.getTarget())
                 .getAnnotation(BusinessType.class).type()};
         Arrays.stream(types)
                 .forEachOrdered(businessTypeEnum -> {
@@ -44,6 +45,20 @@ public class BusinessWrapperAspect {
                         businessWrapperBean.businessWrap(business);
                     }
                 });
+    }
+
+    @After(value = "@annotation(businessWrapper)")
+    public void afterAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
+        if (!businessWrapper.atBefore()) {
+            run(joinPoint, businessWrapper);
+        }
+    }
+
+    @Before(value = "@annotation(businessWrapper)")
+    public void beforeAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
+        if (businessWrapper.atBefore()) {
+            run(joinPoint, businessWrapper);
+        }
     }
 
 }
