@@ -72,7 +72,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     }
 
     private Set<String> getKinds(KubernetesResourceTemplateVO.Template vo) {
-        return vo.getMembers()
+        return vo.getMembers() == null ? Sets.newHashSet() : vo.getMembers()
                 .keySet();
     }
 
