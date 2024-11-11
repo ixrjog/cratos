@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
+import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.wrapper.kubernetes.KubernetesResourceTemplateMemberWrapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class KubernetesResourceTemplateMemberFacadeImpl implements KubernetesRes
 
     private final KubernetesResourceTemplateMemberService templateMemberService;
     private final KubernetesResourceTemplateMemberWrapper templateMemberWrapper;
+    private final KubernetesResourceService resourceService;
 
     @Override
     public DataTable<KubernetesResourceTemplateVO.Member> queryMemberPage(
@@ -55,6 +57,8 @@ public class KubernetesResourceTemplateMemberFacadeImpl implements KubernetesRes
 
     @Override
     public void deleteById(int id) {
+        resourceService.queryByMemberId(id)
+                .forEach(resource -> resourceService.deleteById(resource.getId()));
         templateMemberService.deleteById(id);
     }
 

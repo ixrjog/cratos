@@ -2,7 +2,6 @@ package com.baiyi.cratos.service.kubernetes.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.KubernetesResource;
-import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceParam;
 import com.baiyi.cratos.mapper.KubernetesResourceMapper;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
@@ -42,6 +41,14 @@ public class KubernetesResourceServiceImpl implements KubernetesResourceService 
         Page<KubernetesResource> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<KubernetesResource> data = kubernetesResourceMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public List<KubernetesResource> queryByMemberId(int id) {
+        Example example = new Example(KubernetesResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("memberId", id);
+        return getMapper().selectByExample(example);
     }
 
 }

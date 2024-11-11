@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -77,6 +78,9 @@ public class KubernetesResourceTemplateParam {
     public static class CreateResourceByTemplate implements HasSessionUser {
         private Integer templateId;
         private String custom;
+        private Set<String> namespaces;
+        private Set<String> kinds;
+
         private String createdBy;
 
         @Override

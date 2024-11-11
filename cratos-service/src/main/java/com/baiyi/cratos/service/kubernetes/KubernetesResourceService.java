@@ -7,6 +7,8 @@ import com.baiyi.cratos.mapper.KubernetesResourceMapper;
 import com.baiyi.cratos.service.base.BaseService;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/7 10:00
@@ -15,5 +17,7 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 public interface KubernetesResourceService extends BaseUniqueKeyService<KubernetesResource, KubernetesResourceMapper>, BaseService<KubernetesResource, KubernetesResourceMapper> {
 
     DataTable<KubernetesResource> queryResourcePage(KubernetesResourceParam.ResourcePageQuery pageQuery);
+
+    List<KubernetesResource> queryByMemberId(int id);
 
 }

@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
+import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
 import com.baiyi.cratos.facade.kubernetes.provider.strategy.CustomStrategyFactory;
@@ -20,12 +21,14 @@ import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
 import com.baiyi.cratos.wrapper.kubernetes.KubernetesResourceTemplateWrapper;
+import com.google.api.client.util.Sets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -40,6 +43,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     private final KubernetesResourceTemplateWrapper templateWrapper;
     private final KubernetesResourceTemplateMemberService templateMemberService;
     private final KubernetesResourceService resourceService;
+    private final KubernetesResourceTemplateMemberFacade templateMemberFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
@@ -89,10 +93,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
             return;
         }
         templateMemberService.queryMemberByTemplateId(id)
-                .forEach(member -> {
-                    templateMemberService.deleteById(member.getId());
-                });
-
+                .forEach(member -> templateMemberFacade.deleteById(member.getId()));
         templateService.deleteById(id);
     }
 
@@ -131,13 +132,28 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     public void createResourceByTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
-        List<KubernetesResourceTemplateMember> members = templateMemberService.queryMemberByTemplateId(
-                createResourceByTemplate.getTemplateId(), true);
+        List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
                 createResourceByTemplate(member, templateCustom, createResourceByTemplate.getCreatedBy());
             }
         }
+    }
+
+    private List<KubernetesResourceTemplateMember> queryMembers(
+            KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
+        List<KubernetesResourceTemplateMember> members = templateMemberService.queryMemberByTemplateId(
+                createResourceByTemplate.getTemplateId(), true);
+        if (CollectionUtils.isEmpty(members)) {
+            return members;
+        }
+        Set<String> namespaces = CollectionUtils.isEmpty(
+                createResourceByTemplate.getNamespaces()) ? Sets.newHashSet() : createResourceByTemplate.getNamespaces();
+        Set<String> kinds = CollectionUtils.isEmpty(
+                createResourceByTemplate.getKinds()) ? Sets.newHashSet() : createResourceByTemplate.getKinds();
+        return members.stream()
+                .filter(member -> namespaces.contains(member.getNamespace()) && kinds.contains(member.getKind()))
+                .toList();
     }
 
     private void createResourceByTemplate(KubernetesResourceTemplateMember member,
