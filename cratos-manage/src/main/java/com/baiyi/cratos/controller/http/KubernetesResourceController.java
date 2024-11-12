@@ -115,7 +115,7 @@ public class KubernetesResourceController {
     }
 
     @Operation(summary = "Update kubernetes resource template member")
-    @PostMapping(value = "/member/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/member/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateMember(
             @RequestBody @Valid KubernetesResourceTemplateParam.UpdateMember updateMember) {
         templateMemberFacade.updateMember(updateMember);

@@ -15,7 +15,6 @@ public class TemplateCustomMerger {
     private KubernetesResourceTemplateCustom.Custom from;
     private KubernetesResourceTemplateCustom.Custom to;
     private KubernetesResourceTemplateMember member;
-
     private KubernetesResourceTemplateCustom.Custom memberCustom;
 
     public static TemplateCustomMerger newBuilder() {
@@ -54,13 +53,14 @@ public class TemplateCustomMerger {
         return this;
     }
 
-    private TemplateCustomMerger rewrite() {
-        CustomStrategyFactory.rewrite(member, memberCustom);
+    public TemplateCustomMerger rewrite() {
+        if (member != null && memberCustom != null) {
+            CustomStrategyFactory.rewrite(member, memberCustom);
+        }
         return this;
     }
 
     public KubernetesResourceTemplateCustom.Custom build() {
-        this.rewrite();
         return memberCustom;
     }
 

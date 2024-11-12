@@ -17,6 +17,8 @@ import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
 import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceBuilder;
+import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceTemplateBuilder;
+import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceTemplateMemberBuilder;
 import com.baiyi.cratos.facade.kubernetes.util.TemplateCustomMerger;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
@@ -107,26 +109,28 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
             throw new KubernetesResourceTemplateException("Template does not exist.");
         }
         // copy template
-        KubernetesResourceTemplate newTemplate = KubernetesResourceTemplate.builder()
-                .templateKey(copyTemplate.getTemplateKey())
-                .name(copyTemplate.getTemplateName())
-                .custom(kubernetesResourceTemplate.getCustom())
-                .apiVersion(kubernetesResourceTemplate.getApiVersion())
-                .comment(kubernetesResourceTemplate.getComment())
-                .valid(true)
-                .build();
+        KubernetesResourceTemplate newTemplate = KubernetesResourceTemplateBuilder.newBuilder()
+                .copyTemplate(copyTemplate)
+                .template(kubernetesResourceTemplate)
+                .copy();
         templateService.add(newTemplate);
         // copy members
+        copyTemplateMembers(copyTemplate, newTemplate);
+        return this.getTemplateById(copyTemplate.getTemplateId());
+    }
+
+    private void copyTemplateMembers(KubernetesResourceTemplateParam.CopyTemplate copyTemplate,
+                                     KubernetesResourceTemplate newTemplate) {
         List<KubernetesResourceTemplateMember> members = templateMemberService.queryMemberByTemplateId(
                 copyTemplate.getTemplateId(), true);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
-                member.setId(null);
-                member.setTemplateId(newTemplate.getId());
-                templateMemberService.add(member);
+                templateMemberService.add(KubernetesResourceTemplateMemberBuilder.newBuilder()
+                        .member(member)
+                        .template(newTemplate)
+                        .copy());
             }
         }
-        return this.getTemplateById(copyTemplate.getTemplateId());
     }
 
     @Override
@@ -136,8 +140,9 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
         List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
+            String createdBy = createResourceByTemplate.getCreatedBy();
             for (KubernetesResourceTemplateMember member : members) {
-                createResourceByTemplateMember(member, templateCustom, createResourceByTemplate.getCreatedBy());
+                createResourceByTemplateMember(member, templateCustom, createdBy);
             }
         }
     }
@@ -169,6 +174,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .member(member)
                 .merge()
                 // 策略工厂重写变量
+                .rewrite()
                 .build();
         KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
         List<EdsAsset> assets = provider.produce(member, memberCustom);
@@ -192,7 +198,11 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 createResourceByTemplate.getTemplateId());
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 kubernetesResourceTemplate);
-        return KubernetesResourceTemplateCustom.merge(userCustom, templateCustom);
+        return TemplateCustomMerger.newBuilder()
+                .mergeFrom(userCustom)
+                .mergeTo(templateCustom)
+                .merge()
+                .build();
     }
 
 }
