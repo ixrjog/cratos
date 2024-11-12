@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.enums.StrategyEnum;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.facade.kubernetes.provider.strategy.CustomStrategy;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -37,11 +36,12 @@ public class WipeTheHostEnvSuffixCustomStrategy implements CustomStrategy {
                 .containsKey(hostKey)) {
             final String hostValue = custom.getData()
                     .get(hostKey);
-            final String envSuffix = "-" + member.getNamespace();
+            // -prod.
+            final String envSuffix = "-" + member.getNamespace() + ".";
             if (hostValue.endsWith(envSuffix) && member.getNamespace()
                     .equals("prod")) {
                 custom.getData()
-                        .put(hostKey, StringUtils.removeEnd(hostValue, envSuffix));
+                        .put(hostKey, hostValue.replace(envSuffix, "."));
             }
         }
     }

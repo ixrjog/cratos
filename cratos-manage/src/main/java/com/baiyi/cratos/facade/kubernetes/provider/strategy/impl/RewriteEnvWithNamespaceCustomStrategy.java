@@ -2,14 +2,13 @@ package com.baiyi.cratos.facade.kubernetes.provider.strategy.impl;
 
 import com.baiyi.cratos.common.enums.StrategyEnum;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
-import com.baiyi.cratos.common.util.BeetlUtil;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.facade.kubernetes.provider.strategy.CustomStrategy;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,18 +39,20 @@ public class RewriteEnvWithNamespaceCustomStrategy implements CustomStrategy {
                 .orElse("envName");
         final String envName = member.getNamespace();
         Map<String, String> data = Maps.newHashMap();
+        // 替换环境变量
         custom.getData()
                 .forEach((k, v) -> {
-                    try {
-                        Map<String, String> contentMap = Maps.newHashMap();
-                        contentMap.put(envKey, member.getNamespace());
-                        String newValue = BeetlUtil.renderTemplate2(v, contentMap);
-                        data.put(k, newValue);
-                    } catch (IOException ioException) {
-                        log.debug(ioException.getMessage());
-                        data.put(k, v);
+                    String placeholder = "${" + envKey + "}";
+                    if (StringUtils.hasText(v)) {
+                        if (v.contains(placeholder)) {
+                            data.put(k, v.replace(placeholder, envName));
+                        } else {
+                            data.put(k, v);
+                        }
                     }
                 });
+        // 设置env环境变量
+        data.put(envKey, envName);
         custom.setData(data);
     }
 

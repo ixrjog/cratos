@@ -7,6 +7,7 @@
         -->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="template_id" jdbcType="INTEGER" property="templateId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="namespace" jdbcType="VARCHAR" property="namespace"/>
         <result column="kind" jdbcType="VARCHAR" property="kind"/>
         <result column="valid" jdbcType="BIT" property="valid"/>

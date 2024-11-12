@@ -47,7 +47,6 @@ public class KubernetesResourceTemplateVO {
         private Boolean valid;
         private String custom;
         private String comment;
-
         private List<String> namespaces;
         private Set<String> kinds;
 
@@ -77,6 +76,7 @@ public class KubernetesResourceTemplateVO {
         private static final long serialVersionUID = 7534387127199381328L;
         private Integer id;
         private Integer templateId;
+        private String name;
         private String namespace;
         private String kind;
         private Boolean valid;

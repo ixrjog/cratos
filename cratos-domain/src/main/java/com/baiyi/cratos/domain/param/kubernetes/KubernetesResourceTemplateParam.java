@@ -134,12 +134,14 @@ public class KubernetesResourceTemplateParam {
     public static class AddMember implements IToTarget<KubernetesResourceTemplateMember> {
         @NotNull
         private Integer templateId;
+        private String name;
         @NotBlank
         private String namespace;
         @NotBlank
         private String kind;
-        @NotBlank
+        @NotNull
         private Boolean valid;
+        @NotBlank
         private String content;
         private String custom;
         private String comment;
@@ -153,10 +155,12 @@ public class KubernetesResourceTemplateParam {
         private Integer id;
         @NotNull
         private Integer templateId;
+        private String name;
         @NotBlank
         private String namespace;
-        private String kind;
         @NotBlank
+        private String kind;
+        @NotNull
         private Boolean valid;
         @NotBlank
         private String content;

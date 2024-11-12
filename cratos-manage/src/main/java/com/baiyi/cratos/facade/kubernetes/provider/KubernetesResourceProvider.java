@@ -25,14 +25,14 @@ public interface KubernetesResourceProvider<A> extends InitializingBean {
 
     default KubernetesResourceTemplateCustom.KubernetesInstance findOf(String namespace,
                                                                        KubernetesResourceTemplateCustom.Custom custom) {
-        if (StringUtils.hasText(namespace)) {
+        if (!StringUtils.hasText(namespace)) {
             throw new KubernetesResourceTemplateException("The namespace is empty.");
         }
         return custom.getInstances()
                 .stream()
                 .filter(instance -> instance.getNamespaces()
                         .stream()
-                        .anyMatch(e -> namespace.equals(e)))
+                        .anyMatch(namespace::equals))
                 .findFirst()
                 .orElse(null);
     }

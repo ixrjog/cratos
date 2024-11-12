@@ -19,6 +19,7 @@ public class KubernetesResourceTemplateMember implements HasValid {
     @Column(name = "template_id")
     private Integer templateId;
 
+    private String name;
     /**
      * 命名空间
      */

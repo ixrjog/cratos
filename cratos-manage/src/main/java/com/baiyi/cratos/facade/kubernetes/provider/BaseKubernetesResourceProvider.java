@@ -87,14 +87,10 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
             KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {
         EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
         if (edsInstance != null && IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
-            return getEdsConfig(edsInstance.getConfigId());
+            return getEdsInstanceProvider(edsInstance.getId()).getInstance()
+                    .getEdsConfigModel();
         }
         throw new KubernetesResourceTemplateException("kubernetesInstance is invalid.");
-    }
-
-    protected EdsKubernetesConfigModel.Kubernetes getEdsConfig(int instanceId) {
-        return getEdsInstanceProvider(instanceId).getInstance()
-                .getEdsConfigModel();
     }
 
     protected EdsInstanceAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> getEdsConfig2(int instanceId) {

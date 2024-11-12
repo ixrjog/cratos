@@ -1,7 +1,6 @@
 package com.baiyi.cratos.service.kubernetes.impl;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.mapper.KubernetesResourceTemplateMemberMapper;
@@ -31,7 +30,9 @@ public class KubernetesResourceTemplateMemberServiceImpl implements KubernetesRe
         Example example = new Example(KubernetesResourceTemplateMember.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("templateId", record.getTemplateId())
-                .andEqualTo("namespace", record.getNamespace());
+                .andEqualTo("name", record.getName())
+                .andEqualTo("namespace", record.getNamespace())
+                .andEqualTo("kind", record.getKind());
         return getMapper().selectOneByExample(example);
     }
 

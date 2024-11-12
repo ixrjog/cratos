@@ -41,11 +41,8 @@ public class CustomStrategyFactory {
                 .peek(e -> {
                     if (e.getOrder() == null) {
                         CustomStrategy customStrategy = getStrategy(e.getName());
-                        if (customStrategy != null) {
-                            e.setOrder(customStrategy.getOrder());
-                        } else {
-                            e.setOrder(0);
-                        }
+                        int order = customStrategy != null ? customStrategy.getOrder() : 0;
+                        e.setOrder(order);
                     }
                 })
                 .sorted(Comparator.comparingInt(KubernetesResourceTemplateCustom.Strategy::getOrder))

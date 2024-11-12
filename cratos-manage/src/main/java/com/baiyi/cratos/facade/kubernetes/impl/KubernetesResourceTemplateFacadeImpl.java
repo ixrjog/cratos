@@ -162,7 +162,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 member.getCustom());
         KubernetesResourceTemplateCustom.Custom memberCustom = KubernetesResourceTemplateCustom.merge(templateCustom,
                 mainCustom);
-        // 自定义策略工程重写
+        // 自定义策略工厂重写变量
         CustomStrategyFactory.rewrite(member, memberCustom);
         KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
         EdsAsset edsAsset = provider.produce(member, memberCustom);
@@ -174,7 +174,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .kind(member.getKind())
                 .name(edsAsset.getName())
                 .namespace(member.getNamespace())
-                .custom(templateCustom.dump())
+                .custom(memberCustom.dump())
                 .edsInstanceId(provider.findOf(member.getNamespace(), templateCustom)
                         .getId())
                 .createdBy(createdBy)

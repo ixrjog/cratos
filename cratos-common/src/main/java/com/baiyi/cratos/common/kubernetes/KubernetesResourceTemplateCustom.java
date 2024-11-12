@@ -56,6 +56,7 @@ public class KubernetesResourceTemplateCustom {
         } else {
             custom.instances = mainCustom.instances;
         }
+        custom.strategies = featureCustom.getStrategies();
         return custom;
     }
 
