@@ -8,6 +8,8 @@ import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourcePro
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/6 13:53
@@ -17,14 +19,14 @@ public interface KubernetesResourceProvider<A> extends InitializingBean {
 
     String getKind();
 
-    EdsAsset produce(KubernetesResourceTemplateMember member, KubernetesResourceTemplateCustom.Custom custom);
+    List<EdsAsset> produce(KubernetesResourceTemplateMember member, KubernetesResourceTemplateCustom.Custom custom);
 
     default void afterPropertiesSet() {
         KubernetesResourceProviderFactory.register(this);
     }
 
-    default KubernetesResourceTemplateCustom.KubernetesInstance findOf(String namespace,
-                                                                       KubernetesResourceTemplateCustom.Custom custom) {
+    default List<KubernetesResourceTemplateCustom.KubernetesInstance> findOf(String namespace,
+                                                                             KubernetesResourceTemplateCustom.Custom custom) {
         if (!StringUtils.hasText(namespace)) {
             throw new KubernetesResourceTemplateException("The namespace is empty.");
         }
@@ -33,8 +35,7 @@ public interface KubernetesResourceProvider<A> extends InitializingBean {
                 .filter(instance -> instance.getNamespaces()
                         .stream()
                         .anyMatch(namespace::equals))
-                .findFirst()
-                .orElse(null);
+                .toList();
     }
 
 }

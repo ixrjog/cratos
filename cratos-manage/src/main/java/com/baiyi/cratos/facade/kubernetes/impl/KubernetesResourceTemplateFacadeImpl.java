@@ -16,7 +16,8 @@ import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;
-import com.baiyi.cratos.facade.kubernetes.provider.strategy.CustomStrategyFactory;
+import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceBuilder;
+import com.baiyi.cratos.facade.kubernetes.util.TemplateCustomMerger;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
@@ -135,7 +136,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
-                createResourceByTemplate(member, templateCustom, createResourceByTemplate.getCreatedBy());
+                createResourceByTemplateMember(member, templateCustom, createResourceByTemplate.getCreatedBy());
             }
         }
     }
@@ -156,30 +157,30 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .toList();
     }
 
-    private void createResourceByTemplate(KubernetesResourceTemplateMember member,
-                                          KubernetesResourceTemplateCustom.Custom templateCustom, String createdBy) {
+    private void createResourceByTemplateMember(KubernetesResourceTemplateMember member,
+                                                KubernetesResourceTemplateCustom.Custom templateCustom,
+                                                String createdBy) {
         KubernetesResourceTemplateCustom.Custom mainCustom = KubernetesResourceTemplateCustom.loadAs(
                 member.getCustom());
-        KubernetesResourceTemplateCustom.Custom memberCustom = KubernetesResourceTemplateCustom.merge(templateCustom,
-                mainCustom);
-        // 自定义策略工厂重写变量
-        CustomStrategyFactory.rewrite(member, memberCustom);
-        KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
-        EdsAsset edsAsset = provider.produce(member, memberCustom);
-        // 资产关联
-        KubernetesResource resource = KubernetesResource.builder()
-                .templateId(member.getTemplateId())
-                .memberId(member.getId())
-                .assetId(edsAsset.getId())
-                .kind(member.getKind())
-                .name(edsAsset.getName())
-                .namespace(member.getNamespace())
-                .custom(memberCustom.dump())
-                .edsInstanceId(provider.findOf(member.getNamespace(), templateCustom)
-                        .getId())
-                .createdBy(createdBy)
+        KubernetesResourceTemplateCustom.Custom memberCustom = TemplateCustomMerger.newBuilder()
+                .mergeFrom(templateCustom)
+                .mergeTo(mainCustom)
+                .member(member)
+                .merge()
+                // 策略工厂重写变量
                 .build();
-        resourceService.add(resource);
+        KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
+        List<EdsAsset> assets = provider.produce(member, memberCustom);
+        assets.forEach(asset -> {
+            // 资产关联
+            KubernetesResource resource = KubernetesResourceBuilder.newBuilder()
+                    .member(member)
+                    .edsAsset(asset)
+                    .memberCustom(memberCustom)
+                    .createdBy(createdBy)
+                    .build();
+            resourceService.add(resource);
+        });
     }
 
     private KubernetesResourceTemplateCustom.Custom getCustom(

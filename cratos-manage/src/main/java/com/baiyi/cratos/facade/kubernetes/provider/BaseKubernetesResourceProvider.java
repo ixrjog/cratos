@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -34,15 +35,16 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
 
     protected abstract A create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content);
 
-    @Override
-    public EdsAsset produce(KubernetesResourceTemplateMember member, KubernetesResourceTemplateCustom.Custom custom) {
-        KubernetesResourceTemplateCustom.KubernetesInstance instance = findOf(member.getNamespace(), custom);
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(instance);
+
+    protected EdsAsset produce(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance,
+                               KubernetesResourceTemplateMember member,
+                               KubernetesResourceTemplateCustom.Custom custom) {
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(kubernetesInstance);
         try {
             String content = BeetlUtil.renderTemplate2(member.getContent(), custom.getData());
             A asset = create(kubernetes, content);
             // 导入资产
-            EdsInstance edsInstance = getEdsInstance(instance);
+            EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
             EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, A> holder = getEdsInstanceProvider(
                     edsInstance.getId());
             return holder.getProvider()
@@ -52,13 +54,22 @@ public abstract class BaseKubernetesResourceProvider<P, A> implements Kubernetes
         }
     }
 
-    protected KubernetesResourceTemplateCustom.KubernetesInstance selectOf(String namespace,
-                                                                           KubernetesResourceTemplateCustom.Custom custom) {
-        KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance = findOf(namespace, custom);
-        if (kubernetesInstance == null) {
+    @Override
+    public List<EdsAsset> produce(KubernetesResourceTemplateMember member,
+                                  KubernetesResourceTemplateCustom.Custom custom) {
+        List<KubernetesResourceTemplateCustom.KubernetesInstance> instances = findOf(member.getNamespace(), custom);
+        return instances.stream()
+                .map(instance -> produce(instance, member, custom))
+                .toList();
+    }
+
+    protected List<KubernetesResourceTemplateCustom.KubernetesInstance> selectOf(String namespace,
+                                                                                 KubernetesResourceTemplateCustom.Custom custom) {
+        List<KubernetesResourceTemplateCustom.KubernetesInstance> kubernetesInstances = findOf(namespace, custom);
+        if (kubernetesInstances == null) {
             throw new KubernetesResourceTemplateException("No Kubernetes instance found.");
         }
-        return kubernetesInstance;
+        return kubernetesInstances;
     }
 
     protected EdsInstance getEdsInstance(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {
