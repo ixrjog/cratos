@@ -121,6 +121,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 copyTemplate.getTemplateId(), true);
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
+                member.setId(null);
                 member.setTemplateId(newTemplate.getId());
                 templateMemberService.add(member);
             }
