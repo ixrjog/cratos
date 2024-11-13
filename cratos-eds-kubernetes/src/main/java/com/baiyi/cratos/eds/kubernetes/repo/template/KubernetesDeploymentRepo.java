@@ -3,23 +3,20 @@ package com.baiyi.cratos.eds.kubernetes.repo.template;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesDeploymentException;
-import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +29,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesDeploymentRepo implements IKubernetesResourceRepo<KubernetesClient, Deployment> {
+public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<KubernetesClient, Deployment> {
 
     public static final String REDEPLOY_TIMESTAMP = "redeploy-timestamp";
 
@@ -70,48 +67,6 @@ public class KubernetesDeploymentRepo implements IKubernetesResourceRepo<Kuberne
         update(kubernetes, deployment);
     }
 
-    @Override
-    public Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = loadAs(client, content);
-            // 删除资源版本
-            deployment.getMetadata()
-                    .setResourceVersion(null);
-            return create(kubernetes, deployment);
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
-
-    public Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, Deployment deployment) {
-        // 删除资源版本
-        deployment.getMetadata()
-                .setResourceVersion(null);
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .resource(deployment)
-                    .create();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
-
-    public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, Deployment deployment) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .resource(deployment)
-                    .update();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
 
     /**
      * 扩容
@@ -210,20 +165,12 @@ public class KubernetesDeploymentRepo implements IKubernetesResourceRepo<Kuberne
     }
 
     @Override
-    public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            DeploymentList deploymentList = client.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .list();
-            if (CollectionUtils.isEmpty(deploymentList.getItems())) {
-                return Collections.emptyList();
-            }
-            return deploymentList.getItems();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected List<Deployment> list(KubernetesClient client, String namespace) {
+        return client.apps()
+                .deployments()
+                .inNamespace(namespace)
+                .list()
+                .getItems();
     }
 
     @Override
@@ -234,64 +181,50 @@ public class KubernetesDeploymentRepo implements IKubernetesResourceRepo<Kuberne
                 .load(is);
     }
 
-    private Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    @Override
+    protected KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        return kubernetesClientBuilder.build(kubernetes);
+    }
+
+    @Override
+    protected Deployment create(KubernetesClient client, Deployment resource) {
         // 删除资源版本
-        deployment.getMetadata()
+        resource.getMetadata()
                 .setResourceVersion(null);
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.apps()
-                    .deployments()
-                    .inNamespace(deployment.getMetadata()
-                            .getNamespace())
-                    .resource(deployment)
-                    .create();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+        return client.apps()
+                .deployments()
+                .inNamespace(resource.getMetadata()
+                        .getNamespace())
+                .resource(resource)
+                .create();
     }
 
     @Override
-    public Deployment get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .withName(name)
-                    .get();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected Deployment get(KubernetesClient client, String namespace, String name) {
+        return client.apps()
+                .deployments()
+                .inNamespace(namespace)
+                .withName(name)
+                .get();
+    }
+
+
+    @Override
+    protected Deployment find(KubernetesClient client, Deployment resource) {
+        return client.apps()
+                .deployments()
+                .inNamespace(getNamespace(resource))
+                .withName(getName(resource))
+                .get();
     }
 
     @Override
-    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment resource) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            client.apps()
-                    .deployments()
-                    .inNamespace(getNamespace(resource))
-                    .resource(resource)
-                    .delete();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
-
-    @Override
-    public Deployment find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment resource = loadAs(client, content);
-            return client.apps()
-                    .deployments()
-                    .inNamespace(getNamespace(resource))
-                    .withName(getName(resource))
-                    .get();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected void delete(KubernetesClient client, Deployment resource) {
+        client.apps()
+                .deployments()
+                .inNamespace(getNamespace(resource))
+                .resource(resource)
+                .delete();
     }
 
 }

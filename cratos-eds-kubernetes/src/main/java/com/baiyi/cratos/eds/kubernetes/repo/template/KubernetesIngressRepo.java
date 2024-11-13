@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes.repo.template;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
-import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
@@ -22,23 +22,9 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesIngressRepo implements IKubernetesResourceRepo<KubernetesClient, Ingress> {
+public class KubernetesIngressRepo extends BaseKubernetesResourceRepo<KubernetesClient, Ingress> {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
-
-    public List<Ingress> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(namespace)
-                    .list()
-                    .getItems();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
 
     @Override
     public Resource<Ingress> loadResource(KubernetesClient client, String resourceContent) {
@@ -47,22 +33,6 @@ public class KubernetesIngressRepo implements IKubernetesResourceRepo<Kubernetes
                 .v1()
                 .ingresses()
                 .load(is);
-    }
-
-    public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress ingress = loadAs(client, content);
-            return client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(ingress.getMetadata()
-                            .getNamespace())
-                    .resource(ingress)
-                    .get();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
     }
 
     public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
@@ -97,64 +67,58 @@ public class KubernetesIngressRepo implements IKubernetesResourceRepo<Kubernetes
     }
 
     @Override
-    public Ingress create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress resource = loadAs(client, content);
-            return client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(getNamespace(resource))
-                    .resource(resource)
-                    .create();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        return kubernetesClientBuilder.build(kubernetes);
     }
 
     @Override
-    public Ingress find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress resource = loadAs(client, content);
-            return client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(getNamespace(resource))
-                    .withName(getName(resource))
-                    .get();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected Ingress create(KubernetesClient client, Ingress resource) {
+        return client.network()
+                .v1()
+                .ingresses()
+                .inNamespace(getNamespace(resource))
+                .resource(resource)
+                .create();
     }
 
     @Override
-    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Ingress resource) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(getNamespace(resource))
-                    .resource(resource)
-                    .delete();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected Ingress get(KubernetesClient client, String namespace, String name) {
+        return client.network()
+                .v1()
+                .ingresses()
+                .inNamespace(namespace)
+                .withName(name)
+                .get();
     }
 
-    public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            return client.network()
-                    .v1()
-                    .ingresses()
-                    .inNamespace(namespace)
-                    .withName(name)
-                    .get();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    @Override
+    protected Ingress find(KubernetesClient client, Ingress resource) {
+        return client.network()
+                .v1()
+                .ingresses()
+                .inNamespace(getNamespace(resource))
+                .withName(getName(resource))
+                .get();
+    }
+
+    @Override
+    protected void delete(KubernetesClient client, Ingress resource) {
+        client.network()
+                .v1()
+                .ingresses()
+                .inNamespace(getNamespace(resource))
+                .resource(resource)
+                .delete();
+    }
+
+    @Override
+    protected List<Ingress> list(KubernetesClient client, String namespace) {
+        return client.network()
+                .v1()
+                .ingresses()
+                .inNamespace(namespace)
+                .list()
+                .getItems();
     }
 
 }

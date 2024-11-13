@@ -2,18 +2,15 @@ package com.baiyi.cratos.eds.kubernetes.repo.template;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.istio.IstioClientBuilder;
-import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import io.fabric8.istio.api.networking.v1alpha3.DestinationRule;
-import io.fabric8.istio.api.networking.v1alpha3.DestinationRuleList;
 import io.fabric8.istio.client.IstioClient;
 import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,43 +20,54 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class KubernetesIstioDestinationRuleRepo implements IKubernetesResourceRepo<IstioClient, DestinationRule> {
+public class KubernetesIstioDestinationRuleRepo extends BaseKubernetesResourceRepo<IstioClient, DestinationRule> {
 
     @Override
-    public DestinationRule create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        return null;
+    protected IstioClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        return IstioClientBuilder.build(kubernetes);
     }
 
     @Override
-    public DestinationRule find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        return null;
+    protected DestinationRule create(IstioClient client, DestinationRule resource) {
+        return client.v1alpha3()
+                .destinationRules()
+                .resource(resource)
+                .create();
     }
 
     @Override
-    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, DestinationRule resource) {
-
+    protected DestinationRule get(IstioClient client, String namespace, String name) {
+        return client.v1alpha3()
+                .destinationRules()
+                .inNamespace(namespace)
+                .withName(name)
+                .get();
     }
 
     @Override
-    public DestinationRule get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        return null;
+    protected DestinationRule find(IstioClient client, DestinationRule resource) {
+        return client.v1alpha3()
+                .destinationRules()
+                .inNamespace(getNamespace(resource))
+                .withName(getName(resource))
+                .get();
     }
 
     @Override
-    public List<DestinationRule> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final IstioClient client = IstioClientBuilder.build(kubernetes)) {
-            DestinationRuleList destinationRuleList = client.v1alpha3()
-                    .destinationRules()
-                    .inNamespace(namespace)
-                    .list();
-            if (CollectionUtils.isEmpty(destinationRuleList.getItems())) {
-                return Collections.emptyList();
-            }
-            return destinationRuleList.getItems();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
+    protected void delete(IstioClient client, DestinationRule resource) {
+        client.v1alpha3()
+                .destinationRules()
+                .resource(resource)
+                .delete();
+    }
+
+    @Override
+    protected List<DestinationRule> list(IstioClient client, String namespace) {
+        return client.v1alpha3()
+                .destinationRules()
+                .inNamespace(namespace)
+                .list()
+                .getItems();
     }
 
     @Override
