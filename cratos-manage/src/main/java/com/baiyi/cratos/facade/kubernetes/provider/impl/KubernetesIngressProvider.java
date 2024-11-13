@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider;
-import com.baiyi.cratos.eds.kubernetes.repo.impl.KubernetesIngressRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
 import com.baiyi.cratos.service.EdsInstanceService;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;

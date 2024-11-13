@@ -1,10 +1,11 @@
-package com.baiyi.cratos.eds.kubernetes.repo.impl;
+package com.baiyi.cratos.eds.kubernetes.repo.template;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesResourceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,13 +22,13 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
+public class KubernetesIngressRepo implements IKubernetesResourceRepo<KubernetesClient, Ingress> {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     public List<Ingress> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(namespace)
@@ -39,10 +40,19 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
         }
     }
 
+    @Override
+    public Resource<Ingress> loadResource(KubernetesClient client, String resourceContent) {
+        InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
+        return client.network()
+                .v1()
+                .ingresses()
+                .load(is);
+    }
+
     public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress ingress = loadAs(kc, content);
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Ingress ingress = loadAs(client, content);
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(ingress.getMetadata()
@@ -56,9 +66,9 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
     }
 
     public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress ingress = loadAs(kc, content);
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Ingress ingress = loadAs(client, content);
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(ingress.getMetadata()
@@ -72,8 +82,8 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
     }
 
     public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, Ingress ingress) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(ingress.getMetadata()
@@ -88,9 +98,9 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
 
     @Override
     public Ingress create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress resource = loadAs(kc, content);
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Ingress resource = loadAs(client, content);
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(getNamespace(resource))
@@ -103,20 +113,10 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
     }
 
     @Override
-    public Ingress loadAs(KubernetesClient kubernetesClient, String content) {
-        InputStream is = new ByteArrayInputStream(content.getBytes());
-        return kubernetesClient.network()
-                .v1()
-                .ingresses()
-                .load(is)
-                .item();
-    }
-
-    @Override
     public Ingress find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Ingress resource = loadAs(kc, content);
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Ingress resource = loadAs(client, content);
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(getNamespace(resource))
@@ -130,8 +130,8 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
 
     @Override
     public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Ingress resource) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(getNamespace(resource))
@@ -144,8 +144,8 @@ public class KubernetesIngressRepo implements KubernetesResourceRepo<Ingress> {
     }
 
     public Ingress get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.network()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.network()
                     .v1()
                     .ingresses()
                     .inNamespace(namespace)

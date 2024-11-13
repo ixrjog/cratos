@@ -1,9 +1,9 @@
-package com.baiyi.cratos.eds.kubernetes.repo.impl;
+package com.baiyi.cratos.eds.kubernetes.repo.template;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesResourceRepo;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesDeploymentException;
+import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
@@ -11,6 +11,7 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployment> {
+public class KubernetesDeploymentRepo implements IKubernetesResourceRepo<KubernetesClient, Deployment> {
 
     public static final String REDEPLOY_TIMESTAMP = "redeploy-timestamp";
 
@@ -71,8 +72,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
 
     @Override
     public Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = loadAs(kc, content);
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Deployment deployment = loadAs(client, content);
             // 删除资源版本
             deployment.getMetadata()
                     .setResourceVersion(null);
@@ -87,8 +88,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
         // 删除资源版本
         deployment.getMetadata()
                 .setResourceVersion(null);
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .resource(deployment)
@@ -100,8 +101,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, Deployment deployment) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .resource(deployment)
@@ -132,8 +133,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
         if (nowReplicas >= replicas) {
             throw new KubernetesDeploymentException("只能扩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
         }
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .withName(name)
@@ -167,8 +168,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
         if (replicas >= nowReplicas) {
             throw new KubernetesDeploymentException("只能缩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
         }
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .withName(name)
@@ -180,9 +181,9 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = loadAs(kc, content);
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Deployment deployment = loadAs(client, content);
+            return client.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
                             .getNamespace())
@@ -195,8 +196,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
     }
 
     public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
                             .getNamespace())
@@ -210,8 +211,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
 
     @Override
     public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            DeploymentList deploymentList = kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            DeploymentList deploymentList = client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .list();
@@ -225,12 +226,20 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
         }
     }
 
+    @Override
+    public Resource<Deployment> loadResource(KubernetesClient client, String resourceContent) {
+        InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
+        return client.apps()
+                .deployments()
+                .load(is);
+    }
+
     private Deployment create(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
         // 删除资源版本
         deployment.getMetadata()
                 .setResourceVersion(null);
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
                     .deployments()
                     .inNamespace(deployment.getMetadata()
                             .getNamespace())
@@ -244,8 +253,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
 
     @Override
     public Deployment get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .withName(name)
@@ -258,8 +267,8 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
 
     @Override
     public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment resource) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            client.apps()
                     .deployments()
                     .inNamespace(getNamespace(resource))
                     .resource(resource)
@@ -272,9 +281,9 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
 
     @Override
     public Deployment find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment resource = loadAs(kc, content);
-            return kc.apps()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Deployment resource = loadAs(client, content);
+            return client.apps()
                     .deployments()
                     .inNamespace(getNamespace(resource))
                     .withName(getName(resource))
@@ -283,15 +292,6 @@ public class KubernetesDeploymentRepo implements KubernetesResourceRepo<Deployme
             log.warn(e.getMessage());
             throw e;
         }
-    }
-
-    @Override
-    public Deployment loadAs(KubernetesClient kubernetesClient, String content) {
-        InputStream is = new ByteArrayInputStream(content.getBytes());
-        return kubernetesClient.apps()
-                .deployments()
-                .load(is)
-                .item();
     }
 
 }

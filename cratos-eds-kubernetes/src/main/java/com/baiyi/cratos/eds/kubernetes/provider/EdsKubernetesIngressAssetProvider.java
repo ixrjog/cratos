@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.eds.kubernetes.model.AckIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.model.EksIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
-import com.baiyi.cratos.eds.kubernetes.repo.impl.KubernetesIngressRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;

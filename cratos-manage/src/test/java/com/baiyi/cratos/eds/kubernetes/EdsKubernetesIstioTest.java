@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.kubernetes.repo.impl.KubernetesIngressRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

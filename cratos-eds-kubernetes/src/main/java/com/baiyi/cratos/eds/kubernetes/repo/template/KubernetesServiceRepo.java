@@ -1,11 +1,12 @@
-package com.baiyi.cratos.eds.kubernetes.repo.impl;
+package com.baiyi.cratos.eds.kubernetes.repo.template;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
-import com.baiyi.cratos.eds.kubernetes.repo.KubernetesResourceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.base.IKubernetesResourceRepo;
 import io.fabric8.kubernetes.api.model.Service;
 import io.fabric8.kubernetes.api.model.ServiceList;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.dsl.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,13 +25,13 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
+public class KubernetesServiceRepo implements IKubernetesResourceRepo<KubernetesClient, Service> {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     public List<Service> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            ServiceList serviceList = kc.services()
+        try (KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            ServiceList serviceList = client.services()
                     .inNamespace(namespace)
                     .list();
             if (CollectionUtils.isEmpty(serviceList.getItems())) {
@@ -44,8 +45,8 @@ public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
     }
 
     public Service get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
-        try (KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.services()
+        try (KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.services()
                     .inNamespace(namespace)
                     .withName(name)
                     .get();
@@ -57,8 +58,8 @@ public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
 
     @Override
     public Service create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Service resource = loadAs(kc, content);
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Service resource = loadAs(client, content);
             return create(kubernetes, resource);
         } catch (Exception e) {
             log.warn(e.getMessage());
@@ -67,8 +68,8 @@ public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
     }
 
     private Service create(EdsKubernetesConfigModel.Kubernetes kubernetes, Service resource) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            return kc.services()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            return client.services()
                     .inNamespace(getNamespace(resource))
                     .resource(resource)
                     .create();
@@ -79,18 +80,17 @@ public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
     }
 
     @Override
-    public Service loadAs(KubernetesClient kubernetesClient, String content) {
-        InputStream is = new ByteArrayInputStream(content.getBytes());
-        return kubernetesClient.services()
-                .load(is)
-                .item();
+    public Resource<Service> loadResource(KubernetesClient client, String resourceContent) {
+        InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
+        return client.services()
+                .load(is);
     }
 
     @Override
     public Service find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Service resource = loadAs(kc, content);
-            return kc.services()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            Service resource = loadAs(client, content);
+            return client.services()
                     .inNamespace(getNamespace(resource))
                     .withName(getName(resource))
                     .get();
@@ -100,11 +100,10 @@ public class KubernetesServiceRepo implements KubernetesResourceRepo<Service> {
         }
     }
 
-
     @Override
     public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, Service resource) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            kc.services()
+        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
+            client.services()
                     .inNamespace(getNamespace(resource))
                     .resource(resource)
                     .delete();

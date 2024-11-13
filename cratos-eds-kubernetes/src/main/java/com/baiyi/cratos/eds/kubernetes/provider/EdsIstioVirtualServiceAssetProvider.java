@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
-import com.baiyi.cratos.eds.kubernetes.repo.IstioVirtualServiceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioVirtualServiceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -34,20 +34,25 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_VIRTUAL_SERVICE)
 public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetProvider<VirtualService> {
 
+    private final KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo;
+
+
     public EdsIstioVirtualServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,
                                                EdsAssetIndexFacade edsAssetIndexFacade,
                                                KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                               KubernetesIstioVirtualServiceRepo kubernetesIstioVirtualServiceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
+        this.kubernetesIstioVirtualServiceRepo = kubernetesIstioVirtualServiceRepo;
     }
 
     @Override
     protected List<VirtualService> listEntities(String namespace,
                                                 ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return IstioVirtualServiceRepo.list(instance.getEdsConfigModel(), namespace);
+        return kubernetesIstioVirtualServiceRepo.list(instance.getEdsConfigModel(), namespace);
     }
 
     @Override
