@@ -77,6 +77,7 @@ public class KubernetesResourceTemplateParam {
     @Schema
     public static class CreateResourceByTemplate implements HasSessionUser {
         private Integer templateId;
+        private String templateKey;
         private String custom;
         private Set<String> namespaces;
         private Set<String> kinds;
