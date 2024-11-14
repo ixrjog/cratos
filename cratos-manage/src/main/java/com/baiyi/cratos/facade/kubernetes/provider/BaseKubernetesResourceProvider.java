@@ -32,7 +32,6 @@ import java.util.List;
 public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetesResourceRepo<?, A>, A extends HasMetadata> implements KubernetesResourceProvider<A> {
 
     private final EdsInstanceService edsInstanceService;
-
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     abstract protected R getRepo();
