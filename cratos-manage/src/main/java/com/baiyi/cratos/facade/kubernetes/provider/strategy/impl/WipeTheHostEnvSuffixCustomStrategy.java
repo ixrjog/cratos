@@ -16,6 +16,8 @@ import java.util.Optional;
 @Component
 public class WipeTheHostEnvSuffixCustomStrategy implements CustomStrategy {
 
+    private final static String DEF_HOST_KEY = "host";
+
     @Override
     public String getName() {
         return StrategyEnum.WIPE_THE_HOST_ENV_SUFFIX.name();
@@ -31,7 +33,7 @@ public class WipeTheHostEnvSuffixCustomStrategy implements CustomStrategy {
                         KubernetesResourceTemplateCustom.Custom custom) {
         final String hostKey = Optional.of(strategy)
                 .map(KubernetesResourceTemplateCustom.Strategy::getValue)
-                .orElse("host");
+                .orElse(DEF_HOST_KEY);
         if (custom.getData()
                 .containsKey(hostKey)) {
             final String hostValue = custom.getData()

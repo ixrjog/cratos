@@ -192,6 +192,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 // 策略工厂重写变量
                 .rewrite()
                 .get();
+        // 核心处里逻辑
         KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
         List<EdsAsset> assets = provider.produce(member, memberCustom);
         assets.forEach(asset -> {

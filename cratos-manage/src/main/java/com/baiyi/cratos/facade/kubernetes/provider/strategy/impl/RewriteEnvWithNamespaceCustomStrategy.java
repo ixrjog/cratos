@@ -21,6 +21,8 @@ import java.util.Optional;
 @Component
 public class RewriteEnvWithNamespaceCustomStrategy implements CustomStrategy {
 
+    private final static String DEF_ENV_KEY = "envName";
+
     @Override
     public String getName() {
         return StrategyEnum.REWRITE_ENV_WITH_NAMESPACE.name();
@@ -36,13 +38,13 @@ public class RewriteEnvWithNamespaceCustomStrategy implements CustomStrategy {
                         KubernetesResourceTemplateCustom.Custom custom) {
         final String envKey = Optional.of(strategy)
                 .map(KubernetesResourceTemplateCustom.Strategy::getValue)
-                .orElse("envName");
+                .orElse(DEF_ENV_KEY);
         final String envName = member.getNamespace();
         Map<String, String> data = Maps.newHashMap();
         // 替换环境变量
         custom.getData()
                 .forEach((k, v) -> {
-                    String placeholder = "${" + envKey + "}";
+                    final String placeholder = "${" + envKey + "}";
                     if (StringUtils.hasText(v)) {
                         if (v.contains(placeholder)) {
                             data.put(k, v.replace(placeholder, envName));
