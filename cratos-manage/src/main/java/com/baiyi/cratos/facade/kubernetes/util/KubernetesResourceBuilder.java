@@ -41,7 +41,7 @@ public class KubernetesResourceBuilder {
         return this;
     }
 
-    public KubernetesResource build() {
+    public KubernetesResource get() {
         return KubernetesResource.builder()
                 .templateId(member.getTemplateId())
                 .memberId(member.getId())

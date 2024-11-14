@@ -60,7 +60,7 @@ public class TemplateCustomMerger {
         return this;
     }
 
-    public KubernetesResourceTemplateCustom.Custom build() {
+    public KubernetesResourceTemplateCustom.Custom get() {
         return memberCustom;
     }
 

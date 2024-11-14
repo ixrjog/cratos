@@ -153,7 +153,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 throw new KubernetesResourceTemplateException("Template ID or Key must be specified.");
             }
         }
-        KubernetesResourceTemplateCustom.Custom templateCustom = getCustom(createResourceByTemplate);
+        KubernetesResourceTemplateCustom.Custom templateCustom = getCustomFromUserMergeTemplate(createResourceByTemplate);
         List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
             String createdBy = createResourceByTemplate.getCreatedBy();
@@ -191,7 +191,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .merge()
                 // 策略工厂重写变量
                 .rewrite()
-                .build();
+                .get();
         KubernetesResourceProvider<?> provider = KubernetesResourceProviderFactory.getProvider(member.getKind());
         List<EdsAsset> assets = provider.produce(member, memberCustom);
         assets.forEach(asset -> {
@@ -201,24 +201,31 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                     .edsAsset(asset)
                     .memberCustom(memberCustom)
                     .createdBy(createdBy)
-                    .build();
+                    .get();
             resourceService.add(resource);
         });
     }
 
-    private KubernetesResourceTemplateCustom.Custom getCustom(
+    /**
+     * 获取模板的Custom
+     * @param createResourceByTemplate
+     * @return
+     */
+    private KubernetesResourceTemplateCustom.Custom getCustomFromUserMergeTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
+        // 用户的
         KubernetesResourceTemplateCustom.Custom userCustom = KubernetesResourceTemplateCustom.loadAs(
                 createResourceByTemplate.getCustom());
         KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(
                 createResourceByTemplate.getTemplateId());
+        // 模板的
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 kubernetesResourceTemplate);
         return TemplateCustomMerger.newBuilder()
                 .mergeFrom(userCustom)
                 .mergeTo(templateCustom)
                 .merge()
-                .build();
+                .get();
     }
 
 }
