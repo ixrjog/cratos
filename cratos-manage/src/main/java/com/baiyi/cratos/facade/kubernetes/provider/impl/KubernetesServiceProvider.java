@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesServiceRepo;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Component
-public class KubernetesServiceProvider extends BaseKubernetesResourceProvider<EdsKubernetesDeploymentAssetProvider, Service> {
+public class KubernetesServiceProvider extends BaseKubernetesResourceProvider<EdsKubernetesDeploymentAssetProvider, KubernetesServiceRepo, Service> {
 
     private final KubernetesServiceRepo kubernetesServiceRepo;
 
@@ -33,13 +32,8 @@ public class KubernetesServiceProvider extends BaseKubernetesResourceProvider<Ed
     }
 
     @Override
-    protected  Service create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        Service resource = null;
-        try {
-            resource = kubernetesServiceRepo.find(kubernetes, content);
-        } catch (Exception ignored) {
-        }
-        return resource != null ? resource : kubernetesServiceRepo.create(kubernetes, content);
+    protected KubernetesServiceRepo getRepo() {
+        return kubernetesServiceRepo;
     }
 
 }

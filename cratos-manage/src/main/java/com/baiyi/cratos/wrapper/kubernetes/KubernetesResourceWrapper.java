@@ -3,9 +3,13 @@ package com.baiyi.cratos.wrapper.kubernetes;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.KubernetesResource;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceVO;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -26,13 +30,17 @@ public class KubernetesResourceWrapper extends BaseDataTableConverter<Kubernetes
 
     private final EdsAssetService edsAssetService;
     private final EdsAssetWrapper edsAssetWrapper;
+    private final EdsInstanceService edsInstanceService;
 
     @Override
     public void wrap(KubernetesResourceVO.Resource vo) {
         EdsAsset edsAsset = edsAssetService.getById(vo.getAssetId());
-        // TODO 改成BusinessWrapper
         if (edsAsset != null) {
             vo.setAsset(edsAssetWrapper.convert(edsAsset));
+        }
+        EdsInstance instance = edsInstanceService.getById(vo.getEdsInstanceId());
+        if (instance != null) {
+            vo.setEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class));
         }
     }
 

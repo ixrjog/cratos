@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.provider.EdsKubernetesDeploymentAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Component
-public class KubernetesIngressProvider extends BaseKubernetesResourceProvider<EdsKubernetesDeploymentAssetProvider, Ingress> {
+public class KubernetesIngressProvider extends BaseKubernetesResourceProvider<EdsKubernetesDeploymentAssetProvider, KubernetesIngressRepo, Ingress> {
 
     private final KubernetesIngressRepo kubernetesIngressRepo;
 
@@ -33,13 +32,8 @@ public class KubernetesIngressProvider extends BaseKubernetesResourceProvider<Ed
     }
 
     @Override
-    protected Ingress create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
-        Ingress resource = null;
-        try {
-            resource = kubernetesIngressRepo.find(kubernetes, content);
-        } catch (Exception ignored) {
-        }
-        return resource != null ? resource : kubernetesIngressRepo.create(kubernetes, content);
+    protected KubernetesIngressRepo getRepo() {
+        return kubernetesIngressRepo;
     }
 
 }

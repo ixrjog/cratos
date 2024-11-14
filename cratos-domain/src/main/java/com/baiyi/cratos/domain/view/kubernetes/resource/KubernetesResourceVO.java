@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,7 @@ public class KubernetesResourceVO {
         private String createdBy;
         private String custom;
         private String comment;
+        private EdsInstanceVO.EdsInstance edsInstance;
         private EdsAssetVO.Asset asset;
 
         @Override

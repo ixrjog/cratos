@@ -17,7 +17,11 @@ public enum KubernetesResourceKindEnum {
     DEPLOYMENT,
     SERVICE,
     INGRESS,
-    CUSTOM_RESOURCE;
+    CUSTOM_RESOURCE,
+    // Istio
+    VIRTUAL_SERVICE,
+    DESTINATION_RULE,
+    ENVOY_FILTER;
 
     public static OptionsVO.Options toOptions() {
         List<OptionsVO.Option> optionList = Arrays.stream(KubernetesResourceKindEnum.values())

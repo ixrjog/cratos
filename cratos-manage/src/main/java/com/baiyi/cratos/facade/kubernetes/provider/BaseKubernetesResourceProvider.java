@@ -12,7 +12,9 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import com.baiyi.cratos.service.EdsInstanceService;
+import io.fabric8.kubernetes.api.model.HasMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -27,14 +29,22 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
-public abstract class BaseKubernetesResourceProvider<P, A> implements KubernetesResourceProvider<A> {
+public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetesResourceRepo<?, A>, A extends HasMetadata> implements KubernetesResourceProvider<A> {
 
     private final EdsInstanceService edsInstanceService;
 
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
-    protected abstract A create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content);
+    abstract protected R getRepo();
 
+    protected A create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+        A resource = null;
+        try {
+            resource = getRepo().find(kubernetes, content);
+        } catch (Exception ignored) {
+        }
+        return resource != null ? resource : getRepo().create(kubernetes, content);
+    }
 
     protected EdsAsset produce(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance,
                                KubernetesResourceTemplateMember member,
