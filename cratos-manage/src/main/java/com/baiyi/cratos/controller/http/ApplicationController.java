@@ -39,7 +39,7 @@ public class ApplicationController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Add application")
+    @Operation(summary = "Scan application")
     @PostMapping(value = "/scan", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> scanApplicationResource(@RequestBody @Valid ApplicationParam.ScanResource scanResource) {
         applicationFacade.scanApplicationResource(scanResource);

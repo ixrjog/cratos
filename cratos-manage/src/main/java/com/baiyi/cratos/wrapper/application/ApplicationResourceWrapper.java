@@ -1,6 +1,8 @@
 package com.baiyi.cratos.wrapper.application;
 
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.param.application.ApplicationParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceVO;
 import com.baiyi.cratos.service.ApplicationResourceService;
@@ -8,6 +10,8 @@ import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -32,6 +36,7 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
     public void wrap(ApplicationResourceVO.Resource vo) {
     }
 
+    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_2H, key = "'APPLICATION:RESOURCES:NAME:' + #hasApplicationResources.applicationName", unless = "#result == null")
     public void wrap(ApplicationResourceVO.HasApplicationResources hasApplicationResources) {
         if (StringUtils.hasText(hasApplicationResources.getApplicationName())) {
             List<ApplicationResource> applicationResources = resourceService.queryByApplicationName(
@@ -44,6 +49,10 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
                 hasApplicationResources.setResources(resources);
             }
         }
+    }
+
+    @CacheEvict(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_2H,key = "'APPLICATION:RESOURCES:NAME:' + #scanResource.name")
+    public void clean(ApplicationParam.ScanResource scanResource) {
     }
 
 }
