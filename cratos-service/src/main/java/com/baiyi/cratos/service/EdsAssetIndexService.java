@@ -32,4 +32,6 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     List<EdsAssetIndex> queryIndexByParam(@NonNull String namePrefix, @NonNull String assetType, int limit);
 
+    EdsAssetIndex getByAssetIdAndName(int assetId,String name);
+
 }

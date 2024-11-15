@@ -27,7 +27,8 @@ public class ApplicationController {
 
     @Operation(summary = "Pagination query application")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<ApplicationVO.Application>> queryApplicationPage(@RequestBody @Valid ApplicationParam.ApplicationPageQuery pageQuery) {
+    public HttpResult<DataTable<ApplicationVO.Application>> queryApplicationPage(
+            @RequestBody @Valid ApplicationParam.ApplicationPageQuery pageQuery) {
         return new HttpResult<>(applicationFacade.queryApplicationPage(pageQuery));
     }
 
@@ -38,9 +39,17 @@ public class ApplicationController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add application")
+    @PostMapping(value = "/scan", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> scanApplicationResource(@RequestBody @Valid ApplicationParam.ScanResource scanResource) {
+        applicationFacade.scanApplicationResource(scanResource);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update application")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateApplication(@RequestBody @Valid ApplicationParam.UpdateApplication updateApplication) {
+    public HttpResult<Boolean> updateApplication(
+            @RequestBody @Valid ApplicationParam.UpdateApplication updateApplication) {
         applicationFacade.updateApplication(updateApplication);
         return HttpResult.SUCCESS;
     }

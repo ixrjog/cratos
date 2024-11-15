@@ -20,4 +20,6 @@ public interface ApplicationFacade extends HasSetValid {
 
     void deleteById(int id);
 
+    void scanApplicationResource(ApplicationParam.ScanResource scanResource);
+
 }

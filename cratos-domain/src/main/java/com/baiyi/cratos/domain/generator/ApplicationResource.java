@@ -36,6 +36,8 @@ public class ApplicationResource {
     @Column(name = "business_type")
     private String businessType;
 
+    private String namespace;
+
     /**
      * 创建时间
      */

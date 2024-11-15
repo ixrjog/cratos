@@ -95,4 +95,14 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
         return edsAssetIndexMapper.queryIndexByNamePrefixAndAssetType(namePrefix, assetType, limit);
     }
 
+    @Override
+    public EdsAssetIndex getByAssetIdAndName(int assetId, String name) {
+        Example example = new Example(EdsAssetIndex.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("assetId", assetId)
+                .andEqualTo("name", name);
+        example.setOrderByClause("id limit 1");
+        return edsAssetIndexMapper.selectOneByExample(example);
+    }
+
 }

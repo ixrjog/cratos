@@ -51,9 +51,12 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
         indices.forEach(edsAssetIndex -> {
             EdsAsset edsAsset = edsAssetService.getById(edsAssetIndex.getAssetId());
             if (edsAsset != null) {
+                EdsAssetIndex namespaceIndex = edsAssetIndexService.getByAssetIdAndName(edsAsset.getId(),
+                        EdsAssetIndexConstants.KUBERNETES_NAMESPACE);
                 ApplicationResource applicationResource = ApplicationResourceBuilder.newBuilder()
                         .withApplication(application)
                         .withEdsAsset(edsAsset)
+                        .withNamespaceIndex(namespaceIndex)
                         .build();
                 applicationResourceService.add(applicationResource);
             }

@@ -4,6 +4,9 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -15,6 +18,8 @@ public class ApplicationResourceBuilder {
     private Application application;
 
     private EdsAsset edsAsset;
+
+    private EdsAssetIndex namespaceIndex;
 
     public static ApplicationResourceBuilder newBuilder() {
         return new ApplicationResourceBuilder();
@@ -30,6 +35,11 @@ public class ApplicationResourceBuilder {
         return this;
     }
 
+    public ApplicationResourceBuilder withNamespaceIndex(EdsAssetIndex namespaceIndex) {
+        this.namespaceIndex = namespaceIndex;
+        return this;
+    }
+
     public ApplicationResource build() {
         return ApplicationResource.builder()
                 .applicationName(application.getName())
@@ -37,6 +47,9 @@ public class ApplicationResourceBuilder {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(edsAsset.getId())
                 .name(edsAsset.getName())
+                .namespace(Optional.ofNullable(namespaceIndex)
+                        .map(EdsAssetIndex::getValue)
+                        .orElse(null))
                 .comment(edsAsset.getDescription())
                 .build();
     }

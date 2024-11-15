@@ -40,7 +40,8 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
                 Map<String, List<ApplicationResourceVO.Resource>> resources = BeanCopierUtil.copyListProperties(
                                 applicationResources, ApplicationResourceVO.Resource.class)
                         .stream()
-                        .collect(Collectors.groupingBy(ApplicationResourceVO.Resource::getName));
+                        .collect(Collectors.groupingBy(ApplicationResourceVO.Resource::getResourceType));
+                hasApplicationResources.setResources(resources);
             }
         }
     }
