@@ -58,4 +58,8 @@ public interface EdsAssetIndexConstants {
     String SUBNET_AVAILABLE_IP_ADDRESS_COUNT ="subnet.availableIpAddressCount";
     String VPC_CIDRS = "vpc.cidrs";
 
+    String REPO_SSH_URL = "repo.sshUrl";
+    String REPO_HTTP_URL = "repo.httpUrl";
+    String REPO_WEB_URL = "repo.webUrl";
+
 }

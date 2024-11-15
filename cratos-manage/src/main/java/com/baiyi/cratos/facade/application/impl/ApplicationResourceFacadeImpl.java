@@ -5,8 +5,10 @@ import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants;
+import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.builder.ApplicationResourceBuilder;
+import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -14,8 +16,11 @@ import com.baiyi.cratos.service.EdsAssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -42,12 +47,14 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
         if (application == null) {
             return;
         }
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(
-                EdsAssetIndexConstants.KUBERNETES_APP_NAME, applicationName);
-        bindAssetFromIndices(application, indices);
+        ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
+        bindKubernetesAssetFromIndices(application);
+        bindRepositoryAssetFromIndices(application, config);
     }
 
-    private void bindAssetFromIndices(Application application, List<EdsAssetIndex> indices) {
+    private void bindKubernetesAssetFromIndices(Application application) {
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(
+                EdsAssetIndexConstants.KUBERNETES_APP_NAME, application.getName());
         indices.forEach(edsAssetIndex -> {
             EdsAsset edsAsset = edsAssetService.getById(edsAssetIndex.getAssetId());
             if (edsAsset != null) {
@@ -57,10 +64,43 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                         .withApplication(application)
                         .withEdsAsset(edsAsset)
                         .withNamespaceIndex(namespaceIndex)
+                        .withType(ApplicationResourceBuilder.Type.KUBERNETES_RESOURCE)
                         .build();
-                applicationResourceService.add(applicationResource);
+                try {
+                    applicationResourceService.add(applicationResource);
+                } catch (DaoServiceException ignored) {
+                }
             }
         });
+    }
+
+    private void bindRepositoryAssetFromIndices(Application application, ApplicationConfigModel.Config config) {
+        String sshUrl = Optional.ofNullable(config)
+                .map(ApplicationConfigModel.Config::getRepository)
+                .map(ApplicationConfigModel.Repository::getSshUrl)
+                .orElse(null);
+        if (StringUtils.hasText(sshUrl)) {
+            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(
+                    EdsAssetIndexConstants.REPO_SSH_URL, sshUrl);
+            if (CollectionUtils.isEmpty(indices)) {
+                return;
+            }
+            indices.forEach(edsAssetIndex -> {
+                EdsAsset edsAsset = edsAssetService.getById(edsAssetIndex.getAssetId());
+                if (edsAsset != null) {
+                    ApplicationResource applicationResource = ApplicationResourceBuilder.newBuilder()
+                            .withApplication(application)
+                            .withEdsAsset(edsAsset)
+                            .withSshUrlIndex(edsAssetIndex)
+                            .withType(ApplicationResourceBuilder.Type.REPOSITORY_RESOURCE)
+                            .build();
+                    try {
+                        applicationResourceService.add(applicationResource);
+                    } catch (DaoServiceException ignored) {
+                    }
+                }
+            });
+        }
     }
 
 }

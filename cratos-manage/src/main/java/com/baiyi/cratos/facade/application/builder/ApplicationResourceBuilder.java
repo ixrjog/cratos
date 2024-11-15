@@ -15,11 +15,20 @@ import java.util.Optional;
  */
 public class ApplicationResourceBuilder {
 
+    public enum Type {
+        KUBERNETES_RESOURCE,
+        REPOSITORY_RESOURCE
+    }
+
     private Application application;
 
     private EdsAsset edsAsset;
 
     private EdsAssetIndex namespaceIndex;
+
+    private EdsAssetIndex sshUrlIndex;
+
+    private Type type;
 
     public static ApplicationResourceBuilder newBuilder() {
         return new ApplicationResourceBuilder();
@@ -40,7 +49,25 @@ public class ApplicationResourceBuilder {
         return this;
     }
 
+    public ApplicationResourceBuilder withType(Type type) {
+        this.type = type;
+        return this;
+    }
+
+    public ApplicationResourceBuilder withSshUrlIndex(EdsAssetIndex sshUrlIndex) {
+        this.sshUrlIndex = sshUrlIndex;
+        return this;
+    }
+
     public ApplicationResource build() {
+        return switch (this.type) {
+            case KUBERNETES_RESOURCE -> buildWithKubernetesResource();
+            case REPOSITORY_RESOURCE -> buildWithRepositoryResource();
+            case null -> null;
+        };
+    }
+
+    private ApplicationResource buildWithKubernetesResource() {
         return ApplicationResource.builder()
                 .applicationName(application.getName())
                 .resourceType(edsAsset.getAssetType())
@@ -50,6 +77,17 @@ public class ApplicationResourceBuilder {
                 .namespace(Optional.ofNullable(namespaceIndex)
                         .map(EdsAssetIndex::getValue)
                         .orElse(null))
+                .comment(edsAsset.getDescription())
+                .build();
+    }
+
+    private ApplicationResource buildWithRepositoryResource() {
+        return ApplicationResource.builder()
+                .applicationName(application.getName())
+                .resourceType(edsAsset.getAssetType())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(edsAsset.getId())
+                .name(sshUrlIndex.getValue())
                 .comment(edsAsset.getDescription())
                 .build();
     }

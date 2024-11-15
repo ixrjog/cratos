@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
@@ -15,10 +16,13 @@ import com.baiyi.cratos.eds.gitlab.repo.GitLabProjectRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
 import org.gitlab4j.api.models.Project;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * @Author baiyi
@@ -54,6 +58,16 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<
                 .createdTimeOf(entity.getCreatedAt())
                 .descriptionOf(entity.getDescription())
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                                      EdsAsset edsAsset, Project entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        indices.add(toEdsAssetIndex(edsAsset, REPO_SSH_URL, entity.getSshUrlToRepo()));
+        indices.add(toEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));
+        indices.add(toEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
+        return indices;
     }
 
 }
