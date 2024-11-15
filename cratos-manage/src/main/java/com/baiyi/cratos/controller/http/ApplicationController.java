@@ -1,9 +1,10 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.application.ApplicationParam;
-import com.baiyi.cratos.domain.view.application.ApplicationDeployVO;
-import com.baiyi.cratos.domain.view.kubernetes.KubernetesDeploymentResponse;
+import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.facade.ApplicationFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,12 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ApplicationController {
 
-    @Operation(summary = "按环境查询应用部署详情")
-    @PostMapping(value = "/deploy/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<KubernetesDeploymentResponse<ApplicationDeployVO.Deploy>> queryApplicationDeploy(
-            @RequestBody @Valid ApplicationParam.QueryApplicationDeploy getApplicationDeploy) {
-        // TODO
-        return null;
+    private final ApplicationFacade applicationFacade;
+
+    @Operation(summary = "Pagination query application")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ApplicationVO.Application>> queryApplicationPage(@RequestBody @Valid ApplicationParam.ApplicationPageQuery pageQuery) {
+        return new HttpResult<>(applicationFacade.queryApplicationPage(pageQuery));
     }
 
 }

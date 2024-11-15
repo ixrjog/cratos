@@ -7,6 +7,8 @@ package com.baiyi.cratos.domain.enums;
  */
 public enum BusinessTypeEnum {
 
+    APPLICATION,
+
     BUSINESS_PROPERTY,
     BUSINESS_DOC,
     // 证书
