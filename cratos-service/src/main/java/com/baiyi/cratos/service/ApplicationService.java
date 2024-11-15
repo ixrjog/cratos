@@ -16,4 +16,6 @@ public interface ApplicationService extends BaseValidService<Application, Applic
 
     DataTable<Application> queryApplicationPage(ApplicationParam.ApplicationPageQueryParam param);
 
+    Application getByName(String name);
+
 }

@@ -36,6 +36,14 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
+    public Application getByName(String name) {
+        Application uniqueKey = Application.builder()
+                .name(name)
+                .build();
+        return getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     public Application getByUniqueKey(@NonNull Application record) {
         Example example = new Example(Application.class);
         Example.Criteria criteria = example.createCriteria();

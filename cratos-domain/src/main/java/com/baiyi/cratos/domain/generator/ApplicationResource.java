@@ -1,6 +1,9 @@
 package com.baiyi.cratos.domain.generator;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +13,9 @@ import java.util.Date;
  * 表注释：应用资源
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "application_resource")
 public class ApplicationResource {
     @Id
@@ -28,7 +34,7 @@ public class ApplicationResource {
     private Integer businessId;
 
     @Column(name = "business_type")
-    private Integer businessType;
+    private String businessType;
 
     /**
      * 创建时间

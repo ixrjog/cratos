@@ -33,9 +33,9 @@ public class ApplicationResourceVO {
         private String applicationName;
         private String name;
         private String resourceType;
+        private String businessType;
         private Integer businessId;
-        private Integer businessType;
         private String comment;
     }
-    
+
 }

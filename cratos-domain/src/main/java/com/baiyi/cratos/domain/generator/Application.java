@@ -1,7 +1,10 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.generator.base.HasValid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -14,6 +17,9 @@ import java.util.Date;
  * 表注释：聚合应用
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Application implements HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

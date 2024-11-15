@@ -4,16 +4,13 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
-import com.baiyi.cratos.facade.ApplicationFacade;
+import com.baiyi.cratos.facade.application.ApplicationFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * &#064;Author  baiyi
@@ -32,6 +29,34 @@ public class ApplicationController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ApplicationVO.Application>> queryApplicationPage(@RequestBody @Valid ApplicationParam.ApplicationPageQuery pageQuery) {
         return new HttpResult<>(applicationFacade.queryApplicationPage(pageQuery));
+    }
+
+    @Operation(summary = "Add application")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addApplication(@RequestBody @Valid ApplicationParam.AddApplication addApplication) {
+        applicationFacade.addApplication(addApplication);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update application")
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateApplication(@RequestBody @Valid ApplicationParam.UpdateApplication updateApplication) {
+        applicationFacade.updateApplication(updateApplication);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update application valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setApplicationValidById(@RequestParam int id) {
+        applicationFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete application by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteApplicationById(@RequestParam int id) {
+        applicationFacade.deleteById(id);
+        return HttpResult.SUCCESS;
     }
 
 }

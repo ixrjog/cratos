@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.wrapper.kubernetes.KubernetesResourceTemplateMemberWrapper;
@@ -51,8 +52,8 @@ public class KubernetesResourceTemplateMemberFacadeImpl implements KubernetesRes
     }
 
     @Override
-    public void setValidById(int id) {
-        templateMemberService.updateValidById(id);
+    public BaseValidService<?, ?> getValidService() {
+        return templateMemberService;
     }
 
     @Override

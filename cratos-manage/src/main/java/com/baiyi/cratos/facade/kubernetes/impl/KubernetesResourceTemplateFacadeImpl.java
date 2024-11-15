@@ -21,6 +21,7 @@ import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceBuilder;
 import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceTemplateBuilder;
 import com.baiyi.cratos.facade.kubernetes.util.KubernetesResourceTemplateMemberBuilder;
 import com.baiyi.cratos.facade.kubernetes.util.TemplateCustomMerger;
+import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
@@ -86,8 +87,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     }
 
     @Override
-    public void setValidById(int id) {
-        templateService.updateValidById(id);
+    public BaseValidService<?, ?> getValidService() {
+        return templateService;
     }
 
     @Override

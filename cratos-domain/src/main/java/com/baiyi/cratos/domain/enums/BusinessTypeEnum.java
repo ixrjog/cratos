@@ -48,6 +48,7 @@ public enum BusinessTypeEnum {
     SERVER,
     SERVER_ACCOUNT,
 
+    EDS_ASSET,
     EDS_ASSET_INDEX,
 
     TRAFFIC_LAYER_DOMAIN,
