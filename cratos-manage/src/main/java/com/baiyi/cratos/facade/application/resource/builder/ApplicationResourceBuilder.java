@@ -1,7 +1,8 @@
-package com.baiyi.cratos.facade.application.builder;
+package com.baiyi.cratos.facade.application.resource.builder;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;
 
 import java.util.Optional;
 
@@ -12,10 +13,6 @@ import java.util.Optional;
  */
 public class ApplicationResourceBuilder {
 
-    public enum Type {
-        KUBERNETES_RESOURCE,
-        REPOSITORY_RESOURCE
-    }
 
     private Application application;
 
@@ -27,7 +24,7 @@ public class ApplicationResourceBuilder {
 
     private EdsAssetIndex sshUrlIndex;
 
-    private Type type;
+    private ResourceScannerFactory.Type type;
 
     public static ApplicationResourceBuilder newBuilder() {
         return new ApplicationResourceBuilder();
@@ -48,7 +45,7 @@ public class ApplicationResourceBuilder {
         return this;
     }
 
-    public ApplicationResourceBuilder withType(Type type) {
+    public ApplicationResourceBuilder withType(ResourceScannerFactory.Type type) {
         this.type = type;
         return this;
     }
