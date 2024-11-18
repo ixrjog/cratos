@@ -62,7 +62,7 @@ public class AwsSnsRepo {
      * @param topicArn
      * @return
      */
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_1H, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:TOPIC:ARN:' + #topicArn", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:TOPIC:ARN:' + #topicArn", unless = "#result == null")
     public Map<String, String> getTopicAttributes(String regionId, EdsAwsConfigModel.Aws aws, String topicArn) {
         GetTopicAttributesRequest request = new GetTopicAttributesRequest();
         request.setTopicArn(topicArn);
@@ -71,7 +71,7 @@ public class AwsSnsRepo {
         return result.getAttributes();
     }
 
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_1H, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:SUBSCRIPTION:ARN:' + #subscriptionArn", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:SUBSCRIPTION:ARN:' + #subscriptionArn", unless = "#result == null")
     public Map<String, String> getSubscriptionAttributes(String regionId, EdsAwsConfigModel.Aws aws,
                                                          String subscriptionArn) {
         GetSubscriptionAttributesRequest request = new GetSubscriptionAttributesRequest();

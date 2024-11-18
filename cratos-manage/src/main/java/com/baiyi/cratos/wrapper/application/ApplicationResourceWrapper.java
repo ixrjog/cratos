@@ -36,7 +36,7 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
     public void wrap(ApplicationResourceVO.Resource vo) {
     }
 
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_2H, key = "'APPLICATION:RESOURCES:NAME:' + #hasApplicationResources.applicationName", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.LONG_TERM, key = "'APPLICATION:RESOURCES:NAME:' + #hasApplicationResources.applicationName", unless = "#result == null")
     public void wrap(ApplicationResourceVO.HasApplicationResources hasApplicationResources) {
         if (StringUtils.hasText(hasApplicationResources.getApplicationName())) {
             List<ApplicationResource> applicationResources = resourceService.queryByApplicationName(
@@ -51,7 +51,7 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
         }
     }
 
-    @CacheEvict(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_2H,key = "'APPLICATION:RESOURCES:NAME:' + #scanResource.name")
+    @CacheEvict(cacheNames = CachingConfiguration.RepositoryName.LONG_TERM, key = "'APPLICATION:RESOURCES:NAME:' + #scanResource.name")
     public void clean(ApplicationParam.ScanResource scanResource) {
     }
 

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
-import static com.baiyi.cratos.common.configuration.CachingConfiguration.Repositories.CACHE_FOR_1H;
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.SHORT_TERM;
 
 /**
  * @Author baiyi
@@ -30,7 +30,7 @@ public class DingtalkDepartmentRepo extends BaseDingtalkToken {
         this.dingtalkDepartmentService = dingtalkDepartmentService;
     }
 
-    @Cacheable(cacheNames = CACHE_FOR_1H, key = "'DINGTALK:DEPT:LISTSUBID:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #listSubDepartmentId.deptId", unless = "#result == null")
+    @Cacheable(cacheNames = SHORT_TERM, key = "'DINGTALK:DEPT:LISTSUBID:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #listSubDepartmentId.deptId", unless = "#result == null")
     public DingtalkDepartment.DepartmentSubIdResult listSubId(EdsDingtalkConfigModel.Dingtalk dingtalk,
                                                               DingtalkDepartmentParam.ListSubDepartmentId listSubDepartmentId) {
         DingtalkToken.TokenResult tokenResult = getToken(dingtalk);
@@ -38,7 +38,7 @@ public class DingtalkDepartmentRepo extends BaseDingtalkToken {
         return dingtalkDepartmentService.listSubId(tokenResult.getAccessToken(), listSubDepartmentId);
     }
 
-    @Cacheable(cacheNames = CACHE_FOR_1H, key = "'DINGTALK:DEPT:GET:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #getDepartment.deptId", unless = "#result == null")
+    @Cacheable(cacheNames = SHORT_TERM, key = "'DINGTALK:DEPT:GET:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #getDepartment.deptId", unless = "#result == null")
     public DingtalkDepartment.GetDepartmentResult get(EdsDingtalkConfigModel.Dingtalk dingtalk,
                                                       DingtalkDepartmentParam.GetDepartment getDepartment) {
         DingtalkToken.TokenResult tokenResult = getToken(dingtalk);

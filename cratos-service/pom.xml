@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
-            <artifactId>cratos-domain</artifactId>
+            <artifactId>cratos-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

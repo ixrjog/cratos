@@ -69,7 +69,7 @@ public class AwsSqsRepo {
      * @param queueUrl
      * @return
      */
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_1H, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl", unless = "#result == null")
     public Map<String, String> getQueueAttributes(String regionId, EdsAwsConfigModel.Aws aws, String queueUrl) {
         GetQueueAttributesRequest request = new GetQueueAttributesRequest();
         request.setAttributeNames(Lists.newArrayList("All"));
@@ -79,7 +79,7 @@ public class AwsSqsRepo {
         return result.getAttributes();
     }
 
-    @CacheEvict(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_1H, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl")
+    @CacheEvict(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl")
     public void evictQueueAttributes(String regionId, EdsAwsConfigModel.Aws aws, String queueUrl) {
     }
 

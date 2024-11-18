@@ -20,7 +20,7 @@ public class Ec2InstancesRepo {
 
     private final Ec2InstancesService ec2InstancesService;
 
-    @Cacheable(cacheNames = CachingConfiguration.Repositories.CACHE_FOR_2H, key = "'AWS:EC2:INSTANCES'", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.LONG_TERM, key = "'AWS:EC2:INSTANCES'", unless = "#result == null")
     public Map<String, InstanceModel.EC2InstanceType> getInstances() {
         return ec2InstancesService.getInstances();
     }

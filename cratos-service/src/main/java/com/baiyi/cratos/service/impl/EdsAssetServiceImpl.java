@@ -12,10 +12,14 @@ import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
+
 
 /**
  * @Author baiyi
@@ -30,6 +34,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     private final EdsAssetMapper edsAssetMapper;
 
     @Override
+    @Cacheable(cacheNames = LONG_TERM , key = "'DOMAIN:EDSASSET:INSTANCEID:' + #record.instanceId + ':ASSETTYPE:' + #record.assetType + ':ASSETKEY:' + #record.assetKey", unless = "#result == null")
     public EdsAsset getByUniqueKey(@NonNull EdsAsset record) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();

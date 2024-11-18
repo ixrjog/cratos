@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -32,26 +36,47 @@ import java.util.stream.Collectors;
 @EnableCaching
 public class CachingConfiguration {
 
-    public interface Repositories {
-        String DEFAULT = "OC5:REPO:DEF:";
-        String CACHE_FOR_10S = "OC5:REPO:10s:";
-        String CACHE_FOR_10M = "OC5:REPO:10m:";
-        String CACHE_FOR_1H = "OC5:REPO:1h:";
-        String CACHE_FOR_2H = "OC5:REPO:2h:";
+    public interface RepositoryName {
+        String LONG_TERM = "CR30d:";
+        String TEMPORARY = "CR10s:";
+        String VERY_SHORT = "CR10m:";
+        String SHORT_TERM = "CR1h:";
     }
 
-    private static final List<CacheProperties.Repo> REPOS = Lists.newArrayList(
-            CacheProperties.Repo.DEFAULT,
-            CacheProperties.Repo.CACHE_FOR_10S,
-            CacheProperties.Repo.CACHE_FOR_10M,
-            CacheProperties.Repo.CACHE_FOR_1H,
-            CacheProperties.Repo.CACHE_FOR_2H
-    );
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CacheRepository {
+        public static final CacheRepository LONG_TERM = CacheRepository.builder()
+                .name(RepositoryName.LONG_TERM)
+                .ttl((Duration.ofDays(30)))
+                .build();
+        public static final CacheRepository SHORT_TERM = CacheRepository.builder()
+                .name(RepositoryName.SHORT_TERM)
+                .ttl((Duration.ofHours(1)))
+                .build();
+        public static final CacheRepository TEMPORARY = CacheRepository.builder()
+                .name(RepositoryName.TEMPORARY)
+                .ttl((Duration.ofSeconds(10)))
+                .build();
+        public static final CacheRepository VERY_SHORT = CacheRepository.builder()
+                .name(RepositoryName.VERY_SHORT)
+                .ttl((Duration.ofMinutes(10)))
+                .build();
+        private String name;
+        private Duration ttl;
+    }
+
+    private static final List<CacheRepository> REPOS = Lists.newArrayList(CacheRepository.LONG_TERM,
+            CacheRepository.TEMPORARY, CacheRepository.VERY_SHORT, CacheRepository.SHORT_TERM);
 
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         // 设置一个初始化的缓存空间set集合
-        Set<String> cacheNames = REPOS.stream().map(CacheProperties.Repo::getName).collect(Collectors.toSet());
+        Set<String> cacheNames = REPOS.stream()
+                .map(CacheRepository::getName)
+                .collect(Collectors.toSet());
         // 使用自定义的缓存配置初始化一个cacheManager
         return RedisCacheManager.builder(factory)
                 // 注意这两句的调用顺序，一定要先调用该方法设置初始化的缓存名，
@@ -92,7 +117,8 @@ public class CachingConfiguration {
         // 指定序列化输入的类型，类必须是非final修饰的，final修饰的类，比如String,Integer等会跑出异常
         om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL);
         //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(om, Object.class);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(om,
+                Object.class);
 
         //使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(new StringRedisSerializer());
