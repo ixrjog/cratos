@@ -37,7 +37,6 @@ public class ApplicationConfigModel {
         }
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Builder
@@ -49,15 +48,19 @@ public class ApplicationConfigModel {
         @Builder.Default
         private Map<String, String> data = Maps.newHashMap();
 
-        //        @Builder.Default
-//        private Set<String> namespaces = Sets.newHashSet();
-//        @Builder.Default
-//        private Set<String> kinds = Sets.newHashSet();
-
+        private App application;
         private Repository repository;
-
         private List<Repository> repositories;
 
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class App {
+        private String name;
+        private String service;
     }
 
     @Data

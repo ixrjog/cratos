@@ -1,11 +1,16 @@
 package com.baiyi.cratos.facade.application.resource.scanner;
 
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -16,8 +21,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public abstract class BaseResourceScanner implements ResourceScanner {
 
-    protected final EdsAssetIndexService edsAssetIndexService;
+    protected final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;
+    protected final EdsAssetIndexService edsAssetIndexService;
     protected final ApplicationResourceService applicationResourceService;
 
     protected void saveResource(ApplicationResource applicationResource) {
@@ -28,6 +34,15 @@ public abstract class BaseResourceScanner implements ResourceScanner {
             applicationResource.setId(resource.getId());
             applicationResourceService.updateByPrimaryKey(applicationResource);
         }
+    }
+
+    protected EdsInstance getEdsInstance(Map<Integer, EdsInstance> instanceMap, EdsAsset edsAsset) {
+        if (instanceMap.containsKey(edsAsset.getInstanceId())) {
+            return instanceMap.get(edsAsset.getInstanceId());
+        }
+        EdsInstance instance = edsInstanceService.getById(edsAsset.getInstanceId());
+        instanceMap.put(edsAsset.getInstanceId(), instance);
+        return instance;
     }
 
 }
