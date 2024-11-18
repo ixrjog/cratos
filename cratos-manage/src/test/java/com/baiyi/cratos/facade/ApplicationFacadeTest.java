@@ -34,7 +34,7 @@ public class ApplicationFacadeTest extends BaseUnit {
 
     @Test
     void resourceScanTest() {
-        applicationResourceFacade.scan("account");
+        applicationResourceFacade.scan("kili");
     }
 
 }

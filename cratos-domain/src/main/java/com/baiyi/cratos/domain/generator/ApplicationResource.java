@@ -25,7 +25,13 @@ public class ApplicationResource {
     @Column(name = "application_name")
     private String applicationName;
 
+    @Column(name = "instance_name")
+    private String instanceName;
+
     private String name;
+
+    @Column(name = "display_name")
+    private String displayName;
 
     @Column(name = "resource_type")
     private String resourceType;

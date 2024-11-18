@@ -1,10 +1,7 @@
 package com.baiyi.cratos.facade.application.builder;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Application;
-import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.*;
 
 import java.util.Optional;
 
@@ -21,6 +18,8 @@ public class ApplicationResourceBuilder {
     }
 
     private Application application;
+
+    private EdsInstance edsInstance;
 
     private EdsAsset edsAsset;
 
@@ -59,6 +58,11 @@ public class ApplicationResourceBuilder {
         return this;
     }
 
+    public ApplicationResourceBuilder withEdsInstance(EdsInstance edsInstance) {
+        this.edsInstance = edsInstance;
+        return this;
+    }
+
     public ApplicationResource build() {
         return switch (this.type) {
             case KUBERNETES_RESOURCE -> buildWithKubernetesResource();
@@ -67,28 +71,27 @@ public class ApplicationResourceBuilder {
         };
     }
 
-    private ApplicationResource buildWithKubernetesResource() {
+    private ApplicationResource.ApplicationResourceBuilder init() {
         return ApplicationResource.builder()
                 .applicationName(application.getName())
                 .resourceType(edsAsset.getAssetType())
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(edsAsset.getId())
+                .instanceName(edsInstance.getInstanceName())
                 .name(edsAsset.getName())
-                .namespace(Optional.ofNullable(namespaceIndex)
+                .displayName(edsAsset.getName())
+                .comment(edsAsset.getDescription());
+    }
+
+    private ApplicationResource buildWithKubernetesResource() {
+        return init().namespace(Optional.ofNullable(namespaceIndex)
                         .map(EdsAssetIndex::getValue)
                         .orElse(null))
-                .comment(edsAsset.getDescription())
                 .build();
     }
 
     private ApplicationResource buildWithRepositoryResource() {
-        return ApplicationResource.builder()
-                .applicationName(application.getName())
-                .resourceType(edsAsset.getAssetType())
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(edsAsset.getId())
-                .name(sshUrlIndex.getValue())
-                .comment(edsAsset.getDescription())
+        return init().displayName(sshUrlIndex.getValue())
                 .build();
     }
 

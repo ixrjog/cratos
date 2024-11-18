@@ -31,7 +31,9 @@ public class ApplicationResourceVO {
         private static final long serialVersionUID = -6075619901692988480L;
         private Integer id;
         private String applicationName;
+        private String instanceName;
         private String name;
+        private String displayName;
         private String resourceType;
         private String businessType;
         private Integer businessId;

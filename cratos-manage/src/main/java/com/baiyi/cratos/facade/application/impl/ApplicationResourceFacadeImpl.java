@@ -9,10 +9,7 @@ import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.builder.ApplicationResourceBuilder;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
-import com.baiyi.cratos.service.ApplicationResourceService;
-import com.baiyi.cratos.service.ApplicationService;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -38,6 +35,8 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
 
     private final EdsAssetIndexService edsAssetIndexService;
 
+    private final EdsInstanceService edsInstanceService;
+
     private final EdsAssetService edsAssetService;
 
     @Override
@@ -48,11 +47,11 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
             return;
         }
         ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
-        bindKubernetesAssetFromIndices(application);
-        bindRepositoryAssetFromIndices(application, config);
+        scanAndBindKubernetesAssets(application);
+        scanAndBindRepositoryAssets(application, config);
     }
 
-    private void bindKubernetesAssetFromIndices(Application application) {
+    private void scanAndBindKubernetesAssets(Application application) {
         List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(
                 EdsAssetIndexConstants.KUBERNETES_APP_NAME, application.getName());
         indices.forEach(edsAssetIndex -> {
@@ -74,7 +73,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
         });
     }
 
-    private void bindRepositoryAssetFromIndices(Application application, ApplicationConfigModel.Config config) {
+    private void scanAndBindRepositoryAssets(Application application, ApplicationConfigModel.Config config) {
         String sshUrl = Optional.ofNullable(config)
                 .map(ApplicationConfigModel.Config::getRepository)
                 .map(ApplicationConfigModel.Repository::getSshUrl)
