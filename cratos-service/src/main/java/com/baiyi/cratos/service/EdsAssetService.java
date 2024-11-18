@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -17,10 +18,12 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType);
 
-    List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType,String region);
+    List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType, String region);
 
     DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery);
 
     List<EdsAsset> queryAssetByParam(String assetKey, String assetType);
+
+    void clear(@NonNull EdsAsset record);
 
 }

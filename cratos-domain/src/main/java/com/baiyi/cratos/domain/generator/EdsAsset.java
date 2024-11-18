@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +20,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "eds_asset")
-public class EdsAsset implements HasValid {
+public class EdsAsset implements HasValid , Serializable {
+    @Serial
+    private static final long serialVersionUID = -6586687065291521613L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
