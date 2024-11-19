@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade {
 
     private final ApplicationService applicationService;
+    private final ApplicationResourceService resourceService;
 
     @Override
     public void scan(String applicationName) {
@@ -30,6 +31,11 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
         }
         ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
         ResourceScannerFactory.scanAndBindAssets(application, config);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        resourceService.deleteById(id);
     }
 
 }

@@ -1,11 +1,14 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.mapper.ApplicationResourceMapper;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -25,6 +28,7 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     private final ApplicationResourceMapper applicationResourceMapper;
 
     @Override
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.LONG_TERM, key = "'DOMAIN:APPLICATIONRESOURCE:APPLICATIONNAME:' + #applicationName", unless = "#result == null")
     public List<ApplicationResource> queryByApplicationName(String applicationName) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();
@@ -42,9 +46,34 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
         return applicationResourceMapper.selectOneByExample(example);
     }
 
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATIONRESOURCE:APPLICATIONNAME:' + #applicationName")
+    public void clear(String applicationName) {
+    }
+
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATIONRESOURCE:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    public void add(ApplicationResource record) {
+        ApplicationResourceService.super.add(record);
+        ((ApplicationResourceService) AopContext.currentProxy()).clear(record.getApplicationName());
+    }
+
+    @Override
+    public void updateByPrimaryKey(ApplicationResource record) {
+        ApplicationResourceService.super.updateByPrimaryKey(record);
+        ((ApplicationResourceService) AopContext.currentProxy()).clear(record.getApplicationName());
+    }
+
+    @Override
+    public void deleteById(int id) {
+        ApplicationResource record = getById(id);
+        if (record != null) {
+            ApplicationResourceService.super.deleteById(id);
+            clear(record.getApplicationName());
+        }
     }
 
 }

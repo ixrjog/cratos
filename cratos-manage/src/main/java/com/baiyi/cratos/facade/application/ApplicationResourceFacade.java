@@ -8,4 +8,6 @@ package com.baiyi.cratos.facade.application;
 public interface ApplicationResourceFacade {
 
     void scan(String applicationName);
+
+    void deleteById(int id);
 }

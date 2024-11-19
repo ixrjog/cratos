@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
+import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
 
     private final ApplicationFacade applicationFacade;
+    private final ApplicationResourceFacade applicationResourceFacade;
 
     @Operation(summary = "Pagination query application")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +67,13 @@ public class ApplicationController {
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteApplicationById(@RequestParam int id) {
         applicationFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete application resource by id")
+    @DeleteMapping(value = "/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteApplicationResourceById(@RequestParam int id) {
+        applicationResourceFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
 

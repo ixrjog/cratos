@@ -57,7 +57,7 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
 
     @Override
     public void scanApplicationResource(ApplicationParam.ScanResource scanResource) {
-        applicationResourceWrapper.clean(scanResource);
+        //applicationResourceWrapper.clean(scanResource);
         resourceFacade.scan(scanResource.getName());
     }
 
