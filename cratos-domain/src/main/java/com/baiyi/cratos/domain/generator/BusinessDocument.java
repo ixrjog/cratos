@@ -1,14 +1,19 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Table(name = "business_document")
-public class BusinessDocument implements BaseBusiness.HasBusiness {
+public class BusinessDocument implements BaseBusiness.HasBusiness, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 5931340313604570353L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

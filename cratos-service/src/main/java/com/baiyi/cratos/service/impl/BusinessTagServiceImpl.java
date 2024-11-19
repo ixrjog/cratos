@@ -11,10 +11,13 @@ import com.baiyi.cratos.service.BusinessTagService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -82,6 +85,11 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         criteria.andEqualTo("businessType", businessType)
                 .andEqualTo("tagId", tagId);
         return businessTagMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:BUSINESSTAG:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

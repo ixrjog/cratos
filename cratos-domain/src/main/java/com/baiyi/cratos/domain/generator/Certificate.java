@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import lombok.AllArgsConstructor;
@@ -11,13 +12,17 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Certificate implements HasValid, ToBusinessTarget {
+public class Certificate implements HasValid, ToBusinessTarget, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = -8880637546910076173L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

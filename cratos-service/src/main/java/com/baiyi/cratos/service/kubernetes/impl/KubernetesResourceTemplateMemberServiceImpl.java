@@ -9,10 +9,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -60,6 +63,11 @@ public class KubernetesResourceTemplateMemberServiceImpl implements KubernetesRe
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("templateId", templateId);
         return getMapper().selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:KUBERNETESRESOURCETEMPLATEMEMBER:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

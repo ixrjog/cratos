@@ -34,4 +34,6 @@ public interface EdsAssetIndexService extends BaseUniqueKeyService<EdsAssetIndex
 
     EdsAssetIndex getByAssetIdAndName(int assetId, String name);
 
+    void clear(@NonNull EdsAssetIndex record);
+
 }

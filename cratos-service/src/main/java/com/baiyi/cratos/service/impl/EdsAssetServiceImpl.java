@@ -53,7 +53,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     @Override
     public void updateByPrimaryKey(@NonNull EdsAsset record) {
         ((EdsAssetService) AopContext.currentProxy()).clear(record);
-        edsAssetMapper.updateByPrimaryKey(record);
+        EdsAssetService.super.updateByPrimaryKey(record);
     }
 
     @Override
@@ -95,8 +95,12 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
-        ((EdsAssetService) AopContext.currentProxy()).clear(getById(id));
-        edsAssetMapper.deleteByPrimaryKey(id);
+        EdsAssetService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSET:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

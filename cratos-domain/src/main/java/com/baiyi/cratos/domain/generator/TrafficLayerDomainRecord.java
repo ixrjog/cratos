@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,18 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 表名：traffic_layer_domain_record
  * 表注释：流量层记录
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "traffic_layer_domain_record")
-public class TrafficLayerDomainRecord implements HasValid {
+public class TrafficLayerDomainRecord implements HasValid, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = -4624837769706561505L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

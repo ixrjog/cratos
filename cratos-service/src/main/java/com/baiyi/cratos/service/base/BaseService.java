@@ -2,10 +2,12 @@ package com.baiyi.cratos.service.base;
 
 import com.baiyi.cratos.annotation.DomainDecrypt;
 import com.baiyi.cratos.annotation.DomainEncrypt;
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.util.BeanNameConverter;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.domain.util.SpringContextUtil;
 import com.google.common.collect.Lists;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.entity.Example;
@@ -18,7 +20,7 @@ import java.util.List;
  * @Version 1.0
  */
 
-public interface BaseService<T, M extends Mapper<T>> {
+public interface BaseService<T extends HasIntegerPrimaryKey, M extends Mapper<T>> {
 
     @SuppressWarnings("unchecked")
     default M getMapper() {
@@ -41,18 +43,24 @@ public interface BaseService<T, M extends Mapper<T>> {
 
     // 方法映射
     default void updateByPrimaryKey(T record) {
+        ((BaseService<?, ?>) AopContext.currentProxy()).clearCacheById(record.getId());
         getMapper().updateByPrimaryKey(record);
     }
 
     // 方法映射
-    default void updateByPrimaryKeySelective(T t) {
-        getMapper().updateByPrimaryKeySelective(t);
+    default void updateByPrimaryKeySelective(T record) {
+        ((BaseService<?, ?>) AopContext.currentProxy()).clearCacheById(record.getId());
+        getMapper().updateByPrimaryKeySelective(record);
     }
 
     // 方法映射
     default void deleteById(int id) {
+        ((BaseService<?, ?>) AopContext.currentProxy()).clearCacheById(id);
         getMapper().deleteByPrimaryKey(id);
     }
+
+    // CacheEvict
+    void clearCacheById(int id);
 
     // 方法映射
     default List<T> selectAll() {

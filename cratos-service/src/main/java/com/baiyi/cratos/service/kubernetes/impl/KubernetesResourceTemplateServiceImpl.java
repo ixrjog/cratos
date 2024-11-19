@@ -12,10 +12,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -47,7 +50,12 @@ public class KubernetesResourceTemplateServiceImpl implements KubernetesResource
 
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
-        kubernetesResourceTemplateMapper.deleteByPrimaryKey(id);
+        KubernetesResourceTemplateService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:KUBERNETESRESOURCETEMPLATE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

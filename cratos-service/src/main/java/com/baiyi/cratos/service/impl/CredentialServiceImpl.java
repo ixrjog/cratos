@@ -12,9 +12,12 @@ import com.baiyi.cratos.service.CredentialService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -51,7 +54,12 @@ public class CredentialServiceImpl implements CredentialService {
     // 删除证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
-        credentialMapper.deleteByPrimaryKey(id);
+        CredentialService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:CREDENTIAL:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

@@ -113,8 +113,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         }
         // copy template
         KubernetesResourceTemplate newTemplate = KubernetesResourceTemplateBuilder.newBuilder()
-                .copyTemplate(copyTemplate)
-                .template(kubernetesResourceTemplate)
+                .withCopyTemplate(copyTemplate)
+                .withTemplate(kubernetesResourceTemplate)
                 .copy();
         templateService.add(newTemplate);
         // copy members
@@ -129,8 +129,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         if (!CollectionUtils.isEmpty(members)) {
             for (KubernetesResourceTemplateMember member : members) {
                 templateMemberService.add(KubernetesResourceTemplateMemberBuilder.newBuilder()
-                        .member(member)
-                        .template(newTemplate)
+                        .withMember(member)
+                        .withTemplate(newTemplate)
                         .copy());
             }
         }
@@ -188,7 +188,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         KubernetesResourceTemplateCustom.Custom memberCustom = TemplateCustomMerger.newBuilder()
                 .mergeFrom(templateCustom)
                 .mergeTo(mainCustom)
-                .member(member)
+                .withMember(member)
                 .merge()
                 // 策略工厂重写变量
                 .rewrite()
@@ -199,10 +199,10 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         assets.forEach(asset -> {
             // 资产关联
             KubernetesResource resource = KubernetesResourceBuilder.newBuilder()
-                    .member(member)
-                    .edsAsset(asset)
-                    .memberCustom(memberCustom)
-                    .createdBy(createdBy)
+                    .withMember(member)
+                    .withEdsAsset(asset)
+                    .withMemberCustom(memberCustom)
+                    .withCreatedBy(createdBy)
                     .get();
             resourceService.add(resource);
         });

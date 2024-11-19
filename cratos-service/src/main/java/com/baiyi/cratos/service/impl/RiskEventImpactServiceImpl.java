@@ -5,14 +5,16 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
 import com.baiyi.cratos.domain.param.risk.RiskEventParam;
-import com.baiyi.cratos.domain.view.base.GraphVO;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
 import com.baiyi.cratos.service.RiskEventImpactService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -37,12 +39,17 @@ public class RiskEventImpactServiceImpl implements RiskEventImpactService {
     @Override
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
-        riskEventImpactMapper.deleteByPrimaryKey(id);
+        RiskEventImpactService.super.deleteById(id);
     }
 
     @Override
     public Integer queryTotalCostByParam(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
         return riskEventImpactMapper.queryTotalCostByParam(riskEventGraphQuery);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RISKEVENTIMPACT:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

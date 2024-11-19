@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
-import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
 import com.baiyi.cratos.domain.param.network.GlobalNetworkParam;
 import com.baiyi.cratos.mapper.GlobalNetworkMapper;
 import com.baiyi.cratos.service.GlobalNetworkService;
@@ -12,10 +11,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -51,6 +53,11 @@ public class GlobalNetworkServiceImpl implements GlobalNetworkService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("valid", true);
         return globalNetworkMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:GLOBALNETWORK:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

@@ -5,10 +5,13 @@ import com.baiyi.cratos.mapper.SshSessionInstanceMapper;
 import com.baiyi.cratos.service.SshSessionInstanceService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -35,6 +38,11 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sessionId", sessionId);
         return sshSessionInstanceMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:SSHSESSIONINSTANCE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

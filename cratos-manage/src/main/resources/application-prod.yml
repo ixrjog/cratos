@@ -34,6 +34,16 @@ spring:
     username: cratos
     password: ENC(nM5dGT70+lk67XzXtjXFyq8g/yQSP4KB)
     driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      test-while-idle: on
+      validation-query-timeout: 1000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      max-evictable-idle-time-millis: 1800000
+      keep-alive:
+      # 获取连接时的最大等待时间
+      max-wait: 1000
+      validation-query: 'SELECT 1'
   data:
     redis:
       host: r-d7obmf3lmgs0hpph5n.redis.eu-west-1.rds.aliyuncs.com

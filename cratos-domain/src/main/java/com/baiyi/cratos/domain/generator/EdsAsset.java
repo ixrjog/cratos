@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "eds_asset")
-public class EdsAsset implements HasValid , Serializable {
+public class EdsAsset implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial
     private static final long serialVersionUID = -6586687065291521613L;
     @Id

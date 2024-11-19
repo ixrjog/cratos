@@ -7,10 +7,13 @@ import com.baiyi.cratos.service.BusinessAssetBindService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 
 /**
@@ -58,6 +61,11 @@ public class BusinessAssetBindServiceImpl implements BusinessAssetBindService {
         criteria.andEqualTo("businessType", business.getBusinessType())
                 .andEqualTo("businessId", business.getBusinessId());
         return businessAssetBindMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:BUSINESSASSETBIND:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

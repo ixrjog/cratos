@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
@@ -12,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
@@ -19,7 +22,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EncryptedDomain
-public class User implements HasValid, ToBusinessTarget {
+public class User implements HasValid, ToBusinessTarget , HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 6763438049703094241L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

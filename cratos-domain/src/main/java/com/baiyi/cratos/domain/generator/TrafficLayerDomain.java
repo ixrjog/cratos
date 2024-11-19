@@ -1,18 +1,23 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 表名：traffic_layer_domain
  * 表注释：流量层域
-*/
+ */
 @Data
 @Table(name = "traffic_layer_domain")
-public class TrafficLayerDomain implements HasValid {
+public class TrafficLayerDomain implements HasValid, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 5174297149180604710L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

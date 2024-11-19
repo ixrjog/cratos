@@ -11,11 +11,14 @@ import com.baiyi.cratos.service.CertificateService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -57,7 +60,12 @@ public class CertificateServiceImpl implements CertificateService {
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
-        certificateMapper.deleteByPrimaryKey(id);
+        CertificateService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:CERTIFICATE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

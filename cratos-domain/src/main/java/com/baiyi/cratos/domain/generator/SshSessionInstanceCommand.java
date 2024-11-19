@@ -1,11 +1,14 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +19,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ssh_session_instance_command")
-public class SshSessionInstanceCommand {
+public class SshSessionInstanceCommand implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1062208452374338765L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

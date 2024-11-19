@@ -14,10 +14,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -66,6 +69,11 @@ public class EdsConfigServiceImpl implements EdsConfigService, ICredentialHolder
     public void afterPropertiesSet() {
         SupportBusinessServiceFactory.register(this);
         CredentialHolderFactory.register(this);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSCONFIG:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

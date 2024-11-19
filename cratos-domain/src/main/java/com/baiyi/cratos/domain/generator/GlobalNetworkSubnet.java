@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -20,7 +23,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "global_network_subnet")
-public class GlobalNetworkSubnet implements HasValid, ToBusinessTarget {
+public class GlobalNetworkSubnet implements HasValid, ToBusinessTarget, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 3624713065860787970L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

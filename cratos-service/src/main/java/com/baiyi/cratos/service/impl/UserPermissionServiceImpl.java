@@ -5,8 +5,11 @@ import com.baiyi.cratos.mapper.UserPermissionMapper;
 import com.baiyi.cratos.service.UserPermissionService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -27,6 +30,11 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                 .andEqualTo("businessId", record.getBusinessId())
                 .andEqualTo("username", record.getUsername());
         return userPermissionMapper.selectOneByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:USERPERMISSION:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

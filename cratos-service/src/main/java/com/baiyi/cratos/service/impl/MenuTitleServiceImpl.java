@@ -7,10 +7,13 @@ import com.baiyi.cratos.mapper.MenuTitleMapper;
 import com.baiyi.cratos.service.MenuTitleService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -40,6 +43,11 @@ public class MenuTitleServiceImpl implements MenuTitleService {
         criteria.andEqualTo("menuId", menuId);
         example.setOrderByClause("lang");
         return menuTitleMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:MENUTITLE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

@@ -1,13 +1,18 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Table(name = "rbac_user_role")
-public class RbacUserRole {
+public class RbacUserRole implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = -7878044424046729111L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

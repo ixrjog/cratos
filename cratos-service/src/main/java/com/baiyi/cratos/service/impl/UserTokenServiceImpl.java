@@ -5,10 +5,13 @@ import com.baiyi.cratos.mapper.UserTokenMapper;
 import com.baiyi.cratos.service.UserTokenService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -46,6 +49,12 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Override
     public UserToken getByUniqueKey(@NonNull UserToken record) {
         return getByToken(record.getToken());
+    }
+
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:USERTOKEN:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

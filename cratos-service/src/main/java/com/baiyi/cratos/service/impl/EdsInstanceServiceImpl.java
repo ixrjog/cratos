@@ -11,10 +11,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -58,6 +61,11 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
         criteria.andEqualTo("edsType", edsType)
                 .andEqualTo("valid", true);
         return edsInstanceMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSINSTANCE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

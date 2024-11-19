@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +21,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "risk_event")
-public class RiskEvent implements HasValid {
+public class RiskEvent implements HasValid, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 815139847154790002L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

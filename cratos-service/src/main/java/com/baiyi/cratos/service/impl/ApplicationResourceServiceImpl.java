@@ -5,10 +5,13 @@ import com.baiyi.cratos.mapper.ApplicationResourceMapper;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -37,6 +40,11 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
                 .andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("businessId", record.getBusinessId());
         return applicationResourceMapper.selectOneByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATIONRESOURCE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

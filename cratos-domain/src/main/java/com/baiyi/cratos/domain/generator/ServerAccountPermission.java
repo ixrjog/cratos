@@ -1,8 +1,11 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +14,9 @@ import java.util.Date;
 */
 @Data
 @Table(name = "server_account_permission")
-public class ServerAccountPermission {
+public class ServerAccountPermission implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1860798551077637387L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

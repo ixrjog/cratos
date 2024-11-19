@@ -8,10 +8,13 @@ import com.baiyi.cratos.mapper.BusinessDocumentMapper;
 import com.baiyi.cratos.service.BusinessDocumentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -36,13 +39,8 @@ public class BusinessDocumentServiceImpl implements BusinessDocumentService {
     }
 
     @Override
-    public void updateByPrimaryKey(BusinessDocument record) {
-        businessDocumentMapper.updateByPrimaryKey(record);
-    }
-
-    @Override
-    public void updateByPrimaryKeySelective(BusinessDocument businessDocument) {
-        businessDocumentMapper.updateByPrimaryKeySelective(businessDocument);
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:BUSINESSDOCUMENT:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

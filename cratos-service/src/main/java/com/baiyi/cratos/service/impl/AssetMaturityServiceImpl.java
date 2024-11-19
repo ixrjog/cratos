@@ -14,11 +14,14 @@ import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -61,7 +64,12 @@ public class AssetMaturityServiceImpl implements AssetMaturityService {
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
-        assetMaturityMapper.deleteByPrimaryKey(id);
+        AssetMaturityService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:ASSETMATURITY:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

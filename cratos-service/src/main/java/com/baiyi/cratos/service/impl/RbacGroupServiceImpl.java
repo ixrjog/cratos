@@ -9,10 +9,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -38,6 +41,11 @@ public class RbacGroupServiceImpl implements RbacGroupService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("groupName", record.getGroupName());
         return rbacGroupMapper.selectOneByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACGROUP:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

@@ -21,22 +21,22 @@ public class KubernetesResourceBuilder {
         return new KubernetesResourceBuilder();
     }
 
-    public KubernetesResourceBuilder member(KubernetesResourceTemplateMember member) {
+    public KubernetesResourceBuilder withMember(KubernetesResourceTemplateMember member) {
         this.member = member;
         return this;
     }
 
-    public KubernetesResourceBuilder edsAsset(EdsAsset edsAsset) {
+    public KubernetesResourceBuilder withEdsAsset(EdsAsset edsAsset) {
         this.edsAsset = edsAsset;
         return this;
     }
 
-    public KubernetesResourceBuilder createdBy(String createdBy) {
+    public KubernetesResourceBuilder withCreatedBy(String createdBy) {
         this.createdBy = createdBy;
         return this;
     }
 
-    public KubernetesResourceBuilder memberCustom(KubernetesResourceTemplateCustom.Custom memberCustom) {
+    public KubernetesResourceBuilder withMemberCustom(KubernetesResourceTemplateCustom.Custom memberCustom) {
         this.memberCustom = memberCustom;
         return this;
     }

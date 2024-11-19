@@ -1,12 +1,15 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
@@ -14,7 +17,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "business_tag")
-public class BusinessTag implements BaseBusiness.HasBusiness {
+public class BusinessTag implements BaseBusiness.HasBusiness, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 8112239664667850417L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

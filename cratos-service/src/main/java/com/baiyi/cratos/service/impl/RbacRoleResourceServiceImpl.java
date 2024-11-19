@@ -5,10 +5,13 @@ import com.baiyi.cratos.mapper.RbacRoleResourceMapper;
 import com.baiyi.cratos.service.RbacRoleResourceService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -52,6 +55,11 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("roleId", roleId);
         return rbacRoleResourceMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACROLERESOURCE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

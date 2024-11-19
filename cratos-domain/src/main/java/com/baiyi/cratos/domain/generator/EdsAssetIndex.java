@@ -1,23 +1,28 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 表名：eds_asset_index
  * 表注释：数据源实例资产
-*/
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "eds_asset_index")
-public class EdsAssetIndex {
+public class EdsAssetIndex implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = -4849818071687150451L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

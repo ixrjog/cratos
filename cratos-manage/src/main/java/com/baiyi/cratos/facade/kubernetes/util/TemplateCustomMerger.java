@@ -31,7 +31,7 @@ public class TemplateCustomMerger {
         return this;
     }
 
-    public TemplateCustomMerger member(KubernetesResourceTemplateMember member) {
+    public TemplateCustomMerger withMember(KubernetesResourceTemplateMember member) {
         this.member = member;
         return this;
     }

@@ -1,11 +1,14 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,7 +20,9 @@ import java.util.Date;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "notification_template")
-public class NotificationTemplate {
+public class NotificationTemplate implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 2431865182955709322L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

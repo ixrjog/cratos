@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,18 +8,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 表名：eds_instance
  * 表注释：外部数据源实例
-*/
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "eds_instance")
-public class EdsInstance implements HasValid {
+public class EdsInstance implements HasValid, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 7042061908757858546L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

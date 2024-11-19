@@ -5,10 +5,15 @@ import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -21,6 +26,10 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
 
     private final EdsAssetIndexMapper edsAssetIndexMapper;
 
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ASSETID:' + #record.assetId")
+    public void clear(@NonNull EdsAssetIndex record) {
+    }
+
     @Override
     public EdsAssetIndex getByUniqueKey(@NonNull EdsAssetIndex record) {
         Example example = new Example(EdsAssetIndex.class);
@@ -32,6 +41,18 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ID:' + #id")
+    public void clearCacheById(int id) {
+    }
+
+    @Override
+    public void updateByPrimaryKey(@NonNull EdsAssetIndex record) {
+        ((EdsAssetIndexService) AopContext.currentProxy()).clear(getById(record.getId()));
+        edsAssetIndexMapper.updateByPrimaryKey(record);
+    }
+
+    @Override
+    @Cacheable(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ASSETID:' + #assetId", unless = "#result == null")
     public List<EdsAssetIndex> queryIndexByAssetId(int assetId) {
         Example example = new Example(EdsAssetIndex.class);
         Example.Criteria criteria = example.createCriteria();

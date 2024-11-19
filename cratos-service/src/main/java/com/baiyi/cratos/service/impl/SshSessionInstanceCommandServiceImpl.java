@@ -1,7 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.RbacRoleResource;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
 import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
 import com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper;
@@ -9,10 +8,13 @@ import com.baiyi.cratos.service.SshSessionInstanceCommandService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * &#064;Author  baiyi
@@ -38,6 +40,11 @@ public class SshSessionInstanceCommandServiceImpl implements SshSessionInstanceC
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sshSessionInstanceId", sshSessionInstanceId);
         return sshSessionInstanceCommandMapper.selectCountByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:SSHSESSIONINSTANCECOMMAND:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

@@ -1,9 +1,12 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +14,9 @@ import java.util.Date;
  */
 @Data
 @Table(name = "kubernetes_resource_template_member")
-public class KubernetesResourceTemplateMember implements HasValid {
+public class KubernetesResourceTemplateMember implements HasValid, HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = -3237152381735938155L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,11 +1,14 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,7 +20,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "application_resource")
-public class ApplicationResource {
+public class ApplicationResource implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 8847037734490068571L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

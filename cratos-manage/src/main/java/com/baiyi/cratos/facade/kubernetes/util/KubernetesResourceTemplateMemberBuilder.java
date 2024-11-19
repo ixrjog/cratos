@@ -18,12 +18,12 @@ public class KubernetesResourceTemplateMemberBuilder {
         return new KubernetesResourceTemplateMemberBuilder();
     }
 
-    public KubernetesResourceTemplateMemberBuilder member(KubernetesResourceTemplateMember member) {
+    public KubernetesResourceTemplateMemberBuilder withMember(KubernetesResourceTemplateMember member) {
         this.member = member;
         return this;
     }
 
-    public KubernetesResourceTemplateMemberBuilder template(KubernetesResourceTemplate template) {
+    public KubernetesResourceTemplateMemberBuilder withTemplate(KubernetesResourceTemplate template) {
         this.template = template;
         return this;
     }

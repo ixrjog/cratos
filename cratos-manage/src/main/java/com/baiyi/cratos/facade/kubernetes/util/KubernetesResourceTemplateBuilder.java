@@ -17,12 +17,12 @@ public class KubernetesResourceTemplateBuilder {
         return new KubernetesResourceTemplateBuilder();
     }
 
-    public KubernetesResourceTemplateBuilder template(KubernetesResourceTemplate template) {
+    public KubernetesResourceTemplateBuilder withTemplate(KubernetesResourceTemplate template) {
         this.template = template;
         return this;
     }
 
-    public KubernetesResourceTemplateBuilder copyTemplate(KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
+    public KubernetesResourceTemplateBuilder withCopyTemplate(KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
         this.copyTemplate = copyTemplate;
         return this;
     }

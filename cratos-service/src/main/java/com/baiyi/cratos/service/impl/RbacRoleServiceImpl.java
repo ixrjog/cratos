@@ -8,9 +8,12 @@ import com.baiyi.cratos.service.RbacRoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -28,6 +31,11 @@ public class RbacRoleServiceImpl implements RbacRoleService {
         Page<RbacRole> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<RbacRole> data = rbacRoleMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACROLE:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

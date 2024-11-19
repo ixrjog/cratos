@@ -11,11 +11,14 @@ import com.baiyi.cratos.service.CredentialService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -76,6 +79,11 @@ public class BusinessCredentialServiceImpl implements BusinessCredentialService 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("credentialId", credentialId);
         return businessCredentialMapper.selectByExample(example);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:BUSINESSCREDENTIAL:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }

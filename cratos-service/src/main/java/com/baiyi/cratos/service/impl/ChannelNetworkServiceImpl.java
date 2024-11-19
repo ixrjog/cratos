@@ -11,9 +11,12 @@ import com.baiyi.cratos.service.ChannelNetworkService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
  * @Author baiyi
@@ -37,7 +40,12 @@ public class ChannelNetworkServiceImpl implements ChannelNetworkService {
     @Override
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
-        channelNetworkMapper.deleteByPrimaryKey(id);
+        ChannelNetworkService.super.deleteById(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:CHANNELNETWORK:ID:' + #id")
+    public void clearCacheById(int id) {
     }
 
 }
