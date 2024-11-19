@@ -57,22 +57,22 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
 
     @Override
     public void add(ApplicationResource record) {
-        ApplicationResourceService.super.add(record);
         ((ApplicationResourceService) AopContext.currentProxy()).clear(record.getApplicationName());
+        ApplicationResourceService.super.add(record);
     }
 
     @Override
     public void updateByPrimaryKey(ApplicationResource record) {
-        ApplicationResourceService.super.updateByPrimaryKey(record);
         ((ApplicationResourceService) AopContext.currentProxy()).clear(record.getApplicationName());
+        ApplicationResourceService.super.updateByPrimaryKey(record);
     }
 
     @Override
     public void deleteById(int id) {
         ApplicationResource record = getById(id);
         if (record != null) {
+            ((ApplicationResourceService) AopContext.currentProxy()).clear(record.getApplicationName());
             ApplicationResourceService.super.deleteById(id);
-            clear(record.getApplicationName());
         }
     }
 
