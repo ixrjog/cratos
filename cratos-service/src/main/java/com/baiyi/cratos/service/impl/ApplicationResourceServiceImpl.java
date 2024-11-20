@@ -37,6 +37,17 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     }
 
     @Override
+    public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
+                                                              String namespace) {
+        Example example = new Example(ApplicationResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("applicationName", applicationName)
+                .andEqualTo("resourceType", resourceType)
+                .andEqualTo("namespace", namespace);
+        return applicationResourceMapper.selectByExample(example);
+    }
+
+    @Override
     public ApplicationResource getByUniqueKey(@NonNull ApplicationResource record) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();

@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="application_resource">
+        <table tableName="user_permission">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,14 +12,18 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 表名：user_permission
+ * 表注释：用户授权信息
+*/
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_permission")
-public class UserPermission implements HasIntegerPrimaryKey, Serializable {
+public class UserPermission implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial
-    private static final long serialVersionUID = -1898962933587914091L;
+    private static final long serialVersionUID = -4814282567975461201L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,10 +34,15 @@ public class UserPermission implements HasIntegerPrimaryKey, Serializable {
     private String username;
 
     /**
-     * 业务ID
+     * 资源名
      */
-    @Column(name = "business_id")
-    private Integer businessId;
+    private String name;
+
+    /**
+     * 显示名称
+     */
+    @Column(name = "display_name")
+    private String displayName;
 
     /**
      * 业务类型
@@ -41,10 +51,15 @@ public class UserPermission implements HasIntegerPrimaryKey, Serializable {
     private String businessType;
 
     /**
+     * 业务ID
+     */
+    @Column(name = "business_id")
+    private Integer businessId;
+
+    /**
      * 授权角色
      */
-    @Column(name = "permission_role")
-    private String permissionRole;
+    private String role;
 
     /**
      * 有效
@@ -52,9 +67,9 @@ public class UserPermission implements HasIntegerPrimaryKey, Serializable {
     private Boolean valid;
 
     /**
-     * 评分
+     * 顺序
      */
-    private Integer rate;
+    private Integer seq;
 
     private String content;
 
@@ -64,10 +79,10 @@ public class UserPermission implements HasIntegerPrimaryKey, Serializable {
     @Column(name = "expired_time")
     private Date expiredTime;
 
-    @Column(name = "create_time", insertable = false, updatable = false)
+    @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", insertable = false, updatable = false)
+    @Column(name = "update_time")
     private Date updateTime;
 
     private String comment;

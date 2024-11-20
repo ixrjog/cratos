@@ -81,4 +81,11 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Grant user permission")
+    @PostMapping(value = "/permission/grant", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> grantUserPermission(@RequestBody @Valid UserParam.ResetPassword resetPassword) {
+        userFacade.resetUserPassword(resetPassword);
+        return HttpResult.SUCCESS;
+    }
+
 }

@@ -17,4 +17,6 @@ public interface ApplicationResourceService extends BaseUniqueKeyService<Applica
 
     void clear(String applicationName);
 
+    List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType, String namespace);
+
 }

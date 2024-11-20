@@ -7,11 +7,13 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
     <result column="business_type" jdbcType="VARCHAR" property="businessType" />
-    <result column="permission_role" jdbcType="VARCHAR" property="permissionRole" />
+    <result column="business_id" jdbcType="INTEGER" property="businessId" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
     <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="rate" jdbcType="INTEGER" property="rate" />
+    <result column="seq" jdbcType="INTEGER" property="seq" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
