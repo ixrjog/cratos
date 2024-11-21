@@ -46,11 +46,11 @@ public class KubernetesPodVO {
         private static final long serialVersionUID = -7125606653208312785L;
         private Map<String,PodCondition> conditions;
         // private List<PodCondition> conditions = new ArrayList();
-        //  private List<ContainerStatus> containerStatuses = new ArrayList();
+        // private List<ContainerStatus> containerStatuses = new ArrayList();
         // private List<ContainerStatus> ephemeralContainerStatuses = new ArrayList();
         private String hostIP;
         // private List<HostIP> hostIPs = new ArrayList();
-        //  private List<ContainerStatus> initContainerStatuses = new ArrayList();
+        // private List<ContainerStatus> initContainerStatuses = new ArrayList();
         private String message;
         private String nominatedNodeName;
         private String phase;
@@ -92,6 +92,5 @@ public class KubernetesPodVO {
         private static final long serialVersionUID = 6481506875613911426L;
         private String nodeName;
     }
-
 
 }

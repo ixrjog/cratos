@@ -39,6 +39,32 @@ public class KubernetesDeploymentVO {
         @Serial
         private static final long serialVersionUID = 4549992231198483582L;
         private Integer replicas;
+        // 发布策略
+        private DeploymentStrategy strategy;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DeploymentStrategy implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -873459316958896176L;
+        private String type;
+        private RollingUpdateDeployment rollingUpdate;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class RollingUpdateDeployment implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8099732330091548272L;
+        private String maxSurge;
+        private String maxUnavailable;
     }
 
 }

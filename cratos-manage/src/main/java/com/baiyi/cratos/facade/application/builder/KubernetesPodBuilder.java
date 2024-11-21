@@ -40,7 +40,6 @@ public class KubernetesPodBuilder {
     public KubernetesPodVO.Pod build() {
         // 找出应用容器
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
-
         Map<String, KubernetesPodVO.PodCondition> conditions = this.pod.getStatus()
                 .getConditions()
                 .stream()

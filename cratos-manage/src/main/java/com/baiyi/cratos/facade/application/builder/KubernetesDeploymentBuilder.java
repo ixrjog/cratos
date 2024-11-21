@@ -35,9 +35,34 @@ public class KubernetesDeploymentBuilder {
     }
 
     public KubernetesDeploymentVO.Deployment build() {
+        KubernetesDeploymentVO.DeploymentStrategy strategy;
+        if (deployment.getSpec()
+                .getStrategy() != null) {
+            strategy = KubernetesDeploymentVO.DeploymentStrategy.builder()
+                    .type(deployment.getSpec()
+                            .getStrategy()
+                            .getType())
+                    .rollingUpdate(KubernetesDeploymentVO.RollingUpdateDeployment.builder()
+                            .maxSurge(deployment.getSpec()
+                                    .getStrategy()
+                                    .getRollingUpdate()
+                                    .getMaxSurge()
+                                    .getStrVal())
+                            .maxUnavailable(deployment.getSpec()
+                                    .getStrategy()
+                                    .getRollingUpdate()
+                                    .getMaxUnavailable()
+                                    .getStrVal())
+                            .build())
+                    .build();
+        } else {
+            strategy = KubernetesDeploymentVO.DeploymentStrategy.builder()
+                    .build();
+        }
         KubernetesDeploymentVO.DeploymentSpec spec = KubernetesDeploymentVO.DeploymentSpec.builder()
                 .replicas(this.deployment.getSpec()
                         .getReplicas())
+                .strategy(strategy)
                 .build();
         List<KubernetesPodVO.Pod> podList = CollectionUtils.isEmpty(
                 this.pods) ? Collections.emptyList() : this.pods.stream()

@@ -30,5 +30,4 @@ public class ApplicationKubernetesDeploymentFacadeTest extends BaseUnit {
         System.out.println(response);
     }
 
-
 }
