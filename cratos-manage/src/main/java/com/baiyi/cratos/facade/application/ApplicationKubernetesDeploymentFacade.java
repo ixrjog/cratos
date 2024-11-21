@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.application;
 
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.domain.param.application.ApplicationKubernetesParam;
-import com.baiyi.cratos.domain.view.application.ApplicationResourceKubernetesVO;
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 
 /**
  * &#064;Author  baiyi
@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.view.application.ApplicationResourceKubernetesVO;
  */
 public interface ApplicationKubernetesDeploymentFacade {
 
-    MessageResponse<ApplicationResourceKubernetesVO.KubernetesDetails> queryKubernetesDeploymentDetails(
+    MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDeploymentDetails(
             ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationKubernetesDeployment);
 
 }

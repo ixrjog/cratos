@@ -3,7 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.domain.param.application.ApplicationKubernetesParam;
-import com.baiyi.cratos.domain.view.application.ApplicationResourceKubernetesVO;
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,7 +30,7 @@ public class ApplicationResourceController {
 
     @Operation(summary = "Query application resource kubernetes details")
     @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<MessageResponse<ApplicationResourceKubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
+    public HttpResult<MessageResponse<KubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
             @RequestBody @Valid ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationResourceKubernetesDetails) {
         return new HttpResult<>(
                 deploymentFacade.queryKubernetesDeploymentDetails(queryApplicationResourceKubernetesDetails));

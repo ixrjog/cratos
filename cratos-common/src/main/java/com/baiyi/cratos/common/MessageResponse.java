@@ -17,9 +17,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageResponse<T> {
 
+    public interface Topics {
+        String APPLICATION_KUBERNETES_DETAILS = "APPLICATION_KUBERNETES_DETAILS";
+    }
+
     private T body;
 
-    private String messageType;
+    private String topic;
 
     @Override
     public String toString() {

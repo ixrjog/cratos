@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.param.application;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -12,6 +13,7 @@ import lombok.Data;
 public class ApplicationKubernetesParam {
 
     @Data
+    @Builder
     @Schema
     public static class QueryApplicationResourceKubernetesDetails {
         @NotBlank
