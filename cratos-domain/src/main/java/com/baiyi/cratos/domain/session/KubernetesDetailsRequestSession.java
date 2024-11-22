@@ -17,13 +17,7 @@ import java.util.Map;
 @Slf4j
 public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
 
-    /**
-     * Map<String sessionId, Map<String messageType, String message>>
-     */
-    private static Map<String, Map<String, ?>> requestMap = new HashedMap<>();
-
-
-    private static Map<String, Map<String, ? extends HasSocketRequest>> X = new HashedMap<>();
+    private static Map<String, Map<String, ? extends HasSocketRequest>> requestMap = new HashedMap<>();
 
     public static <T extends HasSocketRequest> void put(String sessionId, T message) {
         if (SocketActionRequestEnum.UNSUBSCRIBE.name()
