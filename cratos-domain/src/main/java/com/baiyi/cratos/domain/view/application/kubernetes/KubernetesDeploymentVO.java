@@ -51,6 +51,8 @@ public class KubernetesDeploymentVO {
     public static class DeploymentStrategy implements Serializable {
         @Serial
         private static final long serialVersionUID = -873459316958896176L;
+        public static final DeploymentStrategy EMPTY = DeploymentStrategy.builder()
+                .build();
         private String type;
         private RollingUpdateDeployment rollingUpdate;
     }

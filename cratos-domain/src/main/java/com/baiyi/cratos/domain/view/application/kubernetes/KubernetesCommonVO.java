@@ -22,10 +22,8 @@ public class KubernetesCommonVO {
     @NoArgsConstructor
     @Schema
     public static class Metadata implements Serializable {
-
         @Serial
         private static final long serialVersionUID = -8726652568141005882L;
-
         private String namespace;
         private String name;
         private String generateName;

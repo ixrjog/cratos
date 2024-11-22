@@ -34,47 +34,53 @@ public class KubernetesDeploymentBuilder {
         return this;
     }
 
-    public KubernetesDeploymentVO.Deployment build() {
-        KubernetesDeploymentVO.DeploymentStrategy strategy;
-        if (deployment.getSpec()
-                .getStrategy() != null) {
-            strategy = KubernetesDeploymentVO.DeploymentStrategy.builder()
-                    .type(deployment.getSpec()
-                            .getStrategy()
-                            .getType())
-                    .rollingUpdate(KubernetesDeploymentVO.RollingUpdateDeployment.builder()
-                            .maxSurge(deployment.getSpec()
-                                    .getStrategy()
-                                    .getRollingUpdate()
-                                    .getMaxSurge()
-                                    .getStrVal())
-                            .maxUnavailable(deployment.getSpec()
-                                    .getStrategy()
-                                    .getRollingUpdate()
-                                    .getMaxUnavailable()
-                                    .getStrVal())
-                            .build())
-                    .build();
-        } else {
-            strategy = KubernetesDeploymentVO.DeploymentStrategy.builder()
-                    .build();
-        }
-        KubernetesDeploymentVO.DeploymentSpec spec = KubernetesDeploymentVO.DeploymentSpec.builder()
+    private KubernetesDeploymentVO.RollingUpdateDeployment makeRollingUpdate() {
+        return KubernetesDeploymentVO.RollingUpdateDeployment.builder()
+                .maxSurge(this.deployment.getSpec()
+                        .getStrategy()
+                        .getRollingUpdate()
+                        .getMaxSurge()
+                        .getStrVal())
+                .maxUnavailable(this.deployment.getSpec()
+                        .getStrategy()
+                        .getRollingUpdate()
+                        .getMaxUnavailable()
+                        .getStrVal())
+                .build();
+    }
+
+    private KubernetesDeploymentVO.DeploymentStrategy makeStrategy() {
+        return this.deployment.getSpec()
+                .getStrategy() == null ? KubernetesDeploymentVO.DeploymentStrategy.EMPTY : KubernetesDeploymentVO.DeploymentStrategy.builder()
+                .type(this.deployment.getSpec()
+                        .getStrategy()
+                        .getType())
+                .rollingUpdate(makeRollingUpdate())
+                .build();
+    }
+
+    private KubernetesDeploymentVO.DeploymentSpec makeSpec() {
+        return KubernetesDeploymentVO.DeploymentSpec.builder()
                 .replicas(this.deployment.getSpec()
                         .getReplicas())
-                .strategy(strategy)
+                .strategy(makeStrategy())
                 .build();
-        List<KubernetesPodVO.Pod> podList = CollectionUtils.isEmpty(
-                this.pods) ? Collections.emptyList() : this.pods.stream()
+    }
+
+    private List<KubernetesPodVO.Pod> makePods() {
+        return CollectionUtils.isEmpty(this.pods) ? Collections.emptyList() : this.pods.stream()
                 .map(e -> KubernetesPodBuilder.newBuilder()
                         .withDeployment(this.deployment)
                         .withPod(e)
                         .build())
                 .toList();
+    }
+
+    public KubernetesDeploymentVO.Deployment build() {
         return KubernetesDeploymentVO.Deployment.builder()
                 .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
-                .pods(podList)
-                .spec(spec)
+                .pods(makePods())
+                .spec(makeSpec())
                 .build();
     }
 

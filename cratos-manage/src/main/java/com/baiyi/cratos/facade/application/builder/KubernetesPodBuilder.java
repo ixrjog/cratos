@@ -37,10 +37,21 @@ public class KubernetesPodBuilder {
         return this;
     }
 
-    public KubernetesPodVO.Pod build() {
-        // 找出应用容器
+    private List<KubernetesContainerVO.ContainerStatus> makeContainerStatuses() {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
-        Map<String, KubernetesPodVO.PodCondition> conditions = this.pod.getStatus()
+        return this.pod.getStatus()
+                .getContainerStatuses()
+                .stream()
+                .map(e -> KubernetesContainerStatusBuilder.newBuilder()
+                        .withContainer(optionalContainer.orElse(null))
+                        .withContainerStatus(e)
+                        .build())
+                .toList();
+    }
+
+    private Map<String, KubernetesPodVO.PodCondition> makeConditions() {
+        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        return this.pod.getStatus()
                 .getConditions()
                 .stream()
                 .map(e -> KubernetesPodVO.PodCondition.builder()
@@ -49,7 +60,10 @@ public class KubernetesPodBuilder {
                         .lastTransitionTime(ConverterUtil.parse(e.getLastTransitionTime()))
                         .build())
                 .collect(Collectors.toMap(KubernetesPodVO.PodCondition::getType, a -> a, (k1, k2) -> k1));
-        KubernetesPodVO.PodStatus podStatus = KubernetesPodVO.PodStatus.builder()
+    }
+
+    private KubernetesPodVO.PodStatus makePodStatus() {
+        return KubernetesPodVO.PodStatus.builder()
                 .hostIP(this.pod.getStatus()
                         .getHostIP())
                 .podIP(this.pod.getStatus()
@@ -58,20 +72,15 @@ public class KubernetesPodBuilder {
                         .getStartTime()))
                 .phase(this.pod.getStatus()
                         .getPhase())
-                .conditions(conditions)
+                .conditions(makeConditions())
                 .build();
-        List<KubernetesContainerVO.ContainerStatus> containerStatuses = this.pod.getStatus()
-                .getContainerStatuses()
-                .stream()
-                .map(e -> KubernetesContainerStatusBuilder.newBuilder()
-                        .withContainer(optionalContainer.orElse(null))
-                        .withContainerStatus(e)
-                        .build())
-                .toList();
+    }
+
+    public KubernetesPodVO.Pod build() {
         return KubernetesPodVO.Pod.builder()
-                .containerStatuses(containerStatuses)
+                .containerStatuses(makeContainerStatuses())
                 .metadata(ConverterUtil.toMetadata(this.pod.getMetadata()))
-                .status(podStatus)
+                .status(makePodStatus())
                 .build();
     }
 

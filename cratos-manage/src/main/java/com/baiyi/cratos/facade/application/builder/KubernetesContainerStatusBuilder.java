@@ -28,20 +28,20 @@ public class KubernetesContainerStatusBuilder {
         return this;
     }
 
+    private boolean isMain() {
+        return this.container != null && this.container.getName()
+                .equals(this.containerStatus.getName());
+    }
+
     public KubernetesContainerVO.ContainerStatus build() {
-        boolean main = false;
-        if (container != null) {
-            main = container.getName()
-                    .equals(containerStatus.getName());
-        }
         return KubernetesContainerVO.ContainerStatus.builder()
-                .containerID(containerStatus.getContainerID())
-                .started(containerStatus.getStarted())
-                .image(containerStatus.getImage())
-                .imageID(containerStatus.getImageID())
-                .name(containerStatus.getName())
-                .restartCount(containerStatus.getRestartCount())
-                .main(main)
+                .containerID(this.containerStatus.getContainerID())
+                .started(this.containerStatus.getStarted())
+                .image(this.containerStatus.getImage())
+                .imageID(this.containerStatus.getImageID())
+                .name(this.containerStatus.getName())
+                .restartCount(this.containerStatus.getRestartCount())
+                .main(isMain())
                 .build();
     }
 
