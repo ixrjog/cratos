@@ -18,12 +18,12 @@ import static lombok.AccessLevel.PRIVATE;
 @SuppressWarnings("ALL")
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class KubernetesDetailsChannelHandlerFactory<T extends HasSocketRequest> {
+public class KubernetesDetailsChannelHandlerFactory {
 
     /**
      * Map<Topic, HasChannelHandler>
      */
-    private static final Map<String, HasChannelHandler<?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, HasChannelHandler<? extends HasSocketRequest>> CONTEXT = new ConcurrentHashMap<>();
 
     public static <T extends HasSocketRequest> void register(HasChannelHandler<T> bean) {
         CONTEXT.put(bean.getTopic(), bean);
@@ -36,8 +36,8 @@ public class KubernetesDetailsChannelHandlerFactory<T extends HasSocketRequest> 
                         message.getTopic());
                 handler.handleRequest(sessionId, session, message);
             }
-        } catch (java.io.IOException ioException) {
-            log.error(ioException.getMessage(), ioException);
+        } catch (java.io.IOException | ClassCastException ex) {
+            log.error(ex.getMessage(), ex);
         }
     }
 

@@ -22,6 +22,9 @@ public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
      */
     private static Map<String, Map<String, ?>> requestMap = new HashedMap<>();
 
+
+    private static Map<String, Map<String, ? extends HasSocketRequest>> X = new HashedMap<>();
+
     public static <T extends HasSocketRequest> void put(String sessionId, T message) {
         if (SocketActionRequestEnum.UNSUBSCRIBE.name()
                 .equalsIgnoreCase(message.getAction())) {

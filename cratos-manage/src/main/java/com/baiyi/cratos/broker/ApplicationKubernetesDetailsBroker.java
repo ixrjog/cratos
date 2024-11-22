@@ -31,27 +31,21 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
             KubernetesDetailsRequestSession.remove(this.sessionId);
             return;
         }
-
         try {
             if (KubernetesDetailsRequestSession.containsBySessionId(this.sessionId)) {
                 // 深copy
                 Map<String, HasSocketRequest> queryMap = Maps.newHashMap(
                         KubernetesDetailsRequestSession.getBySessionId(this.sessionId));
-                queryMap.forEach((k, v) -> {
-                    KubernetesDetailsChannelHandlerFactory.handleRequest(sessionId, session, v);
-                });
+                queryMap.forEach((k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId,
+                        this.session, request));
             }
             TimeUnit.MILLISECONDS.sleep(150L);
         } catch (InterruptedException e) {
             Thread.currentThread()
                     .interrupt();
-
         } catch (Exception e) {
-            log.warn("Leo build event loop error: {}", e.getMessage());
+            log.warn(e.getMessage());
         }
-
-
     }
-
 
 }
