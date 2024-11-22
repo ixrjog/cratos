@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.common.HasTopic;
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.converter.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.domain.generator.Application;
@@ -42,7 +43,7 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
             ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationKubernetesDeployment) {
         return MessageResponse.<KubernetesVO.KubernetesDetails>builder()
                 .body(toKubernetesDetails(queryApplicationKubernetesDeployment))
-                .topic(MessageResponse.Topics.APPLICATION_KUBERNETES_DETAILS)
+                .topic(HasTopic.APPLICATION_KUBERNETES_DETAILS)
                 .build();
     }
 

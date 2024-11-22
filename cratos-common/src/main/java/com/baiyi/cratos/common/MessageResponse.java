@@ -15,11 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageResponse<T> {
-
-    public interface Topics {
-        String APPLICATION_KUBERNETES_DETAILS = "APPLICATION_KUBERNETES_DETAILS";
-    }
+public class MessageResponse<T> implements HasTopic {
 
     private T body;
 
