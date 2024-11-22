@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerIngressParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerIngressParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

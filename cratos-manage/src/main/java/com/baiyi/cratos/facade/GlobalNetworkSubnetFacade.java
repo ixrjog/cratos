@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkSubnetParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkSubnetParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 
 /**

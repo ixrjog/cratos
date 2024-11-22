@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

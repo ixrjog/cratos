@@ -25,7 +25,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.risk.RiskEventParam$RiskEventPageQueryParam"
+            parameterType="com.baiyi.cratos.domain.param.http.risk.RiskEventParam$RiskEventPageQueryParam"
             resultMap="BaseResultMap">
         select * from risk_event
         <where>
@@ -66,7 +66,7 @@
     </select>
 
     <select id="queryMonths"
-            parameterType="com.baiyi.cratos.domain.param.risk.RiskEventParam$RiskEventPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.risk.RiskEventParam$RiskEventPageQuery"
             resultMap="SimpleDataMap">
         select date_format(event_time, '%Y-%m') as `c_name` from risk_event
         where valid = true

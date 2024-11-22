@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
-import com.baiyi.cratos.domain.param.env.EnvParam;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.mapper.EnvMapper;
 import com.baiyi.cratos.service.EnvService;
 import com.github.pagehelper.Page;

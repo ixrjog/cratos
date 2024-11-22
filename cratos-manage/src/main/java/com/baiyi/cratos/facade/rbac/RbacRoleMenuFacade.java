@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.rbac;
 
-import com.baiyi.cratos.domain.param.rbac.RbacRoleMenuParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleMenuParam;
 
 /**
  * @Author baiyi

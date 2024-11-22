@@ -2,8 +2,8 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
-import com.baiyi.cratos.domain.param.ssh.SshSessionParam;
+import com.baiyi.cratos.domain.param.http.ssh.SshCommandParam;
+import com.baiyi.cratos.domain.param.http.ssh.SshSessionParam;
 import com.baiyi.cratos.domain.view.ssh.SshCommandVO;
 import com.baiyi.cratos.domain.view.ssh.SshSessionVO;
 import com.baiyi.cratos.facade.SshSessionFacade;

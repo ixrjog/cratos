@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

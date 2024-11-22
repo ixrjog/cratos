@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.domain.param.credential.CredentialParam;
+import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

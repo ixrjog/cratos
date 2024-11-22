@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.KubernetesResource;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

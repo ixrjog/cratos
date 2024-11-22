@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.RiskEvent;
-import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.param.http.risk.RiskEventParam;
 import com.baiyi.cratos.domain.view.base.GraphVO;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;

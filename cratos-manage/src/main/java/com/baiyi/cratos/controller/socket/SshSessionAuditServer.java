@@ -1,20 +1,17 @@
 package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.ssh.SimpleState;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.player.SshAuditPlayer;
 import com.google.gson.GsonBuilder;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
-import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -27,7 +24,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 @ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = WebSocketConfig.class)
 @Component
-public class SshSessionAuditServer {
+public class SshSessionAuditServer extends BaseSocketAuthenticationServer {
 
     private static SshAuditPlayer sshAuditPlayer;
 
@@ -38,16 +35,6 @@ public class SshSessionAuditServer {
 
     private static void setPlayer(SshAuditPlayer sshAuditPlayer) {
         SshSessionAuditServer.sshAuditPlayer = sshAuditPlayer;
-    }
-
-    @OnOpen
-    public void onOpen(Session session, @PathParam(value = "username") String username) {
-        log.debug("User {} open webSocket.", username);
-        // 认证
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                username, null);
-        SecurityContextHolder.getContext()
-                .setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)

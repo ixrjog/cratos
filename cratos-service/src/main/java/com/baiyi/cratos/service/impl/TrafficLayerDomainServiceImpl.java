@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainMapper;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
 import com.github.pagehelper.Page;

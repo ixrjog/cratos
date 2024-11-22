@@ -2,7 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
-import com.baiyi.cratos.domain.param.ssh.SshCommandParam;
+import com.baiyi.cratos.domain.param.http.ssh.SshCommandParam;
 import com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper;
 import com.baiyi.cratos.service.SshSessionInstanceCommandService;
 import com.github.pagehelper.Page;

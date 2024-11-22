@@ -1,7 +1,7 @@
 package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
-import com.baiyi.cratos.domain.param.risk.RiskEventParam;
+import com.baiyi.cratos.domain.param.http.risk.RiskEventParam;
 import com.baiyi.cratos.mapper.RiskEventImpactMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;

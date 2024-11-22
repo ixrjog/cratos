@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.business.BusinessPropertyParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessPropertyParam;
 
 /**
  * @Author baiyi

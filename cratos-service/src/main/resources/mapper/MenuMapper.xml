@@ -18,7 +18,7 @@
   </resultMap>
 
   <select id="queryPageByParam"
-          parameterType="com.baiyi.cratos.domain.param.menu.MenuParam$MenuPageQuery"
+          parameterType="com.baiyi.cratos.domain.param.http.menu.MenuParam$MenuPageQuery"
           resultMap="BaseResultMap">
       select * from menu
       <where>

@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.rbac.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacGroup;
-import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacGroupParam;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.facade.rbac.RbacGroupFacade;
 import com.baiyi.cratos.service.RbacGroupService;

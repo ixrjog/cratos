@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
+import com.baiyi.cratos.domain.param.http.template.NotificationTemplateParam;
 import com.baiyi.cratos.domain.view.template.NotificationTemplateVO;
 
 /**

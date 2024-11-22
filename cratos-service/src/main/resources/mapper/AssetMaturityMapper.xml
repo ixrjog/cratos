@@ -18,7 +18,7 @@
   </resultMap>
 
   <select id="queryPageByParam"
-          parameterType="com.baiyi.cratos.domain.param.asset.AssetMaturityParam$AssetMaturityPageQueryParam"
+          parameterType="com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam$AssetMaturityPageQueryParam"
           resultMap="BaseResultMap">
       select * from asset_maturity
       <where>

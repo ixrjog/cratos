@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.util;
 
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 
 /**
  * &#064;Author  baiyi

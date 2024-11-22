@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.crystal.CrystalServerVO;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;

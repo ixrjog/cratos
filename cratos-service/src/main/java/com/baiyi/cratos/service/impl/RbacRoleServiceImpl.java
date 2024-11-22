@@ -2,7 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
 import com.baiyi.cratos.mapper.RbacRoleMapper;
 import com.baiyi.cratos.service.RbacRoleService;
 import com.github.pagehelper.Page;

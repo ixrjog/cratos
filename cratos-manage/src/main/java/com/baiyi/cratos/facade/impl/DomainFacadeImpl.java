@@ -5,7 +5,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.param.domain.DomainParam;
+import com.baiyi.cratos.domain.param.http.domain.DomainParam;
 import com.baiyi.cratos.domain.view.domain.DomainVO;
 import com.baiyi.cratos.facade.DomainFacade;
 import com.baiyi.cratos.service.DomainService;

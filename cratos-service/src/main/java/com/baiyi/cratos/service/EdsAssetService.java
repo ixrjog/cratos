@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import lombok.NonNull;

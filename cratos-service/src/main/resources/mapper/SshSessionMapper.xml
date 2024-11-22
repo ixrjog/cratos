@@ -19,7 +19,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.ssh.SshSessionParam$SshSessionPageQuery"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.ssh.SshSessionParam$SshSessionPageQuery"
           resultMap="BaseResultMap">
       select * from ssh_session
       <where>

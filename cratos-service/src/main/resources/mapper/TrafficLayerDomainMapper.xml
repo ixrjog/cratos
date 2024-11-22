@@ -14,7 +14,7 @@
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam$DomainPageQueryParam"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam$DomainPageQueryParam"
           resultMap="BaseResultMap">
       select * from traffic_layer_domain
       <where>

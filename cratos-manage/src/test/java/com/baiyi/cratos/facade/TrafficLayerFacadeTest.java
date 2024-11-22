@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import jakarta.annotation.Resource;

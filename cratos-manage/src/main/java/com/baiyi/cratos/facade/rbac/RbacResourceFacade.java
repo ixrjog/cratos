@@ -2,8 +2,8 @@ package com.baiyi.cratos.facade.rbac;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 
 /**

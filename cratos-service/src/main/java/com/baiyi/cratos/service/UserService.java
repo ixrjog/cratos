@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.mapper.UserMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;

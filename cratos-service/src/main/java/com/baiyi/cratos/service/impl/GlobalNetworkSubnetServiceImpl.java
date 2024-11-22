@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkSubnetParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkSubnetParam;
 import com.baiyi.cratos.mapper.GlobalNetworkSubnetMapper;
 import com.baiyi.cratos.service.GlobalNetworkSubnetService;
 import com.github.pagehelper.Page;

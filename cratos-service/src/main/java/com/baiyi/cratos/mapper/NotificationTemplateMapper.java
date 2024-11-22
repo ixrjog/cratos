@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
+import com.baiyi.cratos.domain.param.http.template.NotificationTemplateParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

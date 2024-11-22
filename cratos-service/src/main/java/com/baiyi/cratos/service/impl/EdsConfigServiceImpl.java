@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.mapper.EdsConfigMapper;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;

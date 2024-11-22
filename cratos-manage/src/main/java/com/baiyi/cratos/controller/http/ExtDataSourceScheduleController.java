@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.param.eds.EdsScheduleParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsScheduleParam;
 import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.facade.EdsScheduleFacade;
 import io.swagger.v3.oas.annotations.Operation;

@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.UserToken;
-import com.baiyi.cratos.domain.param.login.LoginParam;
+import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;

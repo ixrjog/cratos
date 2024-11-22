@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam;
 import com.baiyi.cratos.mapper.AssetMaturityMapper;
 import com.baiyi.cratos.service.AssetMaturityService;
 import com.github.pagehelper.Page;

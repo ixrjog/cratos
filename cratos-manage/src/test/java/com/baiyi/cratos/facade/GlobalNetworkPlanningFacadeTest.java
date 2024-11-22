@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkPlanningParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

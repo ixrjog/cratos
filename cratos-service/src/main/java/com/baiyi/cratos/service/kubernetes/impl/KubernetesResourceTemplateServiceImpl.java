@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.mapper.KubernetesResourceTemplateMapper;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
 import com.github.pagehelper.Page;

@@ -15,7 +15,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.application.ApplicationParam$ApplicationPageQueryParam"
+            parameterType="com.baiyi.cratos.domain.param.http.application.ApplicationParam$ApplicationPageQueryParam"
             resultMap="BaseResultMap">
         select * from application
         <where>

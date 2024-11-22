@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.BusinessProperty;
-import com.baiyi.cratos.domain.param.business.BusinessPropertyParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessPropertyParam;
 import com.baiyi.cratos.facade.BusinessPropertyFacade;
 import com.baiyi.cratos.service.BusinessPropertyService;
 import lombok.RequiredArgsConstructor;

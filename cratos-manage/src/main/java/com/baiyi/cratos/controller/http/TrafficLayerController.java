@@ -2,9 +2,9 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerIngressParam;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerIngressParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;

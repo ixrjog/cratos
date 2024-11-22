@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.KubernetesResource;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;

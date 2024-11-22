@@ -16,7 +16,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.domain.DomainParam$DomainPageQueryParam"
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.domain.DomainParam$DomainPageQueryParam"
             resultMap="BaseResultMap">
         select * from domain
         <where>

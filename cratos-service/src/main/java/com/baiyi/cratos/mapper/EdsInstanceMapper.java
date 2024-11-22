@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

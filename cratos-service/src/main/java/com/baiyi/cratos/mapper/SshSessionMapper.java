@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.SshSession;
-import com.baiyi.cratos.domain.param.ssh.SshSessionParam;
+import com.baiyi.cratos.domain.param.http.ssh.SshSessionParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

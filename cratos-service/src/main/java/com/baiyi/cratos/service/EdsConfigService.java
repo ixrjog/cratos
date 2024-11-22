@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.param.eds.EdsConfigParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.mapper.EdsConfigMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;

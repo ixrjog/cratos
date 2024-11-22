@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.login.LoginParam;
+import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 
 /**

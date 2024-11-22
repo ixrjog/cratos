@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.server.ServerParam;
+import com.baiyi.cratos.domain.param.http.server.ServerParam;
 import com.baiyi.cratos.domain.view.server.ServerVO;
 import com.baiyi.cratos.facade.server.ServerFacade;
 import com.baiyi.cratos.service.ServerService;

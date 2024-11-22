@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.param.menu.MenuParam;
+import com.baiyi.cratos.domain.param.http.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
 import com.baiyi.cratos.domain.view.menu.RoleMenuVO;

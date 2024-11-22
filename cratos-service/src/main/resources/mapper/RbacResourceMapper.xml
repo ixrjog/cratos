@@ -15,7 +15,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.rbac.RbacResourceParam$ResourcePageQuery"
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam$ResourcePageQuery"
             resultMap="BaseResultMap">
         select * from rbac_resource
         <where>
@@ -32,7 +32,7 @@
     </select>
 
     <select id="queryResourceInRoleByParam"
-            parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
             resultMap="BaseResultMap">
         select a1.*
         from rbac_role_resource a0
@@ -47,7 +47,7 @@
 
     <!--  查询角色未绑定资源-->
     <select id="queryResourceNotInRoleByParam"
-            parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam$RoleResourcePageQuery"
             resultMap="BaseResultMap">
         select * from rbac_resource
         <where>

@@ -2,7 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Robot;
-import com.baiyi.cratos.domain.param.robot.RobotParam;
+import com.baiyi.cratos.domain.param.http.robot.RobotParam;
 import com.baiyi.cratos.mapper.RobotMapper;
 import com.baiyi.cratos.service.RobotService;
 import com.github.pagehelper.Page;

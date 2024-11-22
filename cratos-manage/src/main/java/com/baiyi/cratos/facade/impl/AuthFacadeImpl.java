@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.login.LoginParam;
+import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.facade.AuthFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.mapper.UserMapper;
 import com.baiyi.cratos.service.UserService;
 import com.github.pagehelper.Page;

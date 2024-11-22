@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
 import com.baiyi.cratos.facade.AssetMaturityFacade;
 import io.swagger.v3.oas.annotations.Operation;

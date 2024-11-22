@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerIngressParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerIngressParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.TrafficLayerIngressFacade;

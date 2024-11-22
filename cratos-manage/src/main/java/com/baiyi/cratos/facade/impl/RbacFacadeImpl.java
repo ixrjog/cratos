@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.RobotFacade;

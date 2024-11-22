@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
 import com.baiyi.cratos.domain.generator.RbacRoleMenu;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleMenuParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleMenuParam;
 import com.baiyi.cratos.facade.rbac.RbacRoleMenuFacade;
 import com.baiyi.cratos.service.RbacRoleMenuService;
 import lombok.RequiredArgsConstructor;

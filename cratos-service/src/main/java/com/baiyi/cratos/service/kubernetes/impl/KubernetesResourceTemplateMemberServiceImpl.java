@@ -2,7 +2,7 @@ package com.baiyi.cratos.service.kubernetes.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.mapper.KubernetesResourceTemplateMemberMapper;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.github.pagehelper.Page;

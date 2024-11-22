@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.robot.RobotParam;
+import com.baiyi.cratos.domain.param.http.robot.RobotParam;
 import com.baiyi.cratos.domain.view.robot.RobotVO;
 import com.baiyi.cratos.facade.RobotFacade;
 import io.swagger.v3.oas.annotations.Operation;

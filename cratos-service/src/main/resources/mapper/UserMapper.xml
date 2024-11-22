@@ -26,7 +26,7 @@
         <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.user.UserParam$UserPageQuery"
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserParam$UserPageQuery"
             resultMap="BaseResultMap">
         select * from user
         <where>

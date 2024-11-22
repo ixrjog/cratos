@@ -1,8 +1,8 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 

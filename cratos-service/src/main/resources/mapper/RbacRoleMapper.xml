@@ -14,7 +14,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleParam$RolePageQuery"
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam$RolePageQuery"
             resultMap="BaseResultMap">
         select * from rbac_role
         <where>

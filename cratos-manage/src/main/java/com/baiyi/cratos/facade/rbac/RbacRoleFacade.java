@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.rbac;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 
 import java.util.List;

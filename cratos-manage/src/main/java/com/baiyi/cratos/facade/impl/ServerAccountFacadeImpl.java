@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ServerAccount;
-import com.baiyi.cratos.domain.param.server.ServerAccountParam;
+import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.server.ServerAccountFacade;

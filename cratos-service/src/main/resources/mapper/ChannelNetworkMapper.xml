@@ -17,7 +17,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.channel.ChannelNetworkParam$ChannelNetworkPageQueryParam"
+            parameterType="com.baiyi.cratos.domain.param.http.channel.ChannelNetworkParam$ChannelNetworkPageQueryParam"
             resultMap="BaseResultMap">
         select * from channel_network
         <where>

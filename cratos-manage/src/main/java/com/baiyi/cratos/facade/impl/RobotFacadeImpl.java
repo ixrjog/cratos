@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.Robot;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.robot.RobotParam;
+import com.baiyi.cratos.domain.param.http.robot.RobotParam;
 import com.baiyi.cratos.domain.view.robot.RobotVO;
 import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.service.RobotService;

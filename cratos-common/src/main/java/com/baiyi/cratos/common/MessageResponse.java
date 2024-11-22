@@ -1,5 +1,6 @@
 package com.baiyi.cratos.common;
 
+import com.baiyi.cratos.domain.HasTopic;
 import com.baiyi.cratos.domain.util.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

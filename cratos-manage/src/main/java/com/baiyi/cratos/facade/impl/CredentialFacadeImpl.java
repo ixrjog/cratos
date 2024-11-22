@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.credential.CredentialParam;
+import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.validator.credential.BaseFingerprintAlgorithm;

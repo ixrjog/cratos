@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.env.EnvParam;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import io.swagger.v3.oas.annotations.Operation;

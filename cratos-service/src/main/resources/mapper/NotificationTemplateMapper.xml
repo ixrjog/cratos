@@ -19,7 +19,7 @@
   </resultMap>
 
   <select id="queryPageByParam"
-          parameterType="com.baiyi.cratos.domain.param.template.NotificationTemplateParam$NotificationTemplatePageQuery"
+          parameterType="com.baiyi.cratos.domain.param.http.template.NotificationTemplateParam$NotificationTemplatePageQuery"
           resultMap="BaseResultMap">
       select * from notification_template
       <where>

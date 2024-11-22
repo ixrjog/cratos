@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.RbacGroup;
-import com.baiyi.cratos.domain.param.rbac.RbacGroupParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacGroupParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

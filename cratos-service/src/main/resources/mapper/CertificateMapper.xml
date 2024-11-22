@@ -21,7 +21,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.certificate.CertificateParam$CertificatePageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.certificate.CertificateParam$CertificatePageQuery"
             resultMap="BaseResultMap">
         select * from certificate
         <choose>

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 
 import java.util.List;

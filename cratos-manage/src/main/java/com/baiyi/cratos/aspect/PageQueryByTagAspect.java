@@ -1,7 +1,7 @@
 package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
-import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.service.BusinessTagService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;

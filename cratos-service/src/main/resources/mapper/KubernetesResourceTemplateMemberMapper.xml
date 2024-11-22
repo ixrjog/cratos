@@ -19,7 +19,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceTemplateParam$MemberPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam$MemberPageQuery"
             resultMap="BaseResultMap">
         select * from kubernetes_resource_template_member
         <where>

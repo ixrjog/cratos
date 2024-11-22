@@ -27,7 +27,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.eds.EdsInstanceParam$AssetPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam$AssetPageQuery"
             resultMap="BaseResultMap">
         select * from eds_asset
         where asset_type = #{assetType}

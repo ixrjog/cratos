@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
-import com.baiyi.cratos.domain.param.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.service.EnvService;

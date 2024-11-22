@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetService;

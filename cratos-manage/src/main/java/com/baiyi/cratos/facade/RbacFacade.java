@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.generator.Robot;
 import com.baiyi.cratos.domain.generator.UserToken;
-import com.baiyi.cratos.domain.param.rbac.RbacUserRoleParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 
 import java.util.List;

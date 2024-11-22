@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Menu;
-import com.baiyi.cratos.domain.param.menu.MenuParam;
+import com.baiyi.cratos.domain.param.http.menu.MenuParam;
 import com.baiyi.cratos.enums.MenuTypeEnum;
 import com.baiyi.cratos.mapper.MenuMapper;
 import com.baiyi.cratos.service.MenuService;

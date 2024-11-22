@@ -4,7 +4,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
-import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
 import com.baiyi.cratos.facade.AssetMaturityFacade;
 import com.baiyi.cratos.service.AssetMaturityService;

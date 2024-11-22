@@ -1,8 +1,8 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.business.BusinessParam;
-import com.baiyi.cratos.domain.param.tag.TagParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.param.http.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 
 import java.util.List;

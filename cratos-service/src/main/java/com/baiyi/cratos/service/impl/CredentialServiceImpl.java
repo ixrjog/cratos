@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.domain.param.credential.CredentialParam;
+import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
 import com.baiyi.cratos.mapper.CredentialMapper;
 import com.baiyi.cratos.service.CredentialService;
 import com.github.pagehelper.Page;

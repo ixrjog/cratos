@@ -3,7 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.credential.CredentialParam;
+import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.facade.CredentialFacade;

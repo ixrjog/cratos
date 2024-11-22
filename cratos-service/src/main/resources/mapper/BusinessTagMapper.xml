@@ -24,7 +24,7 @@
         )
     </select>
 
-    <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByTag"
+    <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryByTag"
             resultType="java.lang.String">
         select distinct tag_value from business_tag
         <where>
@@ -36,12 +36,12 @@
         </where>
     </select>
 
-    <select id="queryTagIdByBusinessType" parameterType="com.baiyi.cratos.domain.param.business.BusinessParam$QueryByBusinessType"
+    <select id="queryTagIdByBusinessType" parameterType="com.baiyi.cratos.domain.param.http.business.BusinessParam$QueryByBusinessType"
             resultType="java.lang.Integer">
         select distinct tag_id from business_tag where business_type = #{businessType}
     </select>
 
-    <select id="queryBusinessIdByTag" parameterType="com.baiyi.cratos.domain.param.tag.BusinessTagParam$QueryByTag"
+    <select id="queryBusinessIdByTag" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryByTag"
             resultType="java.lang.Integer">
         select business_id from business_tag
         where tag_id = #{tagId} and business_type = #{businessType}

@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.exception.CustomSchedulerException;
 import com.baiyi.cratos.common.util.CronUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.eds.EdsScheduleParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsScheduleParam;
 import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.facade.EdsScheduleFacade;
 import com.baiyi.cratos.scheduler.SchedulerService;

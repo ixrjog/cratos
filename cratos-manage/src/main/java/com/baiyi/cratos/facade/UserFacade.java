@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.user.UserParam;
+import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 

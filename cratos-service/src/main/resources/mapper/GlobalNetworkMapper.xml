@@ -17,7 +17,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.network.GlobalNetworkParam$GlobalNetworkPageQueryParam"
+            parameterType="com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam$GlobalNetworkPageQueryParam"
             resultMap="BaseResultMap">
         select * from global_network
         <where>

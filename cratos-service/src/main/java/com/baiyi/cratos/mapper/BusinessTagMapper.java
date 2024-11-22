@@ -1,8 +1,8 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.BusinessTag;
-import com.baiyi.cratos.domain.param.business.BusinessParam;
-import com.baiyi.cratos.domain.param.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.RbacRole;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

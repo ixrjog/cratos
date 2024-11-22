@@ -21,7 +21,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.network.GlobalNetworkSubnetParam$GlobalNetworkSubnetPageQueryParam"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.network.GlobalNetworkSubnetParam$GlobalNetworkSubnetPageQueryParam"
           resultMap="BaseResultMap">
       select * from global_network_subnet
       <where>

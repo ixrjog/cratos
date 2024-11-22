@@ -12,7 +12,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="queryUserMenuIds" parameterType="com.baiyi.cratos.domain.param.rbac.RbacRoleParam$RolePageQuery"
+  <select id="queryUserMenuIds" parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam$RolePageQuery"
           resultType="java.lang.Integer">
       select distinct menu_id
       from rbac_role_menu

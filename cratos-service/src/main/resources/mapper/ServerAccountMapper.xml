@@ -17,7 +17,7 @@
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.server.ServerAccountParam$ServerAccountPageQuery"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.server.ServerAccountParam$ServerAccountPageQuery"
           resultMap="BaseResultMap">
       select * from server_account
       <where>

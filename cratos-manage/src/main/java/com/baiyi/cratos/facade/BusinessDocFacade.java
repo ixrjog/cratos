@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.business.BusinessParam;
-import com.baiyi.cratos.domain.param.doc.BusinessDocParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.param.http.doc.BusinessDocParam;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 
 import java.util.List;

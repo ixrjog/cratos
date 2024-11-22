@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.rbac.*;
+import com.baiyi.cratos.domain.param.http.rbac.*;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;

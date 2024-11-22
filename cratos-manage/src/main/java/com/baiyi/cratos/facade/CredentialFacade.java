@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.credential.CredentialParam;
+import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 
 import java.util.List;

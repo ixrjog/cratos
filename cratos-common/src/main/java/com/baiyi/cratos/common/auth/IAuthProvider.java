@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common.auth;
 
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.login.LoginParam;
+import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 
 /**

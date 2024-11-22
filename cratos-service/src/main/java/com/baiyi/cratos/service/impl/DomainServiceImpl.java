@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.param.domain.DomainParam;
+import com.baiyi.cratos.domain.param.http.domain.DomainParam;
 import com.baiyi.cratos.mapper.DomainMapper;
 import com.baiyi.cratos.service.DomainService;
 import com.github.pagehelper.Page;

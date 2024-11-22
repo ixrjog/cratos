@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
 import com.baiyi.cratos.domain.generator.RbacRoleResource;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.facade.rbac.RbacRoleResourceFacade;
 import com.baiyi.cratos.service.RbacRoleResourceService;
 import lombok.RequiredArgsConstructor;

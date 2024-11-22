@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.ServerAccount;
-import com.baiyi.cratos.domain.param.server.ServerAccountParam;
+import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

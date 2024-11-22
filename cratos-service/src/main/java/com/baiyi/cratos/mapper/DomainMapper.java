@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.param.domain.DomainParam;
+import com.baiyi.cratos.domain.param.http.domain.DomainParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

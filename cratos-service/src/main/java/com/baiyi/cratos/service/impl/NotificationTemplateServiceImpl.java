@@ -2,7 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
+import com.baiyi.cratos.domain.param.http.template.NotificationTemplateParam;
 import com.baiyi.cratos.mapper.NotificationTemplateMapper;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.github.pagehelper.Page;

@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Certificate;
-import com.baiyi.cratos.domain.param.certificate.CertificateParam;
+import com.baiyi.cratos.domain.param.http.certificate.CertificateParam;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import com.baiyi.cratos.facade.CertificateFacade;
 import com.baiyi.cratos.service.CertificateService;

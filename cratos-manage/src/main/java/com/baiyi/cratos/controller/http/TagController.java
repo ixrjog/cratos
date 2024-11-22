@@ -2,8 +2,8 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.business.BusinessParam;
-import com.baiyi.cratos.domain.param.tag.TagParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.param.http.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.facade.TagFacade;
 import io.swagger.v3.oas.annotations.Operation;

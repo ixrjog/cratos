@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.AssetMaturity;
-import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

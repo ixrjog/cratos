@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkPlanningParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 
 /**

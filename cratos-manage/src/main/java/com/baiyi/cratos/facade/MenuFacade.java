@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.menu.MenuParam;
+import com.baiyi.cratos.domain.param.http.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 
 /**

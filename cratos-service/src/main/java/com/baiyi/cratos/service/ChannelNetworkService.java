@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
-import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
+import com.baiyi.cratos.domain.param.http.channel.ChannelNetworkParam;
 import com.baiyi.cratos.mapper.ChannelNetworkMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;

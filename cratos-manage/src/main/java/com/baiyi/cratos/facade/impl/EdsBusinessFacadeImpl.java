@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.param.eds.EdsBusinessParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsBusinessParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsBusinessVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;

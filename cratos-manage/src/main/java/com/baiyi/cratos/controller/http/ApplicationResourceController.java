@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.MessageResponse;
-import com.baiyi.cratos.domain.param.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
 import io.swagger.v3.oas.annotations.Operation;

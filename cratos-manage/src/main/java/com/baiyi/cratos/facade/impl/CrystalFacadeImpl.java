@@ -2,8 +2,8 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
-import com.baiyi.cratos.domain.param.server.ServerAccountParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.crystal.CrystalServerVO;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;

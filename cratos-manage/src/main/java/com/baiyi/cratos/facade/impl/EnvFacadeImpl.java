@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Env;
-import com.baiyi.cratos.domain.param.env.EnvParam;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.service.EnvService;

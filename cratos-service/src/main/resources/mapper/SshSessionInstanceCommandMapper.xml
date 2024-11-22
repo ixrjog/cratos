@@ -16,7 +16,7 @@
     <result column="output" jdbcType="LONGVARCHAR" property="output" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.ssh.SshCommandParam$SshCommandPageQuery"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.ssh.SshCommandParam$SshCommandPageQuery"
           resultMap="BaseResultMap">
       select * from ssh_session_instance_command
       <where>

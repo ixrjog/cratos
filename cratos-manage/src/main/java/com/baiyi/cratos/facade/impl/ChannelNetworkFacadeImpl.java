@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.enums.ChannelAvailableStatusEnum;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ChannelNetwork;
-import com.baiyi.cratos.domain.param.channel.ChannelNetworkParam;
+import com.baiyi.cratos.domain.param.http.channel.ChannelNetworkParam;
 import com.baiyi.cratos.domain.view.channel.ChannelNetworkVO;
 import com.baiyi.cratos.facade.ChannelNetworkFacade;
 import com.baiyi.cratos.service.ChannelNetworkService;

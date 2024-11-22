@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.kubernetes.KubernetesResourceParam;
+import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceVO;
 
 /**

@@ -1,11 +1,11 @@
 package com.baiyi.cratos.facade.application.impl;
 
-import com.baiyi.cratos.common.HasTopic;
+import com.baiyi.cratos.domain.HasTopic;
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.converter.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.param.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -42,12 +42,19 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDeploymentDetails(
             ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationKubernetesDeployment) {
         return MessageResponse.<KubernetesVO.KubernetesDetails>builder()
-                .body(toKubernetesDetails(queryApplicationKubernetesDeployment))
+                .body(buildKubernetesDetails(queryApplicationKubernetesDeployment))
                 .topic(HasTopic.APPLICATION_KUBERNETES_DETAILS)
                 .build();
     }
 
-    public KubernetesVO.KubernetesDetails toKubernetesDetails(
+    private List<KubernetesDeploymentVO.Deployment> toDeployments(List<ApplicationResource> resources) {
+        Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
+        return resources.stream()
+                .map(e -> deploymentConverter.to(edsInstanceConfigMap, e))
+                .toList();
+    }
+
+    private KubernetesVO.KubernetesDetails buildKubernetesDetails(
             ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails param) {
         Application application = applicationService.getByName(param.getApplicationName());
         if (application == null) {
@@ -59,14 +66,10 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
             return KubernetesVO.KubernetesDetails.failed(
                     "The kubernetes resource bound to the application does not exist.");
         }
-        Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
-        List<KubernetesDeploymentVO.Deployment> deployments = resources.stream()
-                .map(e -> deploymentConverter.to(edsInstanceConfigMap, e))
-                .toList();
         return KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))
                 .namespace(param.getNamespace())
-                .deployments(deployments)
+                .deployments(toDeployments(resources))
                 .build();
     }
 

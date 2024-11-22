@@ -17,7 +17,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.env.EnvParam$EnvPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.env.EnvParam$EnvPageQuery"
             resultMap="BaseResultMap">
         select * from env
         <where>

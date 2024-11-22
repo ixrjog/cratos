@@ -1,6 +1,6 @@
 package com.baiyi.cratos.scheduler.job;
 
-import com.baiyi.cratos.domain.param.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.facade.EdsFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDataMap;

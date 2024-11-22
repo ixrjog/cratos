@@ -1,7 +1,7 @@
 package com.baiyi.cratos.mapper;
 
 import com.baiyi.cratos.domain.generator.Env;
-import com.baiyi.cratos.domain.param.env.EnvParam;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;

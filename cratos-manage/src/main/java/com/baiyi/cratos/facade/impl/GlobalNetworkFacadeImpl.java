@@ -7,7 +7,7 @@ import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;

@@ -2,8 +2,8 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.param.rbac.RbacResourceParam;
-import com.baiyi.cratos.domain.param.rbac.RbacRoleResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam;
+import com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam;
 import com.baiyi.cratos.mapper.RbacResourceMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.HasUniqueKey;

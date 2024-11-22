@@ -2,7 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.template.NotificationTemplateParam;
+import com.baiyi.cratos.domain.param.http.template.NotificationTemplateParam;
 import com.baiyi.cratos.domain.view.template.NotificationTemplateVO;
 import com.baiyi.cratos.facade.NotificationTemplateFacade;
 import io.swagger.v3.oas.annotations.Operation;

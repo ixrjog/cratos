@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.param.eds.EdsBusinessParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsBusinessParam;
 import com.baiyi.cratos.domain.view.eds.EdsBusinessVO;
 import com.baiyi.cratos.facade.EdsBusinessFacade;
 import io.swagger.v3.oas.annotations.Operation;

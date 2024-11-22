@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.asset.AssetMaturityParam;
+import com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
 
 /**

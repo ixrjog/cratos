@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
-import com.baiyi.cratos.domain.param.network.GlobalNetworkPlanningParam;
+import com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam;
 import com.baiyi.cratos.mapper.GlobalNetworkPlanningMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;

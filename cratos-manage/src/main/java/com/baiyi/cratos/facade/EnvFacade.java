@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.env.EnvParam;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 
 /**

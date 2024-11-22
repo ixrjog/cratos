@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.menu.MenuParam;
+import com.baiyi.cratos.domain.param.http.menu.MenuParam;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
 import com.baiyi.cratos.facade.MyMenuFacade;
 import com.baiyi.cratos.service.MenuService;

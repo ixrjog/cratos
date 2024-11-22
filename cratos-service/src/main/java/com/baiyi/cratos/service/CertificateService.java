@@ -2,7 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Certificate;
-import com.baiyi.cratos.domain.param.certificate.CertificateParam;
+import com.baiyi.cratos.domain.param.http.certificate.CertificateParam;
 import com.baiyi.cratos.mapper.CertificateMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;

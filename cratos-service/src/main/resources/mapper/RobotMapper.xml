@@ -27,7 +27,7 @@
     </select>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.robot.RobotParam$RobotPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.robot.RobotParam$RobotPageQuery"
             resultMap="BaseResultMap">
         select * from robot
         <where>

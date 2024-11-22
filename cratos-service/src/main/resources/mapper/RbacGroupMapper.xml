@@ -13,7 +13,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.rbac.RbacGroupParam$GroupPageQuery"
+  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacGroupParam$GroupPageQuery"
           resultMap="BaseResultMap">
       select * from rbac_group
       <where>
