@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/application/kubernetes/details/{username}", configurator = WebSocketConfig.class)
 @Component
+@ServerEndpoint(value = "/socket/application/kubernetes/details/{username}", configurator = WebSocketConfig.class)
 public class ApplicationKubernetesDetailsServer extends BaseSocketAuthenticationServer {
 
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(5);
@@ -30,12 +30,12 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
     private final String sessionId = UUID.randomUUID()
             .toString();
 
-    @OnOpen
     @Override
+    @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
         super.onOpen(session, username);
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
-        // 启动经纪人
+        // 消息代理
         Thread.ofVirtual()
                 .start(new ApplicationKubernetesDetailsBroker(this.sessionId, session));
     }

@@ -22,8 +22,8 @@ import org.springframework.util.StringUtils;
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = WebSocketConfig.class)
 @Component
+@ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = WebSocketConfig.class)
 public class SshSessionAuditServer extends BaseSocketAuthenticationServer {
 
     private static SshAuditPlayer sshAuditPlayer;

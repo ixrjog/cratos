@@ -41,8 +41,8 @@
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
         <spring-security.version>6.3.4</spring-security.version>
-        <!-- 1.12.736 -->
-        <aws-java-sdk.version>1.12.761</aws-java-sdk.version>
+        <!-- aws https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-elasticloadbalancingv2 -->
+        <aws-java-sdk.version>1.12.778</aws-java-sdk.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.13.0</shedlock-spring.version>
     </properties>
@@ -51,7 +51,7 @@
         <!--  https://spring.io/projects/spring-boot#learn  -->
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -157,7 +157,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.10.1</version>
+            <version>2.11.0</version>
         </dependency>
         <!-- 系统信息 -->
         <dependency>
