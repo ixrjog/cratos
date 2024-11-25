@@ -1,6 +1,6 @@
-package com.baiyi.cratos.facade.kubernetes.details;
+package com.baiyi.cratos.domain.channel.factory;
 
-import com.baiyi.cratos.facade.kubernetes.details.broker.HasChannelHandler;
+import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import jakarta.websocket.Session;
 import lombok.NoArgsConstructor;
@@ -24,20 +24,20 @@ public class KubernetesDetailsChannelHandlerFactory {
     /**
      * Map<Topic, HasChannelHandler>
      */
-    private static final Map<String, HasChannelHandler<? extends HasSocketRequest>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, BaseChannelHandler<? extends HasSocketRequest>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <T extends HasSocketRequest> void register(HasChannelHandler<T> bean) {
+    public static <T extends HasSocketRequest> void register(BaseChannelHandler<T> bean) {
         CONTEXT.put(bean.getTopic(), bean);
     }
 
     public static <T extends HasSocketRequest> void handleRequest(String sessionId, Session session, T message) {
         try {
             if (CONTEXT.containsKey(message.getTopic())) {
-                HasChannelHandler<HasSocketRequest> handler = (HasChannelHandler<HasSocketRequest>) CONTEXT.get(
+                BaseChannelHandler<HasSocketRequest> handler = (BaseChannelHandler<HasSocketRequest>) CONTEXT.get(
                         message.getTopic());
                 handler.handleRequest(sessionId, session, message);
             }
-        } catch (java.io.IOException | ClassCastException ex) {
+        } catch (IllegalStateException | ClassCastException ex) {
             log.error(ex.getMessage(), ex);
         }
     }

@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.kubernetes.details.broker;
 
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
-import com.baiyi.cratos.facade.kubernetes.details.KubernetesDetailsChannelHandlerFactory;
+import com.baiyi.cratos.domain.channel.factory.KubernetesDetailsChannelHandlerFactory;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;

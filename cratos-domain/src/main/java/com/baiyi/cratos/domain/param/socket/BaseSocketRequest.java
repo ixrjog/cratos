@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.socket;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
 
 public class BaseSocketRequest {
 
-    public static SimpleRequest loadAs(String message) {
+    public static SimpleRequest loadAs(String message) throws JsonSyntaxException {
         return new GsonBuilder().create()
                 .fromJson(message, SimpleRequest.class);
     }

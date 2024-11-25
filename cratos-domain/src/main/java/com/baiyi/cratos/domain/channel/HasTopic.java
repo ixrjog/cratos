@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain;
+package com.baiyi.cratos.domain.channel;
 
 /**
  * &#064;Author  baiyi
@@ -7,7 +7,10 @@ package com.baiyi.cratos.domain;
  */
 public interface HasTopic {
 
+    String HEARTBEAT = "HEARTBEAT";
+
     String APPLICATION_KUBERNETES_DETAILS = "APPLICATION_KUBERNETES_DETAILS";
+    String PLAY_SSH_SESSION_AUDIT = "PLAY_SSH_SESSION_AUDIT";
 
     String getTopic();
 }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.param.socket;
 
-import com.baiyi.cratos.domain.HasTopic;
+import com.baiyi.cratos.domain.channel.HasTopic;
 
 /**
  * &#064;Author  baiyi

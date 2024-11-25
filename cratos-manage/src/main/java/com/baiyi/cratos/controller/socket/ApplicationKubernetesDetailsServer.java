@@ -1,10 +1,11 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.facade.kubernetes.details.broker.ApplicationKubernetesDetailsBroker;
 import com.baiyi.cratos.configuration.WebSocketConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
-import com.baiyi.cratos.domain.param.socket.BaseSocketRequest;
+import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
+import com.baiyi.cratos.facade.kubernetes.details.broker.ApplicationKubernetesDetailsBroker;
+import com.google.gson.JsonSyntaxException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -26,7 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationKubernetesDetailsServer extends BaseSocketAuthenticationServer {
 
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(5);
-
     private final String sessionId = UUID.randomUUID()
             .toString();
 
@@ -42,14 +42,13 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
 
     @OnMessage(maxMessageSize = 10 * 1024)
     public void onMessage(Session session, String message) {
-        if (!session.isOpen() || !StringUtils.hasText(message)) {
-            return;
-        }
-        try {
-            BaseSocketRequest.SimpleRequest simpleRequest = BaseSocketRequest.loadAs(message);
-            KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, simpleRequest);
-        } catch (Exception ex) {
-            log.debug(ex.getMessage(), ex);
+        if (StringUtils.hasText(message)) {
+            try {
+                ApplicationKubernetesParam.KubernetesDetailsRequest kubernetesDetailsRequest = ApplicationKubernetesParam.loadAs(
+                        message);
+                KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
+            } catch (JsonSyntaxException ignored) {
+            }
         }
     }
 

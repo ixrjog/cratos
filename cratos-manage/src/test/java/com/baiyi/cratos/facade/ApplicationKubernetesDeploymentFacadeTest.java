@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.MessageResponse;
+import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;

@@ -18,9 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class SshAuditOutputTask implements Runnable {
 
     private final Session session;
-
     private final String instanceId;
-
     private final String auditPath;
 
     public SshAuditOutputTask(Session session, String instanceId, String auditPath) {
@@ -55,8 +53,7 @@ public class SshAuditOutputTask implements Runnable {
                 .instanceId(instanceId)
                 .output(line)
                 .build();
-        session.getBasicRemote()
-                .sendText(om.toString());
+        send(om);
     }
 
     private void sendError(String error) throws IOException {
@@ -65,6 +62,10 @@ public class SshAuditOutputTask implements Runnable {
                 .error(error)
                 .code(1)
                 .build();
+        send(om);
+    }
+
+    private void send(OutputMessage om) throws IOException {
         session.getBasicRemote()
                 .sendText(om.toString());
     }
