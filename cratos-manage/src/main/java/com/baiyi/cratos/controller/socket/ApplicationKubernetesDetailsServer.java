@@ -1,6 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.kubernetes.broker.ApplicationKubernetesDetailsBroker;
+import com.baiyi.cratos.facade.kubernetes.details.broker.ApplicationKubernetesDetailsBroker;
 import com.baiyi.cratos.configuration.WebSocketConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.param.socket.BaseSocketRequest;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.kubernetes.broker.impl;
+package com.baiyi.cratos.facade.kubernetes.details.broker.impl;
 
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.domain.HasTopic;
@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesRequest;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
-import com.baiyi.cratos.kubernetes.broker.HasChannelHandler;
+import com.baiyi.cratos.facade.kubernetes.details.broker.HasChannelHandler;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

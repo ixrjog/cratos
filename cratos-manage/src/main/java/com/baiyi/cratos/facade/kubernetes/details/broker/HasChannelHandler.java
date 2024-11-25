@@ -1,9 +1,9 @@
-package com.baiyi.cratos.kubernetes.broker;
+package com.baiyi.cratos.facade.kubernetes.details.broker;
 
 import com.baiyi.cratos.common.MessageResponse;
 import com.baiyi.cratos.domain.HasTopic;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
-import com.baiyi.cratos.kubernetes.KubernetesDetailsChannelHandlerFactory;
+import com.baiyi.cratos.facade.kubernetes.details.KubernetesDetailsChannelHandlerFactory;
 import jakarta.websocket.Session;
 import org.springframework.beans.factory.InitializingBean;
 
