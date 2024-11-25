@@ -1,5 +1,6 @@
-package com.baiyi.cratos.broker;
+package com.baiyi.cratos.kubernetes;
 
+import com.baiyi.cratos.kubernetes.broker.HasChannelHandler;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import jakarta.websocket.Session;
 import lombok.NoArgsConstructor;

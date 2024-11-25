@@ -1,6 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.broker.ApplicationKubernetesDetailsBroker;
+import com.baiyi.cratos.kubernetes.broker.ApplicationKubernetesDetailsBroker;
 import com.baiyi.cratos.configuration.WebSocketConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.param.socket.BaseSocketRequest;
@@ -47,7 +47,7 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
         }
         try {
             BaseSocketRequest.SimpleRequest simpleRequest = BaseSocketRequest.loadAs(message);
-            KubernetesDetailsRequestSession.put(this.sessionId, simpleRequest);
+            KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, simpleRequest);
         } catch (Exception ex) {
             log.debug(ex.getMessage(), ex);
         }

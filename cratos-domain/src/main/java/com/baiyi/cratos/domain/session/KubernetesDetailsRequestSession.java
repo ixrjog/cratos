@@ -19,7 +19,7 @@ public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
 
     private static Map<String, Map<String, ? extends HasSocketRequest>> requestMap = new HashedMap<>();
 
-    public static <T extends HasSocketRequest> void put(String sessionId, T message) {
+    public static <T extends HasSocketRequest> void putRequestMessage(String sessionId, T message) {
         if (SocketActionRequestEnum.UNSUBSCRIBE.name()
                 .equalsIgnoreCase(message.getAction())) {
             if (containsBySessionId(sessionId)) {
@@ -42,7 +42,7 @@ public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
         return KubernetesDetailsRequestSession.requestMap.containsKey(sessionId);
     }
 
-    public static <T extends HasSocketRequest> Map<String, T> getBySessionId(String sessionId) {
+    public static <T extends HasSocketRequest> Map<String, T> getRequestMessageBySessionId(String sessionId) {
         return (Map<String, T>) KubernetesDetailsRequestSession.requestMap.get(sessionId);
     }
 

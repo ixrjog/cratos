@@ -1,7 +1,8 @@
-package com.baiyi.cratos.broker;
+package com.baiyi.cratos.kubernetes.broker;
 
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
+import com.baiyi.cratos.kubernetes.KubernetesDetailsChannelHandlerFactory;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
             if (KubernetesDetailsRequestSession.containsBySessionId(this.sessionId)) {
                 // 深copy
                 Map<String, HasSocketRequest> queryMap = Maps.newHashMap(
-                        KubernetesDetailsRequestSession.getBySessionId(this.sessionId));
+                        KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
                 queryMap.forEach((k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId,
                         this.session, request));
             }
