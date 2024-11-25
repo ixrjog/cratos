@@ -43,14 +43,15 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
     }
 
     private void runTask() {
-        if (KubernetesDetailsRequestSession.containsBySessionId(this.sessionId)) {
-            // 深copy
-            Map<String, HasSocketRequest> queryMap = Maps.newHashMap(
-                    KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
-            queryMap.forEach(
-                    (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
-                            request));
+        if (!KubernetesDetailsRequestSession.containsBySessionId(this.sessionId)) {
+            return;
         }
+        // 深copy
+        Map<String, HasSocketRequest> queryMap = Maps.newHashMap(
+                KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
+        queryMap.forEach(
+                (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
+                        request));
     }
 
 }
