@@ -87,4 +87,9 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
         }
     }
 
+    @Override
+    public List<String> getNamespaceOptions() {
+        return applicationResourceMapper.getNamespaceOptions();
+    }
+
 }

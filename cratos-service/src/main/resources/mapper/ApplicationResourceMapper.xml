@@ -18,4 +18,10 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
   </resultMap>
+
+  <select id="getNamespaceOptions" resultType="java.lang.String">
+      select distinct namespace
+      from application_resource
+      where namespace != '';
+  </select>
 </mapper>

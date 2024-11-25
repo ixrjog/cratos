@@ -19,4 +19,6 @@ public interface ApplicationResourceService extends BaseUniqueKeyService<Applica
 
     List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType, String namespace);
 
+    List<String> getNamespaceOptions();
+
 }

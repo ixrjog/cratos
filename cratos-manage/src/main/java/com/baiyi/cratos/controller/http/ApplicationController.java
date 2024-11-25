@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,6 +76,12 @@ public class ApplicationController {
     public HttpResult<Boolean> deleteApplicationResourceById(@RequestParam int id) {
         applicationResourceFacade.deleteById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Get application resource namespace options")
+    @GetMapping(value = "/resource/namespace/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getResourceNamespaceOptions() {
+        return new HttpResult<>(applicationResourceFacade.getNamespaceOptions());
     }
 
 }

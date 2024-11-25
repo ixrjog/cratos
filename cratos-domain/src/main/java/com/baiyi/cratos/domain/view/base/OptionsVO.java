@@ -17,6 +17,18 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class OptionsVO {
 
+    public static OptionsVO.Options toOptions(List<String> strings) {
+        List<OptionsVO.Option> optionList = strings.stream()
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e)
+                        .value(e)
+                        .build())
+                .toList();
+        return OptionsVO.Options.builder()
+                .options(optionList)
+                .build();
+    }
+
     @Data
     @Schema
     @Builder
