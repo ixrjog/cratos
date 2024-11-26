@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class DingtalkResult {
+public class DingtalkResultModel {
 
     @Data
     @SuppressWarnings("SpellCheckingInspection")

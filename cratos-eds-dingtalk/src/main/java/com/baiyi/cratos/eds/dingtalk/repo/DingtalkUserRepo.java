@@ -2,12 +2,12 @@ package com.baiyi.cratos.eds.dingtalk.repo;
 
 import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkResponse;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkToken;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkUser;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkResponseModel;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkUserParam;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkTokenService;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkUserService;
+import com.baiyi.cratos.eds.dingtalk.repo.base.BaseDingtalkToken;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,36 +24,33 @@ import java.util.Optional;
 @Component
 public class DingtalkUserRepo extends BaseDingtalkToken {
 
-    private final DingtalkUserService dingtalkUserService;
 
-    public DingtalkUserRepo(RedisUtil redisUtil, DingtalkTokenService dingtalkTokenService,
-                            DingtalkUserService dingtalkUserService) {
-        super(redisUtil, dingtalkTokenService);
-        this.dingtalkUserService = dingtalkUserService;
+    public DingtalkUserRepo(RedisUtil redisUtil, DingtalkService dingtalkService) {
+        super(redisUtil, dingtalkService);
     }
 
-    public DingtalkUser.UserResult list(EdsDingtalkConfigModel.Dingtalk dingtalk,
-                                        DingtalkUserParam.QueryUserPage queryUserPage) {
-        DingtalkToken.TokenResult tokenResponse = getToken(dingtalk);
-        return dingtalkUserService.list(tokenResponse.getAccessToken(), queryUserPage);
+    public DingtalkUserModel.UserResult list(EdsDingtalkConfigModel.Dingtalk dingtalk,
+                                             DingtalkUserParam.QueryUserPage queryUserPage) {
+        DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
+        return dingtalkService.list(tokenResponse.getAccessToken(), queryUserPage);
     }
 
-    public List<DingtalkUser.User> queryUserByDeptId(EdsDingtalkConfigModel.Dingtalk dingtalk, Long deptId) {
-        List<DingtalkUser.User> users = Lists.newArrayList();
+    public List<DingtalkUserModel.User> queryUserByDeptId(EdsDingtalkConfigModel.Dingtalk dingtalk, Long deptId) {
+        List<DingtalkUserModel.User> users = Lists.newArrayList();
         DingtalkUserParam.QueryUserPage queryUserPage = DingtalkUserParam.QueryUserPage.builder()
                 .deptId(deptId)
                 .build();
         while (true) {
-            DingtalkToken.TokenResult tokenResponse = getToken(dingtalk);
-            DingtalkUser.UserResult userResult = list(dingtalk, queryUserPage);
-            Optional<List<DingtalkUser.User>> optionalUsers = Optional.ofNullable(userResult)
-                    .map(DingtalkUser.UserResult::getResult)
-                    .map(DingtalkUser.Result::getList);
+            DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
+            DingtalkUserModel.UserResult userResult = list(dingtalk, queryUserPage);
+            Optional<List<DingtalkUserModel.User>> optionalUsers = Optional.ofNullable(userResult)
+                    .map(DingtalkUserModel.UserResult::getResult)
+                    .map(DingtalkUserModel.Result::getList);
             if (optionalUsers.isPresent()) {
                 users.addAll(optionalUsers.get());
                 if (Optional.of(userResult)
-                        .map(DingtalkUser.UserResult::getResult)
-                        .map(DingtalkResponse.Result::getHasMore)
+                        .map(DingtalkUserModel.UserResult::getResult)
+                        .map(DingtalkResponseModel.Result::getHasMore)
                         .orElse(false)) {
                     queryUserPage.setCursor(userResult.getResult()
                             .getNextCursor());

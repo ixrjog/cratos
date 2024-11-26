@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.repo.DingtalkDepartmentRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.DINGTALK_ROBOT, assetType = EdsAssetTypeEnum.DINGTALK_ROBOT_MSG)
-public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg> {
+public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg> {
 
     public EdsDingtalkRobotMsgAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -39,14 +39,14 @@ public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected List<DingtalkRobot.Msg> listEntities(
+    protected List<DingtalkRobotModel.Msg> listEntities(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Unsupported.");
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance,
-                                  DingtalkRobot.Msg entity) {
+                                  DingtalkRobotModel.Msg entity) {
         return newEdsAssetBuilder(instance, entity).build();
     }
 

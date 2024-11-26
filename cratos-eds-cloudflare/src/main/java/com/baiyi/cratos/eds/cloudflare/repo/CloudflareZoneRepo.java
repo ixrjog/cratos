@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.cloudflare.repo;
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CloudflareZoneRepo {
 
-    private final CloudflareZoneService cloudflareZoneService;
+    private final CloudflareService cloudflareService;
 
     public List<CloudflareZone.Result> listZones(EdsCloudflareConfigModel.Cloudflare cloudflare) {
         List<CloudflareZone.Result> results = Lists.newArrayList();
@@ -30,7 +30,7 @@ public class CloudflareZoneRepo {
             Map<String, String> param = DictBuilder.newBuilder()
                     .put("page", String.valueOf(page))
                     .build();
-            CloudflareHttpResult<List<CloudflareZone.Result>> rt = cloudflareZoneService.listZones(cloudflare.getCred()
+            CloudflareHttpResult<List<CloudflareZone.Result>> rt = cloudflareService.listZones(cloudflare.getCred()
                     .toBearer(), param);
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()

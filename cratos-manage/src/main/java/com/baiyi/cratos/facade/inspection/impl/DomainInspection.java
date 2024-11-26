@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.service.DomainService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -36,9 +36,9 @@ public class DomainInspection extends BaseInspection {
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
     public DomainInspection(NotificationTemplateService notificationTemplateService,
-                            DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                            DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
                             EdsConfigService edsConfigService, DomainService domainService) {
-        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
         this.domainService = domainService;
     }
 

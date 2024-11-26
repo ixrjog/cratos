@@ -17,13 +17,13 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class DingtalkToken {
+public class DingtalkTokenModel {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class TokenResult extends DingtalkResponse.BaseMsg implements Serializable {
+    public static class TokenResult extends DingtalkResponseModel.BaseMsg implements Serializable {
         @Serial
         private static final long serialVersionUID = 3927595287613794126L;
         @JsonProperty("access_token")

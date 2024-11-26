@@ -12,8 +12,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartment;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkUser;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
 import com.baiyi.cratos.eds.dingtalk.repo.DingtalkUserRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.DINGTALK_APP, assetType = EdsAssetTypeEnum.DINGTALK_USER)
-public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkUser.User> {
+public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkUserModel.User> {
 
     private static final long DEPT_ROOT_ID = 1L;
 
@@ -54,16 +54,16 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     @Override
-    protected List<DingtalkUser.User> listEntities(
+    protected List<DingtalkUserModel.User> listEntities(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) throws EdsQueryEntitiesException {
-        List<DingtalkDepartment.Department> results = Lists.newArrayList();
-        Map<String, DingtalkUser.User> userMap = Maps.newHashMap();
+        List<DingtalkDepartmentModel.Department> results = Lists.newArrayList();
+        Map<String, DingtalkUserModel.User> userMap = Maps.newHashMap();
         EdsDingtalkConfigModel.Dingtalk dingtalk = instance.getEdsConfigModel();
         try {
             Set<Long> deptIdSet = queryDeptSubIds(instance);
-            List<DingtalkDepartment.Department> entities = Lists.newArrayList();
+            List<DingtalkDepartmentModel.Department> entities = Lists.newArrayList();
             for (Long deptId : deptIdSet) {
-                List<DingtalkUser.User> users = dingtalkUserRepo.queryUserByDeptId(dingtalk, deptId);
+                List<DingtalkUserModel.User> users = dingtalkUserRepo.queryUserByDeptId(dingtalk, deptId);
                 if (!CollectionUtils.isEmpty(users)) {
                     users.forEach(e -> userMap.put(e.getUserid(), e));
                 }
@@ -90,7 +90,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
-            DingtalkUser.User entity) {
+            DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, entity.getMobile()));
@@ -105,7 +105,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
-                                  DingtalkUser.User entity) {
+                                  DingtalkUserModel.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserid())
                 .assetKeyOf(entity.getUnionid())
                 .nameOf(entity.getName())

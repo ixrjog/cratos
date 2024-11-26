@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.service.AssetMaturityService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -36,9 +36,9 @@ public class AssetMaturityInspection extends BaseInspection {
     public static final String CUSTOM_ASSET_EXPIRATION_INSPECTION_NOTIFICATION = "CUSTOM_ASSET_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public AssetMaturityInspection(NotificationTemplateService notificationTemplateService,
-                                   DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                                   DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
                                    EdsConfigService edsConfigService, AssetMaturityService assetMaturityService) {
-        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
         this.assetMaturityService = assetMaturityService;
     }
 

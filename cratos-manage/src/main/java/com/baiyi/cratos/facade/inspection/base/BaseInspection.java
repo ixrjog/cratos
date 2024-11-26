@@ -8,14 +8,12 @@ import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobot;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import com.baiyi.cratos.facade.inspection.InspectionTask;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +32,7 @@ import java.util.List;
 public abstract class BaseInspection implements InspectionTask, InitializingBean {
 
     private final NotificationTemplateService notificationTemplateService;
-    private final DingtalkRobotService dingtalkRobotService;
+    private final DingtalkService dingtalkService;
     protected final EdsInstanceHelper edsInstanceHelper;
     private final EdsConfigService edsConfigService;
 
@@ -45,10 +43,10 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     private String notification;
 
     public BaseInspection(NotificationTemplateService notificationTemplateService,
-                          DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                          DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
                           EdsConfigService edsConfigService) {
         this.notificationTemplateService = notificationTemplateService;
-        this.dingtalkRobotService = dingtalkRobotService;
+        this.dingtalkService = dingtalkService;
         this.edsInstanceHelper = edsInstanceHelper;
         this.edsConfigService = edsConfigService;
     }
@@ -65,11 +63,6 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
         return notificationTemplateService.getByUniqueKey(query);
     }
 
-    protected DingtalkRobot.Msg toRobotMsg(String robotMsg) {
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(robotMsg, DingtalkRobot.Msg.class);
-    }
-
     abstract protected String getMsg() throws IOException;
 
     protected void send() {
@@ -79,7 +72,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobot.Msg>>) edsInstanceHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
@@ -88,11 +81,11 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
             try {
-                DingtalkRobot.Msg message = toRobotMsg(getMsg());
+                DingtalkRobotModel.Msg message = DingtalkRobotModel.loadAs(getMsg());
                 if (notification.equals("LOCAL")) {
                     System.out.println(message);
                 } else {
-                    dingtalkRobotService.send(robot.getToken(), message);
+                    dingtalkService.send(robot.getToken(), message);
                     providerHolder.importAsset(message);
                 }
             } catch (IOException e) {

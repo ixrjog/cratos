@@ -1,9 +1,6 @@
 package com.baiyi.cratos.eds.dingtalk.configuration;
 
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkDepartmentService;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkTokenService;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkUserService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +21,9 @@ public class DingtalkWebClientConfiguration {
     private static final String BASE_URL = "https://oapi.dingtalk.com";
 
     @Bean
-    public DingtalkDepartmentService dingtalkDepartmentService() {
+    public DingtalkService dingtalkService() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
         WebClient webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
@@ -35,52 +31,7 @@ public class DingtalkWebClientConfiguration {
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
                 .build();
-        return factory.createClient(DingtalkDepartmentService.class);
-    }
-
-    @Bean
-    public DingtalkTokenService dingtalkTokenService() {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl(BASE_URL)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(DingtalkTokenService.class);
-    }
-
-    @Bean
-    public DingtalkUserService dingtalkUserService() {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl(BASE_URL)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(DingtalkUserService.class);
-    }
-
-    @Bean
-    public DingtalkRobotService dingtalkRobotService() {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl(BASE_URL)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(DingtalkRobotService.class);
+        return factory.createClient(DingtalkService.class);
     }
 
 }

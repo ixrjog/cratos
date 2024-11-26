@@ -18,13 +18,13 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class DingtalkDepartment {
+public class DingtalkDepartmentModel {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class DepartmentSubIdResult extends DingtalkResult.Query implements Serializable {
+    public static class DepartmentSubIdResult extends DingtalkResultModel.Query implements Serializable {
         @Serial
         private static final long serialVersionUID = 8776879385196041038L;
         private Result result;
@@ -42,7 +42,7 @@ public class DingtalkDepartment {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class GetDepartmentResult extends DingtalkResult.Query implements Serializable {
+    public static class GetDepartmentResult extends DingtalkResultModel.Query implements Serializable {
         @Serial
         private static final long serialVersionUID = 536273783194486923L;
         private Department result;

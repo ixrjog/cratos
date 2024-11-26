@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.configuration;
 
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +20,7 @@ import reactor.netty.http.client.HttpClient;
 public class CloudflareWebClientConfiguration {
 
     @Bean
-    public CloudflareZoneService cloudflareZoneService() {
+    public CloudflareService cloudflareService() {
         HttpClient httpClient = HttpClient.create()
                 // 走代理
 //                .proxy(proxy ->
@@ -36,23 +35,7 @@ public class CloudflareWebClientConfiguration {
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
                 .build();
-        return factory.createClient(CloudflareZoneService.class);
-    }
-
-    @Bean
-    public CloudflareCertService cloudflareCertService() {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl(EdsCloudflareConfigModel.CLIENT_API)
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(CloudflareCertService.class);
+        return factory.createClient(CloudflareService.class);
     }
 
 }

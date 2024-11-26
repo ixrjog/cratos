@@ -11,11 +11,14 @@ import com.baiyi.cratos.eds.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.facade.inspection.model.DeploymentImageModel;
-import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.EdsConfigService;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
@@ -50,10 +53,10 @@ public class AppDeploymentImageInspection extends BaseInspection {
     private static final String[] FILTER_LIST = {"-1", "-2", "-3", "-4"};
 
     public AppDeploymentImageInspection(NotificationTemplateService notificationTemplateService,
-                                        DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                                        DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
                                         EdsConfigService edsConfigService, EdsAssetService edsAssetService,
                                         EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }

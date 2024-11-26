@@ -1,10 +1,10 @@
-package com.baiyi.cratos.eds.dingtalk.repo;
+package com.baiyi.cratos.eds.dingtalk.repo.base;
 
 import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkToken;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkTokenService;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 
 import static com.baiyi.cratos.common.constants.CacheKeyConstants.DINGTALK_TOKEN;
 
@@ -16,25 +16,24 @@ import static com.baiyi.cratos.common.constants.CacheKeyConstants.DINGTALK_TOKEN
 public abstract class BaseDingtalkToken {
 
     private final RedisUtil redisUtil;
+    protected final DingtalkService dingtalkService;
 
-    private final DingtalkTokenService dingtalkTokenService;
-
-    public BaseDingtalkToken(RedisUtil redisUtil, DingtalkTokenService dingtalkTokenService) {
+    public BaseDingtalkToken(RedisUtil redisUtil, DingtalkService dingtalkService) {
         this.redisUtil = redisUtil;
-        this.dingtalkTokenService = dingtalkTokenService;
+        this.dingtalkService = dingtalkService;
     }
 
     private String generateCacheKey(String name) {
         return StringFormatter.format(DINGTALK_TOKEN, name);
     }
 
-    protected DingtalkToken.TokenResult getToken(EdsDingtalkConfigModel.Dingtalk dingtalk) {
+    protected DingtalkTokenModel.TokenResult getToken(EdsDingtalkConfigModel.Dingtalk dingtalk) {
         String key = generateCacheKey(dingtalk.getApp()
                 .getName());
         if (redisUtil.hasKey(key)) {
-            return (DingtalkToken.TokenResult) redisUtil.get(key);
+            return (DingtalkTokenModel.TokenResult) redisUtil.get(key);
         }
-        DingtalkToken.TokenResult token = dingtalkTokenService.getToken(dingtalk.getApp()
+        DingtalkTokenModel.TokenResult token = dingtalkService.getToken(dingtalk.getApp()
                 .getAppKey(), dingtalk.getApp()
                 .getAppSecret());
         redisUtil.set(key, token, token.getExpiresIn());

@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.service.CertificateService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -36,9 +36,9 @@ public class CertificateInspection extends BaseInspection {
     public static final String CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION = "CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public CertificateInspection(NotificationTemplateService notificationTemplateService,
-                                 DingtalkRobotService dingtalkRobotService, EdsInstanceHelper edsInstanceHelper,
+                                 DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
                                  EdsConfigService edsConfigService, CertificateService certificateService) {
-        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
         this.certificateService = certificateService;
     }
 

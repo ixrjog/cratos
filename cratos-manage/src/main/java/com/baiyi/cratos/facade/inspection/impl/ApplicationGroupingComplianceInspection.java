@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.EdsInstanceHelper;
-import com.baiyi.cratos.eds.dingtalk.service.DingtalkRobotService;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
@@ -25,7 +25,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
@@ -142,12 +145,12 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
             """;
 
     public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
-                                                   DingtalkRobotService dingtalkRobotService,
+                                                   DingtalkService dingtalkService,
                                                    EdsInstanceHelper edsInstanceHelper,
                                                    EdsConfigService edsConfigService, ListAppGroup listAppGroup,
                                                    EdsAssetService edsAssetService,
                                                    EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkRobotService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }

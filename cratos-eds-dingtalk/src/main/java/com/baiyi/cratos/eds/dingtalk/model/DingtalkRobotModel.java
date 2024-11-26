@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.dingtalk.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +20,12 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class DingtalkRobot {
+public class DingtalkRobotModel {
+
+    public static Msg loadAs(String robotMsg) {
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(robotMsg, DingtalkRobotModel.Msg.class);
+    }
 
     @Data
     @Builder

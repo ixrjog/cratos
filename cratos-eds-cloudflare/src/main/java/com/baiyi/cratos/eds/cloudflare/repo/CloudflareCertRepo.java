@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.cloudflare.repo;
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
 import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CloudflareCertRepo {
 
-    private final CloudflareCertService certService;
+    private final CloudflareService cloudflareService;
 
     public List<CloudflareCert.Result> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare,
                                                             String zoneId) {
@@ -31,7 +31,7 @@ public class CloudflareCertRepo {
             Map<String, String> param = DictBuilder.newBuilder()
                     .put("page", String.valueOf(page))
                     .build();
-            CloudflareHttpResult<List<CloudflareCert.Result>> rt = certService.listCertificatePacks(cloudflare.getCred()
+            CloudflareHttpResult<List<CloudflareCert.Result>> rt = cloudflareService.listCertificatePacks(cloudflare.getCred()
                     .toBearer(), zoneId, param);
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()
