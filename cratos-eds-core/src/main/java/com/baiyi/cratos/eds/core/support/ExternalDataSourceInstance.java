@@ -12,10 +12,10 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ExternalDataSourceInstance<C extends IEdsConfigModel> {
+public class ExternalDataSourceInstance<Config extends IEdsConfigModel> {
 
     EdsInstance edsInstance;
 
-    C edsConfigModel;
+    Config edsConfigModel;
 
 }

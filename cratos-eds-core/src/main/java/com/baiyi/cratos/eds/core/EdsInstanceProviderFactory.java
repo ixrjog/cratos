@@ -33,7 +33,7 @@ public class EdsInstanceProviderFactory {
 
     private static final Map<String, Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <C extends IEdsConfigModel, A> void register(EdsInstanceAssetProvider<C, A> providerBean) {
+    public static <Config extends IEdsConfigModel, Asset> void register(EdsInstanceAssetProvider<Config, Asset> providerBean) {
         log.info("EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(),
                 providerBean.getAssetType());
         if (CONTEXT.containsKey(providerBean.getInstanceType())) {
@@ -48,16 +48,16 @@ public class EdsInstanceProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <A> A produceModel(String instanceType, String assetType, EdsAssetVO.Asset asset) {
-        return (A) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
+    public static <Asset> Asset produceModel(String instanceType, String assetType, EdsAssetVO.Asset asset) {
+        return (Asset) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .assetLoadAs(asset.getOriginalModel());
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> C produceConfig(String instanceType, String assetType,
-                                                              EdsConfig edsConfig) {
-        return (C) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
+    public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, String assetType,
+                                                                        EdsConfig edsConfig) {
+        return (Config) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .produceConfig(edsConfig);
     }
@@ -75,12 +75,12 @@ public class EdsInstanceProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> C produceConfig(String instanceType, EdsConfig edsConfig) {
+    public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, EdsConfig edsConfig) {
         try {
             Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
                     instanceType);
             for (String assetType : pMap.keySet()) {
-                return (C) pMap.get(assetType)
+                return (Config) pMap.get(assetType)
                         .produceConfig(edsConfig);
             }
         } catch (Exception e) {
@@ -107,25 +107,25 @@ public class EdsInstanceProviderFactory {
      *
      * @param instance
      * @param assetType
-     * @param <C>
-     * @param <A>
+     * @param <Config>
+     * @param <Asset>
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel, A> EdsInstanceProviderHolder<C, A> buildHolder(
-            ExternalDataSourceInstance<C> instance, String assetType) {
+    public static <Config extends IEdsConfigModel, Asset> EdsInstanceProviderHolder<Config, Asset> buildHolder(
+            ExternalDataSourceInstance<Config> instance, String assetType) {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
         Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = Optional.of(
                         CONTEXT.get(instanceType))
                 .orElseThrow(() -> new EdsInstanceProviderException("No available provider: instanceType={}.",
                         instanceType));
-        EdsInstanceAssetProvider<C, A> provider = (EdsInstanceAssetProvider<C, A>) Optional.of(
+        EdsInstanceAssetProvider<Config, Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) Optional.of(
                         providerMap.get(assetType))
                 .orElseThrow(
                         () -> new EdsInstanceProviderException("No available provider: instanceType={}, assetType={}.",
                                 instanceType, assetType));
-        return EdsInstanceProviderHolder.<C, A>builder()
+        return EdsInstanceProviderHolder.<Config, Asset>builder()
                 .instance(instance)
                 .provider(provider)
                 .build();

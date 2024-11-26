@@ -11,9 +11,9 @@ import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
  * @Date 2024/2/23 18:16
  * @Version 1.0
  */
-public interface EdsInstanceAssetProvider<C extends IEdsConfigModel, A> extends EdsAssetTypeOfAnnotate {
+public interface EdsInstanceAssetProvider<Config extends IEdsConfigModel, Asset> extends EdsAssetTypeOfAnnotate {
 
-    void importAssets(ExternalDataSourceInstance<C> instance);
+    void importAssets(ExternalDataSourceInstance<Config> instance);
 
     /**
      * Import a asset
@@ -21,11 +21,11 @@ public interface EdsInstanceAssetProvider<C extends IEdsConfigModel, A> extends 
      * @param asset
      * @return
      */
-    EdsAsset importAsset(ExternalDataSourceInstance<C> instance, A asset);
+    EdsAsset importAsset(ExternalDataSourceInstance<Config> instance, Asset asset);
 
-    C produceConfig(EdsConfig edsConfig);
+    Config produceConfig(EdsConfig edsConfig);
 
-    A assetLoadAs(String originalModel);
+    Asset assetLoadAs(String originalModel);
 
     void setConfig(EdsConfig edsConfig);
 

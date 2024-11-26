@@ -9,8 +9,8 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
  * @Date 2024/2/29 10:44
  * @Version 1.0
  */
-public interface IEdsAssetConverter<C extends IEdsConfigModel, A> {
+public interface IEdsAssetConverter<Config extends IEdsConfigModel, Asset> {
 
-    EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance, A entity);
+    EdsAsset toEdsAsset(ExternalDataSourceInstance<Config> instance, Asset entity);
 
 }

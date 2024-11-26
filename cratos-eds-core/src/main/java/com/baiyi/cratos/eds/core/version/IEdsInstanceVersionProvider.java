@@ -10,9 +10,9 @@ import org.springframework.beans.factory.InitializingBean;
  * &#064;Date  2024/11/26 14:18
  * &#064;Version 1.0
  */
-public interface IEdsInstanceVersionProvider<C extends IEdsConfigModel> extends EdsInstanceTypeOfAnnotate, InitializingBean {
+public interface IEdsInstanceVersionProvider<Config extends IEdsConfigModel> extends EdsInstanceTypeOfAnnotate, InitializingBean {
 
-    String getVersion(ExternalDataSourceInstance<C> instance);
+    String getVersion(ExternalDataSourceInstance<Config> instance);
 
     default void afterPropertiesSet() {
         EdsInstanceVersionProviderFactory.register(this);

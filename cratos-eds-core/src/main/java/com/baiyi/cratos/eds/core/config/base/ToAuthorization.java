@@ -21,7 +21,6 @@ public class ToAuthorization {
         default boolean hasToken() {
             return StringUtils.hasText(getToken());
         }
-
     }
 
     public interface ToAuthorizationApikey {
@@ -34,7 +33,6 @@ public class ToAuthorization {
         default boolean hasApikey() {
             return StringUtils.hasText(getApikey());
         }
-
     }
 
     public interface ToAuthorizationSsoKey {
@@ -44,7 +42,6 @@ public class ToAuthorization {
         default String toSsoKey() {
             return StringFormatter.arrayFormat("sso-key {}:{}", getKey(), getSecret());
         }
-
     }
 
     public interface ToAuthorizationBasic {
@@ -55,7 +52,6 @@ public class ToAuthorization {
             String basic = getUsername() + ":" + getPassword();
             return StringFormatter.format("Basic {}", toBase64(basic));
         }
-
     }
 
     private static String toBase64(String basic) {

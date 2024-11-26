@@ -23,27 +23,27 @@ public class EdsInstanceVersionProviderFactory {
 
     private static final Map<String, IEdsInstanceVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <C extends IEdsConfigModel> void register(IEdsInstanceVersionProvider<C> providerBean) {
+    public static <Config extends IEdsConfigModel> void register(IEdsInstanceVersionProvider<Config> providerBean) {
         log.info("EdsInstanceVersionProviderFactory Registered: instanceType={}", providerBean.getInstanceType());
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> IEdsInstanceVersionProvider<C> getVersionProvider(String instanceType) {
-        return (IEdsInstanceVersionProvider<C>) CONTEXT.get(instanceType);
+    public static <Config extends IEdsConfigModel> IEdsInstanceVersionProvider<Config> getVersionProvider(String instanceType) {
+        return (IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
     }
 
     @SuppressWarnings("unchecked")
-    public static <C extends IEdsConfigModel> EdsInstanceVersionProviderHolder<C> buildHolder(
-            ExternalDataSourceInstance<C> instance) throws EdsInstanceVersionProviderException {
+    public static <Config extends IEdsConfigModel> EdsInstanceVersionProviderHolder<Config> buildHolder(
+            ExternalDataSourceInstance<Config> instance) throws EdsInstanceVersionProviderException {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
         IEdsInstanceVersionProvider<?> provider = Optional.of(CONTEXT.get(instanceType))
                 .orElseThrow(() -> new EdsInstanceVersionProviderException("No available provider: instanceType={}.",
                         instanceType));
-        return EdsInstanceVersionProviderHolder.<C>builder()
+        return EdsInstanceVersionProviderHolder.<Config>builder()
                 .instance(instance)
-                .provider((IEdsInstanceVersionProvider<C>) provider)
+                .provider((IEdsInstanceVersionProvider<Config>) provider)
                 .build();
     }
 
