@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.kubernetes.details.handler.impl;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
@@ -32,12 +33,12 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
                               ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {
-            com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationResourceKubernetesDetails = com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails.builder()
+            QueryApplicationResourceKubernetesDetails param = QueryApplicationResourceKubernetesDetails.builder()
                     .applicationName(message.getApplicationName())
                     .namespace(message.getNamespace())
                     .build();
             MessageResponse<KubernetesVO.KubernetesDetails> response = deploymentFacade.queryKubernetesDeploymentDetails(
-                    queryApplicationResourceKubernetesDetails);
+                    param);
             send(session, response);
         }
     }
