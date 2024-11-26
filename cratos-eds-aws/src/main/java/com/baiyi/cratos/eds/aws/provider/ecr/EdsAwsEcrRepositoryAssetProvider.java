@@ -26,7 +26,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_ECR_REPOSITORY)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ECR_REPOSITORY)
 public class EdsAwsEcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, Repository> {
 
     public EdsAwsEcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

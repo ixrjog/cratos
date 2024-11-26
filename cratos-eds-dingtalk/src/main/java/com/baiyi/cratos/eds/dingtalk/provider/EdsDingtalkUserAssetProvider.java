@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.DINGTALK_APP, assetType = EdsAssetTypeEnum.DINGTALK_USER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_USER)
 public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkUserModel.User> {
 
     private static final long DEPT_ROOT_ID = 1L;

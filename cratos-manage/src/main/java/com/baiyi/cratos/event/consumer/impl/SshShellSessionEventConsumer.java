@@ -1,6 +1,6 @@
 package com.baiyi.cratos.event.consumer.impl;
 
-import com.baiyi.cratos.common.constants.TopicConstants;
+import com.baiyi.cratos.common.constants.EventTopicConstants;
 import com.baiyi.cratos.domain.annotation.Topic;
 import com.baiyi.cratos.event.Event;
 import com.baiyi.cratos.event.consumer.base.BaseEventConsumer;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Slf4j
-@Topic(name = TopicConstants.SSH_SHELL_SESSION_TOPIC)
+@Topic(name = EventTopicConstants.SSH_SHELL_SESSION_TOPIC)
 @Component
 public class SshShellSessionEventConsumer extends BaseEventConsumer<SshShellEvent> {
 

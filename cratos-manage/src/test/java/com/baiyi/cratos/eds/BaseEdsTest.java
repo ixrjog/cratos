@@ -40,7 +40,8 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
     private CredentialService credService;
 
     public void importInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(importInstanceAsset.getInstanceId(), importInstanceAsset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(importInstanceAsset.getInstanceId(),
+                importInstanceAsset.getAssetType());
         providerHolder.importAssets();
     }
 
@@ -55,13 +56,14 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
     public C getConfig(int configId) {
         EdsConfig edsConfig = edsConfigService.getById(configId);
         String configContent = edsConfig.getConfigContent();
+        C config ;
         if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credService.getById(edsConfig.getCredentialId());
             if (cred != null) {
-                return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));
+               return wrapConfig(edsConfig,configLoadAs(configCredTemplate.renderTemplate(configContent, cred)));
             }
         }
-        return configLoadAs(configContent);
+        return wrapConfig(edsConfig,configLoadAs(configContent));
     }
 
     @SuppressWarnings("unchecked")
@@ -69,6 +71,13 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsTest.class, 0);
         return ConfigUtil.loadAs(configContent, clazz);
+    }
+
+    private C wrapConfig(EdsConfig edsConfig, C config){
+        if (IdentityUtil.hasIdentity(edsConfig.getInstanceId())) {
+            config.setEdsInstance(edsInstanceService.getById(edsConfig.getInstanceId()));
+        }
+        return config;
     }
 
 }

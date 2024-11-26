@@ -23,7 +23,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HUAWEICLOUD, assetType = EdsAssetTypeEnum.HUAWEICLOUD_SUBNET)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SUBNET)
 public class HwcSubnetAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<HuaweicloudSubnet.Subnet> {
 
     public HwcSubnetAssetToBusinessWrapper(EdsInstanceService edsInstanceService,

@@ -33,7 +33,7 @@ import java.util.Map;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EC2)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_EC2)
 public class EdsAwsEc2AssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
 
     private final Ec2InstancesRepo ec2InstancesRepo;
@@ -61,12 +61,12 @@ public class EdsAwsEc2AssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
         }
         List<Instance> ec2Instances = awsEc2Repo.listInstances(regionId, aws);
         if (!CollectionUtils.isEmpty(ec2Instances)) {
-            return toEc2(regionId, aws, instanceTypeMap, ec2Instances);
+            return toEC2(regionId, aws, instanceTypeMap, ec2Instances);
         }
         return Collections.emptyList();
     }
 
-    private List<AwsEc2.Ec2> toEc2(String regionId, EdsAwsConfigModel.Aws aws,
+    private List<AwsEc2.Ec2> toEC2(String regionId, EdsAwsConfigModel.Aws aws,
                                    Map<String, InstanceModel.EC2InstanceType> instanceTypeMap,
                                    List<Instance> instances) {
         return instances.stream()

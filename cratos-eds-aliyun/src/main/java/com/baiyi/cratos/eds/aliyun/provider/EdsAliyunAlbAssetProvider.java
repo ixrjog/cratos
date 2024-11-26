@@ -30,7 +30,7 @@ import java.util.Set;
  * &#064;Version  1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ALB)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ALB)
 public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> {
 
     private final AliyunLoadBalancersRepo aliyunAlbRepo;

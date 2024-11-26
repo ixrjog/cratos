@@ -27,7 +27,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GANDI, assetType = EdsAssetTypeEnum.GANDI_DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GANDI, assetTypeOf = EdsAssetTypeEnum.GANDI_DOMAIN)
 public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsGandiConfigModel.Gandi, GandiDomain.Domain> {
 
     private final GandiDomainRepo gandiDomainRepo;

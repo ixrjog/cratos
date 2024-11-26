@@ -39,8 +39,11 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
     @Resource
     private EdsAssetService edsAssetService;
 
+
     @Resource
     private EdsAssetIndexService edsAssetIndexService;
+
+
 
     @Test
     void test() {

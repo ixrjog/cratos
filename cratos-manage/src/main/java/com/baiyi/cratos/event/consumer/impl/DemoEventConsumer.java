@@ -1,6 +1,6 @@
 package com.baiyi.cratos.event.consumer.impl;
 
-import com.baiyi.cratos.common.constants.TopicConstants;
+import com.baiyi.cratos.common.constants.EventTopicConstants;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.Topic;
 import com.baiyi.cratos.domain.message.TestMessage;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Slf4j
-@Topic(name = TopicConstants.TEST_TOPIC)
+@Topic(name = EventTopicConstants.TEST_TOPIC)
 @Component
 public class DemoEventConsumer extends BaseEventConsumer<TestMessage.Test> {
 

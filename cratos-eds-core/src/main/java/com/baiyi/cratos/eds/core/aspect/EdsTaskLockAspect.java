@@ -111,7 +111,7 @@ public class EdsTaskLockAspect {
         Expression expression = expressionParser.parseExpression(edsTaskLock.instanceId());
         Object instanceIdSpEL = expression.getValue(context);
         if (instanceIdSpEL instanceof Integer instanceId) {
-            return StringFormatter.arrayFormat(LOCK_KEY, edsInstanceAssetType.instanceType(), instanceId, edsInstanceAssetType.assetType());
+            return StringFormatter.arrayFormat(LOCK_KEY, edsInstanceAssetType.instanceTypeOf(), instanceId, edsInstanceAssetType.assetTypeOf());
         }
         return null;
     }

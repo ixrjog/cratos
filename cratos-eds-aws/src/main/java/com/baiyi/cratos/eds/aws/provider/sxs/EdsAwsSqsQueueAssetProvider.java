@@ -30,7 +30,7 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SQS_QUEUE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SQS_QUEUE)
 public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
 
     private final AwsSqsRepo awsSqsRepo;

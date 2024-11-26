@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ACR_NAMESPACE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_NAMESPACE)
 public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, ListNamespaceResponse.NamespacesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;

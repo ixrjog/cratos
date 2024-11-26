@@ -40,7 +40,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP_SUBSCRIPTION)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP_SUBSCRIPTION)
 public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunOnsV5.ConsumerGroupSubscription> {
 
     private final EdsAssetIndexService edsAssetIndexService;

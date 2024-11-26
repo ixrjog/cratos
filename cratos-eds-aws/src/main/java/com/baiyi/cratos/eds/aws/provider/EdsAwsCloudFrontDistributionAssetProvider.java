@@ -30,7 +30,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_CLOUDFRONT_DISTRIBUTION)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CLOUDFRONT_DISTRIBUTION)
 public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsCloudFrontDistribution.Distribution> {
 
     public EdsAwsCloudFrontDistributionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

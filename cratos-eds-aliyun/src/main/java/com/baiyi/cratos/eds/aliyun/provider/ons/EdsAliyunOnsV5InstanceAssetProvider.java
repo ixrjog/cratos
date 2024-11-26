@@ -32,7 +32,7 @@ import java.util.Set;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE)
 public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListInstancesResponseBody.ListInstancesResponseBodyDataList> {
 
     public EdsAliyunOnsV5InstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

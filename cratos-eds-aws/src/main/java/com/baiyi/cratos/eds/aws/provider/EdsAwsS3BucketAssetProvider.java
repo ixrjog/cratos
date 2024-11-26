@@ -27,7 +27,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_S3_BUCKET)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_S3_BUCKET)
 public class EdsAwsS3BucketAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, Bucket> {
 
     public EdsAwsS3BucketAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

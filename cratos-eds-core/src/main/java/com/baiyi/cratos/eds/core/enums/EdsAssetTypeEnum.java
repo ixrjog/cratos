@@ -85,7 +85,9 @@ public enum EdsAssetTypeEnum {
     HARBOR_REPOSITORY("Harbor Repository", 0),
 
     GOOGLECLOUD_CERTIFICATE("Certificate", 0),
-    GOOGLECLOUD_MEMBER("Member", 0);
+    GOOGLECLOUD_MEMBER("Member", 0),
+
+    DEF("Default",0);
 
     private final String displayName;
     private final Integer seq;

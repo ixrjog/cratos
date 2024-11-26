@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GODADDY, assetType = EdsAssetTypeEnum.GODADDY_DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GODADDY, assetTypeOf = EdsAssetTypeEnum.GODADDY_DOMAIN)
 public class GodaddyDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<GodaddyDomain.Domain> {
 
     @Override

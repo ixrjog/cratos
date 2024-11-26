@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GANDI, assetType = EdsAssetTypeEnum.GANDI_DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GANDI, assetTypeOf = EdsAssetTypeEnum.GANDI_DOMAIN)
 public class GandiDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<GandiDomain.Domain> {
 
     @Override

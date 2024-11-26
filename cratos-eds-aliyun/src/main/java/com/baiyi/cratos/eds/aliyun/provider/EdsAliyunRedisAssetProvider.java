@@ -33,7 +33,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_REDIS)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_REDIS)
 public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance> {
 
     private final AliyunRedisRepo aliyunRedisRepo;

@@ -8,13 +8,13 @@ import org.springframework.aop.support.AopUtils;
  * @Date 2024/3/12 10:21
  * @Version 1.0
  */
-public interface IAssetTypeAnnotate {
+public interface EdsAssetTypeOfAnnotate extends EdsInstanceTypeOfAnnotate {
 
     // 从注解中获取
     default String getAssetType() {
         return AopUtils.getTargetClass(this)
                 .getAnnotation(EdsInstanceAssetType.class)
-                .assetType()
+                .assetTypeOf()
                 .name();
     }
 

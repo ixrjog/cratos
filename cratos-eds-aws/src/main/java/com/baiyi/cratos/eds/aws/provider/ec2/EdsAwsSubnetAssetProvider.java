@@ -34,7 +34,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SUBNET)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SUBNET)
 public class EdsAwsSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Subnet> {
 
     public EdsAwsSubnetAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

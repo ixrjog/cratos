@@ -26,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.LDAP, assetType = EdsAssetTypeEnum.LDAP_PERSON)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_PERSON)
 public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfigModel.Ldap, LdapPerson.Person> {
 
     private final LdapPersonRepo ldapPersonRepo;

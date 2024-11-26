@@ -28,7 +28,6 @@ public class AwsWebClientConfiguration {
     public Ec2InstancesService ec2InstancesService() {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
         WebClient webClient = WebClient.builder()
                 .baseUrl(BASE_URL)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))

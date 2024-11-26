@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ACR_REPOSITORY)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_REPOSITORY)
 public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListRepositoryResponse.RepositoriesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;

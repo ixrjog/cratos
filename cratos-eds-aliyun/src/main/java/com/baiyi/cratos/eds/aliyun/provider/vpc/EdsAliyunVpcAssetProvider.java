@@ -30,7 +30,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_VPC)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VPC)
 public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeVpcsResponse.Vpc> {
 
     private final AliyunVpcRepo aliyunVpcRepo;

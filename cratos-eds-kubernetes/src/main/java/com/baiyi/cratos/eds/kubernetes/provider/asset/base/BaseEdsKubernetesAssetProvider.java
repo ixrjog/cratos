@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.provider.base;
+package com.baiyi.cratos.eds.kubernetes.provider.asset.base;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;

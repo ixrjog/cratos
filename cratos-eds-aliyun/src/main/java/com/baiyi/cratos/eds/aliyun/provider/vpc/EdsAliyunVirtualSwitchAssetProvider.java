@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_VIRTUAL_SWITCH)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VIRTUAL_SWITCH)
 public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunVirtualSwitch.Switch> {
 
     private final AliyunVpcRepo aliyunVpcRepo;

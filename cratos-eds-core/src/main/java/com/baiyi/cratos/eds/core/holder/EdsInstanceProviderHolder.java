@@ -21,10 +21,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EdsInstanceProviderHolder<C extends IEdsConfigModel, A> {
 
-    @Schema(description = "Eds Instance")
+    @Schema(description = "Eds instance")
     private ExternalDataSourceInstance<C> instance;
 
-    @Schema(description = "Eds Provider")
+    @Schema(description = "Eds provider")
     private EdsInstanceAssetProvider<C, A> provider;
 
     @Schema(description = "导入所有资产")

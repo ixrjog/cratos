@@ -1,7 +1,7 @@
 package com.baiyi.cratos.event.publisher;
 
 import com.baiyi.cratos.common.annotation.EventPublisher;
-import com.baiyi.cratos.common.constants.TopicConstants;
+import com.baiyi.cratos.common.constants.EventTopicConstants;
 import com.baiyi.cratos.common.event.IEventPublisher;
 import com.baiyi.cratos.domain.message.TestMessage;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class DemoEventPublisher implements IEventPublisher<TestMessage.Test> {
 
     @Override
-    @EventPublisher(topic = TopicConstants.TEST_TOPIC)
+    @EventPublisher(topic = EventTopicConstants.TEST_TOPIC)
     public void publish(TestMessage.Test test) {
     }
 

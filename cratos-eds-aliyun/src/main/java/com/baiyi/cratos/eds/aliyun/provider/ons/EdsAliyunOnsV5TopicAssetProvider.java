@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC)
 public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> {
 
     public EdsAliyunOnsV5TopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

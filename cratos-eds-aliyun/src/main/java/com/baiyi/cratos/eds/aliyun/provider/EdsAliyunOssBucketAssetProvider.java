@@ -30,7 +30,7 @@ import java.util.Set;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_OSS_BUCKET)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_OSS_BUCKET)
 public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, Bucket> {
 
     public EdsAliyunOssBucketAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

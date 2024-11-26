@@ -26,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_CERT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CERT)
 public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, CertificateSummary> {
 
     public EdsAwsCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

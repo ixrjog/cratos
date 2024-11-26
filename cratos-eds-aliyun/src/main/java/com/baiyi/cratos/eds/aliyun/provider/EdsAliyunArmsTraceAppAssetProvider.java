@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS)
 public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunArms.TraceApps> {
 
     public EdsAliyunArmsTraceAppAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

@@ -16,8 +16,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface EdsInstanceAssetType {
 
-    EdsInstanceTypeEnum instanceType();
+    EdsInstanceTypeEnum instanceTypeOf();
 
-    EdsAssetTypeEnum assetType();
+    EdsAssetTypeEnum assetTypeOf() default EdsAssetTypeEnum.DEF;
 
 }

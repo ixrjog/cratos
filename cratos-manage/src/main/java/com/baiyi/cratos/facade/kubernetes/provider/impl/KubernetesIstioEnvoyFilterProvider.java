@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.kubernetes.provider.impl;
 
 import com.baiyi.cratos.common.enums.KubernetesResourceKindEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.eds.kubernetes.provider.EdsIstioIstioEnvoyFilterAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.provider.asset.EdsIstioIstioEnvoyFilterAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioEnvoyFilterRepo;
 import com.baiyi.cratos.facade.kubernetes.provider.BaseKubernetesResourceProvider;
 import com.baiyi.cratos.service.EdsInstanceService;

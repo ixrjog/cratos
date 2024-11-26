@@ -30,7 +30,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HUAWEICLOUD, assetType = EdsAssetTypeEnum.HUAWEICLOUD_SCM_CERT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SCM_CERT)
 public class EdsHuaweicloudScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, CertificateDetail> {
 
     private final static String DATE_FORMAT = "yyyy-MM-dd' 'HH:mm:ss.S";

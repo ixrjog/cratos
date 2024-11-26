@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_RAM_USER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
 public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
 
     private final AliyunRamUserRepo aliyunRamUserRepo;

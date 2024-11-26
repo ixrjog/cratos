@@ -30,7 +30,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_TRANSFER_SERVER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_TRANSFER_SERVER)
 public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> {
 
     public EdsAwsTransferServerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

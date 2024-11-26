@@ -3,15 +3,10 @@ package com.baiyi.cratos.eds.harbor.repo;
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.core.config.EdsHarborConfigModel;
 import com.baiyi.cratos.eds.harbor.model.HarborRepository;
-import com.baiyi.cratos.eds.harbor.service.HarborRepositoryService;
+import com.baiyi.cratos.eds.harbor.service.HarborService;
+import com.baiyi.cratos.eds.harbor.service.HarborServiceFactory;
 import com.google.common.collect.Lists;
-import io.netty.channel.ChannelOption;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.support.WebClientAdapter;
-import org.springframework.web.service.invoker.HttpServiceProxyFactory;
-import reactor.netty.http.client.HttpClient;
 
 import java.util.List;
 import java.util.Map;
@@ -23,22 +18,10 @@ import java.util.Map;
  */
 public class HarborRepositoryRepo {
 
-    private static HarborRepositoryService createHarborRepositoryService(EdsHarborConfigModel.Harbor harbor) {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-        WebClient webClient = WebClient.builder()
-                .baseUrl(harbor.acqUrl())
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-        WebClientAdapter adapter = WebClientAdapter.create(webClient);
-        HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
-                .build();
-        return factory.createClient(HarborRepositoryService.class);
-    }
 
     public static List<HarborRepository.Repository> listRepositories(EdsHarborConfigModel.Harbor harbor,
                                                                      String project) {
-        HarborRepositoryService harborRepositoryService = createHarborRepositoryService(harbor);
+        HarborService harborService = HarborServiceFactory.createHarborService(harbor);
         int page = 1;
         int size = 10;
         Map<String, String> param = DictBuilder.newBuilder()
@@ -47,7 +30,7 @@ public class HarborRepositoryRepo {
                 .build();
         List<HarborRepository.Repository> result = Lists.newArrayList();
         while (true) {
-            List<HarborRepository.Repository> repositories = harborRepositoryService.listRepositories(harbor.getCred()
+            List<HarborRepository.Repository> repositories = harborService.listRepositories(harbor.getCred()
                     .toBasic(), project, param);
             if (CollectionUtils.isEmpty(repositories)) {
                 return result;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.gitlab.provider;
+package com.baiyi.cratos.eds.gitlab.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -30,7 +30,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_PROJECT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_PROJECT)
 public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, Project> {
 
     public EdsGitLabProjectAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

@@ -26,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.LDAP, assetType = EdsAssetTypeEnum.LDAP_GROUP)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_GROUP)
 public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfigModel.Ldap, LdapGroup.Group> {
 
     private final LdapGroupRepo ldapGroupRepo;

@@ -26,7 +26,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HUAWEICLOUD, assetType = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
 public class EdsHuaweicloudIamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult> {
 
     public EdsHuaweicloudIamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

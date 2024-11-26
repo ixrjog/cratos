@@ -34,7 +34,7 @@ import static com.baiyi.cratos.domain.constant.Global.*;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_DDS_MONGO_INSTANCE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DDS_MONGO_INSTANCE)
 public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance> {
 
     public EdsAliyunDdsMongoInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

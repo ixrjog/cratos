@@ -26,7 +26,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.DINGTALK_ROBOT, assetType = EdsAssetTypeEnum.DINGTALK_ROBOT_MSG)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_ROBOT, assetTypeOf = EdsAssetTypeEnum.DINGTALK_ROBOT_MSG)
 public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg> {
 
     public EdsDingtalkRobotMsgAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

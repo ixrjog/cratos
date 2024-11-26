@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.provider;
+package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesAutoscalerRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.resource.AdvancedHorizontalPodAutoscaler;
@@ -27,7 +27,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_ALIBABACLOUD_AUTOSCALER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES, assetTypeOf = EdsAssetTypeEnum.KUBERNETES_ALIBABACLOUD_AUTOSCALER)
 public class EdsKubernetesAlibabacloudAutoscalerAssetProvider extends BaseEdsKubernetesAssetProvider<AdvancedHorizontalPodAutoscaler> {
 
     private final KubernetesAutoscalerRepo kubernetesAutoscalerRepo;

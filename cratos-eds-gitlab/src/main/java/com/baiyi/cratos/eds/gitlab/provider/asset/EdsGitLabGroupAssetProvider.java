@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.gitlab.provider;
+package com.baiyi.cratos.eds.gitlab.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -26,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_GROUP)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_GROUP)
 public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, Group> {
 
     public EdsGitLabGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

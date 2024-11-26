@@ -30,7 +30,7 @@ import java.util.List;
  * &#064;Version  1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
 public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunDomain> {
 
     public EdsAliyunDomainProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

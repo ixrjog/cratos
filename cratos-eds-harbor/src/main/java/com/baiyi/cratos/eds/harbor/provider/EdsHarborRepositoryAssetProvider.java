@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HARBOR, assetType = EdsAssetTypeEnum.HARBOR_REPOSITORY)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HARBOR, assetTypeOf = EdsAssetTypeEnum.HARBOR_REPOSITORY)
 public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsHarborConfigModel.Harbor, HarborRepository.Repository> {
 
     public EdsHarborRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

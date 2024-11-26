@@ -72,10 +72,6 @@ public class KubernetesResourceTemplateCustom {
         private Map<String, String> data = Maps.newHashMap();
         @Builder.Default
         private List<KubernetesInstance> instances = Lists.newArrayList();
-//        @Builder.Default
-//        private Set<String> namespaces = Sets.newHashSet();
-//        @Builder.Default
-//        private Set<String> kinds = Sets.newHashSet();
         @Builder.Default
         private List<Strategy> strategies = Lists.newArrayList();
     }

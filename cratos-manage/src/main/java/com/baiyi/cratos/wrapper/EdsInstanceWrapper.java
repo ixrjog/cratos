@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetTypeVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolderBuilder;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.List;
 public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements IBaseWrapper<EdsInstanceVO.EdsInstance> {
 
     private final EdsConfigWrapper edsConfigWrapper;
+    private final EdsInstanceVersionProviderHolderBuilder versionHolderBuilder;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
@@ -36,13 +39,19 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
         // Wrap Eds Config
         edsConfigWrapper.wrap(vo);
         vo.setAssetTypes(EdsInstanceProviderFactory.getInstanceAssetTypes(vo.getEdsType()));
-        List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(
-                        vo.getEdsType())
+        List<EdsAssetTypeVO.Type> instanceAssetTypes = EdsInstanceProviderFactory.getInstanceAssetTypes(vo.getEdsType())
                 .stream()
                 .map(this::toType)
                 .sorted(Comparator.comparingInt(EdsAssetTypeVO.Type::getSeq))
                 .toList();
         vo.setInstanceAssetTypes(instanceAssetTypes);
+        // Version
+        EdsInstanceVersionProviderHolder<?> holder = versionHolderBuilder.newHolder(vo.getId());
+        try {
+            vo.setVersion(holder.version());
+        } catch (Exception ex) {
+            log.debug(ex.getMessage());
+        }
     }
 
     private EdsAssetTypeVO.Type toType(String name) {

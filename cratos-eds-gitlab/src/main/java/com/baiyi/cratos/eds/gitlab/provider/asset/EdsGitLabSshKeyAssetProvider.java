@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.gitlab.provider;
+package com.baiyi.cratos.eds.gitlab.provider.asset;
 
 import com.baiyi.cratos.common.util.SshKeyUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -34,7 +34,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GITLAB, assetType = EdsAssetTypeEnum.GITLAB_SSHKEY)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_SSHKEY)
 public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, SshKeyData> {
 
     public EdsGitLabSshKeyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

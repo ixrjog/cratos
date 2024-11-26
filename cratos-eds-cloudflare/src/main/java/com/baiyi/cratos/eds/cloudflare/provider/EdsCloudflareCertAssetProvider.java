@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.CLOUDFLARE, assetType = EdsAssetTypeEnum.CLOUDFLARE_CERT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_CERT)
 public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;

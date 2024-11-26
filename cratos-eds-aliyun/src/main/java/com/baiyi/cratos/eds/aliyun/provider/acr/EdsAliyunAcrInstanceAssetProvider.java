@@ -29,7 +29,7 @@ import java.util.*;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE)
 public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListInstanceResponse.InstancesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;

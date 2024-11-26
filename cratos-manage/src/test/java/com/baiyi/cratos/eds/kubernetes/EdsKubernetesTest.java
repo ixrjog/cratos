@@ -5,6 +5,7 @@ import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
@@ -56,6 +57,16 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     private KubernetesClientBuilder kubernetesClientBuilder;
 
     private static final String ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE = "alb.ingress.kubernetes.io/backend-keepalive";
+
+    @Resource
+    private KubernetesTest kubernetesTest;
+
+
+    @Test
+    void test1() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        kubernetesTest.test(cfg, null);
+    }
 
     @Test
     void ingressDevTest() {

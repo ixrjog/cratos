@@ -30,7 +30,7 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SNS_TOPIC)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SNS_TOPIC)
 public class EdsAwsSnsTopicAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Topic> {
 
     private final AwsSnsRepo awsSnsRepo;

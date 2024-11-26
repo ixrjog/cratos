@@ -40,9 +40,21 @@ public class KubernetesVO {
         private String message;
 
         private ApplicationVO.Application application;
+        private Banner banner;
         private String namespace;
         @Builder.Default
         private List<KubernetesDeploymentVO.Deployment> deployments = Lists.newArrayList();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Banner implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 7690223104294560669L;
+        private String name;
     }
 
 }

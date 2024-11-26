@@ -30,7 +30,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE)
 public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeDBInstanceAttributeResponse.DBInstanceAttribute> {
 
     private final AliyunRdsInstanceRepo aliyunRdsInstanceRepo;

@@ -26,7 +26,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_ELB)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ELB)
 public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, LoadBalancer> {
 
     public EdsAwsElbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

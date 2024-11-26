@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_EBS)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_EBS)
 public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, Volume> {
 
     private final AwsEbsRepo ebsRepo;

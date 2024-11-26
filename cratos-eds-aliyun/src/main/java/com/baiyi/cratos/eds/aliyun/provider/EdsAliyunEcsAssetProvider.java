@@ -33,7 +33,7 @@ import java.util.Optional;
  * &#064;Version  1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_ECS)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
 public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
 
     private final AliyunEcsRepo aliyunEcsRepo;

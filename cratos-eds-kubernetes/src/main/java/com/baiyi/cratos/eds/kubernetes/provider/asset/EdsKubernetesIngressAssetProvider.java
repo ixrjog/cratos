@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.provider;
+package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.eds.kubernetes.model.AckIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.model.EksIngressConditionsModel;
-import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
@@ -39,7 +39,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_INGRESS)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES, assetTypeOf = EdsAssetTypeEnum.KUBERNETES_INGRESS)
 public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetProvider<Ingress> {
 
     private final KubernetesIngressRepo kubernetesIngressRepo;

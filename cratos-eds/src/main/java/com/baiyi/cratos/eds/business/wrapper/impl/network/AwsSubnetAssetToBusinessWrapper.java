@@ -24,7 +24,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_SUBNET)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SUBNET)
 public class AwsSubnetAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<AwsEc2.Subnet> {
 
     public AwsSubnetAssetToBusinessWrapper(EdsInstanceService edsInstanceService,

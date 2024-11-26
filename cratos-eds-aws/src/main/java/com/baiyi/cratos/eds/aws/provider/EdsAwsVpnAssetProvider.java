@@ -27,7 +27,7 @@ import java.util.Optional;
  * @Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.AWS, assetType = EdsAssetTypeEnum.AWS_STS_VPN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_STS_VPN)
 public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
 
     public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

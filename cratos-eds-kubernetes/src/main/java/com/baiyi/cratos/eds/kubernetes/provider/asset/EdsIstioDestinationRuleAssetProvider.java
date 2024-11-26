@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.kubernetes.provider;
+package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.kubernetes.provider.base.BaseEdsKubernetesAssetProvider;
+import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIstioDestinationRuleRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
@@ -31,7 +31,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.KUBERNETES, assetType = EdsAssetTypeEnum.KUBERNETES_DESTINATION_RULE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES, assetTypeOf = EdsAssetTypeEnum.KUBERNETES_DESTINATION_RULE)
 public class EdsIstioDestinationRuleAssetProvider extends BaseEdsKubernetesAssetProvider<DestinationRule> {
 
     private final KubernetesIstioDestinationRuleRepo kubernetesIstioDestinationRuleRepo;

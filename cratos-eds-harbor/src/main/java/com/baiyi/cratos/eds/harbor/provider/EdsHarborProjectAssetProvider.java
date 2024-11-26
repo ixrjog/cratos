@@ -26,7 +26,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.HARBOR, assetType = EdsAssetTypeEnum.HARBOR_PROJECT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HARBOR, assetTypeOf = EdsAssetTypeEnum.HARBOR_PROJECT)
 public class EdsHarborProjectAssetProvider extends BaseEdsInstanceAssetProvider<EdsHarborConfigModel.Harbor, HarborProject.Project> {
 
     public EdsHarborProjectAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,

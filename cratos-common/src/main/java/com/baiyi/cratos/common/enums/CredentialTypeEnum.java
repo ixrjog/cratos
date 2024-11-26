@@ -37,17 +37,22 @@ public enum CredentialTypeEnum {
     private final String displayName;
 
     CredentialTypeEnum(String displayName) {
-        this.displayName= displayName;
+        this.displayName = displayName;
     }
 
-    public static OptionsVO.Options toOptions(){
-        List<OptionsVO.Option> optionList = Arrays.stream(CredentialTypeEnum.values()).map(e -> OptionsVO.Option.builder()
-                .label(e.getDisplayName())
-                .value(e.name())
-                .build()).collect(Collectors.toList());
+    public static OptionsVO.Options toOptions() {
         return OptionsVO.Options.builder()
-                .options(optionList)
+                .options(getOptions())
                 .build();
+    }
+
+    private static List<OptionsVO.Option> getOptions() {
+        return Arrays.stream(CredentialTypeEnum.values())
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e.getDisplayName())
+                        .value(e.name())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }

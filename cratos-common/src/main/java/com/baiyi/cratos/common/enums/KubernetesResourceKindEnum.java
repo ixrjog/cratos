@@ -24,15 +24,18 @@ public enum KubernetesResourceKindEnum {
     ENVOY_FILTER;
 
     public static OptionsVO.Options toOptions() {
-        List<OptionsVO.Option> optionList = Arrays.stream(KubernetesResourceKindEnum.values())
+        return OptionsVO.Options.builder()
+                .options(getOptions())
+                .build();
+    }
+
+    private static List<OptionsVO.Option> getOptions() {
+        return Arrays.stream(KubernetesResourceKindEnum.values())
                 .map(e -> OptionsVO.Option.builder()
                         .label(e.name())
                         .value(e.name())
                         .build())
                 .collect(Collectors.toList());
-        return OptionsVO.Options.builder()
-                .options(optionList)
-                .build();
     }
 
     public static void checkKind(String kind) {

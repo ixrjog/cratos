@@ -36,7 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.ALIYUN, assetType = EdsAssetTypeEnum.ALIYUN_RAM_POLICY)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_POLICY)
 public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetPolicyResponse.Policy> {
 
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;

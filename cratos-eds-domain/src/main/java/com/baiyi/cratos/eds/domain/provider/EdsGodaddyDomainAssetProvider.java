@@ -27,7 +27,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceType = EdsInstanceTypeEnum.GODADDY, assetType = EdsAssetTypeEnum.GODADDY_DOMAIN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GODADDY, assetTypeOf = EdsAssetTypeEnum.GODADDY_DOMAIN)
 public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsGodaddyConfigModel.Godaddy, GodaddyDomain.Domain> {
 
     private final GodaddyDomainRepo godaddyDomainRepo;
