@@ -4,9 +4,9 @@ package com.baiyi.cratos.eds.core;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.google.common.collect.Maps;
@@ -14,7 +14,6 @@ import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,7 +32,8 @@ public class EdsInstanceProviderFactory {
 
     private static final Map<String, Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends IEdsConfigModel, Asset> void register(EdsInstanceAssetProvider<Config, Asset> providerBean) {
+    public static <Config extends IEdsConfigModel, Asset> void register(
+            EdsInstanceAssetProvider<Config, Asset> providerBean) {
         log.info("EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(),
                 providerBean.getAssetType());
         if (CONTEXT.containsKey(providerBean.getInstanceType())) {
@@ -116,15 +116,17 @@ public class EdsInstanceProviderFactory {
             ExternalDataSourceInstance<Config> instance, String assetType) {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
-        Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = Optional.of(
-                        CONTEXT.get(instanceType))
-                .orElseThrow(() -> new EdsInstanceProviderException("No available provider: instanceType={}.",
-                        instanceType));
-        EdsInstanceAssetProvider<Config, Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) Optional.of(
-                        providerMap.get(assetType))
-                .orElseThrow(
-                        () -> new EdsInstanceProviderException("No available provider: instanceType={}, assetType={}.",
-                                instanceType, assetType));
+
+        if (!CONTEXT.containsKey(instanceType)) {
+            EdsInstanceProviderException.runtime("No available provider: instanceType={}.", instanceType);
+        }
+        Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = CONTEXT.get(instanceType);
+        if (!providerMap.containsKey(assetType)) {
+            EdsInstanceProviderException.runtime("No available provider: instanceType={}, assetType={}.", instanceType,
+                    assetType);
+        }
+        EdsInstanceAssetProvider<Config, Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) providerMap.get(
+                assetType);
         return EdsInstanceProviderHolder.<Config, Asset>builder()
                 .instance(instance)
                 .provider(provider)

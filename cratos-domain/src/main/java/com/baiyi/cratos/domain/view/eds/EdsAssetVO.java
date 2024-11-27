@@ -1,14 +1,19 @@
 package com.baiyi.cratos.domain.view.eds;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -54,7 +59,8 @@ public class EdsAssetVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Asset extends BaseVO implements HasResourceCount, Serializable {
+    @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
+    public static class Asset extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, HasResourceCount, Serializable {
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;
         private Integer id;
@@ -77,6 +83,14 @@ public class EdsAssetVO {
         private String description;
         private ToBusiness toBusiness;
         private Map<String, Integer> resourceCount;
+
+        @Override
+        public Integer getBusinessId() {
+            return id;
+        }
+
+        @Schema(description = "Business Tags")
+        private List<BusinessTagVO.BusinessTag> businessTags;
     }
 
     @EqualsAndHashCode(callSuper = true)

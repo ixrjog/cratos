@@ -32,4 +32,8 @@ public class EdsInstanceVersionProviderException extends BaseException {
         this.code = 700001;
     }
 
+    public static void runtime(String message, Object... var2) {
+        throw new EdsInstanceVersionProviderException(StringFormatter.arrayFormat(message, var2));
+    }
+
 }

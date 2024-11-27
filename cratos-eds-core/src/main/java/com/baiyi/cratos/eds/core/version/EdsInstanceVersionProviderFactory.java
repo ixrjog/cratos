@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -29,7 +28,8 @@ public class EdsInstanceVersionProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends IEdsConfigModel> IEdsInstanceVersionProvider<Config> getVersionProvider(String instanceType) {
+    public static <Config extends IEdsConfigModel> IEdsInstanceVersionProvider<Config> getVersionProvider(
+            String instanceType) {
         return (IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
     }
 
@@ -38,12 +38,12 @@ public class EdsInstanceVersionProviderFactory {
             ExternalDataSourceInstance<Config> instance) throws EdsInstanceVersionProviderException {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();
-        IEdsInstanceVersionProvider<?> provider = Optional.of(CONTEXT.get(instanceType))
-                .orElseThrow(() -> new EdsInstanceVersionProviderException("No available provider: instanceType={}.",
-                        instanceType));
+        if (!CONTEXT.containsKey(instanceType)) {
+            EdsInstanceVersionProviderException.runtime("No available provider: instanceType={}.", instanceType);
+        }
         return EdsInstanceVersionProviderHolder.<Config>builder()
                 .instance(instance)
-                .provider((IEdsInstanceVersionProvider<Config>) provider)
+                .provider((IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType))
                 .build();
     }
 

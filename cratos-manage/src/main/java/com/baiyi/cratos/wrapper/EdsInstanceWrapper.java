@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetTypeVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolderBuilder;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -46,11 +47,10 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
                 .toList();
         vo.setInstanceAssetTypes(instanceAssetTypes);
         // Version
-        EdsInstanceVersionProviderHolder<?> holder = versionHolderBuilder.newHolder(vo.getId());
         try {
+            EdsInstanceVersionProviderHolder<?> holder = versionHolderBuilder.newHolder(vo.getId());
             vo.setVersion(holder.version());
-        } catch (Exception ex) {
-            log.debug(ex.getMessage());
+        } catch (EdsInstanceVersionProviderException ignored) {
         }
     }
 

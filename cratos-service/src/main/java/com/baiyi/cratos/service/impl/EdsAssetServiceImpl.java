@@ -2,6 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
@@ -31,6 +32,7 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 public class EdsAssetServiceImpl implements EdsAssetService {
 
     private final EdsAssetMapper edsAssetMapper;
@@ -93,7 +95,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
 
     @Override
     // 删除用证书关联的业务标签、凭据
-    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
         EdsAssetService.super.deleteById(id);
     }
