@@ -27,6 +27,10 @@ public class EdsInstanceVersionProviderFactory {
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
 
+    public static boolean isSupport(String instanceType){
+        return CONTEXT.containsKey(instanceType);
+    }
+
     @SuppressWarnings("unchecked")
     public static <Config extends IEdsConfigModel> IEdsInstanceVersionProvider<Config> getVersionProvider(
             String instanceType) {

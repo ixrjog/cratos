@@ -26,6 +26,14 @@ public class EdsInstanceVersionProviderHolderBuilder {
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigService edsConfigService;
 
+    public boolean isSupport(Integer instanceId) {
+        EdsInstance edsInstance = edsInstanceService.getById(instanceId);
+        if (edsInstance == null) {
+            return false;
+        }
+        return EdsInstanceVersionProviderFactory.isSupport(edsInstance.getEdsType());
+    }
+
     public EdsInstanceVersionProviderHolder<?> newHolder(
             Integer instanceId) throws EdsInstanceVersionProviderException {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
