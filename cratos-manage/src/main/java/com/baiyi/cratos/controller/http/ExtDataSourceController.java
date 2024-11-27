@@ -61,6 +61,13 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Unregister eds instance")
+    @DeleteMapping(value = "/instance/unregister", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> unregisterEdsInstance(@RequestParam int id) {
+        edsFacade.unregisterEdsInstance(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update eds instance")
     @PutMapping(value = "/instance/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateEdsInstance(

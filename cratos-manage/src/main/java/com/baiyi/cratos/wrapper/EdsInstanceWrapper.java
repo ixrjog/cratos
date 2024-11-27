@@ -65,7 +65,7 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
             EdsInstanceVersionProviderHolder<?> holder = versionHolderBuilder.newHolder(instanceId);
             return holder.version();
         } catch (EdsInstanceVersionProviderException ignored) {
-            return "";
+            return null;
         }
     }
 

@@ -1,5 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
@@ -35,13 +37,16 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     public static final boolean SKIP_LOAD_ASSET = true;
 
     @Override
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(EdsAssetVO.Asset vo) {
-        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(vo.getInstanceId(), vo.getAssetType());
+        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(vo.getInstanceId(),
+                vo.getAssetType());
         // TODO 是否要序列化对象？
         vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
                 .assetLoadAs(vo.getOriginalModel()));
         // ToBusiness
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(vo.getAssetType());
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
+                vo.getAssetType());
         if (assetToBusinessWrapper != null) {
             assetToBusinessWrapper.wrap(vo);
         }
@@ -53,17 +58,18 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(asset.getInstanceId(), asset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(asset.getInstanceId(),
+                asset.getAssetType());
         if (!skipLoadAsset) {
             asset.setOriginalAsset(providerHolder.getProvider()
                     .assetLoadAs(asset.getOriginalModel()));
         }
         // ToBusiness
-        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(asset.getAssetType());
+        IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
+                asset.getAssetType());
         if (assetToBusinessWrapper != null) {
             assetToBusinessWrapper.wrap(asset);
         }
-
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
                 .put(makeResourceCountForAssetIndex(asset))
                 .build();

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -57,6 +58,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATION:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        ApplicationService.super.deleteById(id);
     }
 
 }

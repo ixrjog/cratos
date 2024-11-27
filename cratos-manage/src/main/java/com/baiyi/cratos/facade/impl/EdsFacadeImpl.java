@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
@@ -22,6 +23,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.EdsScheduleFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -59,6 +61,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsAssetIndexService edsAssetIndexService;
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
+    private final EdsScheduleFacade edsScheduleFacade;
 
     @Override
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
@@ -78,7 +81,7 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsInstance edsInstance = registerEdsInstance.toTarget();
         // 校验配置文件是否被占用
         if (edsInstanceService.selectCountByConfigId(edsInstance.getConfigId()) > 0) {
-            throw new EdsInstanceRegisterException(
+            EdsInstanceRegisterException.runtime(
                     "The specified configId is being used by other data source instances.");
         }
         EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
@@ -88,6 +91,30 @@ public class EdsFacadeImpl implements EdsFacade {
         edsInstanceService.add(edsInstance);
         edsConfig.setInstanceId(edsInstance.getId());
         edsConfigService.updateByPrimaryKey(edsConfig);
+    }
+
+    @Override
+    public void unregisterEdsInstance(int id) {
+        EdsInstance edsInstance = edsInstanceService.getById(id);
+        if (edsInstance == null) {
+            return;
+        }
+        // Asset
+        EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()
+                .instanceId(id)
+                .page(1)
+                .length(1)
+                .build();
+        DataTable<EdsAsset> dataTable = edsAssetService.queryEdsInstanceAssetPage(pageQuery);
+        if (dataTable.getTotalNum() != 0L) {
+            EdsInstanceRegisterException.runtime("Assets exist in the ds instance.");
+        }
+        // Schedule
+        List<ScheduleVO.Job> jobs = edsScheduleFacade.queryJob(id);
+        if (!CollectionUtils.isEmpty(jobs)) {
+            EdsInstanceRegisterException.runtime("Scheduled jobs exist in the eds instance.");
+        }
+        edsInstanceService.deleteById(id);
     }
 
     @Override

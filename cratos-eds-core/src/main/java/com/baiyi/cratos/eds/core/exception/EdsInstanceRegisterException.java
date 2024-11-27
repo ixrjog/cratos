@@ -33,4 +33,8 @@ public class EdsInstanceRegisterException extends BaseException {
         this.code = 70000;
     }
 
+    public static void runtime(String message) {
+        throw new EdsInstanceRegisterException(message);
+    }
+
 }
