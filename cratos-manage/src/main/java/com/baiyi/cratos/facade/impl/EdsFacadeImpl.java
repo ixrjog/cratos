@@ -94,6 +94,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void unregisterEdsInstance(int id) {
         EdsInstance edsInstance = edsInstanceService.getById(id);
         if (edsInstance == null) {
@@ -114,7 +115,15 @@ public class EdsFacadeImpl implements EdsFacade {
         if (!CollectionUtils.isEmpty(jobs)) {
             EdsInstanceRegisterException.runtime("Scheduled jobs exist in the eds instance.");
         }
+        unregisterEdsConfig(edsInstance.getConfigId());
         edsInstanceService.deleteById(id);
+    }
+
+    private void unregisterEdsConfig(int configId) {
+        EdsConfig edsConfig = edsConfigService.getById(configId);
+        edsConfig.setInstanceId(0);
+        edsConfigService.updateByPrimaryKey(edsConfig);
+
     }
 
     @Override
