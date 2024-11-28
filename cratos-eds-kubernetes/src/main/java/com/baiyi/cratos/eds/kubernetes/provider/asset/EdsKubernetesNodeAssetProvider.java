@@ -18,8 +18,10 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.NodeStatus;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Quantity;
 import org.springframework.stereotype.Component;
 
@@ -62,6 +64,19 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
     protected List<Node> listEntities(String namespace,
                                       ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
         return List.of();
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                  Node entity) {
+        EdsAsset edsAsset = super.toEdsAsset(instance, entity);
+        Map<String, String> labels = Optional.of(entity)
+                .map(Node::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Maps.newHashMap());
+        edsAsset.setRegion(labels.getOrDefault("topology.kubernetes.io/region", null));
+        edsAsset.setZone(labels.getOrDefault("topology.kubernetes.io/zone", null));
+        return edsAsset;
     }
 
     /**
