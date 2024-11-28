@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -47,35 +44,38 @@ public class KubeUtil {
         if (deployment == null) {
             return Optional.empty();
         }
-        final String namespace = Optional.of(deployment)
-                .map(Deployment::getMetadata)
-                .map(ObjectMeta::getNamespace)
-                .orElse("");
-        final String deploymentName = Optional.of(deployment)
-                .map(Deployment::getMetadata)
-                .map(ObjectMeta::getName)
-                .orElse("");
-        List<Container> containers = Optional.of(deployment)
-                .map(Deployment::getSpec)
-                .map(DeploymentSpec::getTemplate)
-                .map(PodTemplateSpec::getSpec)
-                .map(PodSpec::getContainers)
-                .orElse(Collections.emptyList());
-
-        if (CollectionUtils.isEmpty(containers)) {
+        try {
+            final String namespace = Optional.of(deployment)
+                    .map(Deployment::getMetadata)
+                    .map(ObjectMeta::getNamespace)
+                    .orElseThrow();
+            final String deploymentName = Optional.of(deployment)
+                    .map(Deployment::getMetadata)
+                    .map(ObjectMeta::getName)
+                    .orElseThrow();
+            List<Container> containers = Optional.of(deployment)
+                    .map(Deployment::getSpec)
+                    .map(DeploymentSpec::getTemplate)
+                    .map(PodTemplateSpec::getSpec)
+                    .map(PodSpec::getContainers)
+                    .orElse(Collections.emptyList());
+            if (CollectionUtils.isEmpty(containers)) {
+                return Optional.empty();
+            }
+            Optional<Container> optionalContainer = containers.stream()
+                    .filter(e -> e.getName()
+                            .equals(deploymentName))
+                    .findFirst();
+            if (optionalContainer.isPresent()) {
+                return optionalContainer;
+            }
+            return containers.stream()
+                    .filter(e -> e.getName()
+                            .equals(getAppNameOf(deployment)))
+                    .findFirst();
+        } catch (NoSuchElementException ex) {
             return Optional.empty();
         }
-        Optional<Container> optionalContainer = containers.stream()
-                .filter(e -> e.getName()
-                        .equals(deploymentName))
-                .findFirst();
-        if (optionalContainer.isPresent()) {
-            return optionalContainer;
-        }
-        return containers.stream()
-                .filter(e -> e.getName()
-                        .equals(getAppNameOf(deployment)))
-                .findFirst();
     }
 
     private static String getAppNameOf(Deployment deployment) {
@@ -129,7 +129,6 @@ public class KubeUtil {
         } else {
             return deploymentName;
         }
-
     }
 
 }

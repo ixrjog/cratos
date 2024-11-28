@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.application.builder;
 
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
@@ -19,6 +20,7 @@ public class KubernetesDeploymentBuilder {
 
     private Deployment deployment;
     private List<Pod> pods;
+    private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
 
     public static KubernetesDeploymentBuilder newBuilder() {
         return new KubernetesDeploymentBuilder();
@@ -31,6 +33,11 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentBuilder withPods(List<Pod> pods) {
         this.pods = pods;
+        return this;
+    }
+
+    public KubernetesDeploymentBuilder withKubernetes(KubernetesCommonVO.KubernetesCluster kubernetesCluster) {
+        this.kubernetesCluster = kubernetesCluster;
         return this;
     }
 
@@ -78,6 +85,7 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentVO.Deployment build() {
         return KubernetesDeploymentVO.Deployment.builder()
+                .kubernetesCluster(this.kubernetesCluster)
                 .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
                 .pods(makePods())
                 .spec(makeSpec())

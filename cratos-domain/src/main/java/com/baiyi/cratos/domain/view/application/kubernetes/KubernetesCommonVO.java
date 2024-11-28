@@ -16,6 +16,10 @@ import java.io.Serializable;
  */
 public class KubernetesCommonVO {
 
+    public interface HasKubernetesCluster {
+        void setKubernetesCluster(KubernetesCluster kubernetesCluster);
+    }
+
     @Data
     @Builder
     @AllArgsConstructor
@@ -28,6 +32,17 @@ public class KubernetesCommonVO {
         private String name;
         private String generateName;
         private String uid;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class KubernetesCluster implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5892072872711777553L;
+        private String name;
     }
 
 }
