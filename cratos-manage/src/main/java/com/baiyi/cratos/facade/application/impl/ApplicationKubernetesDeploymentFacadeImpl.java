@@ -51,11 +51,8 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
-        if (CollectionUtils.isEmpty(resources)) {
-            return KubernetesVO.KubernetesDetails.failed(
-                    "The kubernetes resource bound to the application does not exist.");
-        }
-        return KubernetesVO.KubernetesDetails.builder()
+        return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesDetails.failed(
+                "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))
                 .namespace(param.getNamespace())
                 .deployments(deploymentConverter.toDeployments(resources))

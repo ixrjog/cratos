@@ -67,5 +67,4 @@ public class RepositoryResourceScanner extends BaseResourceScanner {
         }
     }
 
-
 }

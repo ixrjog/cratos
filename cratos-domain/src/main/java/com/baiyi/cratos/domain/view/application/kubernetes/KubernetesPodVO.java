@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
 import com.baiyi.cratos.domain.constant.Global;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,8 @@ public class KubernetesPodVO {
         private PodStatus status;
         private PodSpec spec;
         private List<KubernetesContainerVO.ContainerStatus> containerStatuses;
+        @Schema(description = "Kubernetes node, has region & zone")
+        private EdsAssetVO.Asset node;
     }
 
     @Data
@@ -44,7 +47,7 @@ public class KubernetesPodVO {
     public static class PodStatus implements Serializable {
         @Serial
         private static final long serialVersionUID = -7125606653208312785L;
-        private Map<String,PodCondition> conditions;
+        private Map<String, PodCondition> conditions;
         // private List<PodCondition> conditions = new ArrayList();
         // private List<ContainerStatus> containerStatuses = new ArrayList();
         // private List<ContainerStatus> ephemeralContainerStatuses = new ArrayList();

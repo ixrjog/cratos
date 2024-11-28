@@ -51,7 +51,6 @@ public class ApplicationConfigModel {
         private App application;
         private Repository repository;
         private List<Repository> repositories;
-
     }
 
     @Data
@@ -71,7 +70,6 @@ public class ApplicationConfigModel {
         private String type;
         private String sshUrl;
         private String webUrl;
-
     }
 
 }

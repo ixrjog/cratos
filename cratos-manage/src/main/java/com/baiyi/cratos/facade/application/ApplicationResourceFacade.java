@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.application;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 
 /**
@@ -14,5 +15,7 @@ public interface ApplicationResourceFacade {
     void deleteById(int id);
 
     OptionsVO.Options getNamespaceOptions();
+
+    void deleteByBusiness(BaseBusiness.HasBusiness byBusiness);
 
 }

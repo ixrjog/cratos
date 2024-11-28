@@ -24,6 +24,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.EdsScheduleFacade;
+import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -62,6 +63,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsAssetIndexService edsAssetIndexService;
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
     private final EdsScheduleFacade edsScheduleFacade;
+    private final ApplicationResourceFacade applicationResourceFacade;
 
     @Override
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
@@ -267,6 +269,11 @@ public class EdsFacadeImpl implements EdsFacade {
                 .stream()
                 .mapToInt(EdsAssetIndex::getId)
                 .forEach(edsAssetIndexService::deleteById);
+        SimpleBusiness byBusiness = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(id)
+                .build();
+        applicationResourceFacade.deleteByBusiness(byBusiness);
         edsAssetService.deleteById(id);
     }
 

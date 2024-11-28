@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
@@ -10,6 +12,9 @@ import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -38,6 +43,16 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     @Override
     public void deleteById(int id) {
         resourceService.deleteById(id);
+    }
+
+    @Override
+    public void deleteByBusiness(BaseBusiness.HasBusiness byBusiness) {
+        List<ApplicationResource> resources = resourceService.queryByBusiness(byBusiness);
+        if (!CollectionUtils.isEmpty(resources)) {
+            for (ApplicationResource resource : resources) {
+                resourceService.deleteById(resource.getId());
+            }
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.mapper.ApplicationResourceMapper;
 import com.baiyi.cratos.service.ApplicationResourceService;
@@ -44,6 +45,15 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
         criteria.andEqualTo("applicationName", applicationName)
                 .andEqualTo("resourceType", resourceType)
                 .andEqualTo("namespace", namespace);
+        return applicationResourceMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<ApplicationResource> queryByBusiness(BaseBusiness.HasBusiness byBusiness) {
+        Example example = new Example(ApplicationResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", byBusiness.getBusinessType())
+                .andEqualTo("businessId", byBusiness.getBusinessId());
         return applicationResourceMapper.selectByExample(example);
     }
 

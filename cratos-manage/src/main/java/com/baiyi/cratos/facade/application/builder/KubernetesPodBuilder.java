@@ -76,10 +76,18 @@ public class KubernetesPodBuilder {
                 .build();
     }
 
+    private KubernetesPodVO.PodSpec makePodSpec() {
+        return KubernetesPodVO.PodSpec.builder()
+                .nodeName(this.pod.getSpec()
+                        .getNodeName())
+                .build();
+    }
+
     public KubernetesPodVO.Pod build() {
         return KubernetesPodVO.Pod.builder()
                 .containerStatuses(makeContainerStatuses())
                 .metadata(ConverterUtil.toMetadata(this.pod.getMetadata()))
+                .spec(makePodSpec())
                 .status(makePodStatus())
                 .build();
     }

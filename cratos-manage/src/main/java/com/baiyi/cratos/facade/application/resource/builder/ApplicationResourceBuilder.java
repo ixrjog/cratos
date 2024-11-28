@@ -13,17 +13,11 @@ import java.util.Optional;
  */
 public class ApplicationResourceBuilder {
 
-
     private Application application;
-
     private EdsInstance edsInstance;
-
     private EdsAsset edsAsset;
-
     private EdsAssetIndex namespaceIndex;
-
     private EdsAssetIndex sshUrlIndex;
-
     private ResourceScannerFactory.Type type;
 
     public static ApplicationResourceBuilder newBuilder() {
