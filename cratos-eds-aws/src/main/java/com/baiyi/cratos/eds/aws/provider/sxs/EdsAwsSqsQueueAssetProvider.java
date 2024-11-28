@@ -2,8 +2,8 @@ package com.baiyi.cratos.eds.aws.provider.sxs;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aws.model.AwsSqs;
-import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsSqsRepo;
+import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SQS_QUEUE)
-public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
+public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
 
     private final AwsSqsRepo awsSqsRepo;
 
@@ -39,7 +39,8 @@ public class EdsAwsSqsQueueAssetProvider extends BaseHasRegionsEdsAssetProvider<
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                        EdsAssetIndexFacade edsAssetIndexFacade, AwsSqsRepo awsSqsRepo,
                                        UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,updateBusinessFromAssetHandler);
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler);
         this.awsSqsRepo = awsSqsRepo;
     }
 

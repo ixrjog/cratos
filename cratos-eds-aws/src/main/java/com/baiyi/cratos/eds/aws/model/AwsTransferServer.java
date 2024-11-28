@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.aws.model;
 
 import com.amazonaws.services.transfer.model.ListedServer;
 import com.amazonaws.services.transfer.model.ListedUser;
+import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,14 +24,10 @@ public class AwsTransferServer {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class TransferServer {
-
+    public static class TransferServer implements HasRegionId {
         private String regionId;
-
         private ListedServer server;
-
         private List<ListedUser> users;
-
     }
 
 }

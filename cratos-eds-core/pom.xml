@@ -26,6 +26,12 @@
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-service</artifactId>
         </dependency>
+        <!--        aws sdk 2.x-->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
+            <version>${aws-java-sdk2.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-sts</artifactId>

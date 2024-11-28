@@ -5,6 +5,7 @@ import com.baiyi.cratos.eds.aws.service.AmazonEcrService;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -77,6 +78,16 @@ public class AwsEcrRepo {
         CreateRepositoryResult result = AmazonEcrService.buildAmazonECR(regionId, aws)
                 .createRepository(request);
         return result.getRepository();
+    }
+
+    public static void deleteRepository(String regionId, EdsAwsConfigModel.Aws aws, String registryId,
+                                        @NonNull String repositoryName) {
+        DeleteRepositoryRequest request = new DeleteRepositoryRequest()
+                .withForce(true)
+                .withRegistryId(registryId)
+                .withRepositoryName(repositoryName);
+        AmazonEcrService.buildAmazonECR(regionId, aws)
+                .deleteRepository(request);
     }
 
 }

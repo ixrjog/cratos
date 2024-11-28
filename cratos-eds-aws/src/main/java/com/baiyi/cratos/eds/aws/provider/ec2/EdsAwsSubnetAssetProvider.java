@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aws.model.AwsEc2;
 import com.baiyi.cratos.eds.aws.repo.AwsVpcRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
-import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SUBNET)
-public class EdsAwsSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Subnet> {
+public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Subnet> {
 
     public EdsAwsSubnetAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -72,7 +72,8 @@ public class EdsAwsSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                         .getSubnetId())
                 .nameOf(StringUtils.hasText(tagName) ? tagName : entity.getSubnet()
                         .getSubnetId())
-                .assetKeyOf(entity.getSubnet().getSubnetArn())
+                .assetKeyOf(entity.getSubnet()
+                        .getSubnetArn())
                 .zoneOf(entity.getSubnet()
                         .getAvailabilityZone())
                 .regionOf(entity.getRegionId())
@@ -85,7 +86,8 @@ public class EdsAwsSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
                 .getCidrBlock()));
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT , entity.getSubnet().getAvailableIpAddressCount()));
+        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getSubnet()
+                .getAvailableIpAddressCount()));
         return indices;
     }
 

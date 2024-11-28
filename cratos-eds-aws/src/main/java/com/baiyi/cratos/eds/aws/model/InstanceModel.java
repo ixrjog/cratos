@@ -41,9 +41,11 @@ public class InstanceModel {
         private String gpu;
         private boolean enhancedNetworkingSupported;
         private String dedicatedEbsThroughput;
-        private String networkPerformance;//"Low",
+        //"Low",
+        private String networkPerformance;
         private int normalizationSizeFactor;//0,
-        private String storage;//EBS only",
+        //EBS only",
+        private String storage;
 
 //        public Integer acqMemory() {
 //            try {

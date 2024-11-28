@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.aws.model;
 
+import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,28 +22,20 @@ public class AwsSns {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Topic {
-
+    public static class Topic implements HasRegionId {
         private String regionId;
-
         private com.amazonaws.services.sns.model.Topic topic;
-
         private Map<String, String> attributes;
-
     }
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Subscription {
-
+    public static class Subscription implements HasRegionId {
         private String regionId;
-
         private com.amazonaws.services.sns.model.Subscription subscription;
-
         private Map<String, String> attributes;
-
     }
 
 }

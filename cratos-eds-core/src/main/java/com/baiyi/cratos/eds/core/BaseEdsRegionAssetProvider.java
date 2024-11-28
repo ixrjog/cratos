@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core;
 
-
+import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -21,16 +21,16 @@ import java.util.Set;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/5/15 下午4:13
+ * &#064;Date  2024/11/28 09:38
  * &#064;Version 1.0
  */
 @Slf4j
-public abstract class BaseHasRegionsEdsAssetProvider<Config extends HasRegionsModel & IEdsConfigModel, Asset> extends BaseEdsInstanceAssetProvider<Config, Asset> {
+public abstract class BaseEdsRegionAssetProvider<Config extends HasRegionsModel & IEdsConfigModel, Asset extends HasRegionId> extends BaseEdsInstanceAssetProvider<Config, Asset> {
 
-    public BaseHasRegionsEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+    public BaseEdsRegionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                      EdsAssetIndexFacade edsAssetIndexFacade,
+                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
     }

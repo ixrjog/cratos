@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.config;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.HasRegionModel;
+import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class EdsAwsConfigModel {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Aws implements HasRegionModel, IEdsConfigModel {
+    public static class Aws implements HasRegionsModel, IEdsConfigModel {
         private Cred cred;
         private String regionId;
         private Set<String> regionIds;

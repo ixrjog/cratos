@@ -1,31 +1,26 @@
 package com.baiyi.cratos.eds.aws.model;
 
+import com.amazonaws.services.ecr.model.Repository;
 import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
-import static lombok.AccessLevel.PRIVATE;
-
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/5/15 上午10:09
+ * &#064;Date  2024/11/28 09:44
  * &#064;Version 1.0
  */
-@NoArgsConstructor(access = PRIVATE)
-public class AwsSqs {
+public class AwsEcr {
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Queue implements HasRegionId {
+    public static class RegionRepository implements HasRegionId {
         private String regionId;
-        private String queue;
-        private Map<String, String> attributes;
+        private Repository repository;
     }
 
 }

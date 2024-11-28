@@ -2,8 +2,9 @@ package com.baiyi.cratos.eds.aws.provider.ecr;
 
 import com.amazonaws.services.ecr.model.Repository;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.aws.model.AwsEcr;
 import com.baiyi.cratos.eds.aws.repo.AwsEcrRepo;
-import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
+import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ECR_REPOSITORY)
-public class EdsAwsEcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, Repository> {
+public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEcr.RegionRepository> {
 
     public EdsAwsEcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -38,22 +39,36 @@ public class EdsAwsEcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProv
     }
 
     @Override
-    protected List<Repository> listEntities(String regionId,
-                                            EdsAwsConfigModel.Aws configModel) throws EdsQueryEntitiesException {
+    protected List<AwsEcr.RegionRepository> listEntities(String regionId,
+                                                         EdsAwsConfigModel.Aws configModel) throws EdsQueryEntitiesException {
         try {
-            return AwsEcrRepo.describeRepositories(regionId, configModel);
+            return toRegionRepositories(regionId, AwsEcrRepo.describeRepositories(regionId, configModel));
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
+    private List<AwsEcr.RegionRepository> toRegionRepositories(String regionId, List<Repository> repositories) {
+        return repositories.stream()
+                .map(e -> AwsEcr.RegionRepository.builder()
+                        .regionId(regionId)
+                        .repository(e)
+                        .build())
+                .toList();
+    }
+
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Repository entity) {
-        return newEdsAssetBuilder(instance, entity)
-                .assetIdOf(entity.getRegistryId())
-                .nameOf(entity.getRepositoryName())
-                .assetKeyOf(entity.getRepositoryArn())
-                .createdTimeOf(entity.getCreatedAt())
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                  AwsEcr.RegionRepository entity) {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getRepository()
+                        .getRegistryId())
+                .nameOf(entity.getRepository()
+                        .getRepositoryName())
+                .assetKeyOf(entity.getRepository()
+                        .getRepositoryArn())
+                .regionOf(entity.getRegionId())
+                .createdTimeOf(entity.getRepository()
+                        .getCreatedAt())
                 .build();
     }
 

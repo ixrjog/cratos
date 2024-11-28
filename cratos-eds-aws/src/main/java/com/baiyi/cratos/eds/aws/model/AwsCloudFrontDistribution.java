@@ -23,11 +23,8 @@ public class AwsCloudFrontDistribution {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Distribution {
-
         private DistributionSummary distribution;
-
         private List<String> aliases;
-
     }
 
 }

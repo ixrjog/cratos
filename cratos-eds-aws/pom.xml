@@ -82,6 +82,12 @@
             <artifactId>aws-java-sdk-ecr</artifactId>
             <version>${aws-java-sdk.version}</version>
         </dependency>
+        <!--sdk2.x-->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ecr</artifactId>
+            <version>${aws-java-sdk2.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

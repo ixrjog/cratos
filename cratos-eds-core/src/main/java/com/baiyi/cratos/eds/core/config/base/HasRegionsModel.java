@@ -7,7 +7,7 @@ import java.util.Set;
  * &#064;Date  2024/5/16 上午9:51
  * &#064;Version 1.0
  */
-public interface HasRegionModel {
+public interface HasRegionsModel {
 
     Set<String> getRegionIds();
 
