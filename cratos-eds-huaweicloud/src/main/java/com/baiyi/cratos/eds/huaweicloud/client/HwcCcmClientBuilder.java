@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudCcmClientBuilder {
+public class HwcCcmClientBuilder {
 
     public static CcmClient buildCcmClient(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) {
         // 配置客户端属性

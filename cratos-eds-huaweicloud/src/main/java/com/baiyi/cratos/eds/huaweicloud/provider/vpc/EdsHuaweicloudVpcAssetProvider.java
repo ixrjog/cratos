@@ -12,9 +12,9 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.huaweicloud.model.HuaweicloudVpc;
-import com.baiyi.cratos.eds.huaweicloud.repo.HuaweicloudVpcRepo;
-import com.baiyi.cratos.eds.huaweicloud.util.HuaweicloudProjectUtil;
+import com.baiyi.cratos.eds.huaweicloud.model.HwcVpc;
+import com.baiyi.cratos.eds.huaweicloud.repo.HwcVpcRepo;
+import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtil;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_VPC)
-public class EdsHuaweicloudVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HuaweicloudVpc.Vpc> {
+public class EdsHuaweicloudVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HwcVpc.Vpc> {
 
     public EdsHuaweicloudVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -46,26 +46,26 @@ public class EdsHuaweicloudVpcAssetProvider extends BaseHasRegionsEdsAssetProvid
     }
 
     @Override
-    protected List<HuaweicloudVpc.Vpc> listEntities(String regionId,
-                                                    EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
-        List<Vpc> vpcs = HuaweicloudVpcRepo.listVpcs(regionId, configModel);
+    protected List<HwcVpc.Vpc> listEntities(String regionId,
+                                            EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
+        List<Vpc> vpcs = HwcVpcRepo.listVpcs(regionId, configModel);
         if (CollectionUtils.isEmpty(vpcs)) {
             return Collections.emptyList();
         }
         return toEntities(regionId, configModel, vpcs);
     }
 
-    private List<HuaweicloudVpc.Vpc> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
-                                                List<Vpc> vpcs) {
+    private List<HwcVpc.Vpc> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
+                                        List<Vpc> vpcs) {
         return vpcs.stream()
-                .map(e -> HuaweicloudVpc.toVpc(regionId, HuaweicloudProjectUtil.findProjectId(regionId, configModel),
+                .map(e -> HwcVpc.toVpc(regionId, HwcProjectUtil.findProjectId(regionId, configModel),
                         e))
                 .toList();
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
-                                  HuaweicloudVpc.Vpc entity) {
+                                  HwcVpc.Vpc entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
                         .getId())
                 .nameOf(entity.getVpc()
@@ -83,7 +83,7 @@ public class EdsHuaweicloudVpcAssetProvider extends BaseHasRegionsEdsAssetProvid
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(
             ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance, EdsAsset edsAsset,
-            HuaweicloudVpc.Vpc entity) {
+            HwcVpc.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
                 .getCidr()));

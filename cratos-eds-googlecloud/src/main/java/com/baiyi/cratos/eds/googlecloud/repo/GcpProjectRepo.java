@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
-import com.baiyi.cratos.eds.googlecloud.builder.GoogleCloudProjectSettingsBuilder;
+import com.baiyi.cratos.eds.googlecloud.builder.GcpProjectSettingsBuilder;
 import com.google.api.client.util.Sets;
 import com.google.cloud.resourcemanager.v3.ProjectsClient;
 import com.google.cloud.resourcemanager.v3.ProjectsSettings;
@@ -22,9 +22,9 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class GoogleCloudProjectRepo {
+public class GcpProjectRepo {
 
-    private final GoogleCloudProjectSettingsBuilder projectSettingsBuilder;
+    private final GcpProjectSettingsBuilder projectSettingsBuilder;
 
     public Map<String,List<String>>listMembers(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);

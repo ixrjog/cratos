@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudVpc {
+public class HwcVpc {
 
     public static Vpc toVpc(String regionId, String projectId, com.huaweicloud.sdk.vpc.v2.model.Vpc vpc) {
         VpcModel vpcModel = VpcModel.builder()

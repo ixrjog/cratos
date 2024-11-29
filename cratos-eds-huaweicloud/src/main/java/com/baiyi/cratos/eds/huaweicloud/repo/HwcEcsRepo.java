@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.client.HuaweicloudEcsClientBuilder;
+import com.baiyi.cratos.eds.huaweicloud.client.HwcEcsClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.ecs.v2.EcsClient;
@@ -22,14 +22,14 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudEcsRepo {
+public class HwcEcsRepo {
 
     private static final int LIMIT = 100;
 
     public static List<ServerDetail> listServers(String regionId,
                                                  EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
         List<ServerDetail> serverDetails = Lists.newArrayList();
-        EcsClient client = HuaweicloudEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
+        EcsClient client = HwcEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
         ListServersDetailsRequest request = new ListServersDetailsRequest();
         request.setLimit(LIMIT);
         int size = LIMIT;

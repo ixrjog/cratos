@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.huaweicloud.repo.HuaweicloudScmRepo;
+import com.baiyi.cratos.eds.huaweicloud.repo.HwcScmRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -31,15 +31,15 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SCM_CERT)
-public class EdsHuaweicloudScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, CertificateDetail> {
+public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, CertificateDetail> {
 
     private final static String DATE_FORMAT = "yyyy-MM-dd' 'HH:mm:ss.S";
 
-    public EdsHuaweicloudScmCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                              CredentialService credentialService,
-                                              ConfigCredTemplate configCredTemplate,
-                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+    public EdsHwcScmCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                      CredentialService credentialService,
+                                      ConfigCredTemplate configCredTemplate,
+                                      EdsAssetIndexFacade edsAssetIndexFacade,
+                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
     }
@@ -47,7 +47,7 @@ public class EdsHuaweicloudScmCertAssetProvider extends BaseHasRegionsEdsAssetPr
     @Override
     protected List<CertificateDetail> listEntities(String regionId,
                                                    EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
-        List<CertificateDetail> certificateDetails = HuaweicloudScmRepo.listCertificates(regionId, configModel);
+        List<CertificateDetail> certificateDetails = HwcScmRepo.listCertificates(regionId, configModel);
         if (CollectionUtils.isEmpty(certificateDetails)) {
             return Collections.emptyList();
         }

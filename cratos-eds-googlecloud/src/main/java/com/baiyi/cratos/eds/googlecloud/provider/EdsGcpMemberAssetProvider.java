@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
-import com.baiyi.cratos.eds.googlecloud.repo.GoogleCloudProjectRepo;
+import com.baiyi.cratos.eds.googlecloud.repo.GcpProjectRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -35,15 +35,15 @@ import java.util.stream.Collectors;
 
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GOOGLECLOUD, assetTypeOf = EdsAssetTypeEnum.GOOGLECLOUD_MEMBER)
-public class EdsGoogleCloudMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleMemberModel.Member> {
+public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleMemberModel.Member> {
 
-    private final GoogleCloudProjectRepo googleCloudProjectRepo;
+    private final GcpProjectRepo googleCloudProjectRepo;
 
-    public EdsGoogleCloudMemberAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade,
-                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                             GoogleCloudProjectRepo googleCloudProjectRepo) {
+    public EdsGcpMemberAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                     EdsAssetIndexFacade edsAssetIndexFacade,
+                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                     GcpProjectRepo googleCloudProjectRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
         this.googleCloudProjectRepo = googleCloudProjectRepo;

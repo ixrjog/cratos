@@ -13,8 +13,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.huaweicloud.model.HuaweicloudEcs;
-import com.baiyi.cratos.eds.huaweicloud.repo.HuaweicloudEcsRepo;
+import com.baiyi.cratos.eds.huaweicloud.model.HwcEcs;
+import com.baiyi.cratos.eds.huaweicloud.repo.HwcEcsRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -35,42 +35,42 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
-public class EdsHuaweicloudEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HuaweicloudEcs.Ecs> {
+public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HwcEcs.Ecs> {
 
-    public EdsHuaweicloudEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+    public EdsHwcEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                  EdsAssetIndexFacade edsAssetIndexFacade,
+                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
     }
 
     @Override
-    protected List<HuaweicloudEcs.Ecs> listEntities(String regionId,
-                                                    EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
-        List<ServerDetail> serverDetails = HuaweicloudEcsRepo.listServers(regionId, configModel);
+    protected List<HwcEcs.Ecs> listEntities(String regionId,
+                                            EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
+        List<ServerDetail> serverDetails = HwcEcsRepo.listServers(regionId, configModel);
         if (CollectionUtils.isEmpty(serverDetails)) {
             return Collections.emptyList();
         }
         return toEntities(regionId, configModel, serverDetails);
     }
 
-    private List<HuaweicloudEcs.Ecs> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
-                                           List<ServerDetail> serverDetails) {
+    private List<HwcEcs.Ecs> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
+                                        List<ServerDetail> serverDetails) {
         return serverDetails.stream()
-                .map(e -> HuaweicloudEcs.toEcs(regionId, e)
+                .map(e -> HwcEcs.toEcs(regionId, e)
                 )
                 .toList();
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
-                                  HuaweicloudEcs.Ecs entity) {
-        Map<String, List<HuaweicloudEcs.ServerAddress>> addMap = entity.getServerDetail()
+                                  HwcEcs.Ecs entity) {
+        Map<String, List<HwcEcs.ServerAddress>> addMap = entity.getServerDetail()
                 .getAddresses();
         String privateIp = "";
         for (String key : addMap.keySet()) {
-            for (HuaweicloudEcs.ServerAddress serverAdd : addMap.get(key)) {
+            for (HwcEcs.ServerAddress serverAdd : addMap.get(key)) {
                 if (ServerAddress.OsEXTIPSTypeEnum.FIXED.getValue().equals(serverAdd.getOsEXTIPSType()))  {
                     privateIp = serverAdd.getAddr();
                 }

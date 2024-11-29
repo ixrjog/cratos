@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudEcs {
+public class HwcEcs {
 
     public static Ecs toEcs(String regionId, ServerDetail serverDetail) {
         // addresses

@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleCertificateModel;
-import com.baiyi.cratos.eds.googlecloud.repo.GoogleCloudCredentialRepo;
+import com.baiyi.cratos.eds.googlecloud.repo.GcpCredentialRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -31,16 +31,16 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GOOGLECLOUD, assetTypeOf = EdsAssetTypeEnum.GOOGLECLOUD_CERTIFICATE)
-public class EdsGoogleCloudCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleCertificateModel.Certificate> {
+public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleCertificateModel.Certificate> {
 
-    private final GoogleCloudCredentialRepo googleCloudCredentialRepo;
+    private final GcpCredentialRepo googleCloudCredentialRepo;
 
-    public EdsGoogleCloudCertificateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                                  CredentialService credentialService,
-                                                  ConfigCredTemplate configCredTemplate,
-                                                  EdsAssetIndexFacade edsAssetIndexFacade,
-                                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                                  GoogleCloudCredentialRepo googleCloudCredentialRepo) {
+    public EdsGcpCertificateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                          CredentialService credentialService,
+                                          ConfigCredTemplate configCredTemplate,
+                                          EdsAssetIndexFacade edsAssetIndexFacade,
+                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                          GcpCredentialRepo googleCloudCredentialRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
         this.googleCloudCredentialRepo = googleCloudCredentialRepo;

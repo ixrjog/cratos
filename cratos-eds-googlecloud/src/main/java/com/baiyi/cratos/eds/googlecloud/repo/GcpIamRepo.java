@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
-import com.baiyi.cratos.eds.googlecloud.builder.GoogleCloudIAMSettingsBuilder;
+import com.baiyi.cratos.eds.googlecloud.builder.GcpIAMSettingsBuilder;
 import com.google.cloud.iam.admin.v1.IAMClient;
 import com.google.cloud.iam.admin.v1.IAMSettings;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ import java.io.IOException;
  */
 @Component
 @RequiredArgsConstructor
-public class GoogleCloudIamRepo {
+public class GcpIamRepo {
 
-    private final GoogleCloudIAMSettingsBuilder googleCloudIAMSettingsBuilder;
+    private final GcpIAMSettingsBuilder googleCloudIAMSettingsBuilder;
 
     private static final int PAGE_SIZE = 10;
 

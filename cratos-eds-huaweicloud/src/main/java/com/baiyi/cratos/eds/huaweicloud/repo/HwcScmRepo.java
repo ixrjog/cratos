@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.client.HuaweicloudScmClientBuilder;
+import com.baiyi.cratos.eds.huaweicloud.client.HwcScmClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.scm.v3.ScmClient;
@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudScmRepo {
+public class HwcScmRepo {
 
     private static final int MAX_LIMIT = 50;
 
@@ -30,7 +30,7 @@ public class HuaweicloudScmRepo {
                                                            EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
         List<CertificateDetail> certificatesList = Lists.newArrayList();
         try {
-            ScmClient client = HuaweicloudScmClientBuilder.buildScmClient(regionId, huaweicloud);
+            ScmClient client = HwcScmClientBuilder.buildScmClient(regionId, huaweicloud);
             ListCertificatesRequest request = new ListCertificatesRequest();
             request.setLimit(MAX_LIMIT);
             int size = MAX_LIMIT;

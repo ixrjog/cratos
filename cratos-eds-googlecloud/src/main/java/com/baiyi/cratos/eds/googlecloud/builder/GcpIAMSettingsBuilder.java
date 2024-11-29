@@ -7,7 +7,7 @@ import com.baiyi.cratos.service.EdsConfigService;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.certificatemanager.v1.CertificateManagerSettings;
+import com.google.cloud.iam.admin.v1.IAMSettings;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -16,22 +16,22 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/7/29 上午10:39
+ * &#064;Date  2024/7/29 下午2:10
  * &#064;Version 1.0
  */
 @Component
-public class GoogleCloudCertificateManagerSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
+public class GcpIAMSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
 
-    public GoogleCloudCertificateManagerSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
+    public GcpIAMSettingsBuilder(EdsConfigService edsConfigService, CredentialService credentialService) {
         super(edsConfigService, credentialService);
     }
 
-    public CertificateManagerSettings buildCertificateManagerSettings(
+    public IAMSettings buildIAMSettings(
             EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
         final String adc = getAdc(googleCloud);
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(
                 new ByteArrayInputStream(adc.getBytes(StandardCharsets.UTF_8)));
-        return CertificateManagerSettings.newBuilder()
+        return IAMSettings.newBuilder()
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
                 .build();
     }

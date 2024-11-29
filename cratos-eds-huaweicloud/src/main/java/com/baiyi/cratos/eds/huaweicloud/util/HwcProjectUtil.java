@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudProjectUtil {
+public class HwcProjectUtil {
 
     private static final String NO_PROJECT_ID = null;
 

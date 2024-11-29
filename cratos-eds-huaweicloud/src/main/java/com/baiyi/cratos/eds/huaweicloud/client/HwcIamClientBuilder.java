@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudIamClientBuilder {
+public class HwcIamClientBuilder {
 
     public static IamClient buildIamClient(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) {
         // 配置客户端属性

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.client;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.util.HuaweicloudProjectUtil;
+import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtil;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
 import com.huaweicloud.sdk.core.region.Region;
@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudVpcClientBuilder {
+public class HwcVpcClientBuilder {
 
     public static VpcClient buildVpcClient(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) {
         // 配置客户端属性
@@ -28,7 +28,7 @@ public class HuaweicloudVpcClientBuilder {
                         .getAccessKey())
                 .withSk(huaweicloud.getCred()
                         .getSecretKey())
-                .withProjectId(HuaweicloudProjectUtil.findProjectId(regionId, huaweicloud));
+                .withProjectId(HwcProjectUtil.findProjectId(regionId, huaweicloud));
         return VpcClient.newBuilder()
                 .withHttpConfig(config)
                 .withCredential(credentials)

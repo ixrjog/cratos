@@ -13,7 +13,7 @@ import java.util.List;
  * &#064;Date  2024/10/31 15:42
  * &#064;Version 1.0
  */
-public class HuaweicloudSubnet {
+public class HwcSubnet {
 
     public static Subnet toSubnet(String regionId, String projectId, com.huaweicloud.sdk.vpc.v2.model.Subnet subnet) {
         SubnetModel subnetModel = SubnetModel.builder()

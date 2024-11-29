@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.client.HuaweicloudVpcClientBuilder;
+import com.baiyi.cratos.eds.huaweicloud.client.HwcVpcClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.vpc.v2.VpcClient;
@@ -14,14 +14,14 @@ import java.util.List;
  * &#064;Date  2024/10/31 10:12
  * &#064;Version 1.0
  */
-public class HuaweicloudVpcRepo {
+public class HwcVpcRepo {
 
     private static final int LIMIT = 2000;
 
     public static List<Vpc> listVpcs(String regionId,
                                     EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
         List<Vpc> vpcs = Lists.newArrayList();
-        VpcClient client = HuaweicloudVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
+        VpcClient client = HwcVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
         ListVpcsRequest request = new ListVpcsRequest();
         request.setLimit(LIMIT);
         int size = LIMIT;
@@ -39,7 +39,7 @@ public class HuaweicloudVpcRepo {
     public static List<Subnet> listSubnets(String regionId,
                                      EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
         List<Subnet> subnets = Lists.newArrayList();
-        VpcClient client = HuaweicloudVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
+        VpcClient client = HwcVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
         ListSubnetsRequest request = new ListSubnetsRequest();
         request.setLimit(LIMIT);
         int size = LIMIT;

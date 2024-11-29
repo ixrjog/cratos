@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.client.HuaweicloudIamClientBuilder;
+import com.baiyi.cratos.eds.huaweicloud.client.HwcIamClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.iam.v3.IamClient;
 import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersRequest;
@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class HuaweicloudIamRepo {
+public class HwcIamRepo {
 
     public static List<KeystoneListUsersResult> listUsers(
             EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
@@ -28,7 +28,7 @@ public class HuaweicloudIamRepo {
 
     public static List<KeystoneListUsersResult> listUsers(String regionId,
                                                           EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
-        IamClient client = HuaweicloudIamClientBuilder.buildIamClient(regionId, huaweicloud);
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
         KeystoneListUsersRequest request = new KeystoneListUsersRequest();
         KeystoneListUsersResponse response = client.keystoneListUsers(request);
         return response.getUsers();

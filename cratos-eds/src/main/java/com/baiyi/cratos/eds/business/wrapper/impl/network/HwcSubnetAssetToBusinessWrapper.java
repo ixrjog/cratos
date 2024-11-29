@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.network.base.BaseGlobalNetwork
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.huaweicloud.model.HuaweicloudSubnet;
+import com.baiyi.cratos.eds.huaweicloud.model.HwcSubnet;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
 @Component
 @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SUBNET)
-public class HwcSubnetAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<HuaweicloudSubnet.Subnet> {
+public class HwcSubnetAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<HwcSubnet.Subnet> {
 
     public HwcSubnetAssetToBusinessWrapper(EdsInstanceService edsInstanceService,
                                            EdsAssetIndexService edsAssetIndexService) {

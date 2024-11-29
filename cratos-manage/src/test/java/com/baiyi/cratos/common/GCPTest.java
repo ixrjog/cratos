@@ -110,8 +110,8 @@ public class GCPTest extends BaseUnit {
 
     @Test
     void test() throws IOException {
-//        GoogleCloudIamRepo.test1();
-        // GoogleCloudIamRepo.test2();
+//        GcpIamRepo.test1();
+        // GcpIamRepo.test2();
     }
 
 }
