@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.huaweicloud.provider;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
@@ -18,6 +19,8 @@ import com.baiyi.cratos.eds.huaweicloud.repo.HwcEcsRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.huaweicloud.sdk.ecs.v2.model.ServerAddress;
 import com.huaweicloud.sdk.ecs.v2.model.ServerDetail;
 import org.springframework.stereotype.Component;
@@ -27,6 +30,8 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.EIP;
 
 /**
  * &#064;Author  baiyi
@@ -58,30 +63,41 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
     private List<HwcEcs.Ecs> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
                                         List<ServerDetail> serverDetails) {
         return serverDetails.stream()
-                .map(e -> HwcEcs.toEcs(regionId, e)
-                )
+                .map(e -> HwcEcs.toEcs(regionId, e))
                 .toList();
+    }
+
+    private Map<String, List<HwcEcs.ServerAddress>> toAddressTypeMap(
+            Map<String, List<HwcEcs.ServerAddress>> addresses) {
+        Map<String, List<HwcEcs.ServerAddress>> catAddress = Maps.newHashMap();
+        for (Map.Entry<String, List<HwcEcs.ServerAddress>> entry : addresses.entrySet()) {
+            String k = entry.getKey();
+            List<HwcEcs.ServerAddress> v = entry.getValue();
+            v.forEach(e -> {
+                if (catAddress.containsKey(e.getOsEXTIPSType())) {
+                    catAddress.get(e.getOsEXTIPSType())
+                            .add(e);
+                } else {
+                    catAddress.put(e.getOsEXTIPSType(), Lists.newArrayList(e));
+                }
+            });
+        }
+        return catAddress;
     }
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
                                   HwcEcs.Ecs entity) {
-        Map<String, List<HwcEcs.ServerAddress>> addMap = entity.getServerDetail()
-                .getAddresses();
-        String privateIp = "";
-        for (String key : addMap.keySet()) {
-            for (HwcEcs.ServerAddress serverAdd : addMap.get(key)) {
-                if (ServerAddress.OsEXTIPSTypeEnum.FIXED.getValue().equals(serverAdd.getOsEXTIPSType()))  {
-                    privateIp = serverAdd.getAddr();
-                }
-            }
-        }
+        Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
+                .getAddresses());
+        String privateIp = addressTypeMap.get(ServerAddress.OsEXTIPSTypeEnum.FIXED.getValue())
+                .getFirst()
+                .getAddr();
         final String assetId = entity.getServerDetail()
                 .getId();
         if (!StringUtils.hasText(privateIp)) {
             privateIp = assetId;
         }
-
         return newEdsAssetBuilder(instance, entity).assetIdOf(assetId)
                 .nameOf(entity.getServerDetail()
                         .getName())
@@ -94,6 +110,22 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
                 .validOf("ACTIVE".equalsIgnoreCase(entity.getServerDetail()
                         .getStatus()))
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance, EdsAsset edsAsset,
+            HwcEcs.Ecs entity) {
+        Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
+                .getAddresses());
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        if (addressTypeMap.containsKey(ServerAddress.OsEXTIPSTypeEnum.FLOATING.getValue())) {
+            indices.add(toEdsAssetIndex(edsAsset, EIP,
+                    addressTypeMap.get(ServerAddress.OsEXTIPSTypeEnum.FLOATING.getValue())
+                            .getFirst()
+                            .getAddr()));
+        }
+        return indices;
     }
 
 }

@@ -25,12 +25,12 @@ public class KubernetesDeploymentVO {
     public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Serializable {
         @Serial
         private static final long serialVersionUID = 9137044441466358774L;
-
         private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
-
         private KubernetesCommonVO.Metadata metadata;
         private DeploymentSpec spec;
         private List<KubernetesPodVO.Pod> pods;
+        @Schema(description = "拓扑")
+        private KubernetesCommonVO.TopologyDetails topologyDetails;
     }
 
     @Data

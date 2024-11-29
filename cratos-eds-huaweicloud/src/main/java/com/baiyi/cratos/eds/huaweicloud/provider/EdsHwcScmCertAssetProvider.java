@@ -65,7 +65,6 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
                     .nameOf(entity.getDomain())
                     .kindOf(entity.getType())
                     .statusOf(entity.getStatus())
-
                     .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), DATE_FORMAT))
                     .build();
         } catch (ParseException parseException) {

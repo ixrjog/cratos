@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -43,6 +44,32 @@ public class KubernetesCommonVO {
         @Serial
         private static final long serialVersionUID = 5892072872711777553L;
         private String name;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class TopologyDetails implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -2123854130035790444L;
+        // private Map<{zone}, Map<{nodeName}, KubernetesNode>>
+        private Map<String, Map<String, KubernetesNode>> nodeTopology;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class KubernetesNode implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2768461856912014422L;
+        private String name;
+        private String hostIP;
+        private String region;
+        private String zone;
     }
 
 }
