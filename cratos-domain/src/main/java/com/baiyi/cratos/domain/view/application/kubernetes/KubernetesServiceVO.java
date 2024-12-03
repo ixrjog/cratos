@@ -40,6 +40,9 @@ public class KubernetesServiceVO {
         private static final long serialVersionUID = 8106057816263739335L;
         private Map<String, String> selector;
         private List<ServicePort> ports;
+        private String clusterIP;
+        private String type;
+
     }
 
     @Data

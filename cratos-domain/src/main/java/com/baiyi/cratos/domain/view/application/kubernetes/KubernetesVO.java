@@ -69,7 +69,6 @@ public class KubernetesVO {
         private List<KubernetesServiceVO.Service> services = Lists.newArrayList();
     }
 
-
     @Data
     @Builder
     @AllArgsConstructor

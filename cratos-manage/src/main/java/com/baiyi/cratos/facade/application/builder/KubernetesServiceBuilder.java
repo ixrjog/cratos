@@ -41,12 +41,12 @@ public class KubernetesServiceBuilder {
     }
 
     private KubernetesServiceVO.ServiceSpec makeServiceSpec() {
-        this.service.getSpec()
-                .getPorts();
         return KubernetesServiceVO.ServiceSpec.builder()
                 .ports(makePorts())
                 .selector(Maps.newHashMap(this.service.getSpec()
                         .getSelector()))
+                .type(this.service.getSpec().getType())
+                .clusterIP(this.service.getSpec().getClusterIP())
                 .build();
     }
 

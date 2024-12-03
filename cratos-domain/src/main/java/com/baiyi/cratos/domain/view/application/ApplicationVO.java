@@ -22,7 +22,6 @@ import java.util.Map;
  */
 public class ApplicationVO {
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
@@ -35,7 +34,6 @@ public class ApplicationVO {
         private Boolean valid;
         private String config;
         private String comment;
-
         private Map<String, List<ApplicationResourceVO.Resource>> resources;
 
         @Override

@@ -72,7 +72,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .build();
     }
 
-
     private KubernetesVO.KubernetesDetails buildKubernetesDetails(
             ApplicationKubernetesParam.QueryKubernetesDetails param) {
         Application application = applicationService.getByName(param.getApplicationName());
