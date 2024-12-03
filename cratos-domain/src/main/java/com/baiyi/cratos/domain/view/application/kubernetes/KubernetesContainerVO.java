@@ -20,7 +20,7 @@ public class KubernetesContainerVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "pod.containerStatuses")
     public static class ContainerStatus implements Serializable {
         @Serial
         private static final long serialVersionUID = -7978494527647095842L;

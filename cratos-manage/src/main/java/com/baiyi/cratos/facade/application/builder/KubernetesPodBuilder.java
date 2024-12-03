@@ -7,6 +7,7 @@ import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class KubernetesPodBuilder {
         return this;
     }
 
+    @Schema(type = "pod.containerStatuses")
     private List<KubernetesContainerVO.ContainerStatus> makeContainerStatuses() {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
         return this.pod.getStatus()
@@ -49,6 +51,7 @@ public class KubernetesPodBuilder {
                 .toList();
     }
 
+    @Schema(type = "pod.status.conditions")
     private Map<String, KubernetesPodVO.PodCondition> makeConditions() {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
         return this.pod.getStatus()
@@ -62,6 +65,7 @@ public class KubernetesPodBuilder {
                 .collect(Collectors.toMap(KubernetesPodVO.PodCondition::getType, a -> a, (k1, k2) -> k1));
     }
 
+    @Schema(type = "pod.status")
     private KubernetesPodVO.PodStatus makePodStatus() {
         return KubernetesPodVO.PodStatus.builder()
                 .hostIP(this.pod.getStatus()
@@ -76,6 +80,7 @@ public class KubernetesPodBuilder {
                 .build();
     }
 
+    @Schema(type = "pod.spec")
     private KubernetesPodVO.PodSpec makePodSpec() {
         return KubernetesPodVO.PodSpec.builder()
                 .nodeName(this.pod.getSpec()

@@ -5,13 +5,17 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -44,6 +48,7 @@ public class KubernetesDeploymentBuilder {
         return this;
     }
 
+    @Schema(type = "deployment.rollingUpdate")
     private KubernetesDeploymentVO.RollingUpdateDeployment makeRollingUpdate() {
         return KubernetesDeploymentVO.RollingUpdateDeployment.builder()
                 .maxSurge(this.deployment.getSpec()
@@ -59,6 +64,7 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
+    @Schema(type = "deployment.strategy")
     private KubernetesDeploymentVO.DeploymentStrategy makeStrategy() {
         return this.deployment.getSpec()
                 .getStrategy() == null ? KubernetesDeploymentVO.DeploymentStrategy.EMPTY : KubernetesDeploymentVO.DeploymentStrategy.builder()
@@ -69,6 +75,29 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
+    @Schema(type = "deployment.spec.template.spec.containers.resources")
+    private KubernetesDeploymentVO.ContainerResources makeContainerResources(Container container) {
+        Map<String, KubernetesDeploymentVO.Quantity> limits = Maps.newHashMap();
+        container.getResources()
+                .getLimits()
+                .forEach((String k, Quantity v) -> limits.put(k, KubernetesDeploymentVO.Quantity.builder()
+                        .amount(v.getAmount())
+                        .format(v.getFormat())
+                        .build()));
+        Map<String, KubernetesDeploymentVO.Quantity> requests = Maps.newHashMap();
+        container.getResources()
+                .getRequests()
+                .forEach((String k, Quantity v) -> requests.put(k, KubernetesDeploymentVO.Quantity.builder()
+                        .amount(v.getAmount())
+                        .format(v.getFormat())
+                        .build()));
+        return KubernetesDeploymentVO.ContainerResources.builder()
+                .limits(limits)
+                .requests(requests)
+                .build();
+    }
+
+    @Schema(type = "deployment.spec.template.spec.containers")
     private List<KubernetesDeploymentVO.TemplateSpecContainer> makeTemplateSpecContainer() {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
         return this.deployment.getSpec()
@@ -82,10 +111,12 @@ public class KubernetesDeploymentBuilder {
                         .main(optionalContainer.map(container -> container.getName()
                                         .equals(e.getName()))
                                 .orElse(false))
+                        .resources(makeContainerResources(e))
                         .build())
                 .toList();
     }
 
+    @Schema(type = "deployment.spec.template")
     private KubernetesDeploymentVO.SpecTemplate makeSpecTemplate() {
         KubernetesDeploymentVO.TemplateSpec spec = KubernetesDeploymentVO.TemplateSpec.builder()
                 .containers(makeTemplateSpecContainer())
@@ -95,6 +126,7 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
+    @Schema(type = "deployment.spec")
     private KubernetesDeploymentVO.DeploymentSpec makeSpec() {
         return KubernetesDeploymentVO.DeploymentSpec.builder()
                 .replicas(this.deployment.getSpec()

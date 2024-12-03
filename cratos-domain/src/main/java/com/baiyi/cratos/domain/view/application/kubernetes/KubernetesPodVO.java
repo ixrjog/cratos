@@ -43,7 +43,7 @@ public class KubernetesPodVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "pod.status")
     public static class PodStatus implements Serializable {
         @Serial
         private static final long serialVersionUID = -7125606653208312785L;
@@ -71,7 +71,7 @@ public class KubernetesPodVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "pod.status.conditions")
     public static class PodCondition implements Serializable {
         @Serial
         private static final long serialVersionUID = -2976180260319668044L;

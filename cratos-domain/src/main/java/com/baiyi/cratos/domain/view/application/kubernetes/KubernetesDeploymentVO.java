@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -37,7 +38,7 @@ public class KubernetesDeploymentVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "deployment.spec")
     public static class DeploymentSpec implements Serializable {
         @Serial
         private static final long serialVersionUID = 4549992231198483582L;
@@ -51,7 +52,7 @@ public class KubernetesDeploymentVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "deployment.spec.template")
     public static class SpecTemplate implements Serializable {
         @Serial
         private static final long serialVersionUID = 6533620123953724215L;
@@ -73,7 +74,7 @@ public class KubernetesDeploymentVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "deployment.spec.template.spec.containers")
     public static class TemplateSpecContainer implements Serializable {
         @Serial
         private static final long serialVersionUID = 6005762108817823260L;
@@ -81,13 +82,14 @@ public class KubernetesDeploymentVO {
         private Boolean main;
         private String name;
         private String image;
+        private KubernetesDeploymentVO.ContainerResources resources;
     }
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "deployment.strategy")
     public static class DeploymentStrategy implements Serializable {
         @Serial
         private static final long serialVersionUID = -873459316958896176L;
@@ -101,12 +103,38 @@ public class KubernetesDeploymentVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    @Schema
+    @Schema(type = "deployment.rollingUpdate")
     public static class RollingUpdateDeployment implements Serializable {
         @Serial
         private static final long serialVersionUID = 8099732330091548272L;
         private String maxSurge;
         private String maxUnavailable;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(type = "deployment.spec.template.spec.containers.resources")
+    public static class ContainerResources implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -8365479765276925656L;
+        private Map<String, Quantity> limits;
+        private Map<String, Quantity> requests;
+
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(type = "deployment.spec.template.spec.containers.resources.quantity")
+    public static class Quantity implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3726795430810844718L;
+        private String amount;
+        private String format;
+
     }
 
 }
