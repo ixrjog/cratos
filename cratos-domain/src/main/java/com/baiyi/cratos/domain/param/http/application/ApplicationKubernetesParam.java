@@ -15,7 +15,7 @@ public class ApplicationKubernetesParam {
     @Data
     @Builder
     @Schema
-    public static class QueryApplicationResourceKubernetesDetails {
+    public static class QueryApplicationResourceKubernetesWorkload {
         @NotBlank
         private String applicationName;
         @NotBlank

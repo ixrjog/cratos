@@ -24,12 +24,12 @@ public class KubernetesVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class KubernetesDetails implements Serializable {
+    public static class KubernetesWorkload implements Serializable {
         @Serial
         private static final long serialVersionUID = 6024185257685366861L;
 
-        public static KubernetesDetails failed(String message) {
-            return KubernetesDetails.builder()
+        public static KubernetesWorkload failed(String message) {
+            return KubernetesWorkload.builder()
                     .message(message)
                     .success(false)
                     .build();
@@ -38,12 +38,13 @@ public class KubernetesVO {
         @Builder.Default
         private boolean success = true;
         private String message;
-
         private ApplicationVO.Application application;
         private Banner banner;
         private String namespace;
         @Builder.Default
         private List<KubernetesDeploymentVO.Deployment> deployments = Lists.newArrayList();
+        @Builder.Default
+        private List<KubernetesServiceVO.Service> services = Lists.newArrayList();
     }
 
     @Data

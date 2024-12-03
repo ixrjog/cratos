@@ -1,7 +1,6 @@
-package com.baiyi.cratos.converter;
+package com.baiyi.cratos.converter.impl;
 
-import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -9,7 +8,6 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
@@ -19,13 +17,11 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -34,16 +30,23 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class ApplicationKubernetesDeploymentConverter {
+public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesResourceConverter<KubernetesDeploymentVO.Deployment,Deployment> {
 
-    private final EdsAssetService edsAssetService;
-    private final EdsInstanceService edsInstanceService;
-    private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final KubernetesPodRepo kubernetesPodRepo;
 
-    public List<KubernetesDeploymentVO.Deployment> toDeployments(List<ApplicationResource> resources) {
+    public ApplicationKubernetesDeploymentConverter(EdsInstanceService edsInstanceService,
+                                                    EdsInstanceProviderHolderBuilder holderBuilder,
+                                                    EdsAssetService edsAssetService,
+                                                    KubernetesDeploymentRepo kubernetesDeploymentRepo,
+                                                    KubernetesPodRepo kubernetesPodRepo) {
+        super(edsInstanceService, holderBuilder, edsAssetService);
+        this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
+        this.kubernetesPodRepo = kubernetesPodRepo;
+    }
+
+    @Override
+    public List<KubernetesDeploymentVO.Deployment> toResourceVO(List<ApplicationResource> resources) {
         Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
         return resources.stream()
                 .map(e -> to(edsInstanceConfigMap, e))
@@ -77,28 +80,8 @@ public class ApplicationKubernetesDeploymentConverter {
         return kubernetesPodRepo.list(kubernetes, namespace, labels);
     }
 
-    private EdsKubernetesConfigModel.Kubernetes getEdsConfig(
-            Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap, EdsInstance edsInstance) {
-        Optional.ofNullable(edsInstance)
-                .map(EdsInstance::getId)
-                .orElseThrow(() -> new KubernetesResourceTemplateException("kubernetesInstance is null."));
-        if (edsInstanceConfigMap.containsKey(edsInstance.getId())) {
-            return edsInstanceConfigMap.get(edsInstance.getId());
-        }
-        if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
-            return getEdsInstanceProvider(edsInstance.getId()).getInstance()
-                    .getEdsConfigModel();
-        }
-        throw new KubernetesResourceTemplateException("kubernetesInstance is invalid.");
-    }
-
-    @SuppressWarnings("unchecked")
-    private EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> getEdsInstanceProvider(
-            int instanceId) {
-        EdsInstance edsInstance = edsInstanceService.getById(instanceId);
-        EdsAssetTypeEnum edsAssetTypeEnum = EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT;
-        return (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
-                instanceId, edsAssetTypeEnum.name());
+    protected EdsAssetTypeEnum getEdsAssetType(){
+        return EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT;
     }
 
 }

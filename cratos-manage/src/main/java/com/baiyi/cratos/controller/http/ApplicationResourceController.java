@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
-import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
+import com.baiyi.cratos.facade.application.ApplicationKubernetesWorkloadFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ApplicationResourceController {
 
-    private final ApplicationKubernetesDeploymentFacade deploymentFacade;
+    private final ApplicationKubernetesWorkloadFacade kubernetesWorkloadFacade;
 
-    @Operation(summary = "Query application resource kubernetes details")
-    @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<MessageResponse<KubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
-            @RequestBody @Valid ApplicationKubernetesParam.QueryApplicationResourceKubernetesDetails queryApplicationResourceKubernetesDetails) {
+    @Operation(summary = "Query application resource kubernetes workload")
+    @PostMapping(value = "/kubernetes/workload/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<MessageResponse<KubernetesVO.KubernetesWorkload>> queryApplicationResourceKubernetesWorkload(
+            @RequestBody @Valid ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload queryApplicationResourceKubernetesWorkload) {
         return new HttpResult<>(
-                deploymentFacade.queryKubernetesDeploymentDetails(queryApplicationResourceKubernetesDetails));
+                kubernetesWorkloadFacade.queryKubernetesWorkload(queryApplicationResourceKubernetesWorkload));
     }
 
 }
