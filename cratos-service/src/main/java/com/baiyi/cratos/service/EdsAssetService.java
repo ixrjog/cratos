@@ -17,6 +17,8 @@ import java.util.List;
  */
 public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAssetMapper>, SupportBusinessService {
 
+    List<EdsAsset> queryInstanceAssets(Integer instanceId);
+
     List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType);
 
     List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType, String region);

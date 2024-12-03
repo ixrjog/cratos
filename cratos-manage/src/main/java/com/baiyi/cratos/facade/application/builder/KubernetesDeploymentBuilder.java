@@ -3,13 +3,16 @@ package com.baiyi.cratos.facade.application.builder;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -66,11 +69,38 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
+    private List<KubernetesDeploymentVO.TemplateSpecContainer> makeTemplateSpecContainer() {
+        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        return this.deployment.getSpec()
+                .getTemplate()
+                .getSpec()
+                .getContainers()
+                .stream()
+                .map(e -> KubernetesDeploymentVO.TemplateSpecContainer.builder()
+                        .name(e.getName())
+                        .image(e.getImage())
+                        .main(optionalContainer.map(container -> container.getName()
+                                        .equals(e.getName()))
+                                .orElse(false))
+                        .build())
+                .toList();
+    }
+
+    private KubernetesDeploymentVO.SpecTemplate makeSpecTemplate() {
+        KubernetesDeploymentVO.TemplateSpec spec = KubernetesDeploymentVO.TemplateSpec.builder()
+                .containers(makeTemplateSpecContainer())
+                .build();
+        return KubernetesDeploymentVO.SpecTemplate.builder()
+                .spec(spec)
+                .build();
+    }
+
     private KubernetesDeploymentVO.DeploymentSpec makeSpec() {
         return KubernetesDeploymentVO.DeploymentSpec.builder()
                 .replicas(this.deployment.getSpec()
                         .getReplicas())
                 .strategy(makeStrategy())
+                .template(makeSpecTemplate())
                 .build();
     }
 

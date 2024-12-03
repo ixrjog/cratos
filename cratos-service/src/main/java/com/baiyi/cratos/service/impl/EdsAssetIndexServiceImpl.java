@@ -41,14 +41,18 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ID:' + #id")
-    public void clearCacheById(int id) {
+    public void add(@NonNull EdsAssetIndex record) {
+        EdsAssetIndexService.super.add(record);
+        ((EdsAssetIndexService) AopContext.currentProxy()).clear(record);
     }
 
     @Override
-    public void updateByPrimaryKey(@NonNull EdsAssetIndex record) {
-        ((EdsAssetIndexService) AopContext.currentProxy()).clear(getById(record.getId()));
-        edsAssetIndexMapper.updateByPrimaryKey(record);
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ID:' + #id")
+    public void clearCacheById(int id) {
+        EdsAssetIndex index = getById(id);
+        if (index != null) {
+            ((EdsAssetIndexService) AopContext.currentProxy()).clear(index);
+        }
     }
 
     @Override

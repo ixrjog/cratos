@@ -33,10 +33,9 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
         }
         Map<String, EdsAssetIndex> assetIndexMap = getEdsAssetIndexMap(assetId);
         edsAssetIndexList.forEach(e -> {
-            if (e == null) {
-                return;
+            if (e != null) {
+                saveAssetIndex(assetIndexMap, e);
             }
-            saveAssetIndex(assetIndexMap, e);
         });
         assetIndexMap.keySet()
                 .forEach(key -> edsAssetIndexService.deleteById(assetIndexMap.get(key)

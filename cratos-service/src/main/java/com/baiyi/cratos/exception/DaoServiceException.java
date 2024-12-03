@@ -16,7 +16,7 @@ import java.io.Serial;
 @Data
 @NoArgsConstructor
 @Slf4j
-public class DaoServiceException extends RuntimeException{
+public class DaoServiceException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = -5807490039234051240L;
@@ -27,6 +27,10 @@ public class DaoServiceException extends RuntimeException{
         super(message);
         this.code = 40001;
         log.debug(message);
+    }
+
+    public static void runtime(String message) {
+        throw new DaoServiceException(message);
     }
 
 }

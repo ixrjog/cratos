@@ -8,6 +8,7 @@ import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * &#064;Date  2024/11/18 10:37
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public abstract class BaseResourceScanner implements ResourceScanner {
@@ -41,6 +43,9 @@ public abstract class BaseResourceScanner implements ResourceScanner {
             return instanceMap.get(edsAsset.getInstanceId());
         }
         EdsInstance instance = edsInstanceService.getById(edsAsset.getInstanceId());
+        if(instance == null) {
+            log.debug("instance is null. id={}",edsAsset.getInstanceId());
+        }
         instanceMap.put(edsAsset.getInstanceId(), instance);
         return instance;
     }

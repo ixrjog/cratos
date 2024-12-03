@@ -35,12 +35,12 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_VPC)
-public class EdsHuaweicloudVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HwcVpc.Vpc> {
+public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HwcVpc.Vpc> {
 
-    public EdsHuaweicloudVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                          EdsAssetIndexFacade edsAssetIndexFacade,
-                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+    public EdsHwcVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                  CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                  EdsAssetIndexFacade edsAssetIndexFacade,
+                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler);
     }

@@ -31,6 +31,7 @@
         <module>cratos-eds-domain</module>
         <module>cratos-eds-harbor</module>
         <module>cratos-ssh-crystal</module>
+        <module>cratos-eds-opscloud</module>
     </modules>
 
     <properties>

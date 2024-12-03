@@ -25,13 +25,13 @@ public class LdapPersonRepo {
     public List<LdapPerson.Person> queryGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
         List<String> usernames = ldapClient.queryGroupMember(ldapConfig, groupName);
         List<LdapPerson.Person> people = Lists.newArrayList();
-        for (String username : usernames) {
+        usernames.forEach(username -> {
             try {
                 people.add(ldapClient.getPersonWithDN(ldapConfig, ldapConfig.buildUserDn(username)));
             } catch (Exception e) {
                 log.debug("未找到 {} 对应的 Person", username);
             }
-        }
+        });
         return people;
     }
 

@@ -40,7 +40,7 @@
 
 | service    | protocol | port | startup parameter     |
 |------------|----------|------|-----------------------|
-| web        | http     | 8080 | --server.port=8080    |
+| web-api    | http     | 8080 | --server.port=8080    |
 | ssh-server | ssh      | 2222 | --ssh.shell.port=2222 |
 
 #### Build

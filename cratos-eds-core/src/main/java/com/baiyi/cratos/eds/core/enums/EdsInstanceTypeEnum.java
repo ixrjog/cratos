@@ -26,7 +26,8 @@ public enum EdsInstanceTypeEnum {
     GODADDY,
     // https://goharbor.io/
     HARBOR,
-    GOOGLECLOUD;
+    GOOGLECLOUD,
+    OPSCLOUD;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()

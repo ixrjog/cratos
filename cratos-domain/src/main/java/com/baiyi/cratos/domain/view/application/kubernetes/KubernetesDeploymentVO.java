@@ -44,6 +44,43 @@ public class KubernetesDeploymentVO {
         private Integer replicas;
         // 发布策略
         private DeploymentStrategy strategy;
+        private SpecTemplate template;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class SpecTemplate implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6533620123953724215L;
+        private TemplateSpec spec;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class TemplateSpec implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -7381336994086390246L;
+        private List<TemplateSpecContainer> containers;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class TemplateSpecContainer implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6005762108817823260L;
+        @Schema(description = "Main Container")
+        private Boolean main;
+        private String name;
+        private String image;
     }
 
     @Data
