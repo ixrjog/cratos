@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.facade.application.ApplicationKubernetesWorkloadFacade;
+import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKubernetesWorkloadFacade {
+public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubernetesDetailsFacade {
 
     private final ApplicationResourceService applicationResourceService;
     private final ApplicationKubernetesDeploymentConverter deploymentConverter;
@@ -39,42 +39,54 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
     private final ApplicationWrapper applicationWrapper;
 
     @Override
-    public MessageResponse<KubernetesVO.KubernetesWorkload> queryKubernetesWorkload(
-            ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload queryApplicationKubernetesDeployment) {
-        return MessageResponse.<KubernetesVO.KubernetesWorkload>builder()
-                .body(buildKubernetesDetails(queryApplicationKubernetesDeployment))
+    public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
+            ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails) {
+        return MessageResponse.<KubernetesVO.KubernetesDetails>builder()
+                .body(buildKubernetesDetails(queryKubernetesDetails))
                 .topic(HasTopic.APPLICATION_KUBERNETES_WORKLOAD)
                 .build();
     }
 
-    private List<KubernetesDeploymentVO.Deployment> buildDeploymentResources(
-            ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload param) {
-        return deploymentConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(param.getApplicationName(),
-                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace()));
-    }
-
     private List<KubernetesServiceVO.Service> buildServiceResources(
-            ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload param) {
+            ApplicationKubernetesParam.QueryKubernetesDetails param) {
         return serviceConverter.toResourceVO(
                 applicationResourceService.queryApplicationResource(param.getApplicationName(),
                         EdsAssetTypeEnum.KUBERNETES_SERVICE.name(), param.getNamespace()));
     }
 
-    private KubernetesVO.KubernetesWorkload buildKubernetesDetails(
-            ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload param) {
+    private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
+        List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
+                applicationResourceService.queryApplicationResource(param.getApplicationName(),
+                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace()));
+        return KubernetesVO.Workloads.builder()
+                .deployments(deployments)
+                .build();
+    }
+
+    private KubernetesVO.Network makeNetwork(ApplicationKubernetesParam.QueryKubernetesDetails param) {
+        List<KubernetesServiceVO.Service> services = serviceConverter.toResourceVO(
+                applicationResourceService.queryApplicationResource(param.getApplicationName(),
+                        EdsAssetTypeEnum.KUBERNETES_SERVICE.name(), param.getNamespace()));
+        return KubernetesVO.Network.builder()
+                .services(services)
+                .build();
+    }
+
+
+    private KubernetesVO.KubernetesDetails buildKubernetesDetails(
+            ApplicationKubernetesParam.QueryKubernetesDetails param) {
         Application application = applicationService.getByName(param.getApplicationName());
         if (application == null) {
-            return KubernetesVO.KubernetesWorkload.failed("The application does not exist.");
+            return KubernetesVO.KubernetesDetails.failed("The application does not exist.");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
-        return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesWorkload.failed(
-                "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesWorkload.builder()
+        return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesDetails.failed(
+                "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))
                 .namespace(param.getNamespace())
-                .deployments(buildDeploymentResources(param))
-                .services(buildServiceResources(param))
+                .workloads(makeWorkloads(param))
+                .network(makeNetwork(param))
                 .build();
     }
 

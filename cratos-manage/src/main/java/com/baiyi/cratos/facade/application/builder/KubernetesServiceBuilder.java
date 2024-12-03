@@ -25,7 +25,7 @@ public class KubernetesServiceBuilder {
         return this;
     }
 
-    public List<KubernetesServiceVO.ServicePort> makePorts() {
+    private List<KubernetesServiceVO.ServicePort> makePorts() {
         return this.service.getSpec()
                 .getPorts()
                 .stream()

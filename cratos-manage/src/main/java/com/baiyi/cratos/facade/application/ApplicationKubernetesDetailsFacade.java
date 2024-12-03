@@ -9,9 +9,9 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
  * &#064;Date  2024/11/20 11:38
  * &#064;Version 1.0
  */
-public interface ApplicationKubernetesWorkloadFacade {
+public interface ApplicationKubernetesDetailsFacade {
 
-    MessageResponse<KubernetesVO.KubernetesWorkload> queryKubernetesWorkload(
-            ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload queryApplicationKubernetesDeployment);
+    MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
+            ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails);
 
 }

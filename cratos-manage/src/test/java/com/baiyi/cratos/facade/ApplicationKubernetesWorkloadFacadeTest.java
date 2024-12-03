@@ -4,7 +4,7 @@ import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
-import com.baiyi.cratos.facade.application.ApplicationKubernetesWorkloadFacade;
+import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -16,16 +16,16 @@ import org.junit.jupiter.api.Test;
 public class ApplicationKubernetesWorkloadFacadeTest extends BaseUnit {
 
     @Resource
-    private ApplicationKubernetesWorkloadFacade applicationKubernetesWorkloadFacade;
+    private ApplicationKubernetesDetailsFacade applicationKubernetesWorkloadFacade;
 
     @Test
     void test() {
-        ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload param = ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload.builder()
+        ApplicationKubernetesParam.QueryKubernetesDetails param = ApplicationKubernetesParam.QueryKubernetesDetails.builder()
                 .applicationName("kili")
                 .namespace("daily")
                 .build();
 
-        MessageResponse<KubernetesVO.KubernetesWorkload> response = applicationKubernetesWorkloadFacade.queryKubernetesWorkload(
+        MessageResponse<KubernetesVO.KubernetesDetails> response = applicationKubernetesWorkloadFacade.queryKubernetesDetails(
                 param);
         System.out.println(response);
     }

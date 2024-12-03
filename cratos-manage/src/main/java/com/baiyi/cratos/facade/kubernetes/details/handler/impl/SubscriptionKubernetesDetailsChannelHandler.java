@@ -3,10 +3,10 @@ package com.baiyi.cratos.facade.kubernetes.details.handler.impl;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
-import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam.QueryApplicationResourceKubernetesWorkload;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam.QueryKubernetesDetails;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
-import com.baiyi.cratos.facade.application.ApplicationKubernetesWorkloadFacade;
+import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.facade.kubernetes.details.handler.BaseKubernetesDetailsChannelHandler;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesDetailsChannelHandler {
 
-    private final ApplicationKubernetesWorkloadFacade deploymentFacade;
+    private final ApplicationKubernetesDetailsFacade deploymentFacade;
 
     @Override
     public String getTopic() {
@@ -33,11 +33,11 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
                               ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {
-            QueryApplicationResourceKubernetesWorkload param = QueryApplicationResourceKubernetesWorkload.builder()
+            QueryKubernetesDetails param = QueryKubernetesDetails.builder()
                     .applicationName(message.getApplicationName())
                     .namespace(message.getNamespace())
                     .build();
-            MessageResponse<KubernetesVO.KubernetesWorkload> response = deploymentFacade.queryKubernetesWorkload(
+            MessageResponse<KubernetesVO.KubernetesDetails> response = deploymentFacade.queryKubernetesDetails(
                     param);
             send(session, response);
         }
