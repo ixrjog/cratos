@@ -14,6 +14,7 @@ import com.baiyi.cratos.wrapper.application.ApplicationResourceWrapper;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -62,6 +63,7 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     }
 
     @Override
+    @Async
     public void scanAllApplicationResource() {
         resourceFacade.scanAll();
     }

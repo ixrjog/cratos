@@ -1,8 +1,10 @@
 package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
@@ -36,13 +38,29 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
         if (application == null) {
             return;
         }
+        doScan(application);
+    }
+
+    private void doScan(Application application) {
         ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
         ResourceScannerFactory.scanAndBindAssets(application, config);
     }
 
     @Override
     public void scanAll() {
-
+        int page = 1;
+        ApplicationParam.ApplicationPageQueryParam param = ApplicationParam.ApplicationPageQueryParam.builder()
+                .page(page)
+                .build();
+        while (true) {
+            DataTable<Application> table = applicationService.queryApplicationPage(param);
+            if (CollectionUtils.isEmpty(table.getData())) {
+                break;
+            }
+            table.getData()
+                    .forEach(this::doScan);
+            page++;
+        }
     }
 
     @Override
