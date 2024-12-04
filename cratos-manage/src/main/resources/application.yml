@@ -1,6 +1,10 @@
 #file: noinspection SpringBootApplicationYaml
 logging:
   config: classpath:logback-spring.xml
+  structured:
+    format:
+      console: ecs
+      file: ecs
 
 spring:
   application:
@@ -23,7 +27,6 @@ spring:
   lifecycle:
     # 设置缓冲时间 默认30s
     timeout-per-shutdown-phase: 45s
-
 
 # 开发环境配置
 server:

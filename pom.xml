@@ -41,7 +41,7 @@
 
         <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
-        <spring-security.version>6.3.4</spring-security.version>
+        <spring-security.version>6.3.5</spring-security.version>
         <!-- aws https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-elasticloadbalancingv2 -->
         <aws-java-sdk.version>1.12.778</aws-java-sdk.version>
         <aws-java-sdk2.version>2.29.21</aws-java-sdk2.version>
@@ -214,11 +214,11 @@
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
         <!-- https://github.com/jwtk/jjwt#installation -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.12.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.jsonwebtoken</groupId>-->
+<!--            <artifactId>jjwt</artifactId>-->
+<!--            <version>0.12.3</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>

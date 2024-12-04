@@ -22,4 +22,6 @@ public interface ApplicationFacade extends HasSetValid {
 
     void scanApplicationResource(ApplicationParam.ScanResource scanResource);
 
+    void scanAllApplicationResource();
+
 }

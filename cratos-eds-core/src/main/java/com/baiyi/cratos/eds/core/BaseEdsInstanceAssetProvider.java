@@ -25,7 +25,6 @@ import com.baiyi.cratos.eds.core.util.ConfigUtil;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -34,6 +33,7 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -50,6 +50,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private final ConfigCredTemplate configCredTemplate;
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
     private final UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler;
+
+    public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     /**
      * 按类型查询本数据源实例资产
@@ -69,8 +71,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), edsAssetTypeEnum.name(), region);
     }
-
-    public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
 
@@ -111,10 +111,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Long value) {
-        if (value == null) {
-            return null;
-        }
-        return toEdsAssetIndex(edsAsset, name, String.valueOf(value));
+        return value == null ? null : toEdsAssetIndex(edsAsset, name, String.valueOf(value));
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Integer value) {
@@ -125,17 +122,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Boolean value) {
-        if (value == null) {
-            return null;
-        }
-        return toEdsAssetIndex(edsAsset, name, value.toString());
+        return value == null ? null : toEdsAssetIndex(edsAsset, name, value.toString());
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, String value) {
-        if (!StringUtils.hasText(value)) {
-            return null;
-        }
-        return EdsAssetIndex.builder()
+        return !StringUtils.hasText(value) ? null : EdsAssetIndex.builder()
                 .instanceId(edsAsset.getInstanceId())
                 .assetId(edsAsset.getId())
                 .name(name)
@@ -192,9 +183,9 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                                            A entity) throws EdsAssetConversionException;
 
     private Set<Integer> listAssetsIdSet(ExternalDataSourceInstance<C> instance) {
-        Set<Integer> idSet = Sets.newHashSet();
-        queryFromDatabaseAssets(instance).forEach(e -> idSet.add(e.getId()));
-        return idSet;
+        return queryFromDatabaseAssets(instance).stream()
+                .map(EdsAsset::getId)
+                .collect(Collectors.toSet());
     }
 
     /**

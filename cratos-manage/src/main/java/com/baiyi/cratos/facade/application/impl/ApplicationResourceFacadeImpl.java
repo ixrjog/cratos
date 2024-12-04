@@ -41,6 +41,11 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     }
 
     @Override
+    public void scanAll() {
+
+    }
+
+    @Override
     public void deleteById(int id) {
         resourceService.deleteById(id);
     }

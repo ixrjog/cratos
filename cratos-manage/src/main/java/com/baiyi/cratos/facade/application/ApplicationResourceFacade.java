@@ -12,6 +12,8 @@ public interface ApplicationResourceFacade {
 
     void scan(String applicationName);
 
+    void scanAll();
+
     void deleteById(int id);
 
     OptionsVO.Options getNamespaceOptions();

@@ -11,6 +11,8 @@ import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -25,10 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EdsInstanceProviderFactory {
-
-    private EdsInstanceProviderFactory() {
-    }
 
     private static final Map<String, Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
@@ -114,9 +114,8 @@ public class EdsInstanceProviderFactory {
     @SuppressWarnings("unchecked")
     public static <Config extends IEdsConfigModel, Asset> EdsInstanceProviderHolder<Config, Asset> buildHolder(
             ExternalDataSourceInstance<Config> instance, String assetType) {
-        String instanceType = instance.getEdsInstance()
+        final String instanceType = instance.getEdsInstance()
                 .getEdsType();
-
         if (!CONTEXT.containsKey(instanceType)) {
             EdsInstanceProviderException.runtime("No available provider: instanceType={}.", instanceType);
         }
@@ -125,7 +124,7 @@ public class EdsInstanceProviderFactory {
             EdsInstanceProviderException.runtime("No available provider: instanceType={}, assetType={}.", instanceType,
                     assetType);
         }
-        EdsInstanceAssetProvider<Config, Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) providerMap.get(
+        EdsInstanceAssetProvider<Config , Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) providerMap.get(
                 assetType);
         return EdsInstanceProviderHolder.<Config, Asset>builder()
                 .instance(instance)

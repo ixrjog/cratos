@@ -49,6 +49,13 @@ public class ApplicationController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Scan all application")
+    @PostMapping(value = "/all/scan", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> scanAllApplicationResource() {
+        applicationFacade.scanAllApplicationResource();
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update application")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateApplication(
