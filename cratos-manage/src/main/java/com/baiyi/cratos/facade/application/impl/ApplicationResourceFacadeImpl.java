@@ -13,6 +13,7 @@ import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -47,6 +48,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     }
 
     @Override
+    @Async
     public void scanAll() {
         int page = 1;
         ApplicationParam.ApplicationPageQueryParam param = ApplicationParam.ApplicationPageQueryParam.builder()

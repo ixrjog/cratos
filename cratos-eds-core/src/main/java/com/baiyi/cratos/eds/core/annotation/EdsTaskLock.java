@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 public @interface EdsTaskLock {
 
     @Schema(description = "SpEL specified parameters.")
-    String instanceId() default "";
+    String instanceId() default "-1";
 
     @Schema(description = "Maximum lock time (seconds): Default 60 seconds.")
     String maxLockTime() default "60";
