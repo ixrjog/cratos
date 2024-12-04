@@ -83,6 +83,9 @@ public class KubernetesDeploymentVO {
         private String name;
         private String image;
         private KubernetesDeploymentVO.ContainerResources resources;
+        public int getSeq() {
+            return main ? 0 : 1;
+        }
     }
 
     @Data

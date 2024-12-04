@@ -13,10 +13,7 @@ import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * &#064;Author  baiyi
@@ -113,6 +110,7 @@ public class KubernetesDeploymentBuilder {
                                 .orElse(false))
                         .resources(makeContainerResources(e))
                         .build())
+                .sorted(Comparator.comparing(KubernetesDeploymentVO.TemplateSpecContainer::getSeq))
                 .toList();
     }
 
