@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Application;
@@ -13,7 +14,7 @@ import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -48,7 +49,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     }
 
     @Override
-    @Async
+    @SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_RESOURCES_TASK, lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void scanAll() {
         int page = 1;
         ApplicationParam.ApplicationPageQueryParam param = ApplicationParam.ApplicationPageQueryParam.builder()

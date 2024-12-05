@@ -1,5 +1,6 @@
 package com.baiyi.cratos.scheduler.task;
 
+import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.configuration.condition.EnvCondition;
 import com.baiyi.cratos.facade.inspection.InspectionFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Component;
 public class InspectionNotificationTask {
 
     @Scheduled(cron = "0 30 9 * * ?")
-    @SchedulerLock(name = "INSPECTION_NOTIFICATION_TASK", lockAtMostFor = "5m", lockAtLeastFor = "5m")
+    @SchedulerLock(name = SchedulerLockNameConstants.INSPECTION_NOTIFICATION_TASK, lockAtMostFor = "5m", lockAtLeastFor = "5m")
     public void task() {
         InspectionFactory.doTask();
     }

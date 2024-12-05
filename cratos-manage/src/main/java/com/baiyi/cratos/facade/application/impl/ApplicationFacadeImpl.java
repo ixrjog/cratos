@@ -6,7 +6,6 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
-import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.service.ApplicationService;
@@ -15,6 +14,7 @@ import com.baiyi.cratos.wrapper.application.ApplicationResourceWrapper;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -62,7 +62,7 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     }
 
     @Override
-    @EdsTaskLock()
+    @Async
     public void scanAllApplicationResource() {
         resourceFacade.scanAll();
     }
