@@ -20,4 +20,6 @@ public interface RbacUserRoleService extends BaseUniqueKeyService<RbacUserRole, 
 
     int selectCountByRoleId(int roleId);
 
+    int queryUserMaxAccessLevel(String username);
+
 }

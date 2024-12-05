@@ -115,7 +115,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                 .map(namespace -> OptionsVO.Option.builder()
                         .label(namespace)
                         .value(namespace)
-                        .valid(userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                        .disabled(userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
                                 business, namespace))
                         .build())
                 .toList();

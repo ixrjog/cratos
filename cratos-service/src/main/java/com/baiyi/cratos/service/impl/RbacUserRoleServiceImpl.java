@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -55,6 +56,12 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
         criteria.andEqualTo("username", record.getUsername())
                 .andEqualTo("roleId", record.getRoleId());
         return rbacUserRoleMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public int queryUserMaxAccessLevel(String username) {
+        Integer maxAccessLevel = rbacUserRoleMapper.queryUserMaxAccessLevel(username);
+        return Objects.requireNonNullElse(maxAccessLevel, 0);
     }
 
     @Override

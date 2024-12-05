@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.rbac;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 
@@ -17,5 +18,7 @@ public interface RbacUserRoleFacade {
     void deleteUserRole(RbacUserRoleParam.DeleteUserRole deleteUserRole);
 
     List<RbacUserRole> queryUserRoles(String username);
+
+    boolean hasAccessLevel(String username, AccessLevel accessLevel);
 
 }

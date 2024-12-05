@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.RbacUserRoleMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.RbacUserRole">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.RbacUserRole">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <select id="queryUserMaxAccessLevel"
+            resultType="java.lang.Integer">>
+    select max(access_level) as max_access_level
+    from rbac_role
+    where id in (select role_id from rbac_user_role where username = #{username})
+    </select>
+
 </mapper>

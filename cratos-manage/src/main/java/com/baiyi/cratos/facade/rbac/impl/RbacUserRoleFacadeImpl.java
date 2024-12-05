@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
@@ -47,6 +48,12 @@ public class RbacUserRoleFacadeImpl implements RbacUserRoleFacade {
             return rbacUserRoleService.queryByUsername(username);
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean hasAccessLevel(String username, AccessLevel accessLevel) {
+        int userMaxAccessLevel = rbacUserRoleService.queryUserMaxAccessLevel(username);
+        return userMaxAccessLevel >= accessLevel.getLevel();
     }
 
 }
