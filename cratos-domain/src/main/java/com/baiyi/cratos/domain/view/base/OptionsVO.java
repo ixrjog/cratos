@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -17,7 +18,8 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class OptionsVO {
 
-    public static final OptionsVO.Options NO_OPTIONS_AVAILABLE = OptionsVO.Options.builder().build();
+    public static final OptionsVO.Options NO_OPTIONS_AVAILABLE = OptionsVO.Options.builder()
+            .build();
 
     public static OptionsVO.Options toOptions(List<String> strings) {
         List<OptionsVO.Option> optionList = strings.stream()
@@ -36,7 +38,8 @@ public class OptionsVO {
     @Builder
     public static class Options {
         private String message;
-        private List<Option> options;
+        @Builder.Default
+        private List<Option> options = Collections.emptyList();
     }
 
     @Data
