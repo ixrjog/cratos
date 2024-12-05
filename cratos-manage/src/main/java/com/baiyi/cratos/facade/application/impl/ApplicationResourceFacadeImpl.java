@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -10,10 +11,12 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;
+import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,8 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     private final ApplicationService applicationService;
     private final ApplicationResourceService resourceService;
     private final UserPermissionFacade userPermissionFacade;
+    private final RbacFacade rbacFacade;
+    private final RbacUserRoleFacade rbacUserRoleFacade;
 
     @Override
     public void scan(String applicationName) {
@@ -96,8 +101,12 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     @SetSessionUserToParam
     public OptionsVO.Options getMyApplicationResourceNamespaceOptions(
             ApplicationParam.GetMyApplicationResourceNamespaceOptions getMyApplicationResourceNamespaceOptions) {
+        // Ops
+        if (rbacUserRoleFacade.hasAccessLevel(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                AccessLevel.OPS)) {
+            return getNamespaceOptions();
+        }
         List<String> namespaces = resourceService.getNamespaceOptions();
-
         if (CollectionUtils.isEmpty(namespaces) || StringUtils.hasText(
                 getMyApplicationResourceNamespaceOptions.getSessionUser())) {
             return OptionsVO.NO_OPTIONS_AVAILABLE;
@@ -115,8 +124,9 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                 .map(namespace -> OptionsVO.Option.builder()
                         .label(namespace)
                         .value(namespace)
-                        .disabled(userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
-                                business, namespace))
+                        .disabled(
+                                userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                                        business, namespace))
                         .build())
                 .toList();
         return OptionsVO.Options.builder()
