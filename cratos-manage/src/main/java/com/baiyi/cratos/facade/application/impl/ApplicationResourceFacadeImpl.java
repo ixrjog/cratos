@@ -1,12 +1,16 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;
@@ -17,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -32,6 +37,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
 
     private final ApplicationService applicationService;
     private final ApplicationResourceService resourceService;
+    private final UserPermissionFacade userPermissionFacade;
 
     @Override
     public void scan(String applicationName) {
@@ -84,6 +90,38 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     @Override
     public OptionsVO.Options getNamespaceOptions() {
         return OptionsVO.toOptions(resourceService.getNamespaceOptions());
+    }
+
+    @Override
+    @SetSessionUserToParam
+    public OptionsVO.Options getMyApplicationResourceNamespaceOptions(
+            ApplicationParam.GetMyApplicationResourceNamespaceOptions getMyApplicationResourceNamespaceOptions) {
+        List<String> namespaces = resourceService.getNamespaceOptions();
+
+        if (CollectionUtils.isEmpty(namespaces) || StringUtils.hasText(
+                getMyApplicationResourceNamespaceOptions.getSessionUser())) {
+            return OptionsVO.NO_OPTIONS_AVAILABLE;
+        }
+        Application application = applicationService.getByName(
+                getMyApplicationResourceNamespaceOptions.getApplicationName());
+        if (application == null) {
+            return OptionsVO.NO_OPTIONS_AVAILABLE;
+        }
+        final SimpleBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.APPLICATION.name())
+                .businessId(application.getId())
+                .build();
+        List<OptionsVO.Option> optionList = namespaces.stream()
+                .map(namespace -> OptionsVO.Option.builder()
+                        .label(namespace)
+                        .value(namespace)
+                        .valid(userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                                business, namespace))
+                        .build())
+                .toList();
+        return OptionsVO.Options.builder()
+                .options(optionList)
+                .build();
     }
 
 }

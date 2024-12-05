@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.mapper.UserPermissionMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
@@ -10,5 +11,9 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
  * @Version 1.0
  */
 public interface UserPermissionService extends BaseUniqueKeyService<UserPermission, UserPermissionMapper> {
+
+    boolean contains(String username, BaseBusiness.HasBusiness hasBusiness);
+
+    boolean contains(String username, BaseBusiness.HasBusiness hasBusiness, String role);
 
 }

@@ -1,5 +1,8 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+
 /**
  * @Author baiyi
  * @Date 2024/1/18 18:18
@@ -7,7 +10,17 @@ package com.baiyi.cratos.facade;
  */
 public interface UserPermissionFacade {
 
-  //  void grantUserPermission(String username, UserPermission userPermission);
+    void grantUserPermission(UserPermissionParam.GrantUserPermission grantUserPermission);
+
+    void revokeUserPermission(UserPermissionParam.RevokeUserPermission revokeUserPermission);
+
+    void deleteUserPermissionById(int id);
+
+    boolean contains(String username, BaseBusiness.HasBusiness hasBusiness);
+
+    boolean contains(String username, BaseBusiness.HasBusiness hasBusiness, String role);
+
+    //  void grantUserPermission(String username, UserPermission userPermission);
 
 //    boolean verify(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum);
 //

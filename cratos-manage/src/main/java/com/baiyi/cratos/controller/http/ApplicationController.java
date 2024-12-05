@@ -10,6 +10,7 @@ import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -89,6 +90,16 @@ public class ApplicationController {
     @GetMapping(value = "/resource/namespace/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getResourceNamespaceOptions() {
         return new HttpResult<>(applicationResourceFacade.getNamespaceOptions());
+    }
+
+    @Operation(summary = "Get my application resource namespace options")
+    @GetMapping(value = "/resource/namespace/my/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getMyResourceNamespaceOptions(
+            @RequestParam @Valid @NotBlank String applicationName) {
+        ApplicationParam.GetMyApplicationResourceNamespaceOptions param = ApplicationParam.GetMyApplicationResourceNamespaceOptions.builder()
+                .applicationName(applicationName)
+                .build();
+        return new HttpResult<>(applicationResourceFacade.getMyApplicationResourceNamespaceOptions(param));
     }
 
 }

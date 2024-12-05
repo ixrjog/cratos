@@ -17,6 +17,8 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class OptionsVO {
 
+    public static final OptionsVO.Options NO_OPTIONS_AVAILABLE = OptionsVO.Options.builder().build();
+
     public static OptionsVO.Options toOptions(List<String> strings) {
         List<OptionsVO.Option> optionList = strings.stream()
                 .map(e -> OptionsVO.Option.builder()
@@ -33,6 +35,7 @@ public class OptionsVO {
     @Schema
     @Builder
     public static class Options {
+        private String message;
         private List<Option> options;
     }
 
@@ -42,6 +45,7 @@ public class OptionsVO {
     public static class Option {
         private String label;
         private Object value;
+        private Boolean valid;
         private Object comment;
     }
 

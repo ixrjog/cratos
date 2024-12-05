@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.application;
 
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -8,9 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -84,6 +83,16 @@ public class ApplicationParam {
     public static class ScanResource {
         @NotBlank
         private String name;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class GetMyApplicationResourceNamespaceOptions implements HasSessionUser {
+        private String applicationName;
+        private String sessionUser;
     }
 
 }
