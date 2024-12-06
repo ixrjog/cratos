@@ -48,7 +48,8 @@ public class OptionsVO {
     public static class Option {
         private String label;
         private Object value;
-        private Boolean disabled;
+        @Builder.Default
+        private Boolean disabled = false;
         private Object comment;
     }
 
