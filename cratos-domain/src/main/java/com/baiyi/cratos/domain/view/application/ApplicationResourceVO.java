@@ -19,7 +19,6 @@ public class ApplicationResourceVO {
 
     public interface HasApplicationResources {
         String getApplicationName();
-
         void setResources(Map<String, List<Resource>> resources);
     }
 

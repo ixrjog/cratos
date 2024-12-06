@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
 import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

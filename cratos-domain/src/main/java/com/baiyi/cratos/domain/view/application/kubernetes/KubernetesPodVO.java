@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
 import com.baiyi.cratos.domain.constant.Global;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;

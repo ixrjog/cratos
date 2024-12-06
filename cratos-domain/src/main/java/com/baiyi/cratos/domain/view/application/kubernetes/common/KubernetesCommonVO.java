@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.view.application.kubernetes;
+package com.baiyi.cratos.domain.view.application.kubernetes.common;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.fasterxml.jackson.annotation.JsonFormat;
