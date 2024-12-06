@@ -7,7 +7,7 @@
 
 #### 简介
 这是OpsCloud5.0版本(https://github.com/ixrjog/opscloud4)，抛弃了旧的负担全面拥抱JDK21 & SpringBoot3
-他主要做多云管理: AWS、Aliyun & AlibabaCloud、GoogleCloud、Huaweicloud、CloudFlare、Gandi、Godaddy、Kubernetes(EKS、ACK)
+实现多云管理: AWS、Aliyun & AlibabaCloud、GoogleCloud、Huaweicloud、CloudFlare、Gandi、Godaddy、Kubernetes(EKS、ACK)
 聚合多云资产统一管理虚拟机、网络规划、域名、证书、流量层等
 
 #### Multi external data source management
