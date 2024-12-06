@@ -47,13 +47,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .build();
     }
 
-    private List<KubernetesServiceVO.Service> buildServiceResources(
-            ApplicationKubernetesParam.QueryKubernetesDetails param) {
-        return serviceConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(param.getApplicationName(),
-                        EdsAssetTypeEnum.KUBERNETES_SERVICE.name(), param.getNamespace()));
-    }
-
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
                 applicationResourceService.queryApplicationResource(param.getApplicationName(),

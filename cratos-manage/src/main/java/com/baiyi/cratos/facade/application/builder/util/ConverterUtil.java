@@ -19,6 +19,7 @@ public class ConverterUtil {
     public static KubernetesCommonVO.Metadata toMetadata(ObjectMeta objectMeta) {
         return KubernetesCommonVO.Metadata.builder()
                 .name(objectMeta.getName())
+                .creationTimestamp(ConverterUtil.parse(objectMeta.getCreationTimestamp()))
                 .generateName(objectMeta.getGenerateName())
                 .uid(objectMeta.getUid())
                 .namespace(objectMeta.getNamespace())

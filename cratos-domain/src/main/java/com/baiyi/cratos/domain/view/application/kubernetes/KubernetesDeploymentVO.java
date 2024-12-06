@@ -124,7 +124,6 @@ public class KubernetesDeploymentVO {
         private static final long serialVersionUID = -8365479765276925656L;
         private Map<String, Quantity> limits;
         private Map<String, Quantity> requests;
-
     }
 
     @Data
@@ -137,7 +136,6 @@ public class KubernetesDeploymentVO {
         private static final long serialVersionUID = 3726795430810844718L;
         private String amount;
         private String format;
-
     }
 
 }

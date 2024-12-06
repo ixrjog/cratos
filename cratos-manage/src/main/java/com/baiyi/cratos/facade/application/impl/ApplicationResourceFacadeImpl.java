@@ -120,17 +120,20 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .businessId(application.getId())
                 .build();
-        List<OptionsVO.Option> optionList = namespaces.stream()
-                .map(namespace -> OptionsVO.Option.builder()
-                        .label(namespace)
-                        .value(namespace)
-                        .disabled(
-                                userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
-                                        business, namespace))
-                        .build())
-                .toList();
+        return getMyApplicationResourceNamespaceOptions(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                namespaces, business);
+    }
+
+    private OptionsVO.Options getMyApplicationResourceNamespaceOptions(String username, List<String> namespaces,
+                                                                       BaseBusiness.HasBusiness business) {
         return OptionsVO.Options.builder()
-                .options(optionList)
+                .options(namespaces.stream()
+                        .map(namespace -> OptionsVO.Option.builder()
+                                .label(namespace)
+                                .value(namespace)
+                                .disabled(userPermissionFacade.contains(username, business, namespace))
+                                .build())
+                        .toList())
                 .build();
     }
 

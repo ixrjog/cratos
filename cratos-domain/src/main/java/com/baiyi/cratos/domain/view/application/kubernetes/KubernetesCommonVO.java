@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
+import com.baiyi.cratos.domain.constant.Global;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -31,6 +34,8 @@ public class KubernetesCommonVO {
         private static final long serialVersionUID = -8726652568141005882L;
         private String namespace;
         private String name;
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
+        private Date creationTimestamp;
         private String generateName;
         private String uid;
     }
@@ -54,7 +59,6 @@ public class KubernetesCommonVO {
     public static class TopologyDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = -2123854130035790444L;
-        // private Map<{zone}, Map<{nodeName}, KubernetesNode>>
         private Map<String, Map<String, KubernetesNode>> nodeTopology;
     }
 
