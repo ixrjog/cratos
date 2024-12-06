@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SshSessionInstanceCommand">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="ssh_session_instance_id" jdbcType="INTEGER" property="sshSessionInstanceId" />
-    <result column="prompt" jdbcType="VARCHAR" property="prompt" />
-    <result column="is_formatted" jdbcType="BIT" property="isFormatted" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="input" jdbcType="LONGVARCHAR" property="input" />
-    <result column="input_formatted" jdbcType="LONGVARCHAR" property="inputFormatted" />
-    <result column="output" jdbcType="LONGVARCHAR" property="output" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SshSessionInstanceCommand">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ssh_session_instance_id" jdbcType="INTEGER" property="sshSessionInstanceId"/>
+        <result column="prompt" jdbcType="VARCHAR" property="prompt"/>
+        <result column="is_formatted" jdbcType="BIT" property="isFormatted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="input" jdbcType="LONGVARCHAR" property="input"/>
+        <result column="input_formatted" jdbcType="LONGVARCHAR" property="inputFormatted"/>
+        <result column="output" jdbcType="LONGVARCHAR" property="output"/>
+    </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.ssh.SshCommandParam$SshCommandPageQuery"
-          resultMap="BaseResultMap">
-      select * from ssh_session_instance_command
-      <where>
-          ssh_session_instance_id = #{sshSessionInstanceId}
-          <if test="inputFormatted != null and inputFormatted != ''">
-              and input_formatted like "%" #{inputFormatted} "%"
-          </if>
-      </where>
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.ssh.SshCommandParam$SshCommandPageQuery"
+            resultMap="BaseResultMap">
+        select * from ssh_session_instance_command
+        <where>
+            ssh_session_instance_id = #{sshSessionInstanceId}
+            <if test="inputFormatted != null and inputFormatted != ''">
+                and input_formatted like "%" #{inputFormatted} "%"
+            </if>
+        </where>
+    </select>
 
 </mapper>

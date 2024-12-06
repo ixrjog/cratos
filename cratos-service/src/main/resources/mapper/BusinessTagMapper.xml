@@ -36,9 +36,12 @@
         </where>
     </select>
 
-    <select id="queryTagIdByBusinessType" parameterType="com.baiyi.cratos.domain.param.http.business.BusinessParam$QueryByBusinessType"
+    <select id="queryTagIdByBusinessType"
+            parameterType="com.baiyi.cratos.domain.param.http.business.BusinessParam$QueryByBusinessType"
             resultType="java.lang.Integer">
-        select distinct tag_id from business_tag where business_type = #{businessType}
+        select distinct tag_id
+        from business_tag
+        where business_type = #{businessType}
     </select>
 
     <select id="queryBusinessIdByTag" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryByTag"
@@ -46,7 +49,7 @@
         select business_id from business_tag
         where tag_id = #{tagId} and business_type = #{businessType}
         <if test="tagValue != null and tagValue != ''">
-           and tag_value = #{tagValue}
+            and tag_value = #{tagValue}
         </if>
     </select>
 

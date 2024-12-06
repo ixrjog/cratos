@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.GlobalNetworkPlanningMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.GlobalNetworkPlanning">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="network_id" jdbcType="INTEGER" property="networkId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="cidr_block" jdbcType="VARCHAR" property="cidrBlock" />
-    <result column="resource_total" jdbcType="INTEGER" property="resourceTotal" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.GlobalNetworkPlanning">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="network_id" jdbcType="INTEGER" property="networkId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="cidr_block" jdbcType="VARCHAR" property="cidrBlock"/>
+        <result column="resource_total" jdbcType="INTEGER" property="resourceTotal"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam$GlobalNetworkPlanningPageQueryParam"
-          resultMap="BaseResultMap">
-      select * from global_network_planning
-      <where>
-          <if test="idList != null and idList.size() > 0">
-              id in
-              <foreach open="(" item="id" separator="," close=")" collection="idList">
-                  #{id}
-              </foreach>
-          </if>
-          <if test="networkId != null">
-              and network_id = #{networkId}
-          </if>
-          <if test="queryName != null and queryName != ''">
-              and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" )
-          </if>
-      </where>
-      order by cidr_block
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam$GlobalNetworkPlanningPageQueryParam"
+            resultMap="BaseResultMap">
+        select * from global_network_planning
+        <where>
+            <if test="idList != null and idList.size() > 0">
+                id in
+                <foreach open="(" item="id" separator="," close=")" collection="idList">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="networkId != null">
+                and network_id = #{networkId}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and ( name like "%" #{queryName} "%" or cidr_block like "%" #{queryName} "%" )
+            </if>
+        </where>
+        order by cidr_block
+    </select>
 
 </mapper>

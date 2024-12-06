@@ -31,15 +31,6 @@
                 order by replace(name, #{queryName}, '')
             </if>
         </where>
-<!--        <choose>-->
-<!--            <when test="queryName != null and queryName != ''">-->
-<!--                where name like "%" #{queryName} "%"-->
-<!--                order by replace(name, #{queryName}, ''), expiry-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                order by expiry-->
-<!--            </otherwise>-->
-<!--        </choose>-->
     </select>
 
 </mapper>

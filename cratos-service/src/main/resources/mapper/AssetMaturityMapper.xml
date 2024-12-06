@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.AssetMaturityMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.AssetMaturity">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="item_type" jdbcType="VARCHAR" property="itemType" />
-    <result column="subscription_time" jdbcType="TIMESTAMP" property="subscriptionTime" />
-    <result column="expiry" jdbcType="TIMESTAMP" property="expiry" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="auto_renewal" jdbcType="BIT" property="autoRenewal" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.AssetMaturity">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="item_type" jdbcType="VARCHAR" property="itemType"/>
+        <result column="subscription_time" jdbcType="TIMESTAMP" property="subscriptionTime"/>
+        <result column="expiry" jdbcType="TIMESTAMP" property="expiry"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="auto_renewal" jdbcType="BIT" property="autoRenewal"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-  <select id="queryPageByParam"
-          parameterType="com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam$AssetMaturityPageQueryParam"
-          resultMap="BaseResultMap">
-      select * from asset_maturity
-      <where>
-          <if test="idList != null and idList.size() > 0">
-              id in
-              <foreach open="(" item="id" separator="," close=")" collection="idList">
-                  #{id}
-              </foreach>
-          </if>
-          <if test="queryName != null and queryName != ''">
-              and name like "%" #{queryName} "%"
-              order by replace(name, #{queryName}, '')
-          </if>
-      </where>
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.asset.AssetMaturityParam$AssetMaturityPageQueryParam"
+            resultMap="BaseResultMap">
+        select * from asset_maturity
+        <where>
+            <if test="idList != null and idList.size() > 0">
+                id in
+                <foreach open="(" item="id" separator="," close=")" collection="idList">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+                order by replace(name, #{queryName}, '')
+            </if>
+        </where>
+    </select>
 
 </mapper>

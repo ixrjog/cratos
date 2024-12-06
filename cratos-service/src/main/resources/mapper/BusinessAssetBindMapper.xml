@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.BusinessAssetBindMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.BusinessAssetBind">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
-    <result column="asset_id" jdbcType="INTEGER" property="assetId" />
-    <result column="asset_type" jdbcType="VARCHAR" property="assetType" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.BusinessAssetBind">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+        <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+        <result column="asset_id" jdbcType="INTEGER" property="assetId"/>
+        <result column="asset_type" jdbcType="VARCHAR" property="assetType"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 </mapper>

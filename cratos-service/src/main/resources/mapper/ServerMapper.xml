@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.ServerMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Server">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
-    <result column="server_group_id" jdbcType="INTEGER" property="serverGroupId" />
-    <result column="os_type" jdbcType="VARCHAR" property="osType" />
-    <result column="env_name" jdbcType="VARCHAR" property="envName" />
-    <result column="public_ip" jdbcType="VARCHAR" property="publicIp" />
-    <result column="private_ip" jdbcType="VARCHAR" property="privateIp" />
-    <result column="remote_mgmt_ip" jdbcType="VARCHAR" property="remoteMgmtIp" />
-    <result column="server_type" jdbcType="VARCHAR" property="serverType" />
-    <result column="region" jdbcType="VARCHAR" property="region" />
-    <result column="zone" jdbcType="VARCHAR" property="zone" />
-    <result column="monitor_status" jdbcType="INTEGER" property="monitorStatus" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="server_status" jdbcType="VARCHAR" property="serverStatus" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.Server">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+        <result column="server_group_id" jdbcType="INTEGER" property="serverGroupId"/>
+        <result column="os_type" jdbcType="VARCHAR" property="osType"/>
+        <result column="env_name" jdbcType="VARCHAR" property="envName"/>
+        <result column="public_ip" jdbcType="VARCHAR" property="publicIp"/>
+        <result column="private_ip" jdbcType="VARCHAR" property="privateIp"/>
+        <result column="remote_mgmt_ip" jdbcType="VARCHAR" property="remoteMgmtIp"/>
+        <result column="server_type" jdbcType="VARCHAR" property="serverType"/>
+        <result column="region" jdbcType="VARCHAR" property="region"/>
+        <result column="zone" jdbcType="VARCHAR" property="zone"/>
+        <result column="monitor_status" jdbcType="INTEGER" property="monitorStatus"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="server_status" jdbcType="VARCHAR" property="serverStatus"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
 </mapper>

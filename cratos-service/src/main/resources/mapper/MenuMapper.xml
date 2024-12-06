@@ -29,7 +29,7 @@
               and menu_type = #{menuType}
           </if>
           <if test="queryName != null and queryName != ''">
-             and name like "%" #{queryName} "%"
+              and name like "%" #{queryName} "%"
           </if>
       </where>
       order by seq

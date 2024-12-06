@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.ApplicationResourceMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.ApplicationResource">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="application_name" jdbcType="VARCHAR" property="applicationName" />
-    <result column="instance_name" jdbcType="VARCHAR" property="instanceName" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
-    <result column="resource_type" jdbcType="VARCHAR" property="resourceType" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
-    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
-    <result column="namespace" jdbcType="VARCHAR" property="namespace" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.ApplicationResource">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="application_name" jdbcType="VARCHAR" property="applicationName"/>
+        <result column="instance_name" jdbcType="VARCHAR" property="instanceName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+        <result column="resource_type" jdbcType="VARCHAR" property="resourceType"/>
+        <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+        <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+        <result column="namespace" jdbcType="VARCHAR" property="namespace"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
 
-  <select id="getNamespaceOptions" resultType="java.lang.String">
-      select distinct namespace
-      from application_resource
-      where namespace != '';
-  </select>
+    <select id="getNamespaceOptions" resultType="java.lang.String">
+        select distinct namespace
+        from application_resource
+        where namespace != '';
+    </select>
+
 </mapper>

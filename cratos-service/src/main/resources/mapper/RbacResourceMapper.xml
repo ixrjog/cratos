@@ -15,7 +15,8 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam$ResourcePageQuery"
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam$ResourcePageQuery"
             resultMap="BaseResultMap">
         select * from rbac_resource
         <where>
@@ -63,8 +64,8 @@
     <select id="countResourcesAuthorizedByUsername" parameterType="string" resultType="int">
         select count(*)
         from rbac_user_role a0
-            join rbac_role_resource a1 on a0.role_id = a1.role_id and a0.username = #{username}
-            join rbac_resource a2 on a1.resource_id = a2.id and a2.resource_name = #{resource}
+                 join rbac_role_resource a1 on a0.role_id = a1.role_id and a0.username = #{username}
+                 join rbac_resource a2 on a1.resource_id = a2.id and a2.resource_name = #{resource}
     </select>
 
 </mapper>
