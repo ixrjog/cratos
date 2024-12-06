@@ -12,6 +12,7 @@ import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesServiceRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesServiceBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.EnvService;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Service;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,8 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
     public ApplicationKubernetesServiceConverter(EdsInstanceService edsInstanceService,
                                                  EdsInstanceProviderHolderBuilder holderBuilder,
                                                  EdsAssetService edsAssetService,
-                                                 KubernetesServiceRepo kubernetesServiceRepo) {
-        super(edsInstanceService, holderBuilder, edsAssetService);
+                                                 KubernetesServiceRepo kubernetesServiceRepo, EnvService envService) {
+        super(edsInstanceService, holderBuilder, edsAssetService, envService);
         this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 

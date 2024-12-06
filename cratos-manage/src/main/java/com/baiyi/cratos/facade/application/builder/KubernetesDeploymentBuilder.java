@@ -1,11 +1,14 @@
 package com.baiyi.cratos.facade.application.builder;
 
+import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
 import com.google.api.client.util.Maps;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.Quantity;
@@ -23,8 +26,16 @@ import java.util.*;
 public class KubernetesDeploymentBuilder {
 
     private Deployment deployment;
+    private Env env;
     private List<Pod> pods;
     private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
+
+    private static final String JAVA_OPTS = "JAVA_OPTS";
+
+    private static final String ENV_JAVA_OPTS = "env.java.opts";
+    private static final String ENV_JAVA_OPTS_TAG = "env.java.opts.tag";
+    private static final String[] JVM_ARGS_PREFIX = {"-Xms", "-Xmx", "-Xmn"};
+    public static final String SIDECAR_ISTIO_IO_INJECT = "sidecar.istio.io/inject";
 
     public static KubernetesDeploymentBuilder newBuilder() {
         return new KubernetesDeploymentBuilder();
@@ -42,6 +53,11 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentBuilder withKubernetes(KubernetesCommonVO.KubernetesCluster kubernetesCluster) {
         this.kubernetesCluster = kubernetesCluster;
+        return this;
+    }
+
+    public KubernetesDeploymentBuilder withEnv(Env env) {
+        this.env = env;
         return this;
     }
 
@@ -143,12 +159,49 @@ public class KubernetesDeploymentBuilder {
                 .toList();
     }
 
+    private Map<String, String> makeAttributes() {
+        Map<String, String> attributes = Maps.newHashMap();
+        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        optionalContainer.flatMap(container -> container.getEnv()
+                        .stream()
+                        .filter(e -> JAVA_OPTS.equals(e.getName()))
+                        .findFirst())
+                .ifPresent(javaOptsEnvVar -> {
+                    List<String> javaOptsList = Splitter.onPattern(" |\\n")
+                            .omitEmptyStrings()
+                            .splitToList(javaOptsEnvVar.getValue());
+                    // JAVA_OPTS
+                    attributes.put(ENV_JAVA_OPTS, Joiner.on("\n")
+                            .skipNulls()
+                            .join(javaOptsList));
+                    List<String> tags = javaOptsList.stream()
+                            .filter(e -> Arrays.stream(JVM_ARGS_PREFIX)
+                                    .anyMatch(e::startsWith))
+                            .toList();
+                    // JAVA_OPTS_TAG
+                    attributes.put(ENV_JAVA_OPTS_TAG, Joiner.on(" ")
+                            .skipNulls()
+                            .join(tags));
+                });
+        // Istio Envoy
+        Map<String, String> labels = this.deployment.getSpec()
+                .getTemplate()
+                .getMetadata()
+                .getLabels();
+        if (labels.containsKey(SIDECAR_ISTIO_IO_INJECT)) {
+            attributes.put(SIDECAR_ISTIO_IO_INJECT, String.valueOf("true".equals(labels.get(SIDECAR_ISTIO_IO_INJECT))));
+        }
+        return attributes;
+    }
+
     public KubernetesDeploymentVO.Deployment build() {
         return KubernetesDeploymentVO.Deployment.builder()
                 .kubernetesCluster(this.kubernetesCluster)
                 .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
                 .pods(makePods())
                 .spec(makeSpec())
+                .attributes(makeAttributes())
+                .env(env)
                 .build();
     }
 

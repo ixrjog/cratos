@@ -47,6 +47,14 @@ public class EnvServiceImpl implements EnvService {
     }
 
     @Override
+    public Env getByEnvName(@NonNull String envName) {
+        Env uniqueKey = Env.builder()
+                .envName(envName)
+                .build();
+        return getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:ENV:ID:' + #id")
     public void clearCacheById(int id) {
     }

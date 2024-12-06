@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.mapper.EnvMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
+import lombok.NonNull;
 
 /**
  * @Author baiyi
@@ -15,5 +16,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
 public interface EnvService extends BaseUniqueKeyService<Env, EnvMapper>, BaseValidService<Env, EnvMapper> {
 
     DataTable<Env> queryEnvPage(EnvParam.EnvPageQuery pageQuery);
+
+    Env getByEnvName(@NonNull String envName);
 
 }

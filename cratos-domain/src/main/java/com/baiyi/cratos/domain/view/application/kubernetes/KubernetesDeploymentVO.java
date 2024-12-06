@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
+import com.baiyi.cratos.domain.generator.Env;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,9 @@ public class KubernetesDeploymentVO {
         private List<KubernetesPodVO.Pod> pods;
         @Schema(description = "拓扑")
         private KubernetesCommonVO.TopologyDetails topologyDetails;
+        @Schema(description = "属性")
+        private Map<String, String> attributes;
+        private Env env;
     }
 
     @Data
@@ -83,6 +87,7 @@ public class KubernetesDeploymentVO {
         private String name;
         private String image;
         private KubernetesDeploymentVO.ContainerResources resources;
+
         public int getSeq() {
             return main ? 0 : 1;
         }
