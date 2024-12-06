@@ -12,11 +12,10 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <select id="queryUserMaxAccessLevel"
-            resultType="java.lang.Integer">>
-    select max(access_level) as max_access_level
-    from rbac_role
-    where id in (select role_id from rbac_user_role where username = #{username})
+    <select id="queryUserMaxAccessLevel" resultType="java.lang.Integer">
+        select max(access_level) as max_access_level
+        from rbac_role
+        where id in (select role_id from rbac_user_role where username = #{username})
     </select>
 
 </mapper>

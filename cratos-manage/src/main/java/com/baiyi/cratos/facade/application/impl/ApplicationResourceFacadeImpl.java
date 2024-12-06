@@ -125,7 +125,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                         .label(namespace)
                         .value(namespace)
                         .disabled(
-                                userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                                !userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
                                         business, namespace))
                         .build())
                 .toList();
