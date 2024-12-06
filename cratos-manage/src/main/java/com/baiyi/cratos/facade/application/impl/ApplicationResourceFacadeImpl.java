@@ -19,6 +19,7 @@ import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFacto
 import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
+import jakarta.ws.rs.HEAD;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -129,8 +130,20 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                                         business, namespace))
                         .build())
                 .toList();
+        return getMyApplicationResourceNamespaceOptions(getMyApplicationResourceNamespaceOptions.getSessionUser(),
+                namespaces, business);
+    }
+
+    private OptionsVO.Options getMyApplicationResourceNamespaceOptions(String username, List<String> namespaces,
+                                                                       BaseBusiness.HasBusiness business) {
         return OptionsVO.Options.builder()
-                .options(optionList)
+                .options(namespaces.stream()
+                        .map(namespace -> OptionsVO.Option.builder()
+                                .label(namespace)
+                                .value(namespace)
+                                .disabled(userPermissionFacade.contains(username, business, namespace))
+                                .build())
+                        .toList())
                 .build();
     }
 

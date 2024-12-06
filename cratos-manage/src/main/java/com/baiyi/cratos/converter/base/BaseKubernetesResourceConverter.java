@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.EnvService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
     protected final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     protected final EdsAssetService edsAssetService;
+    protected final EnvService envService;
 
     abstract protected EdsAssetTypeEnum getEdsAssetType();
 

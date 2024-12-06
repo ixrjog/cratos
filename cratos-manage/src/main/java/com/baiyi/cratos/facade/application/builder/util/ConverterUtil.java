@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.builder.util;
 
 import com.baiyi.cratos.common.util.TimeUtil;
-import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 
 import java.text.ParseException;
@@ -19,6 +19,7 @@ public class ConverterUtil {
     public static KubernetesCommonVO.Metadata toMetadata(ObjectMeta objectMeta) {
         return KubernetesCommonVO.Metadata.builder()
                 .name(objectMeta.getName())
+                .creationTimestamp(ConverterUtil.parse(objectMeta.getCreationTimestamp()))
                 .generateName(objectMeta.getGenerateName())
                 .uid(objectMeta.getUid())
                 .namespace(objectMeta.getNamespace())

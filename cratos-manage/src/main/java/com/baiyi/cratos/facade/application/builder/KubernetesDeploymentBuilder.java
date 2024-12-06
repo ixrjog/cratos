@@ -1,9 +1,11 @@
 package com.baiyi.cratos.facade.application.builder;
 
-import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
+import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.facade.application.builder.attribute.KubernetesDeploymentAttributeBuilder;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Container;
@@ -23,6 +25,7 @@ import java.util.*;
 public class KubernetesDeploymentBuilder {
 
     private Deployment deployment;
+    private Env env;
     private List<Pod> pods;
     private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
 
@@ -42,6 +45,11 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentBuilder withKubernetes(KubernetesCommonVO.KubernetesCluster kubernetesCluster) {
         this.kubernetesCluster = kubernetesCluster;
+        return this;
+    }
+
+    public KubernetesDeploymentBuilder withEnv(Env env) {
+        this.env = env;
         return this;
     }
 
@@ -143,12 +151,19 @@ public class KubernetesDeploymentBuilder {
                 .toList();
     }
 
+    private Map<String, String> makeAttributes() {
+       return KubernetesDeploymentAttributeBuilder.newBuilder().withDeployment(this.deployment)
+                .build();
+    }
+
     public KubernetesDeploymentVO.Deployment build() {
         return KubernetesDeploymentVO.Deployment.builder()
                 .kubernetesCluster(this.kubernetesCluster)
                 .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
                 .pods(makePods())
                 .spec(makeSpec())
+                .attributes(makeAttributes())
+                .env(env)
                 .build();
     }
 

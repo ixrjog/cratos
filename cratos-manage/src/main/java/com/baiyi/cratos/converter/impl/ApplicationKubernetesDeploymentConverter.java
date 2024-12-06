@@ -4,7 +4,8 @@ import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesCommonVO;
+import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.EnvService;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -30,7 +32,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesResourceConverter<KubernetesDeploymentVO.Deployment,Deployment> {
+public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesResourceConverter<KubernetesDeploymentVO.Deployment, Deployment> {
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final KubernetesPodRepo kubernetesPodRepo;
@@ -39,8 +41,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                                                     EdsInstanceProviderHolderBuilder holderBuilder,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                    KubernetesPodRepo kubernetesPodRepo) {
-        super(edsInstanceService, holderBuilder, edsAssetService);
+                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService) {
+        super(edsInstanceService, holderBuilder, edsAssetService, envService);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
     }
@@ -65,10 +67,12 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         KubernetesCommonVO.KubernetesCluster kubernetesCluster = KubernetesCommonVO.KubernetesCluster.builder()
                 .name(edsInstance.getInstanceName())
                 .build();
+        Env env = envService.getByEnvName(namespace);
         return KubernetesDeploymentBuilder.newBuilder()
                 .withKubernetes(kubernetesCluster)
                 .withDeployment(deployment)
                 .withPods(pods)
+                .withEnv(env)
                 .build();
     }
 
@@ -80,7 +84,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         return kubernetesPodRepo.list(kubernetes, namespace, labels);
     }
 
-    protected EdsAssetTypeEnum getEdsAssetType(){
+    protected EdsAssetTypeEnum getEdsAssetType() {
         return EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT;
     }
 

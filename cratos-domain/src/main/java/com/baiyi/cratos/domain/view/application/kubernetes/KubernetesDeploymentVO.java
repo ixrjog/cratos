@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
+import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +34,9 @@ public class KubernetesDeploymentVO {
         private List<KubernetesPodVO.Pod> pods;
         @Schema(description = "拓扑")
         private KubernetesCommonVO.TopologyDetails topologyDetails;
+        @Schema(description = "属性")
+        private Map<String, String> attributes;
+        private Env env;
     }
 
     @Data
@@ -83,6 +88,7 @@ public class KubernetesDeploymentVO {
         private String name;
         private String image;
         private KubernetesDeploymentVO.ContainerResources resources;
+
         public int getSeq() {
             return main ? 0 : 1;
         }
@@ -124,7 +130,6 @@ public class KubernetesDeploymentVO {
         private static final long serialVersionUID = -8365479765276925656L;
         private Map<String, Quantity> limits;
         private Map<String, Quantity> requests;
-
     }
 
     @Data
@@ -137,7 +142,6 @@ public class KubernetesDeploymentVO {
         private static final long serialVersionUID = 3726795430810844718L;
         private String amount;
         private String format;
-
     }
 
 }
