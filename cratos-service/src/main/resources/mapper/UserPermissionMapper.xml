@@ -20,4 +20,25 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
     </resultMap>
+
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserPermissionParam$UserPermissionPageQuery"
+            resultMap="BaseResultMap">
+        select * from user_permission
+        <choose>
+            <when test="username != null and username != ''">
+                username = #{username}
+            </when>
+            <when test="businessType != null and businessType != ''">
+                and business_type = #{businessType}
+            </when>
+            <when test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+                order by replace( name, #{queryName}, '' ) , create_time
+            </when>
+            <otherwise>
+                order by create_time
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>

@@ -1,10 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.service.UserPermissionService;
+import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +21,14 @@ import org.springframework.stereotype.Component;
 public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     private final UserPermissionService userPermissionService;
+    private final UserPermissionWrapper userPermissionWrapper;
+
+    @Override
+    public DataTable<UserPermissionVO.Permission> queryUserPermissionPage(
+            UserPermissionParam.UserPermissionPageQuery pageQuery) {
+        DataTable<UserPermission> table = userPermissionService.queryUserPermissionPage(pageQuery);
+        return userPermissionWrapper.wrapToTarget(table);
+    }
 
     @Override
     public void grantUserPermission(UserPermissionParam.GrantUserPermission grantUserPermission) {

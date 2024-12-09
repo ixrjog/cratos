@@ -27,6 +27,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     List<EdsAsset> queryAssetByParam(String assetKey, String assetType);
 
+    List<EdsAsset> queryByTypeAndName(@NonNull String assetType, @NonNull String name, boolean isPrefix);
+
     void clear(@NonNull EdsAsset record);
 
 }

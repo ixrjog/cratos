@@ -1,7 +1,9 @@
 package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.mapper.UserPermissionMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
@@ -15,5 +17,7 @@ public interface UserPermissionService extends BaseUniqueKeyService<UserPermissi
     boolean contains(String username, BaseBusiness.HasBusiness hasBusiness);
 
     boolean contains(String username, BaseBusiness.HasBusiness hasBusiness, String role);
+
+    DataTable<UserPermission> queryUserPermissionPage(UserPermissionParam.UserPermissionPageQuery pageQuery);
 
 }

@@ -83,6 +83,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
             try {
                 DingtalkRobotModel.Msg message = DingtalkRobotModel.loadAs(getMsg());
                 if (notification.equals("LOCAL")) {
+                    // 本地调试打印到控制台
                     System.out.println(message);
                 } else {
                     dingtalkService.send(robot.getToken(), message);

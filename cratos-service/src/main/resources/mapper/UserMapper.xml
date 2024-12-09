@@ -29,15 +29,16 @@
     <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserParam$UserPageQuery"
             resultMap="BaseResultMap">
         select * from user
-        <where>
-            <if test="queryName != null and queryName != ''">
-                and
-                (username like "%" #{queryName} "%"
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                username like "%" #{queryName} "%"
                 or name like "%" #{queryName} "%"
-                or display_name like "%" #{queryName} "%" )
-            </if>
-        </where>
-        order by replace( name, #{queryName}, '' ) , create_time
+                or display_name like "%" #{queryName} "%"
+                order by replace( name, #{queryName}, '' ) , create_time
+            </when>
+            <otherwise>
+                order by create_time
+            </otherwise>
+        </choose>
     </select>
-
 </mapper>

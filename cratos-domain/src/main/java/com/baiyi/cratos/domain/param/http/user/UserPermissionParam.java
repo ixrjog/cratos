@@ -2,12 +2,16 @@ package com.baiyi.cratos.domain.param.http.user;
 
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.IToTarget;
+import com.baiyi.cratos.domain.param.PageParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
@@ -17,6 +21,18 @@ import java.util.Date;
  * &#064;Version 1.0
  */
 public class UserPermissionParam {
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class UserPermissionPageQuery extends PageParam {
+        @Schema(description = "查询名称")
+        private String queryName;
+        private String username;
+        private String businessType;
+    }
 
     @Data
     @Schema

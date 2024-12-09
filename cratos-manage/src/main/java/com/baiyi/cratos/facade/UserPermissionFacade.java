@@ -1,7 +1,9 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 
 /**
  * @Author baiyi
@@ -9,6 +11,9 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
  * @Version 1.0
  */
 public interface UserPermissionFacade {
+
+    DataTable<UserPermissionVO.Permission> queryUserPermissionPage(
+            UserPermissionParam.UserPermissionPageQuery pageQuery);
 
     void grantUserPermission(UserPermissionParam.GrantUserPermission grantUserPermission);
 

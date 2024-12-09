@@ -1,14 +1,20 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.mapper.UserPermissionMapper;
 import com.baiyi.cratos.service.UserPermissionService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -22,6 +28,13 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 public class UserPermissionServiceImpl implements UserPermissionService {
 
     private final UserPermissionMapper userPermissionMapper;
+
+    @Override
+    public  DataTable<UserPermission> queryUserPermissionPage(UserPermissionParam.UserPermissionPageQuery pageQuery){
+        Page<UserPermission> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<UserPermission> data = userPermissionMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
+    }
 
     @Override
     public UserPermission getByUniqueKey(@NonNull UserPermission record) {
