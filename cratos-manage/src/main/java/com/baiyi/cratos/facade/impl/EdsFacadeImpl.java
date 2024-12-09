@@ -4,10 +4,7 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
@@ -258,7 +255,7 @@ public class EdsFacadeImpl implements EdsFacade {
 
     @Override
     public DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
-        DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery);
+        DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery.toParam());
         return edsAssetWrapper.wrapToTarget(table);
     }
 

@@ -3,10 +3,13 @@ package com.baiyi.cratos.domain.param.http.eds;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -80,7 +83,7 @@ public class EdsInstanceParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class AssetPageQuery extends PageParam {
+    public static class AssetPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @NotNull
         private Integer instanceId;
         @Schema(description = "Query by name")
@@ -88,6 +91,34 @@ public class EdsInstanceParam {
         @Schema(description = "Query by assetType")
         private String assetType;
         private Boolean valid;
+        private BusinessTagParam.QueryByTag queryByTag;
+        private List<Integer> idList;
+
+        public AssetPageQueryParam toParam() {
+            return AssetPageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
+                    .instanceId(this.instanceId)
+                    .queryName(this.queryName)
+                    .assetType(this.assetType)
+                    .valid(this.valid)
+                    .idList(idList)
+                    .build();
+        }
+
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class AssetPageQueryParam extends PageParam {
+        private Integer instanceId;
+        private String queryName;
+        private String assetType;
+        private Boolean valid;
+        private List<Integer> idList;
     }
 
     @Data

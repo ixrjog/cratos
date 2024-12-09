@@ -96,8 +96,13 @@ public class EdsAssetServiceImpl implements EdsAssetService {
 
     @Override
     public DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
-        Page<EdsAsset> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<EdsAsset> data = edsAssetMapper.queryPageByParam(pageQuery);
+        return this.queryEdsInstanceAssetPage(pageQuery.toParam());
+    }
+
+    @Override
+    public DataTable<EdsAsset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQueryParam param) {
+        Page<EdsAsset> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<EdsAsset> data = edsAssetMapper.queryPageByParam(param);
         return new DataTable<>(data, page.getTotal());
     }
 

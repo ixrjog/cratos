@@ -27,7 +27,7 @@
     </resultMap>
 
     <select id="queryPageByParam"
-            parameterType="com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam$AssetPageQuery"
+            parameterType="com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam$AssetPageQueryParam"
             resultMap="BaseResultMap">
         select * from eds_asset
         where asset_type = #{assetType}
@@ -37,11 +37,23 @@
         <if test="valid != null">
             and valid = #{valid}
         </if>
-        <if test="queryName != null and queryName != ''">
-            and (name like "%" #{queryName} "%"
-            or asset_id like "%" #{queryName} "%"
-            or asset_key like "%" #{queryName} "%")
+        <if test="idList != null and idList.size() > 0">
+            and id in
+            <foreach open="(" item="id" separator="," close=")" collection="idList">
+                #{id}
+            </foreach>
         </if>
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                and (name like "%" #{queryName} "%"
+                or asset_id like "%" #{queryName} "%"
+                or asset_key like "%" #{queryName} "%")
+                order by replace(name, #{queryName}, ''), id desc
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
     </select>
 
 </mapper>
