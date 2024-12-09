@@ -129,4 +129,12 @@ public class TrafficLayerController {
         return new HttpResult<>(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
     }
 
+    @Operation(summary = "Update traffic layer ingress traffic-limit")
+    @PutMapping(value = "/ingress/traffic-limit/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateIngressTrafficLimit(
+            @RequestBody @Valid TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+        trafficLayerIngressTrafficLimitFacade.updateIngressTrafficLimit(updateIngressTrafficLimit);
+        return HttpResult.SUCCESS;
+    }
+
 }

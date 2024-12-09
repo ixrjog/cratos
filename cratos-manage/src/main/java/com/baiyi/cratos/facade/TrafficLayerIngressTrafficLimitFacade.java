@@ -14,4 +14,7 @@ public interface TrafficLayerIngressTrafficLimitFacade {
     DataTable<TrafficLayerIngressVO.IngressTrafficLimit> queryIngressTrafficLimitPage(
             TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery);
 
+    void updateIngressTrafficLimit(
+            TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit);
+
 }

@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.http.traffic;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,17 @@ public class TrafficIngressTrafficLimitParam {
                     .length(this.getLength())
                     .build();
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateIngressTrafficLimit {
+        @NotNull
+        private Integer assetId;
+        @NotNull
+        private Integer limitQps;
+        private String commit;
     }
 
 }

@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.traffic;
 import com.baiyi.cratos.common.exception.TrafficLayerException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
@@ -10,15 +11,23 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.TrafficLayerIngressTrafficLimitFacade;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
+import com.google.common.collect.Maps;
+import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -38,6 +47,9 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     private final EdsFacade edsFacade;
     private final EdsAssetIndexFacade indexFacade;
     private final TagService tagService;
+    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final KubernetesIngressRepo kubernetesIngressRepo;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     private BusinessTagParam.QueryByTag buildQueryByTag() {
         Tag tag = tagService.getByTagKey("ingress.kubernetes.io/traffic-limit-qps");
@@ -91,6 +103,49 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                     .add(index);
         });
         return ingressTrafficLimit;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void updateIngressTrafficLimit(
+            TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+        EdsAsset edsAsset = edsAssetService.getById(updateIngressTrafficLimit.getAssetId());
+        if (edsAsset == null) {
+            TrafficLayerException.runtime("Asset ingress does not exist.");
+        }
+        if (!EdsAssetTypeEnum.KUBERNETES_INGRESS.name()
+                .equals(edsAsset.getAssetType())) {
+            TrafficLayerException.runtime("Incorrect asset type.");
+        }
+        // TODO checkTag
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
+                edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
+                .getEdsConfigModel();
+
+        Ingress originalIngress = holder.getProvider()
+                .assetLoadAs(edsAsset.getOriginalModel());
+        final String namespace = originalIngress.getMetadata()
+                .getNamespace();
+
+        Ingress targetIngress = kubernetesIngressRepo.get(kubernetes, namespace, edsAsset.getName());
+        if (targetIngress == null) {
+            TrafficLayerException.runtime("Kubernetes ingress does not exist.");
+        }
+        // 校验qps
+        if (CollectionUtils.isEmpty(targetIngress.getMetadata()
+                .getAnnotations())) {
+            targetIngress.getMetadata()
+                    .setAnnotations(Maps.newHashMap());
+        }
+        targetIngress.getMetadata()
+                .getAnnotations()
+                .put("alb.ingress.kubernetes.io/traffic-limit-qps",
+                        String.valueOf(updateIngressTrafficLimit.getLimitQps()));
+        // 更新
+        Ingress updatedIngress = kubernetesIngressRepo.update(kubernetes, targetIngress);
+        // 导入资产
+        holder.getProvider()
+                .importAsset(holder.getInstance(), updatedIngress);
     }
 
 }
