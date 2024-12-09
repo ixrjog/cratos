@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.param.http.traffic;
 
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.http.commit.CommitParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -40,14 +42,18 @@ public class TrafficIngressTrafficLimitParam {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class UpdateIngressTrafficLimit {
+    public static class UpdateIngressTrafficLimit implements HasSessionUser {
         @NotNull
         private Integer assetId;
         @NotNull
         @Min(0)
         @Max(100000)
         private Integer limitQps;
-        private String commit;
+        private CommitParam.Commit commit;
+        @Override
+        public void setSessionUser(String username) {
+            this.commit.setUsername(username);
+        }
     }
 
 }
