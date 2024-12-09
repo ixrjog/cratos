@@ -3,6 +3,8 @@ package com.baiyi.cratos.domain.param.http.traffic;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +44,8 @@ public class TrafficIngressTrafficLimitParam {
         @NotNull
         private Integer assetId;
         @NotNull
+        @Min(0)
+        @Max(100000)
         private Integer limitQps;
         private String commit;
     }

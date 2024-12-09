@@ -131,21 +131,36 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         if (targetIngress == null) {
             TrafficLayerException.runtime("Kubernetes ingress does not exist.");
         }
-        // 校验qps
-        if (CollectionUtils.isEmpty(targetIngress.getMetadata()
-                .getAnnotations())) {
-            targetIngress.getMetadata()
-                    .setAnnotations(Maps.newHashMap());
-        }
-        targetIngress.getMetadata()
-                .getAnnotations()
-                .put("alb.ingress.kubernetes.io/traffic-limit-qps",
-                        String.valueOf(updateIngressTrafficLimit.getLimitQps()));
+        // 设置
+        setIngress(targetIngress,updateIngressTrafficLimit);
         // 更新
         Ingress updatedIngress = kubernetesIngressRepo.update(kubernetes, targetIngress);
         // 导入资产
         holder.getProvider()
                 .importAsset(holder.getInstance(), updatedIngress);
+    }
+
+    private void setIngress(Ingress targetIngress, TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+        boolean isOffline = updateIngressTrafficLimit.getLimitQps() == 0;
+        // 校验qps
+        if (CollectionUtils.isEmpty(targetIngress.getMetadata()
+                .getAnnotations())) {
+            if (isOffline) {
+                TrafficLayerException.runtime("Invalid changes, configuration has not changed.");
+            }
+            targetIngress.getMetadata()
+                    .setAnnotations(Maps.newHashMap());
+        }
+        if (isOffline) {
+            targetIngress.getMetadata()
+                    .getAnnotations()
+                    .remove("alb.ingress.kubernetes.io/traffic-limit-qps");
+        } else {
+            targetIngress.getMetadata()
+                    .getAnnotations()
+                    .put("alb.ingress.kubernetes.io/traffic-limit-qps",
+                            String.valueOf(updateIngressTrafficLimit.getLimitQps()));
+        }
     }
 
 }
