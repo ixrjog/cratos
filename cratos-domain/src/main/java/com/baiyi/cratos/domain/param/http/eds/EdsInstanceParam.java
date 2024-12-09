@@ -84,7 +84,6 @@ public class EdsInstanceParam {
     @NoArgsConstructor
     @Schema
     public static class AssetPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
-        @NotNull
         private Integer instanceId;
         @Schema(description = "Query by name")
         private String queryName;

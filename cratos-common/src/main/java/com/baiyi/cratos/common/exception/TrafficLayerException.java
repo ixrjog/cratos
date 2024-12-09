@@ -34,4 +34,8 @@ public class TrafficLayerException extends BaseException {
         this.code = TRAFFIC_LAYER_ERROR;
     }
 
+    public static void runtime(String message) {
+        throw new TrafficLayerException(message);
+    }
+
 }

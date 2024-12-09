@@ -80,6 +80,8 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         // 注解
         indices.add(getEdsAssetIndexSourceIP(instance, edsAsset, entity));
+        // alb.ingress.kubernetes.io/traffic-limit-qps
+        indices.add(getEdsAssetIndexTrafficLimitQps(instance, edsAsset, entity));
         return indices;
     }
 
@@ -101,6 +103,23 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .filter(StringUtils::hasText)
                 .findFirst()
                 .map(sourceIP -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_SOURCE_IP, sourceIP))
+                .orElse(null);
+    }
+
+    // 适用于ACK
+    private EdsAssetIndex getEdsAssetIndexTrafficLimitQps(
+            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            Ingress entity) {
+        Map<String, String> AnnotationMap = entity.getMetadata()
+                .getAnnotations();
+        // alb.ingress.kubernetes.io/conditions.source-ip-example
+        return AnnotationMap.keySet()
+                .stream()
+                .filter(key -> key.equals("alb.ingress.kubernetes.io/traffic-limit-qps"))
+                .map(AnnotationMap::get)
+                .filter(StringUtils::hasText)
+                .findFirst()
+                .map(qps -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_TRAFFIC_LIMIT_QPS, qps))
                 .orElse(null);
     }
 

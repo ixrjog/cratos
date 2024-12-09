@@ -44,6 +44,14 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Tag getByTagKey(String tagKey) {
+        Tag uniqueKey = Tag.builder()
+                .tagKey(tagKey)
+                .build();
+        return getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     public Tag getByUniqueKey(@NonNull Tag record) {
         Example example = new Example(Tag.class);
         Example.Criteria criteria = example.createCriteria();

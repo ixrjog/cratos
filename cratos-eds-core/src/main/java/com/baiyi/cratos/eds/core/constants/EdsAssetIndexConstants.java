@@ -46,6 +46,7 @@ public interface EdsAssetIndexConstants {
     String KUBERNETES_GROUP = "deployment.spec.template.metadata.labels.group";
     String KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME = "loadBalancer.ingress.hostname";
     String KUBERNETES_INGRESS_SOURCE_IP = "alb.ingress.kubernetes.io/conditions.source-ip";
+    String KUBERNETES_INGRESS_TRAFFIC_LIMIT_QPS = "alb.ingress.kubernetes.io/traffic-limit-qps";
 
     String KUBERNETES_NODE_CPU = "status.capacity.cpu";
     String KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE = "status.capacity.ephemeral-storage";

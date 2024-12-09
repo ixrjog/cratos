@@ -16,4 +16,6 @@ public interface TagService extends BaseUniqueKeyService<Tag, TagMapper>, BaseVa
 
     DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery);
 
+    Tag getByTagKey(String tagKey);
+
 }

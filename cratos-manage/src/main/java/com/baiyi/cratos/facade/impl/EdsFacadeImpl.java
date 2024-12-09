@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -254,6 +255,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_ASSET)
     public DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery pageQuery) {
         DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery.toParam());
         return edsAssetWrapper.wrapToTarget(table);

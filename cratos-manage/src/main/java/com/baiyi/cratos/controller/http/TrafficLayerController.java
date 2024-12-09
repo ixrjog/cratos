@@ -2,16 +2,14 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerIngressParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
-import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
-import com.baiyi.cratos.facade.TrafficLayerFacade;
-import com.baiyi.cratos.facade.TrafficLayerIngressFacade;
-import com.baiyi.cratos.facade.TrafficLayerRecordFacade;
+import com.baiyi.cratos.facade.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,12 +31,10 @@ import java.util.List;
 public class TrafficLayerController {
 
     private final TrafficLayerDomainFacade domainFacade;
-
     private final TrafficLayerRecordFacade recordFacade;
-
     private final TrafficLayerFacade trafficLayerFacade;
-
     private final TrafficLayerIngressFacade trafficLayerIngressFacade;
+    private final TrafficLayerIngressTrafficLimitFacade trafficLayerIngressTrafficLimitFacade;
 
     @Operation(summary = "Pagination query traffic layer domain")
     @PostMapping(value = "/domain/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -124,6 +120,13 @@ public class TrafficLayerController {
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
         return new HttpResult<>(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
+    }
+
+    @Operation(summary = "Query traffic layer ingress traffic-limit")
+    @PostMapping(value = "/ingress/traffic-limit/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<TrafficLayerIngressVO.IngressTrafficLimit>> queryIngressTrafficLimitPage(
+            @RequestBody @Valid TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery) {
+        return new HttpResult<>(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
     }
 
 }
