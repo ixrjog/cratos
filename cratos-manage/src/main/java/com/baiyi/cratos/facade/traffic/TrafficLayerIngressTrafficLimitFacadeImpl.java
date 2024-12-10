@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.commit.CommitParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
@@ -32,8 +33,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
@@ -148,6 +151,13 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     @Committing(typeOf = BusinessTypeEnum.EDS_ASSET, businessId = "#updateIngressTrafficLimit.assetId")
     public SimpleCommited updateIngressTrafficLimit(
             TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+        String commitMessage = Optional.ofNullable(updateIngressTrafficLimit)
+                .map(TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit::getCommit)
+                .map(CommitParam.Commit::getMessage)
+                .orElseThrow(() -> new TrafficLayerException("Commit message is empty."));
+        if (!StringUtils.hasText(commitMessage)) {
+            TrafficLayerException.runtime("Commit message is blank.");
+        }
         EdsAsset edsAsset = checkedGet(updateIngressTrafficLimit.getAssetId());
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
@@ -170,9 +180,10 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         holder.getProvider()
                 .importAsset(holder.getInstance(), updatedIngress);
         return SimpleCommited.builder()
-                .commitContent(
-                        StringFormatter.arrayFormat("Update: \\n{} \\n-> \\n qps={}", ingressStr , updateIngressTrafficLimit.getLimitQps()))
-                .commitMessage(updateIngressTrafficLimit.getCommit().getMessage())
+                .commitContent(StringFormatter.arrayFormat("Update:\n{}\n->\nqps={}", ingressStr,
+                        updateIngressTrafficLimit.getLimitQps()))
+                .commitMessage(updateIngressTrafficLimit.getCommit()
+                        .getMessage())
                 .build();
     }
 
