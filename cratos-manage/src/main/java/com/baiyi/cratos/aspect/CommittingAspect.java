@@ -87,8 +87,8 @@ public class CommittingAspect {
     private void submit(Commited commited, String username, String businessType, Integer businessId) {
         BusinessCommit businessCommit = BusinessCommit.builder()
                 .username(username)
-                .businessType("a")
-                .businessId(1)
+                .businessType(businessType)
+                .businessId(businessId)
                 .commitId(commited.getCommitId())
                 .commitMessage(commited.getCommitMessage())
                 .commitContent(commited.getCommitContent())
