@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.http.commit;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ public class CommitParam {
         private Integer businessId;
         private String businessType;
         private String username;
+        @NotBlank
         private String message;
         private String content;
     }

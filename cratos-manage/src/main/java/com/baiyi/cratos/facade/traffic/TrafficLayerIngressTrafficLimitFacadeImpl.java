@@ -1,7 +1,10 @@
 package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.common.exception.TrafficLayerException;
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleCommited;
+import com.baiyi.cratos.domain.annotation.Committing;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -142,15 +145,17 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     }
 
     @SuppressWarnings("unchecked")
-    public void updateIngressTrafficLimit(
+    @Committing(typeOf = BusinessTypeEnum.EDS_ASSET, businessId = "#updateIngressTrafficLimit.assetId")
+    public SimpleCommited updateIngressTrafficLimit(
             TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
         EdsAsset edsAsset = checkedGet(updateIngressTrafficLimit.getAssetId());
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
                 .getEdsConfigModel();
+        final String ingressStr = edsAsset.getOriginalModel();
         Ingress originalIngress = holder.getProvider()
-                .assetLoadAs(edsAsset.getOriginalModel());
+                .assetLoadAs(ingressStr);
         final String namespace = originalIngress.getMetadata()
                 .getNamespace();
         Ingress targetIngress = kubernetesIngressRepo.get(kubernetes, namespace, edsAsset.getName());
@@ -164,6 +169,11 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         // 导入并更新资产
         holder.getProvider()
                 .importAsset(holder.getInstance(), updatedIngress);
+        return SimpleCommited.builder()
+                .commitContent(
+                        StringFormatter.arrayFormat("Update: \\n{} \\n-> \\n qps={}", ingressStr , updateIngressTrafficLimit.getLimitQps()))
+                .commitMessage(updateIngressTrafficLimit.getCommit().getMessage())
+                .build();
     }
 
     private void setIngress(Ingress targetIngress,

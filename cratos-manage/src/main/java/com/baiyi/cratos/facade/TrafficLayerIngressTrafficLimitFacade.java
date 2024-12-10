@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 
@@ -14,7 +15,7 @@ public interface TrafficLayerIngressTrafficLimitFacade {
     DataTable<TrafficLayerIngressVO.IngressTrafficLimit> queryIngressTrafficLimitPage(
             TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery);
 
-    void updateIngressTrafficLimit(
+    SimpleCommited updateIngressTrafficLimit(
             TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit);
 
 }
