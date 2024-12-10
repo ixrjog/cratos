@@ -31,7 +31,7 @@
         select * from user
         <choose>
             <when test="queryName != null and queryName != ''">
-                username like "%" #{queryName} "%"
+                where username like "%" #{queryName} "%"
                 or name like "%" #{queryName} "%"
                 or display_name like "%" #{queryName} "%"
                 order by replace( name, #{queryName}, '' ) , create_time
