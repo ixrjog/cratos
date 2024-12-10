@@ -17,6 +17,7 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
+import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.TrafficLayerIngressTrafficLimitFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -50,9 +51,12 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final KubernetesIngressRepo kubernetesIngressRepo;
     private final EdsAssetIndexService edsAssetIndexService;
+    private final BusinessTagFacade businessTagFacade;
+
+    private static final String TAG_KEY = "ingress.kubernetes.io/traffic-limit-qps";
 
     private BusinessTagParam.QueryByTag buildQueryByTag() {
-        Tag tag = tagService.getByTagKey("ingress.kubernetes.io/traffic-limit-qps");
+        Tag tag = tagService.getByTagKey(TAG_KEY);
         if (tag == null) {
             TrafficLayerException.runtime("Tag 'ingress.kubernetes.io/traffic-limit-qps' does not exist.");
         }
@@ -110,7 +114,6 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         List<EdsAsset> edsAssets = edsAssetService.queryAssetByParam(ingressTrafficLimit.getLoadBalancer()
                 .getValue(), EdsAssetTypeEnum.ALIYUN_ALB.name());
         if (!CollectionUtils.isEmpty(edsAssets)) {
-
             EdsAssetIndex edsAssetIndex = edsAssetIndexService.getByAssetIdAndName(edsAssets.getFirst()
                     .getId(), ALIYUN_ALB_INSTANCE_URL);
             if (edsAssetIndex != null) {
@@ -119,10 +122,8 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void updateIngressTrafficLimit(
-            TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
-        EdsAsset edsAsset = edsAssetService.getById(updateIngressTrafficLimit.getAssetId());
+    private EdsAsset checkedGet(int assetId) {
+        EdsAsset edsAsset = edsAssetService.getById(assetId);
         if (edsAsset == null) {
             TrafficLayerException.runtime("Asset ingress does not exist.");
         }
@@ -130,17 +131,28 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                 .equals(edsAsset.getAssetType())) {
             TrafficLayerException.runtime("Incorrect asset type.");
         }
-        // TODO checkTag
+        preCheckAssetTag(edsAsset);
+        return edsAsset;
+    }
+
+    private void preCheckAssetTag(EdsAsset edsAsset) {
+        if (!businessTagFacade.containsTag(BusinessTypeEnum.EDS_ASSET.name(), edsAsset.getId(), TAG_KEY)) {
+            TrafficLayerException.runtime("Current assets cannot be changed.");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void updateIngressTrafficLimit(
+            TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+        EdsAsset edsAsset = checkedGet(updateIngressTrafficLimit.getAssetId());
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
                 .getEdsConfigModel();
-
         Ingress originalIngress = holder.getProvider()
                 .assetLoadAs(edsAsset.getOriginalModel());
         final String namespace = originalIngress.getMetadata()
                 .getNamespace();
-
         Ingress targetIngress = kubernetesIngressRepo.get(kubernetes, namespace, edsAsset.getName());
         if (targetIngress == null) {
             TrafficLayerException.runtime("Kubernetes ingress does not exist.");
@@ -149,7 +161,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         setIngress(targetIngress, updateIngressTrafficLimit);
         // 更新
         Ingress updatedIngress = kubernetesIngressRepo.update(kubernetes, targetIngress);
-        // 导入资产
+        // 导入并更新资产
         holder.getProvider()
                 .importAsset(holder.getInstance(), updatedIngress);
     }

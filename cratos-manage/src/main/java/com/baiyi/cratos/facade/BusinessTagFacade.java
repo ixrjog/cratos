@@ -19,6 +19,10 @@ public interface BusinessTagFacade {
 
     void saveBusinessTag(BusinessTagParam.SaveBusinessTag saveBusinessTag);
 
+    boolean containsTag(String businessType, Integer businessId, Integer tagId);
+
+    boolean containsTag(String businessType, Integer businessId, String tagKey);
+
     void deleteById(int id);
 
 }

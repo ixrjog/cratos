@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -72,6 +73,25 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
                 businessTagService.updateByPrimaryKey(existBusinessTag);
             }
         }
+    }
+
+    @Override
+    public boolean containsTag(String businessType, Integer businessId, Integer tagId) {
+        BusinessTag uniqueKey = BusinessTag.builder()
+                .businessType(businessType)
+                .businessId(businessId)
+                .tagId(tagId)
+                .build();
+        return businessTagService.getByUniqueKey(uniqueKey) != null;
+    }
+
+    @Override
+    public boolean containsTag(String businessType, Integer businessId, String tagKey) {
+        Tag tag = tagService.getByTagKey(tagKey);
+        if (tag == null) {
+            return false;
+        }
+        return containsTag(businessType, businessId, tag.getId());
     }
 
     @Override
