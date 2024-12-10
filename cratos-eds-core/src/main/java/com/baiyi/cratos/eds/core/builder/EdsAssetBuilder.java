@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core.builder;
 
 import com.baiyi.cratos.common.util.YamlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 
@@ -70,6 +71,11 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
 
     public EdsAssetBuilder<C, A> regionOf(String region) {
         edsAsset.setRegion(region);
+        return this;
+    }
+
+    public EdsAssetBuilder<C, A> regionOf(HasRegionId hasRegionId) {
+        edsAsset.setRegion(hasRegionId.getRegionId());
         return this;
     }
 

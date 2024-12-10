@@ -53,6 +53,7 @@ public class TrafficLayerIngressVO {
         private List<EdsAssetIndex> rules = Lists.newArrayList();
         private EdsAssetIndex namespace;
         private EdsAssetIndex loadBalancer;
+        private EdsAssetIndex loadBalancerUrl;
         private EdsAssetIndex trafficLimitQps;
         private EdsAssetIndex sourceIp;
     }

@@ -24,13 +24,9 @@ public class AliyunEcs {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Ecs {
-
         private String regionId;
-
         private DescribeInstancesResponse.Instance instance;
-
         private List<DescribeDisksResponse.Disk> disks;
-
     }
 
 }

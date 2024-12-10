@@ -13,43 +13,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AliyunDomain {
-
     private String ccompany;
-
     private String domainAuditStatus;
-
     private String domainGroupId;
-
     private String domainGroupName;
-
     private String domainName;
-
     private String domainStatus;
-
     private String domainType;
-
     private Integer expirationCurrDateDiff;
-
     private String expirationDate;
-
     private Long expirationDateLong;
-
     private String expirationDateStatus;
-
     private String instanceId;
-
     private Boolean premium;
-
     private String productId;
-
     private String registrantType;
-
     private String registrationDate;
-
     private Long registrationDateLong;
-
     private String remark;
-
     private String resourceGroupId;
-
 }

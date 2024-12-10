@@ -23,6 +23,8 @@ public interface EdsAssetIndexConstants {
     String ALIYUN_REDIS_INSTANCE_CLASS = "redis.instanceClass";
     String ALIYUN_REDIS_CONNECTION_DOMAIN = "redis.connectionDomain";
 
+    String ALIYUN_ALB_INSTANCE_URL = "aliyun.alb.instance.url";
+
     String AWS_SNS_SUBSCRIPTION_ENDPOINT = "endpoint";
     String AWS_SNS_SUBSCRIPTION_TOPIC_ARN = "topic.arn";
     String AWS_SNS_SUBSCRIPTION_PROTOCOL = "protocol";

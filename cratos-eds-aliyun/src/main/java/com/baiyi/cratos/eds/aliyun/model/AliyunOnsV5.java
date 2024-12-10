@@ -21,13 +21,9 @@ public class AliyunOnsV5 {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ConsumerGroupSubscription {
-
         private String endpoint;
-
         private String instanceId;
-
         private ListConsumerGroupSubscriptionsResponseBody.ListConsumerGroupSubscriptionsResponseBodyData consumerGroupSubscription;
-
     }
 
 }

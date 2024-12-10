@@ -84,6 +84,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
             switch (index.getName()) {
                 case KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME -> {
                     ingressTrafficLimit.setLoadBalancer(index);
+                    setLoadBalancerUrl(ingressTrafficLimit);
                     return;
                 }
                 case KUBERNETES_NAMESPACE -> {
@@ -103,6 +104,19 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                     .add(index);
         });
         return ingressTrafficLimit;
+    }
+
+    private void setLoadBalancerUrl(TrafficLayerIngressVO.IngressTrafficLimit ingressTrafficLimit) {
+        List<EdsAsset> edsAssets = edsAssetService.queryAssetByParam(ingressTrafficLimit.getLoadBalancer()
+                .getValue(), EdsAssetTypeEnum.ALIYUN_ALB.name());
+        if (!CollectionUtils.isEmpty(edsAssets)) {
+
+            EdsAssetIndex edsAssetIndex = edsAssetIndexService.getByAssetIdAndName(edsAssets.getFirst()
+                    .getId(), ALIYUN_ALB_INSTANCE_URL);
+            if (edsAssetIndex != null) {
+                ingressTrafficLimit.setLoadBalancerUrl(edsAssetIndex);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -132,7 +146,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
             TrafficLayerException.runtime("Kubernetes ingress does not exist.");
         }
         // 设置
-        setIngress(targetIngress,updateIngressTrafficLimit);
+        setIngress(targetIngress, updateIngressTrafficLimit);
         // 更新
         Ingress updatedIngress = kubernetesIngressRepo.update(kubernetes, targetIngress);
         // 导入资产
@@ -140,7 +154,8 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                 .importAsset(holder.getInstance(), updatedIngress);
     }
 
-    private void setIngress(Ingress targetIngress, TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
+    private void setIngress(Ingress targetIngress,
+                            TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
         boolean isOffline = updateIngressTrafficLimit.getLimitQps() == 0;
         // 校验qps
         if (CollectionUtils.isEmpty(targetIngress.getMetadata()
