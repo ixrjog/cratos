@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SimpleCommited implements Commited {
 
+    private String name;
     @Builder.Default
     private String commitId = UUID.randomUUID().toString();
     private String commitContent;

@@ -7,6 +7,7 @@ package com.baiyi.cratos.domain;
  */
 public interface Commited {
 
+    String getName();
     String getCommitId();
     String getCommitContent();
     String getCommitMessage();

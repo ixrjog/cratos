@@ -180,6 +180,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         holder.getProvider()
                 .importAsset(holder.getInstance(), updatedIngress);
         return SimpleCommited.builder()
+                .name(edsAsset.getName())
                 .commitContent(StringFormatter.arrayFormat("Update:\n{}\n->\nqps={}", ingressStr,
                         updateIngressTrafficLimit.getLimitQps()))
                 .commitMessage(updateIngressTrafficLimit.getCommit()
