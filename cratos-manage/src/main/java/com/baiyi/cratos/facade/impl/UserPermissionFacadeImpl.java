@@ -12,8 +12,6 @@ import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
  * @Author baiyi
  * @Date 2024/1/18 18:18
@@ -67,13 +65,11 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     @Override
     public UserPermissionVO.PermissionDetails getUserPermissionDetailsByUsername(String username) {
-        Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> permissions = UserPermissionMerger.newMerger()
-                .withUserPermissions(userPermissionService.queryByUsername(username))
-                .get();
         return UserPermissionVO.PermissionDetails.builder()
-                .permissions(permissions)
+                .permissions(UserPermissionMerger.newMerger()
+                        .withUserPermissions(userPermissionService.queryByUsername(username))
+                        .get())
                 .build();
-
     }
 
 }

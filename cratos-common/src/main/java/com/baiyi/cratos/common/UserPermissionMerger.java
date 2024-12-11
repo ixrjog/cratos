@@ -35,30 +35,41 @@ public class UserPermissionMerger {
         if (CollectionUtils.isEmpty(userPermissions)) {
             return this;
         }
-        Map<String, List<UserPermission>> businessPermissions = userPermissions.stream()
-                .collect(Collectors.groupingBy(UserPermission::getBusinessType));
-        businessPermissions.forEach((businessType, v) -> {
-            final Map<Integer, UserPermissionVO.MergedPermissions> mergedPermissionsMap = Maps.newHashMap();
-            v.stream()
-                    .collect(Collectors.groupingBy(UserPermission::getBusinessId))
-                    .forEach((businessId, permissions) -> permissions.forEach(permission -> {
-                        if (mergedPermissionsMap.containsKey(businessId)) {
-                            mergedPermissionsMap.get(businessId)
-                                    .getRoles()
-                                    .add(toRole(permission));
-                        } else {
-                            UserPermissionVO.MergedPermissions mergedPermissions = UserPermissionVO.MergedPermissions.builder()
-                                    .businessType(businessType)
-                                    .businessId(businessId)
-                                    .build();
-                            mergedPermissions.getRoles()
-                                    .add(toRole(permission));
-                            mergedPermissionsMap.put(businessId, mergedPermissions);
-                        }
-                    }));
-            permissions.put(businessType, mergedPermissionsMap);
-        });
+        userPermissions.stream()
+                .collect(Collectors.groupingBy(UserPermission::getBusinessType))
+                .forEach((businessType, v) -> {
+                    Map<Integer, UserPermissionVO.MergedPermissions> mergedPermissionsMap = merge(businessType, v);
+                    permissions.put(businessType, mergedPermissionsMap);
+                });
         return this;
+    }
+
+    private Map<Integer, UserPermissionVO.MergedPermissions> merge(String businessType, List<UserPermission> v) {
+        Map<Integer, UserPermissionVO.MergedPermissions> mergedPermissionsMap = Maps.newHashMap();
+        v.stream()
+                .collect(Collectors.groupingBy(UserPermission::getBusinessId))
+                .forEach((businessId, permissions) -> permissions.forEach(
+                        permission -> merge(permission, mergedPermissionsMap)));
+        return mergedPermissionsMap;
+    }
+
+    private void merge(UserPermission userPermission,
+                       Map<Integer, UserPermissionVO.MergedPermissions> mergedPermissionsMap) {
+        final Integer businessId = userPermission.getBusinessId();
+        final String businessType = userPermission.getBusinessType();
+        if (mergedPermissionsMap.containsKey(businessId)) {
+            mergedPermissionsMap.get(businessId)
+                    .getRoles()
+                    .add(toRole(userPermission));
+        } else {
+            UserPermissionVO.MergedPermissions mergedPermissions = UserPermissionVO.MergedPermissions.builder()
+                    .businessType(businessType)
+                    .businessId(businessId)
+                    .build();
+            mergedPermissions.getRoles()
+                    .add(toRole(userPermission));
+            mergedPermissionsMap.put(businessId, mergedPermissions);
+        }
     }
 
     public Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> get() {
