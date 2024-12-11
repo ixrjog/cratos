@@ -61,6 +61,7 @@ public class UserPermissionVO {
         private static final long serialVersionUID = 8090775323820190804L;
         private String businessType;
         private Integer businessId;
+        private String name;
         @Builder.Default
         private List<PermissionRole> roles = Lists.newArrayList();
     }

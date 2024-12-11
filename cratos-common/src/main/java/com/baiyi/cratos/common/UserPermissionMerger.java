@@ -65,6 +65,7 @@ public class UserPermissionMerger {
             UserPermissionVO.MergedPermissions mergedPermissions = UserPermissionVO.MergedPermissions.builder()
                     .businessType(businessType)
                     .businessId(businessId)
+                    .name(userPermission.getName())
                     .build();
             mergedPermissions.getRoles()
                     .add(toRole(userPermission));
