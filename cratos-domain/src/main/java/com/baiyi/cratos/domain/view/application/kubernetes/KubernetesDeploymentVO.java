@@ -28,6 +28,10 @@ public class KubernetesDeploymentVO {
     public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Serializable {
         @Serial
         private static final long serialVersionUID = 9137044441466358774L;
+
+        public static final Deployment INVALID = Deployment.builder()
+                .build();
+
         private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
         private KubernetesCommonVO.Metadata metadata;
         private DeploymentSpec spec;

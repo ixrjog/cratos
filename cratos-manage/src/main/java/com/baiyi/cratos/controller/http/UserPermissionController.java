@@ -8,6 +8,7 @@ import com.baiyi.cratos.facade.UserPermissionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,8 @@ public class UserPermissionController {
 
     @Operation(summary = "Pagination query user permission")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserPermissionVO.Permission>> queryUserPermissionPage(@RequestBody @Valid UserPermissionParam.UserPermissionPageQuery pageQuery) {
+    public HttpResult<DataTable<UserPermissionVO.Permission>> queryUserPermissionPage(
+            @RequestBody @Valid UserPermissionParam.UserPermissionPageQuery pageQuery) {
         return new HttpResult<>(permissionFacade.queryUserPermissionPage(pageQuery));
     }
 
@@ -50,6 +52,12 @@ public class UserPermissionController {
     public HttpResult<Boolean> revokeUserPermissionById(@RequestParam int id) {
         permissionFacade.deleteUserPermissionById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<UserPermissionVO.PermissionDetails> getUserPermissionDetailsByUsername(
+            @RequestParam @Valid @NotBlank String username) {
+        return new HttpResult<>(permissionFacade.getUserPermissionDetailsByUsername(username));
     }
 
 }

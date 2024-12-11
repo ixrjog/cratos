@@ -30,7 +30,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     private final UserPermissionMapper userPermissionMapper;
 
     @Override
-    public  DataTable<UserPermission> queryUserPermissionPage(UserPermissionParam.UserPermissionPageQuery pageQuery){
+    public DataTable<UserPermission> queryUserPermissionPage(UserPermissionParam.UserPermissionPageQuery pageQuery) {
         Page<UserPermission> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<UserPermission> data = userPermissionMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
@@ -60,6 +60,14 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                 .andEqualTo("businessId", hasBusiness.getBusinessId())
                 .andEqualTo("username", username);
         return userPermissionMapper.selectCountByExample(example) != 0;
+    }
+
+    @Override
+    public List<UserPermission> queryByUsername(String username) {
+        Example example = new Example(UserPermission.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", username);
+        return userPermissionMapper.selectByExample(example);
     }
 
     @Override

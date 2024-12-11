@@ -3,7 +3,9 @@ package com.baiyi.cratos.domain.view.user;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -42,24 +44,29 @@ public class UserPermissionVO {
     }
 
     @Data
+    @Builder
     @Schema
     public static class PermissionDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = -8019733940094649908L;
+        // Map<{businessType}, Map<{businessId}, MergedPermissions>>
         private Map<String, Map<Integer, MergedPermissions>> permissions;
     }
 
     @Data
+    @Builder
     @Schema
     public static class MergedPermissions implements Serializable {
         @Serial
         private static final long serialVersionUID = 8090775323820190804L;
         private String businessType;
         private Integer businessId;
-        private List<PermissionRole> roles;
+        @Builder.Default
+        private List<PermissionRole> roles = Lists.newArrayList();
     }
 
     @Data
+    @Builder
     @Schema
     public static class PermissionRole implements Serializable {
         @Serial

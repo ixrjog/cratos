@@ -5,8 +5,8 @@ import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Env;
-import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
+import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -51,14 +53,18 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     public List<KubernetesDeploymentVO.Deployment> toResourceVO(List<ApplicationResource> resources) {
         Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
         return resources.stream()
-                .map(e -> to(edsInstanceConfigMap, e))
-                .toList();
+                .map(resource -> to(edsInstanceConfigMap, resource))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private KubernetesDeploymentVO.Deployment to(Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap,
                                                  ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
+        if (edsAsset == null) {
+            return null;
+        }
         EdsInstance edsInstance = edsInstanceService.getById(edsAsset.getInstanceId());
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();

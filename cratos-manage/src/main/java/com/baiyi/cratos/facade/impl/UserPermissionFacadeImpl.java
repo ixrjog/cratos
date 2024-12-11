@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.UserPermissionMerger;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
@@ -10,6 +11,8 @@ import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -62,75 +65,15 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
         return userPermissionService.contains(username, hasBusiness, role);
     }
 
+    @Override
+    public UserPermissionVO.PermissionDetails getUserPermissionDetailsByUsername(String username) {
+        Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> permissions = UserPermissionMerger.newMerger()
+                .withUserPermissions(userPermissionService.queryByUsername(username))
+                .get();
+        return UserPermissionVO.PermissionDetails.builder()
+                .permissions(permissions)
+                .build();
 
-//    @Override
-//    public boolean verify(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum) {
-//        UserPermission uniqueKey = UserPermission.builder()
-//                .username(username)
-//                .businessType(business.getBusinessType())
-//                .businessId(business.getBusinessId())
-//                .build();
-//        UserPermission userPermission = userPermissionService.getByUniqueKey(uniqueKey);
-//        try {
-//            PermissionRoleEnum roleEnum = PermissionRoleEnum.valueOf(userPermission.getPermissionRole()
-//                    .toUpperCase());
-//            if (roleEnum == permissionRoleEnum) {
-//                return true;
-//            }
-//            return roleEnum.getCode() > permissionRoleEnum.getCode();
-//        } catch (IllegalArgumentException e) {
-//            // 枚举类转换错误
-//            return false;
-//        }
-//    }
-
-    /**
-     * Revoke user's business object permissions
-     *
-     * @param username
-     * @param business
-     */
-//    @Override
-//    public void revokeUserBusinessPermission(String username, BaseBusiness.HasBusiness business) {
-//        UserPermission uniqueKey = UserPermission.builder()
-//                .username(username)
-//                .businessType(business.getBusinessType())
-//                .businessId(business.getBusinessId())
-//                .build();
-//        UserPermission userPermission = userPermissionService.getByUniqueKey(uniqueKey);
-//        if (userPermission != null) {
-//            userPermissionService.deleteById(userPermission.getId());
-//        }
-//    }
-//
-//    @Override
-//    public void grantUserBusinessPermission(String username, BaseBusiness.HasBusiness business, PermissionRoleEnum permissionRoleEnum, Date expirationTime) {
-//        UserPermission uniqueKey = UserPermission.builder()
-//                .username(username)
-//                .businessType(business.getBusinessType())
-//                .businessId(business.getBusinessId())
-//                .build();
-//        UserPermission userPermission = userPermissionService.getByUniqueKey(uniqueKey);
-//        if (userPermission != null) {
-//            UserPermission updateUserPermission = UserPermission.builder()
-//                    .id(userPermission.getId())
-//                    .permissionRole(permissionRoleEnum.name())
-//                    .valid(true)
-//                    .expiredTime(expirationTime)
-//                    .build();
-//            userPermissionService.updateByPrimaryKeySelective(updateUserPermission);
-//        } else {
-//            UserPermission addUserPermission = UserPermission.builder()
-//                    .username(username)
-//                    .businessType(business.getBusinessType())
-//                    .businessId(business.getBusinessId())
-//                    .permissionRole(permissionRoleEnum.name())
-//                    .valid(true)
-//                    .expiredTime(expirationTime)
-//                    .rate(0)
-//                    .build();
-//            userPermissionService.add(addUserPermission);
-//        }
-//    }
+    }
 
 }
