@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -55,7 +54,9 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         return resources.stream()
                 .map(resource -> to(edsInstanceConfigMap, resource))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                // 按名称排序
+                .sorted()
+                .toList();
     }
 
     private KubernetesDeploymentVO.Deployment to(Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap,

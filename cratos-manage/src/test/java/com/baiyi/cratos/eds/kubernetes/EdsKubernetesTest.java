@@ -260,8 +260,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     @Test
     void test11() {
         long terminationGracePeriodSeconds = 60L;
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY,
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         List<Deployment> deployments = kubernetesDeploymentRepo.list(cfg, "daily");
         for (Deployment deployment : deployments) {
             long s = Optional.ofNullable(deployment)

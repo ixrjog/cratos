@@ -25,7 +25,7 @@ public class KubernetesDeploymentVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Serializable {
+    public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Comparable<Deployment>, Serializable {
         @Serial
         private static final long serialVersionUID = 9137044441466358774L;
 
@@ -41,6 +41,13 @@ public class KubernetesDeploymentVO {
         @Schema(description = "属性")
         private Map<String, String> attributes;
         private Env env;
+
+        @Override
+        public int compareTo(Deployment o) {
+            return this.metadata.getName()
+                    .compareTo(o.metadata.getName());
+        }
+
     }
 
     @Data
