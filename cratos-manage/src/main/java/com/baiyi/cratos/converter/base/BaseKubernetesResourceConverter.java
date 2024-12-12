@@ -37,7 +37,7 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
             Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap, EdsInstance edsInstance) {
         Optional.ofNullable(edsInstance)
                 .map(EdsInstance::getId)
-                .orElseThrow(() -> new KubernetesResourceTemplateException("kubernetesInstance is null."));
+                .orElseThrow(() -> new KubernetesResourceTemplateException("kubernetes instance is null."));
         if (edsInstanceConfigMap.containsKey(edsInstance.getId())) {
             return edsInstanceConfigMap.get(edsInstance.getId());
         }
@@ -45,7 +45,7 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
             return getEdsInstanceProvider(edsInstance.getId()).getInstance()
                     .getEdsConfigModel();
         }
-        throw new KubernetesResourceTemplateException("kubernetesInstance is invalid.");
+        throw new KubernetesResourceTemplateException("kubernetes instance is invalid.");
     }
 
     @SuppressWarnings("unchecked")
