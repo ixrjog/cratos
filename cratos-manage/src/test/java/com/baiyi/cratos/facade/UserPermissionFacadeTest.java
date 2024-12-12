@@ -51,7 +51,7 @@ public class UserPermissionFacadeTest extends BaseUnit {
 
     @Test
     void test2() {
-        UserPermissionVO.PermissionDetails details = userPermissionFacade.getUserPermissionDetailsByUsername("baiyi");
+        UserPermissionVO.UserPermissionDetails details = userPermissionFacade.getUserPermissionDetailsByUsername("baiyi");
         System.out.println(details);
     }
 

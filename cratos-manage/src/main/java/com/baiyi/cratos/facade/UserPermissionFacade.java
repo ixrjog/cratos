@@ -25,6 +25,9 @@ public interface UserPermissionFacade {
 
     boolean contains(String username, BaseBusiness.HasBusiness hasBusiness, String role);
 
-    UserPermissionVO.PermissionDetails getUserPermissionDetailsByUsername(String username);
+    UserPermissionVO.UserPermissionDetails getUserPermissionDetailsByUsername(String username);
+
+    UserPermissionVO.BusinessUserPermissionDetails queryBusinessUserPermissionDetails(
+            UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails);
 
 }

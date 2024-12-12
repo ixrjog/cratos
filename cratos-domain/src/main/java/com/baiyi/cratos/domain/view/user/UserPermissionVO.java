@@ -46,11 +46,22 @@ public class UserPermissionVO {
     @Data
     @Builder
     @Schema
-    public static class PermissionDetails implements Serializable {
+    public static class UserPermissionDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = -8019733940094649908L;
         // Map<{businessType}, Map<{businessId}, MergedPermissions>>
-        private Map<String, Map<Integer, MergedPermissions>> permissions;
+        private Map<String, List<MergedPermissions>> permissions;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class BusinessUserPermissionDetails implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = 5357289462624411413L;
+        // Map<{role}, List<String>>
+        private Map<String, List<String>> permissions;
     }
 
     @Data

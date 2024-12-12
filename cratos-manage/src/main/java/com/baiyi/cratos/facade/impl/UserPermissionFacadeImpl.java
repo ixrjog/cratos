@@ -64,12 +64,18 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     }
 
     @Override
-    public UserPermissionVO.PermissionDetails getUserPermissionDetailsByUsername(String username) {
-        return UserPermissionVO.PermissionDetails.builder()
+    public UserPermissionVO.UserPermissionDetails getUserPermissionDetailsByUsername(String username) {
+        return UserPermissionVO.UserPermissionDetails.builder()
                 .permissions(UserPermissionMerger.newMerger()
                         .withUserPermissions(userPermissionService.queryByUsername(username))
                         .get())
                 .build();
+    }
+
+    @Override
+    public UserPermissionVO.BusinessUserPermissionDetails queryBusinessUserPermissionDetails(
+            UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
+        return null;
     }
 
 }

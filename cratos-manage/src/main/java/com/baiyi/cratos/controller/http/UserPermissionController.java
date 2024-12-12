@@ -55,9 +55,15 @@ public class UserPermissionController {
     }
 
     @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<UserPermissionVO.PermissionDetails> getUserPermissionDetailsByUsername(
+    public HttpResult<UserPermissionVO.UserPermissionDetails> getUserPermissionDetailsByUsername(
             @RequestParam @Valid @NotBlank String username) {
         return new HttpResult<>(permissionFacade.getUserPermissionDetailsByUsername(username));
+    }
+
+    @PostMapping(value = "/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> queryBusinessUserPermissionDetails(
+            @RequestBody @Valid UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
+        return new HttpResult<>(permissionFacade.queryBusinessUserPermissionDetails(queryBusinessUserPermissionDetails));
     }
 
 }

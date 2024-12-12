@@ -70,4 +70,14 @@ public class UserPermissionParam {
         private String role;
     }
 
+    @Data
+    @Schema
+    @Builder
+    public static class QueryBusinessUserPermissionDetails {
+        @NotBlank
+        private String businessType;
+        @NotNull
+        private Integer businessId;
+    }
+
 }

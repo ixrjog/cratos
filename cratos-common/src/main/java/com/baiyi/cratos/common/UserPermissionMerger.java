@@ -73,9 +73,13 @@ public class UserPermissionMerger {
         }
     }
 
-    public Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> get() {
+    public Map<String, List<UserPermissionVO.MergedPermissions>> get() {
         this.merge();
-        return this.permissions;
+        Map<String, List<UserPermissionVO.MergedPermissions>> result = Maps.newHashMap();
+        this.permissions.forEach((k, v) -> result.put(k, v.values()
+                .stream()
+                .toList()));
+        return result;
     }
 
     private UserPermissionVO.PermissionRole toRole(UserPermission userPermission) {
