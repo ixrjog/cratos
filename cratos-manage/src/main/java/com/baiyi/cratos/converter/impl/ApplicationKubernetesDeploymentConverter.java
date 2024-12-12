@@ -63,7 +63,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                                                  ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
-        if (edsAsset == null) {
+        if (Objects.isNull(edsAsset)) {
             return null;
         }
         EdsInstance edsInstance = edsInstanceService.getById(edsAsset.getInstanceId());

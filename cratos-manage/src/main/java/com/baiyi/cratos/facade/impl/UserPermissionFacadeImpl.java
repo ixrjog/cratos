@@ -75,7 +75,9 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     @Override
     public UserPermissionVO.BusinessUserPermissionDetails queryBusinessUserPermissionDetails(
             UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
-        return null;
+        return UserPermissionVO.BusinessUserPermissionDetails.builder()
+
+                .build();
     }
 
 }

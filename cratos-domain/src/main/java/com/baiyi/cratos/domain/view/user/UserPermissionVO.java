@@ -57,7 +57,6 @@ public class UserPermissionVO {
     @Builder
     @Schema
     public static class BusinessUserPermissionDetails implements Serializable {
-
         @Serial
         private static final long serialVersionUID = 5357289462624411413L;
         // Map<{role}, List<String>>

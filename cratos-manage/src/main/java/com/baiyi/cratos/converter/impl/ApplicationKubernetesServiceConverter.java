@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -45,6 +46,7 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
         Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
         return resources.stream()
                 .map(e -> to(edsInstanceConfigMap, e))
+                .filter(Objects::nonNull)
                 .toList();
     }
 
@@ -52,6 +54,9 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
                                            ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
+        if (Objects.isNull(edsAsset)) {
+            return null;
+        }
         EdsInstance edsInstance = edsInstanceService.getById(edsAsset.getInstanceId());
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();
