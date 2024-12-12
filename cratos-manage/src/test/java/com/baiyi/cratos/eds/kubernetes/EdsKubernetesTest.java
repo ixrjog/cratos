@@ -9,10 +9,9 @@ import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
-import io.fabric8.kubernetes.api.model.Container;
-import io.fabric8.kubernetes.api.model.EnvVar;
-import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.Watcher;
@@ -256,6 +255,32 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
             }
         }
 
+    }
+
+    @Test
+    void test11() {
+        long terminationGracePeriodSeconds = 60L;
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY,
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        List<Deployment> deployments = kubernetesDeploymentRepo.list(cfg, "daily");
+        for (Deployment deployment : deployments) {
+            long s = Optional.ofNullable(deployment)
+                    .map(Deployment::getSpec)
+                    .map(DeploymentSpec::getTemplate)
+                    .map(PodTemplateSpec::getSpec)
+                    .map(PodSpec::getTerminationGracePeriodSeconds)
+                    .orElse(0L);
+            if (s == terminationGracePeriodSeconds) {
+                log.info("不更新: " + deployment.getMetadata().getName());
+                continue;
+            }
+            deployment.getSpec()
+                    .getTemplate()
+                    .getSpec()
+                    .setTerminationGracePeriodSeconds(terminationGracePeriodSeconds);
+            kubernetesDeploymentRepo.update(cfg, deployment);
+            log.info("更新: " + deployment.getMetadata().getName());
+        }
     }
 
 }
