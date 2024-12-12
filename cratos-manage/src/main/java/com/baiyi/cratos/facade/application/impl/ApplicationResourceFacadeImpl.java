@@ -19,7 +19,6 @@ import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFacto
 import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
-import jakarta.ws.rs.HEAD;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -57,11 +56,12 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
 
     private void doScan(Application application) {
         ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
+        log.info("Scan application {} resources.", application.getName());
         ResourceScannerFactory.scanAndBindAssets(application, config);
     }
 
     @Override
-    @SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_RESOURCES_TASK, lockAtMostFor = "5m", lockAtLeastFor = "5m")
+    @SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_RESOURCES_TASK, lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void scanAll() {
         int page = 1;
         ApplicationParam.ApplicationPageQueryParam param = ApplicationParam.ApplicationPageQueryParam.builder()
@@ -74,7 +74,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
             }
             table.getData()
                     .forEach(this::doScan);
-            page++;
+            param.setPage(++page);
         }
     }
 
@@ -125,9 +125,8 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                 .map(namespace -> OptionsVO.Option.builder()
                         .label(namespace)
                         .value(namespace)
-                        .disabled(
-                                !userPermissionFacade.contains(getMyApplicationResourceNamespaceOptions.getSessionUser(),
-                                        business, namespace))
+                        .disabled(!userPermissionFacade.contains(
+                                getMyApplicationResourceNamespaceOptions.getSessionUser(), business, namespace))
                         .build())
                 .toList();
         return getMyApplicationResourceNamespaceOptions(getMyApplicationResourceNamespaceOptions.getSessionUser(),

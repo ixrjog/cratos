@@ -33,8 +33,13 @@ public class ApplicationFacadeTest extends BaseUnit {
     }
 
     @Test
-    void resourceScanTest() {
+    void resourceScanTest1() {
         applicationResourceFacade.scan("kili");
+    }
+
+    @Test
+    void resourceScanTest2() {
+        applicationResourceFacade.scanAll();
     }
 
 }
