@@ -32,14 +32,14 @@ public class UserPermissionMerger {
     }
 
     private UserPermissionMerger merge() {
-        if (CollectionUtils.isEmpty(userPermissions)) {
+        if (CollectionUtils.isEmpty(this.userPermissions)) {
             return this;
         }
-        userPermissions.stream()
+        this.userPermissions.stream()
                 .collect(Collectors.groupingBy(UserPermission::getBusinessType))
                 .forEach((businessType, v) -> {
                     Map<Integer, UserPermissionVO.MergedPermissions> mergedPermissionsMap = merge(businessType, v);
-                    permissions.put(businessType, mergedPermissionsMap);
+                    this.permissions.put(businessType, mergedPermissionsMap);
                 });
         return this;
     }
@@ -75,7 +75,7 @@ public class UserPermissionMerger {
 
     public Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> get() {
         this.merge();
-        return permissions;
+        return this.permissions;
     }
 
     private UserPermissionVO.PermissionRole toRole(UserPermission userPermission) {

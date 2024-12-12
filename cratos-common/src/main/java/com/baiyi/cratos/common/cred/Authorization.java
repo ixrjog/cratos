@@ -21,9 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class Authorization {
 
     public interface IToBasic {
-
         String toBasic();
-
     }
 
     @Data
@@ -31,7 +29,6 @@ public class Authorization {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Credential implements IToBasic {
-
         private String password;
         private String username;
 
@@ -44,7 +41,6 @@ public class Authorization {
                     .join(username, password);
             return Authorization.toBasic(authString);
         }
-
     }
 
     @Data
@@ -52,9 +48,7 @@ public class Authorization {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Token implements IToBasic {
-
         private String token;
-
         public boolean isEmpty() {
             return (StringUtils.isEmpty(token));
         }
@@ -63,7 +57,6 @@ public class Authorization {
             String authString = token + ":";
             return Authorization.toBasic(authString);
         }
-
     }
 
     private static String toBasic(String authString) {
