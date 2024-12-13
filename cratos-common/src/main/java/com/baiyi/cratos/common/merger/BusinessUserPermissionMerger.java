@@ -23,10 +23,7 @@ public class BusinessUserPermissionMerger {
     private UserPermissionVO.BusinessUserPermissionDetails details;
 
     public static BusinessUserPermissionMerger newMerger() {
-        BusinessUserPermissionMerger merger = new BusinessUserPermissionMerger();
-        merger.details = UserPermissionVO.BusinessUserPermissionDetails.builder()
-                .build();
-        return merger;
+        return new BusinessUserPermissionMerger();
     }
 
     public BusinessUserPermissionMerger withUserPermissions(List<UserPermission> userPermissions) {
@@ -40,45 +37,45 @@ public class BusinessUserPermissionMerger {
     }
 
     public UserPermissionVO.BusinessUserPermissionDetails get() {
-        this.merge();
+        this.grouping();
         return this.details;
     }
 
-    private void merge() {
-        groupingByRole();
-        groupingByUsername();
-    }
-
-    private void groupingByRole() {
+    private void grouping() {
         //  Map<{role}, List<username>>
         Map<String, List<String>> permissionByRole = Maps.newHashMap();
-        for (UserPermission userPermission : userPermissions) {
-            if (permissionByRole.containsKey(userPermission.getRole())) {
-                permissionByRole.get(userPermission.getRole())
-                        .add(userPermission.getUsername());
-            } else {
-                List<String> usernames = Lists.newArrayList();
-                usernames.add(userPermission.getUsername());
-                permissionByRole.put(userPermission.getRole(), usernames);
-            }
-        }
-        details.setPermissionByRole(permissionByRole);
-    }
-
-    private void groupingByUsername() {
         //  Map<{username}, List<role>>
         Map<String, List<String>> permissionByUsername = Maps.newHashMap();
-        for (UserPermission userPermission : userPermissions) {
-            if (permissionByUsername.containsKey(userPermission.getUsername())) {
-                permissionByUsername.get(userPermission.getUsername())
-                        .add(userPermission.getRole());
-            } else {
-                List<String> roles = Lists.newArrayList();
-                roles.add(userPermission.getRole());
-                permissionByUsername.put(userPermission.getUsername(), roles);
-            }
+        userPermissions.forEach(userPermission -> {
+            groupingByRole(permissionByRole, userPermission);
+            groupingByUsername(permissionByUsername, userPermission);
+        });
+        this.details = UserPermissionVO.BusinessUserPermissionDetails.builder()
+                .permissionByUser(permissionByUsername)
+                .permissionByRole(permissionByRole)
+                .build();
+    }
+
+    private void groupingByRole(Map<String, List<String>> permissionByRole, UserPermission userPermission) {
+        if (permissionByRole.containsKey(userPermission.getRole())) {
+            permissionByRole.get(userPermission.getRole())
+                    .add(userPermission.getUsername());
+        } else {
+            List<String> usernames = Lists.newArrayList();
+            usernames.add(userPermission.getUsername());
+            permissionByRole.put(userPermission.getRole(), usernames);
         }
-        details.setPermissionByUser(permissionByUsername);
+    }
+
+    private void groupingByUsername(Map<String, List<String>> permissionByUsername, UserPermission userPermission) {
+        if (permissionByUsername.containsKey(userPermission.getUsername())) {
+            permissionByUsername.get(userPermission.getUsername())
+                    .add(userPermission.getRole());
+        } else {
+            List<String> roles = Lists.newArrayList();
+            roles.add(userPermission.getRole());
+            permissionByUsername.put(userPermission.getUsername(), roles);
+        }
     }
 
 }
