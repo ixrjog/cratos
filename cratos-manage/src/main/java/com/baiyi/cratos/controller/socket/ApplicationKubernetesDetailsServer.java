@@ -37,7 +37,7 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         // 消息代理
         Thread.ofVirtual()
-                .start(new ApplicationKubernetesDetailsBroker(this.sessionId, session));
+                .start(ApplicationKubernetesDetailsBroker.newBroker(this.sessionId, session));
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)

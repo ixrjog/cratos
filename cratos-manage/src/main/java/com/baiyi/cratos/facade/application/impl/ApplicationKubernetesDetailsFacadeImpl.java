@@ -43,7 +43,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails) {
         return MessageResponse.<KubernetesVO.KubernetesDetails>builder()
                 .body(buildKubernetesDetails(queryKubernetesDetails))
-                .topic(HasTopic.APPLICATION_KUBERNETES_WORKLOAD)
+                .topic(HasTopic.APPLICATION_KUBERNETES_DETAILS)
                 .build();
     }
 

@@ -21,11 +21,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesDetailsChannelHandler {
 
-    private final ApplicationKubernetesDetailsFacade deploymentFacade;
+    private final ApplicationKubernetesDetailsFacade kubernetesDetailsFacade;
 
     @Override
     public String getTopic() {
-        return HasTopic.APPLICATION_KUBERNETES_WORKLOAD;
+        return HasTopic.APPLICATION_KUBERNETES_DETAILS;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
                     .applicationName(message.getApplicationName())
                     .namespace(message.getNamespace())
                     .build();
-            MessageResponse<KubernetesVO.KubernetesDetails> response = deploymentFacade.queryKubernetesDetails(
+            MessageResponse<KubernetesVO.KubernetesDetails> response = kubernetesDetailsFacade.queryKubernetesDetails(
                     param);
             send(session, response);
         }

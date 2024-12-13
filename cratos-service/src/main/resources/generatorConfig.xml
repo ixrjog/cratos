@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="business_commit">
+        <table tableName="qrtz_cron_triggers">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

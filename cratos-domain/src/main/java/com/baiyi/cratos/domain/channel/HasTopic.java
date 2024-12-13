@@ -8,8 +8,7 @@ package com.baiyi.cratos.domain.channel;
 public interface HasTopic {
 
     String HEARTBEAT = "HEARTBEAT";
-
-    String APPLICATION_KUBERNETES_WORKLOAD = "APPLICATION_KUBERNETES_WORKLOAD";
+    String APPLICATION_KUBERNETES_DETAILS = "APPLICATION_KUBERNETES_DETAILS";
     String PLAY_SSH_SESSION_AUDIT = "PLAY_SSH_SESSION_AUDIT";
 
     String getTopic();

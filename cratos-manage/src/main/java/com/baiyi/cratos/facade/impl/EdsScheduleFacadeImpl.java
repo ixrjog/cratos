@@ -44,7 +44,6 @@ public class EdsScheduleFacadeImpl implements EdsScheduleFacade {
         return StringFormatter.format("EDS:ID:{}", instanceId);
     }
 
-
     @Override
     public List<ScheduleVO.Job> queryJob(int instanceId) {
         Optional.ofNullable(instanceService.getById(instanceId))

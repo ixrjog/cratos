@@ -21,6 +21,10 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
     private final String sessionId;
     private final Session session;
 
+    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session) {
+        return new ApplicationKubernetesDetailsBroker(sessionId, session);
+    }
+
     public ApplicationKubernetesDetailsBroker(String sessionId, Session session) {
         this.sessionId = sessionId;
         this.session = session;
@@ -47,9 +51,9 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
             return;
         }
         // 深copy
-        Map<String, HasSocketRequest> queryMap = Maps.newHashMap(
+        Map<String, HasSocketRequest> requestMap = Maps.newHashMap(
                 KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
-        queryMap.forEach(
+        requestMap.forEach(
                 (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
                         request));
     }
