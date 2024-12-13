@@ -39,7 +39,7 @@ public class BusinessUserPermissionMerger {
         return this;
     }
 
-    public UserPermissionVO.BusinessUserPermissionDetails get(){
+    public UserPermissionVO.BusinessUserPermissionDetails get() {
         this.merge();
         return this.details;
     }
@@ -66,17 +66,17 @@ public class BusinessUserPermissionMerger {
     }
 
     private void groupingByUsername() {
+        //  Map<{username}, List<role>>
         Map<String, List<String>> permissionByUsername = Maps.newHashMap();
         for (UserPermission userPermission : userPermissions) {
             if (permissionByUsername.containsKey(userPermission.getUsername())) {
                 permissionByUsername.get(userPermission.getUsername())
                         .add(userPermission.getRole());
             } else {
-                List<String> usernames = Lists.newArrayList();
-                usernames.add(userPermission.getUsername());
-                permissionByUsername.put(userPermission.getUsername(), usernames);
+                List<String> roles = Lists.newArrayList();
+                roles.add(userPermission.getRole());
+                permissionByUsername.put(userPermission.getUsername(), roles);
             }
-
         }
         details.setPermissionByUser(permissionByUsername);
     }
