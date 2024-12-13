@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view.user;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -59,14 +60,16 @@ public class UserPermissionVO {
     public static class BusinessUserPermissionDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = 5357289462624411413L;
-        // Map<{role}, List<String>>
-        private Map<String, List<String>> permissions;
+        // Map<{username}, List<String>>
+        private Map<String, List<String>> permissionByUser;
+
+        private Map<String, List<String>> permissionByRole;
     }
 
     @Data
     @Builder
     @Schema
-    public static class MergedPermissions implements Serializable {
+    public static class MergedPermissions implements BaseBusiness.HasBusiness, Serializable {
         @Serial
         private static final long serialVersionUID = 8090775323820190804L;
         private String businessType;
@@ -88,6 +91,20 @@ public class UserPermissionVO {
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
         private String comment;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class MergedBusinessPermissions implements BaseBusiness.HasBusiness, Serializable {
+        @Serial
+        private static final long serialVersionUID = 8090775323820190804L;
+        private String businessType;
+        private Integer businessId;
+        private String name;
+        private UserVO.User user;
+        @Builder.Default
+        private List<PermissionRole> roles = Lists.newArrayList();
     }
 
 }

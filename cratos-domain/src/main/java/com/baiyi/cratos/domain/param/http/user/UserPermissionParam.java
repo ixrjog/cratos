@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.user;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -73,7 +74,7 @@ public class UserPermissionParam {
     @Data
     @Schema
     @Builder
-    public static class QueryBusinessUserPermissionDetails {
+    public static class QueryBusinessUserPermissionDetails implements BaseBusiness.HasBusiness {
         @NotBlank
         private String businessType;
         @NotNull

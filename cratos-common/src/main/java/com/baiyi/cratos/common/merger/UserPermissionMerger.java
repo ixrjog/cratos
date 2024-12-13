@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common;
+package com.baiyi.cratos.common.merger;
 
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;

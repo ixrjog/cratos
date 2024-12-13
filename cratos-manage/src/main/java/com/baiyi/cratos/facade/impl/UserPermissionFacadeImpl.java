@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.UserPermissionMerger;
+import com.baiyi.cratos.common.merger.BusinessUserPermissionMerger;
+import com.baiyi.cratos.common.merger.UserPermissionMerger;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
@@ -8,9 +9,14 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.service.UserPermissionService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -23,6 +29,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     private final UserPermissionService userPermissionService;
     private final UserPermissionWrapper userPermissionWrapper;
+    private final UserService userService;
 
     @Override
     public DataTable<UserPermissionVO.Permission> queryUserPermissionPage(
@@ -75,9 +82,19 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     @Override
     public UserPermissionVO.BusinessUserPermissionDetails queryBusinessUserPermissionDetails(
             UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
-        return UserPermissionVO.BusinessUserPermissionDetails.builder()
-
-                .build();
+        List<UserPermission> userPermissions = userPermissionService.queryByBusiness(
+                queryBusinessUserPermissionDetails);
+        Map<String, List<UserPermission>> usernameMap = userPermissions.stream()
+                .collect(Collectors.groupingBy(UserPermission::getUsername));
+//        Map<String, User> users = usernameMap.keySet()
+//                .stream()
+//                .map(userService::getByUsername)
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toMap(User::getUsername, a -> a, (k1, k2) -> k1));
+        return BusinessUserPermissionMerger.newMerger()
+                .withUserPermissions(userPermissions)
+                // .withUsers(users)
+                .get();
     }
 
 }

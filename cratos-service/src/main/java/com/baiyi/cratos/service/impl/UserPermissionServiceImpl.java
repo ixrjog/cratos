@@ -81,4 +81,13 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         return getByUniqueKey(uniqueKey) != null;
     }
 
+    @Override
+    public List<UserPermission> queryByBusiness(BaseBusiness.HasBusiness hasBusiness) {
+        Example example = new Example(UserPermission.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", hasBusiness.getBusinessType())
+                .andEqualTo("businessId", hasBusiness.getBusinessId());
+        return userPermissionMapper.selectByExample(example);
+    }
+
 }
