@@ -67,7 +67,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         if (template == null) {
             KubernetesResourceTemplateException.runtime("Template does not exist.");
         }
-        template.setLock(lockTemplate.getLock());
+        template.setLocked(lockTemplate.getLocked());
         templateService.updateByPrimaryKey(template);
     }
 
@@ -93,7 +93,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         if (kubernetesResourceTemplate == null) {
             return;
         }
-        if (kubernetesResourceTemplate.getLock() == LOCKED) {
+        if (kubernetesResourceTemplate.getLocked() == LOCKED) {
             KubernetesResourceTemplateException.runtime("Template is locked and cannot be modified.");
         }
         kubernetesResourceTemplate.setName(updateTemplate.getName());
@@ -115,7 +115,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         if (kubernetesResourceTemplate == null) {
             return;
         }
-        if (kubernetesResourceTemplate.getLock() == LOCKED) {
+        if (kubernetesResourceTemplate.getLocked() == LOCKED) {
             KubernetesResourceTemplateException.runtime("Template is locked and cannot be modified.");
         }
         templateMemberService.queryMemberByTemplateId(id)
@@ -167,11 +167,11 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                         .build();
                 KubernetesResourceTemplate template = templateService.getByUniqueKey(uniqueKey);
                 if (template == null) {
-                    throw new KubernetesResourceTemplateException("Template does not exist.");
+                    KubernetesResourceTemplateException.runtime("Template does not exist.");
                 }
                 createResourceByTemplate.setTemplateId(template.getId());
             } else {
-                throw new KubernetesResourceTemplateException("Template ID or Key must be specified.");
+                KubernetesResourceTemplateException.runtime("Template ID or Key must be specified.");
             }
         }
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustomFromUserMergeTemplate(

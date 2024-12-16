@@ -29,4 +29,13 @@ public class KubernetesResourceTemplateFacadeTest extends BaseUnit {
         System.out.println(table);
     }
 
+    @Test
+    void test2() {
+        KubernetesResourceTemplateParam.LockTemplate lockTemplate = KubernetesResourceTemplateParam.LockTemplate.builder()
+                .templateId(1)
+                .lock(true)
+                .build();
+        kubernetesResourceTemplateFacade.lockTemplate(lockTemplate);
+    }
+
 }

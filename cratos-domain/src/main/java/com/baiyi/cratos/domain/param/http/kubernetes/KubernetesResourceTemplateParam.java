@@ -79,7 +79,7 @@ public class KubernetesResourceTemplateParam {
         @NotNull
         private Integer templateId;
         @NotNull
-        private Boolean lock;
+        private Boolean locked;
     }
 
     @Data
