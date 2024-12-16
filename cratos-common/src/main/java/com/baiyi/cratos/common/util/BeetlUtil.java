@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
+import org.beetl.core.exception.BeetlException;
 import org.beetl.core.resource.StringTemplateResourceLoader;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ public final class BeetlUtil {
      * @return
      * @throws IOException
      */
-    public static String renderTemplate(String template, Map<String, Object> contentMap) throws IOException {
+    public static String renderTemplate(String template,
+                                        Map<String, Object> contentMap) throws IOException, BeetlException {
         // 初始化代码
         StringTemplateResourceLoader resourceLoader = new StringTemplateResourceLoader();
         Configuration cfg = Configuration.defaultConfiguration();
@@ -38,7 +40,8 @@ public final class BeetlUtil {
         return t.render();
     }
 
-    public static String renderTemplate2(String template, Map<String, String> contentMap) throws IOException {
+    public static String renderTemplate2(String template,
+                                         Map<String, String> contentMap) throws IOException, BeetlException {
         // 初始化代码
         StringTemplateResourceLoader resourceLoader = new StringTemplateResourceLoader();
         Configuration cfg = Configuration.defaultConfiguration();

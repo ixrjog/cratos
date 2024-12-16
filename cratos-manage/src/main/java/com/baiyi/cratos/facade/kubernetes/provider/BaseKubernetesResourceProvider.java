@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -58,8 +57,8 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
                     edsInstance.getId());
             return holder.getProvider()
                     .importAsset(holder.getInstance(), asset);
-        } catch (IOException ioException) {
-            throw new KubernetesResourceTemplateException(ioException.getMessage());
+        } catch (Exception ex) {
+            throw new KubernetesResourceTemplateException(ex.getMessage());
         }
     }
 
