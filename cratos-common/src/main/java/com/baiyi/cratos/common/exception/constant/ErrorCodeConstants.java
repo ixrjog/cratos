@@ -40,4 +40,6 @@ public interface ErrorCodeConstants {
     int KUBERNETES_RESOURCE_TEMPLATE = 51000;
 
     int APPLICATION_ERROR = 52000;
+
+    int BEETL_ERROR = 53000;
 }

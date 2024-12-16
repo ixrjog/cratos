@@ -2,7 +2,7 @@ package com.baiyi.cratos.notification;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.BeetlUtil;
+import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;

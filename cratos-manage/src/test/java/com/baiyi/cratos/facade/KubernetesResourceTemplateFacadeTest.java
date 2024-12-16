@@ -33,7 +33,7 @@ public class KubernetesResourceTemplateFacadeTest extends BaseUnit {
     void test2() {
         KubernetesResourceTemplateParam.LockTemplate lockTemplate = KubernetesResourceTemplateParam.LockTemplate.builder()
                 .templateId(1)
-                .lock(true)
+                .locked(true)
                 .build();
         kubernetesResourceTemplateFacade.lockTemplate(lockTemplate);
     }

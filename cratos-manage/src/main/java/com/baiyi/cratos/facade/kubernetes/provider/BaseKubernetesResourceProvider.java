@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.kubernetes.provider;
 
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
-import com.baiyi.cratos.common.util.BeetlUtil;
+import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -49,7 +49,7 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
                                KubernetesResourceTemplateCustom.Custom custom) {
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(kubernetesInstance);
         try {
-            String content = BeetlUtil.renderTemplate2(member.getContent(), custom.getData());
+            String content = BeetlUtil.renderTemplateV2(member.getContent(), custom.getData());
             A asset = create(kubernetes, content);
             // 导入资产
             EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
@@ -75,14 +75,14 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
                                                                                  KubernetesResourceTemplateCustom.Custom custom) {
         List<KubernetesResourceTemplateCustom.KubernetesInstance> kubernetesInstances = findOf(namespace, custom);
         if (kubernetesInstances == null) {
-            throw new KubernetesResourceTemplateException("No Kubernetes instance found.");
+            KubernetesResourceTemplateException.runtime("No Kubernetes instance found.");
         }
         return kubernetesInstances;
     }
 
     protected EdsInstance getEdsInstance(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {
         if (kubernetesInstance == null) {
-            throw new KubernetesResourceTemplateException("kubernetesInstance is null.");
+            KubernetesResourceTemplateException.runtime("kubernetesInstance is null.");
         }
         if (IdentityUtil.hasIdentity(kubernetesInstance.getId())) {
             EdsInstance edsInstance = edsInstanceService.getById(kubernetesInstance.getId());

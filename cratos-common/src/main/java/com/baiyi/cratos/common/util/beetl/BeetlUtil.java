@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.util;
+package com.baiyi.cratos.common.util.beetl;
 
 import lombok.NoArgsConstructor;
 import org.beetl.core.Configuration;
@@ -40,14 +40,15 @@ public final class BeetlUtil {
         return t.render();
     }
 
-    public static String renderTemplate2(String template,
-                                         Map<String, String> contentMap) throws IOException, BeetlException {
+    public static String renderTemplateV2(String template,
+                                          Map<String, String> contentMap) throws IOException, BeetlException {
         // 初始化代码
         StringTemplateResourceLoader resourceLoader = new StringTemplateResourceLoader();
         Configuration cfg = Configuration.defaultConfiguration();
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
         // 获取模板
         Template t = gt.getTemplate(template);
+        gt.setErrorHandler(new BeetlErrorHandler());
         t.binding(contentMap);
         return t.render();
     }
