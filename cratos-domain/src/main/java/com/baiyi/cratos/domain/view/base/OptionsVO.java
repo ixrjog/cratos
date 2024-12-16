@@ -45,12 +45,18 @@ public class OptionsVO {
     @Data
     @Schema
     @Builder
-    public static class Option {
+    public static class Option implements Comparable<Option> {
         private String label;
         private Object value;
         @Builder.Default
         private Boolean disabled = false;
+        private Integer seq;
         private Object comment;
+
+        @Override
+        public int compareTo(Option o) {
+            return this.seq.compareTo(o.getSeq());
+        }
     }
 
 }

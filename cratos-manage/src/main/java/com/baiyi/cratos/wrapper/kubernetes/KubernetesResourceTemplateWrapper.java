@@ -41,6 +41,19 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
                 vo.getCustom());
         vo.setNamespaces(getNamespaces(templateCustom));
         vo.setKinds(getKinds(vo));
+        vo.setInstances(getInstances(templateCustom));
+    }
+
+    private List<KubernetesResourceTemplateVO.KubernetesInstance> getInstances(
+            KubernetesResourceTemplateCustom.Custom templateCustom) {
+        return templateCustom.getInstances()
+                .stream()
+                .map(e -> KubernetesResourceTemplateVO.KubernetesInstance.builder()
+                        .id(e.getId())
+                        .name(e.getName())
+                        .selected(e.getSelected() != null ? e.getSelected() : false)
+                        .build())
+                .toList();
     }
 
     /**

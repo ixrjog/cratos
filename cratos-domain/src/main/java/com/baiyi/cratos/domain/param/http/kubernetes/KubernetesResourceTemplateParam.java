@@ -82,6 +82,7 @@ public class KubernetesResourceTemplateParam {
         private String custom;
         private Set<String> namespaces;
         private Set<String> kinds;
+        private Set<Integer> instances;
         private String createdBy;
 
         @Override

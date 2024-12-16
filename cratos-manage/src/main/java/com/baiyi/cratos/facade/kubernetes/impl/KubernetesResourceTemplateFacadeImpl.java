@@ -71,6 +71,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     @Override
     public void addTemplate(KubernetesResourceTemplateParam.AddTemplate addTemplate) {
         KubernetesResourceTemplate kubernetesResourceTemplate = addTemplate.toTarget();
+        KubernetesResourceTemplateCustom.loadAs(addTemplate.getCustom());
         templateService.add(kubernetesResourceTemplate);
     }
 
@@ -83,6 +84,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         kubernetesResourceTemplate.setName(updateTemplate.getName());
         kubernetesResourceTemplate.setApiVersion(updateTemplate.getApiVersion());
         kubernetesResourceTemplate.setCustom(updateTemplate.getCustom());
+        KubernetesResourceTemplateCustom.loadAs(updateTemplate.getCustom());
         templateService.updateByPrimaryKey(kubernetesResourceTemplate);
     }
 
@@ -154,7 +156,14 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 throw new KubernetesResourceTemplateException("Template ID or Key must be specified.");
             }
         }
-        KubernetesResourceTemplateCustom.Custom templateCustom = getCustomFromUserMergeTemplate(createResourceByTemplate);
+        KubernetesResourceTemplateCustom.Custom templateCustom = getCustomFromUserMergeTemplate(
+                createResourceByTemplate);
+        // 过滤实例
+        templateCustom.setInstances(templateCustom.getInstances()
+                .stream()
+                .filter(e -> createResourceByTemplate.getInstances()
+                        .contains(e.getId()))
+                .toList());
         List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
             String createdBy = createResourceByTemplate.getCreatedBy();
@@ -210,6 +219,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
 
     /**
      * 获取模板的Custom
+     *
      * @param createResourceByTemplate
      * @return
      */

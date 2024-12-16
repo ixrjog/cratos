@@ -83,6 +83,7 @@ public class KubernetesResourceTemplateCustom {
     public static class KubernetesInstance {
         private String name;
         private Integer id;
+        private Boolean selected;
         private List<String> namespaces;
     }
 

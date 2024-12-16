@@ -10,7 +10,13 @@ import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.EnvWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.VERY_SHORT;
 
 /**
  * @Author baiyi
@@ -47,6 +53,14 @@ public class EnvFacadeImpl implements EnvFacade {
         if (envService.getByUniqueKey(env) == null) {
             envService.add(env);
         }
+    }
+
+    @Override
+    @CacheEvict(cacheNames = VERY_SHORT, key = "'DOMAIN:ENVMAP'")
+    public Map<String, Env> getEnvMap() {
+        return envService.selectAll()
+                .stream()
+                .collect(Collectors.toMap(Env::getEnvName, a -> a, (k1, k2) -> k1));
     }
 
     @Override

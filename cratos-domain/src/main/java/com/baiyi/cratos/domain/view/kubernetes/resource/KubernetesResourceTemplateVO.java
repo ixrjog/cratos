@@ -7,8 +7,7 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -49,6 +48,7 @@ public class KubernetesResourceTemplateVO {
         private String comment;
         private List<String> namespaces;
         private Set<String> kinds;
+        private List<KubernetesInstance> instances;
 
         @Override
         public Integer getBusinessId() {
@@ -65,6 +65,16 @@ public class KubernetesResourceTemplateVO {
         public Integer getTemplateId() {
             return id;
         }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class KubernetesInstance {
+        private String name;
+        private Integer id;
+        private Boolean selected;
     }
 
     @EqualsAndHashCode(callSuper = true)

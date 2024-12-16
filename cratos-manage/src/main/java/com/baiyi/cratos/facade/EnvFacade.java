@@ -1,8 +1,11 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
+
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -16,5 +19,7 @@ public interface EnvFacade extends HasSetValid {
     void updateEnv(EnvParam.UpdateEnv updateEnv);
 
     void addEnv(EnvParam.AddEnv addEnv);
+
+    Map<String, Env> getEnvMap();
 
 }

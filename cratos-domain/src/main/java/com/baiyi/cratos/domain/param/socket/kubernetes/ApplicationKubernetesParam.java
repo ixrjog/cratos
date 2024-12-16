@@ -3,10 +3,11 @@ package com.baiyi.cratos.domain.param.socket.kubernetes;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -22,7 +23,6 @@ public class ApplicationKubernetesParam {
 
     @Data
     @Builder
-    @Schema
     public static class KubernetesDetailsRequest implements HasSocketRequest {
         private String topic;
         private String action;
@@ -30,6 +30,33 @@ public class ApplicationKubernetesParam {
         private String applicationName;
         @NotBlank
         private String namespace;
+    }
+
+    @Data
+    @Builder
+    public static class KubernetesWatchLogRequest implements HasSocketRequest {
+        private String topic;
+        private String action;
+        @NotBlank
+        private String applicationName;
+        @NotBlank
+        private String namespace;
+        private List<PodRequest> pods;
+    }
+
+    @Data
+    @Builder
+    public static class KubernetesExecRequest implements HasSocketRequest {
+        private String topic;
+        private String action;
+    }
+
+    @Data
+    @Builder
+    public static class PodRequest {
+        private String podName;
+        private String namespace;
+        private String containerName;
     }
 
 }

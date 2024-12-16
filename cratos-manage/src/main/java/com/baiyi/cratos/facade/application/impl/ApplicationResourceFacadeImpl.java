@@ -9,8 +9,10 @@ import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
@@ -27,6 +29,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -43,6 +46,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     private final UserPermissionFacade userPermissionFacade;
     private final RbacFacade rbacFacade;
     private final RbacUserRoleFacade rbacUserRoleFacade;
+    private final EnvFacade envFacade;
 
     @Override
     public void scan(String applicationName) {
@@ -95,7 +99,19 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
 
     @Override
     public OptionsVO.Options getNamespaceOptions() {
-        return OptionsVO.toOptions(resourceService.getNamespaceOptions());
+        List<String> namespaces = resourceService.getNamespaceOptions();
+        Map<String, Env> envMap = envFacade.getEnvMap();
+        return OptionsVO.Options.builder()
+                .options(namespaces.stream()
+                        .map(namespace -> OptionsVO.Option.builder()
+                                .label(namespace)
+                                .value(namespace)
+                                .disabled(false)
+                                .seq(getNamespaceSeq(namespace, envMap))
+                                .build())
+                        .sorted()
+                        .toList())
+                .build();
     }
 
     @Override
@@ -121,29 +137,32 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .businessId(application.getId())
                 .build();
-        List<OptionsVO.Option> optionList = namespaces.stream()
-                .map(namespace -> OptionsVO.Option.builder()
-                        .label(namespace)
-                        .value(namespace)
-                        .disabled(!userPermissionFacade.contains(
-                                getMyApplicationResourceNamespaceOptions.getSessionUser(), business, namespace))
-                        .build())
-                .toList();
         return getMyApplicationResourceNamespaceOptions(getMyApplicationResourceNamespaceOptions.getSessionUser(),
                 namespaces, business);
     }
 
     private OptionsVO.Options getMyApplicationResourceNamespaceOptions(String username, List<String> namespaces,
                                                                        BaseBusiness.HasBusiness business) {
+        Map<String, Env> envMap = envFacade.getEnvMap();
         return OptionsVO.Options.builder()
                 .options(namespaces.stream()
                         .map(namespace -> OptionsVO.Option.builder()
                                 .label(namespace)
                                 .value(namespace)
                                 .disabled(userPermissionFacade.contains(username, business, namespace))
+                                .seq(getNamespaceSeq(namespace, envMap))
                                 .build())
+                        .sorted()
                         .toList())
                 .build();
+    }
+
+    private int getNamespaceSeq(String namespace, Map<String, Env> envMap) {
+        if (envMap.containsKey(namespace)) {
+            return envMap.get(namespace)
+                    .getSeq();
+        }
+        return Integer.MAX_VALUE;
     }
 
 }
