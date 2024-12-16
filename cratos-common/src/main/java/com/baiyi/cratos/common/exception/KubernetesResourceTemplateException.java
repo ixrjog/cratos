@@ -33,4 +33,8 @@ public class KubernetesResourceTemplateException extends BaseException {
         this.code = KUBERNETES_RESOURCE_TEMPLATE;
     }
 
+    public static void runtime(String message) {
+        throw new KubernetesResourceTemplateException(message);
+    }
+
 }

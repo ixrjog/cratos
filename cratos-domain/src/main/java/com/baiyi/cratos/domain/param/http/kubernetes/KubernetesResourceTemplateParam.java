@@ -75,6 +75,17 @@ public class KubernetesResourceTemplateParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
+    public static class LockTemplate {
+        @NotNull
+        private Integer templateId;
+        @NotNull
+        private Boolean lock;
+    }
+
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
     public static class CreateResourceByTemplate implements HasSessionUser {
         // Choose between ID or Key and fill in one
         private Integer templateId;
@@ -99,6 +110,7 @@ public class KubernetesResourceTemplateParam {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
+        private Boolean lock;
         private String custom;
         private String comment;
     }
@@ -112,6 +124,7 @@ public class KubernetesResourceTemplateParam {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
+        private Boolean lock;
         private String custom;
         private String comment;
     }

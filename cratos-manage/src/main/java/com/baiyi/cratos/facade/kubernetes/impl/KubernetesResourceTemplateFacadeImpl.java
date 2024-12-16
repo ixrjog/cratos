@@ -51,6 +51,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     private final KubernetesResourceService resourceService;
     private final KubernetesResourceTemplateMemberFacade templateMemberFacade;
 
+    private static final boolean LOCKED = true;
+
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
     public DataTable<KubernetesResourceTemplateVO.Template> queryTemplatePage(
@@ -60,10 +62,20 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     }
 
     @Override
+    public void lockTemplate(KubernetesResourceTemplateParam.LockTemplate lockTemplate) {
+        KubernetesResourceTemplate template = templateService.getById(lockTemplate.getTemplateId());
+        if (template == null) {
+            KubernetesResourceTemplateException.runtime("Template does not exist.");
+        }
+        template.setLock(lockTemplate.getLock());
+        templateService.updateByPrimaryKey(template);
+    }
+
+    @Override
     public KubernetesResourceTemplateVO.Template getTemplateById(int id) {
         KubernetesResourceTemplate template = templateService.getById(id);
         if (template == null) {
-            throw new KubernetesResourceTemplateException("Template does not exist.");
+            KubernetesResourceTemplateException.runtime("Template does not exist.");
         }
         return templateWrapper.wrapToTarget(template);
     }
@@ -81,6 +93,9 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
         if (kubernetesResourceTemplate == null) {
             return;
         }
+        if (kubernetesResourceTemplate.getLock() == LOCKED) {
+            KubernetesResourceTemplateException.runtime("Template is locked and cannot be modified.");
+        }
         kubernetesResourceTemplate.setName(updateTemplate.getName());
         kubernetesResourceTemplate.setApiVersion(updateTemplate.getApiVersion());
         kubernetesResourceTemplate.setCustom(updateTemplate.getCustom());
@@ -96,9 +111,12 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(int id) {
-        KubernetesResourceTemplate template = templateService.getById(id);
-        if (template == null) {
+        KubernetesResourceTemplate kubernetesResourceTemplate = templateService.getById(id);
+        if (kubernetesResourceTemplate == null) {
             return;
+        }
+        if (kubernetesResourceTemplate.getLock() == LOCKED) {
+            KubernetesResourceTemplateException.runtime("Template is locked and cannot be modified.");
         }
         templateMemberService.queryMemberByTemplateId(id)
                 .forEach(member -> templateMemberFacade.deleteById(member.getId()));

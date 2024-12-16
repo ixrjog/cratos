@@ -54,6 +54,14 @@ public class KubernetesResourceController {
         return new HttpResult<>(templateFacade.getTemplateById(id));
     }
 
+    @Operation(summary = "Lock kubernetes resource template")
+    @PutMapping(value = "/template/lock", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> lockTemplate(
+            @RequestBody @Valid KubernetesResourceTemplateParam.LockTemplate lockTemplate) {
+        templateFacade.lockTemplate(lockTemplate);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Copy kubernetes resource template")
     @PostMapping(value = "/template/copy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesResourceTemplateVO.Template> copyTemplate(

@@ -51,6 +51,8 @@ public class KubernetesResourceTemplate implements HasValid, HasIntegerPrimaryKe
      */
     private Boolean valid;
 
+    private Boolean lock;
+
     /**
      * 创建时间
      */

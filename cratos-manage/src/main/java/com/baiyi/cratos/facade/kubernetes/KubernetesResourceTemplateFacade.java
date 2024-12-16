@@ -16,6 +16,8 @@ public interface KubernetesResourceTemplateFacade extends HasSetValid {
     DataTable<KubernetesResourceTemplateVO.Template> queryTemplatePage(
             KubernetesResourceTemplateParam.TemplatePageQuery pageQuery);
 
+    void lockTemplate(KubernetesResourceTemplateParam.LockTemplate lockTemplate);
+
     KubernetesResourceTemplateVO.Template getTemplateById(int id);
 
     void addTemplate(KubernetesResourceTemplateParam.AddTemplate addTemplate);
