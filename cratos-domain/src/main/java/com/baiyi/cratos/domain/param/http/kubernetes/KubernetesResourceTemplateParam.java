@@ -110,7 +110,7 @@ public class KubernetesResourceTemplateParam {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
-        private Boolean lock;
+        private Boolean locked;
         private String custom;
         private String comment;
     }
@@ -124,7 +124,7 @@ public class KubernetesResourceTemplateParam {
         private String templateKey;
         private String apiVersion;
         private Boolean valid;
-        private Boolean lock;
+        private Boolean locked;
         private String custom;
         private String comment;
     }
