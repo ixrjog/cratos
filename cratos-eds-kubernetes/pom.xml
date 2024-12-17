@@ -16,7 +16,8 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- https://github.com/fabric8io/kubernetes-client -->
-        <fabric8-sdk.version>6.13.4</fabric8-sdk.version>
+        <fabric8-sdk.version>7.0.0</fabric8-sdk.version>
+<!--        <fabric8-sdk.version>6.13.4</fabric8-sdk.version>-->
     </properties>
 
     <dependencies>
@@ -32,7 +33,7 @@
         <dependency>
             <groupId>io.fabric8</groupId>
             <artifactId>kubernetes-model</artifactId>
-            <version>${fabric8-sdk.version}</version>
+            <version>6.13.4</version>
         </dependency>
         <!--  https://search.maven.org/artifact/io.fabric8/istio-client/6.9.0/jar?eh= -->
         <dependency>
