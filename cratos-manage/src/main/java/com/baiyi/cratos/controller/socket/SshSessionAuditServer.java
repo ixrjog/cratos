@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.UUID;
 
 
@@ -38,7 +39,7 @@ public class SshSessionAuditServer extends BaseSocketAuthenticationServer {
                 BaseChannelHandler<SshSessionAuditParam.AuditRequest> handler = (BaseChannelHandler<SshSessionAuditParam.AuditRequest>) SshAuditChannelHandlerFactory.getHandler(
                         auditRequest.getTopic());
                 handler.handleRequest(sessionId, session, auditRequest);
-            } catch (IllegalArgumentException ignored) {
+            } catch (IllegalArgumentException | IOException ignored) {
             }
         }
     }

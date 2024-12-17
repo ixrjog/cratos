@@ -43,6 +43,10 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
                 log.debug(e.getMessage());
             }
         }
+        close();
+    }
+
+    private void close() {
         KubernetesDetailsRequestSession.remove(this.sessionId);
     }
 

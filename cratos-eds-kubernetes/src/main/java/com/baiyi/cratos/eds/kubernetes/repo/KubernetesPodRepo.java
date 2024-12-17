@@ -9,6 +9,7 @@ import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.Listable;
+import io.fabric8.kubernetes.client.dsl.LogWatch;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +78,8 @@ public class KubernetesPodRepo {
         }
     }
 
-    public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,@NonNull String namespace, Map<String, String> labels) {
+    public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
+                          Map<String, String> labels) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             PodList podList = kc.pods()
                     .inNamespace(namespace)
@@ -92,9 +95,19 @@ public class KubernetesPodRepo {
         }
     }
 
+    public LogWatch getLogWatch(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace,
+                                String podName, String containerName, Integer lines, OutputStream outputStream) {
+        return kubernetesClientBuilder.build(kubernetes)
+                .pods()
+                .inNamespace(namespace)
+                .withName(podName)
+                .inContainer(containerName)
+                .tailingLines(lines)
+                .watchLog(outputStream);
+    }
+
     @Data
     public static class SimpleListener implements ExecListener {
-
         private boolean isClosed = false;
 
         @Override

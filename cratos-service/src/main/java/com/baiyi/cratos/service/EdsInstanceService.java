@@ -23,4 +23,6 @@ public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance, Ed
 
     List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
+    EdsInstance getByName(String instanceName);
+
 }

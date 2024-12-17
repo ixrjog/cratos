@@ -48,6 +48,14 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     }
 
     @Override
+    public EdsInstance getByName(String instanceName) {
+        EdsInstance uniqueKey = EdsInstance.builder()
+                .instanceName(instanceName)
+                .build();
+        return getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     public int selectCountByConfigId(Integer configId) {
         Example example = new Example(EdsInstance.class);
         Example.Criteria criteria = example.createCriteria();

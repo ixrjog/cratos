@@ -12,6 +12,8 @@ import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/22 17:19
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesDetailsChannelHandler {
+public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesDetailsChannelHandler<ApplicationKubernetesParam.KubernetesDetailsRequest> {
 
     private final ApplicationKubernetesDetailsFacade kubernetesDetailsFacade;
 
@@ -30,7 +32,7 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
 
     @Override
     public void handleRequest(String sessionId, Session session,
-                              ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException {
+                              ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException, IOException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {
             QueryKubernetesDetails param = QueryKubernetesDetails.builder()

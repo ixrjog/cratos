@@ -6,6 +6,7 @@ import jakarta.websocket.Session;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +38,7 @@ public class KubernetesDetailsChannelHandlerFactory {
                         message.getTopic());
                 handler.handleRequest(sessionId, session, message);
             }
-        } catch (IllegalStateException | ClassCastException ex) {
+        } catch (IllegalStateException | ClassCastException | IOException ex) {
             log.error(ex.getMessage(), ex);
         }
     }
