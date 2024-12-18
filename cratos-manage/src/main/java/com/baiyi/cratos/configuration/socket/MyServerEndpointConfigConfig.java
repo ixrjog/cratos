@@ -1,5 +1,6 @@
 package com.baiyi.cratos.configuration.socket;
 
+import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.google.common.collect.Lists;
@@ -48,15 +49,19 @@ public class MyServerEndpointConfigConfig extends ServerEndpointConfig.Configura
                 .get(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL);
         if (!CollectionUtils.isEmpty(list)) {
             String token = list.getFirst();
-            UserToken userToken = userTokenFacade.verifyToken(token);
-            String username = request.getParameterMap()
-                    .get("username")
-                    .getFirst();
-            if (userToken.getUsername()
-                    .equals(username)) {
-                response.getHeaders()
-                        .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, Lists.newArrayList(token));
-                userProperties.put("id", username);
+            try {
+                UserToken userToken = userTokenFacade.verifyToken(token);
+                String username = request.getParameterMap()
+                        .get("username")
+                        .getFirst();
+                if (userToken.getUsername()
+                        .equals(username)) {
+                    response.getHeaders()
+                            .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, Lists.newArrayList(token));
+                    userProperties.put("id", username);
+                }
+            } catch (AuthenticationException ignored) {
+                // 认证失败
             }
         }
         super.modifyHandshake(config, request, response);
