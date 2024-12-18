@@ -60,12 +60,14 @@ public class KubernetesDeploymentBuilder {
                         .getStrategy()
                         .getRollingUpdate()
                         .getMaxSurge()
-                        .getStrVal())
+                        .getValue()
+                        .toString())
                 .maxUnavailable(this.deployment.getSpec()
                         .getStrategy()
                         .getRollingUpdate()
                         .getMaxUnavailable()
-                        .getStrVal())
+                        .getValue()
+                        .toString())
                 .build();
     }
 
@@ -152,7 +154,8 @@ public class KubernetesDeploymentBuilder {
     }
 
     private Map<String, String> makeAttributes() {
-       return KubernetesDeploymentAttributeBuilder.newBuilder().withDeployment(this.deployment)
+        return KubernetesDeploymentAttributeBuilder.newBuilder()
+                .withDeployment(this.deployment)
                 .build();
     }
 

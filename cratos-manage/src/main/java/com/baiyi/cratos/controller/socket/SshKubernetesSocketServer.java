@@ -4,14 +4,13 @@ import com.baiyi.cratos.common.model.CratosHostHolder;
 import com.baiyi.cratos.configuration.WebSocketConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.generator.SshSession;
-import com.baiyi.cratos.domain.ssh.SimpleState;
+import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.service.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
-import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
 import com.baiyi.cratos.ssh.core.task.crystal.SentOutputTask;
-import com.baiyi.cratos.ssh.crystal.factory.SshCrystalMessageHandlerFactory;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -21,22 +20,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
-
-import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT;
-import static com.baiyi.cratos.ssh.core.SshCrystalMessageHandler.NO_MESSAGE;
+import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/9/12 10:57
+ * &#064;Date  2024/12/18 10:06
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/ssh/crystal/{username}", configurator = WebSocketConfig.class)
 @Component
-public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
+@ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = WebSocketConfig.class)
+public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     private SshSession sshSession;
     private static SshSessionService sshSessionService;
+    public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
     private final String sessionId = UUID.randomUUID()
             .toString();
 
@@ -46,51 +44,50 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
     }
 
     private static void setSshSession(SshSessionService sshSessionService) {
-        SshCrystalSocketServer.sshSessionService = sshSessionService;
+        SshKubernetesSocketServer.sshSessionService = sshSessionService;
     }
 
+    @Override
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
+        super.onOpen(session, username);
+        session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
-            log.info("Crystal ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
+            log.info("Kubernetes ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
                     host.getHostAddress());
-            SshSession sshSession = SshSessionBuilder.build(sessionId, username, host, SshSessionTypeEnum.WEB_SHELL);
-            sshSessionService.add(sshSession);
+            SshSession sshSession = SshSessionBuilder.build(sessionId, username, host, SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
+            SshKubernetesSocketServer.sshSessionService.add(sshSession);
             this.sshSession = sshSession;
-            session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
             // 启动任务 JDK21 VirtualThreads
             Thread.ofVirtual()
-                    .start(new SentOutputTask(sessionId, session));
+                    .start(SentOutputTask.newTask(sessionId, session));
         } catch (Exception e) {
-            log.error("Crystal ssh create connection error: {}", e.getMessage());
+            log.error("Kubernetes ssh create connection error: {}", e.getMessage());
         }
+
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)
     public void onMessage(Session session, String message) {
-        if (!session.isOpen() || !StringUtils.hasText(message)) {
-            return;
+        if (StringUtils.hasText(message)) {
+            try {
+                ApplicationKubernetesParam.KubernetesDetailsRequest kubernetesDetailsRequest = ApplicationKubernetesParam.loadAs(
+                        message);
+                KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
+            } catch (JsonSyntaxException ignored) {
+            }
         }
-        try {
-            SimpleState ss = new GsonBuilder().create()
-                    .fromJson(message, SimpleState.class);
-            SshCrystalMessageHandlerFactory.getByState(ss.getState())
-                    .handle(message, session, sshSession);
-        } catch (Exception e) {
-            log.debug(e.getMessage());
-        }
-    }
-
-    @OnClose
-    public void onClose(Session session) {
-        SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE.name())
-                .handle(NO_MESSAGE, session, sshSession);
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
         // TODO
+    }
+
+    @OnClose
+    public void onClose(Session session) {
+        KubernetesDetailsRequestSession.remove(sessionId);
     }
 
 }

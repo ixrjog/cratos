@@ -27,6 +27,10 @@ public class SentOutputTask implements Runnable {
         this.session = session;
     }
 
+    public static SentOutputTask newTask(String sessionId, Session session) {
+        return new SentOutputTask(sessionId, session);
+    }
+
     @Override
     public void run() {
         try {

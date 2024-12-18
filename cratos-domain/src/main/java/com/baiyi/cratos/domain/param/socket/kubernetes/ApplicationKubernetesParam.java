@@ -45,6 +45,18 @@ public class ApplicationKubernetesParam {
 
     @Data
     @Builder
+    public static class KubernetesContainerTerminalResize implements HasSocketRequest {
+        private String topic;
+        private String action;
+        //@NotBlank
+        private String applicationName;
+        //@NotBlank
+        private String namespace;
+        private List<DeploymentRequest> deployments;
+    }
+
+    @Data
+    @Builder
     public static class KubernetesExecRequest implements HasSocketRequest {
         private String topic;
         private String action;
