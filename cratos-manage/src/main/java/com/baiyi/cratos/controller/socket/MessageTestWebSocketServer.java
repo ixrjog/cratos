@@ -1,6 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/test/{username}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/socket/test/{username}", configurator = MyServerEndpointConfigConfig.class)
 @Component
 public class MessageTestWebSocketServer {
 

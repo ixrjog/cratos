@@ -1,6 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@ServerEndpoint(value = "/socket/application/kubernetes/details/{username}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/socket/application/kubernetes/details/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class ApplicationKubernetesDetailsServer extends BaseSocketAuthenticationServer {
 
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(5);

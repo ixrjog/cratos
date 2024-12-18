@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -33,9 +34,13 @@ public class KubernetesResourceTemplateMemberServiceImpl implements KubernetesRe
         Example example = new Example(KubernetesResourceTemplateMember.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("templateId", record.getTemplateId())
-                .andEqualTo("name", record.getName())
                 .andEqualTo("namespace", record.getNamespace())
                 .andEqualTo("kind", record.getKind());
+        if (StringUtils.hasText(record.getName())) {
+            criteria.andEqualTo("name", record.getName());
+        } else {
+            criteria.andIsNull("name");
+        }
         return getMapper().selectOneByExample(example);
     }
 
@@ -66,7 +71,7 @@ public class KubernetesResourceTemplateMemberServiceImpl implements KubernetesRe
     }
 
     @Override
-    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:KUBERNETESRESOURCETEMPLATEMEMBER:ID:' + #id")
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:KUBERNETES_RESOURCE_TEMPLATE_MEMBER:ID:' + #id")
     public void clearCacheById(int id) {
     }
 

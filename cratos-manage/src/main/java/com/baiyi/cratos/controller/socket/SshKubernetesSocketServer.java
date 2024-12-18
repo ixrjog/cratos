@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.common.model.CratosHostHolder;
-import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-@ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     private SshSession sshSession;

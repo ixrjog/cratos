@@ -1,6 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
-import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.channel.factory.SshAuditChannelHandlerFactory;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @SuppressWarnings("ALL")
 @Slf4j
 @Component
-@ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/socket/ssh/audit/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshSessionAuditServer extends BaseSocketAuthenticationServer {
 
     private final String sessionId = UUID.randomUUID()

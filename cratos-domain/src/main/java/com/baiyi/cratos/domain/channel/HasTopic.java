@@ -12,5 +12,7 @@ public interface HasTopic {
     String APPLICATION_KUBERNETES_WATCH_LOG = "APPLICATION_KUBERNETES_WATCH_LOG";
     String PLAY_SSH_SESSION_AUDIT = "PLAY_SSH_SESSION_AUDIT";
 
+    String ERROR =  "ERROR";
+
     String getTopic();
 }

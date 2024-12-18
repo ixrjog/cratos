@@ -1,7 +1,7 @@
 package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.common.model.CratosHostHolder;
-import com.baiyi.cratos.configuration.WebSocketConfig;
+import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.ssh.SimpleState;
@@ -31,7 +31,7 @@ import static com.baiyi.cratos.ssh.core.SshCrystalMessageHandler.NO_MESSAGE;
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/ssh/crystal/{username}", configurator = WebSocketConfig.class)
+@ServerEndpoint(value = "/socket/ssh/crystal/{username}", configurator = MyServerEndpointConfigConfig.class)
 @Component
 public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 

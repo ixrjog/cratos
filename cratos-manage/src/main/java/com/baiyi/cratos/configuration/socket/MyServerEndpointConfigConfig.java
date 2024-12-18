@@ -1,7 +1,5 @@
-package com.baiyi.cratos.configuration;
+package com.baiyi.cratos.configuration.socket;
 
-import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.google.common.collect.Lists;
@@ -9,13 +7,12 @@ import jakarta.websocket.HandshakeResponse;
 import jakarta.websocket.server.HandshakeRequest;
 import jakarta.websocket.server.ServerEndpointConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -24,7 +21,7 @@ import java.util.List;
  */
 @Configuration
 @Component
-public class WebSocketConfig extends ServerEndpointConfig.Configurator {
+public class MyServerEndpointConfigConfig extends ServerEndpointConfig.Configurator {
 
     private static UserTokenFacade userTokenFacade;
 
@@ -33,13 +30,8 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
         setFacade(userTokenFacade);
     }
 
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
-    }
-
     private static void setFacade(UserTokenFacade userTokenFacade) {
-        WebSocketConfig.userTokenFacade = userTokenFacade;
+        MyServerEndpointConfigConfig.userTokenFacade = userTokenFacade;
     }
 
     /**
@@ -51,6 +43,7 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
      */
     @Override
     public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request, HandshakeResponse response) {
+        final Map<String, Object> userProperties = config.getUserProperties();
         List<String> list = request.getHeaders()
                 .get(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL);
         if (!CollectionUtils.isEmpty(list)) {
@@ -59,12 +52,12 @@ public class WebSocketConfig extends ServerEndpointConfig.Configurator {
             String username = request.getParameterMap()
                     .get("username")
                     .getFirst();
-            if (!userToken.getUsername()
+            if (userToken.getUsername()
                     .equals(username)) {
-                throw new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED);
+                response.getHeaders()
+                        .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, Lists.newArrayList(token));
+                userProperties.put("id", username);
             }
-            response.getHeaders()
-                    .put(HandshakeRequest.SEC_WEBSOCKET_PROTOCOL, Lists.newArrayList(token));
         }
         super.modifyHandshake(config, request, response);
     }

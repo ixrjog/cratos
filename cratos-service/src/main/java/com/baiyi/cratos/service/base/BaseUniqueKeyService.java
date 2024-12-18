@@ -19,7 +19,8 @@ public interface BaseUniqueKeyService<T extends HasIntegerPrimaryKey, M extends 
         if (record == null) {
             throw new DaoServiceException("The insertion record does not exist.");
         }
-        if (getByUniqueKey(record) != null) {
+        T tryRecord = getByUniqueKey(record);
+        if (tryRecord != null) {
             throw new DaoServiceException("Union key conflict.");
         }
         try {
