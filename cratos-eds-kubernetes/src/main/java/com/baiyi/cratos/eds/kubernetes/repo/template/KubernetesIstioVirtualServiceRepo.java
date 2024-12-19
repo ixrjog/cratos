@@ -29,46 +29,56 @@ public class KubernetesIstioVirtualServiceRepo extends BaseKubernetesResourceRep
 
     @Override
     protected VirtualService create(IstioClient client, VirtualService resource) {
-        return client.v1alpha3()
-                .virtualServices()
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.v1alpha3()
+                    .virtualServices()
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected VirtualService get(IstioClient client, String namespace, String name) {
-        return client.v1alpha3()
-                .virtualServices()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .virtualServices()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected VirtualService find(IstioClient client, VirtualService resource) {
-        return client.v1alpha3()
-                .virtualServices()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .virtualServices()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(IstioClient client, VirtualService resource) {
-        client.v1alpha3()
-                .virtualServices()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .delete();
+        try (client) {
+            client.v1alpha3()
+                    .virtualServices()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .delete();
+        }
     }
 
     @Override
     protected List<VirtualService> list(IstioClient client, String namespace) {
-        return client.v1alpha3()
-                .virtualServices()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.v1alpha3()
+                    .virtualServices()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override

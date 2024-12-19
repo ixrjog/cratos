@@ -29,45 +29,55 @@ public class KubernetesIstioDestinationRuleRepo extends BaseKubernetesResourceRe
 
     @Override
     protected DestinationRule create(IstioClient client, DestinationRule resource) {
-        return client.v1alpha3()
-                .destinationRules()
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.v1alpha3()
+                    .destinationRules()
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected DestinationRule get(IstioClient client, String namespace, String name) {
-        return client.v1alpha3()
-                .destinationRules()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .destinationRules()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected DestinationRule find(IstioClient client, DestinationRule resource) {
-        return client.v1alpha3()
-                .destinationRules()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .destinationRules()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(IstioClient client, DestinationRule resource) {
-        client.v1alpha3()
-                .destinationRules()
-                .resource(resource)
-                .delete();
+        try (client) {
+            client.v1alpha3()
+                    .destinationRules()
+                    .resource(resource)
+                    .delete();
+        }
     }
 
     @Override
     protected List<DestinationRule> list(IstioClient client, String namespace) {
-        return client.v1alpha3()
-                .destinationRules()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.v1alpha3()
+                    .destinationRules()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override

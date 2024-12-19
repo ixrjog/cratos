@@ -29,46 +29,56 @@ public class KubernetesIstioEnvoyFilterRepo extends BaseKubernetesResourceRepo<I
 
     @Override
     protected EnvoyFilter create(IstioClient client, EnvoyFilter resource) {
-        return client.v1alpha3()
-                .envoyFilters()
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.v1alpha3()
+                    .envoyFilters()
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected EnvoyFilter get(IstioClient client, String namespace, String name) {
-        return client.v1alpha3()
-                .envoyFilters()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .envoyFilters()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected EnvoyFilter find(IstioClient client, EnvoyFilter resource) {
-        return client.v1alpha3()
-                .envoyFilters()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.v1alpha3()
+                    .envoyFilters()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(IstioClient client, EnvoyFilter resource) {
-        client.v1alpha3()
-                .envoyFilters()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .delete();
+        try (client) {
+            client.v1alpha3()
+                    .envoyFilters()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .delete();
+        }
     }
 
     @Override
     protected List<EnvoyFilter> list(IstioClient client, String namespace) {
-        return client.v1alpha3()
-                .envoyFilters()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.v1alpha3()
+                    .envoyFilters()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override

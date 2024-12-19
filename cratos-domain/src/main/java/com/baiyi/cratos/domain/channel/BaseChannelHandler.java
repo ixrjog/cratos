@@ -16,8 +16,10 @@ public interface BaseChannelHandler<T extends HasSocketRequest> extends HasTopic
     void handleRequest(String sessionId, Session session, T message) throws IllegalStateException, IOException;
 
     default void send(Session session, MessageResponse<?> response) throws IllegalStateException, IOException {
-        session.getBasicRemote()
-                .sendText(response.toString());
+        if (session.isOpen()) {
+            session.getBasicRemote()
+                    .sendText(response.toString());
+        }
     }
 
 }

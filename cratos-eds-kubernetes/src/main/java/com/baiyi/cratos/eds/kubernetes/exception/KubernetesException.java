@@ -32,6 +32,10 @@ public class KubernetesException extends BaseException {
         setCode(code);
     }
 
+    public static void runtime(String message) {
+        throw new KubernetesException(message);
+    }
+
     public KubernetesException(ErrorEnum errorEnum) {
         super(errorEnum);
     }

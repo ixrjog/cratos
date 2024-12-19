@@ -73,52 +73,62 @@ public class KubernetesIngressRepo extends BaseKubernetesResourceRepo<Kubernetes
 
     @Override
     protected Ingress create(KubernetesClient client, Ingress resource) {
-        return client.network()
-                .v1()
-                .ingresses()
-                .inNamespace(getNamespace(resource))
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.network()
+                    .v1()
+                    .ingresses()
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected Ingress get(KubernetesClient client, String namespace, String name) {
-        return client.network()
-                .v1()
-                .ingresses()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.network()
+                    .v1()
+                    .ingresses()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected Ingress find(KubernetesClient client, Ingress resource) {
-        return client.network()
-                .v1()
-                .ingresses()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.network()
+                    .v1()
+                    .ingresses()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(KubernetesClient client, Ingress resource) {
-        client.network()
-                .v1()
-                .ingresses()
-                .inNamespace(getNamespace(resource))
-                .resource(resource)
-                .delete();
+        try (client) {
+            client.network()
+                    .v1()
+                    .ingresses()
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
+                    .delete();
+        }
     }
 
     @Override
     protected List<Ingress> list(KubernetesClient client, String namespace) {
-        return client.network()
-                .v1()
-                .ingresses()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.network()
+                    .v1()
+                    .ingresses()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
 }

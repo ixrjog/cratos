@@ -38,6 +38,7 @@ public class KubernetesCommonVO {
         private Date creationTimestamp;
         private String generateName;
         private String uid;
+        private Map<String, String> labels;
     }
 
     @Data

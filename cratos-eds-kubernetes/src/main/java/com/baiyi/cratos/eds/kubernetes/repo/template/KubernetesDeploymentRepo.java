@@ -166,11 +166,13 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
 
     @Override
     protected List<Deployment> list(KubernetesClient client, String namespace) {
-        return client.apps()
-                .deployments()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.apps()
+                    .deployments()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override
@@ -191,40 +193,48 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         // 删除资源版本
         resource.getMetadata()
                 .setResourceVersion(null);
-        return client.apps()
-                .deployments()
-                .inNamespace(resource.getMetadata()
-                        .getNamespace())
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.apps()
+                    .deployments()
+                    .inNamespace(resource.getMetadata()
+                            .getNamespace())
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected Deployment get(KubernetesClient client, String namespace, String name) {
-        return client.apps()
-                .deployments()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.apps()
+                    .deployments()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
 
     @Override
     protected Deployment find(KubernetesClient client, Deployment resource) {
-        return client.apps()
-                .deployments()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.apps()
+                    .deployments()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(KubernetesClient client, Deployment resource) {
-        client.apps()
-                .deployments()
-                .inNamespace(getNamespace(resource))
-                .resource(resource)
-                .delete();
+        try (client) {
+            client.apps()
+                    .deployments()
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
+                    .delete();
+        }
     }
 
 }

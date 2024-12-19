@@ -33,47 +33,57 @@ public class KubernetesCustomResourceRepo extends BaseKubernetesResourceRepo<Kub
 
     @Override
     protected CustomResourceDefinition create(KubernetesClient client, CustomResourceDefinition resource) {
-        return client.apiextensions()
-                .v1()
-                .customResourceDefinitions()
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.apiextensions()
+                    .v1()
+                    .customResourceDefinitions()
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected CustomResourceDefinition get(KubernetesClient client, String namespace, String name) {
-        return client.apiextensions()
-                .v1()
-                .customResourceDefinitions()
-                .withName(name)
-                .get();
+        try (client) {
+            return client.apiextensions()
+                    .v1()
+                    .customResourceDefinitions()
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected CustomResourceDefinition find(KubernetesClient client, CustomResourceDefinition resource) {
-        return client.apiextensions()
-                .v1()
-                .customResourceDefinitions()
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.apiextensions()
+                    .v1()
+                    .customResourceDefinitions()
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(KubernetesClient client, CustomResourceDefinition resource) {
-        client.apiextensions()
-                .v1()
-                .customResourceDefinitions()
-                .withName(getName(resource))
-                .delete();
+        try (client) {
+            client.apiextensions()
+                    .v1()
+                    .customResourceDefinitions()
+                    .withName(getName(resource))
+                    .delete();
+        }
     }
 
     @Override
     protected List<CustomResourceDefinition> list(KubernetesClient client, String namespace) {
-        return client.apiextensions()
-                .v1()
-                .customResourceDefinitions()
-                .list()
-                .getItems();
+        try (client) {
+            return client.apiextensions()
+                    .v1()
+                    .customResourceDefinitions()
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override

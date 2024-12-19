@@ -33,42 +33,52 @@ public class KubernetesServiceRepo extends BaseKubernetesResourceRepo<Kubernetes
 
     @Override
     protected Service create(KubernetesClient client, Service resource) {
-        return client.services()
-                .inNamespace(getNamespace(resource))
-                .resource(resource)
-                .create();
+        try (client) {
+            return client.services()
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
+                    .create();
+        }
     }
 
     @Override
     protected Service get(KubernetesClient client, String namespace, String name) {
-        return client.services()
-                .inNamespace(namespace)
-                .withName(name)
-                .get();
+        try (client) {
+            return client.services()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        }
     }
 
     @Override
     protected Service find(KubernetesClient client, Service resource) {
-        return client.services()
-                .inNamespace(getNamespace(resource))
-                .withName(getName(resource))
-                .get();
+        try (client) {
+            return client.services()
+                    .inNamespace(getNamespace(resource))
+                    .withName(getName(resource))
+                    .get();
+        }
     }
 
     @Override
     protected void delete(KubernetesClient client, Service resource) {
-        client.services()
-                .inNamespace(getNamespace(resource))
-                .resource(resource)
-                .delete();
+        try (client) {
+            client.services()
+                    .inNamespace(getNamespace(resource))
+                    .resource(resource)
+                    .delete();
+        }
     }
 
     @Override
     protected List<Service> list(KubernetesClient client, String namespace) {
-        return client.services()
-                .inNamespace(namespace)
-                .list()
-                .getItems();
+        try (client) {
+            return client.services()
+                    .inNamespace(namespace)
+                    .list()
+                    .getItems();
+        }
     }
 
     @Override
