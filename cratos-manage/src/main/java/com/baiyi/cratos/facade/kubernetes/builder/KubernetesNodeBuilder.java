@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
  */
 public class KubernetesNodeBuilder {
 
+    private static final String TOPOLOGY_KUBERNETES_IO_ZONE = "topology.kubernetes.io/zone";
+    private static final String TOPOLOGY_KUBERNETES_IO_REGION = "topology.kubernetes.io/region";
+    private static final String FAILURE_DOMAIN_BETA_KUBERNETES_IO_ZONE = "failure-domain.beta.kubernetes.io/zone";
+    private static final String FAILURE_DOMAIN_BETA_KUBERNETES_IO_REGION = "failure-domain.beta.kubernetes.io/region";
     private Node node;
 
     public static KubernetesNodeBuilder newBuilder() {
@@ -66,20 +70,20 @@ public class KubernetesNodeBuilder {
                 .getLabels();
     }
 
-    private String makeZone() {
-        return getMetadataLabels().containsKey("topology.kubernetes.io/zone") ? getMetadataLabels().get(
-                "topology.kubernetes.io/zone") : getMetadataLabels().get("failure-domain.beta.kubernetes.io/zone");
+    private String getZone() {
+        return getMetadataLabels().containsKey(TOPOLOGY_KUBERNETES_IO_ZONE) ? getMetadataLabels().get(
+                TOPOLOGY_KUBERNETES_IO_ZONE) : getMetadataLabels().get(FAILURE_DOMAIN_BETA_KUBERNETES_IO_ZONE);
     }
 
-    private String makeRegion() {
-        return getMetadataLabels().containsKey("topology.kubernetes.io/region") ? getMetadataLabels().get(
-                "topology.kubernetes.io/region") : getMetadataLabels().get("failure-domain.beta.kubernetes.io/region");
+    private String getRegion() {
+        return getMetadataLabels().containsKey(TOPOLOGY_KUBERNETES_IO_REGION) ? getMetadataLabels().get(
+                TOPOLOGY_KUBERNETES_IO_REGION) : getMetadataLabels().get(FAILURE_DOMAIN_BETA_KUBERNETES_IO_REGION);
     }
 
     public KubernetesNodeVO.Node build() {
         return KubernetesNodeVO.Node.builder()
-                .zone(makeZone())
-                .region(makeRegion())
+                .zone(getZone())
+                .region(getRegion())
                 .metadata(ConverterUtil.toMetadata(this.node.getMetadata()))
                 .status(makeStatus())
                 .build();
