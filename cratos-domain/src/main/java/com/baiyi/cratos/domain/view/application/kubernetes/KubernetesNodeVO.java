@@ -58,7 +58,6 @@ public class KubernetesNodeVO {
         private String zone;
         private KubernetesCommonVO.Metadata metadata;
         private NodeStatus status;
-
     }
 
     @Data
@@ -71,7 +70,7 @@ public class KubernetesNodeVO {
         private static final long serialVersionUID = -6345842858862810079L;
         private Map<String, NodeAddress> addresses;
         private NodeSystemInfo nodeInfo;
-        //
+        // by type
         private Map<String, NodeCondition> conditions;
     }
 
