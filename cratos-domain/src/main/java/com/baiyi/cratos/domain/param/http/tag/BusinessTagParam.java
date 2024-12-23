@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.http.tag;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,9 @@ public class BusinessTagParam {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema
     public static class SaveBusinessTag implements IToTarget<BusinessTag> {
         private Integer id;

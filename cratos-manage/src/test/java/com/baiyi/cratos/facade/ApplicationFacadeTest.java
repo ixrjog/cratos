@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
+import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,9 @@ public class ApplicationFacadeTest extends BaseUnit {
 
     @Resource
     private ApplicationFacade applicationFacade;
+
+    @Resource
+    private ApplicationService applicationService;
 
     @Resource
     private ApplicationResourceFacade applicationResourceFacade;
