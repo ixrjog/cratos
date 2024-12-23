@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ExtDataSourceKubernetesController {
 
-    private KubernetesNodeDetailsFacade kubernetesNodeDetailsFacade;
+    private final KubernetesNodeDetailsFacade kubernetesNodeDetailsFacade;
 
     @Operation(summary = "Query kubernetes node details")
     @PostMapping(value = "/node/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
