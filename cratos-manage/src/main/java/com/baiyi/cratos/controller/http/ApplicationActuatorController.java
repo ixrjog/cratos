@@ -35,4 +35,11 @@ public class ApplicationActuatorController {
         return new HttpResult<>(applicationActuatorFacade.queryApplicationActuatorPage(pageQuery));
     }
 
+    @Operation(summary = "Scan application actuator")
+    @PostMapping(value = "/scanAll", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> scanApplicationActuator() {
+        applicationActuatorFacade.scanAll();
+        return HttpResult.SUCCESS;
+    }
+
 }

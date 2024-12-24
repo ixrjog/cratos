@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -21,6 +22,7 @@ import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -51,7 +53,7 @@ public class ApplicationActuatorFacadeImpl implements ApplicationActuatorFacade 
     private final ApplicationActuatorWrapper applicationActuatorWrapper;
 
     @Override
-    //@SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_ACTUATOR_TASK, lockAtMostFor = "10m", lockAtLeastFor = "10m")
+    @SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_ACTUATOR_TASK, lockAtMostFor = "10m", lockAtLeastFor = "10m")
     public void scanAll() {
         Tag frameworkTag = tagService.getByTagKey("Framework");
         List<Application> applications = applicationService.selectAll();
