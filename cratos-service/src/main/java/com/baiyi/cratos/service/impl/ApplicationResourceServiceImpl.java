@@ -49,6 +49,15 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     }
 
     @Override
+    public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType) {
+        Example example = new Example(ApplicationResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("applicationName", applicationName)
+                .andEqualTo("resourceType", resourceType);
+        return applicationResourceMapper.selectByExample(example);
+    }
+
+    @Override
     public List<ApplicationResource> queryByBusiness(BaseBusiness.HasBusiness byBusiness) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();
@@ -58,7 +67,8 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     }
 
     @Override
-    public List<ApplicationResource> queryByParam(String applicationName,String instanceName, String resourceType, String namespace) {
+    public List<ApplicationResource> queryByParam(String applicationName, String instanceName, String resourceType,
+                                                  String namespace) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("applicationName", applicationName)

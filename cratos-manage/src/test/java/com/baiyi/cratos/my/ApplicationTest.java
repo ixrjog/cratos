@@ -71,7 +71,7 @@ public class ApplicationTest extends BaseUnit {
                     .endsWith("-h5")) {
                 continue;
             }
-            List<ApplicationResource> resources = applicationResourceService.queryByParam(app.getName(), "ACK-PROD",
+            List<ApplicationResource> resources = applicationResourceService.queryByParam(app.getName(), "ACK-CHANNEL-PROD",
                     "KUBERNETES_DEPLOYMENT", "prod");
             if (!resources.isEmpty()) {
                 ApplicationResource resource = resources.getFirst();
@@ -130,6 +130,5 @@ public class ApplicationTest extends BaseUnit {
         holders.put(instanceId, holder);
         return holder;
     }
-
 
 }
