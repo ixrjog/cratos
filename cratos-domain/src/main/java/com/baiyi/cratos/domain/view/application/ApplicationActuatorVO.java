@@ -2,8 +2,7 @@ package com.baiyi.cratos.domain.view.application;
 
 import com.baiyi.cratos.domain.view.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class ApplicationActuatorVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class ApplicationActuator extends BaseVO implements  Serializable {
+    public static class ApplicationActuator extends BaseVO implements Serializable {
         @Serial
         private static final long serialVersionUID = 6876457686001577045L;
         private Integer id;
@@ -37,6 +36,53 @@ public class ApplicationActuatorVO {
         private String startupProbe;
         private String lifecycle;
         private String comment;
+
+        private Container container;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Container implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5344460324717646868L;
+        private Probe livenessProbe;
+        private Probe readinessProbe;
+        private Probe startupProbe;
+        private Lifecycle lifecycle;
+        private Boolean standard;
+
+        public void verify() {
+            this.standard = livenessProbe.getStandard() && this.readinessProbe.getStandard() && this.startupProbe.getStandard() && this.lifecycle.getStandard();
+        }
+
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Probe implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5344460324717646868L;
+        private String path;
+        private Integer port;
+        private Boolean standard;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Lifecycle implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -3235610014871294865L;
+        private String preStopExecCommand;
+        private Boolean standard;
     }
 
 }

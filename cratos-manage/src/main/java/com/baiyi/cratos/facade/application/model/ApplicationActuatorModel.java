@@ -1,7 +1,12 @@
 package com.baiyi.cratos.facade.application.model;
 
+import com.baiyi.cratos.common.exception.ApplicationConfigException;
+import com.baiyi.cratos.common.util.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
+import com.baiyi.cratos.domain.generator.ApplicationActuator;
+import com.google.gson.JsonSyntaxException;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -45,6 +50,8 @@ public class ApplicationActuatorModel {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Probe extends YamlDump {
+        public static final Probe EMPTY = Probe.builder()
+                .build();
         private Integer failureThreshold;
         private HTTPGetAction httpGet;
         private Integer initialDelaySeconds;
@@ -96,9 +103,40 @@ public class ApplicationActuatorModel {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Lifecycle extends YamlDump {
+
+        public static final Lifecycle EMPTY = Lifecycle.builder()
+                .build();
+
         private LifecycleHandler postStart;
         private LifecycleHandler preStop;
     }
+
+    public static Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
+        return lifecycleLoadAs(actuator.getLifecycle());
+    }
+
+    public static Lifecycle lifecycleLoadAs(String lifecycle) {
+        if (StringUtils.isBlank(lifecycle)) {
+            return Lifecycle.EMPTY;
+        }
+        try {
+            return YamlUtil.loadAs(lifecycle, Lifecycle.class);
+        } catch (JsonSyntaxException e) {
+            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+        }
+    }
+
+    public static Probe probeLoadAs(String probe) {
+        if (StringUtils.isBlank(probe)) {
+            return Probe.EMPTY;
+        }
+        try {
+            return YamlUtil.loadAs(probe, Probe.class);
+        } catch (JsonSyntaxException e) {
+            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+        }
+    }
+
 
     @Data
     @Builder
