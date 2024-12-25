@@ -27,7 +27,7 @@ public class ContainerLifecycleBuilder {
 
     private KubernetesDeploymentVO.SleepAction makeSleepAction(
             io.fabric8.kubernetes.api.model.LifecycleHandler lifecycleHandler) {
-        Long sleepSeconds = Optional.of(lifecycleHandler)
+        Long sleepSeconds = Optional.ofNullable(lifecycleHandler)
                 .map(LifecycleHandler::getSleep)
                 .map(SleepAction::getSeconds)
                 .orElse(null);
@@ -39,12 +39,12 @@ public class ContainerLifecycleBuilder {
 
     private KubernetesDeploymentVO.ExecAction makeExecAction(
             io.fabric8.kubernetes.api.model.LifecycleHandler lifecycleHandler) {
-        List<String> commands = Optional.of(lifecycleHandler)
+        List<String> commands = Optional.ofNullable(lifecycleHandler)
                 .map(LifecycleHandler::getExec)
                 .map(ExecAction::getCommand)
                 .orElse(List.of());
         return KubernetesDeploymentVO.ExecAction.builder()
-                .command(CollectionUtils.isEmpty(commands) ? "" : String.join(" ", commands))
+                .command(CollectionUtils.isEmpty(commands) ? null : String.join(" ", commands))
                 .build();
     }
 

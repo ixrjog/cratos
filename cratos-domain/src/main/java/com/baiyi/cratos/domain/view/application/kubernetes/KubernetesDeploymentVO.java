@@ -101,6 +101,9 @@ public class KubernetesDeploymentVO {
         private String image;
         private KubernetesDeploymentVO.ContainerResources resources;
         private Lifecycle lifecycle;
+        private Probe livenessProbe;
+        private Probe readinessProbe;
+        private Probe startupProbe;
 
         public int getSeq() {
             return main ? 0 : 1;
@@ -179,11 +182,8 @@ public class KubernetesDeploymentVO {
     public static class LifecycleHandler implements Serializable {
         @Serial
         private static final long serialVersionUID = 8666748233494672828L;
-        @JsonProperty("exec")
         private ExecAction exec;
-        @JsonProperty("httpGet")
         private HTTPGetAction httpGet;
-        @JsonProperty("sleep")
         private SleepAction sleep;
     }
 
@@ -204,6 +204,8 @@ public class KubernetesDeploymentVO {
     public static class HTTPGetAction implements Serializable {
         @Serial
         private static final long serialVersionUID = -837942790581562335L;
+        public static final HTTPGetAction EMPTY = HTTPGetAction.builder()
+                .build();
         private String host;
         @Builder.Default
         private List<HTTPHeader> httpHeaders = Lists.newArrayList();
@@ -231,6 +233,27 @@ public class KubernetesDeploymentVO {
         @Serial
         private static final long serialVersionUID = -3709439553179190122L;
         private Long seconds;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Probe implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -2282018100691269848L;
+        public static final Probe EMPTY = Probe.builder()
+                .build();
+        private ExecAction exec;
+        private Integer failureThreshold;
+        //private GRPCAction grpc;
+        private HTTPGetAction httpGet;
+        private Integer initialDelaySeconds;
+        private Integer periodSeconds;
+        private Integer successThreshold;
+        //private TCPSocketAction tcpSocket;
+        private Long terminationGracePeriodSeconds;
+        private Integer timeoutSeconds;
     }
 
 }

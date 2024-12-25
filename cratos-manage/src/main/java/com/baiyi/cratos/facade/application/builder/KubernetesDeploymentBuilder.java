@@ -104,17 +104,27 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
-    private KubernetesDeploymentVO.TemplateSpecContainer makeTemplateSpecContainer(Container mainContainer, Container e ) {
+    private KubernetesDeploymentVO.TemplateSpecContainer makeTemplateSpecContainer(Container mainContainer,
+                                                                                   Container container) {
         Optional<Container> optionalContainer = Optional.ofNullable(mainContainer);
         return KubernetesDeploymentVO.TemplateSpecContainer.builder()
-                .name(e.getName())
-                .image(e.getImage())
-                .main(optionalContainer.map(container -> container.getName()
-                                .equals(e.getName()))
+                .name(container.getName())
+                .image(container.getImage())
+                .main(optionalContainer.map(main -> main.getName()
+                                .equals(container.getName()))
                         .orElse(false))
-                .resources(makeContainerResources(e))
+                .resources(makeContainerResources(container))
                 .lifecycle(ContainerLifecycleBuilder.newBuilder()
-                        .withContainer(e)
+                        .withContainer(container)
+                        .build())
+                .livenessProbe(ContainerProbeBuilder.newBuilder()
+                        .withProbe(container.getLivenessProbe())
+                        .build())
+                .readinessProbe(ContainerProbeBuilder.newBuilder()
+                        .withProbe(container.getReadinessProbe())
+                        .build())
+                .startupProbe(ContainerProbeBuilder.newBuilder()
+                        .withProbe(container.getStartupProbe())
                         .build())
                 .build();
     }
