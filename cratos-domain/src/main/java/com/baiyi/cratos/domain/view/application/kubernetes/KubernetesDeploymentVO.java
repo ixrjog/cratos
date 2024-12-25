@@ -205,6 +205,7 @@ public class KubernetesDeploymentVO {
         @Serial
         private static final long serialVersionUID = -837942790581562335L;
         public static final HTTPGetAction EMPTY = HTTPGetAction.builder()
+                .isEmpty(true)
                 .build();
         private String host;
         @Builder.Default
@@ -212,6 +213,8 @@ public class KubernetesDeploymentVO {
         private String path;
         private String port;
         private String scheme;
+        @Builder.Default
+        private boolean isEmpty = false;
     }
 
     @Data
@@ -243,6 +246,7 @@ public class KubernetesDeploymentVO {
         @Serial
         private static final long serialVersionUID = -2282018100691269848L;
         public static final Probe EMPTY = Probe.builder()
+                .isEmpty(true)
                 .build();
         private ExecAction exec;
         private Integer failureThreshold;
@@ -254,6 +258,9 @@ public class KubernetesDeploymentVO {
         //private TCPSocketAction tcpSocket;
         private Long terminationGracePeriodSeconds;
         private Integer timeoutSeconds;
+
+        @Builder.Default
+        private boolean isEmpty = false;
     }
 
 }

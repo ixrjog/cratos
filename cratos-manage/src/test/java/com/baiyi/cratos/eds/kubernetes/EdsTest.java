@@ -6,9 +6,11 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesEventRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.api.client.util.Maps;
+import io.fabric8.kubernetes.api.model.Event;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,11 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+
+    public static final int CONFIG_ACK_DAILY = 11;
+
+    @Resource
+    private KubernetesEventRepo kubernetesEventRepo;
 
     @Data
     @Builder
@@ -43,7 +50,15 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
     @Resource
     private EdsAssetIndexService edsAssetIndexService;
 
+    @Test
+    void eventTest() {
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(CONFIG_ACK_DAILY);
+        List<Event> events = kubernetesEventRepo.listEvent(kubernetes, "daily");
+        for (Event event : events) {
+            System.out.println(event.toString());
+        }
 
+    }
 
     @Test
     void test() {
