@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Node;
 import io.fabric8.kubernetes.api.model.NodeStatus;
 import io.fabric8.kubernetes.api.model.Quantity;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -112,7 +113,7 @@ public class KubernetesNodeBuilder {
     private String formatQuantity(Quantity quantity) {
         return Joiner.on("/")
                 .skipNulls()
-                .join(quantity.getAmount(), quantity.getFormat());
+                .join(quantity.getAmount(), StringUtils.hasText(quantity.getFormat()) ? quantity.getFormat() : null);
     }
 
     public KubernetesNodeVO.Node build() {
