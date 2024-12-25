@@ -119,9 +119,12 @@ public class KubernetesDeploymentVO {
         @Serial
         private static final long serialVersionUID = -873459316958896176L;
         public static final DeploymentStrategy EMPTY = DeploymentStrategy.builder()
+                .isEmpty(true)
                 .build();
         private String type;
         private RollingUpdateDeployment rollingUpdate;
+        @Builder.Default
+        private boolean isEmpty = false;
     }
 
     @Data
@@ -166,6 +169,7 @@ public class KubernetesDeploymentVO {
     @NoArgsConstructor
     public static class Lifecycle implements Serializable {
         public static final Lifecycle EMPTY = Lifecycle.builder()
+                .isEmpty(true)
                 .build();
         @Serial
         private static final long serialVersionUID = -2552010171914670706L;
@@ -173,6 +177,8 @@ public class KubernetesDeploymentVO {
         private LifecycleHandler postStart;
         @JsonProperty("preStop")
         private LifecycleHandler preStop;
+        @Builder.Default
+        private boolean isEmpty = false;
     }
 
     @Data
