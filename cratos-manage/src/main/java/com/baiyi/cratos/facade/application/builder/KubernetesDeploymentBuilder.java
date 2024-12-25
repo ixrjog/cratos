@@ -104,22 +104,30 @@ public class KubernetesDeploymentBuilder {
                 .build();
     }
 
+    private KubernetesDeploymentVO.TemplateSpecContainer makeTemplateSpecContainer(Container mainContainer, Container e ) {
+        Optional<Container> optionalContainer = Optional.ofNullable(mainContainer);
+        return KubernetesDeploymentVO.TemplateSpecContainer.builder()
+                .name(e.getName())
+                .image(e.getImage())
+                .main(optionalContainer.map(container -> container.getName()
+                                .equals(e.getName()))
+                        .orElse(false))
+                .resources(makeContainerResources(e))
+                .lifecycle(ContainerLifecycleBuilder.newBuilder()
+                        .withContainer(e)
+                        .build())
+                .build();
+    }
+
     @Schema(type = "deployment.spec.template.spec.containers")
-    private List<KubernetesDeploymentVO.TemplateSpecContainer> makeTemplateSpecContainer() {
+    private List<KubernetesDeploymentVO.TemplateSpecContainer> makeTemplateSpecContainers() {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
         return this.deployment.getSpec()
                 .getTemplate()
                 .getSpec()
                 .getContainers()
                 .stream()
-                .map(e -> KubernetesDeploymentVO.TemplateSpecContainer.builder()
-                        .name(e.getName())
-                        .image(e.getImage())
-                        .main(optionalContainer.map(container -> container.getName()
-                                        .equals(e.getName()))
-                                .orElse(false))
-                        .resources(makeContainerResources(e))
-                        .build())
+                .map(e -> makeTemplateSpecContainer(optionalContainer.orElse(null), e))
                 .sorted(Comparator.comparing(KubernetesDeploymentVO.TemplateSpecContainer::getSeq))
                 .toList();
     }
@@ -127,7 +135,7 @@ public class KubernetesDeploymentBuilder {
     @Schema(type = "deployment.spec.template")
     private KubernetesDeploymentVO.SpecTemplate makeSpecTemplate() {
         KubernetesDeploymentVO.TemplateSpec spec = KubernetesDeploymentVO.TemplateSpec.builder()
-                .containers(makeTemplateSpecContainer())
+                .containers(makeTemplateSpecContainers())
                 .build();
         return KubernetesDeploymentVO.SpecTemplate.builder()
                 .spec(spec)

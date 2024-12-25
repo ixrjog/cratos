@@ -58,6 +58,8 @@ public class KubernetesNodeVO {
         private String zone;
         private KubernetesCommonVO.Metadata metadata;
         private NodeStatus status;
+        @Schema(description = "属性")
+        private Map<String, String> attributes;
     }
 
     @Data

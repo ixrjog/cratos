@@ -2,6 +2,8 @@ package com.baiyi.cratos.domain.view.application.kubernetes;
 
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +49,6 @@ public class KubernetesDeploymentVO {
             return this.metadata.getName()
                     .compareTo(o.metadata.getName());
         }
-
     }
 
     @Data
@@ -99,6 +100,7 @@ public class KubernetesDeploymentVO {
         private String name;
         private String image;
         private KubernetesDeploymentVO.ContainerResources resources;
+        private Lifecycle lifecycle;
 
         public int getSeq() {
             return main ? 0 : 1;
@@ -153,6 +155,82 @@ public class KubernetesDeploymentVO {
         private static final long serialVersionUID = 3726795430810844718L;
         private String amount;
         private String format;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Lifecycle implements Serializable {
+        public static final Lifecycle EMPTY = Lifecycle.builder()
+                .build();
+        @Serial
+        private static final long serialVersionUID = -2552010171914670706L;
+        @JsonProperty("postStart")
+        private LifecycleHandler postStart;
+        @JsonProperty("preStop")
+        private LifecycleHandler preStop;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LifecycleHandler implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8666748233494672828L;
+        @JsonProperty("exec")
+        private ExecAction exec;
+        @JsonProperty("httpGet")
+        private HTTPGetAction httpGet;
+        @JsonProperty("sleep")
+        private SleepAction sleep;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ExecAction implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6096511997030766067L;
+        private String command;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class HTTPGetAction implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -837942790581562335L;
+        private String host;
+        @Builder.Default
+        private List<HTTPHeader> httpHeaders = Lists.newArrayList();
+        private String path;
+        private String port;
+        private String scheme;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class HTTPHeader implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1235700388134906731L;
+        private String name;
+        private String value;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SleepAction implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -3709439553179190122L;
+        private Long seconds;
     }
 
 }

@@ -28,7 +28,7 @@ public class ApplicationActuatorWrapper extends BaseDataTableConverter<Applicati
         ApplicationActuatorVO.Probe livenessProbe = toProbeVO(vo.getLivenessProbe());
         verifyLivenessProbe(vo.getFramework(), livenessProbe);
         ApplicationActuatorVO.Probe readinessProbe = toProbeVO(vo.getReadinessProbe());
-        verifyLivenessProbe(vo.getFramework(), readinessProbe);
+        verifyReadinessProbe(vo.getFramework(), readinessProbe);
         ApplicationActuatorVO.Container container = ApplicationActuatorVO.Container.builder()
                 .startupProbe(startupProbe)
                 .livenessProbe(livenessProbe)

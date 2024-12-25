@@ -3,10 +3,17 @@ package com.baiyi.cratos.facade.kubernetes.builder;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeStatus;
+import io.fabric8.kubernetes.api.model.Quantity;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -80,12 +87,41 @@ public class KubernetesNodeBuilder {
                 TOPOLOGY_KUBERNETES_IO_REGION) : getMetadataLabels().get(FAILURE_DOMAIN_BETA_KUBERNETES_IO_REGION);
     }
 
+    private Map<String, String> makeAttributes() {
+        Map<String, String> attributes = Maps.newHashMap();
+        Optional<Map<String, Quantity>> optionalMap = Optional.of(this.node)
+                .map(Node::getStatus)
+                .map(NodeStatus::getCapacity);
+        if (optionalMap.isEmpty()) {
+            return attributes;
+        }
+        Map<String, Quantity> quantityMap = optionalMap.get();
+        if (quantityMap.containsKey("cpu")) {
+            attributes.put(KUBERNETES_NODE_CPU, formatQuantity(quantityMap.get("cpu")));
+        }
+        if (quantityMap.containsKey("ephemeral-storage")) {
+            attributes.put(KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE,
+                    formatQuantity(quantityMap.get("ephemeral-storage")));
+        }
+        if (quantityMap.containsKey("memory")) {
+            attributes.put(KUBERNETES_NODE_CAPACITY_MEMORY, formatQuantity(quantityMap.get("memory")));
+        }
+        return attributes;
+    }
+
+    private String formatQuantity(Quantity quantity) {
+        return Joiner.on("/")
+                .skipNulls()
+                .join(quantity.getAmount(), quantity.getFormat());
+    }
+
     public KubernetesNodeVO.Node build() {
         return KubernetesNodeVO.Node.builder()
                 .zone(getZone())
                 .region(getRegion())
                 .metadata(ConverterUtil.toMetadata(this.node.getMetadata()))
                 .status(makeStatus())
+                .attributes(makeAttributes())
                 .build();
     }
 

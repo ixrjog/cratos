@@ -103,17 +103,21 @@ public class ApplicationTest extends BaseUnit {
                             // Framework: PPJv1
                             saveBusinessTag.setTagValue("PPJv1");
                             businessTagFacade.saveBusinessTag(saveBusinessTag);
+                            continue;
                         }
                         if ("/actuator/health/liveness".equals(path)) {
                             // Framework: PPJv2
                             saveBusinessTag.setTagValue("PPJv2");
                             businessTagFacade.saveBusinessTag(saveBusinessTag);
+                            continue;
                         }
+                        // non-standard
+                        saveBusinessTag.setTagValue("PPJvNon-standard");
+                        businessTagFacade.saveBusinessTag(saveBusinessTag);
                     }
                 } catch (EdsInstanceProviderException e) {
                     // 类型不符
                 }
-
             } else {
                 System.out.println(app.getName() + ": no resources.");
             }
