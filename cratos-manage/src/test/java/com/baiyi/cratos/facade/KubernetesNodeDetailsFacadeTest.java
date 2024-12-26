@@ -20,10 +20,10 @@ public class KubernetesNodeDetailsFacadeTest extends BaseUnit {
 
     @Test
     void test() {
-        EdsKubernetesNodeParam.QueryKubernetesNodeDetails queryKubernetesDetails = EdsKubernetesNodeParam.QueryKubernetesNodeDetails.builder()
+        EdsKubernetesNodeParam.QueryKubernetesNodeDetailsRequest queryKubernetesDetails = EdsKubernetesNodeParam.QueryKubernetesNodeDetailsRequest.builder()
                 .instanceName("ACK-PROD")
                 .build();
-        MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> response = kubernetesNodeDetailsFacade.queryKubernetesNodeDetails(
+        MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> response = kubernetesNodeDetailsFacade.queryEdsKubernetesNodeDetails(
                 queryKubernetesDetails);
         System.out.println(response);
     }

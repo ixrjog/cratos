@@ -1,8 +1,8 @@
-package com.baiyi.cratos.facade.kubernetes.details.broker;
+package com.baiyi.cratos.facade.kubernetes.node.broker;
 
-import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
-import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.domain.channel.factory.KubernetesDetailsChannelHandlerFactory;
+import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
+import com.baiyi.cratos.domain.session.EdsKubernetesNodeDetailsRequestSession;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -12,22 +12,22 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/11/22 16:34
+ * &#064;Date  2024/12/26 13:52
  * &#064;Version 1.0
  */
 @Slf4j
-public class ApplicationKubernetesDetailsBroker implements Runnable {
+public class EdsKubernetesNodeDetailsBroker implements Runnable {
 
     private final String sessionId;
     private final Session session;
 
     private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(8);
 
-    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session) {
-        return new ApplicationKubernetesDetailsBroker(sessionId, session);
+    public static EdsKubernetesNodeDetailsBroker newBroker(String sessionId, Session session) {
+        return new EdsKubernetesNodeDetailsBroker(sessionId, session);
     }
 
-    public ApplicationKubernetesDetailsBroker(String sessionId, Session session) {
+    public EdsKubernetesNodeDetailsBroker(String sessionId, Session session) {
         this.sessionId = sessionId;
         this.session = session;
     }
@@ -49,19 +49,20 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
     }
 
     private void close() {
-        KubernetesDetailsRequestSession.remove(this.sessionId);
+        EdsKubernetesNodeDetailsRequestSession.remove(this.sessionId);
     }
 
     private void runTask() {
-        if (!KubernetesDetailsRequestSession.containsBySessionId(this.sessionId)) {
+        if (!EdsKubernetesNodeDetailsRequestSession.containsBySessionId(this.sessionId)) {
             return;
         }
         // 深copy
         Map<String, HasSocketRequest> requestMap = Maps.newHashMap(
-                KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
+                EdsKubernetesNodeDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
         requestMap.forEach(
                 (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
                         request));
     }
 
 }
+

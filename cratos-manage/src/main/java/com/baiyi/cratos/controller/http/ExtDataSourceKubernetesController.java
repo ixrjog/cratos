@@ -31,8 +31,8 @@ public class ExtDataSourceKubernetesController {
     @Operation(summary = "Query kubernetes node details")
     @PostMapping(value = "/node/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MessageResponse<KubernetesNodeVO.KubernetesNodeDetails>> queryKubernetesNodeDetails(
-            @RequestBody @Valid EdsKubernetesNodeParam.QueryKubernetesNodeDetails queryKubernetesDetails) {
-        return new HttpResult<>(kubernetesNodeDetailsFacade.queryKubernetesNodeDetails(queryKubernetesDetails));
+            @RequestBody @Valid EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
+        return new HttpResult<>(kubernetesNodeDetailsFacade.queryEdsKubernetesNodeDetails(queryEdsKubernetesNodeDetails));
     }
 
 }

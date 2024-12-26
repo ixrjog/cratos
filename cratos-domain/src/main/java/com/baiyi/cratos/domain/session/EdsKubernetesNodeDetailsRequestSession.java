@@ -10,12 +10,12 @@ import java.util.Map;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/11/22 15:26
+ * &#064;Date  2024/12/26 13:45
  * &#064;Version 1.0
  */
 @SuppressWarnings("ALL")
 @Slf4j
-public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
+public class EdsKubernetesNodeDetailsRequestSession<T extends HasSocketRequest> {
 
     private static Map<String, Map<String, ? extends HasSocketRequest>> sessionRequestMap = new HashedMap<>();
 
@@ -23,31 +23,31 @@ public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
         if (SocketActionRequestEnum.UNSUBSCRIBE.name()
                 .equalsIgnoreCase(message.getAction())) {
             if (containsBySessionId(sessionId)) {
-                KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId)
+                EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.get(sessionId)
                         .remove(message.getTopic());
             }
             return;
         }
         if (containsBySessionId(sessionId)) {
-            ((Map<String, T>) KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId)).put(message.getTopic(),
+            ((Map<String, T>) EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.get(sessionId)).put(message.getTopic(),
                     message);
         } else {
             Map<String, T> queryMap = Maps.newHashMap();
             queryMap.put(message.getTopic(), message);
-            KubernetesDetailsRequestSession.sessionRequestMap.put(sessionId, queryMap);
+            EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.put(sessionId, queryMap);
         }
     }
 
     public static boolean containsBySessionId(String sessionId) {
-        return KubernetesDetailsRequestSession.sessionRequestMap.containsKey(sessionId);
+        return EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.containsKey(sessionId);
     }
 
     public static <T extends HasSocketRequest> Map<String, T> getRequestMessageBySessionId(String sessionId) {
-        return (Map<String, T>) KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId);
+        return (Map<String, T>) EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.get(sessionId);
     }
 
     public static void remove(String sessionId) {
-        KubernetesDetailsRequestSession.sessionRequestMap.remove(sessionId);
+        EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.remove(sessionId);
     }
 
 }

@@ -15,7 +15,7 @@ public class EdsKubernetesNodeParam {
     @Data
     @Builder
     @Schema
-    public static class QueryKubernetesNodeDetails {
+    public static class QueryEdsKubernetesNodeDetails {
         @NotBlank
         private String instanceName;
     }

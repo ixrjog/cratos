@@ -40,18 +40,18 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
     private final KubernetesNodeRepo kubernetesNodeRepo;
 
     @Override
-    public MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> queryKubernetesNodeDetails(
-            EdsKubernetesNodeParam.QueryKubernetesNodeDetails queryKubernetesDetails) {
+    public MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> queryEdsKubernetesNodeDetails(
+            EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
         return MessageResponse.<KubernetesNodeVO.KubernetesNodeDetails>builder()
-                .body(buildKubernetesNodeDetails(queryKubernetesDetails))
+                .body(buildKubernetesNodeDetails(queryEdsKubernetesNodeDetails))
                 .topic(HasTopic.EDS_KUBERNETES_NODE_DETAILS)
                 .build();
     }
 
     private KubernetesNodeVO.KubernetesNodeDetails buildKubernetesNodeDetails(
-            EdsKubernetesNodeParam.QueryKubernetesNodeDetails queryKubernetesDetails) {
+            EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
         try {
-            EdsInstance kubernetesInstance = getEdsInstanceByName(queryKubernetesDetails.getInstanceName());
+            EdsInstance kubernetesInstance = getEdsInstanceByName(queryEdsKubernetesNodeDetails.getInstanceName());
             return KubernetesNodeVO.KubernetesNodeDetails.builder()
                     .kubernetesInstance(edsInstanceWrapper.wrapToTarget(kubernetesInstance))
                     .nodes(makeNodes(kubernetesInstance.getId()))

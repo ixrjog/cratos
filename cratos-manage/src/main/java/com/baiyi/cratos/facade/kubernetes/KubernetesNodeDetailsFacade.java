@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
  */
 public interface KubernetesNodeDetailsFacade {
 
-    MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> queryKubernetesNodeDetails(
-            EdsKubernetesNodeParam.QueryKubernetesNodeDetails queryKubernetesDetails);
+    MessageResponse<KubernetesNodeVO.KubernetesNodeDetails> queryEdsKubernetesNodeDetails(
+            EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails kubernetesNodeDetailsRequest);
 
 }
