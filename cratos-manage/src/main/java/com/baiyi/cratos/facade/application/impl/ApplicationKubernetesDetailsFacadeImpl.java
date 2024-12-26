@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
+import static com.baiyi.cratos.domain.view.base.OptionsVO.NO_OPTIONS_AVAILABLE;
 
 /**
  * &#064;Author  baiyi
@@ -44,6 +47,26 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         return MessageResponse.<KubernetesVO.KubernetesDetails>builder()
                 .body(buildKubernetesDetails(queryKubernetesDetails))
                 .topic(HasTopic.APPLICATION_KUBERNETES_DETAILS)
+                .build();
+    }
+
+    @Override
+    public OptionsVO.Options queryKubernetesDeploymentOptions(
+            ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
+        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
+                queryKubernetesDeploymentOptions.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
+                queryKubernetesDeploymentOptions.getNamespace());
+        if (CollectionUtils.isEmpty(resources)) {
+            return NO_OPTIONS_AVAILABLE;
+        }
+        return OptionsVO.Options.builder()
+                .options(resources.stream()
+                        .map(e -> OptionsVO.Option.builder()
+                                .value(e.getName())
+                                .label(e.getDisplayName())
+                                .build())
+                        .sorted()
+                        .toList())
                 .build();
     }
 
@@ -72,7 +95,8 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             return KubernetesVO.KubernetesDetails.failed("The application does not exist.");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
+                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
+                param.getName());
         return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesDetails.failed(
                 "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))

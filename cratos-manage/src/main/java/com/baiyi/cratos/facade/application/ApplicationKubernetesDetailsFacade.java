@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.application;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 
 /**
  * &#064;Author  baiyi
@@ -13,5 +14,8 @@ public interface ApplicationKubernetesDetailsFacade {
 
     MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
             ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails);
+
+    OptionsVO.Options queryKubernetesDeploymentOptions(
+            ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions);
 
 }

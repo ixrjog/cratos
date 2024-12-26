@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,15 @@ public class ApplicationResourceController {
     @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MessageResponse<KubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails) {
+        return new HttpResult<>(kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
+    }
+
+    @Operation(summary = "Query application resource kubernetes deployment options")
+    @PostMapping(value = "/kubernetes/deployment/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> queryApplicationResourceKubernetesDeploymentOptions(
+            @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
         return new HttpResult<>(
-                kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
+                kubernetesDetailsFacade.queryKubernetesDeploymentOptions(queryKubernetesDeploymentOptions));
     }
 
 }

@@ -20,6 +20,18 @@ public class ApplicationKubernetesParam {
         private String applicationName;
         @NotBlank
         private String namespace;
+        @Schema(description = "Resource Name")
+        private String name;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class QueryKubernetesDeploymentOptions {
+        @NotBlank
+        private String applicationName;
+        @NotBlank
+        private String namespace;
     }
 
 }

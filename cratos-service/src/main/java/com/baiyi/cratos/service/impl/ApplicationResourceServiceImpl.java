@@ -11,6 +11,7 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
 
     private final ApplicationResourceMapper applicationResourceMapper;
 
+    private static final String IGNORE = null;
+
     @Override
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.LONG_TERM, key = "'DOMAIN:APPLICATIONRESOURCE:APPLICATIONNAME:' + #applicationName", unless = "#result == null")
     public List<ApplicationResource> queryByApplicationName(String applicationName) {
@@ -40,11 +43,20 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     @Override
     public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
                                                               String namespace) {
+        return queryApplicationResource(applicationName, resourceType, namespace, IGNORE);
+    }
+
+    @Override
+    public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
+                                                              String namespace, String name) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("applicationName", applicationName)
                 .andEqualTo("resourceType", resourceType)
                 .andEqualTo("namespace", namespace);
+        if (StringUtils.hasText(name)) {
+            criteria.andEqualTo("name", name);
+        }
         return applicationResourceMapper.selectByExample(example);
     }
 
