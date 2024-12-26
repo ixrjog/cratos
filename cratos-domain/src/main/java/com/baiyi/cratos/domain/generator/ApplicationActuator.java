@@ -51,8 +51,6 @@ public class ApplicationActuator implements HasIntegerPrimaryKey, Serializable {
 
     private String framework;
 
-    private Boolean standard;
-
     /**
      * 创建时间
      */
@@ -75,6 +73,14 @@ public class ApplicationActuator implements HasIntegerPrimaryKey, Serializable {
     private String startupProbe;
 
     private String lifecycle;
+
+    @Column(name = "actuator_standard")
+    private Boolean actuatorStandard;
+
+    @Column(name = "lifecycle_standard")
+    private Boolean lifecycleStandard;
+
+    private Boolean standard;
 
     private String comment;
 }

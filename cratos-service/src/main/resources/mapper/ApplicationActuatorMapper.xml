@@ -15,13 +15,15 @@
         <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
         <result column="namespace" jdbcType="VARCHAR" property="namespace"/>
         <result column="framework" jdbcType="VARCHAR" property="framework"/>
-        <result column="standard" jdbcType="BIT" property="standard"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="liveness_probe" jdbcType="LONGVARCHAR" property="livenessProbe"/>
         <result column="readiness_probe" jdbcType="LONGVARCHAR" property="readinessProbe"/>
         <result column="startup_probe" jdbcType="LONGVARCHAR" property="startupProbe"/>
         <result column="lifecycle" jdbcType="LONGVARCHAR" property="lifecycle"/>
+        <result column="actuator_standard" jdbcType="BIT" property="actuatorStandard"/>
+        <result column="lifecycle_standard" jdbcType="BIT" property="lifecycleStandard"/>
+        <result column="standard" jdbcType="BIT" property="standard"/>
         <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
     </resultMap>
 
@@ -38,6 +40,12 @@
             </if>
             <if test="framework != null and framework != ''">
                 and framework = #{framework}
+            </if>
+            <if test="actuatorStandard != null">
+                and actuator_standard = #{actuatorStandard}
+            </if>
+            <if test="lifecycleStandard != null">
+                and lifecycle_standard = #{lifecycleStandard}
             </if>
             <if test="standard != null">
                 and standard = #{standard}

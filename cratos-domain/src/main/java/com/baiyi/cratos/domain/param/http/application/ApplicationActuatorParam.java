@@ -24,6 +24,8 @@ public class ApplicationActuatorParam {
         private String namespace;
         private String framework;
         private Boolean standard;
+        private Boolean actuatorStandard;
+        private Boolean lifecycleStandard;
     }
 
 }

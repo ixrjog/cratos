@@ -37,6 +37,8 @@ public class ApplicationActuatorWrapper extends BaseDataTableConverter<Applicati
                 .build();
         container.verify();
         vo.setContainer(container);
+        vo.setActuatorStandard(container.getActuatorStandard());
+        vo.setLifecycleStandard(container.getLifecycleStandard());
         vo.setStandard(container.getStandard());
     }
 

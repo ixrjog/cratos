@@ -30,6 +30,8 @@ public class ApplicationActuatorVO {
         private String businessType;
         private String namespace;
         private String framework;
+        private Boolean actuatorStandard;
+        private Boolean lifecycleStandard;
         private Boolean standard;
         private String livenessProbe;
         private String readinessProbe;
@@ -52,10 +54,15 @@ public class ApplicationActuatorVO {
         private Probe readinessProbe;
         private Probe startupProbe;
         private Lifecycle lifecycle;
+
+        private Boolean actuatorStandard;
+        private Boolean lifecycleStandard;
         private Boolean standard;
 
         public void verify() {
-            this.standard = livenessProbe.getStandard() && this.readinessProbe.getStandard() && this.startupProbe.getStandard() && this.lifecycle.getStandard();
+            this.actuatorStandard = livenessProbe.getStandard() && this.readinessProbe.getStandard() && this.startupProbe.getStandard();
+            this.lifecycleStandard = this.lifecycle.getStandard();
+            this.standard = this.actuatorStandard && this.lifecycleStandard;
         }
 
     }

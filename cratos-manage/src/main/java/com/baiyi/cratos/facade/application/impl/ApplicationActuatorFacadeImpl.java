@@ -70,6 +70,17 @@ public class ApplicationActuatorFacadeImpl implements ApplicationActuatorFacade 
                 }
             }
         });
+        // standard;
+        applicationActuatorService.selectAll()
+                .forEach(actuator -> {
+                    ApplicationActuatorVO.ApplicationActuator vo = applicationActuatorWrapper.wrapToTarget(actuator);
+                    if(!(actuator.getStandard().equals(vo.getStandard()) && actuator.getActuatorStandard().equals(vo.getActuatorStandard()) && actuator.getLifecycleStandard().equals(vo.getLifecycleStandard())) ) {
+                        actuator.setStandard(vo.getStandard());
+                        actuator.setActuatorStandard(vo.getActuatorStandard());
+                        actuator.setLifecycleStandard(vo.getLifecycleStandard());
+                        applicationActuatorService.updateByPrimaryKey(actuator);
+                    }
+                });
     }
 
     private void saveApplicationActuator(Application application, ApplicationResource resource, Tag frameworkTag,
