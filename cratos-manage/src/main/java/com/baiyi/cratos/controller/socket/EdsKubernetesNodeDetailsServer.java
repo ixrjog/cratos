@@ -3,7 +3,6 @@ package com.baiyi.cratos.controller.socket;
 import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.session.EdsKubernetesNodeDetailsRequestSession;
-import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.facade.kubernetes.node.broker.EdsKubernetesNodeDetailsBroker;
 import com.google.gson.JsonSyntaxException;
 import jakarta.websocket.*;
@@ -60,7 +59,7 @@ public class EdsKubernetesNodeDetailsServer extends BaseSocketAuthenticationServ
 
     @OnClose
     public void onClose(Session session) {
-        KubernetesDetailsRequestSession.remove(sessionId);
+        EdsKubernetesNodeDetailsRequestSession.remove(sessionId);
     }
 
 }
