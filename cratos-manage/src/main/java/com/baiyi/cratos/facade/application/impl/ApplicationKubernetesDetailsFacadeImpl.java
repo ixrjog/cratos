@@ -73,7 +73,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
                 applicationResourceService.queryApplicationResource(param.getApplicationName(),
-                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace()));
+                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(), param.getName()));
         return KubernetesVO.Workloads.builder()
                 .deployments(deployments)
                 .build();
@@ -95,8 +95,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             return KubernetesVO.KubernetesDetails.failed("The application does not exist.");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
-                param.getName());
+                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
         return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesDetails.failed(
                 "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))

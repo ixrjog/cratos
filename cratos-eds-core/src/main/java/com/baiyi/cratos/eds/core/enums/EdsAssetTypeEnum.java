@@ -61,10 +61,11 @@ public enum EdsAssetTypeEnum {
     KUBERNETES_INGRESS("Ingress", 0),
     KUBERNETES_SERVICE("Service", 0),
     KUBERNETES_NODE("Node", 0),
-    KUBERNETES_VIRTUAL_SERVICE("VirtualService", 0),
-    KUBERNETES_DESTINATION_RULE("DestinationRule", 0),
+    KUBERNETES_VIRTUAL_SERVICE("Virtual Service", 0),
+    KUBERNETES_DESTINATION_RULE("Destination Rule", 0),
     KUBERNETES_ENVOY_FILTER("EnvoyFilter", 0),
     KUBERNETES_ALIBABACLOUD_AUTOSCALER("Alibabacloud Autoscaler", 0),
+    KUBERNETES_CONFIG_MAP("ConfigMap", 0),
 
     LDAP_PERSON("Person", 0),
     LDAP_GROUP("Group", 0),
