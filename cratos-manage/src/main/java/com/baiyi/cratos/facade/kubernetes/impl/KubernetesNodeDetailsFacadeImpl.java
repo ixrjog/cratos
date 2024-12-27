@@ -48,37 +48,45 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
                 .build();
     }
 
+    @SuppressWarnings("unchecked")
     private KubernetesNodeVO.KubernetesNodeDetails buildKubernetesNodeDetails(
             EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
         try {
             EdsInstance kubernetesInstance = getEdsInstanceByName(queryEdsKubernetesNodeDetails.getInstanceName());
+            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node>) holderBuilder.newHolder(
+                    kubernetesInstance.getId(), EdsAssetTypeEnum.KUBERNETES_NODE.name());
+            EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
+                    .getEdsConfigModel();
             return KubernetesNodeVO.KubernetesNodeDetails.builder()
                     .kubernetesInstance(edsInstanceWrapper.wrapToTarget(kubernetesInstance))
-                    .nodes(makeNodes(kubernetesInstance.getId()))
+                    .nodes(makeNodes(kubernetes))
                     .build();
         } catch (KubernetesException kubernetesException) {
             return KubernetesNodeVO.KubernetesNodeDetails.failed(kubernetesException.getMessage());
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private Map<String, List<KubernetesNodeVO.Node>> makeNodes(int instanceId) {
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node>) holderBuilder.newHolder(
-                instanceId, EdsAssetTypeEnum.KUBERNETES_NODE.name());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
-                .getEdsConfigModel();
+    private Map<String, List<KubernetesNodeVO.Node>> makeNodes(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         List<Node> nodeList = kubernetesNodeRepo.list(kubernetes);
         if (CollectionUtils.isEmpty(nodeList)) {
             return Map.of();
         }
+        Map<String, KubernetesNodeVO.NodeUsage> nodeUsageMap = makeNodeUsage(kubernetes);
         return nodeList.stream()
-                .map(this::toNode)
+                .map(e->
+                    toNode(e,nodeUsageMap.get(e.getMetadata().getName()))
+                )
                 .collect(Collectors.groupingBy(KubernetesNodeVO.Node::getZone));
     }
 
-    private KubernetesNodeVO.Node toNode(Node node) {
-       return KubernetesNodeBuilder.newBuilder()
+    private Map<String, KubernetesNodeVO.NodeUsage> makeNodeUsage(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+        return kubernetesNodeRepo.queryNodeUsageMap(kubernetes);
+    }
+
+    private KubernetesNodeVO.Node toNode(Node node,KubernetesNodeVO.NodeUsage nodeUsage) {
+        return KubernetesNodeBuilder.newBuilder()
                 .withNode(node)
+                .withNodeUsage(nodeUsage)
                 .build();
     }
 

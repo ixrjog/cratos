@@ -28,6 +28,7 @@ public class KubernetesNodeBuilder {
     private static final String FAILURE_DOMAIN_BETA_KUBERNETES_IO_ZONE = "failure-domain.beta.kubernetes.io/zone";
     private static final String FAILURE_DOMAIN_BETA_KUBERNETES_IO_REGION = "failure-domain.beta.kubernetes.io/region";
     private Node node;
+    private KubernetesNodeVO.NodeUsage nodeUsage;
 
     public static KubernetesNodeBuilder newBuilder() {
         return new KubernetesNodeBuilder();
@@ -35,6 +36,11 @@ public class KubernetesNodeBuilder {
 
     public KubernetesNodeBuilder withNode(Node node) {
         this.node = node;
+        return this;
+    }
+
+    public KubernetesNodeBuilder withNodeUsage(KubernetesNodeVO.NodeUsage nodeUsage) {
+        this.nodeUsage = nodeUsage;
         return this;
     }
 
@@ -123,6 +129,7 @@ public class KubernetesNodeBuilder {
                 .metadata(ConverterUtil.toMetadata(this.node.getMetadata()))
                 .status(makeStatus())
                 .attributes(makeAttributes())
+                .usage(this.nodeUsage)
                 .build();
     }
 

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,20 @@ public class KubernetesNodeVO {
         private NodeStatus status;
         @Schema(description = "属性")
         private Map<String, String> attributes;
+        private NodeUsage usage;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class NodeUsage implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 7370901819274341856L;
+        private String name;
+        private BigDecimal cpuPercentage;
+        private BigDecimal memoryPercentage;
     }
 
     @Data

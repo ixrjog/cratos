@@ -64,7 +64,13 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     @Test
     void test1() {
         EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
-        kubernetesTest.test(cfg, null);
+        kubernetesTest.test1(cfg, null);
+    }
+
+    @Test
+    void test12() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        kubernetesTest.test2(cfg);
     }
 
     @Test
