@@ -37,7 +37,7 @@ public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> imple
     public void wrap(MenuVO.Menu vo) {
         vo.setTitle(vo.getName());
         vo.setActive(false);
-        vo.setOpen(true);
+        vo.setOpen(false);
         menuTitleWrapper.wrap(vo);
         recursionWrapMenuChildren(vo);
     }
