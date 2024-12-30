@@ -2,7 +2,7 @@ package com.baiyi.cratos.wrapper.application;
 
 import com.baiyi.cratos.domain.generator.ApplicationActuator;
 import com.baiyi.cratos.domain.view.application.ApplicationActuatorVO;
-import com.baiyi.cratos.facade.application.model.ApplicationActuatorModel;
+import com.baiyi.cratos.facade.application.baseline.mode.DeploymentBaselineModel;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import com.google.common.base.Joiner;
@@ -79,7 +79,7 @@ public class ApplicationActuatorWrapper extends BaseDataTableConverter<Applicati
     }
 
     private ApplicationActuatorVO.Lifecycle toLifecycleVO(String lifecycle) {
-        ApplicationActuatorModel.Lifecycle lifecycleMO = ApplicationActuatorModel.lifecycleLoadAs(lifecycle);
+        DeploymentBaselineModel.Lifecycle lifecycleMO = DeploymentBaselineModel.lifecycleLoadAs(lifecycle);
         String preStopExecCommand = Joiner.on(" ")
                 .skipNulls()
                 .join(lifecycleMO.getPreStop()
@@ -92,7 +92,7 @@ public class ApplicationActuatorWrapper extends BaseDataTableConverter<Applicati
     }
 
     private ApplicationActuatorVO.Probe toProbeVO(String probe) {
-        ApplicationActuatorModel.Probe probeMO = ApplicationActuatorModel.probeLoadAs(probe);
+        DeploymentBaselineModel.Probe probeMO = DeploymentBaselineModel.probeLoadAs(probe);
         return ApplicationActuatorVO.Probe.builder()
                 .path(probeMO.getHttpGet()
                         .getPath())

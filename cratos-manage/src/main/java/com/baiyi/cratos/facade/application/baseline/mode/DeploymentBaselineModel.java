@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.application.model;
+package com.baiyi.cratos.facade.application.baseline.mode;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
 import com.baiyi.cratos.common.util.YamlUtil;
@@ -9,40 +9,14 @@ import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/23 16:58
  * &#064;Version 1.0
  */
-public class ApplicationActuatorModel {
-
-    public static Probe to(io.fabric8.kubernetes.api.model.Probe probe) {
-        if (probe == null) {
-            return null;
-        }
-        HTTPGetAction httpGetAction = probe.getHttpGet() != null ? HTTPGetAction.builder()
-                .host(probe.getHttpGet()
-                        .getHost())
-                .path(probe.getHttpGet()
-                        .getPath())
-                .port(Integer.valueOf(probe.getHttpGet()
-                        .getPort()
-                        .getValue()
-                        .toString()))
-                .scheme(probe.getHttpGet()
-                        .getScheme())
-                .build() : null;
-        return Probe.builder()
-                .failureThreshold(probe.getFailureThreshold())
-                .httpGet(httpGetAction)
-                .initialDelaySeconds(probe.getInitialDelaySeconds())
-                .periodSeconds(probe.getPeriodSeconds())
-                .successThreshold(probe.getSuccessThreshold())
-                .terminationGracePeriodSeconds(probe.getTerminationGracePeriodSeconds())
-                .timeoutSeconds(probe.getTimeoutSeconds())
-                .build();
-    }
+public class DeploymentBaselineModel {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
@@ -60,6 +34,26 @@ public class ApplicationActuatorModel {
         // private TCPSocketAction tcpSocket;
         private Long terminationGracePeriodSeconds;
         private Integer timeoutSeconds;
+
+        public static boolean equals(Probe probe1, Probe probe2) {
+            int port1 = Optional.ofNullable(probe1)
+                    .map(Probe::getHttpGet)
+                    .map(HTTPGetAction::getPort)
+                    .orElse(0);
+            int port2 = Optional.ofNullable(probe2)
+                    .map(Probe::getHttpGet)
+                    .map(HTTPGetAction::getPort)
+                    .orElse(0);
+            String host1 = Optional.ofNullable(probe1)
+                    .map(Probe::getHttpGet)
+                    .map(HTTPGetAction::getHost)
+                    .orElse("");
+            String host2 = Optional.ofNullable(probe2)
+                    .map(Probe::getHttpGet)
+                    .map(HTTPGetAction::getHost)
+                    .orElse("");
+            return port1 == port2 && host1.equals(host2);
+        }
     }
 
     @Data
@@ -73,39 +67,27 @@ public class ApplicationActuatorModel {
         private String scheme;
     }
 
-    public static Lifecycle to(io.fabric8.kubernetes.api.model.Lifecycle lifecycle) {
-        if (lifecycle == null) {
-            return null;
-        }
-        LifecycleHandler postStart = to(lifecycle.getPostStart());
-        LifecycleHandler preStop = to(lifecycle.getPreStop());
-        return Lifecycle.builder()
-                .postStart(postStart)
-                .preStop(preStop)
-                .build();
-    }
-
-    private static LifecycleHandler to(io.fabric8.kubernetes.api.model.LifecycleHandler lifecycleHandler) {
-        if (lifecycleHandler == null) {
-            return null;
-        }
-        return LifecycleHandler.builder()
-                .exec(ExecAction.builder()
-                        .command(lifecycleHandler.getExec()
-                                .getCommand())
-                        .build())
-                .build();
-    }
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Lifecycle extends YamlDump {
-
         public static final Lifecycle EMPTY = Lifecycle.builder()
                 .build();
+
+        public static boolean equals(Lifecycle lifecycle1, Lifecycle lifecycle2) {
+            String command1 = Optional.ofNullable(lifecycle1)
+                    .map(Lifecycle::getPreStop)
+                    .map(LifecycleHandler::getCommand)
+                    .orElse("");
+
+            String command2 = Optional.ofNullable(lifecycle2)
+                    .map(Lifecycle::getPreStop)
+                    .map(LifecycleHandler::getCommand)
+                    .orElse("");
+            return command1.equals(command2);
+        }
 
         private LifecycleHandler postStart;
         private LifecycleHandler preStop;
@@ -137,7 +119,6 @@ public class ApplicationActuatorModel {
         }
     }
 
-
     @Data
     @Builder
     @AllArgsConstructor
@@ -145,6 +126,14 @@ public class ApplicationActuatorModel {
     public static class LifecycleHandler {
         private ExecAction exec;
         // private io.fabric8.kubernetes.api.model.HTTPGetAction httpGet;
+
+        public String getCommand() {
+            List<String> command = Optional.ofNullable(exec)
+                    .map(ExecAction::getCommand)
+                    .orElse(List.of());
+            return StringUtils.join(command, " ");
+        }
+
     }
 
     @Data

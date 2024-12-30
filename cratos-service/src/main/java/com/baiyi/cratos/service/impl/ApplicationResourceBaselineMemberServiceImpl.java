@@ -1,0 +1,39 @@
+package com.baiyi.cratos.service.impl;
+
+import com.baiyi.cratos.domain.generator.ApplicationResourceBaselineMember;
+import com.baiyi.cratos.mapper.ApplicationResourceBaselineMemberMapper;
+import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/12/30 10:05
+ * &#064;Version 1.0
+ */
+@Service
+@RequiredArgsConstructor
+public class ApplicationResourceBaselineMemberServiceImpl implements ApplicationResourceBaselineMemberService {
+
+    private final ApplicationResourceBaselineMemberMapper applicationResourceBaselineMemberMapper;
+
+    @Override
+    @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATION_RESOURCE_BASELINE_MEMBER:ID:' + #id")
+    public void clearCacheById(int id) {
+    }
+
+    @Override
+    public ApplicationResourceBaselineMember getByUniqueKey(@NonNull ApplicationResourceBaselineMember record) {
+        Example example = new Example(ApplicationResourceBaselineMember.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("baselineId", record.getBaselineId())
+                .andEqualTo("baselineType", record.getBaselineType());
+        return applicationResourceBaselineMemberMapper.selectOneByExample(example);
+    }
+
+}

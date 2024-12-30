@@ -3,7 +3,7 @@ package com.baiyi.cratos.my;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.ApplicationActuator;
-import com.baiyi.cratos.facade.application.model.ApplicationActuatorModel;
+import com.baiyi.cratos.facade.application.baseline.mode.DeploymentBaselineModel;
 import com.baiyi.cratos.service.ApplicationActuatorService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
@@ -25,13 +25,15 @@ public class ApplicationActuatorTest extends BaseUnit {
     @Resource
     private ApplicationActuatorService applicationActuatorService;
 
+
+
     @Test
     void test() {
         Map<String, Integer> cntMap = Maps.newHashMap();
         List<ApplicationActuator> applicationActuators = applicationActuatorService.selectAll();
         applicationActuators.forEach(applicationActuator -> {
             try {
-                ApplicationActuatorModel.Lifecycle lifecycle = ApplicationActuatorModel.lifecycleLoadAs(
+                DeploymentBaselineModel.Lifecycle lifecycle = DeploymentBaselineModel.lifecycleLoadAs(
                         applicationActuator);
                 String cmd = Joiner.on(" ")
                         .skipNulls()

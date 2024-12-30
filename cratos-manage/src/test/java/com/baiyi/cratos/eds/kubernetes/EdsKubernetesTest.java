@@ -5,6 +5,7 @@ import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
@@ -53,6 +54,8 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     private KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     @Resource
+    private KubernetesPodRepo kubernetesPodRepo;
+    @Resource
     private KubernetesClientBuilder kubernetesClientBuilder;
 
     private static final String ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE = "alb.ingress.kubernetes.io/backend-keepalive";
@@ -71,6 +74,13 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     void test12() {
         EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         kubernetesTest.test2(cfg);
+    }
+
+    @Test
+    void test13() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        List<Pod> pods = kubernetesPodRepo.list(cfg, "daily", "kili");
+        System.out.println(pods);
     }
 
     @Test
@@ -276,7 +286,8 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
                     .map(PodSpec::getTerminationGracePeriodSeconds)
                     .orElse(0L);
             if (s == terminationGracePeriodSeconds) {
-                log.info("不更新: " + deployment.getMetadata().getName());
+                log.info("不更新: " + deployment.getMetadata()
+                        .getName());
                 continue;
             }
             deployment.getSpec()
@@ -284,7 +295,8 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
                     .getSpec()
                     .setTerminationGracePeriodSeconds(terminationGracePeriodSeconds);
             kubernetesDeploymentRepo.update(cfg, deployment);
-            log.info("更新: " + deployment.getMetadata().getName());
+            log.info("更新: " + deployment.getMetadata()
+                    .getName());
         }
     }
 

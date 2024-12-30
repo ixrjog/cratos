@@ -4,8 +4,6 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
-import io.fabric8.kubernetes.api.model.apps.Deployment;
-import io.fabric8.kubernetes.api.model.apps.DeploymentList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.Listable;
@@ -34,22 +32,6 @@ import java.util.Optional;
 public class KubernetesPodRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
-
-    public List<Deployment> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
-        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            DeploymentList deploymentList = kc.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .list();
-            if (CollectionUtils.isEmpty(deploymentList.getItems())) {
-                return Collections.emptyList();
-            }
-            return deploymentList.getItems();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
 
     public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
                           @NonNull String deploymentName) {
