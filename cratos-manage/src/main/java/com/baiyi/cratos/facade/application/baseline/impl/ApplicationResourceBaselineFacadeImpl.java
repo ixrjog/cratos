@@ -83,6 +83,31 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     @Override
+    public void rescan(int baselineId) {
+        ApplicationResourceBaseline baseline = baselineService.getById(baselineId);
+        if (baseline == null) {
+            return;
+        }
+        EdsAsset edsAsset = edsAssetService.getById(baseline.getBusinessId());
+        if (edsAsset == null) {
+            return;
+        }
+        Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
+        EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
+        try {
+            Deployment deployment = holder.getProvider()
+                    .assetLoadAs(edsAsset.getOriginalModel());
+            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            if (optionalContainer.isEmpty()) {
+                return;
+            }
+            this.scan(baseline, optionalContainer.get());
+        } catch (NullPointerException nullPointerException) {
+            log.error(nullPointerException.getMessage());
+        }
+    }
+
+    @Override
     public DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery) {
         if (pageQuery.getByMemberType() != null) {
@@ -143,15 +168,19 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
                     .build();
             int baselineId = saveBaseline(baseline);
             baseline.setId(baselineId);
-            BaselineMemberProcessorFactory.saveMemberAll(baseline, optionalContainer.get());
-            // 回写合规字段
-            boolean standard = !baselineMemberService.hasNonStandardBaselineMember(baselineId);
-            if (baseline.getStandard() != standard) {
-                baseline.setStandard(standard);
-                baselineService.updateByPrimaryKey(baseline);
-            }
+            this.scan(baseline, optionalContainer.get());
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
+        }
+    }
+
+    private void scan(ApplicationResourceBaseline baseline, Container container) {
+        BaselineMemberProcessorFactory.saveMemberAll(baseline, container);
+        // 回写合规字段
+        boolean standard = !baselineMemberService.hasNonStandardBaselineMember(baseline.getId());
+        if (baseline.getStandard() != standard) {
+            baseline.setStandard(standard);
+            baselineService.updateByPrimaryKey(baseline);
         }
     }
 

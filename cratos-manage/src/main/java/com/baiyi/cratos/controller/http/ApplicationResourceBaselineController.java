@@ -29,8 +29,15 @@ public class ApplicationResourceBaselineController {
 
     @Operation(summary = "Scan application resource baseline")
     @PostMapping(value = "/scanAll", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> scanApplicationActuator() {
+    public HttpResult<Boolean> scanAllBaseline() {
         applicationResourceBaselineFacade.scanAll();
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Rescan application resource baseline")
+    @PutMapping(value = "/rescan", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> rescanBaselineById(int baselineId) {
+        applicationResourceBaselineFacade.rescan(baselineId);
         return HttpResult.SUCCESS;
     }
 
