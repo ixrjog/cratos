@@ -1,9 +1,11 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +35,12 @@ public class ApplicationResourceBaselineController {
     public HttpResult<Boolean> scanApplicationActuator() {
         applicationResourceBaselineFacade.scanAll();
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query application resource baseline type options")
+    @PostMapping(value = "/kubernetes/deployment/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getBaselineTypeOptions() {
+        return new HttpResult<>(ResourceBaselineTypeEnum.toOptions());
     }
 
     @Operation(summary = "Pagination query application resource baseline")

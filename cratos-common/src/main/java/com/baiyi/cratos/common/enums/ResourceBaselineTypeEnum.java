@@ -1,6 +1,10 @@
 package com.baiyi.cratos.common.enums;
 
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -19,6 +23,18 @@ public enum ResourceBaselineTypeEnum {
 
     ResourceBaselineTypeEnum(String displayName) {
         this.displayName = displayName;
+    }
+
+    public static OptionsVO.Options toOptions() {
+        List<OptionsVO.Option> optionList = Arrays.stream(ResourceBaselineTypeEnum.values())
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e.getDisplayName())
+                        .value(e.name())
+                        .build())
+                .toList();
+        return OptionsVO.Options.builder()
+                .options(optionList)
+                .build();
     }
 
 }
