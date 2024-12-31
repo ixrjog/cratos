@@ -1,23 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.ApplicationResourceBaselineMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.ApplicationResourceBaseline">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="application_name" jdbcType="VARCHAR" property="applicationName" />
-    <result column="instance_name" jdbcType="VARCHAR" property="instanceName" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="display_name" jdbcType="VARCHAR" property="displayName" />
-    <result column="resource_type" jdbcType="VARCHAR" property="resourceType" />
-    <result column="business_id" jdbcType="INTEGER" property="businessId" />
-    <result column="business_type" jdbcType="VARCHAR" property="businessType" />
-    <result column="namespace" jdbcType="VARCHAR" property="namespace" />
-    <result column="framework" jdbcType="VARCHAR" property="framework" />
-    <result column="standard" jdbcType="BIT" property="standard" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.ApplicationResourceBaseline">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="application_name" jdbcType="VARCHAR" property="applicationName"/>
+        <result column="instance_name" jdbcType="VARCHAR" property="instanceName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+        <result column="resource_type" jdbcType="VARCHAR" property="resourceType"/>
+        <result column="business_id" jdbcType="INTEGER" property="businessId"/>
+        <result column="business_type" jdbcType="VARCHAR" property="businessType"/>
+        <result column="namespace" jdbcType="VARCHAR" property="namespace"/>
+        <result column="framework" jdbcType="VARCHAR" property="framework"/>
+        <result column="standard" jdbcType="BIT" property="standard"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam$ApplicationResourceBaselinePageQuery"
+            resultMap="BaseResultMap">
+        select * from application_resource_baseline
+        <where>
+            <if test="applicationName != null and applicationName != ''">
+                application_name = #{applicationName}
+            </if>
+            <if test="namespace != null and namespace != ''">
+                and namespace = #{namespace}
+            </if>
+            <if test="framework != null and framework != ''">
+                and framework = #{framework}
+            </if>
+            <if test="standard != null">
+                and standard = #{standard}
+            </if>
+            <if test="byMemberType != null">
+                and id in (
+                select baseline_id
+                from application_resource_baseline_member
+                where baseline_type = #{byMemberType.baselineType} and standard = #{byMemberType.standard}
+                )
+            </if>
+        </where>
+    </select>
+
 </mapper>

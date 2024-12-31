@@ -1,5 +1,9 @@
 package com.baiyi.cratos.facade.application;
 
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
+import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/30 11:00
@@ -8,5 +12,8 @@ package com.baiyi.cratos.facade.application;
 public interface ApplicationResourceBaselineFacade {
 
     void scanAll();
+
+    DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
+            ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery);
 
 }

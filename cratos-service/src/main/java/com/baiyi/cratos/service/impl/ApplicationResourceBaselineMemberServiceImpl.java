@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
@@ -34,6 +36,14 @@ public class ApplicationResourceBaselineMemberServiceImpl implements Application
         criteria.andEqualTo("baselineId", record.getBaselineId())
                 .andEqualTo("baselineType", record.getBaselineType());
         return applicationResourceBaselineMemberMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<ApplicationResourceBaselineMember> queryByBaselineId(int baselineId){
+        Example example = new Example(ApplicationResourceBaselineMember.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("baselineId", baselineId);
+        return applicationResourceBaselineMemberMapper.selectByExample(example);
     }
 
 }

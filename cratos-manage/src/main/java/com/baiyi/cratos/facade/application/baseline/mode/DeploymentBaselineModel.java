@@ -3,7 +3,6 @@ package com.baiyi.cratos.facade.application.baseline.mode;
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
 import com.baiyi.cratos.common.util.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
-import com.baiyi.cratos.domain.generator.ApplicationActuator;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
@@ -93,9 +92,9 @@ public class DeploymentBaselineModel {
         private LifecycleHandler preStop;
     }
 
-    public static Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
-        return lifecycleLoadAs(actuator.getLifecycle());
-    }
+//    public static Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
+//        return lifecycleLoadAs(actuator.getLifecycle());
+//    }
 
     public static Lifecycle lifecycleLoadAs(String lifecycle) {
         if (StringUtils.isBlank(lifecycle)) {

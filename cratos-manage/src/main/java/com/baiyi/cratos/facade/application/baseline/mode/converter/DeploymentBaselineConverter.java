@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade.application.baseline.mode.converter;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
 import com.baiyi.cratos.common.util.YamlUtil;
-import com.baiyi.cratos.domain.generator.ApplicationActuator;
 import com.baiyi.cratos.facade.application.baseline.mode.DeploymentBaselineModel;
 import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
@@ -65,9 +64,9 @@ public class DeploymentBaselineConverter {
                 .build();
     }
 
-    public static DeploymentBaselineModel.Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
-        return lifecycleLoadAs(actuator.getLifecycle());
-    }
+//    public static DeploymentBaselineModel.Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
+//        return lifecycleLoadAs(actuator.getLifecycle());
+//    }
 
     public static DeploymentBaselineModel.Lifecycle lifecycleLoadAs(String lifecycle) {
         if (StringUtils.isBlank(lifecycle)) {

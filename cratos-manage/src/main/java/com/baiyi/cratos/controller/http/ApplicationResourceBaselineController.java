@@ -1,12 +1,17 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
+import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +33,13 @@ public class ApplicationResourceBaselineController {
     public HttpResult<Boolean> scanApplicationActuator() {
         applicationResourceBaselineFacade.scanAll();
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Pagination query application resource baseline")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<ApplicationResourceBaselineVO.ResourceBaseline>> queryApplicationResourceBaselinePage(
+            @RequestBody @Valid ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery) {
+        return new HttpResult<>(applicationResourceBaselineFacade.queryApplicationResourceBaselinePage(pageQuery));
     }
 
 }

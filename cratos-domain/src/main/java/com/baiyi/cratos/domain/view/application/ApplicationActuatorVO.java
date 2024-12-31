@@ -78,6 +78,8 @@ public class ApplicationActuatorVO {
         private String path;
         private Integer port;
         private Boolean standard;
+
+        private Probe baseline;
     }
 
     @Data
@@ -90,6 +92,8 @@ public class ApplicationActuatorVO {
         private static final long serialVersionUID = -3235610014871294865L;
         private String preStopExecCommand;
         private Boolean standard;
+
+        private Lifecycle baseline;
     }
 
 }
