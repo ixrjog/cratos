@@ -36,7 +36,7 @@ public class ApplicationResourceBaselineController {
 
     @Operation(summary = "Rescan application resource baseline")
     @PutMapping(value = "/rescan", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> rescanBaselineById(int baselineId) {
+    public HttpResult<Boolean> rescanBaselineById(@RequestParam int baselineId) {
         applicationResourceBaselineFacade.rescan(baselineId);
         return HttpResult.SUCCESS;
     }
