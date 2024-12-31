@@ -15,4 +15,6 @@ public interface ApplicationResourceBaselineMemberService extends BaseUniqueKeyS
 
     List<ApplicationResourceBaselineMember> queryByBaselineId(int baselineId);
 
+    boolean hasNonStandardBaselineMember(int baselineId);
+
 }

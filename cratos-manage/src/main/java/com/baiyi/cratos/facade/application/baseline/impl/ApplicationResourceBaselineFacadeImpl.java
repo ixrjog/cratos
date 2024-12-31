@@ -144,6 +144,12 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
             int baselineId = saveBaseline(baseline);
             baseline.setId(baselineId);
             BaselineMemberProcessorFactory.saveMemberAll(baseline, optionalContainer.get());
+            // 回写合规字段
+            boolean standard = !baselineMemberService.hasNonStandardBaselineMember(baselineId);
+            if (baseline.getStandard() != standard) {
+                baseline.setStandard(standard);
+                baselineService.updateByPrimaryKey(baseline);
+            }
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
         }

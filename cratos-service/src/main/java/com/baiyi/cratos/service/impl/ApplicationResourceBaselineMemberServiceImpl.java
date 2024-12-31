@@ -39,11 +39,20 @@ public class ApplicationResourceBaselineMemberServiceImpl implements Application
     }
 
     @Override
-    public List<ApplicationResourceBaselineMember> queryByBaselineId(int baselineId){
+    public List<ApplicationResourceBaselineMember> queryByBaselineId(int baselineId) {
         Example example = new Example(ApplicationResourceBaselineMember.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("baselineId", baselineId);
         return applicationResourceBaselineMemberMapper.selectByExample(example);
+    }
+
+    @Override
+    public boolean hasNonStandardBaselineMember(int baselineId) {
+        Example example = new Example(ApplicationResourceBaselineMember.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("baselineId", baselineId)
+                .andEqualTo("standard", false);
+        return applicationResourceBaselineMemberMapper.selectCountByExample(example) > 0;
     }
 
 }
