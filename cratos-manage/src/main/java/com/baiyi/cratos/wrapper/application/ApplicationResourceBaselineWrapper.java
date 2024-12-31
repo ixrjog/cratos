@@ -31,27 +31,19 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
 
     @Override
     public void wrap(ApplicationResourceBaselineVO.ResourceBaseline vo) {
+        vo.setContainer(buildContainer(vo));
+    }
+
+    private ApplicationResourceBaselineVO.Container buildContainer(ApplicationResourceBaselineVO.ResourceBaseline vo) {
         List<ApplicationResourceBaselineMember> members = baselineMemberService.queryByBaselineId(vo.getId());
         Map<String, ApplicationResourceBaselineMember> memberMap = members.stream()
                 .collect(Collectors.toMap(ApplicationResourceBaselineMember::getBaselineType, a -> a, (k1, k2) -> k1));
-
-        ApplicationResourceBaselineVO.Lifecycle lifecycle = toLifecycle(
-                memberMap.get(ResourceBaselineTypeEnum.CONTAINER_LIFECYCLE.name()));
-        ApplicationResourceBaselineVO.Probe startupProbe = toProbe(
-                memberMap.get(ResourceBaselineTypeEnum.CONTAINER_STARTUP_PROBE.name()));
-        ApplicationResourceBaselineVO.Probe livenessProbe = toProbe(
-                memberMap.get(ResourceBaselineTypeEnum.CONTAINER_LIVENESS_PROBE.name()));
-        ApplicationResourceBaselineVO.Probe readinessProbe = toProbe(
-                memberMap.get(ResourceBaselineTypeEnum.CONTAINER_READINESS_PROBE.name()));
-
-        ApplicationResourceBaselineVO.Container container = ApplicationResourceBaselineVO.Container.builder()
-                .startupProbe(startupProbe)
-                .livenessProbe(livenessProbe)
-                .readinessProbe(readinessProbe)
-                .lifecycle(lifecycle)
+        return ApplicationResourceBaselineVO.Container.builder()
+                .startupProbe(toProbe(memberMap.get(ResourceBaselineTypeEnum.CONTAINER_STARTUP_PROBE.name())))
+                .livenessProbe(toProbe(memberMap.get(ResourceBaselineTypeEnum.CONTAINER_LIVENESS_PROBE.name())))
+                .readinessProbe(toProbe(memberMap.get(ResourceBaselineTypeEnum.CONTAINER_READINESS_PROBE.name())))
+                .lifecycle(toLifecycle(memberMap.get(ResourceBaselineTypeEnum.CONTAINER_LIFECYCLE.name())))
                 .build();
-        vo.setContainer(container);
-
     }
 
     private ApplicationResourceBaselineVO.Lifecycle toLifecycle(ApplicationResourceBaselineMember lifecycleMember) {

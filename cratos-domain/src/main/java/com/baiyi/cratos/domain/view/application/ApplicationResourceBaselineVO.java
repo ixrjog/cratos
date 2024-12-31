@@ -32,7 +32,6 @@ public class ApplicationResourceBaselineVO {
         private String framework;
         private Boolean standard;
         private String comment;
-
         private Container container;
     }
 
@@ -56,11 +55,10 @@ public class ApplicationResourceBaselineVO {
     @NoArgsConstructor
     @Schema
     public static class Probe implements Serializable {
-        public static final Probe EMPTY = Probe.builder()
-                .build();
-
         @Serial
         private static final long serialVersionUID = 5344460324717646868L;
+        public static final Probe EMPTY = Probe.builder()
+                .build();
         private String path;
         private Integer port;
         private Boolean standard;
@@ -77,7 +75,6 @@ public class ApplicationResourceBaselineVO {
         private static final long serialVersionUID = -3235610014871294865L;
         public static final Lifecycle EMPTY = Lifecycle.builder()
                 .build();
-
         private String preStopExecCommand;
         private Boolean standard;
         private Lifecycle baseline;
