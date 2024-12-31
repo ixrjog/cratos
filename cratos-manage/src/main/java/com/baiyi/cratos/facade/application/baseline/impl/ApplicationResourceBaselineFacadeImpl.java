@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.application.baseline.impl;
 
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
+import com.baiyi.cratos.common.exception.ApplicationResourceBaselineException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -18,9 +19,14 @@ import com.baiyi.cratos.facade.application.baseline.factory.BaselineMemberProces
 import com.baiyi.cratos.facade.application.baseline.mode.converter.DeploymentBaselineConverter;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.application.ApplicationResourceBaselineWrapper;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -30,6 +36,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * &#064;Author  baiyi
@@ -78,6 +85,19 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     @Override
     public DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery) {
+        if (pageQuery.getByMemberType() != null) {
+            try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
+                Validator validator = factory.getValidator();
+                Set<ConstraintViolation<ApplicationResourceBaselineParam.BaselineMember>> constraintViolations = validator.validate(
+                        pageQuery.getByMemberType());
+                if (!CollectionUtils.isEmpty(constraintViolations)) {
+                    ApplicationResourceBaselineException.runtime(Joiner.on(",")
+                            .join(constraintViolations.stream()
+                                    .map(ConstraintViolation::getMessage)
+                                    .toList()));
+                }
+            }
+        }
         DataTable<ApplicationResourceBaseline> dataTable = baselineService.queryApplicationResourceBaselinePage(
                 pageQuery);
         return applicationResourceBaselineWrapper.wrapToTarget(dataTable);

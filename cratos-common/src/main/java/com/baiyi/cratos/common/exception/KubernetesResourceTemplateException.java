@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
-import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.KUBERNETES_RESOURCE_TEMPLATE;
+import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.KUBERNETES_RESOURCE_TEMPLATE_ERROR;
 
 /**
  * &#064;Author  baiyi
@@ -25,12 +25,12 @@ public class KubernetesResourceTemplateException extends BaseException {
 
     public KubernetesResourceTemplateException(String message) {
         super(message);
-        this.code = KUBERNETES_RESOURCE_TEMPLATE;
+        this.code = KUBERNETES_RESOURCE_TEMPLATE_ERROR;
     }
 
     public KubernetesResourceTemplateException(String message, Object... var2) {
         super(StringFormatter.arrayFormat(message, var2));
-        this.code = KUBERNETES_RESOURCE_TEMPLATE;
+        this.code = KUBERNETES_RESOURCE_TEMPLATE_ERROR;
     }
 
     public static void runtime(String message) {

@@ -2,6 +2,8 @@ package com.baiyi.cratos.domain.param.http.application;
 
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -30,7 +32,9 @@ public class ApplicationResourceBaselineParam {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class BaselineMember {
+        @NotBlank(message = "The parameter baselineType cannot be empty")
         private String baselineType;
+        @NotNull(message = "The parameter standard must be specified")
         private Boolean standard;
     }
 
