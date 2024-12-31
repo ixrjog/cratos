@@ -66,10 +66,12 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
                         .getCommand());
         ApplicationResourceBaselineVO.Lifecycle baseline = ApplicationResourceBaselineVO.Lifecycle.builder()
                 .preStopExecCommand(baselinePreStopExecCommand)
+                .content(lifecycleMember.getBaselineContent())
                 .build();
         return ApplicationResourceBaselineVO.Lifecycle.builder()
                 .preStopExecCommand(preStopExecCommand)
                 .standard(lifecycleMember.getStandard())
+                .content(lifecycleMember.getContent())
                 .baseline(baseline)
                 .build();
     }
@@ -86,6 +88,7 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
                         .getPath())
                 .port(baselineProbeMO.getHttpGet()
                         .getPort())
+                .content(probeMember.getBaselineContent())
                 .build();
         return ApplicationResourceBaselineVO.Probe.builder()
                 .path(probeMO.getHttpGet()
@@ -94,6 +97,7 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
                         .getPort())
                 .baseline(baseline)
                 .standard(probeMember.getStandard())
+                .content(probeMember.getContent())
                 .build();
     }
 

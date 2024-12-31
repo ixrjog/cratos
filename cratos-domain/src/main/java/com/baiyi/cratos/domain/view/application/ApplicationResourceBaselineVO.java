@@ -62,6 +62,7 @@ public class ApplicationResourceBaselineVO {
         private String path;
         private Integer port;
         private Boolean standard;
+        private String content;
         private Probe baseline;
     }
 
@@ -77,6 +78,7 @@ public class ApplicationResourceBaselineVO {
                 .build();
         private String preStopExecCommand;
         private Boolean standard;
+        private String content;
         private Lifecycle baseline;
     }
 
