@@ -38,7 +38,7 @@ public class ApplicationResourceBaselineController {
     }
 
     @Operation(summary = "Query application resource baseline type options")
-    @PostMapping(value = "/kubernetes/deployment/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/type/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getBaselineTypeOptions() {
         return new HttpResult<>(ResourceBaselineTypeEnum.toOptions());
     }
