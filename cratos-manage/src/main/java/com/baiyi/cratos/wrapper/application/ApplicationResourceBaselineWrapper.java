@@ -93,6 +93,7 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
                 .port(probeMO.getHttpGet()
                         .getPort())
                 .baseline(baseline)
+                .standard(probeMember.getStandard())
                 .build();
     }
 
