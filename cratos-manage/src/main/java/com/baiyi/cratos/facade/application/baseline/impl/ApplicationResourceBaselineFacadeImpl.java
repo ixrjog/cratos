@@ -108,6 +108,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
             BaselineMemberProcessorFactory.mergeToBaseline(baseline, baselineMembers, deployment);
             kubernetesDeploymentRepo.update((EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
                     .getEdsConfigModel(), deployment);
+            this.rescan(baselineId);
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
         }
