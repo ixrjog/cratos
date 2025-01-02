@@ -102,13 +102,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
         EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
         try {
-            Deployment localDeployment = holder.getProvider()
-                    .assetLoadAs(edsAsset.getOriginalModel());
-            Deployment deployment = kubernetesDeploymentRepo.get(
-                    (EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
-                            .getEdsConfigModel(), localDeployment.getMetadata()
-                            .getNamespace(), localDeployment.getMetadata()
-                            .getName());
+            Deployment deployment = getKubernetesDeployment( holder, edsAsset);
             Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
             BaselineMemberProcessorFactory.mergeToBaseline(baseline, baselineMembers, deployment);
             kubernetesDeploymentRepo.update((EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
@@ -117,6 +111,15 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
         }
+    }
+
+    private Deployment getKubernetesDeployment(EdsInstanceProviderHolder<?, Deployment> holder, EdsAsset edsAsset) {
+        Deployment local = holder.getProvider()
+                .assetLoadAs(edsAsset.getOriginalModel());
+        return kubernetesDeploymentRepo.get((EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
+                .getEdsConfigModel(), local.getMetadata()
+                .getNamespace(), local.getMetadata()
+                .getName());
     }
 
     @Override
@@ -132,8 +135,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
         EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
         try {
-            Deployment deployment = holder.getProvider()
-                    .assetLoadAs(edsAsset.getOriginalModel());
+            Deployment deployment = getKubernetesDeployment( holder, edsAsset);
             Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 return;
@@ -177,13 +179,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         }
         EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
         try {
-            Deployment localDeployment = holder.getProvider()
-                    .assetLoadAs(edsAsset.getOriginalModel());
-            Deployment deployment = kubernetesDeploymentRepo.get(
-                    (EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
-                            .getEdsConfigModel(), localDeployment.getMetadata()
-                            .getNamespace(), localDeployment.getMetadata()
-                            .getName());
+            Deployment deployment = getKubernetesDeployment( holder, edsAsset);
             Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 return;
