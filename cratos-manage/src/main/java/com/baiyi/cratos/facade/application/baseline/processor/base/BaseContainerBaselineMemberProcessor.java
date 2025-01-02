@@ -23,7 +23,7 @@ public abstract class BaseContainerBaselineMemberProcessor implements ContainerB
             baselineMemberService.add(baselineMember);
         } else {
             baselineMember.setId(dbBaselineMember.getId());
-            baselineMemberService.updateByPrimaryKey(dbBaselineMember);
+            baselineMemberService.updateByPrimaryKey(baselineMember);
         }
     }
 

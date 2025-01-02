@@ -149,6 +149,23 @@ public class ContainerEnvSpringOptsBaselineMemberProcessor extends BaseContainer
                 .getName())) {
             return generateAwsBaselineContent(framework, env);
         }
+        // 已修改的
+        if ("java-options-common".equals(env.getValueFrom()
+                .getConfigMapKeyRef()
+                .getName())) {
+            DeploymentBaselineModel.ConfigMapKeySelector configMapKeyRef = DeploymentBaselineModel.ConfigMapKeySelector.builder()
+                    .key(env.getValueFrom().getConfigMapKeyRef().getKey())
+                    .name("java-options-common")
+                    .build();
+            DeploymentBaselineModel.EnvVarSource valueFrom = DeploymentBaselineModel.EnvVarSource.builder()
+                    .configMapKeyRef(configMapKeyRef)
+                    .build();
+            return DeploymentBaselineModel.EnvVar.builder()
+                    .name(env.getName())
+                    .value(env.getValue())
+                    .valueFrom(valueFrom)
+                    .build();
+        }
         return DeploymentBaselineModel.EnvVar.EMPTY;
     }
 
