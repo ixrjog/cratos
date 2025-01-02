@@ -45,7 +45,7 @@ public class ContainerLivenessProbeBaselineMemberProcessor extends BaseContainer
                 .namespace(baseline.getNamespace())
                 .content(livenessProbe.dump())
                 .baselineContent(baselineLivenessProbe.dump())
-                .standard(DeploymentBaselineModel.Probe.equals(livenessProbe, baselineLivenessProbe))
+                .standard(DeploymentBaselineModel.Probe.validate(livenessProbe, baselineLivenessProbe))
                 .build();
         save(livenessProbeMember);
     }

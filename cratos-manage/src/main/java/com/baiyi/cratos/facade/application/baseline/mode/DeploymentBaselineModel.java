@@ -34,7 +34,7 @@ public class DeploymentBaselineModel {
         private Long terminationGracePeriodSeconds;
         private Integer timeoutSeconds;
 
-        public static boolean equals(Probe probe1, Probe probe2) {
+        public static boolean validate(Probe probe1, Probe probe2) {
             int port1 = Optional.ofNullable(probe1)
                     .map(Probe::getHttpGet)
                     .map(HTTPGetAction::getPort)
@@ -74,27 +74,21 @@ public class DeploymentBaselineModel {
     public static class Lifecycle extends YamlDump {
         public static final Lifecycle EMPTY = Lifecycle.builder()
                 .build();
+        private LifecycleHandler postStart;
+        private LifecycleHandler preStop;
 
-        public static boolean equals(Lifecycle lifecycle1, Lifecycle lifecycle2) {
+        public static boolean validate(Lifecycle lifecycle1, Lifecycle lifecycle2) {
             String command1 = Optional.ofNullable(lifecycle1)
                     .map(Lifecycle::getPreStop)
                     .map(LifecycleHandler::getCommand)
                     .orElse("");
-
             String command2 = Optional.ofNullable(lifecycle2)
                     .map(Lifecycle::getPreStop)
                     .map(LifecycleHandler::getCommand)
                     .orElse("");
             return command1.equals(command2);
         }
-
-        private LifecycleHandler postStart;
-        private LifecycleHandler preStop;
     }
-
-//    public static Lifecycle lifecycleLoadAs(ApplicationActuator actuator) {
-//        return lifecycleLoadAs(actuator.getLifecycle());
-//    }
 
     public static Lifecycle lifecycleLoadAs(String lifecycle) {
         if (StringUtils.isBlank(lifecycle)) {
@@ -103,7 +97,7 @@ public class DeploymentBaselineModel {
         try {
             return YamlUtil.loadAs(lifecycle, Lifecycle.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+            throw new ApplicationConfigException("Application resource container lifecycle format error: {}", e.getMessage());
         }
     }
 
@@ -114,7 +108,7 @@ public class DeploymentBaselineModel {
         try {
             return YamlUtil.loadAs(probe, Probe.class);
         } catch (JsonSyntaxException e) {
-            throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
+            throw new ApplicationConfigException("Application resource container probe format error: {}", e.getMessage());
         }
     }
 
@@ -124,7 +118,6 @@ public class DeploymentBaselineModel {
     @NoArgsConstructor
     public static class LifecycleHandler {
         private ExecAction exec;
-        // private io.fabric8.kubernetes.api.model.HTTPGetAction httpGet;
 
         public String getCommand() {
             List<String> command = Optional.ofNullable(exec)
@@ -132,7 +125,6 @@ public class DeploymentBaselineModel {
                     .orElse(List.of());
             return StringUtils.join(command, " ");
         }
-
     }
 
     @Data
@@ -141,6 +133,69 @@ public class DeploymentBaselineModel {
     @NoArgsConstructor
     public static class ExecAction {
         private List<String> command;
+    }
+
+    public static EnvVar envVarLoadAs(String envVar) {
+        if (StringUtils.isBlank(envVar)) {
+            return EnvVar.EMPTY;
+        }
+        try {
+            return YamlUtil.loadAs(envVar, EnvVar.class);
+        } catch (JsonSyntaxException e) {
+            throw new ApplicationConfigException("Application resource container envVar format error: {}", e.getMessage());
+        }
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EnvVar extends YamlDump {
+        public static final EnvVar EMPTY = EnvVar.builder()
+                .build();
+        private String name;
+        private String value;
+        private EnvVarSource valueFrom;
+
+        public static boolean validate(EnvVar env1, EnvVar env2) {
+            Optional<ConfigMapKeySelector> configMapKeySelector1 = Optional.ofNullable(env1)
+                    .map(EnvVar::getValueFrom)
+                    .map(EnvVarSource::getConfigMapKeyRef);
+
+            Optional<ConfigMapKeySelector> configMapKeySelector2 = Optional.ofNullable(env2)
+                    .map(EnvVar::getValueFrom)
+                    .map(EnvVarSource::getConfigMapKeyRef);
+
+            if (configMapKeySelector1.isPresent() && configMapKeySelector2.isPresent()) {
+                return configMapKeySelector1.get()
+                        .getKey()
+                        .equals(configMapKeySelector2.get()
+                                .getKey()) && configMapKeySelector1.get()
+                        .getName()
+                        .equals(configMapKeySelector2.get()
+                                .getName());
+            }
+            return false;
+        }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EnvVarSource {
+        private ConfigMapKeySelector configMapKeyRef;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ConfigMapKeySelector {
+        private String key;
+        private String name;
+        private Boolean optional;
     }
 
 }

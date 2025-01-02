@@ -17,7 +17,8 @@ public enum ResourceBaselineTypeEnum {
     CONTAINER_LIFECYCLE("lifecycle"),
     CONTAINER_LIVENESS_PROBE("livenessProbe"),
     CONTAINER_READINESS_PROBE("readinessProbe"),
-    CONTAINER_STARTUP_PROBE("startupProbe");
+    CONTAINER_STARTUP_PROBE("startupProbe"),
+    CONTAINER_ENV_SPRING_OPTS("springOpts");
 
     private final String displayName;
 

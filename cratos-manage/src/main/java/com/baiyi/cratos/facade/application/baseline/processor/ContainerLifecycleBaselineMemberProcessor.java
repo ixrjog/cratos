@@ -45,7 +45,7 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
                 .namespace(baseline.getNamespace())
                 .content(lifecycle.dump())
                 .baselineContent(baselineLifecycle.dump())
-                .standard(DeploymentBaselineModel.Lifecycle.equals(lifecycle, baselineLifecycle))
+                .standard(DeploymentBaselineModel.Lifecycle.validate(lifecycle, baselineLifecycle))
                 .build();
         save(lifecycleMember);
     }

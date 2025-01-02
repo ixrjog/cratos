@@ -45,7 +45,7 @@ public class ContainerReadinessProbeBaselineMemberProcessor extends BaseContaine
                 .namespace(baseline.getNamespace())
                 .content(readinessProbe.dump())
                 .baselineContent(baselineReadinessProbe.dump())
-                .standard(DeploymentBaselineModel.Probe.equals(readinessProbe, baselineReadinessProbe))
+                .standard(DeploymentBaselineModel.Probe.validate(readinessProbe, baselineReadinessProbe))
                 .build();
         save(readinessProbeMember);
     }

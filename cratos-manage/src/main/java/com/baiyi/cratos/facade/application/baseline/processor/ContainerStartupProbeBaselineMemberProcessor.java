@@ -45,7 +45,7 @@ public class ContainerStartupProbeBaselineMemberProcessor extends BaseContainerB
                 .namespace(baseline.getNamespace())
                 .content(startupProbe.dump())
                 .baselineContent(baselineStartupProbe.dump())
-                .standard(DeploymentBaselineModel.Probe.equals(startupProbe, baselineStartupProbe))
+                .standard(DeploymentBaselineModel.Probe.validate(startupProbe, baselineStartupProbe))
                 .build();
         save(startupProbeMember);
     }
