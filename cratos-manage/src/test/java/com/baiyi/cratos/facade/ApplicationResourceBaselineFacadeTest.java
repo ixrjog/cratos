@@ -31,9 +31,10 @@ public class ApplicationResourceBaselineFacadeTest extends BaseUnit {
                 .standard(true)
                 .build();
         ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery = ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery.builder()
-                .byMemberType(byMemberType)
+                //.byMemberType(byMemberType)
                 .page(1)
                 .length(10)
+                .namespace("daily")
                 .build();
         DataTable<ApplicationResourceBaselineVO.ResourceBaseline> dataTable = applicationResourceBaselineFacade.queryApplicationResourceBaselinePage(
                 pageQuery);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @Date 2024/1/3 09:42
  * @Version 1.0
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = {"com.baiyi.cratos.controller.http"})
 public class RequestExceptionHandler {
 
     @ResponseStatus(HttpStatus.OK)

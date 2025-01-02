@@ -39,10 +39,12 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <springdoc-openapi-starter-webmvc.version>2.2.0</springdoc-openapi-starter-webmvc.version>
+        <!--
+        https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+        -->
+        <springdoc-openapi-starter-webmvc.version>2.7.0</springdoc-openapi-starter-webmvc.version>
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
-        <spring-security.version>6.3.5</spring-security.version>
+        <spring-security.version>6.4.2</spring-security.version>
         <!-- aws https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-elasticloadbalancingv2 -->
         <aws-java-sdk.version>1.12.778</aws-java-sdk.version>
         <aws-java-sdk2.version>2.29.21</aws-java-sdk2.version>
