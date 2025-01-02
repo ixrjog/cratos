@@ -17,4 +17,6 @@ public interface ApplicationResourceBaselineMemberService extends BaseUniqueKeyS
 
     boolean hasNonStandardBaselineMember(int baselineId);
 
+    void deleteByBaselineId(int baselineId);
+
 }

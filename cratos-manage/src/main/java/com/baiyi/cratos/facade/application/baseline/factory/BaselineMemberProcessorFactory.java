@@ -31,7 +31,7 @@ public class BaselineMemberProcessorFactory {
         CONTEXT.put(bean.getType(), bean);
     }
 
-    public static void saveMemberAll(ApplicationResourceBaseline baseline, Container container) {
+    public static void saveAll(ApplicationResourceBaseline baseline, Container container) {
         CONTEXT.forEach((key, bean) -> bean.saveMember(baseline, container));
     }
 

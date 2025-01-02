@@ -206,7 +206,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     private void scan(ApplicationResourceBaseline baseline, Container container) {
-        BaselineMemberProcessorFactory.saveMemberAll(baseline, container);
+        BaselineMemberProcessorFactory.saveAll(baseline, container);
         // 回写合规字段
         boolean standard = !baselineMemberService.hasNonStandardBaselineMember(baseline.getId());
         if (baseline.getStandard() != standard) {

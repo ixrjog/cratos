@@ -22,10 +22,8 @@ public abstract class BaseContainerBaselineMemberProcessor implements ContainerB
         if (dbBaselineMember == null) {
             baselineMemberService.add(baselineMember);
         } else {
-            if (dbBaselineMember.getStandard() != baselineMember.getStandard()) {
-                dbBaselineMember.setStandard(baselineMember.getStandard());
-                baselineMemberService.updateByPrimaryKey(dbBaselineMember);
-            }
+            baselineMember.setId(dbBaselineMember.getId());
+            baselineMemberService.updateByPrimaryKey(dbBaselineMember);
         }
     }
 

@@ -2,11 +2,13 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
+import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -36,6 +38,7 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 public class EdsAssetServiceImpl implements EdsAssetService {
 
     private final EdsAssetMapper edsAssetMapper;
+    private final ApplicationResourceBaselineService applicationResourceBaselineService;
 
     @Override
     @Cacheable(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSET:INSTANCEID:' + #record.instanceId + ':ASSETTYPE:' + #record.assetType + ':ASSETKEY:' + #record.assetKey", unless = "#result == null")
@@ -123,6 +126,10 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {
+        applicationResourceBaselineService.deleteByBusiness(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(id)
+                .build());
         EdsAssetService.super.deleteById(id);
     }
 

@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -44,6 +45,16 @@ public class ApplicationResourceBaselineMemberServiceImpl implements Application
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("baselineId", baselineId);
         return applicationResourceBaselineMemberMapper.selectByExample(example);
+    }
+
+    @Override
+    public void deleteByBaselineId(int baselineId) {
+        List<ApplicationResourceBaselineMember> members = this.queryByBaselineId(baselineId);
+        if (!CollectionUtils.isEmpty(members)) {
+            for (ApplicationResourceBaselineMember member : members) {
+                this.deleteById(member.getId());
+            }
+        }
     }
 
     @Override

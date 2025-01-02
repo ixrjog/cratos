@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
@@ -15,5 +16,7 @@ public interface ApplicationResourceBaselineService extends BaseUniqueKeyService
 
     DataTable<ApplicationResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery);
+
+    void deleteByBusiness(BaseBusiness.HasBusiness byBusiness);
 
 }

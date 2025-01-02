@@ -1,9 +1,11 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.mapper.ApplicationResourceBaselineMapper;
+import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -11,6 +13,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -27,6 +30,7 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 public class ApplicationResourceBaselineServiceImpl implements ApplicationResourceBaselineService {
 
     private final ApplicationResourceBaselineMapper applicationResourceBaselineMapper;
+    private final ApplicationResourceBaselineMemberService applicationResourceBaselineMemberService;
 
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:APPLICATION_RESOURCE_BASELINE:ID:' + #id")
@@ -41,6 +45,25 @@ public class ApplicationResourceBaselineServiceImpl implements ApplicationResour
                 .andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("businessId", record.getBusinessId());
         return applicationResourceBaselineMapper.selectOneByExample(example);
+    }
+
+    private List<ApplicationResourceBaseline> queryByBusiness(BaseBusiness.HasBusiness byBusiness) {
+        Example example = new Example(ApplicationResourceBaseline.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("businessType", byBusiness.getBusinessType())
+                .andEqualTo("businessId", byBusiness.getBusinessId());
+        return applicationResourceBaselineMapper.selectByExample(example);
+    }
+
+    @Override
+    public void deleteByBusiness(BaseBusiness.HasBusiness byBusiness) {
+        List<ApplicationResourceBaseline> baselines = this.queryByBusiness(byBusiness);
+        if (!CollectionUtils.isEmpty(baselines)) {
+            for (ApplicationResourceBaseline baseline : baselines) {
+                applicationResourceBaselineMemberService.deleteByBaselineId(baseline.getId());
+                ApplicationResourceBaselineService.super.deleteById(baseline.getId());
+            }
+        }
     }
 
     @Override
