@@ -9,6 +9,8 @@ import com.baiyi.cratos.facade.application.baseline.mode.converter.DeploymentBas
 import com.baiyi.cratos.facade.application.baseline.processor.base.BaseContainerBaselineMemberProcessor;
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import io.fabric8.kubernetes.api.model.Container;
+import io.fabric8.kubernetes.api.model.IntOrString;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -48,6 +50,27 @@ public class ContainerStartupProbeBaselineMemberProcessor extends BaseContainerB
                 .standard(DeploymentBaselineModel.Probe.validate(startupProbe, baselineStartupProbe))
                 .build();
         save(startupProbeMember);
+    }
+
+    @Override
+    public void mergeToBaseline(ApplicationResourceBaseline baseline, ApplicationResourceBaselineMember baselineMember,
+                                Deployment deployment, Container container) {
+        container.getStartupProbe()
+                .getHttpGet()
+                .setPort(new IntOrString(8081));
+        if (PPFramework.PP_JV_1.getDisplayName()
+                .equals(baseline.getFramework())) {
+            container.getStartupProbe()
+                    .getHttpGet()
+                    .setPath("/actuator/health");
+        }
+        if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
+                .equals(baseline.getFramework())) {
+            container.getStartupProbe()
+                    .getHttpGet()
+                    .setPath("/actuator/health/readiness");
+        }
     }
 
     private DeploymentBaselineModel.Probe generateBaselineContent(String framework) {

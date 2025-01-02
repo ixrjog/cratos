@@ -8,9 +8,11 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.TagFacade;
@@ -60,6 +62,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final ApplicationResourceBaselineWrapper applicationResourceBaselineWrapper;
+    private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     private static final String TAG_FRAMEWORK = "Framework";
 
@@ -80,6 +83,34 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
                 }
             }
         });
+    }
+
+    @Override
+    public void mergeToBaseline(int baselineId) {
+        ApplicationResourceBaseline baseline = baselineService.getById(baselineId);
+        if (baseline == null) {
+            return;
+        }
+        EdsAsset edsAsset = edsAssetService.getById(baseline.getBusinessId());
+        if (edsAsset == null) {
+            return;
+        }
+        List<ApplicationResourceBaselineMember> baselineMembers = baselineMemberService.queryByBaselineId(baselineId);
+        if (CollectionUtils.isEmpty(baselineMembers)) {
+            return;
+        }
+        Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
+        EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
+        try {
+            Deployment deployment = holder.getProvider()
+                    .assetLoadAs(edsAsset.getOriginalModel());
+            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            BaselineMemberProcessorFactory.mergeToBaseline(baseline, baselineMembers, deployment);
+            kubernetesDeploymentRepo.update((EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
+                    .getEdsConfigModel(), deployment);
+        } catch (NullPointerException nullPointerException) {
+            log.error(nullPointerException.getMessage());
+        }
     }
 
     @Override

@@ -41,6 +41,13 @@ public class ApplicationResourceBaselineController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Merge application resource baseline")
+    @PutMapping(value = "/merge", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> mergeToBaseline(@RequestParam int baselineId) {
+        applicationResourceBaselineFacade.mergeToBaseline(baselineId);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Query application resource baseline type options")
     @GetMapping(value = "/type/options", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getBaselineTypeOptions() {

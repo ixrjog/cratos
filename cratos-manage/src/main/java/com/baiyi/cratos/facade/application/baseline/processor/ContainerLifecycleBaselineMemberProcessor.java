@@ -9,6 +9,7 @@ import com.baiyi.cratos.facade.application.baseline.mode.converter.DeploymentBas
 import com.baiyi.cratos.facade.application.baseline.processor.base.BaseContainerBaselineMemberProcessor;
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import io.fabric8.kubernetes.api.model.Container;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -48,6 +49,29 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
                 .standard(DeploymentBaselineModel.Lifecycle.validate(lifecycle, baselineLifecycle))
                 .build();
         save(lifecycleMember);
+    }
+
+    @Override
+    public void mergeToBaseline(ApplicationResourceBaseline baseline, ApplicationResourceBaselineMember baselineMember,
+                                Deployment deployment, Container container) {
+        if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                .equals(baseline.getFramework())) {
+            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/shutdown", "-X", "POST");
+
+            container.getLifecycle()
+                    .getPreStop()
+                    .getExec()
+                    .setCommand(command);
+        }
+        if (PPFramework.PP_JV_1.getDisplayName()
+                .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
+                .equals(baseline.getFramework())) {
+            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "POST");
+            container.getLifecycle()
+                    .getPreStop()
+                    .getExec()
+                    .setCommand(command);
+        }
     }
 
     private DeploymentBaselineModel.Lifecycle generateBaselineContent(String framework) {

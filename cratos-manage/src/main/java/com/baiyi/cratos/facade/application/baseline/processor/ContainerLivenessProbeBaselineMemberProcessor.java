@@ -9,6 +9,8 @@ import com.baiyi.cratos.facade.application.baseline.mode.converter.DeploymentBas
 import com.baiyi.cratos.facade.application.baseline.processor.base.BaseContainerBaselineMemberProcessor;
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import io.fabric8.kubernetes.api.model.Container;
+import io.fabric8.kubernetes.api.model.IntOrString;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -48,6 +50,22 @@ public class ContainerLivenessProbeBaselineMemberProcessor extends BaseContainer
                 .standard(DeploymentBaselineModel.Probe.validate(livenessProbe, baselineLivenessProbe))
                 .build();
         save(livenessProbeMember);
+    }
+
+    @Override
+    public void mergeToBaseline(ApplicationResourceBaseline baseline, ApplicationResourceBaselineMember baselineMember,
+                                Deployment deployment, Container container) {
+
+        container.getLivenessProbe().getHttpGet().setPort(new IntOrString(8081));
+        if (PPFramework.PP_JV_1.getDisplayName()
+                .equals(baseline.getFramework())) {
+            container.getLivenessProbe().getHttpGet().setPath("/actuator/health");
+        }
+        if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
+                .equals(baseline.getFramework())) {
+            container.getLivenessProbe().getHttpGet().setPath("/actuator/health/liveness");
+        }
     }
 
     private DeploymentBaselineModel.Probe generateBaselineContent(String framework) {

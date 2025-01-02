@@ -9,6 +9,7 @@ import com.baiyi.cratos.facade.application.baseline.processor.base.BaseContainer
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.EnvVar;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class ContainerEnvSpringOptsBaselineMemberProcessor extends BaseContainer
                 .value(env.getValue())
                 .valueFrom(valueFrom)
                 .build();
-        DeploymentBaselineModel.EnvVar baselineSpringOpts = generateBaselineContent(baseline.getFramework(),env);
+        DeploymentBaselineModel.EnvVar baselineSpringOpts = generateBaselineContent(baseline.getFramework(), env);
         ApplicationResourceBaselineMember springOptsMember = ApplicationResourceBaselineMember.builder()
                 .baselineId(baseline.getId())
                 .baselineType(getType().name())
@@ -73,6 +74,68 @@ public class ContainerEnvSpringOptsBaselineMemberProcessor extends BaseContainer
                 .standard(DeploymentBaselineModel.EnvVar.validate(envVar, baselineSpringOpts))
                 .build();
         save(springOptsMember);
+    }
+
+    @Override
+    public void mergeToBaseline(ApplicationResourceBaseline baseline, ApplicationResourceBaselineMember baselineMember,
+                                Deployment deployment, Container container) {
+        Optional<EnvVar> optionalEnvVar = container.getEnv()
+                .stream()
+                .filter(e -> "SPRING_OPTS".equals(e.getName()))
+                .findFirst();
+        // 不处理
+        if (optionalEnvVar.isEmpty()) {
+            return;
+        }
+        EnvVar env = optionalEnvVar.get();
+        if ("java-options".equals(env.getValueFrom()
+                .getConfigMapKeyRef()
+                .getName())) {
+            if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey(PPFramework.PP_JV_SPRINGBOOT_2.name());
+            }
+            if (PPFramework.PP_JV_1.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey("ALIYUN_" + PPFramework.PP_JV_1.name());
+            }
+            if (PPFramework.PP_JV_2.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey(PPFramework.PP_JV_2.name());
+            }
+        }
+        if ("java-options-aws".equals(env.getValueFrom()
+                .getConfigMapKeyRef()
+                .getName())) {
+            String key = "";
+            if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey(PPFramework.PP_JV_SPRINGBOOT_2.name());
+            }
+            if (PPFramework.PP_JV_1.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey("AWS_" + PPFramework.PP_JV_1.name());
+            }
+            if (PPFramework.PP_JV_2.getDisplayName()
+                    .equals(baseline.getFramework())) {
+                env.getValueFrom()
+                        .getConfigMapKeyRef()
+                        .setKey(PPFramework.PP_JV_2.name());
+            }
+        }
+        env.getValueFrom()
+                .getConfigMapKeyRef()
+                .setName("java-options-common");
     }
 
     private DeploymentBaselineModel.EnvVar generateBaselineContent(String framework, EnvVar env) {

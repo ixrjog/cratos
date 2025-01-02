@@ -15,6 +15,8 @@ public interface ApplicationResourceBaselineFacade {
 
     void rescan(int baselineId);
 
+    void mergeToBaseline(int baselineId);
+
     DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery);
 
