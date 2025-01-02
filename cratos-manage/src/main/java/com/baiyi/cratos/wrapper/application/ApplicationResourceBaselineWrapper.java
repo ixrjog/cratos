@@ -8,7 +8,7 @@ import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import com.baiyi.cratos.wrapper.application.converter.BaselineConverter;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
-import com.google.common.collect.Maps;
+import com.google.api.client.util.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -38,11 +38,11 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
         List<ApplicationResourceBaselineMember> members = baselineMemberService.queryByBaselineId(vo.getId());
         Map<String, ApplicationResourceBaselineMember> memberMap = members.stream()
                 .collect(Collectors.toMap(ApplicationResourceBaselineMember::getBaselineType, a -> a, (k1, k2) -> k1));
-        Map<String, ApplicationResourceBaselineVO.EnvVar> env = Maps.newHashMap();
+        List<ApplicationResourceBaselineVO.EnvVar> env = Lists.newArrayList();
         ApplicationResourceBaselineVO.EnvVar springOptsEnvVar = toEnv(
                 memberMap.get(ResourceBaselineTypeEnum.CONTAINER_ENV_SPRING_OPTS.name()));
         if (springOptsEnvVar != null) {
-            env.put(springOptsEnvVar.getName(), springOptsEnvVar);
+            env.add(springOptsEnvVar);
         }
         return ApplicationResourceBaselineVO.Container.builder()
                 .startupProbe(toProbe(memberMap.get(ResourceBaselineTypeEnum.CONTAINER_STARTUP_PROBE.name())))

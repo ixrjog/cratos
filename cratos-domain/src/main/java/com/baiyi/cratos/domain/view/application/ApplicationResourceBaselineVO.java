@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Map;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -49,7 +49,7 @@ public class ApplicationResourceBaselineVO {
         private Probe startupProbe;
         private Lifecycle lifecycle;
 
-        private Map<String, EnvVar> env;
+        private List<EnvVar> env;
     }
 
     @Data
@@ -90,10 +90,10 @@ public class ApplicationResourceBaselineVO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class EnvVar implements Serializable {
-        @Serial
-        private static final long serialVersionUID = -5743384787968066582L;
         public static final EnvVar EMPTY = EnvVar.builder()
                 .build();
+        @Serial
+        private static final long serialVersionUID = -6680445475935870245L;
         private String name;
         private String value;
         private EnvVarSource valueFrom;
