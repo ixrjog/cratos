@@ -38,6 +38,7 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
             QueryKubernetesDetails param = QueryKubernetesDetails.builder()
                     .applicationName(message.getApplicationName())
                     .namespace(message.getNamespace())
+                    .name(message.getName())
                     .build();
             MessageResponse<KubernetesVO.KubernetesDetails> response = kubernetesDetailsFacade.queryKubernetesDetails(
                     param);

@@ -29,6 +29,7 @@ public class ApplicationKubernetesParam {
         private String applicationName;
         //@NotBlank
         private String namespace;
+        private String name;
     }
 
     @Data
