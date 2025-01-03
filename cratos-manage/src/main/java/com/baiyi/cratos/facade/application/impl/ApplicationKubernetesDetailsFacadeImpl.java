@@ -61,11 +61,11 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         }
         return OptionsVO.Options.builder()
                 .options(resources.stream()
-                        .sorted()
                         .map(e -> OptionsVO.Option.builder()
                                 .value(e.getName())
                                 .label(e.getDisplayName())
                                 .build())
+                        .sorted()
                         .toList())
                 .build();
     }

@@ -4,9 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -54,7 +56,11 @@ public class OptionsVO {
         private Object comment;
 
         @Override
-        public int compareTo(Option o) {
+        public int compareTo(@NonNull Option o) {
+            if (Objects.isNull(this.seq)) {
+                return this.value.toString()
+                        .compareTo(o.value.toString());
+            }
             return this.seq.compareTo(o.getSeq());
         }
     }
