@@ -57,7 +57,6 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
         if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
                 .equals(baseline.getFramework())) {
             List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/shutdown", "-X", "POST");
-
             container.getLifecycle()
                     .getPreStop()
                     .getExec()

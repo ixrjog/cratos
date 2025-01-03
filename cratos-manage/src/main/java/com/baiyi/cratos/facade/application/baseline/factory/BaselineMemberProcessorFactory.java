@@ -36,7 +36,8 @@ public class BaselineMemberProcessorFactory {
     }
 
     public static void mergeToBaseline(ApplicationResourceBaseline baseline,
-                                       List<ApplicationResourceBaselineMember> baselineMembers, Deployment deployment) {
+                                       List<ApplicationResourceBaselineMember> baselineMembers,
+                                       final Deployment deployment) {
         Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
         if (optionalContainer.isEmpty()) {
             return;
