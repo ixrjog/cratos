@@ -17,8 +17,6 @@ import static com.baiyi.cratos.domain.constant.Global.ISO8601;
 public class ConverterUtil {
 
     public static KubernetesCommonVO.Metadata toMetadata(ObjectMeta objectMeta) {
-        objectMeta.getLabels();
-
         return KubernetesCommonVO.Metadata.builder()
                 .name(objectMeta.getName())
                 .creationTimestamp(ConverterUtil.parse(objectMeta.getCreationTimestamp()))

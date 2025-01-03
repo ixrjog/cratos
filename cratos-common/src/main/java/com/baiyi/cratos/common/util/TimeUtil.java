@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 public final class TimeUtil {
 
     public static final String YEAR = "yyyy";
-
     public static final int THE_NUMBER_OF_SECONDS_IN_A_DAY = 86_400;
+    public static final TimeZone UTC_TZ = TimeZone.getTimeZone("UTC");
 
     private TimeUtil() {
     }
@@ -36,6 +36,7 @@ public final class TimeUtil {
 
     public static Date strToDate(String d, String format) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        simpleDateFormat.setTimeZone(UTC_TZ);
         return simpleDateFormat.parse(d);
     }
 

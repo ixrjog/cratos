@@ -24,7 +24,6 @@ public abstract class BaseDataTableConverter<T, S> implements IBaseWrapper<T>, C
      * Convert & Wrap
      *
      * @param s
-     * @param targetClass
      * @return
      */
     public T wrapToTarget(S s) {

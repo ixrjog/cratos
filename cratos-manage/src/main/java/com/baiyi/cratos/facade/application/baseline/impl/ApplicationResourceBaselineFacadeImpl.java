@@ -140,10 +140,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
             Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
-            if (optionalContainer.isEmpty()) {
-                return;
-            }
-            this.scan(baseline, optionalContainer.get());
+            optionalContainer.ifPresent(container -> this.scan(baseline, container));
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
         }

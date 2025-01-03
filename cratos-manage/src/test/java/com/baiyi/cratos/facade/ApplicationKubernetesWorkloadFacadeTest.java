@@ -21,7 +21,7 @@ public class ApplicationKubernetesWorkloadFacadeTest extends BaseUnit {
     @Test
     void test() {
         ApplicationKubernetesParam.QueryKubernetesDetails param = ApplicationKubernetesParam.QueryKubernetesDetails.builder()
-                .applicationName("kili")
+                .applicationName("scene-data-product")
                 .namespace("daily")
                 .build();
 
