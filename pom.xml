@@ -33,6 +33,7 @@
         <module>cratos-ssh-crystal</module>
         <module>cratos-eds-opscloud</module>
         <module>cratos-eds-jenkins</module>
+        <module>cratos-ssh-kubernetes</module>
     </modules>
 
     <properties>

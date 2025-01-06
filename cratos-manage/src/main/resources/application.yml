@@ -24,9 +24,13 @@ spring:
   shell:
     interactive:
       enabled: off
+    script:
+      enabled: off
   lifecycle:
     # 设置缓冲时间 默认30s
     timeout-per-shutdown-phase: 45s
+  main:
+    banner-mode: CONSOLE
 
 # 开发环境配置
 server:

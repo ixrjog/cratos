@@ -158,7 +158,8 @@ public class SshShellRunnable
 
                 SshShellCommandFactory.SSH_THREAD_CONTEXT.set(new SshContext(this, terminal, reader, authentication));
                 shellListenerService.onSessionStarted(session);
-                new InteractiveShellRunner(reader, promptProvider, shell, new DefaultShellContext()).run(null);
+                new InteractiveShellRunner(reader, promptProvider, shell, new DefaultShellContext()).run(
+                        (String[]) null);
                 shellListenerService.onSessionStopped(session);
                 log.debug("{}: closing", session);
                 quit(0);
