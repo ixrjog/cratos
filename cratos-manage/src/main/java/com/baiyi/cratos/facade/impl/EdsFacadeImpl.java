@@ -33,6 +33,7 @@ import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ import java.util.Optional;
  * @Date 2024/2/5 17:07
  * @Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class EdsFacadeImpl implements EdsFacade {
@@ -237,9 +239,13 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Async
     public void importEdsInstanceAsset(EdsInstanceParam.ImportInstanceAsset importInstanceAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(importInstanceAsset.getInstanceId(),
-                importInstanceAsset.getAssetType());
-        providerHolder.importAssets();
+        try {
+            EdsInstanceProviderHolder<?, ?> providerHolder = buildHolder(importInstanceAsset.getInstanceId(),
+                    importInstanceAsset.getAssetType());
+            providerHolder.importAssets();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application;
 
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.env.EnvVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -18,7 +19,7 @@ public class ApplicationResourceBaselineVO {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
-    public static class ResourceBaseline extends BaseVO implements Serializable {
+    public static class ResourceBaseline extends BaseVO implements EnvVO.HasEnv, Serializable {
         @Serial
         private static final long serialVersionUID = 6876457686001577045L;
         private Integer id;
@@ -34,6 +35,12 @@ public class ApplicationResourceBaselineVO {
         private Boolean standard;
         private String comment;
         private Container container;
+        private EnvVO.Env env;
+
+        @Override
+        public String getEnvName() {
+            return this.namespace;
+        }
     }
 
     @Data
@@ -116,7 +123,7 @@ public class ApplicationResourceBaselineVO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ConfigMapKeySelector implements Serializable  {
+    public static class ConfigMapKeySelector implements Serializable {
         @Serial
         private static final long serialVersionUID = 5380033101181848519L;
         private String key;
