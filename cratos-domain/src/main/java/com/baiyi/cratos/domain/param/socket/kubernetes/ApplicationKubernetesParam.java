@@ -30,17 +30,7 @@ public class ApplicationKubernetesParam {
         //@NotBlank
         private String namespace;
         private String name;
-    }
-
-    @Data
-    @Builder
-    public static class KubernetesWatchLogRequest implements HasSocketRequest {
-        private String topic;
-        private String action;
-        //@NotBlank
-        private String applicationName;
-        //@NotBlank
-        private String namespace;
+        // Watch container logs
         private List<DeploymentRequest> deployments;
     }
 

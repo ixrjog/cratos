@@ -73,7 +73,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             try {
                 ApplicationKubernetesParam.KubernetesDetailsRequest kubernetesDetailsRequest = ApplicationKubernetesParam.loadAs(
                         message);
-                KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
+               // KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
             } catch (JsonSyntaxException ignored) {
             }
         }

@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Component
 @RequiredArgsConstructor
-public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetesDetailsChannelHandler<ApplicationKubernetesParam.KubernetesWatchLogRequest> {
+public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetesDetailsChannelHandler<ApplicationKubernetesParam.KubernetesDetailsRequest> {
 
     private final KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
@@ -41,7 +41,7 @@ public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetes
 
     @Override
     public void handleRequest(String sessionId, Session session,
-                              ApplicationKubernetesParam.KubernetesWatchLogRequest message) throws IllegalStateException, IOException {
+                              ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException, IOException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {
             Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
