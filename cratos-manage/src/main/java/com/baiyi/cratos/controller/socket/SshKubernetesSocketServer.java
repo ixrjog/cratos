@@ -65,7 +65,6 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
         } catch (Exception e) {
             log.error("Kubernetes ssh create connection error: {}", e.getMessage());
         }
-
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)
