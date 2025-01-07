@@ -44,6 +44,10 @@ public class SessionOutput extends HostSystem {
     StringBuilder output = new StringBuilder();
     ByteArrayOutputStream outputStream;
 
+    public static SessionOutput newOutput(String sessionId, String instanceId) {
+        return new SessionOutput(sessionId, instanceId);
+    }
+
     public SessionOutput() {
     }
 

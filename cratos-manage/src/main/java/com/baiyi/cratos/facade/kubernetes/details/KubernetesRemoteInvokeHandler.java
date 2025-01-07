@@ -24,18 +24,17 @@ public class KubernetesRemoteInvokeHandler {
     private final KubernetesPodRepo kubernetesPodRepo;
 
     public void runWatchLog(String sessionId, String instanceId, EdsKubernetesConfigModel.Kubernetes kubernetes,
-                                   ApplicationKubernetesParam.PodRequest pod, Integer lines) {
+                            ApplicationKubernetesParam.PodRequest pod, Integer lines) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        LogWatch logWatch = kubernetesPodRepo.getLogWatch(kubernetes,
-                pod.getNamespace(),
-                pod.getName(),
-                pod.getContainer().getName(),
-                lines, out);
-        SessionOutput sessionOutput = new SessionOutput(sessionId, instanceId);
+        LogWatch logWatch = kubernetesPodRepo.getLogWatch(kubernetes, pod.getNamespace(), pod.getName(),
+                pod.getContainer()
+                        .getName(), lines, out);
+        SessionOutput sessionOutput = SessionOutput.newOutput(sessionId, instanceId);
         // 启动线程处理会话
-        WatchKubernetesTerminalOutputTask run = new WatchKubernetesTerminalOutputTask(sessionOutput, out);
+        WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out);
         // JDK21 VirtualThreads
-        Thread.ofVirtual().start(run);
+        Thread.ofVirtual()
+                .start(run);
         KubernetesSession kubernetesSession = KubernetesSession.builder()
                 .sessionId(sessionId)
                 .instanceId(instanceId)

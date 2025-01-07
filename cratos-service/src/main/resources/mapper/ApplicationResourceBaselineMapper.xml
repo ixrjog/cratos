@@ -45,6 +45,16 @@
                 where baseline_type = #{byMemberType.baselineType} and standard = #{byMemberType.standard}
                 )
             </if>
+            <if test="isQueryCanary != null">
+                <choose>
+                    <when test="isQueryCanary">
+                        and name like "%-canary"
+                    </when>
+                    <otherwise>
+                        and name not like "%-canary"
+                    </otherwise>
+                </choose>
+            </if>
         </where>
     </select>
 

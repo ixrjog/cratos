@@ -35,10 +35,7 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * &#064;Author  baiyi
@@ -161,6 +158,10 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
                                     .toList()));
                 }
             }
+        }
+        // 只作用于prod环境
+        if (Objects.nonNull(pageQuery.getIsQueryCanary()) && !"prod".equals(pageQuery.getNamespace())) {
+            pageQuery.setIsQueryCanary(null);
         }
         DataTable<ApplicationResourceBaseline> dataTable = baselineService.queryApplicationResourceBaselinePage(
                 pageQuery);

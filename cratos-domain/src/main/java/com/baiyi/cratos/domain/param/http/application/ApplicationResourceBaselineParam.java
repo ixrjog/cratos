@@ -25,6 +25,7 @@ public class ApplicationResourceBaselineParam {
         private String framework;
         private Boolean standard;
         private BaselineMember byMemberType;
+        private Boolean isQueryCanary;
     }
 
     @Data

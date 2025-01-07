@@ -13,6 +13,7 @@ import com.baiyi.cratos.facade.kubernetes.details.handler.BaseKubernetesDetailsC
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -65,7 +66,7 @@ public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetes
         if (kubernetesMap.containsKey(edsInstanceId)) {
             return kubernetesMap.get(edsInstanceId);
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 edsInstanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         kubernetesMap.put(edsInstanceId, holder.getInstance()
                 .getEdsConfigModel());

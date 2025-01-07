@@ -14,6 +14,10 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 @Slf4j
 public class WatchKubernetesTerminalOutputTask extends AbstractSshChannelOutputTask {
 
+    public static WatchKubernetesTerminalOutputTask newTask(SessionOutput sessionOutput, ByteArrayOutputStream baos) {
+        return new WatchKubernetesTerminalOutputTask(sessionOutput, baos);
+    }
+
     public WatchKubernetesTerminalOutputTask(SessionOutput sessionOutput, ByteArrayOutputStream baos) {
         setSessionOutput(sessionOutput);
         setOutputStream(baos);
@@ -21,7 +25,8 @@ public class WatchKubernetesTerminalOutputTask extends AbstractSshChannelOutputT
 
     @Override
     public void write(char[] buf, int off, int len) {
-        SessionOutputUtil.addToOutput(getSessionOutput().getSessionId(), getSessionOutput().getInstanceId(), buf, off, len);
+        SessionOutputUtil.addToOutput(getSessionOutput().getSessionId(), getSessionOutput().getInstanceId(), buf, off,
+                len);
     }
 
 }
