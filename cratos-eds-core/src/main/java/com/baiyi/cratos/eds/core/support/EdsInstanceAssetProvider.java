@@ -29,4 +29,6 @@ public interface EdsInstanceAssetProvider<Config extends IEdsConfigModel, Asset>
 
     void setConfig(EdsConfig edsConfig);
 
+    Asset getAsset(EdsAsset asset);
+
 }

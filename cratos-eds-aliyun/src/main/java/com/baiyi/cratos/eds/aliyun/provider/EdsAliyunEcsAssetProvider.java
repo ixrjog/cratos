@@ -13,6 +13,7 @@ import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -38,18 +39,18 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     private final AliyunEcsRepo aliyunEcsRepo;
 
+    private static final String VPC = "vpc";
+    private static final String PRE_PAID = "PrePaid";
+
     public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade, AliyunEcsRepo aliyunEcsRepo,
-                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                     EdsAssetIndexFacade edsAssetIndexFacade,
+                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                     EdsInstanceProviderHolderBuilder holderBuilder, AliyunEcsRepo aliyunEcsRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunEcsRepo = aliyunEcsRepo;
     }
-
-    private static final String VPC = "vpc";
-
-    private static final String PRE_PAID = "PrePaid";
 
     public static Date toUtcDate(String time) {
         return TimeUtil.toDate(time, TimeZoneEnum.UTC);

@@ -13,6 +13,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -43,10 +44,12 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     public EdsAliyunVirtualSwitchAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,
-                                               EdsAssetIndexFacade edsAssetIndexFacade, AliyunVpcRepo aliyunVpcRepo,
-                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                               EdsAssetIndexFacade edsAssetIndexFacade,
+                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                               EdsInstanceProviderHolderBuilder holderBuilder,
+                                               AliyunVpcRepo aliyunVpcRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunVpcRepo = aliyunVpcRepo;
     }
 
@@ -99,9 +102,12 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunVirtualSwitch.Switch entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK , entity.getVirtualSwitch().getCidrBlock()));
-        indices.add(toEdsAssetIndex(edsAsset, VPC_ID , entity.getVirtualSwitch().getVpcId()));
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch().getAvailableIpAddressCount()));
+        indices.add(toEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()
+                .getCidrBlock()));
+        indices.add(toEdsAssetIndex(edsAsset, VPC_ID, entity.getVirtualSwitch()
+                .getVpcId()));
+        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch()
+                .getAvailableIpAddressCount()));
         return indices;
     }
 

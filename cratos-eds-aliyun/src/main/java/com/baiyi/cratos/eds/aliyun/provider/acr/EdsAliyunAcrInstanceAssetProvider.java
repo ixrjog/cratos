@@ -12,6 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -36,10 +37,12 @@ public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     public EdsAliyunAcrInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                             EdsAssetIndexFacade edsAssetIndexFacade, AliyunAcrRepo aliyunAcrRepo,
-                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                             EdsAssetIndexFacade edsAssetIndexFacade,
+                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                             EdsInstanceProviderHolderBuilder holderBuilder,
+                                             AliyunAcrRepo aliyunAcrRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunAcrRepo = aliyunAcrRepo;
     }
 
@@ -70,10 +73,10 @@ public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     @Override
     protected Set<String> getRegionSet(EdsAliyunConfigModel.Aliyun configModel) {
-        return Sets.newHashSet(  Optional.of(configModel)
-             .map(EdsAliyunConfigModel.Aliyun::getAcr)
-             .map(EdsAliyunConfigModel.ACR::getRegionIds)
-             .orElse(Collections.emptyList()));
+        return Sets.newHashSet(Optional.of(configModel)
+                .map(EdsAliyunConfigModel.Aliyun::getAcr)
+                .map(EdsAliyunConfigModel.ACR::getRegionIds)
+                .orElse(Collections.emptyList()));
     }
 
 }

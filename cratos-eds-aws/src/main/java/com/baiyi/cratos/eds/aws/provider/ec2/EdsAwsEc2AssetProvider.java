@@ -14,6 +14,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -37,16 +38,15 @@ import java.util.Map;
 public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
 
     private final Ec2InstancesRepo ec2InstancesRepo;
-
     private final AwsEc2Repo awsEc2Repo;
 
     public EdsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                   EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
-                                  AwsEc2Repo awsEc2Repo,
-                                  UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                  AwsEc2Repo awsEc2Repo, UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                  EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.ec2InstancesRepo = ec2InstancesRepo;
         this.awsEc2Repo = awsEc2Repo;
     }

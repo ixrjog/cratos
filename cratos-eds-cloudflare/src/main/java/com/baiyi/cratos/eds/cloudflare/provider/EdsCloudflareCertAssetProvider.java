@@ -12,6 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -36,16 +37,17 @@ import java.util.stream.Collectors;
 public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareCert.Certificate> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;
-
     private final CloudflareCertRepo cloudflareCertRepo;
 
     public EdsCloudflareCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
-                                          CloudflareZoneRepo cloudflareZoneRepo, CloudflareCertRepo cloudflareCertRepo,
-                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                          EdsInstanceProviderHolderBuilder holderBuilder,
+                                          CloudflareZoneRepo cloudflareZoneRepo,
+                                          CloudflareCertRepo cloudflareCertRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.cloudflareZoneRepo = cloudflareZoneRepo;
         this.cloudflareCertRepo = cloudflareCertRepo;
     }

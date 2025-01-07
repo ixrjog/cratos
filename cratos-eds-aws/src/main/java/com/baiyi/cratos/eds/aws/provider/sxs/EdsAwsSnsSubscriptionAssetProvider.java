@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -43,9 +44,10 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
                                               CredentialService credentialService,
                                               ConfigCredTemplate configCredTemplate,
                                               EdsAssetIndexFacade edsAssetIndexFacade, AwsSnsRepo awsSnsRepo,
-                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                              EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.awsSnsRepo = awsSnsRepo;
     }
 
@@ -96,7 +98,8 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
                 .getEndpoint()));
         indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
                 .getTopicArn()));
-        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription().getProtocol()));
+        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription()
+                .getProtocol()));
         return indices;
     }
 

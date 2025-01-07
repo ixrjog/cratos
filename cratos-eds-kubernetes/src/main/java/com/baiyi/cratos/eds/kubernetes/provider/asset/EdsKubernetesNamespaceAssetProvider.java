@@ -6,6 +6,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -34,10 +35,11 @@ public class EdsKubernetesNamespaceAssetProvider extends BaseEdsKubernetesAssetP
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,
                                                EdsAssetIndexFacade edsAssetIndexFacade,
-                                               KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                               UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                               EdsInstanceProviderHolderBuilder holderBuilder,
+                                               KubernetesNamespaceRepo kubernetesNamespaceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesNamespaceRepo = kubernetesNamespaceRepo;
     }
 

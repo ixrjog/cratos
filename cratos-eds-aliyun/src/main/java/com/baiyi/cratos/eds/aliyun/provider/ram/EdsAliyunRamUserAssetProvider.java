@@ -16,6 +16,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -42,16 +43,16 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
 
     private final AliyunRamUserRepo aliyunRamUserRepo;
-
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
 
     public EdsAliyunRamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                         EdsAssetIndexFacade edsAssetIndexFacade, AliyunRamUserRepo aliyunRamUserRepo,
-                                         AliyunRamPolicyRepo aliyunRamPolicyRepo,
-                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                         EdsAssetIndexFacade edsAssetIndexFacade,
+                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                         EdsInstanceProviderHolderBuilder holderBuilder,
+                                         AliyunRamUserRepo aliyunRamUserRepo, AliyunRamPolicyRepo aliyunRamPolicyRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
     }

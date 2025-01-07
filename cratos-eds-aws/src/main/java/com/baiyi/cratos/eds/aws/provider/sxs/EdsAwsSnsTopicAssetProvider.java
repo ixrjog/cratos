@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -37,10 +38,11 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsA
 
     public EdsAwsSnsTopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                       EdsAssetIndexFacade edsAssetIndexFacade, AwsSnsRepo awsSnsRepo,
-                                       UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                       EdsAssetIndexFacade edsAssetIndexFacade,
+                                       UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                       EdsInstanceProviderHolderBuilder holderBuilder, AwsSnsRepo awsSnsRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.awsSnsRepo = awsSnsRepo;
     }
 

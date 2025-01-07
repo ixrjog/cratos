@@ -16,6 +16,8 @@ import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
@@ -50,8 +52,15 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private final ConfigCredTemplate configCredTemplate;
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
     private final UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
+
+    @SuppressWarnings("unchecked")
+    protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
+      return (EdsInstanceProviderHolder<C, A>) holderBuilder.newHolder(
+                instanceId, getAssetType());
+    }
 
     /**
      * 按类型查询本数据源实例资产
@@ -244,6 +253,13 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     @Override
     public void afterPropertiesSet() {
         EdsInstanceProviderFactory.register(this);
+    }
+
+
+    @Override
+    public A getAsset(EdsAsset edsAsset) {
+        // 用到的时候再重写
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

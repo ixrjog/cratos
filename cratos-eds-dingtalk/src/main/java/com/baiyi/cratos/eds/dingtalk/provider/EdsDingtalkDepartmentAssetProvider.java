@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -38,20 +39,20 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTAL
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_DEPARTMENT)
 public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkDepartmentModel.Department> {
 
-    private static final long DEPT_ROOT_ID = 1L;
-
     private final DingtalkDepartmentRepo dingtalkDepartmentRepo;
 
     public EdsDingtalkDepartmentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                               CredentialService credentialService,
                                               ConfigCredTemplate configCredTemplate,
                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                              DingtalkDepartmentRepo dingtalkDepartmentRepo,
-                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                              EdsInstanceProviderHolderBuilder holderBuilder,DingtalkDepartmentRepo dingtalkDepartmentRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.dingtalkDepartmentRepo = dingtalkDepartmentRepo;
     }
+
+    private static final long DEPT_ROOT_ID = 1L;
 
     @Override
     protected List<DingtalkDepartmentModel.Department> listEntities(

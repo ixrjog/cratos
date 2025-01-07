@@ -6,6 +6,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -32,22 +33,27 @@ public class EdsKubernetesAlibabacloudAutoscalerAssetProvider extends BaseEdsKub
 
     private final KubernetesAutoscalerRepo kubernetesAutoscalerRepo;
 
-    public EdsKubernetesAlibabacloudAutoscalerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsKubernetesAlibabacloudAutoscalerAssetProvider(EdsAssetService edsAssetService,
+                                                            SimpleEdsFacade simpleEdsFacade,
                                                             CredentialService credentialService,
                                                             ConfigCredTemplate configCredTemplate,
                                                             EdsAssetIndexFacade edsAssetIndexFacade,
+                                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                                            EdsInstanceProviderHolderBuilder holderBuilder,
                                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                                            KubernetesAutoscalerRepo kubernetesDeploymentRepo,
-                                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                                            KubernetesAutoscalerRepo kubernetesAutoscalerRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
-        this.kubernetesAutoscalerRepo = kubernetesDeploymentRepo;
+                updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
+        this.kubernetesAutoscalerRepo = kubernetesAutoscalerRepo;
     }
 
     @Override
     protected List<AdvancedHorizontalPodAutoscaler> listEntities(String namespace,
-                                            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-       return kubernetesAutoscalerRepo.list(instance.getEdsConfigModel(), namespace).stream().map(Resource::item).toList();
+                                                                 ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesAutoscalerRepo.list(instance.getEdsConfigModel(), namespace)
+                .stream()
+                .map(Resource::item)
+                .toList();
     }
 
 }

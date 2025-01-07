@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -34,10 +35,12 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<
 
     public EdsGodaddyDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                         EdsAssetIndexFacade edsAssetIndexFacade, GodaddyDomainRepo godaddyDomainRepo,
-                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                         EdsAssetIndexFacade edsAssetIndexFacade,
+                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                         EdsInstanceProviderHolderBuilder holderBuilder,
+                                         GodaddyDomainRepo godaddyDomainRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.godaddyDomainRepo = godaddyDomainRepo;
     }
 

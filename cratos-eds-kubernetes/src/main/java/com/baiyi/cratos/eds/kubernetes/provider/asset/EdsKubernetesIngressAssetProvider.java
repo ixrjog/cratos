@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -49,11 +50,11 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     public EdsKubernetesIngressAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                             KubernetesIngressRepo kubernetesIngressRepo,
-                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                             EdsInstanceProviderHolderBuilder holderBuilder,
+                                             KubernetesNamespaceRepo kubernetesNamespaceRepo,KubernetesIngressRepo kubernetesIngressRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesIngressRepo = kubernetesIngressRepo;
     }
 

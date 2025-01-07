@@ -116,12 +116,8 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     private Deployment getKubernetesDeployment(EdsInstanceProviderHolder<?, Deployment> holder, EdsAsset edsAsset) {
-        Deployment local = holder.getProvider()
-                .assetLoadAs(edsAsset.getOriginalModel());
-        return kubernetesDeploymentRepo.get((EdsKubernetesConfigModel.Kubernetes) holder.getInstance()
-                .getEdsConfigModel(), local.getMetadata()
-                .getNamespace(), local.getMetadata()
-                .getName());
+        return holder.getProvider()
+                .getAsset(edsAsset);
     }
 
     @Override

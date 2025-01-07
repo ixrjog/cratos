@@ -14,6 +14,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -42,17 +43,18 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     private final AliyunLoadBalancersRepo aliyunAlbRepo;
 
     private static final String ALB_URL = "https://slb.console.aliyun.com/alb/{}/albs/{}";
+    private static final String DEFAULT_ENDPOINT = "alb.cn-hangzhou.aliyuncs.com";
 
     public EdsAliyunAlbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade, AliyunLoadBalancersRepo aliyunAlbRepo,
-                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                     EdsAssetIndexFacade edsAssetIndexFacade,
+                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                     EdsInstanceProviderHolderBuilder holderBuilder,
+                                     AliyunLoadBalancersRepo aliyunAlbRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunAlbRepo = aliyunAlbRepo;
     }
-
-    private static final String DEFAULT_ENDPOINT = "alb.cn-hangzhou.aliyuncs.com";
 
     @Override
     protected Set<String> listNamespace(

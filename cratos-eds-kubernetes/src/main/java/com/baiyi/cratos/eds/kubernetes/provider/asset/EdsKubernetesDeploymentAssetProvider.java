@@ -9,6 +9,8 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -50,11 +52,12 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                                                 CredentialService credentialService,
                                                 ConfigCredTemplate configCredTemplate,
                                                 EdsAssetIndexFacade edsAssetIndexFacade,
+                                                UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                                EdsInstanceProviderHolderBuilder holderBuilder,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                                KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler) {
+                                                KubernetesDeploymentRepo kubernetesDeploymentRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                kubernetesNamespaceRepo, updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
     }
 
@@ -99,6 +102,18 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
         }
         return indices;
+    }
+
+    @Override
+    public Deployment getAsset(EdsAsset edsAsset) {
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+                edsAsset.getInstanceId());
+        Deployment local = holder.getProvider()
+                .assetLoadAs(edsAsset.getOriginalModel());
+        return kubernetesDeploymentRepo.get(holder.getInstance()
+                .getEdsConfigModel(), local.getMetadata()
+                .getNamespace(), local.getMetadata()
+                .getName());
     }
 
 }

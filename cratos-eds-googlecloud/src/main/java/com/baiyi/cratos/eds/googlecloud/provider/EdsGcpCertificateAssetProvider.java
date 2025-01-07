@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -36,13 +37,13 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
     private final GcpCredentialRepo googleCloudCredentialRepo;
 
     public EdsGcpCertificateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                          CredentialService credentialService,
-                                          ConfigCredTemplate configCredTemplate,
+                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
                                           UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                          EdsInstanceProviderHolderBuilder holderBuilder,
                                           GcpCredentialRepo googleCloudCredentialRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler);
+                updateBusinessFromAssetHandler, holderBuilder);
         this.googleCloudCredentialRepo = googleCloudCredentialRepo;
     }
 
@@ -74,10 +75,12 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
 
     @Override
     protected List<GoogleCertificateModel.Certificate> listEntities(String namespace,
-                                             ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance) throws EdsQueryEntitiesException {
+                                                                    ExternalDataSourceInstance<EdsGoogleCloudConfigModel.GoogleCloud> instance) throws EdsQueryEntitiesException {
         try {
-            return googleCloudCredentialRepo.listCertificates(namespace, instance.getEdsConfigModel()).stream().map(
-                    GoogleCertificateModel::toCertificate).toList();
+            return googleCloudCredentialRepo.listCertificates(namespace, instance.getEdsConfigModel())
+                    .stream()
+                    .map(GoogleCertificateModel::toCertificate)
+                    .toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
