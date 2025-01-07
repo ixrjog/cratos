@@ -168,6 +168,31 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         return applicationResourceBaselineWrapper.wrapToTarget(dataTable);
     }
 
+    @Override
+    public void redeploy(int baselineId) {
+        ApplicationResourceBaseline baseline = baselineService.getById(baselineId);
+        if (baseline == null) {
+            ApplicationResourceBaselineException.runtime("Baseline configuration does not exist.");
+        }
+        if (!BusinessTypeEnum.EDS_ASSET.name()
+                .equals(baseline.getBusinessType())) {
+            ApplicationResourceBaselineException.runtime("BusinessType is not an EDS_ASSET.");
+        }
+        EdsAsset edsAsset = edsAssetService.getById(baseline.getBusinessId());
+        if (edsAsset == null) {
+            ApplicationResourceBaselineException.runtime("Asset does not exist.");
+        }
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+                edsAsset.getInstanceId());
+        try {
+            Deployment deployment = getKubernetesDeployment(holder, edsAsset);
+            kubernetesDeploymentRepo.redeploy(holder.getInstance()
+                    .getEdsConfigModel(), deployment);
+        } catch (Exception ex) {
+            ApplicationResourceBaselineException.runtime(ex.getMessage());
+        }
+    }
+
     private void saveBaseline(Application application, ApplicationResource resource, Tag frameworkTag,
                               Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders) {
         if (!BusinessTypeEnum.EDS_ASSET.name()

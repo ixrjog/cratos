@@ -48,6 +48,13 @@ public class ApplicationResourceBaselineController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Redeploy application resource baseline deployment")
+    @PutMapping(value = "/redeploy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> redeployBaselineDeployment(@RequestParam int baselineId) {
+        applicationResourceBaselineFacade.redeploy(baselineId);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Query application resource baseline type options")
     @GetMapping(value = "/type/options", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getBaselineTypeOptions() {

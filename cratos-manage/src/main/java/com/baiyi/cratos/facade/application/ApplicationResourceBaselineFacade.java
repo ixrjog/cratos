@@ -20,4 +20,6 @@ public interface ApplicationResourceBaselineFacade {
     DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery);
 
+    void redeploy(int baselineId);
+
 }
