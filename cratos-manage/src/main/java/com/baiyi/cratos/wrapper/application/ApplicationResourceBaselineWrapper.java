@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaselineMember;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
+import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployingFacade;
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import com.baiyi.cratos.wrapper.application.converter.BaselineConverter;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -30,10 +31,12 @@ import java.util.stream.Collectors;
 public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<ApplicationResourceBaselineVO.ResourceBaseline, ApplicationResourceBaseline> implements IBaseWrapper<ApplicationResourceBaselineVO.ResourceBaseline> {
 
     private final ApplicationResourceBaselineMemberService baselineMemberService;
+    private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.ENV})
     public void wrap(ApplicationResourceBaselineVO.ResourceBaseline vo) {
+        vo.setIsDeploying(deploymentRedeployFacade.isRedeploying(vo.getId()));
         vo.setContainer(buildContainer(vo));
     }
 

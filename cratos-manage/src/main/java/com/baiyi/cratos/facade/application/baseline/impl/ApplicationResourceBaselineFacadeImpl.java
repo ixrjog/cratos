@@ -17,6 +17,7 @@ import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.TagFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
+import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployingFacade;
 import com.baiyi.cratos.facade.application.baseline.factory.BaselineMemberProcessorFactory;
 import com.baiyi.cratos.facade.application.baseline.mode.converter.DeploymentBaselineConverter;
 import com.baiyi.cratos.service.*;
@@ -60,6 +61,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+    private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
     private static final String TAG_FRAMEWORK = "Framework";
 
@@ -174,6 +176,10 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (baseline == null) {
             ApplicationResourceBaselineException.runtime("Baseline configuration does not exist.");
         }
+        if (deploymentRedeployFacade.isRedeploying(baselineId)) {
+            ApplicationResourceBaselineException.runtime(
+                    "Deploying, duplicate operations are prohibited within 1 minute.");
+        }
         if (!BusinessTypeEnum.EDS_ASSET.name()
                 .equals(baseline.getBusinessType())) {
             ApplicationResourceBaselineException.runtime("BusinessType is not an EDS_ASSET.");
@@ -188,6 +194,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
             kubernetesDeploymentRepo.redeploy(holder.getInstance()
                     .getEdsConfigModel(), deployment);
+            deploymentRedeployFacade.deploying(baselineId);
         } catch (Exception ex) {
             ApplicationResourceBaselineException.runtime(ex.getMessage());
         }

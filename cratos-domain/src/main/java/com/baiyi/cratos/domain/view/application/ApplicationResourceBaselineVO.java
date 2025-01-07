@@ -37,6 +37,8 @@ public class ApplicationResourceBaselineVO {
         private Container container;
         private EnvVO.Env env;
 
+        private Boolean isDeploying;
+
         @Override
         public String getEnvName() {
             return this.namespace;
