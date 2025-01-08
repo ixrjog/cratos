@@ -126,6 +126,8 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (baseline == null) {
             return;
         }
+        // 重新检查标签
+        checkAndUpdateBaselineFramework(baseline);
         EdsAsset edsAsset = edsAssetService.getById(baseline.getBusinessId());
         if (edsAsset == null) {
             return;
@@ -138,6 +140,26 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
             optionalContainer.ifPresent(container -> this.scan(baseline, container));
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
+        }
+    }
+
+    private void checkAndUpdateBaselineFramework(ApplicationResourceBaseline baseline) {
+        // 重新检查标签
+        Application application = applicationService.getByName(baseline.getApplicationName());
+        if (application == null) {
+            ApplicationResourceBaselineException.runtime("Application does not exist.");
+        }
+        Tag frameworkTag = tagService.getByTagKey(TAG_FRAMEWORK);
+        BusinessTag uniqueKey = BusinessTag.builder()
+                .tagId(frameworkTag.getId())
+                .businessType(BusinessTypeEnum.APPLICATION.name())
+                .businessId(application.getId())
+                .build();
+        BusinessTag frameworkBizTag = businessTagService.getByUniqueKey(uniqueKey);
+        if (!baseline.getFramework()
+                .equals(frameworkBizTag.getTagValue())) {
+            baseline.setFramework(frameworkBizTag.getTagValue());
+            baselineService.updateByPrimaryKey(baseline);
         }
     }
 
