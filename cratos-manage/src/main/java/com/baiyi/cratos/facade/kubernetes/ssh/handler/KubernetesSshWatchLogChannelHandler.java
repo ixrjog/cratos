@@ -1,15 +1,16 @@
-package com.baiyi.cratos.facade.kubernetes.details.handler.impl;
+package com.baiyi.cratos.facade.kubernetes.ssh.handler;
 
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
-import com.baiyi.cratos.facade.kubernetes.details.handler.BaseKubernetesDetailsChannelHandler;
+import com.baiyi.cratos.facade.kubernetes.ssh.BaseKubernetesSshChannelHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
@@ -29,11 +30,12 @@ import java.util.Map;
  */
 @Component
 @RequiredArgsConstructor
-public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetesDetailsChannelHandler<ApplicationKubernetesParam.KubernetesDetailsRequest> {
+public class KubernetesSshWatchLogChannelHandler extends BaseKubernetesSshChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     private final KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsInstanceService edsInstanceService;
+
 
     @Override
     public String getTopic() {
@@ -42,7 +44,7 @@ public class SubscriptionKubernetesWatchLogChannelHandler extends BaseKubernetes
 
     @Override
     public void handleRequest(String sessionId, Session session,
-                              ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException, IOException {
+                              KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {
             Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();

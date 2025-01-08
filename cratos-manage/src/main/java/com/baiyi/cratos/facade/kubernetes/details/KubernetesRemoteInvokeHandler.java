@@ -9,6 +9,7 @@ import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.watch.kubernetes.WatchKubernetesTerminalOutputTask;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  * &#064;Date  2024/12/17 15:10
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class KubernetesRemoteInvokeHandler {
@@ -29,6 +31,10 @@ public class KubernetesRemoteInvokeHandler {
         LogWatch logWatch = kubernetesPodRepo.getLogWatch(kubernetes, pod.getNamespace(), pod.getName(),
                 pod.getContainer()
                         .getName(), lines, out);
+        if (logWatch == null) {
+            log.warn("LogWatch is null: namespace={}, name={}", pod.getNamespace(), pod.getName());
+            return;
+        }
         SessionOutput sessionOutput = SessionOutput.newOutput(sessionId, instanceId);
         // 启动线程处理会话
         WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out);

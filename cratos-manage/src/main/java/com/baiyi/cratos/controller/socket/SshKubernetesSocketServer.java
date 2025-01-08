@@ -3,8 +3,9 @@ package com.baiyi.cratos.controller.socket;
 import com.baiyi.cratos.common.model.CratosHostHolder;
 import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
+import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
 import com.baiyi.cratos.domain.generator.SshSession;
-import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.service.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
@@ -54,14 +55,14 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
-            log.info("Kubernetes ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
+            log.info("Kubernetes ssh session try to connect: sessionId={}, hostAddress={}", this.sessionId,
                     host.getHostAddress());
-            SshSession sshSession = SshSessionBuilder.build(sessionId, username, host, SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
+            SshSession sshSession = SshSessionBuilder.build(this.sessionId, username, host,
+                    SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
             SshKubernetesSocketServer.sshSessionService.add(sshSession);
             this.sshSession = sshSession;
-            // 启动任务 JDK21 VirtualThreads
             Thread.ofVirtual()
-                    .start(SentOutputTask.newTask(sessionId, session));
+                    .start(SentOutputTask.newTask(this.sessionId, session));
         } catch (Exception e) {
             log.error("Kubernetes ssh create connection error: {}", e.getMessage());
         }
@@ -71,9 +72,10 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
     public void onMessage(Session session, String message) {
         if (StringUtils.hasText(message)) {
             try {
-                ApplicationKubernetesParam.KubernetesDetailsRequest kubernetesDetailsRequest = ApplicationKubernetesParam.loadAs(
+                KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest request = KubernetesContainerTerminalParam.loadAs(
                         message);
-               // KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
+                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session,
+                        request);
             } catch (JsonSyntaxException ignored) {
             }
         }

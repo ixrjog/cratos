@@ -30,9 +30,9 @@ public class ApplicationKubernetesParam {
         //@NotBlank
         private String namespace;
         private String name;
-        // Watch container logs
-        private List<DeploymentRequest> deployments;
     }
+
+
 
     @Data
     @Builder
