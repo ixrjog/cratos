@@ -2,8 +2,6 @@ package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
-import com.baiyi.cratos.domain.channel.HasTopic;
-import com.baiyi.cratos.domain.channel.factory.KubernetesDetailsChannelHandlerFactory;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.facade.kubernetes.details.broker.ApplicationKubernetesDetailsBroker;
@@ -46,15 +44,9 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
     public void onMessage(Session session, String message) {
         if (StringUtils.hasText(message)) {
             try {
-                ApplicationKubernetesParam.KubernetesDetailsRequest kubernetesDetailsRequest = ApplicationKubernetesParam.loadAs(
+                ApplicationKubernetesParam.KubernetesDetailsRequest request = ApplicationKubernetesParam.loadAs(
                         message);
-                // 单次请求
-                if (HasTopic.APPLICATION_KUBERNETES_WATCH_LOG.equals(kubernetesDetailsRequest.getTopic())) {
-                    KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, session,
-                            kubernetesDetailsRequest);
-                } else {
-                    KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, kubernetesDetailsRequest);
-                }
+                KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, request);
             } catch (JsonSyntaxException ignored) {
             }
         }

@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.socket.kubernetes;
 
+import com.baiyi.cratos.domain.channel.HasTopic;
+import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -23,6 +25,12 @@ public class KubernetesContainerTerminalParam {
     @Data
     @Builder
     public static class KubernetesContainerTerminalRequest implements HasSocketRequest {
+
+        public static final KubernetesContainerTerminalRequest CLOSE = KubernetesContainerTerminalRequest.builder()
+                .topic(HasTopic.APPLICATION_KUBERNETES_WATCH_LOG)
+                .action(SocketActionRequestEnum.CLOSE.name())
+                .build();
+
         private String topic;
         private String action;
         //@NotBlank

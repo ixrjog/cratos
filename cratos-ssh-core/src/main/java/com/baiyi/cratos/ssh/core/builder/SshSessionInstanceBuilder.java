@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.core.builder;
 
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
+import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.core.model.PodAssetModel;
@@ -29,6 +30,20 @@ public class SshSessionInstanceBuilder {
                 .instanceId(hostSystem.getInstanceId())
                 .loginUser(hostSystem.getLoginUsername())
                 .destIp(hostSystem.getHost())
+                .outputSize(0L)
+                .startTime(new Date())
+                .instanceType(sshSessionInstanceTypeEnum.name())
+                .instanceClosed(false)
+                .auditPath(auditPath)
+                .build();
+    }
+
+    public static SshSessionInstance build(String sessionId, ApplicationKubernetesParam.PodRequest pod,SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
+        return SshSessionInstance.builder()
+                .sessionId(sessionId)
+                .instanceId(pod.getInstanceId())
+                .loginUser("-")
+                .destIp("-")
                 .outputSize(0L)
                 .startTime(new Date())
                 .instanceType(sshSessionInstanceTypeEnum.name())

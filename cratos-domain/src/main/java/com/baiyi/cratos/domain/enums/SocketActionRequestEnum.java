@@ -8,7 +8,11 @@ package com.baiyi.cratos.domain.enums;
 public enum SocketActionRequestEnum {
 
     QUERY,
+    // 循环推送消息
     SUBSCRIPTION,
-    UNSUBSCRIBE
+    UNSUBSCRIBE,
+    // Kubernetes Watch Log
+    WATCH,
+    CLOSE
 
 }

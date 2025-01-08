@@ -51,15 +51,11 @@ public class EdsCloudComputerListCommand extends AbstractCommand {
     private static final String COMMAND_AWS_EC2_ASSET_LIST = GROUP + "-aws-ec2-list";
 
     private final EdsAssetService edsAssetService;
-
     private final EdsInstanceService edsInstanceService;
-
     private final UserService userService;
-
     private final SimpleEdsAccountFacade simpleEdsAccountFacade;
 
     public final static String[] ASSET_TABLE_FIELD_NAME = {"ID", "Instance ID", "Name", "IP", "EDS Name", "Region", "Type", "Login Account"};
-
     protected static final int PAGE_FOOTER_SIZE = 6;
 
     public EdsCloudComputerListCommand(SshShellHelper helper, SshShellProperties properties,

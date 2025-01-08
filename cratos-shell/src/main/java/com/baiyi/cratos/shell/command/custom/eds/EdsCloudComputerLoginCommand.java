@@ -56,11 +56,8 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListComm
 public class EdsCloudComputerLoginCommand extends AbstractCommand {
 
     private final SimpleSshSessionFacade simpleSshSessionFacade;
-
     private final CredentialService credentialService;
-
     private final SshAuditProperties sshAuditProperties;
-
     private final ServerCommandAuditor serverCommandAuditor;
 
     public static final String GROUP = "computer";

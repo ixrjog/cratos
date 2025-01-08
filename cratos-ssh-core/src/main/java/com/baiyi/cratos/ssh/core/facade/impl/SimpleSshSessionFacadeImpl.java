@@ -21,7 +21,6 @@ import java.util.Date;
 public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
 
     private final SshSessionService sshSessionService;
-
     private final SshSessionInstanceService sshSessionInstanceService;
 
     @Override
@@ -50,6 +49,15 @@ public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
     @Override
     public void updateSshSessionInstance(SshSessionInstance sshSessionInstance) {
         sshSessionInstanceService.updateByPrimaryKey(sshSessionInstance);
+    }
+
+    @Override
+    public void closeSshSessionInstance(String sessionId, String instanceId) {
+        SshSessionInstance sshSessionInstance = sshSessionInstanceService.getByInstanceId(instanceId);
+        if (sshSessionInstance != null && sshSessionInstance.getSessionId()
+                .equals(sessionId)) {
+            this.closeSshSessionInstance(sshSessionInstance);
+        }
     }
 
     @Override

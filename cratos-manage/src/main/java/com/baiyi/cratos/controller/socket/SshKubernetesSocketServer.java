@@ -6,7 +6,6 @@ import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
-import com.baiyi.cratos.domain.session.KubernetesDetailsRequestSession;
 import com.baiyi.cratos.service.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
@@ -74,8 +73,8 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             try {
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest request = KubernetesContainerTerminalParam.loadAs(
                         message);
-                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session,
-                        request);
+                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session, request);
+                // KubernetesSshWatchLogChannelHandler
             } catch (JsonSyntaxException ignored) {
             }
         }
@@ -88,7 +87,8 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     @OnClose
     public void onClose(Session session) {
-        KubernetesDetailsRequestSession.remove(sessionId);
+        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session,
+                KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest.CLOSE);
     }
 
 }

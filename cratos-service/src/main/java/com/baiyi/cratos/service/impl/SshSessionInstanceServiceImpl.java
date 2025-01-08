@@ -33,6 +33,14 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
     }
 
     @Override
+    public SshSessionInstance getByInstanceId(@NonNull String instanceId) {
+        SshSessionInstance uniqueKey = SshSessionInstance.builder()
+                .instanceId(instanceId)
+                .build();
+        return this.getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     public List<SshSessionInstance> queryBySessionId(String sessionId) {
         Example example = new Example(SshSessionInstance.class);
         Example.Criteria criteria = example.createCriteria();
