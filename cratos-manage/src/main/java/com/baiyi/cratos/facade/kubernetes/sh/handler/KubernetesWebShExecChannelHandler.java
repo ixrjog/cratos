@@ -69,6 +69,9 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                         .ifPresent(deployments -> deployments.forEach(
                                 deployment -> run(sessionId, deployment, kubernetesMap)));
             }
+            case SocketActionRequestEnum.INPUT -> Optional.of(message)
+                    .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
+                    .ifPresent(deployments -> deployments.forEach(deployment -> doInput(sessionId, deployment)));
             case SocketActionRequestEnum.RESIZE -> Optional.of(message)
                     .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                     .ifPresent(deployments -> deployments.forEach(deployment -> doResize(sessionId, deployment)));
