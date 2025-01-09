@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.core.message;
 
+import com.baiyi.cratos.domain.param.HasTerminalSize;
 import com.baiyi.cratos.domain.ssh.HasState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;

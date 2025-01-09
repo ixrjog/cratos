@@ -6,6 +6,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
+import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.fabric8.kubernetes.client.dsl.Listable;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
 import lombok.Data;
@@ -77,8 +78,8 @@ public class KubernetesPodRepo {
         }
     }
 
-    public LogWatch getLogWatch(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace,
-                                String podName, String containerName, Integer lines, OutputStream outputStream) {
+    public LogWatch watchLog(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+                             String containerName, Integer lines, OutputStream outputStream) {
         return kubernetesClientBuilder.build(kubernetes)
                 .pods()
                 .inNamespace(namespace)
@@ -86,6 +87,29 @@ public class KubernetesPodRepo {
                 .inContainer(containerName)
                 .tailingLines(lines)
                 .watchLog(outputStream);
+    }
+
+    public ExecWatch exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+                          String containerName, SimpleListener listener, OutputStream out) {
+        return kubernetesClientBuilder.build(kubernetes)
+                .pods()
+                .inNamespace(namespace)
+                .withName(podName)
+                // 如果Pod中只有一个容器，不需要指定
+                .inContainer(containerName)
+                .redirectingInput()
+                //.redirectingOutput()
+                //.redirectingError()
+                //.redirectingErrorChannel()
+                .writingOutput(out)
+                .writingError(out)
+                .withTTY()
+                .usingListener(listener)
+                .exec("env", "TERM=xterm", "sh");
+    }
+
+    public static SimpleListener newListener() {
+        return new SimpleListener();
     }
 
     @Data

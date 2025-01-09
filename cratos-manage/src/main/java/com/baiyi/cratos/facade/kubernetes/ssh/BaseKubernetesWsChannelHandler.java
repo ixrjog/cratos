@@ -1,0 +1,79 @@
+package com.baiyi.cratos.facade.kubernetes.ssh;
+
+import com.baiyi.cratos.domain.channel.BaseChannelHandler;
+import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
+import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
+import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
+import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
+import com.baiyi.cratos.ssh.core.model.KubernetesSession;
+import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
+import com.google.common.base.Joiner;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.Map;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2025/1/8 14:04
+ * &#064;Version 1.0
+ */
+@RequiredArgsConstructor
+public abstract class BaseKubernetesWsChannelHandler<T extends HasSocketRequest> implements BaseChannelHandler<T> {
+
+    protected final SimpleSshSessionFacade simpleSshSessionFacade;
+    protected final KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler;
+    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    protected final EdsInstanceService edsInstanceService;
+    //private final SshSessionInstanceService sshSessionInstanceService;
+    protected final SshAuditProperties sshAuditProperties;
+
+    protected void doClose(String sessionId) {
+        Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
+        if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
+            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> {
+                // 关闭会话
+                KubernetesSessionPool.closeSession(sessionId, instanceId);
+                simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
+            });
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected EdsKubernetesConfigModel.Kubernetes getKubernetes(
+            Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap, int edsInstanceId) {
+        if (kubernetesMap.containsKey(edsInstanceId)) {
+            return kubernetesMap.get(edsInstanceId);
+        }
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+                edsInstanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        kubernetesMap.put(edsInstanceId, holder.getInstance()
+                .getEdsConfigModel());
+        return holder.getInstance()
+                .getEdsConfigModel();
+    }
+
+    protected String toInstanceId(ApplicationKubernetesParam.PodRequest pod) {
+        if (StringUtils.hasText(pod.getInstanceId())) {
+            return pod.getInstanceId();
+        }
+        return Joiner.on("#")
+                .join(pod.getName(), pod.getContainer()
+                        .getName());
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        KubernetesSshChannelHandlerFactory.register(this);
+    }
+
+}

@@ -27,7 +27,7 @@ public class KubernetesContainerTerminalParam {
     public static class KubernetesContainerTerminalRequest implements HasSocketRequest {
 
         public static final KubernetesContainerTerminalRequest CLOSE = KubernetesContainerTerminalRequest.builder()
-                .topic(HasTopic.APPLICATION_KUBERNETES_WATCH_LOG)
+                .topic(HasTopic.APPLICATION_KUBERNETES_POD_WATCH_LOG)
                 .action(SocketActionRequestEnum.CLOSE.name())
                 .build();
 

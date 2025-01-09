@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.core.model;
 
+import com.baiyi.cratos.domain.param.HasTerminalSize;
 import com.baiyi.cratos.ssh.core.watch.kubernetes.WatchKubernetesTerminalOutputTask;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
 import io.fabric8.kubernetes.client.dsl.LogWatch;
@@ -31,19 +32,9 @@ public class KubernetesSession {
     private PrintStream commander;
     private LogWatch logWatch;
     private ExecWatch execWatch;
-
     private WatchKubernetesTerminalOutputTask watchKubernetesTerminalOutputTask;
-
     private OutputStream inputToChannel;
-
     private static SessionOutput sessionOutput;
-
-//    public void resize(KubernetesMessage.Resize resizeMessage) {
-//        if (this.execWatch == null) {
-//            return;
-//        }
-//        execWatch.resize(resizeMessage.getCols(), resizeMessage.getRows());
-//    }
 
     public void setSessionOutput(SessionOutput sessionOutput) {
         KubernetesSession.sessionOutput = sessionOutput;
@@ -51,6 +42,13 @@ public class KubernetesSession {
 
     public SessionOutput getSessionOutput() {
         return KubernetesSession.sessionOutput;
+    }
+
+    public void resize(HasTerminalSize terminalSize) {
+        if (this.execWatch == null) {
+            return;
+        }
+        execWatch.resize(terminalSize.getCols(), terminalSize.getRows());
     }
 
 }

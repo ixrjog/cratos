@@ -13,6 +13,12 @@ public enum SocketActionRequestEnum {
     UNSUBSCRIBE,
     // Kubernetes Watch Log
     WATCH,
+
+    EXEC,
+    INPUT,
+    RESIZE,
+    EXIT,
+
     CLOSE
 
 }

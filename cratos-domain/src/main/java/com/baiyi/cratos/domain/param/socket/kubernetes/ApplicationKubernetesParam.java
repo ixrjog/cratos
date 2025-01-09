@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.param.socket.kubernetes;
 
+import com.baiyi.cratos.domain.param.BaseTerminal;
+import com.baiyi.cratos.domain.param.HasTerminalSize;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -33,7 +35,6 @@ public class ApplicationKubernetesParam {
     }
 
 
-
     @Data
     @Builder
     public static class KubernetesContainerTerminalResize implements HasSocketRequest {
@@ -64,11 +65,24 @@ public class ApplicationKubernetesParam {
 
     @Data
     @Builder
-    public static class PodRequest {
+    public static class PodRequest implements HasTerminalSize {
         private String instanceId;
         private String name;
         private String namespace;
         private ContainerRequest container;
+        // 用户输入的指令
+        private String input;
+        private BaseTerminal.Terminal terminal;
+
+        @Override
+        public int getWidth() {
+            return this.terminal.getWidth();
+        }
+
+        @Override
+        public int getHeight() {
+            return this.terminal.getHeight();
+        }
     }
 
     @Data

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.ssh.core.message;
+package com.baiyi.cratos.domain.param;
 
 /**
  * &#064;Author  baiyi
