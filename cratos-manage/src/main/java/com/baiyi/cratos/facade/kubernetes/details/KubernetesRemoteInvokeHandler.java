@@ -26,6 +26,8 @@ public class KubernetesRemoteInvokeHandler {
 
     private final KubernetesPodRepo kubernetesPodRepo;
 
+    private static final String NOT_AUDITED = null;
+
     public void invokeLogWatch(String sessionId, String instanceId, EdsKubernetesConfigModel.Kubernetes kubernetes,
                                ApplicationKubernetesParam.PodRequest pod, Integer lines) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -37,7 +39,8 @@ public class KubernetesRemoteInvokeHandler {
         }
         SessionOutput sessionOutput = SessionOutput.newOutput(sessionId, instanceId);
         // 启动线程处理会话
-        WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out);
+        WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out,
+                NOT_AUDITED);
         // JDK21 VirtualThreads
         Thread.ofVirtual()
                 .start(run);
@@ -62,7 +65,8 @@ public class KubernetesRemoteInvokeHandler {
         }
         SessionOutput sessionOutput = SessionOutput.newOutput(sessionId, instanceId);
         // 启动线程处理会话
-        WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out);
+        WatchKubernetesTerminalOutputTask run = WatchKubernetesTerminalOutputTask.newTask(sessionOutput, out,
+                auditPath);
         // JDK21 VirtualThreads
         Thread.ofVirtual()
                 .start(run);
