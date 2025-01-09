@@ -60,29 +60,25 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     @Override
     public void handleRequest(String sessionId, Session session,
                               KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
-        if (SocketActionRequestEnum.EXEC.name()
-                .equalsIgnoreCase(message.getAction())) {
-            Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
-            Optional.of(message)
-                    .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
-                    .ifPresent(deployments -> deployments.forEach(
-                            deployment -> run(sessionId, deployment, kubernetesMap)));
-        }
-        if (SocketActionRequestEnum.RESIZE.name()
-                .equalsIgnoreCase(message.getAction())) {
-            Optional.of(message)
+        SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
+        switch (action) {
+            case SocketActionRequestEnum.EXEC -> {
+                Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
+                Optional.of(message)
+                        .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
+                        .ifPresent(deployments -> deployments.forEach(
+                                deployment -> run(sessionId, deployment, kubernetesMap)));
+            }
+            case SocketActionRequestEnum.RESIZE -> Optional.of(message)
                     .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                     .ifPresent(deployments -> deployments.forEach(deployment -> doResize(sessionId, deployment)));
-        }
-        if (SocketActionRequestEnum.EXIT.name()
-                .equalsIgnoreCase(message.getAction())) {
-            Optional.of(message)
+            case SocketActionRequestEnum.EXIT -> Optional.of(message)
                     .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                     .ifPresent(deployments -> deployments.forEach(deployment -> doExit(sessionId, deployment)));
-        }
-        if (SocketActionRequestEnum.CLOSE.name()
-                .equalsIgnoreCase(message.getAction())) {
-            doClose(sessionId);
+            case SocketActionRequestEnum.CLOSE -> doClose(sessionId);
+            default -> {
+                // error action
+            }
         }
     }
 

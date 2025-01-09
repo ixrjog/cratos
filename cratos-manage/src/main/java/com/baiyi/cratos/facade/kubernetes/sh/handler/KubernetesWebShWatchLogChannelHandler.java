@@ -50,17 +50,19 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
     @Override
     public void handleRequest(String sessionId, Session session,
                               KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
-        if (SocketActionRequestEnum.WATCH.name()
-                .equalsIgnoreCase(message.getAction())) {
-            Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
-            Optional.of(message)
-                    .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
-                    .ifPresent(deployments -> deployments.forEach(
-                            deployment -> run(sessionId, deployment, kubernetesMap)));
-        }
-        if (SocketActionRequestEnum.CLOSE.name()
-                .equalsIgnoreCase(message.getAction())) {
-            doClose(sessionId);
+        SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
+        switch (action) {
+            case SocketActionRequestEnum.WATCH -> {
+                Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
+                Optional.of(message)
+                        .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
+                        .ifPresent(deployments -> deployments.forEach(
+                                deployment -> run(sessionId, deployment, kubernetesMap)));
+            }
+            case SocketActionRequestEnum.CLOSE -> doClose(sessionId);
+            default -> {
+                // error action
+            }
         }
     }
 
