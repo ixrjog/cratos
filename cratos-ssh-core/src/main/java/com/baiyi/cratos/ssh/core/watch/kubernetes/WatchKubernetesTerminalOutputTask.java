@@ -14,13 +14,14 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 @Slf4j
 public class WatchKubernetesTerminalOutputTask extends AbstractSshChannelOutputTask {
 
-    public static WatchKubernetesTerminalOutputTask newTask(SessionOutput sessionOutput, ByteArrayOutputStream baos) {
-        return new WatchKubernetesTerminalOutputTask(sessionOutput, baos);
+    public static WatchKubernetesTerminalOutputTask newTask(SessionOutput sessionOutput, ByteArrayOutputStream baos,String auditPath) {
+        return new WatchKubernetesTerminalOutputTask(sessionOutput, baos , auditPath);
     }
 
-    public WatchKubernetesTerminalOutputTask(SessionOutput sessionOutput, ByteArrayOutputStream baos) {
+    public WatchKubernetesTerminalOutputTask(SessionOutput sessionOutput, ByteArrayOutputStream baos,String auditPath) {
         setSessionOutput(sessionOutput);
         setOutputStream(baos);
+        setAuditPath(auditPath);
     }
 
     @Override

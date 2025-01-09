@@ -99,7 +99,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-                    kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod);
+                    kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
                 });
     }
 

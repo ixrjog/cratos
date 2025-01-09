@@ -52,7 +52,7 @@ public class KubernetesRemoteInvokeHandler {
     }
 
     public void invokeExecWatch(String sessionId, String instanceId, EdsKubernetesConfigModel.Kubernetes kubernetes,
-                                ApplicationKubernetesParam.PodRequest pod) {
+                                ApplicationKubernetesParam.PodRequest pod, String auditPath) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExecWatch execWatch = kubernetesPodRepo.exec(kubernetes, pod.getNamespace(), pod.getName(), pod.getContainer()
                 .getName(), KubernetesPodRepo.newListener(), out);
