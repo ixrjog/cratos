@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTermin
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
-import com.baiyi.cratos.facade.kubernetes.ssh.BaseKubernetesWsChannelHandler;
+import com.baiyi.cratos.facade.kubernetes.ssh.BaseKubernetesWebShChannelHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -29,15 +29,15 @@ import java.util.Optional;
  * &#064;Version 1.0
  */
 @Component
-public class KubernetesWsWatchLogChannelHandler extends BaseKubernetesWsChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
+public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     public static final int LOG_LINES = 100;
 
-    public KubernetesWsWatchLogChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
-                                              KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
-                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                              EdsInstanceService edsInstanceService,
-                                              SshAuditProperties sshAuditProperties) {
+    public KubernetesWebShWatchLogChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
+                                                 KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
+                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                 EdsInstanceService edsInstanceService,
+                                                 SshAuditProperties sshAuditProperties) {
         super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
                 edsInstanceService, sshAuditProperties);
     }
@@ -73,7 +73,7 @@ public class KubernetesWsWatchLogChannelHandler extends BaseKubernetesWsChannelH
         EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
         deployment.getPods()
                 .forEach(pod -> {
-                    final String sshSessionInstanceId = toInstanceId(pod);
+                    final String sshSessionInstanceId = pod.getInstanceId();
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId,
                             sshSessionInstanceId);
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,

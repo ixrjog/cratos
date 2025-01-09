@@ -3,7 +3,6 @@ package com.baiyi.cratos.facade.kubernetes.ssh;
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
-import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -14,11 +13,9 @@ import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.model.KubernetesSession;
 import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
-import com.google.common.base.Joiner;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -28,13 +25,12 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseKubernetesWsChannelHandler<T extends HasSocketRequest> implements BaseChannelHandler<T> {
+public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketRequest> implements BaseChannelHandler<T> {
 
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
     protected final KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler;
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     protected final EdsInstanceService edsInstanceService;
-    //private final SshSessionInstanceService sshSessionInstanceService;
     protected final SshAuditProperties sshAuditProperties;
 
     protected void doClose(String sessionId) {
@@ -60,15 +56,6 @@ public abstract class BaseKubernetesWsChannelHandler<T extends HasSocketRequest>
                 .getEdsConfigModel());
         return holder.getInstance()
                 .getEdsConfigModel();
-    }
-
-    protected String toInstanceId(ApplicationKubernetesParam.PodRequest pod) {
-        if (StringUtils.hasText(pod.getInstanceId())) {
-            return pod.getInstanceId();
-        }
-        return Joiner.on("#")
-                .join(pod.getName(), pod.getContainer()
-                        .getName());
     }
 
     @Override
