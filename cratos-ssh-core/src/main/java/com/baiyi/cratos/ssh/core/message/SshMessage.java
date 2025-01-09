@@ -36,13 +36,23 @@ public class SshMessage {
         private Terminal terminal;
 
         @Override
-        public int getWidth() {
+        public Integer getWidth() {
             return this.terminal.getWidth();
         }
 
         @Override
-        public int getHeight() {
+        public Integer getHeight() {
             return this.terminal.getHeight();
+        }
+
+        @Override
+        public Integer getCols() {
+            return null;
+        }
+
+        @Override
+        public Integer getRows() {
+            return null;
         }
     }
 
