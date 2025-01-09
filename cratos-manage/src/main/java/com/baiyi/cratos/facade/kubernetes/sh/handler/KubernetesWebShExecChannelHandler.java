@@ -22,7 +22,6 @@ import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -108,12 +107,11 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         Optional.of(deploymentRequest)
                 .map(ApplicationKubernetesParam.DeploymentRequest::getPods)
                 .ifPresent(pods -> pods.forEach(pod -> {
-                    if (!StringUtils.hasText(pod.getInput())) {
-                        return;
-                    }
+//                    if (!StringUtils.hasText(pod.getInput())) {
+//                        return;
+//                    }
                     String instanceId = pod.getInstanceId();
-                    KubernetesSession kubernetesSession = KubernetesSessionPool.getBySessionId(sessionId,
-                            pod.getInstanceId());
+                    KubernetesSession kubernetesSession = KubernetesSessionPool.getBySessionId(sessionId, instanceId);
                     if (kubernetesSession != null) {
                         sendInput(kubernetesSession, pod.getInput());
                     }
