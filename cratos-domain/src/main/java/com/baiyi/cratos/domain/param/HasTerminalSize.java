@@ -16,14 +16,14 @@ public interface HasTerminalSize {
     Integer getRows();
 
     default int getTerminalCols() {
-        if (getCols() == null) {
+        if (getCols() != null) {
             return getCols();
         }
         return (int) Math.floor(getWidth() / W);
     }
 
     default int getTerminalRows() {
-        if (getRows() == null) {
+        if (getRows() != null) {
             return getRows();
         }
         return (int) Math.floor(getHeight() / H);
