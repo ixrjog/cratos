@@ -72,6 +72,8 @@ public class KubernetesRemoteInvokeHandler {
                 .execWatch(execWatch)
                 .watchKubernetesTerminalOutputTask(run)
                 .build();
+        // resize
+        execWatch.resize(pod.getCols(), pod.getRows());
         kubernetesSession.setSessionOutput(sessionOutput);
         KubernetesSessionPool.addSession(kubernetesSession);
     }
