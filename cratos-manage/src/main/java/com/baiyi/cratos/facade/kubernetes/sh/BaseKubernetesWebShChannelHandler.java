@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes.ssh;
+package com.baiyi.cratos.facade.kubernetes.sh;
 
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;

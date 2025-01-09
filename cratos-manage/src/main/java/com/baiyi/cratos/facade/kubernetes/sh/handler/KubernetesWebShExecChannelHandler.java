@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes.ssh.handler;
+package com.baiyi.cratos.facade.kubernetes.sh.handler;
 
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
@@ -9,8 +9,9 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTermin
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
-import com.baiyi.cratos.facade.kubernetes.ssh.BaseKubernetesWebShChannelHandler;
+import com.baiyi.cratos.facade.kubernetes.sh.BaseKubernetesWebShChannelHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.ssh.core.auditor.PodCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
@@ -38,13 +39,17 @@ import java.util.Optional;
 @Component
 public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
+    private final PodCommandAuditor podCommandAuditor;
+
     public KubernetesWebShExecChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
                                              KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                              EdsInstanceService edsInstanceService,
-                                             SshAuditProperties sshAuditProperties) {
+                                             SshAuditProperties sshAuditProperties,
+                                             PodCommandAuditor podCommandAuditor) {
         super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
                 edsInstanceService, sshAuditProperties);
+        this.podCommandAuditor = podCommandAuditor;
     }
 
     @Override
@@ -91,8 +96,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         deployment.getPods()
                 .forEach(pod -> {
                     final String instanceId = pod.getInstanceId();
-                    final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId,
-                            instanceId);
+                    final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
                     // 记录
@@ -147,7 +151,8 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     String instanceId = pod.getInstanceId();
                     KubernetesSessionPool.closeSession(sessionId, instanceId);
                     simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
-                    // TODO audit recode
+                    // TODO recode audit
+                    podCommandAuditor.asyncRecordCommand(sessionId, instanceId);
                 }));
     }
 

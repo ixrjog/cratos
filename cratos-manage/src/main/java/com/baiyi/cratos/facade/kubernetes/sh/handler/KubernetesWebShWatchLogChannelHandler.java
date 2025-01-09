@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes.ssh.handler;
+package com.baiyi.cratos.facade.kubernetes.sh.handler;
 
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTermin
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
-import com.baiyi.cratos.facade.kubernetes.ssh.BaseKubernetesWebShChannelHandler;
+import com.baiyi.cratos.facade.kubernetes.sh.BaseKubernetesWebShChannelHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;

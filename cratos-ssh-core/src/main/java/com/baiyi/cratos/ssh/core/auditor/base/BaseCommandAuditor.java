@@ -6,6 +6,7 @@ import com.baiyi.cratos.service.SshSessionInstanceCommandService;
 import com.baiyi.cratos.service.SshSessionInstanceService;
 import com.baiyi.cratos.ssh.core.auditor.InstanceCommandBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -22,20 +23,13 @@ import java.util.regex.Pattern;
  * &#064;Version  1.0
  */
 @Slf4j
+@RequiredArgsConstructor
 public abstract class BaseCommandAuditor {
 
-    public BaseCommandAuditor(SshSessionInstanceService sshSessionInstanceService,
-                              SshSessionInstanceCommandService sshSessionInstanceCommandService) {
-        this.sshSessionInstanceService = sshSessionInstanceService;
-        this.sshSessionInstanceCommandService = sshSessionInstanceCommandService;
-    }
-
     private final SshSessionInstanceService sshSessionInstanceService;
-
     private final SshSessionInstanceCommandService sshSessionInstanceCommandService;
 
     protected abstract String getInputRegex();
-
     protected abstract String getBsRegex();
 
     /**
