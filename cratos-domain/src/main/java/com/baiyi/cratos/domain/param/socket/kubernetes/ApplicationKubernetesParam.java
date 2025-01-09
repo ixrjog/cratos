@@ -75,13 +75,23 @@ public class ApplicationKubernetesParam {
         private BaseTerminal.Terminal terminal;
 
         @Override
-        public int getWidth() {
+        public Integer getWidth() {
             return this.terminal.getWidth();
         }
 
         @Override
-        public int getHeight() {
+        public Integer getHeight() {
             return this.terminal.getHeight();
+        }
+
+        @Override
+        public Integer getCols() {
+            return this.terminal.getCols();
+        }
+
+        @Override
+        public Integer getRows() {
+            return this.terminal.getRows();
         }
     }
 

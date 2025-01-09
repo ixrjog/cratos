@@ -10,15 +10,22 @@ public interface HasTerminalSize {
     double W = 7.0;
     double H = 14.4166;
 
-    int getWidth();
+    Integer getWidth();
+    Integer getHeight();
+    Integer getCols();
+    Integer getRows();
 
-    int getHeight();
-
-    default int getCols() {
+    default int getTerminalCols() {
+        if (getCols() == null) {
+            return getCols();
+        }
         return (int) Math.floor(getWidth() / W);
     }
 
-    default int getRows() {
+    default int getTerminalRows() {
+        if (getRows() == null) {
+            return getRows();
+        }
         return (int) Math.floor(getHeight() / H);
     }
 

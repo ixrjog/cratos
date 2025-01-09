@@ -48,7 +48,7 @@ public class KubernetesSession {
         if (this.execWatch == null) {
             return;
         }
-        execWatch.resize(terminalSize.getCols(), terminalSize.getRows());
+        execWatch.resize(terminalSize.getTerminalCols(), terminalSize.getTerminalRows());
     }
 
 }

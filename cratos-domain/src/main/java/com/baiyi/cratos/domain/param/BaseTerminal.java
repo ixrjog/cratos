@@ -15,6 +15,9 @@ public class BaseTerminal {
     public static class Terminal {
         private Integer width;
         private Integer height;
+
+        private Integer cols;
+        private Integer rows;
     }
 
 }

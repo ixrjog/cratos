@@ -107,9 +107,6 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         Optional.of(deploymentRequest)
                 .map(ApplicationKubernetesParam.DeploymentRequest::getPods)
                 .ifPresent(pods -> pods.forEach(pod -> {
-//                    if (!StringUtils.hasText(pod.getInput())) {
-//                        return;
-//                    }
                     String instanceId = pod.getInstanceId();
                     KubernetesSession kubernetesSession = KubernetesSessionPool.getBySessionId(sessionId, instanceId);
                     if (kubernetesSession != null) {
