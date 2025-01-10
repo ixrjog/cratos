@@ -25,7 +25,6 @@ public class WatchKubernetesLogOutputTask extends AbstractSshChannelOutputTask {
         setSessionOutput(sessionOutput);
         setOutputStream(byteArrayOutputStream);
         setAuditPath(auditPath);
-
         this.printWriter = printWriter;
     }
 

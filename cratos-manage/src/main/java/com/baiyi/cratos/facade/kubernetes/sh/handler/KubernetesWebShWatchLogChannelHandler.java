@@ -74,17 +74,24 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
         }
         EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
         deployment.getPods()
-                .forEach(pod -> {
-                    final String sshSessionInstanceId = pod.getInstanceId();
-                    final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId,
-                            sshSessionInstanceId);
-                    SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
-                            SshSessionInstanceTypeEnum.CONTAINER_LOG, auditPath);
-                    // 记录
-                    simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-                    kubernetesRemoteInvokeHandler.invokeLogWatch(sessionId, sshSessionInstanceId, kubernetes, pod,
-                            LOG_LINES);
-                });
+                .forEach(pod -> run(sessionId,kubernetes,pod));
+    }
+
+    private void run(String sessionId,EdsKubernetesConfigModel.Kubernetes kubernetes,ApplicationKubernetesParam.PodRequest pod){
+        final String sshSessionInstanceId = pod.getInstanceId();
+        final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId,
+                sshSessionInstanceId);
+        SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
+                SshSessionInstanceTypeEnum.CONTAINER_LOG, auditPath);
+        // 记录
+        simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+        kubernetesRemoteInvokeHandler.invokeLogWatch(sessionId, sshSessionInstanceId, kubernetes, pod,
+                LOG_LINES);
+    }
+
+    @Override
+    protected void doRecode(String sessionId, String instanceId) {
+        // 不需要
     }
 
 }

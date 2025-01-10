@@ -146,8 +146,13 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     KubernetesSessionPool.closeSession(sessionId, instanceId);
                     simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
                     // TODO recode audit
-                    podCommandAuditor.asyncRecordCommand(sessionId, instanceId);
+                    doRecode(sessionId, instanceId);
                 }));
+    }
+
+    @Override
+    protected void doRecode(String sessionId, String instanceId) {
+        podCommandAuditor.asyncRecordCommand(sessionId, instanceId);
     }
 
 }

@@ -40,6 +40,7 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
                 // 关闭会话
                 KubernetesSessionPool.closeSession(sessionId, instanceId);
                 simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
+                doRecode(sessionId, instanceId);
             });
         }
     }
@@ -57,6 +58,8 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
         return holder.getInstance()
                 .getEdsConfigModel();
     }
+
+    abstract protected void doRecode(String sessionId, String instanceId);
 
     @Override
     public void afterPropertiesSet() {
