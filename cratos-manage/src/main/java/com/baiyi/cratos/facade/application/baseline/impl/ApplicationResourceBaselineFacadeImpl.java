@@ -4,6 +4,8 @@ import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
 import com.baiyi.cratos.common.exception.ApplicationResourceBaselineException;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleCommited;
+import com.baiyi.cratos.domain.annotation.Committing;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
@@ -85,18 +87,19 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     @Override
-    public void mergeToBaseline(int baselineId) {
+    @Committing(typeOf = BusinessTypeEnum.APPLICATION_RESOURCE_BASELINE, businessId = "#baselineId")
+    public SimpleCommited mergeToBaseline(int baselineId) {
         ApplicationResourceBaseline baseline = baselineService.getById(baselineId);
         if (baseline == null) {
-            return;
+            return null;
         }
         EdsAsset edsAsset = edsAssetService.getById(baseline.getBusinessId());
         if (edsAsset == null) {
-            return;
+            return null;
         }
         List<ApplicationResourceBaselineMember> baselineMembers = baselineMemberService.queryByBaselineId(baselineId);
         if (CollectionUtils.isEmpty(baselineMembers)) {
-            return;
+            return null;
         }
         Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders = Maps.newHashMap();
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
@@ -110,10 +113,17 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
             holder.getProvider()
                     .importAsset(holder.getInstance(), updated);
             this.rescan(baselineId);
+            return SimpleCommited.builder()
+                    .name(baseline.getName())
+                    .commitContent("n/a")
+                    .commitMessage("mergeToBaseline")
+                    .build();
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
+            return null;
         }
     }
+
 
     private Deployment getKubernetesDeployment(EdsInstanceProviderHolder<?, Deployment> holder, EdsAsset edsAsset) {
         return holder.getProvider()

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.application;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
 
@@ -15,7 +16,7 @@ public interface ApplicationResourceBaselineFacade {
 
     void rescan(int baselineId);
 
-    void mergeToBaseline(int baselineId);
+    SimpleCommited mergeToBaseline(int baselineId);
 
     DataTable<ApplicationResourceBaselineVO.ResourceBaseline> queryApplicationResourceBaselinePage(
             ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery);

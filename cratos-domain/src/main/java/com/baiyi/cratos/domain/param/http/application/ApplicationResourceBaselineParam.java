@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.http.application;
 
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.http.commit.CommitParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,15 @@ public class ApplicationResourceBaselineParam {
         private String baselineType;
         @NotNull(message = "The parameter standard must be specified")
         private Boolean standard;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MergeToBaselineCommit {
+        private Integer baselineId;
+        private CommitParam.Commit commit;
     }
 
 }

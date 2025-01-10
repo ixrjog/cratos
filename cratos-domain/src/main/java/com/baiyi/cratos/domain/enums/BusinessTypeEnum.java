@@ -54,6 +54,8 @@ public enum BusinessTypeEnum {
     TRAFFIC_LAYER_DOMAIN,
     TRAFFIC_LAYER_RECORD,
 
+    APPLICATION_RESOURCE_BASELINE,
+
     MENU,
     MENU_TITLE,
 
