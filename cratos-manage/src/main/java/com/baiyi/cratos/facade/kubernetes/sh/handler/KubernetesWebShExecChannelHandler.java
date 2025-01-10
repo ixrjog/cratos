@@ -22,6 +22,7 @@ import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -138,21 +139,25 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 }));
     }
 
+    protected void doClose(String sessionId) {
+        Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
+        if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
+            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> {
+                doExit(sessionId, instanceId);
+            });
+        }
+    }
+
+    private void doExit(String sessionId, String instanceId) {
+        KubernetesSessionPool.closeSession(sessionId, instanceId);
+        simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
+        podCommandAuditor.asyncRecordCommand(sessionId, instanceId);
+    }
+
     private void doExit(String sessionId, ApplicationKubernetesParam.DeploymentRequest deploymentRequest) {
         Optional.of(deploymentRequest)
                 .map(ApplicationKubernetesParam.DeploymentRequest::getPods)
-                .ifPresent(pods -> pods.forEach(pod -> {
-                    String instanceId = pod.getInstanceId();
-                    KubernetesSessionPool.closeSession(sessionId, instanceId);
-                    simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
-                    // TODO recode audit
-                    doRecode(sessionId, instanceId);
-                }));
-    }
-
-    @Override
-    protected void doRecode(String sessionId, String instanceId) {
-        podCommandAuditor.asyncRecordCommand(sessionId, instanceId);
+                .ifPresent(pods -> pods.forEach(pod -> doExit(sessionId, pod.getInstanceId())));
     }
 
 }

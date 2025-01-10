@@ -15,9 +15,12 @@ import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
+import com.baiyi.cratos.ssh.core.model.KubernetesSession;
+import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -66,6 +69,17 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
         }
     }
 
+    protected void doClose(String sessionId) {
+        Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
+        if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
+            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> {
+                // 关闭会话
+                KubernetesSessionPool.closeSession(sessionId, instanceId);
+                simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
+            });
+        }
+    }
+
     private void run(String sessionId, ApplicationKubernetesParam.DeploymentRequest deployment,
                      Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap) {
         EdsInstance edsInstance = edsInstanceService.getByName(deployment.getKubernetesClusterName());
@@ -87,11 +101,6 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
         simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
         kubernetesRemoteInvokeHandler.invokeLogWatch(sessionId, sshSessionInstanceId, kubernetes, pod,
                 LOG_LINES);
-    }
-
-    @Override
-    protected void doRecode(String sessionId, String instanceId) {
-        // 不需要
     }
 
 }

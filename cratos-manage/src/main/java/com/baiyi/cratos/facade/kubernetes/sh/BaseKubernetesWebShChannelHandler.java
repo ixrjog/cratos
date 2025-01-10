@@ -11,11 +11,8 @@ import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
-import com.baiyi.cratos.ssh.core.model.KubernetesSession;
-import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -33,18 +30,6 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
     protected final EdsInstanceService edsInstanceService;
     protected final SshAuditProperties sshAuditProperties;
 
-    protected void doClose(String sessionId) {
-        Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
-        if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
-            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> {
-                // 关闭会话
-                KubernetesSessionPool.closeSession(sessionId, instanceId);
-                simpleSshSessionFacade.closeSshSessionInstance(sessionId, instanceId);
-                doRecode(sessionId, instanceId);
-            });
-        }
-    }
-
     @SuppressWarnings("unchecked")
     protected EdsKubernetesConfigModel.Kubernetes getKubernetes(
             Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap, int edsInstanceId) {
@@ -58,8 +43,6 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
         return holder.getInstance()
                 .getEdsConfigModel();
     }
-
-    abstract protected void doRecode(String sessionId, String instanceId);
 
     @Override
     public void afterPropertiesSet() {
