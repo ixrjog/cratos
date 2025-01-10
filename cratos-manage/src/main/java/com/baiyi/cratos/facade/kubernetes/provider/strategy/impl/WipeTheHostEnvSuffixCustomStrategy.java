@@ -40,7 +40,7 @@ public class WipeTheHostEnvSuffixCustomStrategy implements CustomStrategy {
                     .get(hostKey);
             // -prod.
             final String envSuffix = "-" + member.getNamespace() + ".";
-            if (hostValue.endsWith(envSuffix) && member.getNamespace()
+            if (hostValue.contains(envSuffix) && member.getNamespace()
                     .equals("prod")) {
                 custom.getData()
                         .put(hostKey, hostValue.replace(envSuffix, "."));
