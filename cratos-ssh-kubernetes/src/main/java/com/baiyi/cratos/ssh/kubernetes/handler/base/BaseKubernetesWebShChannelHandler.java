@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes.sh;
+package com.baiyi.cratos.ssh.kubernetes.handler.base;
 
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
@@ -7,10 +7,10 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.facade.kubernetes.details.KubernetesRemoteInvokeHandler;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
+import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
 

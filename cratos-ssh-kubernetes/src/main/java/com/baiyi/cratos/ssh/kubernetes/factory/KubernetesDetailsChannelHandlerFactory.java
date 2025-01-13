@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.channel.factory;
+package com.baiyi.cratos.ssh.kubernetes.factory;
 
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;

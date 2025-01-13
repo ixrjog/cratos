@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.details.handler;
 
 import com.baiyi.cratos.domain.channel.BaseChannelHandler;
-import com.baiyi.cratos.domain.channel.factory.KubernetesDetailsChannelHandlerFactory;
+import com.baiyi.cratos.ssh.kubernetes.factory.KubernetesDetailsChannelHandlerFactory;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 
 /**

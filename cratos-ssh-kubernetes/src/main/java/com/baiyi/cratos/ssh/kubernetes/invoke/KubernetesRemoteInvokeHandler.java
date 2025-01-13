@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes.details;
+package com.baiyi.cratos.ssh.kubernetes.invoke;
 
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;

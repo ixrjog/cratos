@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.kubernetes.node.broker;
 
-import com.baiyi.cratos.domain.channel.factory.KubernetesDetailsChannelHandlerFactory;
+import com.baiyi.cratos.ssh.kubernetes.factory.KubernetesDetailsChannelHandlerFactory;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.baiyi.cratos.domain.session.EdsKubernetesNodeDetailsRequestSession;
 import com.google.common.collect.Maps;
