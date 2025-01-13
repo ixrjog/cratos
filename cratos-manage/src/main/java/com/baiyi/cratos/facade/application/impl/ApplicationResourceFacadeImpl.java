@@ -149,7 +149,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
                         .map(namespace -> OptionsVO.Option.builder()
                                 .label(namespace)
                                 .value(namespace)
-                                .disabled(userPermissionFacade.contains(username, business, namespace))
+                                .disabled(!userPermissionFacade.contains(username, business, namespace))
                                 .seq(getNamespaceSeq(namespace, envMap))
                                 .build())
                         .sorted()
