@@ -1,8 +1,8 @@
-package com.baiyi.cratos.service.impl;
+package com.baiyi.cratos.service.session.impl;
 
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.mapper.SshSessionInstanceMapper;
-import com.baiyi.cratos.service.SshSessionInstanceService;
+import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -46,6 +46,14 @@ public class SshSessionInstanceServiceImpl implements SshSessionInstanceService 
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sessionId", sessionId);
         return sshSessionInstanceMapper.selectByExample(example);
+    }
+
+    @Override
+    public int countBySessionId(@NonNull String sessionId) {
+        Example example = new Example(SshSessionInstance.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("sessionId", sessionId);
+        return sshSessionInstanceMapper.selectCountByExample(example);
     }
 
     @Override

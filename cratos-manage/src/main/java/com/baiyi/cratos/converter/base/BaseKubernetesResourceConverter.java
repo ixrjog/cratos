@@ -8,6 +8,7 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.EnvService;
@@ -30,6 +31,7 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     protected final EdsAssetService edsAssetService;
     protected final EnvService envService;
+    protected final AccessControlFacade accessControlFacade;
 
     abstract protected EdsAssetTypeEnum getEdsAssetType();
 

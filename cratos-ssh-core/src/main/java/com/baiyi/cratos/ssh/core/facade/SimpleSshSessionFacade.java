@@ -26,4 +26,6 @@ public interface SimpleSshSessionFacade {
 
     void closeSshSessionInstance(String sessionId, String instanceId);
 
+    void closeSshSession(String sessionId);
+
 }

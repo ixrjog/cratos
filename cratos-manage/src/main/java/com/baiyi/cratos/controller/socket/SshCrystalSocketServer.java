@@ -5,7 +5,7 @@ import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.ssh.SimpleState;
-import com.baiyi.cratos.service.SshSessionService;
+import com.baiyi.cratos.service.session.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;

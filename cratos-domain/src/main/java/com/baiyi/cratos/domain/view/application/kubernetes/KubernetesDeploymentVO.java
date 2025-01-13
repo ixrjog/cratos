@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
 import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
@@ -43,6 +44,8 @@ public class KubernetesDeploymentVO {
         @Schema(description = "属性")
         private Map<String, String> attributes;
         private Env env;
+        @Schema(description = "访问控制")
+        private AccessControlVO.AccessControl accessControl;
 
         @Override
         public int compareTo(Deployment o) {

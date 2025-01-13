@@ -1,10 +1,11 @@
-package com.baiyi.cratos.service;
+package com.baiyi.cratos.service.session;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.param.http.ssh.SshSessionParam;
 import com.baiyi.cratos.mapper.SshSessionMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import lombok.NonNull;
 
 /**
  * &#064;Author  baiyi
@@ -14,5 +15,7 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 public interface SshSessionService extends BaseUniqueKeyService<SshSession, SshSessionMapper> {
 
     DataTable<SshSession> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery);
+
+    SshSession getBySessionId(@NonNull String sessionId);
 
 }

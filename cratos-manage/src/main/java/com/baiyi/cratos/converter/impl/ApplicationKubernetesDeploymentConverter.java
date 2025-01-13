@@ -1,10 +1,13 @@
 package com.baiyi.cratos.converter.impl;
 
 import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -12,6 +15,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
+import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -21,6 +25,7 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -42,8 +47,9 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                                                     EdsInstanceProviderHolderBuilder holderBuilder,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService) {
-        super(edsInstanceService, holderBuilder, edsAssetService, envService);
+                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService,
+                                                    AccessControlFacade accessControlFacade) {
+        super(edsInstanceService, holderBuilder, edsAssetService, envService, accessControlFacade);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
     }
@@ -75,11 +81,16 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .name(edsInstance.getInstanceName())
                 .build();
         Env env = envService.getByEnvName(namespace);
+        AccessControlVO.AccessControl accessControl = accessControlFacade.generateAccessControl(SimpleBusiness.builder()
+                        .businessType(BusinessTypeEnum.APPLICATION.name())
+                        .businessId(resource.getBusinessId())
+                .build(),namespace );
         return KubernetesDeploymentBuilder.newBuilder()
                 .withKubernetes(kubernetesCluster)
                 .withDeployment(deployment)
                 .withPods(pods)
                 .withEnv(env)
+                .withAccessControl(accessControl)
                 .build();
     }
 
@@ -88,7 +99,16 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .getTemplate()
                 .getMetadata()
                 .getLabels();
-        return kubernetesPodRepo.list(kubernetes, namespace, labels);
+        Map<String, String> queryLabels = Maps.newHashMap();
+        labels.forEach((k, v) -> {
+            switch (k) {
+                case "app", "group" -> queryLabels.put(k, v);
+                case null, default -> {
+                }
+            }
+        });
+        return CollectionUtils.isEmpty(queryLabels) ? kubernetesPodRepo.list(kubernetes, namespace,
+                labels) : kubernetesPodRepo.list(kubernetes, namespace, queryLabels);
     }
 
     protected EdsAssetTypeEnum getEdsAssetType() {

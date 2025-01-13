@@ -3,7 +3,7 @@ package com.baiyi.cratos.ssh.core.player.impl;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.param.socket.audit.SshSessionAuditParam;
-import com.baiyi.cratos.service.SshSessionInstanceService;
+import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.ssh.core.player.BaseSshAuditChannelHandler;
 import com.baiyi.cratos.ssh.core.player.SshAuditOutputTask;
 import jakarta.websocket.Session;

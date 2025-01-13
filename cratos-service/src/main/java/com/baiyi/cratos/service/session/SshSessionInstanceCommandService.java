@@ -1,4 +1,4 @@
-package com.baiyi.cratos.service;
+package com.baiyi.cratos.service.session;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;

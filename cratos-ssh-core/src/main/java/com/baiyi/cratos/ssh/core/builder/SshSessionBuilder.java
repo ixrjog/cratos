@@ -40,6 +40,7 @@ public class SshSessionBuilder {
                 .sessionStatus("SESSION_STARTED")
                 .sessionType(sessionTypeEnum.name())
                 .startTime(new Date())
+                .valid(false)
                 .build();
     }
 

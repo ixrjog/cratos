@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.core.auditor;
 
-import com.baiyi.cratos.service.SshSessionInstanceCommandService;
-import com.baiyi.cratos.service.SshSessionInstanceService;
+import com.baiyi.cratos.service.session.SshSessionInstanceCommandService;
+import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.ssh.core.auditor.base.BaseCommandAuditor;
 import org.springframework.stereotype.Component;
 

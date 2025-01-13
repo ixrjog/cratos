@@ -3,14 +3,18 @@ package com.baiyi.cratos.my;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.StreamSupport;
 
 /**
@@ -22,6 +26,8 @@ public class ApplicationResourceBaselineTest extends BaseUnit {
 
     @Resource
     private ApplicationService applicationService;
+    @Resource
+    private ApplicationResourceBaselineService baselineService;
     @Resource
     private BusinessTagService businessTagService;
 
@@ -450,6 +456,22 @@ public class ApplicationResourceBaselineTest extends BaseUnit {
 
     @Test
     void test3() {
+        Map<String, String> map = Maps.newHashMap();
+        List<ApplicationResourceBaseline> baselines = baselineService.selectAll();
+        baselines.forEach(baseline -> {
+            if (!map.containsKey(baseline.getApplicationName())) {
+                map.put(baseline.getApplicationName(), null);
+            }
+            if (baseline.getNamespace()
+                    .equals("prod") && baseline.getName()
+                    .endsWith("-canary")) {
+                map.put(baseline.getApplicationName(), baseline.getName());
+            }
+        });
+
+        map.forEach((key, value) -> {
+            System.out.println("app: " + key + ", canary: " + value);
+        });
 
     }
 

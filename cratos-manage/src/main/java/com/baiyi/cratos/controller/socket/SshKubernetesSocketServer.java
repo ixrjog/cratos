@@ -6,7 +6,7 @@ import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
-import com.baiyi.cratos.service.SshSessionService;
+import com.baiyi.cratos.service.session.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
 import com.baiyi.cratos.ssh.core.task.crystal.SentOutputTask;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
-    private SshSession sshSession;
+   // private SshSession sshSession;
     private static SshSessionService sshSessionService;
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
     private final String sessionId = UUID.randomUUID()
@@ -59,7 +59,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             SshSession sshSession = SshSessionBuilder.build(this.sessionId, username, host,
                     SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
             SshKubernetesSocketServer.sshSessionService.add(sshSession);
-            this.sshSession = sshSession;
+           // this.sshSession = sshSession;
             Thread.ofVirtual()
                     .start(SentOutputTask.newTask(this.sessionId, session));
         } catch (Exception e) {

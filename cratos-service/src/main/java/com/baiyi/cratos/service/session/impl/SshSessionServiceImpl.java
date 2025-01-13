@@ -1,10 +1,10 @@
-package com.baiyi.cratos.service.impl;
+package com.baiyi.cratos.service.session.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.param.http.ssh.SshSessionParam;
 import com.baiyi.cratos.mapper.SshSessionMapper;
-import com.baiyi.cratos.service.SshSessionService;
+import com.baiyi.cratos.service.session.SshSessionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -29,7 +29,7 @@ public class SshSessionServiceImpl implements SshSessionService {
     private final SshSessionMapper sshSessionMapper;
 
     @Override
-    public  DataTable<SshSession> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery){
+    public DataTable<SshSession> querySshSessionPage(SshSessionParam.SshSessionPageQuery pageQuery) {
         Page<SshSession> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<SshSession> data = sshSessionMapper.queryPageByParam(pageQuery);
         return new DataTable<>(data, page.getTotal());
@@ -41,6 +41,14 @@ public class SshSessionServiceImpl implements SshSessionService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sessionId", record.getSessionId());
         return sshSessionMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public SshSession getBySessionId(@NonNull String sessionId) {
+        SshSession uniqueKey = getByUniqueKey(SshSession.builder()
+                .sessionId(sessionId)
+                .build());
+        return getByUniqueKey(uniqueKey);
     }
 
     @Override

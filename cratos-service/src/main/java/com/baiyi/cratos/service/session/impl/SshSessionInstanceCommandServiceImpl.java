@@ -1,10 +1,10 @@
-package com.baiyi.cratos.service.impl;
+package com.baiyi.cratos.service.session.impl;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
 import com.baiyi.cratos.domain.param.http.ssh.SshCommandParam;
 import com.baiyi.cratos.mapper.SshSessionInstanceCommandMapper;
-import com.baiyi.cratos.service.SshSessionInstanceCommandService;
+import com.baiyi.cratos.service.session.SshSessionInstanceCommandService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;

@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.SshSessionMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SshSession">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="session_id" jdbcType="CHAR" property="sessionId" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="remote_addr" jdbcType="VARCHAR" property="remoteAddr" />
-    <result column="session_status" jdbcType="VARCHAR" property="sessionStatus" />
-    <result column="server_hostname" jdbcType="VARCHAR" property="serverHostname" />
-    <result column="server_addr" jdbcType="VARCHAR" property="serverAddr" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="session_type" jdbcType="VARCHAR" property="sessionType" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SshSession">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="session_id" jdbcType="CHAR" property="sessionId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="remote_addr" jdbcType="VARCHAR" property="remoteAddr"/>
+        <result column="session_status" jdbcType="VARCHAR" property="sessionStatus"/>
+        <result column="server_hostname" jdbcType="VARCHAR" property="serverHostname"/>
+        <result column="server_addr" jdbcType="VARCHAR" property="serverAddr"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="session_type" jdbcType="VARCHAR" property="sessionType"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-  <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.ssh.SshSessionParam$SshSessionPageQuery"
-          resultMap="BaseResultMap">
-      select * from ssh_session
-      <where>
-          <if test="username != null and username != ''">
-              username = #{username}
-          </if>
-          <if test="sessionStatus != null and sessionStatus != ''">
-              and session_status = #{sessionStatus}
-          </if>
-          <if test="sessionType != null and sessionType != ''">
-              and session_type = #{sessionType}
-          </if>
-      </where>
-      order by id desc
-  </select>
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.ssh.SshSessionParam$SshSessionPageQuery"
+            resultMap="BaseResultMap">
+        select * from ssh_session
+        <where>
+            valid = true
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="sessionStatus != null and sessionStatus != ''">
+                and session_status = #{sessionStatus}
+            </if>
+            <if test="sessionType != null and sessionType != ''">
+                and session_type = #{sessionType}
+            </if>
+        </where>
+        order by id desc
+    </select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.application.builder;
 
 import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
@@ -30,6 +31,7 @@ public class KubernetesDeploymentBuilder {
     private Env env;
     private List<Pod> pods;
     private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
+    private AccessControlVO.AccessControl accessControl;
 
     public static KubernetesDeploymentBuilder newBuilder() {
         return new KubernetesDeploymentBuilder();
@@ -52,6 +54,11 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentBuilder withEnv(Env env) {
         this.env = env;
+        return this;
+    }
+
+    public KubernetesDeploymentBuilder withAccessControl(AccessControlVO.AccessControl accessControl) {
+        this.accessControl = accessControl;
         return this;
     }
 
@@ -186,7 +193,8 @@ public class KubernetesDeploymentBuilder {
                 .pods(makePods())
                 .spec(makeSpec())
                 .attributes(makeAttributes())
-                .env(env)
+                .env(this.env)
+                .accessControl(this.accessControl)
                 .build();
     }
 

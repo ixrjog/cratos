@@ -1,10 +1,7 @@
 package com.baiyi.cratos.domain.view.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +35,8 @@ public class OptionsVO {
     @Data
     @Schema
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Options {
         private String message;
         @Builder.Default

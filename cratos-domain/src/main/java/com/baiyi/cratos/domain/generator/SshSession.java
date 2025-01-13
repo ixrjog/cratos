@@ -76,6 +76,8 @@ public class SshSession implements HasIntegerPrimaryKey, Serializable {
     @Column(name = "session_type")
     private String sessionType;
 
+    private Boolean valid;
+
     @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 

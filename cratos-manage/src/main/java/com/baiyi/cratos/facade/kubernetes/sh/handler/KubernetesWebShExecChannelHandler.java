@@ -142,10 +142,9 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     protected void doClose(String sessionId) {
         Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
         if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
-            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> {
-                doExit(sessionId, instanceId);
-            });
+            kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> doExit(sessionId, instanceId));
         }
+        simpleSshSessionFacade.closeSshSession(sessionId);
     }
 
     private void doExit(String sessionId, String instanceId) {

@@ -2,8 +2,8 @@ package com.baiyi.cratos.ssh.core.auditor.base;
 
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
-import com.baiyi.cratos.service.SshSessionInstanceCommandService;
-import com.baiyi.cratos.service.SshSessionInstanceService;
+import com.baiyi.cratos.service.session.SshSessionInstanceCommandService;
+import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.ssh.core.auditor.InstanceCommandBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import lombok.RequiredArgsConstructor;
