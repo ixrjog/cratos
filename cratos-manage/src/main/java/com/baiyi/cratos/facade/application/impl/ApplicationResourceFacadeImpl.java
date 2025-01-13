@@ -124,7 +124,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
             return getNamespaceOptions();
         }
         List<String> namespaces = resourceService.getNamespaceOptions();
-        if (CollectionUtils.isEmpty(namespaces) || StringUtils.hasText(
+        if (CollectionUtils.isEmpty(namespaces) || !StringUtils.hasText(
                 getMyApplicationResourceNamespaceOptions.getSessionUser())) {
             return OptionsVO.NO_OPTIONS_AVAILABLE;
         }
