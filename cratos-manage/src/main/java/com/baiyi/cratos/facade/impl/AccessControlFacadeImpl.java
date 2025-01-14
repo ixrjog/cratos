@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.facade.AccessControlFacade;
@@ -43,6 +44,16 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
             return AccessControlVO.AccessControl.unauthorized(hasBusiness.getBusinessType());
         }
         return AccessControlVO.AccessControl.authorized(hasBusiness.getBusinessType());
+    }
+
+    @Override
+    public AccessControlVO.HasAccessControl invoke(AccessControlVO.HasAccessControl hasAccessControl) {
+        AccessControlVO.AccessControl accessControl = this.generateAccessControl(SimpleBusiness.builder()
+                .businessType(hasAccessControl.getBusinessType())
+                .businessId(hasAccessControl.getBusinessId())
+                .build(), hasAccessControl.getNamespace());
+        hasAccessControl.setAccessControl(accessControl);
+        return hasAccessControl;
     }
 
 }

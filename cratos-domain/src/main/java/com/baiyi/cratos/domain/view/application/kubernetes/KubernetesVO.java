@@ -1,5 +1,8 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -24,7 +28,8 @@ public class KubernetesVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class KubernetesDetails implements Serializable {
+    @BusinessType(type = BusinessTypeEnum.APPLICATION)
+    public static class KubernetesDetails implements AccessControlVO.HasAccessControl, Serializable {
         @Serial
         private static final long serialVersionUID = 6024185257685366861L;
 
@@ -43,6 +48,14 @@ public class KubernetesVO {
         private String namespace;
         private Workloads workloads;
         private Network network;
+
+        @Schema(description = "访问控制")
+        private AccessControlVO.AccessControl accessControl;
+
+        @Override
+        public Integer getBusinessId() {
+            return Optional.ofNullable(this.application).map(ApplicationVO.Application::getId).orElse(0);
+        }
     }
 
     @Data

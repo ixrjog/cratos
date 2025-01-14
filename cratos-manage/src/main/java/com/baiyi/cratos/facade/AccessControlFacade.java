@@ -12,4 +12,6 @@ public interface AccessControlFacade {
 
     AccessControlVO.AccessControl generateAccessControl(BaseBusiness.HasBusiness hasBusiness, String namespace);
 
+    AccessControlVO.HasAccessControl invoke(AccessControlVO.HasAccessControl hasAccessControl);
+
 }

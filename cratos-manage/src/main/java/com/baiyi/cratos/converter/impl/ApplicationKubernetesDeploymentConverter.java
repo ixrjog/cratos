@@ -1,13 +1,10 @@
 package com.baiyi.cratos.converter.impl;
 
 import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
-import com.baiyi.cratos.domain.SimpleBusiness;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Env;
-import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -15,7 +12,6 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
-import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -47,9 +43,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                                                     EdsInstanceProviderHolderBuilder holderBuilder,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService,
-                                                    AccessControlFacade accessControlFacade) {
-        super(edsInstanceService, holderBuilder, edsAssetService, envService, accessControlFacade);
+                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService) {
+        super(edsInstanceService, holderBuilder, edsAssetService, envService);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
     }
@@ -81,16 +76,11 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .name(edsInstance.getInstanceName())
                 .build();
         Env env = envService.getByEnvName(namespace);
-        AccessControlVO.AccessControl accessControl = accessControlFacade.generateAccessControl(SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.APPLICATION.name())
-                        .businessId(resource.getBusinessId())
-                .build(),namespace );
         return KubernetesDeploymentBuilder.newBuilder()
                 .withKubernetes(kubernetesCluster)
                 .withDeployment(deployment)
                 .withPods(pods)
                 .withEnv(env)
-                .withAccessControl(accessControl)
                 .build();
     }
 

@@ -12,6 +12,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
@@ -40,6 +41,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final ApplicationKubernetesServiceConverter serviceConverter;
     private final ApplicationService applicationService;
     private final ApplicationWrapper applicationWrapper;
+    private final AccessControlFacade accessControlFacade;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -96,13 +98,16 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
-        return CollectionUtils.isEmpty(resources) ? KubernetesVO.KubernetesDetails.failed(
-                "The kubernetes resource bound to the application does not exist.") : KubernetesVO.KubernetesDetails.builder()
+        if (CollectionUtils.isEmpty(resources)) {
+            KubernetesVO.KubernetesDetails.failed("The kubernetes resource bound to the application does not exist.");
+        }
+        KubernetesVO.KubernetesDetails kubernetesDetails = KubernetesVO.KubernetesDetails.builder()
                 .application(applicationWrapper.convert(application))
                 .namespace(param.getNamespace())
                 .workloads(makeWorkloads(param))
                 .network(makeNetwork(param))
                 .build();
+        return (KubernetesVO.KubernetesDetails) accessControlFacade.invoke(kubernetesDetails);
     }
 
 }
