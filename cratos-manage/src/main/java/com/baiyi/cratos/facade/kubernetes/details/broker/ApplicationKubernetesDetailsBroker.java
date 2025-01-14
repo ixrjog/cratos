@@ -22,22 +22,23 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
 
     private final String sessionId;
     private final Session session;
-
-
+    private final SecurityContext context;
     private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(8);
 
-    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session,  SecurityContext context ) {
-        SecurityContextHolder.setContext(context);
-        return new ApplicationKubernetesDetailsBroker(sessionId, session);
+    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session,
+                                                               SecurityContext context) {
+        return new ApplicationKubernetesDetailsBroker(sessionId, session, context);
     }
 
-    public ApplicationKubernetesDetailsBroker(String sessionId, Session session) {
+    public ApplicationKubernetesDetailsBroker(String sessionId, Session session, SecurityContext context) {
         this.sessionId = sessionId;
         this.session = session;
+        this.context = context;
     }
 
     @Override
     public void run() {
+        SecurityContextHolder.setContext(this.context);
         while (this.session.isOpen()) {
             try {
                 runTask();

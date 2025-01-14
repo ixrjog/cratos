@@ -41,7 +41,7 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
         SecurityContext context = SecurityContextHolder.getContext();
         // 消息代理
         Thread.ofVirtual()
-                .start(ApplicationKubernetesDetailsBroker.newBroker(this.sessionId, session, context ));
+                .start(ApplicationKubernetesDetailsBroker.newBroker(this.sessionId, session, context));
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)
