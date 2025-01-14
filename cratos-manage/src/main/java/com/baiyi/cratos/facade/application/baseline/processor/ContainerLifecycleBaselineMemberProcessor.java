@@ -65,7 +65,7 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
         if (PPFramework.PP_JV_1.getDisplayName()
                 .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(baseline.getFramework())) {
-            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "POST");
+            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "GET");
             container.getLifecycle()
                     .getPreStop()
                     .getExec()
@@ -90,7 +90,7 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
         if (PPFramework.PP_JV_1.getDisplayName()
                 .equals(framework) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(framework)) {
-            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "POST");
+            List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "GET");
             DeploymentBaselineModel.ExecAction exec = DeploymentBaselineModel.ExecAction.builder()
                     .command(command)
                     .build();
