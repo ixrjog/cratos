@@ -7,12 +7,12 @@ import com.baiyi.cratos.ssh.core.model.UserSessionsOutput;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -120,7 +120,7 @@ public class SessionOutputUtil {
      * @return session output list
      */
     public static List<SessionOutput> getOutput(String sessionId) {
-        List<SessionOutput> outputList = Lists.newArrayList();
+        List<SessionOutput> outputs = Lists.newArrayList();
         UserSessionsOutput userSessionsOutput = USER_SESSIONS_OUTPUT_MAP.get(sessionId);
         if (userSessionsOutput != null) {
             userSessionsOutput.getSessionOutputMap()
@@ -130,18 +130,21 @@ public class SessionOutputUtil {
                         try {
                             SessionOutput sessionOutput = userSessionsOutput.getSessionOutputMap()
                                     .get(instanceId);
-                            if (sessionOutput != null && sessionOutput.getOutput() != null && StringUtils.isNotEmpty(
-                                    sessionOutput.getOutput())) {
-                                outputList.add(sessionOutput);
-                                userSessionsOutput.getSessionOutputMap()
-                                        .put(instanceId, new SessionOutput(sessionId, sessionOutput));
-                            }
+                            Optional.ofNullable(sessionOutput)
+                                    .map(SessionOutput::getOutput)
+                                    .ifPresent(output -> {
+                                        if(!output.isEmpty()) {
+                                            outputs.add(sessionOutput);
+                                            userSessionsOutput.getSessionOutputMap()
+                                                    .put(instanceId, new SessionOutput(sessionId, sessionOutput));
+                                        }
+                                    });
                         } catch (Exception ex) {
                             log.error(ex.toString(), ex);
                         }
                     });
         }
-        return outputList;
+        return outputs;
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.param.socket.kubernetes;
 
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.channel.HasTopic;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.gson.GsonBuilder;
@@ -40,6 +42,14 @@ public class KubernetesContainerTerminalParam {
         private String name;
         // Watch container logs
         private List<ApplicationKubernetesParam.DeploymentRequest> deployments;
+
+        public SimpleBusiness toBusiness(int applicationId) {
+           return SimpleBusiness.builder()
+                   .businessType(BusinessTypeEnum.APPLICATION.name())
+                   .businessId(applicationId)
+                   .build();
+        }
+
     }
 
 }

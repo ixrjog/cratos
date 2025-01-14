@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
 import com.baiyi.cratos.domain.channel.HasTopic;
+import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
@@ -8,9 +9,9 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesPara
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.ssh.kubernetes.handler.base.BaseKubernetesWebShChannelHandler;
-import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
+import com.baiyi.cratos.service.access.AccessControlFacade;
 import com.baiyi.cratos.ssh.core.auditor.PodCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -18,6 +19,8 @@ import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.model.KubernetesSession;
 import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
+import com.baiyi.cratos.ssh.kubernetes.handler.base.BaseKubernetesWebShChannelHandler;
+import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -45,10 +48,11 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                              EdsInstanceService edsInstanceService,
-                                             SshAuditProperties sshAuditProperties,
-                                             PodCommandAuditor podCommandAuditor) {
+                                             SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
+                                             AccessControlFacade accessControlFacade,
+                                             ApplicationService applicationService) {
         super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
-                edsInstanceService, sshAuditProperties);
+                edsInstanceService, sshAuditProperties, accessControlFacade, applicationService);
         this.podCommandAuditor = podCommandAuditor;
     }
 
@@ -63,6 +67,18 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {
             case SocketActionRequestEnum.EXEC -> {
+                boolean pass = accessInterception(message);
+                if (!pass) {
+                    MessageResponse<Boolean> response = MessageResponse.<Boolean>builder()
+                            .body(false)
+                            .success(pass)
+                            .msg("Unauthorized access")
+                            .code(403)
+                            .build();
+                    session.getBasicRemote()
+                            .sendText(response.toString());
+                    return;
+                }
                 Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
                 Optional.of(message)
                         .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)

@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.facade.AccessControlFacade;
+import com.baiyi.cratos.service.access.AccessControlFacade;
 import com.baiyi.cratos.service.UserPermissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

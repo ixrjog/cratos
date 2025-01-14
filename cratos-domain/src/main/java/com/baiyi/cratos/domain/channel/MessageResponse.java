@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.channel;
 
 import com.baiyi.cratos.domain.util.JSONUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,14 @@ public class MessageResponse<T> implements HasTopic {
     private T body;
 
     private String topic;
+
+    @Schema(description = "是否成功")
+    @Builder.Default
+    private Boolean success = true;
+
+    private String msg;
+
+    private int code;
 
     @Override
     public String toString() {

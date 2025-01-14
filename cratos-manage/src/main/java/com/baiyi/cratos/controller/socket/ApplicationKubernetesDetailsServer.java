@@ -10,6 +10,8 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -35,9 +37,11 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
     public void onOpen(Session session, @PathParam(value = "username") String username) {
         super.onOpen(session, username);
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
+        // 获取当前的 SecurityContext
+        SecurityContext context = SecurityContextHolder.getContext();
         // 消息代理
         Thread.ofVirtual()
-                .start(ApplicationKubernetesDetailsBroker.newBroker(this.sessionId, session));
+                .start(ApplicationKubernetesDetailsBroker.newBroker(this.sessionId, session, context ));
     }
 
     @OnMessage(maxMessageSize = 10 * 1024)

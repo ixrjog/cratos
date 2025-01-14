@@ -6,6 +6,8 @@ import com.baiyi.cratos.ssh.kubernetes.factory.KubernetesDetailsChannelHandlerFa
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -21,9 +23,11 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
     private final String sessionId;
     private final Session session;
 
+
     private static final long SLEEP_TIME = TimeUnit.SECONDS.toMillis(8);
 
-    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session) {
+    public static ApplicationKubernetesDetailsBroker newBroker(String sessionId, Session session,  SecurityContext context ) {
+        SecurityContextHolder.setContext(context);
         return new ApplicationKubernetesDetailsBroker(sessionId, session);
     }
 
