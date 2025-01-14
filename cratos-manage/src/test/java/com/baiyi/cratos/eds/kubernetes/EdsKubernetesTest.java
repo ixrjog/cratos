@@ -84,6 +84,13 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     }
 
     @Test
+    void test14() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        List<Pod> pods = kubernetesPodRepo.listByReplicaSet(cfg, "daily", "account-daily");
+        System.out.println(pods);
+    }
+
+    @Test
     void ingressDevTest() {
         updateIngress(CONFIG_ACK_DEV, "dev");
     }

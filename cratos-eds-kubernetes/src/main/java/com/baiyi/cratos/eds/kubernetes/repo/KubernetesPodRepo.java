@@ -2,8 +2,12 @@ package com.baiyi.cratos.eds.kubernetes.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
+import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.ReplicaSet;
+import io.fabric8.kubernetes.api.model.apps.ReplicaSetList;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.dsl.ExecListener;
 import io.fabric8.kubernetes.client.dsl.ExecWatch;
@@ -33,6 +37,85 @@ import java.util.Optional;
 public class KubernetesPodRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
+
+    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            String deploymentUid = deployment.getMetadata()
+                    .getUid();
+            Map<String, String> labels = Maps.newHashMap();
+            labels.put("app", deployment.getMetadata()
+                    .getLabels()
+                    .get("app"));
+            ReplicaSetList list = kc.apps()
+                    .replicaSets()
+                    .inNamespace(deployment.getMetadata()
+                            .getNamespace())
+                    .withLabels(labels)
+                    .list();
+            List<ReplicaSet> replicaSets = list.getItems()
+                    .stream()
+                    .filter(e -> e.getMetadata()
+                            .getOwnerReferences()
+                            .getFirst()
+                            .getUid()
+                            .equals(deploymentUid))
+                    .toList();
+            return list(kubernetes, deployment.getMetadata()
+                    .getNamespace(), labels).stream()
+                    .filter(e -> filter(replicaSets, e))
+                    .toList();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,
+                                      @NonNull String namespace, @NonNull String deploymentName) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            Deployment deployment = kc.apps()
+                    .deployments()
+                    .inNamespace(namespace)
+                    .withName(deploymentName)
+                    .get();
+            String deploymentUid = deployment.getMetadata()
+                    .getUid();
+            log.debug("Deployment name: {}, UID: {}", deploymentName, deploymentUid);
+            Map<String, String> labels = Maps.newHashMap();
+            labels.put("app", deployment.getMetadata()
+                    .getLabels()
+                    .get("app"));
+            ReplicaSetList list = kc.apps()
+                    .replicaSets()
+                    .inNamespace(namespace)
+                    .withLabels(labels)
+                    .list();
+            List<ReplicaSet> replicaSets = list.getItems()
+                    .stream()
+                    .filter(e -> e.getMetadata()
+                            .getOwnerReferences()
+                            .getFirst()
+                            .getUid()
+                            .equals(deploymentUid))
+                    .toList();
+            return list(kubernetes, namespace, labels).stream()
+                    .filter(e -> filter(replicaSets, e))
+                    .toList();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    private boolean filter(List<ReplicaSet> replicaSets, Pod pod) {
+        return replicaSets.stream()
+                .anyMatch(replicaSet -> replicaSet.getMetadata()
+                        .getUid()
+                        .equals(pod.getMetadata()
+                                .getOwnerReferences()
+                                .getFirst()
+                                .getUid()));
+    }
 
     public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
                           @NonNull String deploymentName) {

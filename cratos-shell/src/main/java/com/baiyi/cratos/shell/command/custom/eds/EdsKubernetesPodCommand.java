@@ -143,7 +143,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                 edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsKubernetesConfigModel.Kubernetes kubernetes = edsInstanceProviderHolder.getInstance()
                 .getEdsConfigModel();
-        List<Pod> pods = kubernetesPodRepo.list(kubernetes, namespace, name);
+        List<Pod> pods = kubernetesPodRepo.listByReplicaSet(kubernetes, namespace, name);
 
         Map<Integer, PodAssetModel> podContext = Maps.newHashMap();
 

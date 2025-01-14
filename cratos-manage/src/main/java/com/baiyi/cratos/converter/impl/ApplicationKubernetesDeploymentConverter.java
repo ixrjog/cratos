@@ -21,7 +21,6 @@ import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -85,20 +84,22 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     }
 
     private List<Pod> getPods(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment, String namespace) {
-        Map<String, String> labels = deployment.getSpec()
-                .getTemplate()
-                .getMetadata()
-                .getLabels();
-        Map<String, String> queryLabels = Maps.newHashMap();
-        labels.forEach((k, v) -> {
-            switch (k) {
-                case "app", "group" -> queryLabels.put(k, v);
-                case null, default -> {
-                }
-            }
-        });
-        return CollectionUtils.isEmpty(queryLabels) ? kubernetesPodRepo.list(kubernetes, namespace,
-                labels) : kubernetesPodRepo.list(kubernetes, namespace, queryLabels);
+//        Map<String, String> labels = deployment.getSpec()
+//                .getTemplate()
+//                .getMetadata()
+//                .getLabels();
+//        Map<String, String> queryLabels = Maps.newHashMap();
+//        labels.forEach((k, v) -> {
+//            switch (k) {
+//                case "app", "group" -> queryLabels.put(k, v);
+//                case null, default -> {
+//                }
+//            }
+//        });
+//        return CollectionUtils.isEmpty(queryLabels) ? kubernetesPodRepo.list(kubernetes, namespace,
+//                labels) : kubernetesPodRepo.list(kubernetes, namespace, queryLabels);
+//
+        return kubernetesPodRepo.listByReplicaSet(kubernetes,deployment);
     }
 
     protected EdsAssetTypeEnum getEdsAssetType() {
