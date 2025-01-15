@@ -18,7 +18,6 @@ import java.util.Map;
  */
 public class HarborRepositoryRepo {
 
-
     public static List<HarborRepository.Repository> listRepositories(EdsHarborConfigModel.Harbor harbor,
                                                                      String project) {
         HarborService harborService = HarborServiceFactory.createHarborService(harbor);

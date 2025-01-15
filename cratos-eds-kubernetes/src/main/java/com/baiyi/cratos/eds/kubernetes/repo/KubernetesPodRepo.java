@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
-import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -38,51 +39,54 @@ public class KubernetesPodRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.TEMPORARY, key = "'EDS:KUBERNETES:INSTANCE_ID:' + #kubernetes.edsInstance.id + ':NAMESPACE:' + #deployment.metadata.namespace +':DEPLOYMENT_NAME:' + #deployment.metadata.name", unless = "#result == null")
+    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,
+                                      @NonNull Deployment deployment) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            String deploymentUid = deployment.getMetadata()
+            String ownerReferencesUID = deployment.getMetadata()
                     .getUid();
-            Map<String, String> labels = Maps.newHashMap();
-            labels.put("app", deployment.getMetadata()
+            Map<String, String> labels = Map.of("app", deployment.getMetadata()
                     .getLabels()
                     .get("app"));
-            ReplicaSetList list = kc.apps()
+            ReplicaSetList replicaSetList = kc.apps()
                     .replicaSets()
                     .inNamespace(deployment.getMetadata()
                             .getNamespace())
                     .withLabels(labels)
                     .list();
-            List<ReplicaSet> replicaSets = list.getItems()
+            List<ReplicaSet> replicaSets = replicaSetList.getItems()
                     .stream()
                     .filter(e -> e.getMetadata()
                             .getOwnerReferences()
                             .getFirst()
                             .getUid()
-                            .equals(deploymentUid))
+                            .equals(ownerReferencesUID))
                     .toList();
-            return list(kubernetes, deployment.getMetadata()
-                    .getNamespace(), labels).stream()
+            return kc.pods()
+                    .inNamespace(deployment.getMetadata()
+                            .getNamespace())
+                    .withLabels(labels)
+                    .list()
+                    .getItems()
+                    .stream()
                     .filter(e -> filter(replicaSets, e))
                     .toList();
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
         }
     }
 
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.TEMPORARY, key = "'EDS:KUBERNETES:INSTANCE_ID:' + #kubernetes.edsInstance.id + ':NAMESPACE:' + #namespace +':DEPLOYMENT_NAME:' + #deploymentName", unless = "#result == null")
     public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,
                                       @NonNull String namespace, @NonNull String deploymentName) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
-            Deployment deployment = kc.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .withName(deploymentName)
-                    .get();
-            String deploymentUid = deployment.getMetadata()
+            Deployment deployment = Optional.ofNullable(kc.apps()
+                            .deployments()
+                            .inNamespace(namespace)
+                            .withName(deploymentName)
+                            .get())
+                    .orElseThrow();
+            String ownerReferencesUID = deployment.getMetadata()
                     .getUid();
-            log.debug("Deployment name: {}, UID: {}", deploymentName, deploymentUid);
-            Map<String, String> labels = Maps.newHashMap();
-            labels.put("app", deployment.getMetadata()
+            Map<String, String> labels = Map.of("app", deployment.getMetadata()
                     .getLabels()
                     .get("app"));
             ReplicaSetList list = kc.apps()
@@ -96,9 +100,14 @@ public class KubernetesPodRepo {
                             .getOwnerReferences()
                             .getFirst()
                             .getUid()
-                            .equals(deploymentUid))
+                            .equals(ownerReferencesUID))
                     .toList();
-            return list(kubernetes, namespace, labels).stream()
+            return kc.pods()
+                    .inNamespace(namespace)
+                    .withLabels(labels)
+                    .list()
+                    .getItems()
+                    .stream()
                     .filter(e -> filter(replicaSets, e))
                     .toList();
         } catch (Exception e) {

@@ -70,7 +70,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();
         Deployment deployment = kubernetesDeploymentRepo.get(kubernetes, namespace, resource.getName());
-        List<Pod> pods = getPods(kubernetes, deployment, namespace);
+        List<Pod> pods = getPods(kubernetes, deployment);
         KubernetesCommonVO.KubernetesCluster kubernetesCluster = KubernetesCommonVO.KubernetesCluster.builder()
                 .name(edsInstance.getInstanceName())
                 .build();
@@ -83,23 +83,8 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .build();
     }
 
-    private List<Pod> getPods(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment, String namespace) {
-//        Map<String, String> labels = deployment.getSpec()
-//                .getTemplate()
-//                .getMetadata()
-//                .getLabels();
-//        Map<String, String> queryLabels = Maps.newHashMap();
-//        labels.forEach((k, v) -> {
-//            switch (k) {
-//                case "app", "group" -> queryLabels.put(k, v);
-//                case null, default -> {
-//                }
-//            }
-//        });
-//        return CollectionUtils.isEmpty(queryLabels) ? kubernetesPodRepo.list(kubernetes, namespace,
-//                labels) : kubernetesPodRepo.list(kubernetes, namespace, queryLabels);
-//
-        return kubernetesPodRepo.listByReplicaSet(kubernetes,deployment);
+    private List<Pod> getPods(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+        return kubernetesPodRepo.listByReplicaSet(kubernetes, deployment);
     }
 
     protected EdsAssetTypeEnum getEdsAssetType() {
