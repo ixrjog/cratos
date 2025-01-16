@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class UserPermissionMerger {
 
     private List<UserPermission> userPermissions;
-
     private Map<String, Map<Integer, UserPermissionVO.MergedPermissions>> permissions;
 
     public static UserPermissionMerger newMerger() {
@@ -73,7 +72,7 @@ public class UserPermissionMerger {
         }
     }
 
-    public Map<String, List<UserPermissionVO.MergedPermissions>> get() {
+    public Map<String, List<UserPermissionVO.MergedPermissions>> make() {
         this.merge();
         Map<String, List<UserPermissionVO.MergedPermissions>> result = Maps.newHashMap();
         this.permissions.forEach((k, v) -> result.put(k, v.values()

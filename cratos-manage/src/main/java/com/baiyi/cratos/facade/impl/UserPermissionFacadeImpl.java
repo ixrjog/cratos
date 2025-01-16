@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.UserPermissionFacade;
+import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
@@ -30,6 +31,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     private final UserPermissionService userPermissionService;
     private final UserPermissionWrapper userPermissionWrapper;
     private final UserService userService;
+    private final EnvService envService;
 
     @Override
     public DataTable<UserPermissionVO.Permission> queryUserPermissionPage(
@@ -72,10 +74,15 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     @Override
     public UserPermissionVO.UserPermissionDetails getUserPermissionDetailsByUsername(String username) {
+//        List<Env> envs = envService.selectAll()
+//                .stream()
+//                .filter(Env::getValid)
+//                .sorted(Comparator.comparing(Env::getSeq))
+//                .toList();
         return UserPermissionVO.UserPermissionDetails.builder()
                 .permissions(UserPermissionMerger.newMerger()
                         .withUserPermissions(userPermissionService.queryByUsername(username))
-                        .get())
+                        .make())
                 .build();
     }
 

@@ -55,6 +55,7 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
     public void mergeToBaseline(ApplicationResourceBaseline baseline, ApplicationResourceBaselineMember baselineMember,
                                 Deployment deployment, Container container) {
         if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(baseline.getFramework())) {
             List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/shutdown", "-X", "POST");
             container.getLifecycle()
@@ -63,7 +64,6 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
                     .setCommand(command);
         }
         if (PPFramework.PP_JV_1.getDisplayName()
-                .equals(baseline.getFramework()) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(baseline.getFramework())) {
             List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "GET");
             container.getLifecycle()
@@ -75,6 +75,7 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
 
     private DeploymentBaselineModel.Lifecycle generateBaselineContent(String framework) {
         if (PPFramework.PP_JV_SPRINGBOOT_2.getDisplayName()
+                .equals(framework) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(framework)) {
             List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/shutdown", "-X", "POST");
             DeploymentBaselineModel.ExecAction exec = DeploymentBaselineModel.ExecAction.builder()
@@ -88,7 +89,6 @@ public class ContainerLifecycleBaselineMemberProcessor extends BaseContainerBase
                     .build();
         }
         if (PPFramework.PP_JV_1.getDisplayName()
-                .equals(framework) || PPFramework.PP_JV_2.getDisplayName()
                 .equals(framework)) {
             List<String> command = List.of("curl", "http://127.0.0.1:8081/actuator/eksshutdown", "-X", "GET");
             DeploymentBaselineModel.ExecAction exec = DeploymentBaselineModel.ExecAction.builder()

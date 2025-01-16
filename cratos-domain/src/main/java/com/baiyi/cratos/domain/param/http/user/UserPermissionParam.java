@@ -38,7 +38,7 @@ public class UserPermissionParam {
     @Data
     @Schema
     @Builder
-    public static class GrantUserPermission implements IToTarget<UserPermission> {
+    public static class  GrantUserPermission implements IToTarget<UserPermission> {
         @NotBlank
         private String username;
         private String name;
