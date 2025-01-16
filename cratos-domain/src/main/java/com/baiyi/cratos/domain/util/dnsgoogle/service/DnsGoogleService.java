@@ -1,6 +1,6 @@
-package com.baiyi.cratos.domain.util.googledns.service;
+package com.baiyi.cratos.domain.util.dnsgoogle.service;
 
-import com.baiyi.cratos.domain.util.googledns.model.DnsGoogleModel;
+import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;

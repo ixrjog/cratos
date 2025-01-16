@@ -1,8 +1,8 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.util.googledns.DnsGoogleUtils;
-import com.baiyi.cratos.domain.util.googledns.model.DnsGoogleModel;
+import com.baiyi.cratos.domain.util.dnsgoogle.DnsGoogleUtils;
+import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 

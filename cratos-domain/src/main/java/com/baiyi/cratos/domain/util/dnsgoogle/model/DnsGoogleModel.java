@@ -1,9 +1,11 @@
-package com.baiyi.cratos.domain.util.googledns.model;
+package com.baiyi.cratos.domain.util.dnsgoogle.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +17,9 @@ public class DnsGoogleModel {
 
     @Data
     @Schema
-    public static class DnsResolve {
+    public static class DnsResolve implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 490847418473577041L;
         @JsonProperty("Status")
         private Integer status;
         @JsonProperty("TC")
@@ -36,14 +40,18 @@ public class DnsGoogleModel {
 
     @Data
     @Schema
-    public static class Question {
+    public static class Question implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6147911676409769604L;
         private String name;
         private Integer type;
     }
 
     @Data
     @Schema
-    public static class Answer {
+    public static class Answer implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2783164268486072049L;
         private String name;
         private Integer type;
         @JsonProperty("TTL")

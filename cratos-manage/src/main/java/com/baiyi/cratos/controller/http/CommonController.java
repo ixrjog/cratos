@@ -1,8 +1,8 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.util.googledns.DnsGoogleUtils;
-import com.baiyi.cratos.domain.util.googledns.model.DnsGoogleModel;
+import com.baiyi.cratos.domain.util.dnsgoogle.DnsGoogleUtils;
+import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

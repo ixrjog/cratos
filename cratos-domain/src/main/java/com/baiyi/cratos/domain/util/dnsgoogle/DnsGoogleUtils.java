@@ -1,7 +1,7 @@
-package com.baiyi.cratos.domain.util.googledns;
+package com.baiyi.cratos.domain.util.dnsgoogle;
 
-import com.baiyi.cratos.domain.util.googledns.model.DnsGoogleModel;
-import com.baiyi.cratos.domain.util.googledns.service.DnsGoogleService;
+import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
+import com.baiyi.cratos.domain.util.dnsgoogle.service.DnsGoogleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
