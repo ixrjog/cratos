@@ -58,4 +58,9 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
     public void clearCacheById(int id) {
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+    }
+
 }

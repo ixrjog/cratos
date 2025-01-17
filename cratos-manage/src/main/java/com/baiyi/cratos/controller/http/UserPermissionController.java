@@ -2,9 +2,12 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
-import com.baiyi.cratos.facade.UserPermissionFacade;
+import com.baiyi.cratos.facade.permission.UserPermissionBusinessFacade;
+import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,12 +28,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserPermissionController {
 
     private final UserPermissionFacade permissionFacade;
+    private final UserPermissionBusinessFacade permissionBusinessFacade;
 
     @Operation(summary = "Pagination query user permission")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserPermissionVO.Permission>> queryUserPermissionPage(
             @RequestBody @Valid UserPermissionParam.UserPermissionPageQuery pageQuery) {
         return new HttpResult<>(permissionFacade.queryUserPermissionPage(pageQuery));
+    }
+
+    @Operation(summary = "Pagination query user business permission")
+    @PostMapping(value = "/business/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<PermissionBusinessVO.PermissionBusiness>> queryUserBusinessPermissionPage(
+            @RequestBody @Valid UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
+        return new HttpResult<>(permissionBusinessFacade.queryUserPermissionBusinessPage(pageQuery));
     }
 
     @Operation(summary = "Grant user permission")

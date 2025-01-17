@@ -35,4 +35,8 @@ public class ServerServiceImpl implements ServerService {
     public void clearCacheById(int id) {
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        
+    }
 }

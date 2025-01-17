@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.permission.impl;
 
 import com.baiyi.cratos.common.merger.BusinessUserPermissionMerger;
 import com.baiyi.cratos.common.merger.UserPermissionMerger;
@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
-import com.baiyi.cratos.facade.UserPermissionFacade;
+import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;

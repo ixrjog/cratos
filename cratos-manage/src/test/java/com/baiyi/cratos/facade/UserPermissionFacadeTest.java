@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
+import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

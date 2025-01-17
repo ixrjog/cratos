@@ -57,11 +57,17 @@ public final class Generics {
             if (rawType instanceof Class rawClass) {
                 if (rawClass == genericClass) {
                     Type realType = pType.getActualTypeArguments()[index];
-                    if (realType instanceof Class) {
-                        return (Class) realType;
-                    } else if (realType instanceof ParameterizedType) {
-                        //这里是泛型的泛型
-                        return (Class) ((ParameterizedType) realType).getRawType();
+                    switch (realType) {
+                        case Class aClass -> {
+                            return aClass;
+                        }
+                        case ParameterizedType parameterizedType -> {
+                            //这里是泛型的泛型
+                            return (Class) parameterizedType.getRawType();
+                            //这里是泛型的泛型
+                        }
+                        default -> {
+                        }
                     }
                 } else if (genericClass.isAssignableFrom(rawClass)) {
                     Map<String, Type> map = combine(pType.getActualTypeArguments(), rawClass);
@@ -92,11 +98,17 @@ public final class Generics {
                             .toArray(new Type[0]);
                     if (rawClass == genericClass) {
                         Type realType = typeArray[index];
-                        if (realType instanceof Class) {
-                            return (Class) realType;
-                        } else if (realType instanceof ParameterizedType) {
-                            //这里是泛型的泛型
-                            return (Class) ((ParameterizedType) realType).getRawType();
+                        switch (realType) {
+                            case Class aClass -> {
+                                return aClass;
+                            }
+                            case ParameterizedType parameterizedType -> {
+                                //这里是泛型的泛型
+                                return (Class) parameterizedType.getRawType();
+                                //这里是泛型的泛型
+                            }
+                            case null, default -> {
+                            }
                         }
                     } else if (genericClass.isAssignableFrom(rawClass)) {
                         return find(rawClass, genericClass, index, combine(typeArray, rawClass));

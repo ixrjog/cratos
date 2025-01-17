@@ -44,4 +44,6 @@ public interface ErrorCodeConstants {
     int BEETL_ERROR = 53000;
 
     int APPLICATION_RESOURCE_BASELINE_ERROR = 54000;
+
+    int USER_PERMISSION_BUSINESS_ERROR = 55000;
 }

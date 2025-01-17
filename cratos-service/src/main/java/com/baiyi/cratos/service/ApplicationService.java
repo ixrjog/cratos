@@ -1,19 +1,19 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.business.PermissionBusinessService;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.mapper.ApplicationMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
-import com.baiyi.cratos.service.base.SupportBusinessService;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/15 11:18
  * &#064;Version 1.0
  */
-public interface ApplicationService extends BaseValidService<Application, ApplicationMapper>, SupportBusinessService, BaseUniqueKeyService<Application, ApplicationMapper> {
+public interface ApplicationService extends BaseValidService<Application, ApplicationMapper>, BaseUniqueKeyService<Application, ApplicationMapper>, PermissionBusinessService {
 
     DataTable<Application> queryApplicationPage(ApplicationParam.ApplicationPageQueryParam param);
 

@@ -1,13 +1,17 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
+import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.mapper.ApplicationMapper;
 import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -64,6 +68,36 @@ public class ApplicationServiceImpl implements ApplicationService {
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
         ApplicationService.super.deleteById(id);
+    }
+
+    @Override
+    public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
+            UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
+        ApplicationParam.ApplicationPageQueryParam param = ApplicationParam.ApplicationPageQueryParam.builder()
+                .queryName(pageQuery.getQueryName())
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .build();
+        DataTable<Application> dataTable = this.queryApplicationPage(param);
+        return new DataTable<>(dataTable.getData()
+                .stream()
+                .map(this::toPermissionBusiness)
+                .toList(), dataTable.getTotalNum());
+    }
+
+    private PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Application application) {
+       return PermissionBusinessVO.PermissionBusiness.builder()
+               .name(application.getName())
+               .displayName(application.getName())
+               .businessType(getBusinessType())
+               .businessId(application.getId())
+               .build();
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        SupportBusinessServiceFactory.register(this);
+        PermissionBusinessServiceFactory.register(this);
     }
 
 }
