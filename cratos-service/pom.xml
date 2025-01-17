@@ -23,10 +23,13 @@
             <artifactId>cratos-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--
+        https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter
+        -->
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>5.0.1</version>
+            <version>4.3.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -67,8 +70,10 @@
 
     <build>
         <plugins>
-            <!--mybatis代码生成插件-->
-            <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-maven-plugin -->
+            <!--
+            mybatis代码生成插件
+            https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-maven-plugin
+            -->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -83,11 +88,11 @@
                         <artifactId>mysql-connector-java</artifactId>
                         <version>8.0.28</version>
                     </dependency>
-                    <!-- https://mvnrepository.com/artifact/tk.mybatis/mapper-->
+                    <!-- https://mvnrepository.com/artifact/tk.mybatis/mapper -->
                     <dependency>
                         <groupId>tk.mybatis</groupId>
                         <artifactId>mapper</artifactId>
-                        <version>5.0.1</version>
+                        <version>4.3.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
