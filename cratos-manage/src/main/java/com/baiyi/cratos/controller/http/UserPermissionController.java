@@ -76,4 +76,10 @@ public class UserPermissionController {
         return new HttpResult<>(permissionFacade.queryUserPermissionDetails(queryBusinessUserPermissionDetails));
     }
 
+    @PostMapping(value = "/all/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<UserPermissionVO.UserPermissionDetails> queryAllBusinessUserPermissionDetails(
+            @RequestBody @Valid UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails) {
+        return new HttpResult<>(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
+    }
+
 }

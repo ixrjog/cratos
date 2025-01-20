@@ -28,4 +28,7 @@ public interface UserPermissionFacade {
     UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
             UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails);
 
+    UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
+            UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails);
+
 }

@@ -125,9 +125,11 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .build();
     }
 
-    public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(String username, String businessType) {
-        List<Integer> userPermissionBusinessIds = userPermissionService.queryUserPermissionBusinessIds(username,
-                businessType);
+    @Override
+    public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
+            UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails) {
+        List<Integer> userPermissionBusinessIds = userPermissionService.queryUserPermissionBusinessIds(queryAllBusinessUserPermissionDetails.getUsername(),
+                queryAllBusinessUserPermissionDetails.getBusinessType());
         if (CollectionUtils.isEmpty(userPermissionBusinessIds)) {
             return UserPermissionVO.UserPermissionDetails.EMPTY;
         }
@@ -139,10 +141,10 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
         List<UserPermissionVO.UserPermissionBusiness> userPermissionBusinesses = userPermissionBusinessIds.stream()
                 .map(id -> {
                     SimpleBusiness hasBusiness = SimpleBusiness.builder()
-                            .businessType(businessType)
+                            .businessType(queryAllBusinessUserPermissionDetails.getBusinessType())
                             .businessId(id)
                             .build();
-                    return queryUserPermissionBusiness(username, envs, hasBusiness);
+                    return queryUserPermissionBusiness(queryAllBusinessUserPermissionDetails.getUsername(), envs, hasBusiness);
                 })
                 .toList();
 

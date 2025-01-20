@@ -82,4 +82,13 @@ public class UserPermissionParam {
         private String username;
     }
 
+    @Data
+    @Schema
+    @Builder
+    public static class QueryAllBusinessUserPermissionDetails {
+        @NotBlank
+        private String businessType;
+        private String username;
+    }
+
 }
