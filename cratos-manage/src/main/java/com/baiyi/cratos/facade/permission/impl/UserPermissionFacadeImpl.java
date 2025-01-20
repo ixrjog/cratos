@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade.permission.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -77,7 +76,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     }
 
     @Override
-    @SetSessionUserToParam
     public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
             UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
         String username = queryBusinessUserPermissionDetails.getUsername();
