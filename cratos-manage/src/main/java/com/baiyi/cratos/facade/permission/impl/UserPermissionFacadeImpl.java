@@ -20,11 +20,9 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -126,18 +124,24 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
         return UserPermissionVO.UserPermissionBusiness.builder()
                 .businessType(hasBusiness.getBusinessType())
                 .businessId(hasBusiness.getBusinessId())
-                .name(userPermissions.getFirst()
-                        .getName())
+                .name(userPermissions.stream()
+                        .filter(e -> StringUtils.hasText(e.getName()))
+                        .findFirst()
+                        .map(UserPermission::getName)
+                        .orElse(""))
                 .userPermissions(to(userPermissions))
                 .build();
     }
 
-    private List<UserPermissionVO.Permission> to(List<UserPermission> userPermissions){
-      return userPermissions.stream().map(e-> {
-          UserPermissionVO.Permission permission = BeanCopierUtil.copyProperties(e, UserPermissionVO.Permission.class);
-          envWrapper.businessWrap(permission);
-          return permission;
-      }).toList();
+    private List<UserPermissionVO.Permission> to(List<UserPermission> userPermissions) {
+        return userPermissions.stream()
+                .map(e -> {
+                    UserPermissionVO.Permission permission = BeanCopierUtil.copyProperties(e,
+                            UserPermissionVO.Permission.class);
+                    envWrapper.businessWrap(permission);
+                    return permission;
+                })
+                .toList();
     }
 
     @Override
@@ -180,7 +184,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                     .build();
             UserPermissionVO.UserPermissionDetails userPermissionDetails = queryUserPermissionDetails(query);
             businessPermissions.put(businessType, userPermissionDetails.getUserPermissions());
-
         });
         return UserPermissionVO.BusinessUserPermissionDetails.builder()
                 .businessPermissions(businessPermissions)
