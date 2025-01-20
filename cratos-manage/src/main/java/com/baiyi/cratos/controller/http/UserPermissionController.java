@@ -65,7 +65,7 @@ public class UserPermissionController {
         return HttpResult.SUCCESS;
     }
 
-    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/details/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> getUserBusinessUserPermissionDetails(
             @RequestParam @Valid @NotBlank String username) {
         return new HttpResult<>(permissionFacade.getUserBusinessUserPermissionDetails(username));
