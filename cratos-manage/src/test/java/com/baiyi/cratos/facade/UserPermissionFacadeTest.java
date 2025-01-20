@@ -67,6 +67,16 @@ public class UserPermissionFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
+    @Test
+    void test3() {
+        UserPermissionParam.QueryAllBusinessUserPermissionDetails query = UserPermissionParam.QueryAllBusinessUserPermissionDetails.builder()
+                .businessType(BusinessTypeEnum.APPLICATION.name())
+                .username("baiyi")
+                .build();
+        UserPermissionVO.UserPermissionDetails details = userPermissionFacade.queryUserPermissionDetails(query);
+        System.out.println(details);
+    }
+
 //    @Test
 //    void test3() {
 //        UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails = UserPermissionParam.QueryBusinessUserPermissionDetails.builder()

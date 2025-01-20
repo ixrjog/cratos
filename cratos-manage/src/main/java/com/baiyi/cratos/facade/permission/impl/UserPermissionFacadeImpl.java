@@ -10,9 +10,11 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
+import com.baiyi.cratos.mapper.EnvMapper;
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.wrapper.EnvWrapper;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,8 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     private final UserPermissionWrapper userPermissionWrapper;
     private final UserService userService;
     private final EnvService envService;
+    private final EnvMapper envMapper;
+    private final EnvWrapper envWrapper;
 
     @Override
     public DataTable<UserPermissionVO.Permission> queryUserPermissionPage(
@@ -124,10 +128,16 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .businessId(hasBusiness.getBusinessId())
                 .name(userPermissions.getFirst()
                         .getName())
-                .displayName(userPermissions.getFirst()
-                        .getDisplayName())
-                .userPermissions(BeanCopierUtil.copyListProperties(userPermissions, UserPermissionVO.Permission.class))
+                .userPermissions(to(userPermissions))
                 .build();
+    }
+
+    private List<UserPermissionVO.Permission> to(List<UserPermission> userPermissions){
+      return userPermissions.stream().map(e-> {
+          UserPermissionVO.Permission permission = BeanCopierUtil.copyProperties(e, UserPermissionVO.Permission.class);
+          envWrapper.businessWrap(permission);
+          return permission;
+      }).toList();
     }
 
     @Override
@@ -145,10 +155,10 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .sorted(Comparator.comparing(Env::getSeq))
                 .toList();
         List<UserPermissionVO.UserPermissionBusiness> userPermissionBusinesses = userPermissionBusinessIds.stream()
-                .map(id -> {
+                .map(businessId -> {
                     SimpleBusiness hasBusiness = SimpleBusiness.builder()
                             .businessType(queryAllBusinessUserPermissionDetails.getBusinessType())
-                            .businessId(id)
+                            .businessId(businessId)
                             .build();
                     return queryUserPermissionBusiness(queryAllBusinessUserPermissionDetails.getUsername(), envs,
                             hasBusiness);
