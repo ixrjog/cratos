@@ -26,6 +26,10 @@ public class HttpResult<T> {
 
     private int code;
 
+   public static <T> HttpResult<T> of(T body){
+        return new HttpResult<>(body);
+    }
+
     public HttpResult(T body) {
         this.body = body;
         this.msg = "success";

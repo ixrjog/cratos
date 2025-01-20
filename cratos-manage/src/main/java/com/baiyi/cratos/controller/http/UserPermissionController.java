@@ -11,6 +11,7 @@ import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -64,11 +65,11 @@ public class UserPermissionController {
         return HttpResult.SUCCESS;
     }
 
-//    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public HttpResult<UserPermissionVO.UserPermissionDetails2> getUserPermissionDetailsByUsername(
-//            @RequestParam @Valid @NotBlank String username) {
-//        return new HttpResult<>(permissionFacade.getUserPermissionDetailsByUsername(username));
-//    }
+    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> getUserBusinessUserPermissionDetails(
+            @RequestParam @Valid @NotBlank String username) {
+        return new HttpResult<>(permissionFacade.getUserBusinessUserPermissionDetails(username));
+    }
 
     @PostMapping(value = "/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.UserPermissionDetails> queryBusinessUserPermissionDetails(
@@ -79,7 +80,7 @@ public class UserPermissionController {
     @PostMapping(value = "/all/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.UserPermissionDetails> queryAllBusinessUserPermissionDetails(
             @RequestBody @Valid UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails) {
-        return new HttpResult<>(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
+        return HttpResult.of(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
     }
 
 }

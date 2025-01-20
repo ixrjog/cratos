@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.exception.UserPermissionBusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,6 +29,10 @@ public class PermissionBusinessServiceFactory {
 
     public static PermissionBusinessService getService(String businessType) {
         return CONTEXT.get(businessType);
+    }
+
+    public static Set<String> getBusinessTypes() {
+        return CONTEXT.keySet();
     }
 
 }

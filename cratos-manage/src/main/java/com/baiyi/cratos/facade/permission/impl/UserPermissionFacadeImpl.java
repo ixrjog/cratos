@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.permission.impl;
 
+import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -13,6 +14,7 @@ import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -20,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -119,8 +122,10 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
         return UserPermissionVO.UserPermissionBusiness.builder()
                 .businessType(hasBusiness.getBusinessType())
                 .businessId(hasBusiness.getBusinessId())
-                .name(userPermissions.getFirst().getName())
-                .displayName(userPermissions.getFirst().getDisplayName())
+                .name(userPermissions.getFirst()
+                        .getName())
+                .displayName(userPermissions.getFirst()
+                        .getDisplayName())
                 .userPermissions(BeanCopierUtil.copyListProperties(userPermissions, UserPermissionVO.Permission.class))
                 .build();
     }
@@ -128,7 +133,8 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     @Override
     public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
             UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails) {
-        List<Integer> userPermissionBusinessIds = userPermissionService.queryUserPermissionBusinessIds(queryAllBusinessUserPermissionDetails.getUsername(),
+        List<Integer> userPermissionBusinessIds = userPermissionService.queryUserPermissionBusinessIds(
+                queryAllBusinessUserPermissionDetails.getUsername(),
                 queryAllBusinessUserPermissionDetails.getBusinessType());
         if (CollectionUtils.isEmpty(userPermissionBusinessIds)) {
             return UserPermissionVO.UserPermissionDetails.EMPTY;
@@ -144,12 +150,30 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                             .businessType(queryAllBusinessUserPermissionDetails.getBusinessType())
                             .businessId(id)
                             .build();
-                    return queryUserPermissionBusiness(queryAllBusinessUserPermissionDetails.getUsername(), envs, hasBusiness);
+                    return queryUserPermissionBusiness(queryAllBusinessUserPermissionDetails.getUsername(), envs,
+                            hasBusiness);
                 })
                 .toList();
-
         return UserPermissionVO.UserPermissionDetails.builder()
                 .userPermissions(userPermissionBusinesses)
+                .build();
+    }
+
+    @Override
+    public UserPermissionVO.BusinessUserPermissionDetails getUserBusinessUserPermissionDetails(String username) {
+        Set<String> businessTypes = PermissionBusinessServiceFactory.getBusinessTypes();
+        Map<String, List<UserPermissionVO.UserPermissionBusiness>> businessPermissions = Maps.newHashMap();
+        businessTypes.forEach(businessType -> {
+            UserPermissionParam.QueryAllBusinessUserPermissionDetails query = UserPermissionParam.QueryAllBusinessUserPermissionDetails.builder()
+                    .username(username)
+                    .businessType(businessType)
+                    .build();
+            UserPermissionVO.UserPermissionDetails userPermissionDetails = queryUserPermissionDetails(query);
+            businessPermissions.put(businessType, userPermissionDetails.getUserPermissions());
+
+        });
+        return UserPermissionVO.BusinessUserPermissionDetails.builder()
+                .businessPermissions(businessPermissions)
                 .build();
     }
 

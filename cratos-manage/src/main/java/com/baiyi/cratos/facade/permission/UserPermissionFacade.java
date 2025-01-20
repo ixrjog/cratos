@@ -31,4 +31,6 @@ public interface UserPermissionFacade {
     UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
             UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails);
 
+    UserPermissionVO.BusinessUserPermissionDetails getUserBusinessUserPermissionDetails(String username);
+
 }

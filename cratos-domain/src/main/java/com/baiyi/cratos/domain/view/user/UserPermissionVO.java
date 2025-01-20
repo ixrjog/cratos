@@ -49,14 +49,12 @@ public class UserPermissionVO {
     @Schema
     public static class BusinessUserPermissionDetails implements Serializable {
         @Serial
-        private static final long serialVersionUID = 5357289462624411413L;
-        // Map<{username}, List<String>>
-        private Map<String, List<String>> permissionByUser;
-
-        private Map<String, List<String>> permissionByRole;
+        private static final long serialVersionUID = 8569271131451422138L;
+        public static final BusinessUserPermissionDetails EMPTY = BusinessUserPermissionDetails.builder()
+                .build();
+        @Builder.Default
+        private Map<String, List<UserPermissionBusiness>> businessPermissions = Map.of();
     }
-
-
 
     @Data
     @Builder
