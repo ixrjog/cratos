@@ -32,7 +32,8 @@ public class KubernetesServiceBuilder {
                 .map(e -> KubernetesServiceVO.ServicePort.builder()
                         .name(e.getName())
                         .appProtocol(e.getAppProtocol())
-                        .targetPort(e.getTargetPort().getIntVal())
+                        .targetPort(e.getTargetPort()
+                                .getIntVal())
                         .nodePort(e.getNodePort())
                         .protocol(e.getProtocol())
                         .port(e.getPort())
@@ -45,12 +46,17 @@ public class KubernetesServiceBuilder {
                 .ports(makePorts())
                 .selector(Maps.newHashMap(this.service.getSpec()
                         .getSelector()))
-                .type(this.service.getSpec().getType())
-                .clusterIP(this.service.getSpec().getClusterIP())
+                .type(this.service.getSpec()
+                        .getType())
+                .clusterIP(this.service.getSpec()
+                        .getClusterIP())
                 .build();
     }
 
     public KubernetesServiceVO.Service build() {
+        if (this.service == null) {
+            return KubernetesServiceVO.Service.EMPTY;
+        }
         return KubernetesServiceVO.Service.builder()
                 .metadata(ConverterUtil.toMetadata(this.service.getMetadata()))
                 .spec(makeServiceSpec())

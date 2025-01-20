@@ -27,6 +27,8 @@ public class KubernetesServiceVO {
     public static class Service implements Serializable {
         @Serial
         private static final long serialVersionUID = -45376273071437967L;
+        public static final Service EMPTY = Service.builder().build();
+
         private KubernetesCommonVO.Metadata metadata;
         private ServiceSpec spec;
     }
