@@ -6,9 +6,7 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -25,6 +23,8 @@ public class UserPermissionVO {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema
     public static class Permission extends BaseVO implements Serializable {
         @Serial
@@ -47,16 +47,6 @@ public class UserPermissionVO {
     @Data
     @Builder
     @Schema
-    public static class UserPermissionDetails implements Serializable {
-        @Serial
-        private static final long serialVersionUID = -8019733940094649908L;
-        // Map<{businessType}, Map<{businessId}, MergedPermissions>>
-        private Map<String, List<MergedPermissions>> permissions;
-    }
-
-    @Data
-    @Builder
-    @Schema
     public static class BusinessUserPermissionDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = 5357289462624411413L;
@@ -66,45 +56,31 @@ public class UserPermissionVO {
         private Map<String, List<String>> permissionByRole;
     }
 
+
+
     @Data
     @Builder
     @Schema
-    public static class MergedPermissions implements BaseBusiness.HasBusiness, Serializable {
+    public static class UserPermissionDetails implements Serializable {
         @Serial
-        private static final long serialVersionUID = 8090775323820190804L;
-        private String businessType;
-        private Integer businessId;
-        private String name;
+        private static final long serialVersionUID = 8108421939569005708L;
+        public static final UserPermissionDetails EMPTY = UserPermissionDetails.builder()
+                .build();
         @Builder.Default
-        private List<PermissionRole> roles = Lists.newArrayList();
+        private List<UserPermissionBusiness> userPermissions = Lists.newArrayList();
     }
 
     @Data
     @Builder
     @Schema
-    public static class PermissionRole implements Serializable {
+    public static class UserPermissionBusiness implements BaseBusiness.HasBusiness, Serializable {
         @Serial
-        private static final long serialVersionUID = -3454331207462892087L;
-        private String role;
-        private Boolean valid;
-        private Integer seq;
-        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
-        private Date expiredTime;
-        private String comment;
-    }
-
-    @Data
-    @Builder
-    @Schema
-    public static class MergedBusinessPermissions implements BaseBusiness.HasBusiness, Serializable {
-        @Serial
-        private static final long serialVersionUID = 8090775323820190804L;
+        private static final long serialVersionUID = -3544879369613177893L;
         private String businessType;
         private Integer businessId;
         private String name;
-        private UserVO.User user;
-        @Builder.Default
-        private List<PermissionRole> roles = Lists.newArrayList();
+        private String displayName;
+        private List<Permission> userPermissions;
     }
 
 }

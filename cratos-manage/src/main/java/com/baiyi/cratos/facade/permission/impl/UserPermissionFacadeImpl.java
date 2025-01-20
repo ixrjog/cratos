@@ -1,11 +1,13 @@
 package com.baiyi.cratos.facade.permission.impl;
 
-import com.baiyi.cratos.common.merger.BusinessUserPermissionMerger;
-import com.baiyi.cratos.common.merger.UserPermissionMerger;
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import com.baiyi.cratos.service.EnvService;
@@ -14,7 +16,9 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,35 +77,80 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     }
 
     @Override
-    public UserPermissionVO.UserPermissionDetails getUserPermissionDetailsByUsername(String username) {
-//        List<Env> envs = envService.selectAll()
-//                .stream()
-//                .filter(Env::getValid)
-//                .sorted(Comparator.comparing(Env::getSeq))
-//                .toList();
+    @SetSessionUserToParam
+    public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
+            UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
+        String username = queryBusinessUserPermissionDetails.getUsername();
+        List<Env> envs = envService.selectAll()
+                .stream()
+                .filter(Env::getValid)
+                .sorted(Comparator.comparing(Env::getSeq))
+                .toList();
+        SimpleBusiness hasBusiness = SimpleBusiness.builder()
+                .businessType(queryBusinessUserPermissionDetails.getBusinessType())
+                .businessId(queryBusinessUserPermissionDetails.getBusinessId())
+                .build();
+        UserPermissionVO.UserPermissionBusiness userPermissionBusiness = queryUserPermissionBusiness(username, envs,
+                hasBusiness);
         return UserPermissionVO.UserPermissionDetails.builder()
-                .permissions(UserPermissionMerger.newMerger()
-                        .withUserPermissions(userPermissionService.queryByUsername(username))
-                        .make())
+                .userPermissions(List.of(userPermissionBusiness))
                 .build();
     }
 
-    @Override
-    public UserPermissionVO.BusinessUserPermissionDetails queryBusinessUserPermissionDetails(
-            UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
-        List<UserPermission> userPermissions = userPermissionService.queryByBusiness(
-                queryBusinessUserPermissionDetails);
-        Map<String, List<UserPermission>> usernameMap = userPermissions.stream()
-                .collect(Collectors.groupingBy(UserPermission::getUsername));
-//        Map<String, User> users = usernameMap.keySet()
-//                .stream()
-//                .map(userService::getByUsername)
-//                .filter(Objects::nonNull)
-//                .collect(Collectors.toMap(User::getUsername, a -> a, (k1, k2) -> k1));
-        return BusinessUserPermissionMerger.newMerger()
-                .withUserPermissions(userPermissions)
-                // .withUsers(users)
-                .get();
+    private UserPermissionVO.UserPermissionBusiness queryUserPermissionBusiness(String username, List<Env> envs,
+                                                                                SimpleBusiness hasBusiness) {
+        Map<String, UserPermission> userPermissionMap = userPermissionService.queryUserPermissionByBusiness(username,
+                        hasBusiness)
+                .stream()
+                .collect(Collectors.toMap(UserPermission::getRole, a -> a, (k1, k2) -> k1));
+        List<UserPermission> userPermissions = envs.stream()
+                .map(env -> {
+                    if (userPermissionMap.containsKey(env.getEnvName())) {
+                        return userPermissionMap.get(env.getEnvName());
+                    } else {
+                        return UserPermission.builder()
+                                .username(username)
+                                .role(env.getEnvName())
+                                .businessType(hasBusiness.getBusinessType())
+                                .businessId(hasBusiness.getBusinessId())
+                                .seq(env.getSeq())
+                                .build();
+                    }
+                })
+                .toList();
+        return UserPermissionVO.UserPermissionBusiness.builder()
+                .businessType(hasBusiness.getBusinessType())
+                .businessId(hasBusiness.getBusinessId())
+                .name(userPermissions.getFirst().getName())
+                .displayName(userPermissions.getFirst().getDisplayName())
+                .userPermissions(BeanCopierUtil.copyListProperties(userPermissions, UserPermissionVO.Permission.class))
+                .build();
+    }
+
+    public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(String username, String businessType) {
+        List<Integer> userPermissionBusinessIds = userPermissionService.queryUserPermissionBusinessIds(username,
+                businessType);
+        if (CollectionUtils.isEmpty(userPermissionBusinessIds)) {
+            return UserPermissionVO.UserPermissionDetails.EMPTY;
+        }
+        List<Env> envs = envService.selectAll()
+                .stream()
+                .filter(Env::getValid)
+                .sorted(Comparator.comparing(Env::getSeq))
+                .toList();
+        List<UserPermissionVO.UserPermissionBusiness> userPermissionBusinesses = userPermissionBusinessIds.stream()
+                .map(id -> {
+                    SimpleBusiness hasBusiness = SimpleBusiness.builder()
+                            .businessType(businessType)
+                            .businessId(id)
+                            .build();
+                    return queryUserPermissionBusiness(username, envs, hasBusiness);
+                })
+                .toList();
+
+        return UserPermissionVO.UserPermissionDetails.builder()
+                .userPermissions(userPermissionBusinesses)
+                .build();
     }
 
 }

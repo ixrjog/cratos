@@ -11,7 +11,6 @@ import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -65,16 +64,16 @@ public class UserPermissionController {
         return HttpResult.SUCCESS;
     }
 
-    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<UserPermissionVO.UserPermissionDetails> getUserPermissionDetailsByUsername(
-            @RequestParam @Valid @NotBlank String username) {
-        return new HttpResult<>(permissionFacade.getUserPermissionDetailsByUsername(username));
-    }
+//    @GetMapping(value = "/details/get/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public HttpResult<UserPermissionVO.UserPermissionDetails2> getUserPermissionDetailsByUsername(
+//            @RequestParam @Valid @NotBlank String username) {
+//        return new HttpResult<>(permissionFacade.getUserPermissionDetailsByUsername(username));
+//    }
 
     @PostMapping(value = "/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> queryBusinessUserPermissionDetails(
+    public HttpResult<UserPermissionVO.UserPermissionDetails> queryBusinessUserPermissionDetails(
             @RequestBody @Valid UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
-        return new HttpResult<>(permissionFacade.queryBusinessUserPermissionDetails(queryBusinessUserPermissionDetails));
+        return new HttpResult<>(permissionFacade.queryUserPermissionDetails(queryBusinessUserPermissionDetails));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.http.user;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -38,7 +39,7 @@ public class UserPermissionParam {
     @Data
     @Schema
     @Builder
-    public static class  GrantUserPermission implements IToTarget<UserPermission> {
+    public static class GrantUserPermission implements IToTarget<UserPermission> {
         @NotBlank
         private String username;
         private String name;
@@ -74,11 +75,17 @@ public class UserPermissionParam {
     @Data
     @Schema
     @Builder
-    public static class QueryBusinessUserPermissionDetails implements BaseBusiness.HasBusiness {
+    public static class QueryBusinessUserPermissionDetails implements BaseBusiness.HasBusiness, HasSessionUser {
         @NotBlank
         private String businessType;
         @NotNull
         private Integer businessId;
+        private String username;
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
+
     }
 
 }

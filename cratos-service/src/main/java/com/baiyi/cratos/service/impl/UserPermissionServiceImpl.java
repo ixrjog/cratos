@@ -90,4 +90,19 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         return userPermissionMapper.selectByExample(example);
     }
 
+    @Override
+    public List<Integer> queryUserPermissionBusinessIds(String username, String businessType) {
+        return userPermissionMapper.queryUserPermissionBusinessIds(username, businessType);
+    }
+
+    @Override
+    public List<UserPermission> queryUserPermissionByBusiness(String username, BaseBusiness.HasBusiness hasBusiness) {
+        Example example = new Example(UserPermission.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", username)
+                .andEqualTo("businessType", hasBusiness.getBusinessType())
+                .andEqualTo("businessId", hasBusiness.getBusinessId());
+        return userPermissionMapper.selectByExample(example);
+    }
+
 }

@@ -41,4 +41,11 @@
         </choose>
     </select>
 
+    <select id="queryUserPermissionBusinessIds" parameterType="string" resultType="int">
+        select distinct business_id
+        from user_permission
+        where username = #{username}
+          and business_type = #{businessType}
+    </select>
+
 </mapper>

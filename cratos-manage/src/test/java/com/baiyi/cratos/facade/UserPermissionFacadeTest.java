@@ -9,6 +9,8 @@ import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * &#064;Author  baiyi
@@ -52,21 +54,29 @@ public class UserPermissionFacadeTest extends BaseUnit {
 
     @Test
     void test2() {
-        UserPermissionVO.UserPermissionDetails details = userPermissionFacade.getUserPermissionDetailsByUsername(
-                "baiyi");
-        System.out.println(details);
-    }
-
-    @Test
-    void test3() {
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                "baiyi", null);
+        SecurityContextHolder.getContext()
+                .setAuthentication(usernamePasswordAuthenticationToken);
         UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails = UserPermissionParam.QueryBusinessUserPermissionDetails.builder()
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .businessId(2)
                 .build();
-        UserPermissionVO.BusinessUserPermissionDetails details = userPermissionFacade.queryBusinessUserPermissionDetails(
+        UserPermissionVO.UserPermissionDetails details = userPermissionFacade.queryUserPermissionDetails(
                 queryBusinessUserPermissionDetails);
         System.out.println(details);
     }
+
+//    @Test
+//    void test3() {
+//        UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails = UserPermissionParam.QueryBusinessUserPermissionDetails.builder()
+//                .businessType(BusinessTypeEnum.APPLICATION.name())
+//                .businessId(2)
+//                .build();
+//        UserPermissionVO.BusinessUserPermissionDetails details = userPermissionFacade.queryBusinessUserPermissionDetails(
+//                queryBusinessUserPermissionDetails);
+//        System.out.println(details);
+//    }
 
 
 }

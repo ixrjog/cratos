@@ -26,4 +26,8 @@ public interface UserPermissionService extends BaseUniqueKeyService<UserPermissi
 
     List<UserPermission> queryByBusiness(BaseBusiness.HasBusiness hasBusiness);
 
+    List<Integer> queryUserPermissionBusinessIds(String username, String businessType);
+
+    List<UserPermission> queryUserPermissionByBusiness(String username, BaseBusiness.HasBusiness hasBusiness);
+
 }
