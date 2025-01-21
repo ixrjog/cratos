@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * &#064;Version 1.0
  */
 @Slf4j
-public class PermissionBusinessServiceFactory {
+public class PermissionBusinessServiceFactory<T> {
 
-    private static final Map<String, PermissionBusinessService> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, PermissionBusinessService<?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(PermissionBusinessService service) {
+    public static <T> void register(PermissionBusinessService<T> service) {
         CONTEXT.put(service.getBusinessType(), service);
     }
 
@@ -27,8 +27,9 @@ public class PermissionBusinessServiceFactory {
         }
     }
 
-    public static PermissionBusinessService getService(String businessType) {
-        return CONTEXT.get(businessType);
+    @SuppressWarnings("unchecked")
+    public static <T> PermissionBusinessService<T> getService(String businessType) {
+        return (PermissionBusinessService<T>) CONTEXT.get(businessType);
     }
 
     public static Set<String> getBusinessTypes() {

@@ -43,8 +43,6 @@ public class UserPermissionParam {
         private String username;
         private String name;
         @NotBlank
-        private String displayName;
-        @NotBlank
         private String businessType;
         private Integer businessId;
         @NotBlank

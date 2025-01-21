@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.permission.impl;
 
+import com.baiyi.cratos.business.PermissionBusinessService;
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
@@ -8,6 +9,7 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
@@ -50,7 +52,20 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     @Override
     public void grantUserPermission(UserPermissionParam.GrantUserPermission grantUserPermission) {
-        UserPermission userPermission = grantUserPermission.toTarget();
+        PermissionBusinessService<?> service = PermissionBusinessServiceFactory.getService(
+                grantUserPermission.getBusinessType());
+        PermissionBusinessVO.PermissionBusiness permissionBusiness = service.getByBusinessId(
+                grantUserPermission.getBusinessId());
+        UserPermission userPermission = UserPermission.builder()
+                .username(grantUserPermission.getUsername())
+                .name(permissionBusiness.getName())
+                .businessId(grantUserPermission.getBusinessId())
+                .businessType(grantUserPermission.getBusinessType())
+                .displayName(permissionBusiness.getDisplayName())
+                .role(grantUserPermission.getRole())
+                .expiredTime(grantUserPermission.getExpiredTime())
+                .comment(grantUserPermission.getComment())
+                .build();
         if (userPermissionService.getByUniqueKey(userPermission) == null) {
             userPermissionService.add(userPermission);
         }

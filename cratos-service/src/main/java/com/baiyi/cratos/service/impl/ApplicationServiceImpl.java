@@ -85,13 +85,14 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .toList(), dataTable.getTotalNum());
     }
 
-    private PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Application application) {
-       return PermissionBusinessVO.PermissionBusiness.builder()
-               .name(application.getName())
-               .displayName(application.getName())
-               .businessType(getBusinessType())
-               .businessId(application.getId())
-               .build();
+    @Override
+    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Application application) {
+        return PermissionBusinessVO.PermissionBusiness.builder()
+                .name(application.getName())
+                .displayName(application.getName())
+                .businessType(getBusinessType())
+                .businessId(application.getId())
+                .build();
     }
 
     @Override
