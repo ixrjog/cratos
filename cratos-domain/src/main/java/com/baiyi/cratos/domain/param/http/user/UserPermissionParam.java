@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -50,7 +49,8 @@ public class UserPermissionParam {
         private Boolean valid;
         private Integer seq;
         private String content;
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        //@JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
+        //@NotNull(message = "ExpiredTime must be specified.")
         private Date expiredTime;
         private String comment;
     }

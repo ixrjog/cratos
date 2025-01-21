@@ -1,6 +1,5 @@
 package com.baiyi.cratos.eds.aws.repo;
 
-import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
 import com.amazonaws.services.ec2.model.DescribeInstancesResult;
 import com.amazonaws.services.ec2.model.Instance;
@@ -30,7 +29,7 @@ public class AwsEc2Repo {
         DescribeInstancesRequest request = new DescribeInstancesRequest();
         List<Instance> instanceList = Lists.newArrayList();
         while (true) {
-            DescribeInstancesResult response = buildAmazonEC2(aws, regionId).describeInstances(request);
+            DescribeInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws).describeInstances(request);
             response.getReservations()
                     .forEach(e -> instanceList.addAll(e.getInstances()));
             request.setNextToken(response.getNextToken());
@@ -38,10 +37,6 @@ public class AwsEc2Repo {
                 return instanceList;
             }
         }
-    }
-
-    private AmazonEC2 buildAmazonEC2(EdsAwsConfigModel.Aws aws, String regionId) {
-        return AmazonEc2Service.buildAmazonEC2(regionId, aws);
     }
 
 }

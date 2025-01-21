@@ -4,7 +4,6 @@ import com.baiyi.cratos.annotation.PreVerifyPermissionsFromParam;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.ErrorEnum;
-import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.service.UserService;
@@ -24,12 +23,9 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -95,14 +91,7 @@ public class PreVerifyPermissionsFromParamAspect {
     }
 
     private boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel, String username) {
-        List<RbacRole> rbacRoles = rbacRoleFacade.queryUserRoles(username);
-        if (CollectionUtils.isEmpty(rbacRoles)) {
-            return false;
-        }
-        return rbacRoles.stream()
-                .map(RbacRole::getAccessLevel)
-                .max(Comparator.comparing(Integer::intValue))
-                .orElse(0) >= accessLevel.getLevel();
+        return rbacRoleFacade.verifyRoleAccessLevelByUsername(accessLevel, username);
     }
 
 }

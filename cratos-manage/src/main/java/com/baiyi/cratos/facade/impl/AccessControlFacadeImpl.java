@@ -1,11 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.service.access.AccessControlFacade;
+import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.service.UserPermissionService;
+import com.baiyi.cratos.service.access.AccessControlFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import org.springframework.util.StringUtils;
 public class AccessControlFacadeImpl implements AccessControlFacade {
 
     private final UserPermissionService userPermissionService;
+    private final RbacRoleFacade rbacRoleFacade;
 
     @Override
     public AccessControlVO.AccessControl generateAccessControl(BaseBusiness.HasBusiness hasBusiness, String namespace) {
@@ -32,6 +35,10 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
         String username = authentication.getName();
         if (!StringUtils.hasText(username)) {
             return AccessControlVO.AccessControl.unauthorized(hasBusiness.getBusinessType());
+        }
+        // 跳过鉴权
+        if (rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS, username)) {
+            return AccessControlVO.AccessControl.authorized(hasBusiness.getBusinessType());
         }
         UserPermission uniqueKey = UserPermission.builder()
                 .businessType(hasBusiness.getBusinessType())

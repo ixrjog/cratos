@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
@@ -11,7 +12,9 @@ import com.baiyi.cratos.wrapper.RbacRoleWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +56,18 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
     public void addRole(RbacRoleParam.AddRole addRole) {
         RbacRole rbacRole = addRole.toTarget();
         rbacRoleService.add(rbacRole);
+    }
+
+    @Override
+    public boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel, String username) {
+        List<RbacRole> rbacRoles = this.queryUserRoles(username);
+        if (CollectionUtils.isEmpty(rbacRoles)) {
+            return false;
+        }
+        return rbacRoles.stream()
+                .map(RbacRole::getAccessLevel)
+                .max(Comparator.comparing(Integer::intValue))
+                .orElse(0) >= accessLevel.getLevel();
     }
 
     @Override

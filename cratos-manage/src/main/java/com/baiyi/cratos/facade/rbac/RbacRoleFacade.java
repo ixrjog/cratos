@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.rbac;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
@@ -23,5 +24,7 @@ public interface RbacRoleFacade {
     void addRole(RbacRoleParam.AddRole addRole);
 
     void deleteRoleById(int id);
+
+    boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel, String username);
 
 }
