@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -61,6 +63,15 @@ public class EnvFacadeImpl implements EnvFacade {
         return envService.selectAll()
                 .stream()
                 .collect(Collectors.toMap(Env::getEnvName, a -> a, (k1, k2) -> k1));
+    }
+
+    @Override
+    public List<Env> querySorted() {
+        return envService.selectAll()
+                .stream()
+                .filter(Env::getValid)
+                .sorted(Comparator.comparing(Env::getSeq))
+                .toList();
     }
 
     @Override

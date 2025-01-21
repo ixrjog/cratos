@@ -9,9 +9,8 @@ import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
+import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
-import com.baiyi.cratos.mapper.EnvMapper;
-import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EnvWrapper;
@@ -22,7 +21,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -37,8 +38,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     private final UserPermissionService userPermissionService;
     private final UserPermissionWrapper userPermissionWrapper;
     private final UserService userService;
-    private final EnvService envService;
-    private final EnvMapper envMapper;
+    private final EnvFacade envFacade;
     private final EnvWrapper envWrapper;
 
     @Override
@@ -84,24 +84,16 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     public UserPermissionVO.UserPermissionDetails queryUserPermissionDetails(
             UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
         String username = queryBusinessUserPermissionDetails.getUsername();
-        List<Env> envs = envService.selectAll()
-                .stream()
-                .filter(Env::getValid)
-                .sorted(Comparator.comparing(Env::getSeq))
-                .toList();
-        SimpleBusiness hasBusiness = SimpleBusiness.builder()
-                .businessType(queryBusinessUserPermissionDetails.getBusinessType())
-                .businessId(queryBusinessUserPermissionDetails.getBusinessId())
-                .build();
+        List<Env> envs = envFacade.querySorted();
         UserPermissionVO.UserPermissionBusiness userPermissionBusiness = queryUserPermissionBusiness(username, envs,
-                hasBusiness);
+                queryBusinessUserPermissionDetails);
         return UserPermissionVO.UserPermissionDetails.builder()
                 .userPermissions(List.of(userPermissionBusiness))
                 .build();
     }
 
     private UserPermissionVO.UserPermissionBusiness queryUserPermissionBusiness(String username, List<Env> envs,
-                                                                                SimpleBusiness hasBusiness) {
+                                                                                BaseBusiness.HasBusiness hasBusiness) {
         Map<String, UserPermission> userPermissionMap = userPermissionService.queryUserPermissionByBusiness(username,
                         hasBusiness)
                 .stream()
@@ -153,11 +145,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
         if (CollectionUtils.isEmpty(userPermissionBusinessIds)) {
             return UserPermissionVO.UserPermissionDetails.EMPTY;
         }
-        List<Env> envs = envService.selectAll()
-                .stream()
-                .filter(Env::getValid)
-                .sorted(Comparator.comparing(Env::getSeq))
-                .toList();
+        List<Env> envs = envFacade.querySorted();
         List<UserPermissionVO.UserPermissionBusiness> userPermissionBusinesses = userPermissionBusinessIds.stream()
                 .map(businessId -> {
                     SimpleBusiness hasBusiness = SimpleBusiness.builder()

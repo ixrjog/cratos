@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +22,7 @@ public interface EnvFacade extends HasSetValid {
     void addEnv(EnvParam.AddEnv addEnv);
 
     Map<String, Env> getEnvMap();
+
+    List<Env> querySorted();
 
 }
