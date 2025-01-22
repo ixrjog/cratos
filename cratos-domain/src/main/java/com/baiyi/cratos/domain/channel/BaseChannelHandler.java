@@ -13,7 +13,8 @@ import java.io.IOException;
  */
 public interface BaseChannelHandler<T extends HasSocketRequest> extends HasTopic, InitializingBean {
 
-    void handleRequest(String sessionId, Session session, T message) throws IllegalStateException, IOException;
+    void handleRequest(String sessionId, String username, Session session,
+                       T message) throws IllegalStateException, IOException;
 
     default void send(Session session, MessageResponse<?> response) throws IllegalStateException, IOException {
         if (session.isOpen()) {

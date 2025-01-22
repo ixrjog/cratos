@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
-   // private SshSession sshSession;
+    // private SshSession sshSession;
     private static SshSessionService sshSessionService;
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
     private final String sessionId = UUID.randomUUID()
@@ -59,7 +59,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             SshSession sshSession = SshSessionBuilder.build(this.sessionId, username, host,
                     SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
             SshKubernetesSocketServer.sshSessionService.add(sshSession);
-           // this.sshSession = sshSession;
+            // this.sshSession = sshSession;
             Thread.ofVirtual()
                     .start(SentOutputTask.newTask(this.sessionId, session));
         } catch (Exception e) {
@@ -73,9 +73,9 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             try {
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest request = KubernetesContainerTerminalParam.loadAs(
                         message);
-                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session, request);
-                // KubernetesSshWatchLogChannelHandler
-            } catch (JsonSyntaxException ignored) {
+                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, getUsername(), session, request);
+            } catch (JsonSyntaxException ex) {
+                log.error(ex.getMessage(), ex);
             }
         }
     }
@@ -87,7 +87,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     @OnClose
     public void onClose(Session session) {
-        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, session,
+        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, getUsername(), session,
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest.CLOSE);
     }
 

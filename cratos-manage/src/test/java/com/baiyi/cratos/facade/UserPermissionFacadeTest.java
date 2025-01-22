@@ -31,7 +31,6 @@ public class UserPermissionFacadeTest extends BaseUnit {
         Application application = applicationService.getByName("kili");
         UserPermissionParam.GrantUserPermission grantUserPermission1 = UserPermissionParam.GrantUserPermission.builder()
                 .username("baiyi")
-                .displayName("baiyi")
                 .businessId(application.getId())
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .name(application.getName())
@@ -42,7 +41,6 @@ public class UserPermissionFacadeTest extends BaseUnit {
 
         UserPermissionParam.GrantUserPermission grantUserPermission2 = UserPermissionParam.GrantUserPermission.builder()
                 .username("baiyi")
-                .displayName("baiyi")
                 .businessId(application.getId())
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .name(application.getName())
@@ -74,6 +72,13 @@ public class UserPermissionFacadeTest extends BaseUnit {
                 .username("baiyi")
                 .build();
         UserPermissionVO.UserPermissionDetails details = userPermissionFacade.queryUserPermissionDetails(query);
+        System.out.println(details);
+    }
+
+    @Test
+    void test4() {
+        UserPermissionVO.BusinessUserPermissionDetails details = userPermissionFacade.getUserBusinessUserPermissionDetails(
+                "baiyi");
         System.out.println(details);
     }
 

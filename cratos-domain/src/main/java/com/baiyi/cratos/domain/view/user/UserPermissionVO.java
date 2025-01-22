@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -71,7 +70,7 @@ public class UserPermissionVO {
         public static final UserPermissionDetails EMPTY = UserPermissionDetails.builder()
                 .build();
         @Builder.Default
-        private List<UserPermissionBusiness> userPermissions = Lists.newArrayList();
+        private List<UserPermissionBusiness> userPermissions = List.of();
     }
 
     @Data

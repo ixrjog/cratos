@@ -18,6 +18,7 @@ import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import java.util.Map;
  * &#064;Date  2025/1/8 14:04
  * &#064;Version 1.0
  */
+@Slf4j
 @RequiredArgsConstructor
 public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketRequest> implements BaseChannelHandler<T> {
 
@@ -51,15 +53,21 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
                 .getEdsConfigModel();
     }
 
-    protected boolean accessInterception(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) {
-        Application application = applicationService.getByName(message.getApplicationName());
-        if (application == null) {
+    protected boolean accessInterception(String username,
+                                         KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) {
+        try {
+            Application application = applicationService.getByName(message.getApplicationName());
+            if (application == null) {
+                return false;
+            }
+            message.toBusiness(application.getId());
+            AccessControlVO.AccessControl accessControl = accessControlFacade.generateAccessControl(username,
+                    message.toBusiness(application.getId()), message.getNamespace());
+            return accessControl.getPermission();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return false;
         }
-        message.toBusiness(application.getId());
-        AccessControlVO.AccessControl accessControl = accessControlFacade.generateAccessControl(
-                message.toBusiness(application.getId()), message.getNamespace());
-        return accessControl.getPermission();
     }
 
     @Override

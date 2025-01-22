@@ -31,12 +31,13 @@ public class KubernetesDetailsChannelHandlerFactory {
         CONTEXT.put(bean.getTopic(), bean);
     }
 
-    public static <T extends HasSocketRequest> void handleRequest(String sessionId, Session session, T message) {
+    public static <T extends HasSocketRequest> void handleRequest(String sessionId, String username, Session session,
+                                                                  T message) {
         try {
             if (CONTEXT.containsKey(message.getTopic())) {
                 BaseChannelHandler<HasSocketRequest> handler = (BaseChannelHandler<HasSocketRequest>) CONTEXT.get(
                         message.getTopic());
-                handler.handleRequest(sessionId, session, message);
+                handler.handleRequest(sessionId, username, session, message);
             }
         } catch (IllegalStateException | ClassCastException | IOException ex) {
             log.error(ex.getMessage(), ex);

@@ -27,7 +27,7 @@ public class SubscriptionKubernetesNodeDetailsChannelHandler extends BaseEdsKube
     private final KubernetesNodeDetailsFacade kubernetesNodeDetailsFacade;
 
     @Override
-    public void handleRequest(String sessionId, Session session,
+    public void handleRequest(String sessionId, String username, Session session,
                               com.baiyi.cratos.domain.param.socket.kubernetes.EdsKubernetesNodeParam.EdsKubernetesNodeDetailsRequest message) throws IllegalStateException, IOException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {

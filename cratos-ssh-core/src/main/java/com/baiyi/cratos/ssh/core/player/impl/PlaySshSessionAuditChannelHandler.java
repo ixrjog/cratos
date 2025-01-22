@@ -24,7 +24,7 @@ public class PlaySshSessionAuditChannelHandler extends BaseSshAuditChannelHandle
     private final SshSessionInstanceService sshSessionInstanceService;
 
     @Override
-    public void handleRequest(String sessionId, Session session,
+    public void handleRequest(String sessionId, String username, Session session,
                               SshSessionAuditParam.AuditRequest message) throws IllegalStateException {
         SshSessionInstance uniqueKey = SshSessionInstance.builder()
                 .instanceId(message.getInstanceId())

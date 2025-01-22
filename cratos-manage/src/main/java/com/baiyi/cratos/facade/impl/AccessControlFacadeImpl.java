@@ -11,9 +11,12 @@ import com.baiyi.cratos.service.access.AccessControlFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -30,10 +33,18 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
 
     @Override
     public AccessControlVO.AccessControl generateAccessControl(BaseBusiness.HasBusiness hasBusiness, String namespace) {
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        String username = authentication.getName();
+        String username = Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getName)
+                .orElse(null);
+        return this.generateAccessControl(username, hasBusiness, namespace);
+    }
+
+    @Override
+    public AccessControlVO.AccessControl generateAccessControl(String username, BaseBusiness.HasBusiness hasBusiness,
+                                                               String namespace) {
         if (!StringUtils.hasText(username)) {
+            log.error("username is empty.");
             return AccessControlVO.AccessControl.unauthorized(hasBusiness.getBusinessType());
         }
         // 跳过鉴权

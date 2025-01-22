@@ -38,8 +38,9 @@ public class SshSessionAuditServer extends BaseSocketAuthenticationServer {
                 SshSessionAuditParam.AuditRequest auditRequest = SshSessionAuditParam.loadAs(message);
                 BaseChannelHandler<SshSessionAuditParam.AuditRequest> handler = (BaseChannelHandler<SshSessionAuditParam.AuditRequest>) SshAuditChannelHandlerFactory.getHandler(
                         auditRequest.getTopic());
-                handler.handleRequest(sessionId, session, auditRequest);
-            } catch (IllegalArgumentException | IOException ignored) {
+                handler.handleRequest(sessionId, getUsername(), session, auditRequest);
+            } catch (IllegalArgumentException | IOException ex) {
+                log.error(ex.getMessage(), ex);
             }
         }
     }

@@ -65,7 +65,7 @@ public class ApplicationKubernetesDetailsBroker implements Runnable {
         Map<String, HasSocketRequest> requestMap = Maps.newHashMap(
                 KubernetesDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
         requestMap.forEach(
-                (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
+                (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, null, this.session,
                         request));
     }
 

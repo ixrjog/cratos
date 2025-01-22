@@ -52,7 +52,7 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
     }
 
     @Override
-    public void handleRequest(String sessionId, Session session,
+    public void handleRequest(String sessionId, String username, Session session,
                               KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {

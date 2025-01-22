@@ -28,7 +28,7 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
     private final ApplicationKubernetesDetailsFacade kubernetesDetailsFacade;
 
     @Override
-    public void handleRequest(String sessionId, Session session,
+    public void handleRequest(String sessionId, String username, Session session,
                               ApplicationKubernetesParam.KubernetesDetailsRequest message) throws IllegalStateException, IOException {
         if (SocketActionRequestEnum.SUBSCRIPTION.name()
                 .equalsIgnoreCase(message.getAction())) {

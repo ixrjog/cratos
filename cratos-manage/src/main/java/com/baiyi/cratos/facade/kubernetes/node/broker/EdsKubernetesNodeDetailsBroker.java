@@ -60,7 +60,7 @@ public class EdsKubernetesNodeDetailsBroker implements Runnable {
         Map<String, HasSocketRequest> requestMap = Maps.newHashMap(
                 EdsKubernetesNodeDetailsRequestSession.getRequestMessageBySessionId(this.sessionId));
         requestMap.forEach(
-                (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, this.session,
+                (k, request) -> KubernetesDetailsChannelHandlerFactory.handleRequest(this.sessionId, null, this.session,
                         request));
     }
 

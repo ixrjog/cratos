@@ -11,9 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -46,6 +49,13 @@ public abstract class BaseSocketAuthenticationServer {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    protected String getUsername() {
+        return Optional.of(  SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Principal::getName)
+                .orElse(null);
     }
 
     @Data
