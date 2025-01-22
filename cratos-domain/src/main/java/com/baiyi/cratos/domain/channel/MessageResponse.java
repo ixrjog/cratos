@@ -18,6 +18,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageResponse<T> implements HasTopic {
 
+    public static MessageResponse<Boolean> unauthorizedAccess() {
+        return MessageResponse.<Boolean>builder()
+                .body(false)
+                .success(false)
+                .msg("Unauthorized access")
+                .code(403)
+                .build();
+    }
+
     private T body;
 
     private String topic;

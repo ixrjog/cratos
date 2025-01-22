@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
+import com.baiyi.cratos.domain.annotation.TopicName;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
@@ -20,7 +21,7 @@ import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.model.KubernetesSession;
 import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;
 import com.baiyi.cratos.ssh.kubernetes.handler.base.BaseKubernetesWebShChannelHandler;
-import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
+import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
@@ -40,12 +41,13 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
+@TopicName(nameOf = HasTopic.APPLICATION_KUBERNETES_POD_EXEC)
 public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     private final PodCommandAuditor podCommandAuditor;
 
     public KubernetesWebShExecChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
-                                             KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
+                                             KubernetesRemoteInvoker kubernetesRemoteInvokeHandler,
                                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                              EdsInstanceService edsInstanceService,
                                              SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
@@ -57,11 +59,6 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     }
 
     @Override
-    public String getTopic() {
-        return HasTopic.APPLICATION_KUBERNETES_POD_EXEC;
-    }
-
-    @Override
     public void handleRequest(String sessionId, Session session,
                               KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
@@ -69,14 +66,11 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             case SocketActionRequestEnum.EXEC -> {
                 boolean pass = accessInterception(message);
                 if (!pass) {
-                    MessageResponse<Boolean> response = MessageResponse.<Boolean>builder()
-                            .body(false)
-                            .success(pass)
-                            .msg("Unauthorized access")
-                            .code(403)
-                            .build();
-                    session.getBasicRemote()
-                            .sendText(response.toString());
+                    if (session.isOpen()) {
+                        session.getBasicRemote()
+                                .sendText(MessageResponse.unauthorizedAccess()
+                                        .toString());
+                    }
                     return;
                 }
                 Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
@@ -94,7 +88,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             case SocketActionRequestEnum.EXIT -> Optional.of(message)
                     .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                     .ifPresent(deployments -> deployments.forEach(deployment -> doExit(sessionId, deployment)));
-            case SocketActionRequestEnum.CLOSE -> doClose(sessionId);
+            case SocketActionRequestEnum.CLOSE -> closeSession(sessionId);
             default -> {
                 // error action
             }
@@ -155,7 +149,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 }));
     }
 
-    protected void doClose(String sessionId) {
+    protected void closeSession(String sessionId) {
         Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
         if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
             kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> doExit(sessionId, instanceId));

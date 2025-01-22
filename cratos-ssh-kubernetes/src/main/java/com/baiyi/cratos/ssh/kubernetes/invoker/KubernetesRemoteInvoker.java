@@ -1,4 +1,4 @@
-package com.baiyi.cratos.ssh.kubernetes.invoke;
+package com.baiyi.cratos.ssh.kubernetes.invoker;
 
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KubernetesRemoteInvokeHandler {
+public class KubernetesRemoteInvoker {
 
     private final KubernetesPodRepo kubernetesPodRepo;
 

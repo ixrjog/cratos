@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.channel;
 
+import org.springframework.aop.support.AopUtils;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/22 10:01
@@ -17,5 +19,10 @@ public interface HasTopic {
 
     String ERROR =  "ERROR";
 
-    String getTopic();
+    default String getTopic() {
+        return AopUtils.getTargetClass(this)
+                .getAnnotation(com.baiyi.cratos.domain.annotation.TopicName.class)
+                .nameOf();
+    }
+
 }

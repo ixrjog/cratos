@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.kubernetes.details.handler.impl;
 
+import com.baiyi.cratos.domain.annotation.TopicName;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
@@ -21,14 +22,10 @@ import java.io.IOException;
  */
 @Component
 @RequiredArgsConstructor
+@TopicName(nameOf = HasTopic.APPLICATION_KUBERNETES_DETAILS)
 public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesDetailsChannelHandler<ApplicationKubernetesParam.KubernetesDetailsRequest> {
 
     private final ApplicationKubernetesDetailsFacade kubernetesDetailsFacade;
-
-    @Override
-    public String getTopic() {
-        return HasTopic.APPLICATION_KUBERNETES_DETAILS;
-    }
 
     @Override
     public void handleRequest(String sessionId, Session session,

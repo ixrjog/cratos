@@ -15,7 +15,7 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.access.AccessControlFacade;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
-import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
+import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +30,7 @@ import java.util.Map;
 public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketRequest> implements BaseChannelHandler<T> {
 
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
-    protected final KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler;
+    protected final KubernetesRemoteInvoker kubernetesRemoteInvokeHandler;
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     protected final EdsInstanceService edsInstanceService;
     protected final SshAuditProperties sshAuditProperties;

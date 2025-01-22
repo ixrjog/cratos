@@ -34,6 +34,7 @@
         <module>cratos-eds-opscloud</module>
         <module>cratos-eds-jenkins</module>
         <module>cratos-ssh-kubernetes</module>
+        <module>cratos-workorder</module>
     </modules>
 
     <properties>

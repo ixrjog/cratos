@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.core.player.impl;
 
+import com.baiyi.cratos.domain.annotation.TopicName;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.param.socket.audit.SshSessionAuditParam;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
+@TopicName(nameOf = HasTopic.PLAY_SSH_SESSION_AUDIT)
 public class PlaySshSessionAuditChannelHandler extends BaseSshAuditChannelHandler {
 
     private final SshSessionInstanceService sshSessionInstanceService;
@@ -33,11 +35,6 @@ public class PlaySshSessionAuditChannelHandler extends BaseSshAuditChannelHandle
         }
         Thread.ofVirtual()
                 .start(new SshAuditOutputTask(session, message.getInstanceId(), sshSessionInstance.getAuditPath()));
-    }
-
-    @Override
-    public String getTopic() {
-        return HasTopic.PLAY_SSH_SESSION_AUDIT;
     }
 
 }

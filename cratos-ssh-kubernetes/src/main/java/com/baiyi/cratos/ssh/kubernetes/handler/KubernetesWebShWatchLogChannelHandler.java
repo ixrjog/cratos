@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
+import com.baiyi.cratos.domain.annotation.TopicName;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -12,7 +13,7 @@ import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.access.AccessControlFacade;
 import com.baiyi.cratos.ssh.kubernetes.handler.base.BaseKubernetesWebShChannelHandler;
-import com.baiyi.cratos.ssh.kubernetes.invoke.KubernetesRemoteInvokeHandler;
+import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
@@ -34,12 +35,13 @@ import java.util.Optional;
  * &#064;Version 1.0
  */
 @Component
+@TopicName(nameOf = HasTopic.APPLICATION_KUBERNETES_POD_WATCH_LOG)
 public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     public static final int LOG_LINES = 100;
 
     public KubernetesWebShWatchLogChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
-                                                 KubernetesRemoteInvokeHandler kubernetesRemoteInvokeHandler,
+                                                 KubernetesRemoteInvoker kubernetesRemoteInvokeHandler,
                                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                  EdsInstanceService edsInstanceService,
                                                  SshAuditProperties sshAuditProperties,
@@ -47,11 +49,6 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
                                                  ApplicationService applicationService) {
         super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
                 edsInstanceService, sshAuditProperties, accessControlFacade, applicationService);
-    }
-
-    @Override
-    public String getTopic() {
-        return HasTopic.APPLICATION_KUBERNETES_POD_WATCH_LOG;
     }
 
     @Override
