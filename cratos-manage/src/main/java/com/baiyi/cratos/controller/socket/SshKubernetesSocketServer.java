@@ -37,6 +37,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
     private final String sessionId = UUID.randomUUID()
             .toString();
+    private String username;
 
     @Autowired
     public void setSshSessionService(SshSessionService sshSessionService) {
@@ -51,6 +52,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
         super.onOpen(session, username);
+        this.username = username;
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
@@ -73,7 +75,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
             try {
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest request = KubernetesContainerTerminalParam.loadAs(
                         message);
-                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, getUsername(), session, request);
+                KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, this.username, session, request);
             } catch (JsonSyntaxException ex) {
                 log.error(ex.getMessage(), ex);
             }
@@ -87,7 +89,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     @OnClose
     public void onClose(Session session) {
-        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, getUsername(), session,
+        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, this.username, session,
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest.CLOSE);
     }
 

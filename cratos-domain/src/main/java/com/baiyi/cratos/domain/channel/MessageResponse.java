@@ -27,6 +27,13 @@ public class MessageResponse<T> implements HasTopic {
                 .build();
     }
 
+    public static <T> MessageResponse<T> authenticationFailed(String topic, T body) {
+        return MessageResponse.<T>builder()
+                .topic(HasTopic.ERROR)
+                .body(body)
+                .build();
+    }
+
     private T body;
 
     private String topic;

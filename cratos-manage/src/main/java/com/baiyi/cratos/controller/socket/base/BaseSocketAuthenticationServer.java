@@ -11,12 +11,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -25,6 +22,8 @@ import java.util.Optional;
  */
 @Slf4j
 public abstract class BaseSocketAuthenticationServer {
+
+    public static final String ANONYMOUS = null;
 
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
@@ -36,26 +35,17 @@ public abstract class BaseSocketAuthenticationServer {
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
         } else {
-            MessageResponse<WebSocketAuthentication> response = MessageResponse.<WebSocketAuthentication>builder()
-                    .topic(HasTopic.ERROR)
-                    .body(WebSocketAuthentication.AUTHENTICATION_FAILED)
-                    .build();
             try {
                 if (session.isOpen()) {
                     session.getBasicRemote()
-                            .sendText(response.toString());
+                            .sendText(MessageResponse.authenticationFailed(HasTopic.ERROR,
+                                            WebSocketAuthentication.AUTHENTICATION_FAILED)
+                                    .toString());
                     session.close();
                 }
             } catch (IOException ignored) {
             }
         }
-    }
-
-    protected String getUsername() {
-        return Optional.of(  SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .map(Principal::getName)
-                .orElse(null);
     }
 
     @Data
