@@ -33,7 +33,7 @@ public class ApplicationResourceController {
     @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MessageResponse<KubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails) {
-        return new HttpResult<>(kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
+        return HttpResult.of(kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
     }
 
     @Operation(summary = "Query application resource kubernetes deployment options")

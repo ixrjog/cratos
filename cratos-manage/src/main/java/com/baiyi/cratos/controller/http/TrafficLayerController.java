@@ -40,7 +40,7 @@ public class TrafficLayerController {
     @PostMapping(value = "/domain/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerDomainVO.Domain>> queryTrafficLayerDomainPage(
             @RequestBody @Valid TrafficLayerDomainParam.DomainPageQuery pageQuery) {
-        return new HttpResult<>(domainFacade.queryDomainPage(pageQuery));
+        return HttpResult.of(domainFacade.queryDomainPage(pageQuery));
     }
 
     @Operation(summary = "Add traffic layer domain")
@@ -69,14 +69,14 @@ public class TrafficLayerController {
     @PostMapping(value = "/domain/env/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<TrafficLayerDomainVO.DomainEnv>> queryTrafficLayerDomainEnv(
             @RequestBody @Valid TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
-        return new HttpResult<>(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
+        return HttpResult.of(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
     }
 
     @Operation(summary = "Pagination query traffic layer record")
     @PostMapping(value = "/record/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerRecordVO.Record>> queryTrafficLayerRecordPage(
             @RequestBody @Valid TrafficLayerRecordParam.RecordPageQuery pageQuery) {
-        return new HttpResult<>(recordFacade.queryRecordPage(pageQuery));
+        return HttpResult.of(recordFacade.queryRecordPage(pageQuery));
     }
 
     @Operation(summary = "Add traffic layer record")
@@ -105,28 +105,28 @@ public class TrafficLayerController {
     @PostMapping(value = "/record/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(
             @RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
-        return new HttpResult<>(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
+        return HttpResult.of(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress host details")
     @PostMapping(value = "/ingress/host/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
-        return new HttpResult<>(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
+        return HttpResult.of(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress details")
     @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
-        return new HttpResult<>(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
+        return HttpResult.of(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress traffic-limit")
     @PostMapping(value = "/ingress/traffic-limit/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerIngressVO.IngressTrafficLimit>> queryIngressTrafficLimitPage(
             @RequestBody @Valid TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery) {
-        return new HttpResult<>(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
+        return HttpResult.of(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
     }
 
     @Operation(summary = "Update traffic layer ingress traffic-limit")

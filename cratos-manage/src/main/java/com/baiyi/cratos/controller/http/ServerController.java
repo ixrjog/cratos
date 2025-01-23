@@ -49,7 +49,7 @@ public class ServerController {
     @Operation(summary = "Pagination query server")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ServerVO.Server>> queryServerPage(@RequestBody @Valid ServerParam.ServerPageQuery pageQuery) {
-        return new HttpResult<>(serverFacade.queryServerPage(pageQuery));
+        return HttpResult.of(serverFacade.queryServerPage(pageQuery));
     }
 
     @Operation(summary = "Delete server by id")

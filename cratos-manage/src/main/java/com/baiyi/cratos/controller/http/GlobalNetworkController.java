@@ -31,9 +31,7 @@ import java.util.List;
 public class GlobalNetworkController {
 
     private final GlobalNetworkFacade globalNetworkFacade;
-
     private final GlobalNetworkPlanningFacade globalNetworkPlanningFacade;
-
     private final GlobalNetworkSubnetFacade globalNetworkSubnetFacade;
 
     // ---------- Network
@@ -42,7 +40,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Network>> queryGlobalNetworkPage(
             @RequestBody @Valid GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
-        return new HttpResult<>(globalNetworkFacade.queryGlobalNetworkPage(pageQuery));
+        return HttpResult.of(globalNetworkFacade.queryGlobalNetworkPage(pageQuery));
     }
 
     @Operation(summary = "Add global network")
@@ -72,13 +70,13 @@ public class GlobalNetworkController {
     @PostMapping(value = "/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<GlobalNetworkVO.NetworkDetails> queryGlobalNetworkDetails(
             @RequestBody @Valid GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails) {
-        return new HttpResult<>(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
+        return HttpResult.of(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
     }
 
     @Operation(summary = "Query global network all details")
     @GetMapping(value = "/all/details/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.NetworkDetails>> getGlobalNetworkAllDetails() {
-        return new HttpResult<>(globalNetworkFacade.getGlobalNetworkAllDetails());
+        return HttpResult.of(globalNetworkFacade.getGlobalNetworkAllDetails());
     }
 
     @Operation(summary = "Update global network valid")
@@ -91,14 +89,14 @@ public class GlobalNetworkController {
     @Operation(summary = "Check global network by id")
     @GetMapping(value = "/id/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkById(@RequestParam int id) {
-        return new HttpResult<>(globalNetworkFacade.checkGlobalNetworkById(id));
+        return HttpResult.of(globalNetworkFacade.checkGlobalNetworkById(id));
     }
 
     @Operation(summary = "Check global network by cidr-block")
     @GetMapping(value = "/cidr-block/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkByCidrBlock(
             @RequestParam @Valid @NotBlank String cidrBlock) {
-        return new HttpResult<>(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
+        return HttpResult.of(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
     }
 
     // ---------- Planning
@@ -107,7 +105,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/planning/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Planning>> queryGlobalNetworkPlanningPage(
             @RequestBody @Valid GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQuery pageQuery) {
-        return new HttpResult<>(globalNetworkPlanningFacade.queryGlobalNetworkPlanningPage(pageQuery));
+        return HttpResult.of(globalNetworkPlanningFacade.queryGlobalNetworkPlanningPage(pageQuery));
     }
 
     @Operation(summary = "Add global network planning")
@@ -169,7 +167,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/subnet/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Subnet>> queryGlobalNetworkSubnetPage(
             @RequestBody @Valid GlobalNetworkSubnetParam.GlobalNetworkSubnetPageQuery pageQuery) {
-        return new HttpResult<>(globalNetworkSubnetFacade.queryGlobalNetworkSubnetPage(pageQuery));
+        return HttpResult.of(globalNetworkSubnetFacade.queryGlobalNetworkSubnetPage(pageQuery));
     }
 
     @Operation(summary = "Delete global network subnet by id")

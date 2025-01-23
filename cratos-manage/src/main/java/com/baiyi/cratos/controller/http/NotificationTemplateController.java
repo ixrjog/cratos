@@ -29,7 +29,7 @@ public class NotificationTemplateController {
     @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<NotificationTemplateVO.NotificationTemplate>> queryNotificationTemplatePage(
             @RequestBody @Valid NotificationTemplateParam.NotificationTemplatePageQuery pageQuery) {
-        return new HttpResult<>(notificationTemplateFacade.queryNotificationTemplatePage(pageQuery));
+        return HttpResult.of(notificationTemplateFacade.queryNotificationTemplatePage(pageQuery));
     }
 
     @Operation(summary = "Add notification template")

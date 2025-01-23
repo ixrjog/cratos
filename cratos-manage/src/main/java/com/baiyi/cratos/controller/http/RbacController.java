@@ -29,23 +29,18 @@ import java.util.List;
 public class RbacController {
 
     private final RbacRoleFacade rbacRoleFacade;
-
     private final RbacGroupFacade rbacGroupFacade;
-
     private final RbacResourceFacade rbacResourceFacade;
-
     private final RbacRoleResourceFacade rbacRoleResourceFacade;
-
     private final RbacUserRoleFacade rbacUserRoleFacade;
-
     private final RbacFacade rbacFacade;
-
     private final RbacRoleMenuFacade rbacRoleMenuFacade;
 
     @Operation(summary = "Pagination query role")
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<RbacRoleVO.Role>> queryRolePage(@RequestBody @Valid RbacRoleParam.RolePageQuery pageQuery) {
-        return new HttpResult<>(rbacRoleFacade.queryRolePage(pageQuery));
+    public HttpResult<DataTable<RbacRoleVO.Role>> queryRolePage(
+            @RequestBody @Valid RbacRoleParam.RolePageQuery pageQuery) {
+        return HttpResult.of(rbacRoleFacade.queryRolePage(pageQuery));
     }
 
     @Operation(summary = "Update role")
@@ -71,8 +66,9 @@ public class RbacController {
 
     @Operation(summary = "Pagination query group")
     @PostMapping(value = "/group/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<RbacGroupVO.Group>> queryGroupPage(@RequestBody @Valid RbacGroupParam.GroupPageQuery pageQuery) {
-        return new HttpResult<>(rbacGroupFacade.queryGroupPage(pageQuery));
+    public HttpResult<DataTable<RbacGroupVO.Group>> queryGroupPage(
+            @RequestBody @Valid RbacGroupParam.GroupPageQuery pageQuery) {
+        return HttpResult.of(rbacGroupFacade.queryGroupPage(pageQuery));
     }
 
     @Operation(summary = "Update group")
@@ -84,35 +80,40 @@ public class RbacController {
 
     @Operation(summary = "Pagination query role resource")
     @PostMapping(value = "/role/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<RbacResourceVO.Resource>> queryRoleResourcePage(@RequestBody @Valid RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
-        return new HttpResult<>(rbacResourceFacade.queryRoleResourcePage(pageQuery));
+    public HttpResult<DataTable<RbacResourceVO.Resource>> queryRoleResourcePage(
+            @RequestBody @Valid RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
+        return HttpResult.of(rbacResourceFacade.queryRoleResourcePage(pageQuery));
     }
 
     @Operation(summary = "Add role resource")
     @PostMapping(value = "/role/resource/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addRoleResource(@RequestBody @Valid RbacRoleResourceParam.AddRoleResource addRoleResource) {
+    public HttpResult<Boolean> addRoleResource(
+            @RequestBody @Valid RbacRoleResourceParam.AddRoleResource addRoleResource) {
         rbacRoleResourceFacade.addRoleResource(addRoleResource);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Copy role resource")
     @PostMapping(value = "/role/resource/copy", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> copyRoleResource(@RequestBody @Valid RbacRoleResourceParam.CopyRoleResource copyRoleResource) {
+    public HttpResult<Boolean> copyRoleResource(
+            @RequestBody @Valid RbacRoleResourceParam.CopyRoleResource copyRoleResource) {
         rbacRoleResourceFacade.copyRoleResource(copyRoleResource);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Delete role resource")
     @DeleteMapping(value = "/role/resource/del", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> deleteRoleResource(@RequestBody @Valid RbacRoleResourceParam.DeleteRoleResource deleteRoleResource) {
+    public HttpResult<Boolean> deleteRoleResource(
+            @RequestBody @Valid RbacRoleResourceParam.DeleteRoleResource deleteRoleResource) {
         rbacRoleResourceFacade.deleteRoleResource(deleteRoleResource);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Pagination query resource")
     @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(@RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
-        return new HttpResult<>(rbacResourceFacade.queryResourcePage(pageQuery));
+    public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(
+            @RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
+        return HttpResult.of(rbacResourceFacade.queryResourcePage(pageQuery));
     }
 
     @Operation(summary = "Add resource")
@@ -159,8 +160,9 @@ public class RbacController {
 
     @Operation(summary = "Verify user permissions")
     @PostMapping(value = "/user/role/resource/permission/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<RbacRoleVO.Role>> verifyUserPermissions(@RequestBody @Valid RbacUserRoleParam.VerifyUserRoleResourcePermission verifyUserRoleResourcePermission) {
-        return new HttpResult<>(rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
+    public HttpResult<List<RbacRoleVO.Role>> verifyUserPermissions(
+            @RequestBody @Valid RbacUserRoleParam.VerifyUserRoleResourcePermission verifyUserRoleResourcePermission) {
+        return HttpResult.of(rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
     }
 
     @Operation(summary = "Add role menu")

@@ -31,13 +31,13 @@ public class UserController {
     @Operation(summary = "Pagination query user")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserParam.UserPageQuery pageQuery) {
-        return new HttpResult<>(userFacade.queryUserPage(pageQuery));
+        return HttpResult.of(userFacade.queryUserPage(pageQuery));
     }
 
     @Operation(summary = "Get user by username")
     @GetMapping(value = "/username/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserVO.User> getUserByUsername(@RequestParam @Valid String username) {
-        return new HttpResult<>(userFacade.getUserByUsername(username));
+        return HttpResult.of(userFacade.getUserByUsername(username));
     }
 
     @Operation(summary = "Add user")
@@ -64,7 +64,7 @@ public class UserController {
     @Operation(summary = "Query user sshkey")
     @PostMapping(value = "/my/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<CredentialVO.Credential>> queryMySshKey() {
-        return new HttpResult<>(userFacade.queryMySshKey());
+        return HttpResult.of(userFacade.queryMySshKey());
     }
 
     @Operation(summary = "Update user valid")

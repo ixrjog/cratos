@@ -28,7 +28,7 @@ public class EnvController {
     @Operation(summary = "Pagination query env")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EnvVO.Env>> queryEnvPage(@RequestBody @Valid EnvParam.EnvPageQuery pageQuery) {
-        return new HttpResult<>(envFacade.queryEnvPage(pageQuery));
+        return HttpResult.of(envFacade.queryEnvPage(pageQuery));
     }
 
     @Operation(summary = "Update env valid")

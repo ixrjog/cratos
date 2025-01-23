@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -87,6 +88,31 @@ public class UserPermissionParam {
         @NotBlank
         private String businessType;
         private String username;
+    }
+
+    /**
+     * 批量授权
+     */
+    @Data
+    @Schema
+    @Builder
+    public static class GrantBusinessUserPermission {
+        @NotBlank
+        private String username;
+        private String name;
+        @NotBlank
+        private String businessType;
+        private Integer businessId;
+        private List<RoleMember> roleMembers;
+    }
+
+    @Data
+    @Schema
+    @Builder
+    public static class RoleMember {
+        private String role;
+        private Boolean checked;
+        private Date expiredTime;
     }
 
 }

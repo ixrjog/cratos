@@ -30,7 +30,7 @@ public class BusinessDocController {
     @Operation(summary = "Query businessDoc by business")
     @PostMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<BusinessDocVO.BusinessDoc>> queryBusinessDocByBusiness(@RequestBody @Valid BusinessParam.GetByBusiness getByBusiness) {
-        return new HttpResult<>(businessDocFacade.getBusinessDocByBusiness(getByBusiness));
+        return HttpResult.of(businessDocFacade.getBusinessDocByBusiness(getByBusiness));
     }
 
     @Operation(summary = "Add businessDoc")

@@ -26,7 +26,7 @@ public class ExampleController {
     @Operation(summary = "Hello World")
     @GetMapping(value = "/helloWorld", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<ExampleVO.HelloWorld> helloWorld() {
-        return new HttpResult<>(ExampleVO.HelloWorld.EXAMPLE);
+        return HttpResult.of(ExampleVO.HelloWorld.EXAMPLE);
     }
 
 //    @Operation(summary = "Example for get username from SecurityContextHolder")

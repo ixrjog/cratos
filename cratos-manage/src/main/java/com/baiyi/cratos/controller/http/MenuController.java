@@ -29,21 +29,19 @@ import java.util.List;
 public class MenuController {
 
     private final MenuFacade menuFacade;
-
     private final MyMenuFacade myMenuFacade;
-
     private final RoleMenuFacade roleMenuFacade;
 
     @Operation(summary = "Get nav menu")
     @GetMapping(value = "/nav/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MenuVO.NavMenu> getNavMenu() {
-        return new HttpResult<>(menuFacade.getNavMenu());
+        return HttpResult.of(menuFacade.getNavMenu());
     }
 
     @Operation(summary = "Get menu by id")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MenuVO.Menu> getMenuById(@RequestParam @Valid int menuId) {
-        return new HttpResult<>(menuFacade.getMenuById(menuId));
+        return HttpResult.of(menuFacade.getMenuById(menuId));
     }
 
     @Operation(summary = "Add menu")
@@ -70,19 +68,19 @@ public class MenuController {
     @Operation(summary = "Query my menu")
     @PostMapping(value = "/my/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryMyMenu(@RequestBody @Valid MenuParam.QueryMyMenu queryMyMenu) {
-        return new HttpResult<>(myMenuFacade.queryMyMenu(queryMyMenu));
+        return HttpResult.of(myMenuFacade.queryMyMenu(queryMyMenu));
     }
 
     @Operation(summary = "Query user menu (TEST)")
     @PostMapping(value = "/user/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
-        return new HttpResult<>(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
+        return HttpResult.of(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
     }
 
     @Operation(summary = "Get role menu by id")
     @GetMapping(value = "/role/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RoleMenuVO.RoleMenu> getRoleMenuByRoleId(@RequestParam int roleId, @Valid String lang) {
-        return new HttpResult<>(roleMenuFacade.getRoleMenu(roleId, lang));
+        return HttpResult.of(roleMenuFacade.getRoleMenu(roleId, lang));
     }
 
 }
