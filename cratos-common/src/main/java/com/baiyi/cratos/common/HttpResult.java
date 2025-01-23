@@ -18,15 +18,12 @@ public class HttpResult<T> {
     public static final HttpResult<Boolean> SUCCESS = new HttpResult<>(true);
 
     private T body;
-
     @Schema(description = "是否成功")
     private boolean success;
-
     private String msg;
-
     private int code;
 
-   public static <T> HttpResult<T> of(T body){
+    public static <T> HttpResult<T> of(T body) {
         return new HttpResult<>(body);
     }
 

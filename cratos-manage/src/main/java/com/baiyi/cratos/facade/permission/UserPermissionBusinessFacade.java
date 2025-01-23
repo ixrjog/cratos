@@ -14,4 +14,7 @@ public interface UserPermissionBusinessFacade {
     DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
             UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery);
 
+    void updateUserPermissionBusiness(
+            UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness);
+
 }
