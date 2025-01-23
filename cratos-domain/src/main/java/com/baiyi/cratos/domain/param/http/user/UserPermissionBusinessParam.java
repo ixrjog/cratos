@@ -41,7 +41,6 @@ public class UserPermissionBusinessParam {
     public static class UpdateUserPermissionBusiness {
         @NotBlank
         private String username;
-        private String name;
         @NotBlank
         private String businessType;
         @NotEmpty
