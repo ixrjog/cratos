@@ -63,8 +63,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .businessType(grantUserPermission.getBusinessType())
                 .displayName(permissionBusiness.getDisplayName())
                 .role(grantUserPermission.getRole())
-                .expiredTime(grantUserPermission.getExpiredTime())
-                .comment(grantUserPermission.getComment())
                 .build();
         if (userPermissionService.getByUniqueKey(userPermission) == null) {
             userPermissionService.add(userPermission);

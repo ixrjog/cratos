@@ -13,8 +13,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/20 10:00
@@ -40,19 +38,11 @@ public class UserPermissionParam {
     public static class GrantUserPermission implements IToTarget<UserPermission> {
         @NotBlank
         private String username;
-        private String name;
         @NotBlank
         private String businessType;
         private Integer businessId;
         @NotBlank
         private String role;
-        private Boolean valid;
-        private Integer seq;
-        private String content;
-        //@JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
-        //@NotNull(message = "ExpiredTime must be specified.")
-        private Date expiredTime;
-        private String comment;
     }
 
     @Data
