@@ -96,6 +96,11 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
+    public List<String> queryUserPermissionUsernames(String businessType, int businessId) {
+        return userPermissionMapper.queryUserPermissionUsernames(businessType, businessId);
+    }
+
+    @Override
     public List<UserPermission> queryUserPermissionByBusiness(String username, BaseBusiness.HasBusiness hasBusiness) {
         Example example = new Example(UserPermission.class);
         Example.Criteria criteria = example.createCriteria();

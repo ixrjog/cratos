@@ -41,11 +41,18 @@
         </choose>
     </select>
 
-    <select id="queryUserPermissionBusinessIds" parameterType="string" resultType="int">
+    <select id="queryUserPermissionBusinessIds" resultType="int">
         select distinct business_id
         from user_permission
         where username = #{username}
           and business_type = #{businessType}
+    </select>
+
+    <select id="queryUserPermissionUsernames" resultType="java.lang.String">
+        select distinct username
+        from user_permission
+        where business_type = #{businessType}
+          and business_id = #{businessId}
     </select>
 
 </mapper>

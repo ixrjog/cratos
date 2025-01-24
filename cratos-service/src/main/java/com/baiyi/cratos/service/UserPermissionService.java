@@ -28,6 +28,12 @@ public interface UserPermissionService extends BaseUniqueKeyService<UserPermissi
 
     List<Integer> queryUserPermissionBusinessIds(String username, String businessType);
 
+    List<String> queryUserPermissionUsernames(String businessType, int businessId);
+
+    default List<String> queryUserPermissionUsernames(BaseBusiness.HasBusiness hasBusiness) {
+        return queryUserPermissionUsernames(hasBusiness.getBusinessType(), hasBusiness.getBusinessId());
+    }
+
     List<UserPermission> queryUserPermissionByBusiness(String username, BaseBusiness.HasBusiness hasBusiness);
 
 }

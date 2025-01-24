@@ -79,4 +79,14 @@ public class UserPermissionParam {
         private String username;
     }
 
+    @Data
+    @Schema
+    @Builder
+    public static class QueryUserPermissionByBusiness implements BaseBusiness.HasBusiness {
+        @NotBlank
+        private String businessType;
+        @NotNull
+        private Integer businessId;
+    }
+
 }

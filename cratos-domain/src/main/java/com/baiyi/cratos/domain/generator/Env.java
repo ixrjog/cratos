@@ -48,6 +48,8 @@ public class Env implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Column(name = "prompt_color")
     private String promptColor;
 
+    private Integer lifecycle;
+
     /**
      * 顺序
      */

@@ -9,6 +9,7 @@
         <result column="env_name" jdbcType="VARCHAR" property="envName"/>
         <result column="color" jdbcType="CHAR" property="color"/>
         <result column="prompt_color" jdbcType="VARCHAR" property="promptColor"/>
+        <result column="lifecycle" jdbcType="INTEGER" property="lifecycle"/>
         <result column="seq" jdbcType="INTEGER" property="seq"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="comment" jdbcType="VARCHAR" property="comment"/>

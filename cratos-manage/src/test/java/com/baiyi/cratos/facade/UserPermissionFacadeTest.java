@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
@@ -27,27 +26,13 @@ public class UserPermissionFacadeTest extends BaseUnit {
 
     @Test
     void test1() {
-        // kili
-        Application application = applicationService.getByName("kili");
-        UserPermissionParam.GrantUserPermission grantUserPermission1 = UserPermissionParam.GrantUserPermission.builder()
-                .username("baiyi")
-                .businessId(application.getId())
+        UserPermissionParam.QueryBusinessUserPermissionDetails query = UserPermissionParam.QueryBusinessUserPermissionDetails.builder()
+                .businessId(2)
                 .businessType(BusinessTypeEnum.APPLICATION.name())
-                .name(application.getName())
-                .seq(1)
-                .role("dev")
-                .build();
-        userPermissionFacade.grantUserPermission(grantUserPermission1);
-
-        UserPermissionParam.GrantUserPermission grantUserPermission2 = UserPermissionParam.GrantUserPermission.builder()
                 .username("baiyi")
-                .businessId(application.getId())
-                .businessType(BusinessTypeEnum.APPLICATION.name())
-                .name(application.getName())
-                .seq(1)
-                .role("daily")
                 .build();
-        userPermissionFacade.grantUserPermission(grantUserPermission2);
+        UserPermissionVO.UserPermissionDetails details = userPermissionFacade.queryUserPermissionDetails(query);
+        System.out.println(details);
     }
 
     @Test

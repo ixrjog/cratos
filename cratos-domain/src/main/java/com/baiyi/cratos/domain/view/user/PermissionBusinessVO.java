@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -30,6 +32,18 @@ public class PermissionBusinessVO {
         private String businessType;
         private Integer businessId;
         private String comment;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class UserPermissionByBusiness implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8108421939569005708L;
+        public static final UserPermissionByBusiness EMPTY = UserPermissionByBusiness.builder()
+                .build();
+        @Builder.Default
+        Map<String, List<UserPermissionVO.UserPermissionBusiness>> userPermissionsMap = Map.of();
     }
 
 }

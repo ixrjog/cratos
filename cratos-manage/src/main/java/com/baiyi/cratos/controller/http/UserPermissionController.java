@@ -83,6 +83,12 @@ public class UserPermissionController {
         return HttpResult.of(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
     }
 
+    @PostMapping(value = "/business/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<PermissionBusinessVO.UserPermissionByBusiness> queryUserPermissionByBusiness(
+            @RequestBody @Valid UserPermissionParam.QueryUserPermissionByBusiness queryUserPermissionByBusiness) {
+        return HttpResult.of(permissionBusinessFacade.queryUserPermissionByBusiness(queryUserPermissionByBusiness));
+    }
+
     @PostMapping(value = "/business/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateUserPermissionBusiness(
             @RequestBody @Valid  UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness) {

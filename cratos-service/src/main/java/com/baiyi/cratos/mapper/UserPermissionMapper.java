@@ -11,6 +11,10 @@ public interface UserPermissionMapper extends Mapper<UserPermission> {
 
     List<UserPermission> queryPageByParam(UserPermissionParam.UserPermissionPageQuery pageQuery);
 
-    List<Integer> queryUserPermissionBusinessIds(@Param("username") String username, @Param("businessType") String businessType);
+    List<Integer> queryUserPermissionBusinessIds(@Param("username") String username,
+                                                 @Param("businessType") String businessType);
+
+    List<String> queryUserPermissionUsernames(@Param("businessType") String businessType,
+                                              @Param("businessId") int businessId);
 
 }

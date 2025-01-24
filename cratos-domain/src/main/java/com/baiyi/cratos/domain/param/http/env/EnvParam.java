@@ -43,6 +43,8 @@ public class EnvParam {
         @NotBlank
         private String promptColor;
         @NotNull
+        private Integer lifecycle;
+        @NotNull
         private Integer seq;
         @NotNull
         private Boolean valid;
@@ -56,6 +58,8 @@ public class EnvParam {
         private String envName;
         private String color;
         private String promptColor;
+        @NotNull
+        private Integer lifecycle;
         private Integer seq;
         private Boolean valid;
         private String comment;

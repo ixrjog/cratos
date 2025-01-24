@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.permission;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 
 /**
@@ -16,5 +17,8 @@ public interface UserPermissionBusinessFacade {
 
     void updateUserPermissionBusiness(
             UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness);
+
+    PermissionBusinessVO.UserPermissionByBusiness queryUserPermissionByBusiness(
+            UserPermissionParam.QueryUserPermissionByBusiness queryUserPermissionByBusiness);
 
 }

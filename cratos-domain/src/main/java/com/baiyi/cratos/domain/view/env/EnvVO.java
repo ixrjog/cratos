@@ -34,6 +34,7 @@ public class EnvVO {
         private String envName;
         private String color;
         private String promptColor;
+        private Integer lifecycle;
         private Integer seq;
         private Boolean valid;
         private String comment;
