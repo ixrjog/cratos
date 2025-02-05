@@ -30,7 +30,7 @@ public class UserExtController {
 
     @Operation(summary = "Pagination query external user")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserExtParam.UserExtPageQuery pageQuery) {
+    public HttpResult<DataTable<UserVO.User>> queryExtUserPage(@RequestBody @Valid UserExtParam.UserExtPageQuery pageQuery) {
         return HttpResult.of(userExtFacade.queryExtUserPage(pageQuery));
     }
 
