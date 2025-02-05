@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
@@ -26,22 +27,29 @@ public class TagGroupServiceImpl implements TagGroupService {
     private BusinessTagService businessTagService;
     public static final String TAG_GROUP = "TAG_GROUP";
 
+    @SuppressWarnings("unchecked")
     @Override
     public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
             UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
         Tag tagGroup = tagService.getByTagKey(TAG_GROUP);
-        if(tagGroup == null){
+        if (tagGroup == null) {
             return DataTable.NO_DATA;
         }
-
-
-
-        return null;
+        DataTable<BusinessTag> dataTable = businessTagService.queryPageByParam(pageQuery);
+        return new DataTable<>(dataTable.getData()
+                .stream()
+                .map(this::toPermissionBusiness)
+                .toList(), dataTable.getTotalNum());
     }
 
     @Override
-    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Tag recode) {
-        return null;
+    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(BusinessTag recode) {
+        return PermissionBusinessVO.PermissionBusiness.builder()
+                .name(recode.getTagValue())
+                .displayName(recode.getTagValue())
+                .businessType(getBusinessType())
+                .businessId(recode.getTagId())
+                .build();
     }
 
 }

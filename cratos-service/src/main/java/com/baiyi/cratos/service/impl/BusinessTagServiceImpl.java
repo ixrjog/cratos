@@ -1,13 +1,17 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +54,7 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     public List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
         return businessTagMapper.queryTagIdByBusinessType(getByBusinessType);
     }
-    
+
     public BusinessTag getByUniqueKey(@NonNull BusinessTag record) {
         Example example = new Example(BusinessTag.class);
         Example.Criteria criteria = example.createCriteria();
@@ -85,6 +89,13 @@ public class BusinessTagServiceImpl implements BusinessTagService {
         criteria.andEqualTo("businessType", businessType)
                 .andEqualTo("tagId", tagId);
         return businessTagMapper.selectByExample(example);
+    }
+
+    @Override
+    public DataTable<BusinessTag> queryPageByParam(UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
+        Page<BusinessTag> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<BusinessTag> data = businessTagMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
     @Override

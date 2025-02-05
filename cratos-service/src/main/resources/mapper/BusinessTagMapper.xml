@@ -53,4 +53,15 @@
         </if>
     </select>
 
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam$UserPermissionBusinessPageQuery"
+            resultMap="BaseResultMap">
+        select * from business_tag
+        where tag_value != null and tag_value != ''
+        <if test="queryName != null and queryName != ''">
+            and tag_value like "%" #{queryName} "%"
+            order by replace(name, #{queryName}, '')
+        </if>
+    </select>
+
 </mapper>

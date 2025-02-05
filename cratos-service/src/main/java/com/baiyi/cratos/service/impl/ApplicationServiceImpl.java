@@ -86,12 +86,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Application application) {
+    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(Application recode) {
         return PermissionBusinessVO.PermissionBusiness.builder()
-                .name(application.getName())
-                .displayName(application.getName())
+                .name(recode.getName())
+                .displayName(recode.getName())
                 .businessType(getBusinessType())
-                .businessId(application.getId())
+                .businessId(recode.getId())
                 .build();
     }
 
