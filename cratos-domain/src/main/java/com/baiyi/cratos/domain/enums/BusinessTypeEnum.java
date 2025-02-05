@@ -64,6 +64,7 @@ public enum BusinessTypeEnum {
 
     SSH_SESSION,
     SSH_INSTANCE,
-    SSH_COMMAND
+    SSH_COMMAND,
+    TAG_GROUP
 
 }

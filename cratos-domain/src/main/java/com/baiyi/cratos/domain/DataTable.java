@@ -11,7 +11,7 @@ import java.util.List;
 @Schema
 @Data
 public class DataTable<T> {
-    public final static DataTable EMPTY = new DataTable<>();
+    public final static DataTable NO_DATA = new DataTable<>();
     @Schema(description = "分页数据")
     private List<T> data;
     @Schema(description = "当前页码")

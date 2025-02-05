@@ -83,12 +83,10 @@ public final class IOUtil {
      */
     public static void writeFile(String body, String path) {
         log.info("Write file: path={}", path);
-
         if (StringUtils.isEmpty(path)) {
             log.error("Write file path is null!");
             return;
         }
-
         mkdir(getPath(path));
         File file = new File(path);
         try (FileWriter fw = new FileWriter(file)) {
