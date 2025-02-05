@@ -26,12 +26,36 @@ public class EdsInstanceParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class InstancePageQuery extends PageParam {
-        @Schema(description = "Query by name")
+    public static class InstancePageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
+        @Schema(description = "查询名称")
         private String queryName;
+        private BusinessTagParam.QueryByTag queryByTag;
+        private List<Integer> idList;
         @Schema(description = "Query by edsType")
         private String edsType;
+
+        public InstancePageQueryParam toParam() {
+            return InstancePageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
+                    .queryName(queryName)
+                    .idList(idList)
+                    .edsType(edsType)
+                    .build();
+        }
     }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class InstancePageQueryParam extends PageParam {
+        private String queryName;
+        private List<Integer> idList;
+        private String edsType;
+    }
+
 
     @Data
     @NoArgsConstructor

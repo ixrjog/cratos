@@ -66,8 +66,9 @@ public class EdsFacadeImpl implements EdsFacade {
     private final ApplicationResourceFacade applicationResourceFacade;
 
     @Override
+    @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
-        DataTable<EdsInstance> table = edsInstanceService.queryEdsInstancePage(pageQuery);
+        DataTable<EdsInstance> table = edsInstanceService.queryEdsInstancePage(pageQuery.toParam());
         return edsInstanceWrapper.wrapToTarget(table);
     }
 

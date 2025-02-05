@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface EdsInstanceService extends BaseUniqueKeyService<EdsInstance, EdsInstanceMapper>, BaseValidService<EdsInstance, EdsInstanceMapper>, SupportBusinessService {
 
-    DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
+    DataTable<EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQueryParam param);
 
     int selectCountByConfigId(Integer configId);
 
