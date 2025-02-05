@@ -2,9 +2,9 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.http.user.UserParam;
+import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.facade.UserFacade;
+import com.baiyi.cratos.facade.UserExtFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,13 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/external/user")
 @Tag(name = "User")
 @RequiredArgsConstructor
-public class ExternalUserController {
+public class UserExtController {
 
-    private final UserFacade userFacade;
+    private final UserExtFacade userExtFacade;
 
-    @Operation(summary = "Pagination query user")
+    @Operation(summary = "Pagination query external user")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserParam.UserPageQuery pageQuery) {
-        return HttpResult.of(userFacade.queryUserPage(pageQuery));
+    public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserExtParam.UserExtPageQuery pageQuery) {
+        return HttpResult.of(userExtFacade.queryExtUserPage(pageQuery));
     }
+
 }

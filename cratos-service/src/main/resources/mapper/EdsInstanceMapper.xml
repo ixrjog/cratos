@@ -17,7 +17,7 @@
         <result column="url" jdbcType="LONGVARCHAR" property="url"/>
         <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
     </resultMap>
-    
+
     <select id="queryPageByParam"
             parameterType="com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam$InstancePageQueryParam"
             resultMap="BaseResultMap">
