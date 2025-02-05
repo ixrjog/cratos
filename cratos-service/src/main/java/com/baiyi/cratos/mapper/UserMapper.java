@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface UserMapper extends Mapper<User> {
 
-    List<User> queryPageByParam(UserParam.UserPageQuery pageQuery);
+    List<User> queryPageByParam(UserParam.UserPageQueryParam param);
 
 }

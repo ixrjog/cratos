@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
@@ -47,8 +48,9 @@ public class UserFacadeImpl implements UserFacade {
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
 
     @Override
+    @PageQueryByTag(typeOf = BusinessTypeEnum.USER)
     public DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) {
-        DataTable<User> table = userService.queryUserPage(pageQuery);
+        DataTable<User> table = userService.queryUserPage(pageQuery.toParam());
         return userWrapper.wrapToTarget(table);
     }
 

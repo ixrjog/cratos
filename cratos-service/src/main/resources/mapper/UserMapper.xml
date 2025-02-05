@@ -26,20 +26,28 @@
         <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
     </resultMap>
 
-    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserParam$UserPageQuery"
+    <select id="queryPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserParam$UserPageQueryParam"
             resultMap="BaseResultMap">
         select * from user
-        <choose>
-            <when test="queryName != null and queryName != ''">
-                where username like "%" #{queryName} "%"
-                or name like "%" #{queryName} "%"
-                or display_name like "%" #{queryName} "%"
-                order by replace( name, #{queryName}, '' ) , create_time
-            </when>
-            <otherwise>
-                order by create_time
-            </otherwise>
-        </choose>
+        <where>
+            <if test="idList != null and idList.size() > 0">
+                id in
+                <foreach open="(" item="id" separator="," close=")" collection="idList">
+                    #{id}
+                </foreach>
+            </if>
+            <choose>
+                <when test="queryName != null and queryName != ''">
+                    and username like "%" #{queryName} "%"
+                    or name like "%" #{queryName} "%"
+                    or display_name like "%" #{queryName} "%"
+                    order by replace( name, #{queryName}, '' ), create_time
+                </when>
+                <otherwise>
+                    and 1=1 order by create_time
+                </otherwise>
+            </choose>
+        </where>
     </select>
 
 </mapper>

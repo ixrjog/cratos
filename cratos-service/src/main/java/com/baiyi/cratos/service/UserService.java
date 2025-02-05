@@ -15,7 +15,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  */
 public interface UserService extends BaseUniqueKeyService<User, UserMapper>, BaseValidService<User, UserMapper>, SupportBusinessService {
 
-    DataTable<User> queryUserPage(UserParam.UserPageQuery pageQuery);
+    DataTable<User> queryUserPage(UserParam.UserPageQueryParam param);
 
     User getByUsername(String username);
 
