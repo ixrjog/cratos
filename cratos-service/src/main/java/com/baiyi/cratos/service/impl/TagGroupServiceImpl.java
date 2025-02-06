@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -12,6 +13,8 @@ import com.baiyi.cratos.service.TagGroupService;
 import com.baiyi.cratos.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -23,19 +26,25 @@ import org.springframework.stereotype.Service;
 @BusinessType(type = BusinessTypeEnum.TAG_GROUP)
 public class TagGroupServiceImpl implements TagGroupService {
 
-    private TagService tagService;
-    private BusinessTagService businessTagService;
-    public static final String TAG_GROUP = "TAG_GROUP";
+    private final TagService tagService;
+    private final BusinessTagService businessTagService;
+    public static final String TAG_GROUP = "Group";
 
     @SuppressWarnings("unchecked")
     @Override
     public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
             UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
         Tag tagGroup = tagService.getByTagKey(TAG_GROUP);
-        if (tagGroup == null) {
+        if (Objects.isNull(tagGroup)) {
             return DataTable.NO_DATA;
         }
-        DataTable<BusinessTag> dataTable = businessTagService.queryPageByParam(pageQuery);
+        BusinessTagParam.BusinessTagPageQuery param = BusinessTagParam.BusinessTagPageQuery.builder()
+                .tagGroupId(tagGroup.getId())
+                .queryName(pageQuery.getQueryName())
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .build();
+        DataTable<BusinessTag> dataTable = businessTagService.queryPageByParam(param);
         return new DataTable<>(dataTable.getData()
                 .stream()
                 .map(this::toPermissionBusiness)
@@ -48,7 +57,8 @@ public class TagGroupServiceImpl implements TagGroupService {
                 .name(recode.getTagValue())
                 .displayName(recode.getTagValue())
                 .businessType(getBusinessType())
-                .businessId(recode.getTagValue().hashCode())
+                .businessId(recode.getTagValue()
+                        .hashCode())
                 .build();
     }
 

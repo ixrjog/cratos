@@ -7,7 +7,6 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.mapper.BusinessTagMapper;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.github.pagehelper.Page;
@@ -92,10 +91,14 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
-    public DataTable<BusinessTag> queryPageByParam(UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
-        Page<BusinessTag> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<BusinessTag> data = businessTagMapper.queryPageByParam(pageQuery);
-        return new DataTable<>(data, page.getTotal());
+    public DataTable<BusinessTag> queryPageByParam(BusinessTagParam.BusinessTagPageQuery param) {
+        Page<BusinessTag> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<String> data = businessTagMapper.queryPageByParam(param);
+        return new DataTable<>(data.stream()
+                .map(e -> BusinessTag.builder()
+                        .tagValue(e)
+                        .build())
+                .toList(), page.getTotal());
     }
 
     @Override

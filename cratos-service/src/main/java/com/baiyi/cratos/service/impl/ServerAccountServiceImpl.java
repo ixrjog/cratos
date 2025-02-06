@@ -1,10 +1,13 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.mapper.ServerAccountMapper;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.github.pagehelper.Page;
@@ -31,6 +34,8 @@ public class ServerAccountServiceImpl implements ServerAccountService {
 
     private final ServerAccountMapper serverAccountMapper;
 
+    private static final String DISPLAY_NAME_TPL = "{}[sudo={}:u={}]";
+
     @Override
     public ServerAccount getByUniqueKey(@NonNull ServerAccount record) {
         Example example = new Example(ServerAccount.class);
@@ -49,6 +54,33 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:SERVERACCOUNT:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
+            UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
+        ServerAccountParam.ServerAccountPageQuery param = ServerAccountParam.ServerAccountPageQuery.builder()
+                .queryName(pageQuery.getQueryName())
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .build();
+        DataTable<ServerAccount> dataTable = this.queryServerAccountPage(param);
+        return new DataTable<>(dataTable.getData()
+                .stream()
+                .map(this::toPermissionBusiness)
+                .toList(), dataTable.getTotalNum());
+    }
+
+    @Override
+    public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(ServerAccount recode) {
+        String displayName = StringFormatter.arrayFormat(DISPLAY_NAME_TPL, recode.getName(), recode.getSudo(),
+                recode.getUsername());
+        return PermissionBusinessVO.PermissionBusiness.builder()
+                .name(recode.getName())
+                .displayName(displayName)
+                .businessType(getBusinessType())
+                .businessId(recode.getId())
+                .build();
     }
 
 }

@@ -3,7 +3,6 @@ package com.baiyi.cratos.mapper;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -19,6 +18,6 @@ public interface BusinessTagMapper extends Mapper<BusinessTag> {
 
     List<Integer> queryBusinessIdByTag(BusinessTagParam.QueryByTag queryByTag);
 
-    List<BusinessTag> queryPageByParam(UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery);
+    List<String> queryPageByParam(BusinessTagParam.BusinessTagPageQuery param);
 
 }

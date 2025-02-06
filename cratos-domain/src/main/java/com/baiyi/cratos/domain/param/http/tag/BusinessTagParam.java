@@ -2,11 +2,10 @@ package com.baiyi.cratos.domain.param.http.tag;
 
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.IToTarget;
+import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +22,9 @@ public class BusinessTagParam {
 
     public interface HasQueryByTag {
         BusinessTagParam.QueryByTag getQueryByTag();
+
         void setIdList(List<Integer> idList);
+
         default boolean isQueryByTag() {
             int tagId = Optional.ofNullable(getQueryByTag())
                     .map(BusinessTagParam.QueryByTag::getTagId)
@@ -72,6 +73,17 @@ public class BusinessTagParam {
         private Integer businessId;
         private Integer tagId;
         private String tagValue;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class BusinessTagPageQuery extends PageParam {
+        private String queryName;
+        private Integer tagGroupId;
     }
 
 }
