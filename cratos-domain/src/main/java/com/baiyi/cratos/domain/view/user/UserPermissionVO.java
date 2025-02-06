@@ -67,7 +67,7 @@ public class UserPermissionVO {
     public static class UserPermissionDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = 8108421939569005708L;
-        public static final UserPermissionDetails EMPTY = UserPermissionDetails.builder()
+        public static final UserPermissionDetails NO_DATA = UserPermissionDetails.builder()
                 .build();
         @Builder.Default
         private List<UserPermissionBusiness> userPermissions = List.of();

@@ -48,7 +48,7 @@ public class TagGroupServiceImpl implements TagGroupService {
                 .name(recode.getTagValue())
                 .displayName(recode.getTagValue())
                 .businessType(getBusinessType())
-                .businessId(recode.getTagId())
+                .businessId(recode.getTagValue().hashCode())
                 .build();
     }
 

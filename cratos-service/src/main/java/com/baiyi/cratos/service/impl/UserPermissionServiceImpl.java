@@ -43,7 +43,8 @@ public class UserPermissionServiceImpl implements UserPermissionService {
         criteria.andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("businessId", record.getBusinessId())
                 .andEqualTo("username", record.getUsername())
-                .andEqualTo("role", record.getRole());
+                .andEqualTo("role", record.getRole())
+                .andEqualTo("name", record.getName());
         return userPermissionMapper.selectOneByExample(example);
     }
 

@@ -156,7 +156,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 queryAllBusinessUserPermissionDetails.getUsername(),
                 queryAllBusinessUserPermissionDetails.getBusinessType());
         if (CollectionUtils.isEmpty(userPermissionBusinessIds)) {
-            return UserPermissionVO.UserPermissionDetails.EMPTY;
+            return UserPermissionVO.UserPermissionDetails.NO_DATA;
         }
         List<Env> envs = envFacade.querySorted();
         List<UserPermissionVO.UserPermissionBusiness> userPermissionBusinesses = userPermissionBusinessIds.stream()
@@ -177,6 +177,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     @Override
     public UserPermissionVO.BusinessUserPermissionDetails getUserBusinessUserPermissionDetails(String username) {
         Set<String> businessTypes = PermissionBusinessServiceFactory.getBusinessTypes();
+        // Map<@BusinessType String, List<UserPermissionVO.UserPermissionBusiness>>
         Map<String, List<UserPermissionVO.UserPermissionBusiness>> businessPermissions = Maps.newHashMap();
         businessTypes.forEach(businessType -> {
             UserPermissionParam.QueryAllBusinessUserPermissionDetails query = UserPermissionParam.QueryAllBusinessUserPermissionDetails.builder()

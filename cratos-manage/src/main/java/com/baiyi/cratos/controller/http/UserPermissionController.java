@@ -65,6 +65,11 @@ public class UserPermissionController {
         return HttpResult.SUCCESS;
     }
 
+    /**
+     * 查询用户授权详情
+     * @param username
+     * @return
+     */
     @GetMapping(value = "/details/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> getUserBusinessUserPermissionDetails(
             @RequestParam @Valid @NotBlank String username) {
