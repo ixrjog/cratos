@@ -13,4 +13,6 @@ public interface UserExtFacade {
 
     DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery);
 
+    void renewalOfExtUser(UserExtParam.RenewalExtUser renewalExtUser);
+
 }

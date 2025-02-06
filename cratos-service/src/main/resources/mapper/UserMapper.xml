@@ -65,10 +65,10 @@
                 and username like "%" #{queryName} "%"
                 or name like "%" #{queryName} "%"
                 or display_name like "%" #{queryName} "%"
-                order by replace( name, #{queryName}, '' ), create_time
+                order by replace( name, #{queryName}, '' ), expired_time
             </when>
             <otherwise>
-                order by create_time
+                order by expired_time
             </otherwise>
         </choose>
     </select>

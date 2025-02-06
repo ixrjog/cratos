@@ -1,8 +1,10 @@
 package com.baiyi.cratos.domain.param.http.user;
 
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.http.commit.CommitParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -49,6 +51,17 @@ public class UserExtParam {
         private String queryName;
         private List<Integer> idList;
         private Integer extUserTagId;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class RenewalExtUser {
+        @NotBlank
+        private String username;
+        @NotBlank
+        private String renewalType;
+        private CommitParam.Commit commit;
     }
 
 }

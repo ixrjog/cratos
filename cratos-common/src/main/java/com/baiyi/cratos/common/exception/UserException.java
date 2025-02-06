@@ -33,4 +33,8 @@ public class UserException extends BaseException {
         this.code = USER_ERROR;
     }
 
+    public static void runtime(String message) {
+        throw new UserException(message);
+    }
+
 }
