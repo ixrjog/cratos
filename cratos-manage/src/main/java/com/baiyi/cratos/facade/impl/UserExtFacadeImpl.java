@@ -20,6 +20,7 @@ import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +52,7 @@ public class UserExtFacadeImpl implements UserExtFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void renewalOfExtUser(UserExtParam.RenewalExtUser renewalExtUser) {
         RenewalExtUserTypeEnum renewalExtUserTypeEnum = RenewalExtUserTypeEnum.valueOf(renewalExtUser.getRenewalType());
         User user = userService.getByUsername(renewalExtUser.getUsername());
