@@ -39,13 +39,10 @@ import java.util.stream.Collectors;
  * Spring security ssh shell authentication provider
  */
 @Slf4j
-public class SshShellSecurityAuthenticationProvider
-        implements SshShellAuthenticationProvider {
+public class SshShellSecurityAuthenticationProvider implements SshShellAuthenticationProvider {
 
     private final ApplicationContext context;
-
     private final String authProviderBeanName;
-
     private AuthenticationManager authenticationManager;
 
     public SshShellSecurityAuthenticationProvider(ApplicationContext context, String authProviderBeanName) {
@@ -69,23 +66,21 @@ public class SshShellSecurityAuthenticationProvider
             this.authenticationManager = map.get(beanName);
             if (this.authenticationManager == null) {
                 throw new BeanCreationException(
-                        "Could not find bean with name: " + beanName + " and class: " + AuthenticationManager.class
-                                .getName() + ". Available are: "
-                                + available);
+                        "Could not find bean with name: " + beanName + " and class: " + AuthenticationManager.class.getName() + ". Available are: " + available);
             }
         } else {
             if (map.size() != 1) {
                 throw new BeanCreationException(
-                        "Found too many beans of class: " + AuthenticationManager.class.getName() + ". Please specify" +
-                                " name with property '" + SshShellProperties.SSH_SHELL_PREFIX
-                                + ".authProviderBeanName'");
+                        "Found too many beans of class: " + AuthenticationManager.class.getName() + ". Please specify" + " name with property '" + SshShellProperties.SSH_SHELL_PREFIX + ".authProviderBeanName'");
             }
-            Map.Entry<String, AuthenticationManager> e = map.entrySet().iterator().next();
+            Map.Entry<String, AuthenticationManager> e = map.entrySet()
+                    .iterator()
+                    .next();
             beanName = e.getKey();
             this.authenticationManager = e.getValue();
         }
-        log.info("Using authentication manager named: {} [class={}]", beanName,
-                this.authenticationManager.getClass().getName());
+        log.info("Using authentication manager named: {} [class={}]", beanName, this.authenticationManager.getClass()
+                .getName());
     }
 
     @Override
@@ -95,10 +90,14 @@ public class SshShellSecurityAuthenticationProvider
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, pass));
             log.debug("User {} authenticated with authorities: {}", username, auth.getAuthorities());
-            List<String> authorities =
-                    auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-            serverSession.getIoSession().setAttribute(AUTHENTICATION_ATTRIBUTE, new SshAuthentication(username,
-                    auth.getPrincipal(), auth.getDetails(), auth.getCredentials(), authorities));
+            List<String> authorities = auth.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+            serverSession.getIoSession()
+                    .setAttribute(AUTHENTICATION_ATTRIBUTE,
+                            new SshAuthentication(username, auth.getPrincipal(), auth.getDetails(),
+                                    auth.getCredentials(), authorities));
             return auth.isAuthenticated();
         } catch (AuthenticationException e) {
             log.error("Unable to authenticate user [{}] : {}", username, e.getMessage());

@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -37,9 +38,7 @@ import java.util.List;
 public class CustomPublicKeyConfiguration {
 
     private final UserService userService;
-
     private final BusinessCredentialService businessCredentialService;
-
     private final CredentialService credentialService;
 
     @Bean
@@ -47,15 +46,22 @@ public class CustomPublicKeyConfiguration {
     public PublickeyAuthenticator publickeyAuthenticatorProvider() {
         return (username, publicKey, serverSession) -> {
             User user = userService.getByUsername(username);
-
             if (user == null) {
                 return false;
             }
-
-            if (!user.getValid() || ExpiredUtil.isExpired(user.getExpiredTime())) {
+            // 无效的用户
+            if (!user.getValid()) {
                 return false;
             }
-
+            // 过期的用户
+            if (ExpiredUtil.isExpired(user.getExpiredTime())) {
+                return false;
+            }
+            // 锁定的用户
+            if (Optional.ofNullable(user.getLocked())
+                    .orElse(false)) {
+                return false;
+            }
             SimpleBusiness query = SimpleBusiness.builder()
                     .businessType(BusinessTypeEnum.USER.name())
                     .businessId(user.getId())
@@ -88,7 +94,8 @@ public class CustomPublicKeyConfiguration {
                         fw.write(credential.getCredential() + "\n");
                     }
                     fw.flush();
-                    return new SshShellPublicKeyAuthenticationProvider(sshShellPubKeysTmpFile).authenticate(username, publicKey, serverSession);
+                    return new SshShellPublicKeyAuthenticationProvider(sshShellPubKeysTmpFile).authenticate(username,
+                            publicKey, serverSession);
                 } catch (Exception e) {
                     log.error("Error generating user {} public key", username);
                 } finally {

@@ -33,13 +33,10 @@ public class SshAuthentication {
 
     @NonNull
     private final String name;
-
     @NonNull
     private final Object principal;
-
     private Object details;
-
     private Object credentials;
-
     private List<String> authorities;
+
 }

@@ -30,7 +30,6 @@ public class SshShellPasswordAuthenticationProvider
         implements SshShellAuthenticationProvider {
 
     private final String user;
-
     private final String password;
 
     public SshShellPasswordAuthenticationProvider(String user, String password) {

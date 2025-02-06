@@ -9,5 +9,4 @@ import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
  */
 @FunctionalInterface
 public interface PublickeyAuthenticatorProvider extends PublickeyAuthenticator {
-
 }

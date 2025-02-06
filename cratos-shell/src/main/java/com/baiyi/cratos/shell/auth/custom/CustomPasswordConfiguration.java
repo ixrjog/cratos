@@ -31,12 +31,10 @@ import static com.baiyi.cratos.domain.ErrorEnum.INCORRECT_USERNAME_OR_PASSWORD;
 public class CustomPasswordConfiguration {
 
     private final UserCredFacade userCredFacade;
-
     private final UserService userService;
 
     @Value("${cratos.auth.enabled:true}")
     private Boolean authEnabled;
-
     @Value("${cratos.auth.provider:LOCAL}")
     private String provider;
 
@@ -55,7 +53,6 @@ public class CustomPasswordConfiguration {
                         .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
                 User user = Optional.ofNullable(userService.getByUsername(username))
                         .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
-
                 return authProvider.verifyPassword(user, pass);
             } catch (AuthenticationException e) {
                 return false;
