@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -146,6 +147,14 @@ public class UserParam {
     public static class UpdatePassword {
         private String username;
         private String password;
+    }
+
+    @Data
+    @Schema
+    @Builder
+    public static class QuerySshKey {
+        @NotBlank
+        private String username;
     }
 
 }

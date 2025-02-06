@@ -173,10 +173,17 @@ public class UserFacadeImpl implements UserFacade {
 
     @Override
     public List<CredentialVO.Credential> queryMySshKey() {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-        return getUserPubKeyCredentials(username).stream()
+        UserParam.QuerySshKey querySshKey = UserParam.QuerySshKey.builder()
+                .username(SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getName())
+                .build();
+        return querySshKey(querySshKey);
+    }
+
+    @Override
+    public List<CredentialVO.Credential> querySshKey(UserParam.QuerySshKey querySshKey) {
+        return getUserPubKeyCredentials(querySshKey.getUsername()).stream()
                 .map(credentialWrapper::wrapToTarget)
                 .toList();
     }

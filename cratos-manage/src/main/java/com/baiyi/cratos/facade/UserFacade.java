@@ -34,4 +34,6 @@ public interface UserFacade extends HasSetValid {
 
     List<CredentialVO.Credential> queryMySshKey();
 
+    List<CredentialVO.Credential> querySshKey(UserParam.QuerySshKey querySshKey);
+
 }

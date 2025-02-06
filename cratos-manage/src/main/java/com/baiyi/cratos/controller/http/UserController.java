@@ -61,10 +61,17 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Query user sshkey")
+    @Operation(summary = "Query my sshkey")
     @PostMapping(value = "/my/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<CredentialVO.Credential>> queryMySshKey() {
         return HttpResult.of(userFacade.queryMySshKey());
+    }
+
+    @Operation(summary = "Query user sshkey")
+    @PostMapping(value = "/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<CredentialVO.Credential>> querySshKey(
+            @RequestBody @Valid UserParam.QuerySshKey querySshKey) {
+        return HttpResult.of(userFacade.querySshKey(querySshKey));
     }
 
     @Operation(summary = "Update user valid")
