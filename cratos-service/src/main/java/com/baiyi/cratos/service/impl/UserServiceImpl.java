@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.mapper.UserMapper;
 import com.baiyi.cratos.service.UserService;
@@ -37,6 +38,13 @@ public class UserServiceImpl implements UserService {
     public DataTable<User> queryUserPage(UserParam.UserPageQueryParam param) {
         Page<User> page = PageHelper.startPage(param.getPage(), param.getLength());
         List<User> data = userMapper.queryPageByParam(param);
+        return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public DataTable<User> queryExtUserPage(UserExtParam.UserExtPageQueryParam param) {
+        Page<User> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<User> data = userMapper.queryExtUserPageByParam(param);
         return new DataTable<>(data, page.getTotal());
     }
 

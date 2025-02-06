@@ -1,11 +1,14 @@
 package com.baiyi.cratos.domain.param.http.user;
 
 import com.baiyi.cratos.domain.param.PageParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -19,9 +22,33 @@ public class UserExtParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class UserExtPageQuery extends PageParam {
+    public static class UserExtPageQuery extends PageParam implements BusinessTagParam.HasQueryByTag {
         @Schema(description = "查询名称")
         private String queryName;
+        private BusinessTagParam.QueryByTag queryByTag;
+        private List<Integer> idList;
+        private Integer extUserTagId;
+
+        public UserExtPageQueryParam toParam() {
+            return UserExtPageQueryParam.builder()
+                    .page(getPage())
+                    .length(getLength())
+                    .queryName(queryName)
+                    .idList(idList)
+                    .extUserTagId(extUserTagId)
+                    .build();
+        }
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class UserExtPageQueryParam extends PageParam {
+        private String queryName;
+        private List<Integer> idList;
+        private Integer extUserTagId;
     }
 
 }

@@ -11,6 +11,7 @@ import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
@@ -51,6 +52,13 @@ public class UserFacadeImpl implements UserFacade {
     @PageQueryByTag(typeOf = BusinessTypeEnum.USER)
     public DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) {
         DataTable<User> table = userService.queryUserPage(pageQuery.toParam());
+        return userWrapper.wrapToTarget(table);
+    }
+
+    @Override
+    @PageQueryByTag(typeOf = BusinessTypeEnum.USER)
+    public DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery) {
+        DataTable<User> table = userService.queryExtUserPage(pageQuery.toParam());
         return userWrapper.wrapToTarget(table);
     }
 

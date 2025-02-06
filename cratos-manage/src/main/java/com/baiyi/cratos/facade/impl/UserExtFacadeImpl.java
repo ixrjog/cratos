@@ -4,9 +4,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Tag;
-import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
-import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.UserExtFacade;
 import com.baiyi.cratos.facade.UserFacade;
@@ -37,16 +35,8 @@ public class UserExtFacadeImpl implements UserExtFacade {
         if (Objects.isNull(extUserTag)) {
             return DataTable.NO_DATA;
         }
-        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
-                .tagId(extUserTag.getId())
-                .build();
-        UserParam.UserPageQuery userPageQuery = UserParam.UserPageQuery.builder()
-                .queryByTag(queryByTag)
-                .page(pageQuery.getPage())
-                .length(pageQuery.getLength())
-                .queryName(pageQuery.getQueryName())
-                .build();
-        return userFacade.queryUserPage(userPageQuery);
+        pageQuery.setExtUserTagId(extUserTag.getId());
+        return userFacade.queryExtUserPage(pageQuery);
     }
 
 }

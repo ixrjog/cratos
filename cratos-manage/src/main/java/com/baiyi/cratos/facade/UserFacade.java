@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
@@ -16,6 +17,8 @@ import java.util.List;
 public interface UserFacade extends HasSetValid {
 
     DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery);
+
+    DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery);
 
     User addUser(UserParam.AddUser addUser);
 

@@ -59,7 +59,6 @@ public class UserParam {
         private List<Integer> idList;
     }
 
-
     @Data
     @Schema
     @Builder

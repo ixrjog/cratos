@@ -50,4 +50,27 @@
         </where>
     </select>
 
+    <select id="queryExtUserPageByParam" parameterType="com.baiyi.cratos.domain.param.http.user.UserExtParam$UserExtPageQueryParam"
+            resultMap="BaseResultMap">
+        select * from user
+        where id in ( select business_id from business_tag where business_type = 'USER' and tag_id = #{extUserTagId} )
+        <if test="idList != null and idList.size() > 0">
+            and id in
+            <foreach open="(" item="id" separator="," close=")" collection="idList">
+                #{id}
+            </foreach>
+        </if>
+        <choose>
+            <when test="queryName != null and queryName != ''">
+                and username like "%" #{queryName} "%"
+                or name like "%" #{queryName} "%"
+                or display_name like "%" #{queryName} "%"
+                order by replace( name, #{queryName}, '' ), create_time
+            </when>
+            <otherwise>
+                order by create_time
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>
