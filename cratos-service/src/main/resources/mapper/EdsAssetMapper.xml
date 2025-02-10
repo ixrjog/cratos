@@ -56,4 +56,38 @@
         </choose>
     </select>
 
+    <select id="queryUserPermissionBusinessIds"
+            parameterType="com.baiyi.cratos.query.EdsAssetQuery$QueryUserPermissionBusinessIdParam"
+            resultType="int">
+        select business_id from business_tag
+        where tag_id = #{tagGroupId}
+        and business_type = #{businessType}
+        <if test="groups != null and groups.size() > 0">
+            and tag_value in
+            <foreach open="(" item="group" separator="," close=")" collection="groups">
+                #{group}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryUserPermissionPageByParam"
+            parameterType="com.baiyi.cratos.query.EdsAssetQuery$UserPermissionPageQueryParam"
+            resultMap="BaseResultMap">
+        select * from eds_asset
+        where asset_type in
+        <foreach open="(" item="type" separator="," close=")" collection="effectiveAssetTypes">
+            #{type}
+        </foreach>
+        <if test="userPermissionIds != null and userPermissionIds.size() > 0">
+            and id in
+            <foreach open="(" item="id" separator="," close=")" collection="userPermissionIds">
+                #{id}
+            </foreach>
+        </if>
+        <if test="queryName != null and queryName != ''">
+            and name like "%" #{queryName} "%"
+        </if>
+        order by name
+    </select>
+
 </mapper>

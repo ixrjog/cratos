@@ -2,6 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.business.PermissionBusinessService;
 import com.baiyi.cratos.domain.generator.BusinessTag;
+import com.baiyi.cratos.domain.generator.Tag;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -10,4 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
  * &#064;Version 1.0
  */
 public interface TagGroupService extends PermissionBusinessService<BusinessTag>, InitializingBean {
+
+    Tag getTagGroup();
+
 }

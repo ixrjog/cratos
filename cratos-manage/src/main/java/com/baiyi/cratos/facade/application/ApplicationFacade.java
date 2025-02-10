@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.application;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
-import com.baiyi.cratos.facade.HasSetValid;
+import com.baiyi.cratos.HasSetValid;
 
 /**
  * &#064;Author  baiyi

@@ -30,11 +30,16 @@ public class TagGroupServiceImpl implements TagGroupService {
     private final BusinessTagService businessTagService;
     public static final String TAG_GROUP = "Group";
 
+    @Override
+    public Tag getTagGroup() {
+        return tagService.getByTagKey(TAG_GROUP);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public DataTable<PermissionBusinessVO.PermissionBusiness> queryUserPermissionBusinessPage(
             UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
-        Tag tagGroup = tagService.getByTagKey(TAG_GROUP);
+        Tag tagGroup = getTagGroup();
         if (Objects.isNull(tagGroup)) {
             return DataTable.NO_DATA;
         }
@@ -47,7 +52,10 @@ public class TagGroupServiceImpl implements TagGroupService {
         DataTable<BusinessTag> dataTable = businessTagService.queryPageByParam(param);
         return new DataTable<>(dataTable.getData()
                 .stream()
-                .map(this::toPermissionBusiness)
+                .map(e -> {
+                    e.setBusinessId(tagGroup.getId());
+                    return toPermissionBusiness(e);
+                })
                 .toList(), dataTable.getTotalNum());
     }
 
@@ -57,8 +65,17 @@ public class TagGroupServiceImpl implements TagGroupService {
                 .name(recode.getTagValue())
                 .displayName(recode.getTagValue())
                 .businessType(getBusinessType())
-                .businessId(recode.getTagValue()
-                        .hashCode())
+                .businessId(recode.getTagId())
+                .build();
+    }
+
+    @Override
+    public PermissionBusinessVO.PermissionBusiness getByBusinessName(String name) {
+        return PermissionBusinessVO.PermissionBusiness.builder()
+                .name(name)
+                .displayName(name)
+                .businessType(getBusinessType())
+                .businessId(name.hashCode())
                 .build();
     }
 

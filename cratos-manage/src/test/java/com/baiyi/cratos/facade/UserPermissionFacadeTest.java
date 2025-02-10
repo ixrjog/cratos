@@ -1,10 +1,14 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
+import com.baiyi.cratos.shell.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
+import com.baiyi.cratos.query.EdsAssetQuery;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -23,6 +27,9 @@ public class UserPermissionFacadeTest extends BaseUnit {
 
     @Resource
     private ApplicationService applicationService;
+
+    @Resource
+    private UserPermissionBusinessFacade userPermissionBusinessFacade;
 
     @Test
     void test1() {
@@ -67,16 +74,15 @@ public class UserPermissionFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
-//    @Test
-//    void test3() {
-//        UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails = UserPermissionParam.QueryBusinessUserPermissionDetails.builder()
-//                .businessType(BusinessTypeEnum.APPLICATION.name())
-//                .businessId(2)
-//                .build();
-//        UserPermissionVO.BusinessUserPermissionDetails details = userPermissionFacade.queryBusinessUserPermissionDetails(
-//                queryBusinessUserPermissionDetails);
-//        System.out.println(details);
-//    }
-
+    @Test
+    void test5() {
+        EdsAssetQuery.UserPermissionPageQueryParam param = EdsAssetQuery.UserPermissionPageQueryParam.builder()
+                .username("baiyitest")
+                .page(1)
+                .length(10)
+                .build();
+        DataTable<EdsAsset> dataTable = userPermissionBusinessFacade.queryUserPermissionAssets(param);
+        System.out.println(dataTable);
+    }
 
 }

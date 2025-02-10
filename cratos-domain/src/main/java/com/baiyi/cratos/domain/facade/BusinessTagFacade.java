@@ -1,5 +1,7 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.domain.facade;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -24,5 +26,7 @@ public interface BusinessTagFacade {
     boolean containsTag(String businessType, Integer businessId, String tagKey);
 
     void deleteById(int id);
+
+    BusinessTag getBusinessTag(BaseBusiness.HasBusiness hasBusiness, String tagKey);
 
 }

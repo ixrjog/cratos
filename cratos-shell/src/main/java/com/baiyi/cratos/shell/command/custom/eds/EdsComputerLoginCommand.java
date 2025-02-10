@@ -9,6 +9,7 @@ import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
+import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.command.custom.eds.handler.WatchTerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.TerminalUtil;
@@ -29,25 +30,30 @@ import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.channel.ChannelOutputStream;
 import org.apache.sshd.server.session.ServerSession;
 import org.jline.terminal.Terminal;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/5/23 下午5:18
+ * &#064;Date  2025/2/10 11:36
  * &#064;Version 1.0
  */
 @Slf4j
-//@Component
-//@SshShellComponent
-//@ShellCommandGroup("Eds Computer Commands")
-//@ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
-public class EdsCloudComputerLoginCommand extends AbstractCommand {
+@Component
+@SshShellComponent
+@ShellCommandGroup("Eds Computer Commands")
+@ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
+public class EdsComputerLoginCommand extends AbstractCommand {
 
     private final SimpleSshSessionFacade simpleSshSessionFacade;
     private final CredentialService credentialService;
@@ -57,10 +63,9 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
     public static final String GROUP = "computer";
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
-    public EdsCloudComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
-                                        SimpleSshSessionFacade simpleSshSessionFacade,
-                                        CredentialService credentialService, SshAuditProperties sshAuditProperties,
-                                        ServerCommandAuditor serverCommandAuditor) {
+    public EdsComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
+                                   SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
+                                   SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
         this.simpleSshSessionFacade = simpleSshSessionFacade;
@@ -119,7 +124,6 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 TerminalUtil.enterRawMode(terminal);
                 // 无延迟
                 out.setNoDelay(true);
-
                 while (true) {
                     if (isClosed(sessionId, sshSessionInstanceId) || serverSession.isClosed()) {
                         TimeUnit.MILLISECONDS.sleep(150L);

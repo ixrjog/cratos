@@ -34,4 +34,24 @@
         </where>
     </select>
 
+    <select id="queryUserPermissionServerAccounts"
+            parameterType="com.baiyi.cratos.query.ServerAccountQuery$QueryUserPermissionServerAccountParam"
+            resultMap="BaseResultMap">
+        select * from server_account
+        where
+        <if test="userPermissionIds != null and userPermissionIds.size() > 0">
+            id in
+            <foreach open="(" item="permissionId" separator="," close=")" collection="userPermissionIds">
+                #{permissionId}
+            </foreach>
+        </if>
+        <if test="hasEdsTagIds != null and hasEdsTagIds.size() > 0">
+            and id in
+            <foreach open="(" item="hasTagId" separator="," close=")" collection="hasEdsTagIds">
+                #{hasTagId}
+            </foreach>
+        </if>
+
+    </select>
+
 </mapper>

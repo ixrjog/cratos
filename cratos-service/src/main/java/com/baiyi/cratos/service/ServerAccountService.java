@@ -5,9 +5,12 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.mapper.ServerAccountMapper;
+import com.baiyi.cratos.query.ServerAccountQuery;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -17,5 +20,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
 public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount, ServerAccountMapper>, BaseValidService<ServerAccount, ServerAccountMapper>, SupportBusinessService, PermissionBusinessService<ServerAccount> {
 
     DataTable<ServerAccount> queryServerAccountPage(ServerAccountParam.ServerAccountPageQuery pageQuery);
+
+    List<ServerAccount> queryUserPermissionServerAccounts(ServerAccountQuery.QueryUserPermissionServerAccountParam param);
 
 }

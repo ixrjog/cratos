@@ -1,6 +1,7 @@
 package com.baiyi.cratos.business;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.service.base.BaseService;
@@ -23,6 +24,19 @@ public interface PermissionBusinessService<T> extends SupportBusinessService, In
             return toPermissionBusiness((T) baseService.getById(businessId));
         }
         return null;
+    }
+
+    default PermissionBusinessVO.PermissionBusiness getByBusinessName(String name) {
+        return null;
+    }
+
+    default PermissionBusinessVO.PermissionBusiness getByBusinessPermission(
+            UserPermissionBusinessParam.BusinessPermission businessPermission) {
+        if (BusinessTypeEnum.TAG_GROUP.name()
+                .equals(getBusinessType())) {
+            return getByBusinessName(businessPermission.getName());
+        }
+        return getByBusinessId(businessPermission.getBusinessId());
     }
 
     PermissionBusinessVO.PermissionBusiness toPermissionBusiness(T recode);

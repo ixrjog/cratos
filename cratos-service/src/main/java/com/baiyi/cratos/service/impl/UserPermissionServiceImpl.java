@@ -2,6 +2,7 @@ package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.mapper.UserPermissionMapper;
@@ -83,6 +84,28 @@ public class UserPermissionServiceImpl implements UserPermissionService {
     }
 
     @Override
+    public boolean containsTagGroup(String username, String group, String role) {
+        UserPermission uniqueKey = UserPermission.builder()
+                .username(username)
+                .businessType(BusinessTypeEnum.TAG_GROUP.name())
+                .businessId(group.hashCode())
+                .role(role)
+                .build();
+        return getByUniqueKey(uniqueKey) != null;
+    }
+
+    @Override
+    public UserPermission getUserPermissionTagGroup(String username, String group, String role) {
+        UserPermission uniqueKey = UserPermission.builder()
+                .username(username)
+                .businessType(BusinessTypeEnum.TAG_GROUP.name())
+                .businessId(group.hashCode())
+                .role(role)
+                .build();
+        return getByUniqueKey(uniqueKey);
+    }
+
+    @Override
     public List<UserPermission> queryByBusiness(BaseBusiness.HasBusiness hasBusiness) {
         Example example = new Example(UserPermission.class);
         Example.Criteria criteria = example.createCriteria();
@@ -109,6 +132,17 @@ public class UserPermissionServiceImpl implements UserPermissionService {
                 .andEqualTo("businessType", hasBusiness.getBusinessType())
                 .andEqualTo("businessId", hasBusiness.getBusinessId());
         return userPermissionMapper.selectByExample(example);
+    }
+
+    /**
+     * 查询用户授权的Group
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public List<String> queryUserPermissionGroups(String username) {
+        return userPermissionMapper.queryUserPermissionGroups(username);
     }
 
 }

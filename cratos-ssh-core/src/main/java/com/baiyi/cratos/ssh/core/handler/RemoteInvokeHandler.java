@@ -34,10 +34,10 @@ import java.util.UUID;
 public class RemoteInvokeHandler {
 
     private static final int SSH_PORT = 22;
-
     private static final String appId = UUID.randomUUID()
             .toString();
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static void openSSHServer(String sessionId, HostSystem hostSystem, OutputStream out) throws SshException {
         JSch jsch = new JSch();
         hostSystem.setStatusCd(HostSystem.SUCCESS_STATUS);
@@ -64,9 +64,7 @@ public class RemoteInvokeHandler {
             // JDK21 VirtualThreads
             Thread.ofVirtual()
                     .start(run);
-
             OutputStream inputToChannel = channel.getOutputStream();
-
             JSchSession jSchSession = JSchSession.builder()
                     .sessionId(sessionId)
                     .instanceId(hostSystem.getInstanceId())

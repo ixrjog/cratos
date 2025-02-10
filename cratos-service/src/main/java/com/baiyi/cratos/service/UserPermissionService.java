@@ -20,6 +20,10 @@ public interface UserPermissionService extends BaseUniqueKeyService<UserPermissi
 
     boolean contains(String username, BaseBusiness.HasBusiness hasBusiness, String role);
 
+    boolean containsTagGroup(String username, String group, String role);
+
+    UserPermission getUserPermissionTagGroup(String username, String group, String role);
+
     DataTable<UserPermission> queryUserPermissionPage(UserPermissionParam.UserPermissionPageQuery pageQuery);
 
     List<UserPermission> queryByUsername(String username);
@@ -35,5 +39,7 @@ public interface UserPermissionService extends BaseUniqueKeyService<UserPermissi
     }
 
     List<UserPermission> queryUserPermissionByBusiness(String username, BaseBusiness.HasBusiness hasBusiness);
+
+    List<String> queryUserPermissionGroups(String username);
 
 }

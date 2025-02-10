@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.http.env.EnvParam;

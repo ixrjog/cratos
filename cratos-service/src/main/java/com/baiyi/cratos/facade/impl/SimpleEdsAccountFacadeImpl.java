@@ -25,11 +25,8 @@ import java.util.List;
 public class SimpleEdsAccountFacadeImpl implements SimpleEdsAccountFacade {
 
     private final TagService tagService;
-
     private final BusinessTagService businessTagService;
-
     private final ServerAccountService serverAccountService;
-
     private final Tag edsTagUniqueKey = Tag.builder()
             .tagKey("EDS")
             .build();

@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
+import com.baiyi.cratos.query.EdsAssetQuery;
 import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.github.pagehelper.Page;
@@ -136,6 +137,18 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSET:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    public DataTable<EdsAsset> queryUserPermissionPage(EdsAssetQuery.UserPermissionPageQueryParam param) {
+        Page<EdsAsset> page = PageHelper.startPage(param.getPage(), param.getLength());
+        List<EdsAsset> data = edsAssetMapper.queryUserPermissionPageByParam(param);
+        return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public List<Integer> queryUserPermissionBusinessIds(EdsAssetQuery.QueryUserPermissionBusinessIdParam param) {
+        return edsAssetMapper.queryUserPermissionBusinessIds(param);
     }
 
 }

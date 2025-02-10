@@ -55,4 +55,11 @@
           and business_id = #{businessId}
     </select>
 
+    <select id="queryUserPermissionGroups" resultType="java.lang.String">
+        select distinct name
+        from user_permission
+        where business_type = 'TAG_GROUP'
+          and username = #{username}
+    </select>
+
 </mapper>

@@ -1,12 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.BusinessException;
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
-import com.baiyi.cratos.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +75,24 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
                 businessTagService.updateByPrimaryKey(existBusinessTag);
             }
         }
+    }
+
+    @Override
+    public BusinessTag getBusinessTag(BaseBusiness.HasBusiness hasBusiness, String tagKey) {
+        Tag tag = tagService.getByTagKey(tagKey);
+        if (Objects.isNull(tag)) {
+            return null;
+        }
+        return getBusinessTag(hasBusiness, tag.getId());
+    }
+
+    private BusinessTag getBusinessTag(BaseBusiness.HasBusiness hasBusiness, int tagId) {
+        BusinessTag uniqueKey = BusinessTag.builder()
+                .businessType(hasBusiness.getBusinessType())
+                .businessId(hasBusiness.getBusinessId())
+                .tagId(tagId)
+                .build();
+        return businessTagService.getByUniqueKey(uniqueKey);
     }
 
     @Override

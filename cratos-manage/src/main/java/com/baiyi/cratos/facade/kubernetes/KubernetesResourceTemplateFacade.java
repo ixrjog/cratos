@@ -4,7 +4,7 @@ package com.baiyi.cratos.facade.kubernetes;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
-import com.baiyi.cratos.facade.HasSetValid;
+import com.baiyi.cratos.HasSetValid;
 
 /**
  * &#064;Author  baiyi

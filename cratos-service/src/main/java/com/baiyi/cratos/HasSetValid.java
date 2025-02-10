@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos;
 
 import com.baiyi.cratos.service.base.BaseValidService;
 

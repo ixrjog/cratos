@@ -16,23 +16,17 @@ import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.command.AbstractCommand;
-import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
  * @Author baiyi
@@ -40,10 +34,10 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListComm
  * @Version 1.0
  */
 @Slf4j
-@Component
-@SshShellComponent
-@ShellCommandGroup("Eds Computer Commands")
-@ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
+//@Component
+//@SshShellComponent
+//@ShellCommandGroup("Eds Computer Commands")
+//@ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class EdsCloudComputerListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
@@ -80,7 +74,6 @@ public class EdsCloudComputerListCommand extends AbstractCommand {
                 .length(pageLength)
                 .queryName(name)
                 .build();
-
         DataTable<EdsAsset> table = edsAssetService.queryEdsInstanceAssetPage(pageQuery);
         if (CollectionUtils.isEmpty(table.getData())) {
             helper.printInfo("No available assets found.");
@@ -88,7 +81,6 @@ public class EdsCloudComputerListCommand extends AbstractCommand {
         Map<Integer, String> edsInstanceMap = Maps.newHashMap();
         Map<Integer, EdsAsset> computerMapper = Maps.newHashMap();
         List<ServerAccount> serverAccounts = simpleEdsAccountFacade.queryServerAccounts();
-
         int i = 1;
         for (EdsAsset asset : table.getData()) {
             if (!edsInstanceMap.containsKey(asset.getInstanceId())) {

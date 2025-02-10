@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.server;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
-import com.baiyi.cratos.facade.HasSetValid;
+import com.baiyi.cratos.HasSetValid;
 
 /**
  * @Author baiyi

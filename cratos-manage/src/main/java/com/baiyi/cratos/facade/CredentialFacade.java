@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Credential;

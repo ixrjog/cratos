@@ -52,6 +52,7 @@ public class UserPermissionBusinessParam {
     @Builder
     public static class BusinessPermission {
         private Integer businessId;
+        private String name;
         private List<RoleMember> roleMembers;
     }
 

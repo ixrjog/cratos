@@ -99,11 +99,9 @@ public class EdsKubernetesDeploymentIstioCommand extends AbstractCommand {
         if (CollectionUtils.isEmpty(table.getData())) {
             helper.printInfo("No available assets found.");
         }
-
         for (EdsAsset asset : table.getData()) {
             Deployment deployment = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(asset.getOriginalModel());
-
             Map<String, String> labels = Optional.ofNullable(deployment)
                     .map(Deployment::getSpec)
                     .map(DeploymentSpec::getTemplate)

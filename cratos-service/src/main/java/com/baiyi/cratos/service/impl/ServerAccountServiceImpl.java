@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -9,7 +10,9 @@ import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.mapper.ServerAccountMapper;
+import com.baiyi.cratos.query.ServerAccountQuery;
 import com.baiyi.cratos.service.ServerAccountService;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -72,6 +75,11 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     }
 
     @Override
+    public List<ServerAccount> queryUserPermissionServerAccounts(ServerAccountQuery.QueryUserPermissionServerAccountParam param) {
+        return serverAccountMapper.queryUserPermissionServerAccounts(param);
+    }
+
+    @Override
     public PermissionBusinessVO.PermissionBusiness toPermissionBusiness(ServerAccount recode) {
         String displayName = StringFormatter.arrayFormat(DISPLAY_NAME_TPL, recode.getName(), recode.getSudo(),
                 recode.getUsername());
@@ -81,6 +89,12 @@ public class ServerAccountServiceImpl implements ServerAccountService {
                 .businessType(getBusinessType())
                 .businessId(recode.getId())
                 .build();
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        SupportBusinessServiceFactory.register(this);
+        PermissionBusinessServiceFactory.register(this);
     }
 
 }
