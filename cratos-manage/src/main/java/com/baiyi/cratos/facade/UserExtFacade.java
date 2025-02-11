@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
 
@@ -13,6 +14,6 @@ public interface UserExtFacade {
 
     DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery);
 
-    void renewalOfExtUser(UserExtParam.RenewalExtUser renewalExtUser);
+    SimpleCommited renewalOfExtUser(UserExtParam.RenewalExtUser renewalExtUser);
 
 }

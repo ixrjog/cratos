@@ -61,6 +61,8 @@ public class UserExtParam {
         private String username;
         @NotBlank
         private String renewalType;
+        @Schema(description = "是否续期所有; true:续签所有, false:只续签账户")
+        private Boolean renewalOfAll;
         private CommitParam.Commit commit;
     }
 

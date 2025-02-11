@@ -27,6 +27,11 @@ public interface Global {
 
     String ISO8601_S6 = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'";
 
-    String NOT_APPLICABLE ="n/a";
+    String NOT_APPLICABLE = "n/a";
 
+    boolean UNLOCKED = false;
+
+    boolean LOCKED = true;
+
+    boolean VALID = true;
 }
