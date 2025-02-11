@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public final class SshKeyUtil {
+public final class SshKeyUtils {
 
     /**
      * https://github.com/bastillion-io/Bastillion/blob/master/src/main/java/io/bastillion/manage/util/SSHUtil.java
@@ -81,6 +81,22 @@ public final class SshKeyUtil {
             }
         }
         return keyType;
+    }
+
+    /**
+     * returns public key title
+     *
+     * @param pubKey public key
+     * @return title of public key
+     */
+    public static String getTitle(String pubKey) {
+        if (StringUtils.isNotEmpty(pubKey)) {
+            String[] parts = pubKey.split(" ");
+            if (parts.length > 2) {
+                return parts[2];
+            }
+        }
+        return "";
     }
 
 }

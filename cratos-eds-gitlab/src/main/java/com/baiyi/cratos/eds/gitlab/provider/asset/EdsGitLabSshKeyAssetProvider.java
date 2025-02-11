@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.provider.asset;
 
-import com.baiyi.cratos.common.util.SshKeyUtil;
+import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -103,7 +103,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         SshKey sshKey = entity.getSshKey();
         return newEdsAssetBuilder(instance, entity).assetIdOf(sshKey.getId())
                 .nameOf(entity.getUsername())
-                .assetKeyOf(SshKeyUtil.calcFingerprint(sshKey.getKey()))
+                .assetKeyOf(SshKeyUtils.calcFingerprint(sshKey.getKey()))
                 .descriptionOf(sshKey.getTitle())
                 .build();
     }

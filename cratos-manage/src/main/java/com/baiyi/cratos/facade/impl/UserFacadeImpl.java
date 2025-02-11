@@ -7,6 +7,7 @@ import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.SshFingerprintUtil;
+import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -202,7 +203,7 @@ public class UserFacadeImpl implements UserFacade {
             return;
         }
         Credential credential = Credential.builder()
-                .title(getTitle(pubKey))
+                .title(SshKeyUtils.getTitle(pubKey))
                 .username(addSshKey.getUsername())
                 .credentialType(CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name())
                 .credential(pubKey)
@@ -218,14 +219,6 @@ public class UserFacadeImpl implements UserFacade {
                 .businessId(user.getId())
                 .build();
         businessCredentialService.add(businessCredential);
-    }
-
-    private String getTitle(String pubKey) {
-        String[] ss = pubKey.split(" ");
-        if (ss.length <= 2) {
-            return "";
-        }
-        return ss[2];
     }
 
     @Override
