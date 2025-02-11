@@ -5,6 +5,7 @@ import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
@@ -63,6 +64,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .businessType(grantUserPermission.getBusinessType())
                 .displayName(permissionBusiness.getDisplayName())
                 .role(grantUserPermission.getRole())
+                .valid(Global.VALID)
                 .build();
         if (userPermissionService.getByUniqueKey(userPermission) == null) {
             userPermissionService.add(userPermission);

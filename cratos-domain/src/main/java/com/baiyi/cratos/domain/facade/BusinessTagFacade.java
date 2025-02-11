@@ -29,4 +29,6 @@ public interface BusinessTagFacade {
 
     BusinessTag getBusinessTag(BaseBusiness.HasBusiness hasBusiness, String tagKey);
 
+    void copyBusinessTag(BusinessTagParam.CopyBusinessTag copyBusinessTag);
+
 }

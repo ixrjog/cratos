@@ -2,12 +2,12 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
@@ -16,6 +16,7 @@ import com.baiyi.cratos.wrapper.BusinessTagWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -84,6 +85,38 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
             return null;
         }
         return getBusinessTag(hasBusiness, tag.getId());
+    }
+
+    @Override
+    public void copyBusinessTag(BusinessTagParam.CopyBusinessTag copyBusinessTag) {
+        List<BusinessTag> businessTags = businessTagService.selectByBusiness(copyBusinessTag);
+        if (CollectionUtils.isEmpty(businessTags)) {
+            return;
+        }
+        copyBusinessTag.getCopyTo()
+                .forEach(copyTo -> {
+                    for (BusinessTag businessTag : businessTags) {
+                        BusinessTag copyToBusinessTag = BusinessTag.builder()
+                                .businessType(copyTo.getBusinessType())
+                                .businessId(copyTo.getBusinessId())
+                                .tagId(businessTag.getTagId())
+                                .tagValue(businessTag.getTagValue())
+                                .build();
+                        copyBusinessTag(copyToBusinessTag, copyBusinessTag.getCovered());
+                    }
+                });
+    }
+
+    private void copyBusinessTag(BusinessTag copyToBusinessTag, Boolean covered) {
+        BusinessTag businessTag = businessTagService.getByUniqueKey(copyToBusinessTag);
+        if (Objects.isNull(businessTag)) {
+            businessTagService.add(copyToBusinessTag);
+            return;
+        }
+        if (Boolean.TRUE.equals(covered)) {
+            businessTag.setTagValue(copyToBusinessTag.getTagValue());
+            businessTagService.updateByPrimaryKey(businessTag);
+        }
     }
 
     private BusinessTag getBusinessTag(BaseBusiness.HasBusiness hasBusiness, int tagId) {

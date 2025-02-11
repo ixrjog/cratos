@@ -46,6 +46,13 @@ public class BusinessTagController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Copy businessTag")
+    @PostMapping(value = "/copy", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> copyBusinessTag(@RequestBody @Valid BusinessTagParam.CopyBusinessTag copyBusinessTag) {
+        businessTagFacade.copyBusinessTag(copyBusinessTag);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add businessTag")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addBusinessTag(@RequestBody @Valid BusinessTagParam.AddBusinessTag addBusinessTag) {

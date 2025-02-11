@@ -1,9 +1,13 @@
 package com.baiyi.cratos.domain.param.http.tag;
 
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -84,6 +88,25 @@ public class BusinessTagParam {
     public static class BusinessTagPageQuery extends PageParam {
         private String queryName;
         private Integer tagGroupId;
+    }
+
+    @Data
+    @Schema
+    public static class CopyBusinessTag implements BaseBusiness.HasBusiness {
+        @NotBlank
+        private String businessType;
+        @NotNull
+        private Integer businessId;
+        @NotEmpty
+        private List<CopyTo> copyTo;
+        private Boolean covered;
+    }
+
+    @Data
+    @Schema
+    public static class CopyTo implements BaseBusiness.HasBusiness {
+        private String businessType;
+        private Integer businessId;
     }
 
 }
