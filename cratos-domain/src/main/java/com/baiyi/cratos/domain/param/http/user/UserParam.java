@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.user;
 
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
@@ -155,6 +156,19 @@ public class UserParam {
     public static class QuerySshKey {
         @NotBlank
         private String username;
+    }
+
+    @Data
+    @Schema
+    @Builder
+    public static class AddMySshKey implements HasSessionUser {
+        private String username;
+        @NotBlank
+        private String pubKey;
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
     }
 
     @Data

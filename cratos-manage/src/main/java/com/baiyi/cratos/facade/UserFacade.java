@@ -39,4 +39,6 @@ public interface UserFacade extends HasSetValid {
 
     void addSshKey(UserParam.AddSshKey addSshKey);
 
+    void addMySshKey(UserParam.AddMySshKey addMySshKey);
+
 }

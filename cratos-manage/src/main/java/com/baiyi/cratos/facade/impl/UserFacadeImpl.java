@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
@@ -196,7 +197,19 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
+    @SetSessionUserToParam(desc = "set Author")
+    public void addMySshKey(UserParam.AddMySshKey addMySshKey) {
+        this.addSshKey(UserParam.AddSshKey.builder()
+                .username(addMySshKey.getUsername())
+                .pubKey(addMySshKey.getPubKey())
+                .build());
+    }
+
+    @Override
     public void addSshKey(UserParam.AddSshKey addSshKey) {
+        if (!StringUtils.hasText(addSshKey.getUsername())) {
+            return;
+        }
         String pubKey = addSshKey.getPubKey();
         User user = userService.getByUsername(addSshKey.getUsername());
         if (user == null) {
