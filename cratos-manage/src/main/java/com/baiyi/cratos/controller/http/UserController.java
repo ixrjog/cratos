@@ -74,6 +74,13 @@ public class UserController {
         return HttpResult.of(userFacade.querySshKey(querySshKey));
     }
 
+    @Operation(summary = "Add user sshkey")
+    @PostMapping(value = "/sshkey/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addSshKey(@RequestBody @Valid UserParam.AddSshKey addSshKey) {
+        userFacade.addSshKey(addSshKey);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update user valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setUserValidById(@RequestParam int id) {

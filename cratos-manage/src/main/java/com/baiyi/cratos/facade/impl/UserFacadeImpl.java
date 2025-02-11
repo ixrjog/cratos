@@ -6,9 +6,11 @@ import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.SshFingerprintUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
@@ -17,6 +19,8 @@ import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
+import com.baiyi.cratos.service.BusinessCredentialService;
+import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
@@ -45,6 +49,8 @@ public class UserFacadeImpl implements UserFacade {
     private final UserWrapper userWrapper;
     private final CredentialFacade credentialFacade;
     private final CredentialWrapper credentialWrapper;
+    private final BusinessCredentialService businessCredentialService;
+    private final CredentialService credentialService;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
 
@@ -186,6 +192,40 @@ public class UserFacadeImpl implements UserFacade {
         return getUserPubKeyCredentials(querySshKey.getUsername()).stream()
                 .map(credentialWrapper::wrapToTarget)
                 .toList();
+    }
+
+    @Override
+    public void addSshKey(UserParam.AddSshKey addSshKey) {
+        String pubKey = addSshKey.getPubKey();
+        User user = userService.getByUsername(addSshKey.getUsername());
+        if (user == null) {
+            return;
+        }
+        Credential credential = Credential.builder()
+                .title(getTitle(pubKey))
+                .username(addSshKey.getUsername())
+                .credentialType(CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name())
+                .credential(pubKey)
+                .fingerprint(SshFingerprintUtil.calcFingerprint(null, pubKey))
+                .privateCredential(true)
+                .valid(true)
+                .expiredTime(ExpiredUtil.generateExpirationTime(366L * 5, TimeUnit.DAYS))
+                .build();
+        credentialService.add(credential);
+        BusinessCredential businessCredential = BusinessCredential.builder()
+                .credentialId(credential.getId())
+                .businessType(BusinessTypeEnum.USER.name())
+                .businessId(user.getId())
+                .build();
+        businessCredentialService.add(businessCredential);
+    }
+
+    private String getTitle(String pubKey) {
+        String[] ss = pubKey.split(" ");
+        if (ss.length <= 2) {
+            return "";
+        }
+        return ss[2];
     }
 
     @Override

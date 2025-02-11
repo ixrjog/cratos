@@ -72,7 +72,7 @@ public class UserParam {
         private String displayName;
         private String email;
         private Boolean valid;
-        private Boolean locked;
+        private final Boolean locked = false;
         private Date lastLogin;
         private String mobilePhone;
         private Integer otp;
@@ -155,6 +155,16 @@ public class UserParam {
     public static class QuerySshKey {
         @NotBlank
         private String username;
+    }
+
+    @Data
+    @Schema
+    @Builder
+    public static class AddSshKey {
+        @NotBlank
+        private String username;
+        @NotBlank
+        private String pubKey;
     }
 
 }
