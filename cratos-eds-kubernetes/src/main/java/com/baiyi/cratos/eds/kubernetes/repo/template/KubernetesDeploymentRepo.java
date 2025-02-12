@@ -214,7 +214,6 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         }
     }
 
-
     @Override
     protected Deployment find(KubernetesClient client, Deployment resource) {
         try (client) {

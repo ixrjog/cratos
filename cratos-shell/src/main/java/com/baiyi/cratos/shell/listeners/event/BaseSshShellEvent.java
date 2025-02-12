@@ -1,6 +1,7 @@
 package com.baiyi.cratos.shell.listeners.event;
 
 import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.context.PodAssetContext;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
@@ -18,11 +19,13 @@ import java.util.Date;
  */
 public abstract class BaseSshShellEvent implements ISshShellEvent, InitializingBean {
 
-    public BaseSshShellEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
-        this.simpleSshSessionFacade = simpleSshSessionFacade;
-    }
-
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
+    protected final UserService userService;
+
+    public BaseSshShellEvent(SimpleSshSessionFacade simpleSshSessionFacade,UserService userService) {
+        this.simpleSshSessionFacade = simpleSshSessionFacade;
+        this.userService = userService;
+    }
 
     protected void endSession(SshShellEvent event) {
         String sessionId = SshSessionIdMapper.getSessionId(event.getSession()

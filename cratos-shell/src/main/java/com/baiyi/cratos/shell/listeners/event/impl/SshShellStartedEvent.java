@@ -2,6 +2,8 @@ package com.baiyi.cratos.shell.listeners.event.impl;
 
 import com.baiyi.cratos.common.model.CratosHostHolder;
 import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
@@ -20,8 +22,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SshShellStartedEvent extends BaseSshShellEvent {
 
-    public SshShellStartedEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
-        super(simpleSshSessionFacade);
+    private final SshShellHelper sshShellHelper;
+
+    public SshShellStartedEvent(SimpleSshSessionFacade simpleSshSessionFacade, UserService userService,
+                                SshShellHelper sshShellHelper) {
+        super(simpleSshSessionFacade, userService);
+        this.sshShellHelper = sshShellHelper;
     }
 
     @Override
@@ -44,6 +50,15 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
                 .getServerSession()
                 .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
         simpleSshSessionFacade.addSshSession(sshSession);
+//        User user = userService.getByUsername(event.getSession()
+//                .getServerSession()
+//                .getUsername());
+//        Date expiredTime = Optional.ofNullable(user)
+//                .map(User::getExpiredTime)
+//                .orElse(null);
+//        if (expiredTime != null) {
+//            sshShellHelper.print("Hi");
+//        }
     }
 
 }

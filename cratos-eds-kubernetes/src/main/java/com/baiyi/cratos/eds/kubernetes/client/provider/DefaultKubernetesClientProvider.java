@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class DefaultKubernetesClientProvider implements IKubernetesClientProvider {
 
     private final CredentialService credentialService;
-
     private final EdsConfigService edsConfigService;
 
     /**

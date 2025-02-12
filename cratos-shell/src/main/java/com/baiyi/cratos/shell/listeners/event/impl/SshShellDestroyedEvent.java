@@ -1,5 +1,6 @@
 package com.baiyi.cratos.shell.listeners.event.impl;
 
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SshShellDestroyedEvent extends BaseSshShellEvent {
 
-    public SshShellDestroyedEvent(SimpleSshSessionFacade simpleSshSessionFacade) {
-        super(simpleSshSessionFacade);
+    public SshShellDestroyedEvent(SimpleSshSessionFacade simpleSshSessionFacade, UserService userService) {
+        super(simpleSshSessionFacade, userService);
     }
 
     @Override
