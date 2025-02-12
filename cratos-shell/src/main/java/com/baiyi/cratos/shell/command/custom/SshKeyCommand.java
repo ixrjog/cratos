@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.SshFingerprintUtil;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -32,7 +32,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
@@ -147,7 +146,7 @@ public class SshKeyCommand extends AbstractCommand {
             helper.getSuccess("Never expire");
         }
 
-        String time = TimeUtil.parse(expiredTime, Global.ISO8601);
+        String time = TimeUtils.parse(expiredTime, Global.ISO8601);
         return ExpiredUtil.isExpired(expiredTime) ? helper.getError(time) : helper.getSuccess(time);
     }
 

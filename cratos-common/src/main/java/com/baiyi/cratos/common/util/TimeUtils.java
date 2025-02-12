@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Slf4j
-public final class TimeUtil {
+public final class TimeUtils {
 
     public static final String YEAR = "yyyy";
     public static final int THE_NUMBER_OF_SECONDS_IN_A_DAY = 86_400;
     public static final TimeZone UTC_TZ = TimeZone.getTimeZone("UTC");
 
-    private TimeUtil() {
+    private TimeUtils() {
     }
 
     /**
@@ -115,6 +115,15 @@ public final class TimeUtil {
             Thread.currentThread()
                     .interrupt();
         }
+    }
+
+    public static int calculateDateDifferenceByDay(Date from, Date to){
+        long subTime = to.getTime() - from.getTime();
+        if (subTime < 0) {
+            throw new RuntimeException("计算时间有误!");
+        }
+        long diff = subTime / TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
+        return (int) diff;
     }
 
 }

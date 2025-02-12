@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.view.user;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.LifeCycleVO;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,7 +27,7 @@ public class UserPermissionVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Permission extends BaseVO implements EnvVO.HasEnv, Serializable {
+    public static class Permission extends BaseVO implements EnvVO.HasEnv, LifeCycleVO.HasLifeCycleExpires, Serializable {
         @Serial
         private static final long serialVersionUID = -4844155821760523819L;
         private Integer id;
@@ -43,6 +44,7 @@ public class UserPermissionVO {
         private Date expiredTime;
         private String comment;
         private EnvVO.Env env;
+        private LifeCycleVO.Expires lifeCycleExpires;
         @Override
         public String getEnvName() {
             return this.role;

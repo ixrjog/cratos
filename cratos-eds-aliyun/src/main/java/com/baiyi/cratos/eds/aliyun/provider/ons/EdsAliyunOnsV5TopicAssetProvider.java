@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider.ons;
 
 import com.aliyun.rocketmq20220801.models.ListTopicsResponseBody;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
@@ -97,7 +97,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
                     .assetKeyOf(key)
                     .kindOf(entity.getMessageType())
                     .regionOf(entity.getRegionId())
-                    .createdTimeOf(TimeUtil.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
+                    .createdTimeOf(TimeUtils.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
                     .descriptionOf(entity.getRemark())
                     .statusOf(entity.getStatus())
                     .build();

@@ -2,7 +2,7 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.util.IdentityUtil;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEventImpact;
@@ -39,7 +39,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
         if (vo.getCost() != 0) {
             RiskEventVO.CostDetail costDetail = RiskEventVO.CostDetail.builder()
                     .cost(vo.getCost())
-                    .costDesc(TimeUtil.convertSecondsToHMS(vo.getCost()))
+                    .costDesc(TimeUtils.convertSecondsToHMS(vo.getCost()))
                     .build();
             vo.setCostDetail(costDetail);
         }
@@ -65,7 +65,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
             iRiskEventImpacts.setImpacts(impacts);
             RiskEventVO.CostDetail totalCost = RiskEventVO.CostDetail.builder()
                     .cost(sumCost.get())
-                    .costDesc(TimeUtil.convertSecondsToHMS(sumCost.get()))
+                    .costDesc(TimeUtils.convertSecondsToHMS(sumCost.get()))
                     .build();
             iRiskEventImpacts.setTotalCost(totalCost);
         }

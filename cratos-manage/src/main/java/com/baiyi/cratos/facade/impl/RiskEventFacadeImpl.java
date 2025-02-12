@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.RiskEventImpactException;
 import com.baiyi.cratos.common.util.IdentityUtil;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
@@ -23,7 +23,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.Date;
 import java.util.List;
 
-import static com.baiyi.cratos.common.util.TimeUtil.YEAR;
+import static com.baiyi.cratos.common.util.TimeUtils.YEAR;
 
 /**
  * @Author baiyi
@@ -56,9 +56,9 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
     public void addRiskEvent(RiskEventParam.AddRiskEvent addRiskEvent) {
         RiskEvent riskEvent = addRiskEvent.toTarget();
         Date eventTime = riskEvent.getEventTime();
-        riskEvent.setYear(TimeUtil.parse(eventTime, YEAR));
-        riskEvent.setWeeks(TimeUtil.getWeekOfYear(eventTime));
-        riskEvent.setQuarter(String.valueOf(TimeUtil.getQuarter(eventTime)));
+        riskEvent.setYear(TimeUtils.parse(eventTime, YEAR));
+        riskEvent.setWeeks(TimeUtils.getWeekOfYear(eventTime));
+        riskEvent.setQuarter(String.valueOf(TimeUtils.getQuarter(eventTime)));
         riskEventService.add(riskEvent);
     }
 
@@ -66,9 +66,9 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
     public void updateRiskEvent(RiskEventParam.UpdateRiskEvent updateRiskEvent) {
         RiskEvent riskEvent = updateRiskEvent.toTarget();
         Date eventTime = riskEvent.getEventTime();
-        riskEvent.setYear(TimeUtil.parse(eventTime, YEAR));
-        riskEvent.setWeeks(TimeUtil.getWeekOfYear(eventTime));
-        riskEvent.setQuarter(String.valueOf(TimeUtil.getQuarter(eventTime)));
+        riskEvent.setYear(TimeUtils.parse(eventTime, YEAR));
+        riskEvent.setWeeks(TimeUtils.getWeekOfYear(eventTime));
+        riskEvent.setQuarter(String.valueOf(TimeUtils.getQuarter(eventTime)));
         riskEventService.updateByPrimaryKey(riskEvent);
         if (!riskEvent.getValid()) {
             List<RiskEventImpact> impacts = impactService.queryByEventId(riskEvent.getId());

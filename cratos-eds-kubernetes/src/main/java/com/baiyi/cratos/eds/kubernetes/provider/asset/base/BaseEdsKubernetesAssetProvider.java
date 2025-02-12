@@ -104,7 +104,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
     }
 
     private Date toUTCDate(String time) {
-        return com.baiyi.cratos.common.util.TimeUtil.toDate(time, TimeZoneEnum.UTC);
+        return com.baiyi.cratos.common.util.TimeUtils.toDate(time, TimeZoneEnum.UTC);
     }
 
     @Override

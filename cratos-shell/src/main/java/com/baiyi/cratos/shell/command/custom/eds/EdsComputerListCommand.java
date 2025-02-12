@@ -3,7 +3,7 @@ package com.baiyi.cratos.shell.command.custom.eds;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -152,7 +152,7 @@ public class EdsComputerListCommand extends AbstractCommand {
             return UNAUTHORIZED;
         }
         return helper.getColored(StringFormatter.arrayFormat("Authorized `expires {}`",
-                TimeUtil.parse(userPermission.getExpiredTime(), Global.ISO8601)), PromptColor.GREEN);
+                TimeUtils.parse(userPermission.getExpiredTime(), Global.ISO8601)), PromptColor.GREEN);
     }
 
     private String renderEnv(Map<String, Env> envMap, String env) {

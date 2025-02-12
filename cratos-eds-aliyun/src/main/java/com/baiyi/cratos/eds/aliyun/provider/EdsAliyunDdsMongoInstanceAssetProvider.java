@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.aliyun.dds20151201.models.DescribeDBInstancesResponseBody;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDdsMongoRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.domain.constant.Global.*;
+import static com.baiyi.cratos.domain.constant.Global.ISO8601;
+import static com.baiyi.cratos.domain.constant.Global.ISO8601_1;
 
 /**
  * &#064;Author  baiyi
@@ -77,8 +78,8 @@ public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsA
                     .nameOf(entity.getDBInstanceDescription())
                     .regionOf(entity.getRegionId())
                     .zoneOf(entity.getZoneId())
-                    .createdTimeOf(TimeUtil.strToDate(entity.getCreationTime(), ISO8601))
-                    .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), ISO8601_1))
+                    .createdTimeOf(TimeUtils.strToDate(entity.getCreationTime(), ISO8601))
+                    .expiredTimeOf(TimeUtils.strToDate(entity.getExpireTime(), ISO8601_1))
                     .build();
         } catch (Exception ex) {
             throw new EdsAssetConversionException(ex.getMessage());

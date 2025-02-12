@@ -4,7 +4,7 @@ import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.aliyuncs.ram.model.v20150501.ListPoliciesForUserResponse;
 import com.aliyuncs.ram.model.v20150501.ListUsersResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
@@ -83,7 +83,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                 .nameOf(entity.getDisplayName())
                 .assetKeyOf(entity.getUserName())
                 .descriptionOf(entity.getComments())
-                .createdTimeOf(TimeUtil.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
+                .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
                 .build();
     }
 

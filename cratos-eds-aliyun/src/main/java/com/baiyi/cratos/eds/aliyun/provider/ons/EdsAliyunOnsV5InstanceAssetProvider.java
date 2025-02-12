@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider.ons;
 
 import com.aliyun.rocketmq20220801.models.ListInstancesResponseBody;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
@@ -74,8 +74,8 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
             return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                     .nameOf(entity.getInstanceName())
                     .regionOf(entity.getRegionId())
-                    .createdTimeOf(TimeUtil.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
-                    .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), "yyyy-MM-dd HH:mm:ss"))
+                    .createdTimeOf(TimeUtils.strToDate(entity.getCreateTime(), "yyyy-MM-dd HH:mm:ss"))
+                    .expiredTimeOf(TimeUtils.strToDate(entity.getExpireTime(), "yyyy-MM-dd HH:mm:ss"))
                     .descriptionOf(entity.getRemark())
                     .build();
         } catch (Exception ex) {

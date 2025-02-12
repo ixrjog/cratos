@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.StringFormatter;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRedisRepo;
@@ -51,7 +51,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     public static Date toUtcDate(String time) {
-        return TimeUtil.toDate(time, TimeZoneEnum.UTC);
+        return TimeUtils.toDate(time, TimeZoneEnum.UTC);
     }
 
     @Override

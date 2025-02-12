@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.provider;
 
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -66,7 +66,7 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
                     .nameOf(entity.getDomain())
                     .kindOf(entity.getType())
                     .statusOf(entity.getStatus())
-                    .expiredTimeOf(TimeUtil.strToDate(entity.getExpireTime(), DATE_FORMAT))
+                    .expiredTimeOf(TimeUtils.strToDate(entity.getExpireTime(), DATE_FORMAT))
                     .build();
         } catch (ParseException parseException) {
             throw new EdsQueryEntitiesException(parseException.getMessage());

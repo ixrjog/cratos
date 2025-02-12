@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.application.builder.util;
 
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 
@@ -29,7 +29,7 @@ public class ConverterUtil {
 
     public static Date parse(String strDate) {
         try {
-            return TimeUtil.strToDate(strDate, ISO8601);
+            return TimeUtils.strToDate(strDate, ISO8601);
         } catch (ParseException ex) {
             return null;
         }

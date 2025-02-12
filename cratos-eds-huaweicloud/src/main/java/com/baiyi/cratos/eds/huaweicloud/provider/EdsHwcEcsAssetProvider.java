@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.provider;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
@@ -107,7 +107,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
                 .regionOf(entity.getRegionId())
                 .zoneOf(entity.getServerDetail()
                         .getOsEXTAZAvailabilityZone())
-                .createdTimeOf(TimeUtil.toDate(entity.getServerDetail()
+                .createdTimeOf(TimeUtils.toDate(entity.getServerDetail()
                         .getCreated(), TimeZoneEnum.UTC))
                 .validOf("ACTIVE".equalsIgnoreCase(entity.getServerDetail()
                         .getStatus()))

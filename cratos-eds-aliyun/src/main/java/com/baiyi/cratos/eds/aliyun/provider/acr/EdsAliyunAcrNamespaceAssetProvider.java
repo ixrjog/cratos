@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider.acr;
 
 import com.aliyuncs.cr.model.v20181201.ListNamespaceResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
@@ -54,7 +54,7 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     public static Date toUtcDate(String time) {
-        return TimeUtil.toDate(time, TimeZoneEnum.UTC);
+        return TimeUtils.toDate(time, TimeZoneEnum.UTC);
     }
 
     @Override

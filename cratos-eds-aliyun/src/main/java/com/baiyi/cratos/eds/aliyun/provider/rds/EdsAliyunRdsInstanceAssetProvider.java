@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider.rds;
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstanceAttributeResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.StringFormatter;
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRdsInstanceRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
@@ -72,7 +72,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     public static Date toUtcDate(String time) {
-        return TimeUtil.toDate(time, TimeZoneEnum.UTC);
+        return TimeUtils.toDate(time, TimeZoneEnum.UTC);
     }
 
 }

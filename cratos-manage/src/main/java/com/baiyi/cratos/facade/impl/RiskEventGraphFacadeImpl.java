@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.util.TimeUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.RiskEvent;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.common.util.TimeUtil.THE_NUMBER_OF_SECONDS_IN_A_DAY;
+import static com.baiyi.cratos.common.util.TimeUtils.THE_NUMBER_OF_SECONDS_IN_A_DAY;
 
 /**
  * @Author baiyi
@@ -153,9 +153,9 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
         int isoYear = Integer.parseInt(riskEventGraphQuery.getYear());
         if (StringUtils.hasText(riskEventGraphQuery.getQuarter())) {
             int quarter = Integer.parseInt(riskEventGraphQuery.getQuarter());
-            return TimeUtil.getDaysByQuarter(isoYear, quarter);
+            return TimeUtils.getDaysByQuarter(isoYear, quarter);
         } else {
-            return TimeUtil.getDaysByYear(isoYear);
+            return TimeUtils.getDaysByYear(isoYear);
         }
     }
 
