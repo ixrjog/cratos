@@ -45,6 +45,7 @@ public class UserPermissionVO {
         private String comment;
         private EnvVO.Env env;
         private LifeCycleVO.Expires lifeCycleExpires;
+
         @Override
         public String getEnvName() {
             return this.role;
@@ -61,6 +62,18 @@ public class UserPermissionVO {
                 .build();
         @Builder.Default
         private Map<String, List<UserPermissionBusiness>> businessPermissions = Map.of();
+        private StatBusinessUserPermission statBusinessUserPermission;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class StatBusinessUserPermission implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4797038200645907522L;
+        private Integer validPermissionQuantity;
+        private Integer invalidPermissionQuantity;
+        private Integer nearExpiryPermissionQuantity;
     }
 
     @Data

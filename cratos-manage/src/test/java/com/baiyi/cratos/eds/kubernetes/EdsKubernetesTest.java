@@ -5,6 +5,8 @@ import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
+import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
+import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
@@ -36,25 +38,20 @@ import java.util.concurrent.TimeUnit;
 public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
 
     public static final int CONFIG_ACK_FE = 9;
-
     public static final int CONFIG_ACK_DEV = 10;
-
     public static final int CONFIG_ACK_DAILY = 11;
-
     public static final int CONFIG_ACK_SIT = 12;
-
     public static final int CONFIG_ACK_PRE = 13;
-
     public static final int CONFIG_ACK_PROD = 14;
 
     @Resource
     private KubernetesIngressRepo kubernetesIngressRepo;
-
     @Resource
     private KubernetesDeploymentRepo kubernetesDeploymentRepo;
-
     @Resource
     private KubernetesPodRepo kubernetesPodRepo;
+    @Resource
+    private KubernetesPodExec kubernetesPodExec;
     @Resource
     private KubernetesClientBuilder kubernetesClientBuilder;
 
@@ -63,6 +60,19 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     @Resource
     private KubernetesTest kubernetesTest;
 
+    @Test
+    void execTest() {
+        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        PodExecContext execContext = PodExecContext.builder()
+                .command(List.of("curl", "-I", "https://www.baidu.com"))
+                .maxWaitingTime(10L)
+                .build();
+        kubernetesPodExec.exec(cfg, "daily", "trade-5947666b9f-qssn6", "trade", execContext);
+        System.out.println(execContext.getOut()
+                .toString());
+        System.out.println(execContext.getError()
+                .toString());
+    }
 
     @Test
     void test1() {

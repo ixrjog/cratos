@@ -32,6 +32,10 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
 
     @Resource
     private KubernetesEventRepo kubernetesEventRepo;
+    @Resource
+    private EdsAssetService edsAssetService;
+    @Resource
+    private EdsAssetIndexService edsAssetIndexService;
 
     @Data
     @Builder
@@ -42,13 +46,6 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         @Builder.Default
         private Map<String, Integer> envReplicasMap = Maps.newHashMap();
     }
-
-    @Resource
-    private EdsAssetService edsAssetService;
-
-
-    @Resource
-    private EdsAssetIndexService edsAssetIndexService;
 
     @Test
     void eventTest() {
