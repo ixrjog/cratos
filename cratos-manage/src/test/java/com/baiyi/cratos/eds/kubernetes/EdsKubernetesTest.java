@@ -54,9 +54,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     private KubernetesPodExec kubernetesPodExec;
     @Resource
     private KubernetesClientBuilder kubernetesClientBuilder;
-
     private static final String ALB_INGRESS_KUBERNETES_IO_BACKEND_KEEPALIVE = "alb.ingress.kubernetes.io/backend-keepalive";
-
     @Resource
     private KubernetesTest kubernetesTest;
 
@@ -64,7 +62,9 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     void execTest() {
         EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         PodExecContext execContext = PodExecContext.builder()
-                .command(List.of("curl", "-I", "https://www.baidu.com"))
+               // .command(List.of("curl", "-I", "https://www.baidu.com"))
+                .command("curl -I \n" +
+                        "https://www.baidu.com")
                 .maxWaitingTime(10L)
                 .build();
         kubernetesPodExec.exec(cfg, "daily", "trade-5947666b9f-qssn6", "trade", execContext);

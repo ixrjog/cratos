@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="application_resource_baseline_member">
+        <table tableName="command_exec">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

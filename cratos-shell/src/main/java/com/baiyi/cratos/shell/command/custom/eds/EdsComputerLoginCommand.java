@@ -35,6 +35,7 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -80,11 +81,11 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
-        EdsAsset edsAsset = computerMapper.get(id);
-        if (edsAsset == null) {
-            helper.print("Computer does not exist.", PromptColor.RED);
+        if (CollectionUtils.isEmpty(computerMapper) || computerMapper.containsKey(id)) {
+            helper.print("Computer does not exist, exec computer-list first, then login", PromptColor.RED);
             return;
         }
+        EdsAsset edsAsset = computerMapper.get(id);
         final String sshSessionInstanceId = generateInstanceId(edsAsset);
         if (!ComputerAssetContext.getAccountContext()
                 .containsKey(account)) {

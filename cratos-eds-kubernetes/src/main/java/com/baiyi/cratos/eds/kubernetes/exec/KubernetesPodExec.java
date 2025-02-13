@@ -38,8 +38,8 @@ public class KubernetesPodExec {
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
                 .usingListener(newListener())
-                .exec(execContext.getExec())) {
-            boolean latchTerminationStatus = execLatch.await(5, TimeUnit.SECONDS);
+                .exec(execContext.toExec())) {
+            boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {
                 log.warn("Latch could not terminate within specified time");
             }
@@ -56,7 +56,6 @@ public class KubernetesPodExec {
     }
 
     private static class PodExecListener implements ExecListener {
-
         @Override
         public void onOpen() {
             log.info("Shell was opened");
@@ -73,6 +72,5 @@ public class KubernetesPodExec {
             log.info("Shell Closing");
             execLatch.countDown();
         }
-
     }
 }

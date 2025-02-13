@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.exec.context;
 
+import com.baiyi.cratos.common.util.CommandParser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -24,13 +24,14 @@ public class PodExecContext {
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
     @Builder.Default
     private ByteArrayOutputStream error = new ByteArrayOutputStream();
-    private List<String> command;
+    private String command;
     @Builder.Default
     @Schema(description = "Seconds.")
     private Long maxWaitingTime = 60L;
 
-    public String[] getExec() {
-       return command.toArray(new String[0]);
+    public String[] toExec() {
+        return CommandParser.parseCommand(command)
+                .toArray(new String[0]);
     }
 
 }
