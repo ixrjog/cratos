@@ -341,29 +341,22 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
-        for (String cloudIdentityType : CLOUD_IDENTITY_TYPES) {
-            List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(cloudIdentityType,
-                    queryCloudIdentityDetails.getUsername());
-            if (!CollectionUtils.isEmpty(assets)) {
-                cloudIdentityAssets.addAll(assets);
-            }
-        }
-        if (CollectionUtils.isEmpty(cloudIdentityAssets)) {
+        List<EdsAsset> cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
+                .flatMap(type -> edsAssetService.queryByTypeAndKey(type, queryCloudIdentityDetails.getUsername()).stream())
+                .distinct()
+                .collect(Collectors.toList());
+        if (cloudIdentityAssets.isEmpty()) {
             return EdsAssetVO.CloudIdentityDetails.NO_DATA;
         }
-        cloudIdentityAssets = cloudIdentityAssets.stream()
-                .collect(Collectors.toMap(EdsAsset::getId, p -> p, (p1, p2) -> p1)) // 去重逻辑
-                .values()
-                .stream()
-                .toList();
-        cloudIdentityAssets.forEach(edsAsset -> {
-            EdsInstance edsInstance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
-                    .orElseThrow(() -> new EdsAssetException("The edsInstance does not exist: instanceId={}.",
-                            edsAsset.getInstanceId()));
-            instanceMap.put(edsInstance.getId(), edsInstanceWrapper.wrapToTarget(edsInstance));
-        });
+        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = cloudIdentityAssets.stream()
+                .map(EdsAsset::getInstanceId)
+                .distinct()
+                .collect(Collectors.toMap(
+                        id -> id,
+                        id -> Optional.ofNullable(edsInstanceService.getById(id))
+                                .map(edsInstanceWrapper::wrapToTarget)
+                                .orElseThrow(() -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))
+                ));
         return EdsAssetVO.CloudIdentityDetails.builder()
                 .username(queryCloudIdentityDetails.getUsername())
                 .cloudIdentities(makeCloudIdentities(instanceMap, cloudIdentityAssets))
