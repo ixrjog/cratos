@@ -110,4 +110,19 @@ public class EdsAssetVO {
         private String comment;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class CloudIdentityDetails implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8165953149227317860L;
+        public static final CloudIdentityDetails NO_DATA = CloudIdentityDetails.builder()
+                .build();
+        private String username;
+        @Builder.Default
+        private Map<String, Map<EdsInstanceVO.EdsInstance, List<Asset>>> cloudIdentities = Map.of();
+    }
+
 }

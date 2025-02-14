@@ -124,6 +124,15 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public List<EdsAsset> queryByTypeAndKey(@NonNull String assetType, @NonNull String key) {
+        Example example = new Example(EdsAsset.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("assetType", assetType)
+                .andEqualTo("assetKey", key);
+        return edsAssetMapper.selectByExample(example);
+    }
+
+    @Override
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {

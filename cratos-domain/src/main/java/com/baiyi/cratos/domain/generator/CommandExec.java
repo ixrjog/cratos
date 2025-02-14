@@ -70,6 +70,9 @@ public class CommandExec implements HasIntegerPrimaryKey {
 
     private String command;
 
+    @Column(name = "exec_target_content")
+    private String execTargetContent;
+
     /**
      * 审批说明
      */

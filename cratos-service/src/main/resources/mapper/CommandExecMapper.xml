@@ -17,6 +17,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="apply_remark" jdbcType="LONGVARCHAR" property="applyRemark" />
     <result column="command" jdbcType="LONGVARCHAR" property="command" />
+    <result column="exec_target_content" jdbcType="LONGVARCHAR" property="execTargetContent" />
     <result column="approve_remark" jdbcType="LONGVARCHAR" property="approveRemark" />
     <result column="out_msg" jdbcType="LONGVARCHAR" property="outMsg" />
     <result column="error_msg" jdbcType="LONGVARCHAR" property="errorMsg" />

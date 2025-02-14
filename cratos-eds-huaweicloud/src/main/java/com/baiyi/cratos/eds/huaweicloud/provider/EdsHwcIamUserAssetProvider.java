@@ -55,6 +55,7 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                                   KeystoneListUsersResult entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
+                .assetKeyOf(entity.getName())
                 .validOf(entity.getEnabled())
                 .build();
     }

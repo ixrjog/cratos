@@ -4,8 +4,12 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.EdsConfig;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
@@ -15,6 +19,7 @@ import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -32,6 +37,8 @@ import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
+import com.google.api.client.util.Lists;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -40,7 +47,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -64,6 +73,9 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
     private final EdsScheduleFacade edsScheduleFacade;
     private final ApplicationResourceFacade applicationResourceFacade;
+
+    private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
+            EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name());
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
@@ -90,7 +102,7 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
                 .orElseThrow(() -> new EdsInstanceRegisterException("The edsConfig does not exist."));
         edsInstance.setEdsType(edsConfig.getEdsType());
-        edsInstance.setValid(true);
+        edsInstance.setValid(Global.VALID);
         edsInstanceService.add(edsInstance);
         edsConfig.setInstanceId(edsInstance.getId());
         edsConfigService.updateByPrimaryKey(edsConfig);
@@ -324,6 +336,52 @@ public class EdsFacadeImpl implements EdsFacade {
     public EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
         //TODO
         return null;
+    }
+
+    @Override
+    public EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
+            EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
+        List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();
+        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
+        for (String cloudIdentityType : CLOUD_IDENTITY_TYPES) {
+            List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(cloudIdentityType,
+                    queryCloudIdentityDetails.getUsername());
+            if (!CollectionUtils.isEmpty(assets)) {
+                cloudIdentityAssets.addAll(assets);
+            }
+        }
+        if (CollectionUtils.isEmpty(cloudIdentityAssets)) {
+            return EdsAssetVO.CloudIdentityDetails.NO_DATA;
+        }
+        cloudIdentityAssets = cloudIdentityAssets.stream()
+                .collect(Collectors.toMap(EdsAsset::getId, p -> p, (p1, p2) -> p1)) // 去重逻辑
+                .values()
+                .stream()
+                .toList();
+        cloudIdentityAssets.forEach(edsAsset -> {
+            EdsInstance edsInstance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
+                    .orElseThrow(() -> new EdsAssetException("The edsInstance does not exist: instanceId={}.",
+                            edsAsset.getInstanceId()));
+            instanceMap.put(edsInstance.getId(), edsInstanceWrapper.wrapToTarget(edsInstance));
+        });
+        return EdsAssetVO.CloudIdentityDetails.builder()
+                .username(queryCloudIdentityDetails.getUsername())
+                .cloudIdentities(makeCloudIdentities(instanceMap, cloudIdentityAssets))
+                .build();
+    }
+
+    private Map<String, Map<EdsInstanceVO.EdsInstance, List<EdsAssetVO.Asset>>> makeCloudIdentities(
+            Map<Integer, EdsInstanceVO.EdsInstance> instanceMap, List<EdsAsset> cloudIdentityAssets) {
+        Map<String, Map<EdsInstanceVO.EdsInstance, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
+        cloudIdentityAssets.forEach(cloudIdentityAsset -> {
+            String assetType = cloudIdentityAsset.getAssetType();
+            EdsInstanceVO.EdsInstance edsInstance = instanceMap.get(cloudIdentityAsset.getInstanceId());
+            EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(cloudIdentityAsset);
+            cloudIdentities.computeIfAbsent(assetType, k -> Maps.newHashMap())
+                    .computeIfAbsent(edsInstance, k -> Lists.newArrayList())
+                    .add(assetVO);
+        });
+        return cloudIdentities;
     }
 
     @Override

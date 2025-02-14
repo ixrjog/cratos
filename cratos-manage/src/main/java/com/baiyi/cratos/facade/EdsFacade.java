@@ -57,4 +57,7 @@ public interface EdsFacade extends HasSetValid {
 
     EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey);
 
+    EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
+            EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails);
+
 }

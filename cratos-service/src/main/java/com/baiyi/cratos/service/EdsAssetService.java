@@ -32,6 +32,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     List<EdsAsset> queryByTypeAndName(@NonNull String assetType, @NonNull String name, boolean isPrefix);
 
+    List<EdsAsset> queryByTypeAndKey(@NonNull String assetType, @NonNull String key);
+
     void clear(@NonNull EdsAsset record);
 
     DataTable<EdsAsset> queryUserPermissionPage(EdsAssetQuery.UserPermissionPageQueryParam param);

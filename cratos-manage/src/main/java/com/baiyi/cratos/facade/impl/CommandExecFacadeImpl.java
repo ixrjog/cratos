@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
 import com.baiyi.cratos.facade.CommandExecFacade;
@@ -21,7 +22,9 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     private final CommandExecService commandExecService;
 
     @Override
+    @SetSessionUserToParam(desc = "Set ApplyUser to CommandExecParam")
     public void addCommandExec(CommandExecParam.AddCommandExec addCommandExec) {
         CommandExec commandExec = addCommandExec.toTarget();
+        commandExecService.add(commandExec);
     }
 }

@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -165,6 +166,16 @@ public class EdsInstanceParam {
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
         private String assetType;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class QueryCloudIdentityDetails {
+        @NotBlank
+        private String username;
     }
 
 }

@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,6 @@ public class EdsFacadeTest extends BaseUnit {
         edsFacade.importEdsInstanceAsset(importInstanceAsset);
     }
 
-
     @Test
     void awsVpnTest() {
         EdsInstanceParam.ImportInstanceAsset importInstanceAsset = EdsInstanceParam.ImportInstanceAsset.builder()
@@ -53,6 +53,15 @@ public class EdsFacadeTest extends BaseUnit {
                 .assetType(EdsAssetTypeEnum.AWS_STS_VPN.name())
                 .build();
         edsFacade.importEdsInstanceAsset(importInstanceAsset);
+    }
+
+    @Test
+    void test() {
+        EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsInstanceParam.QueryCloudIdentityDetails.builder()
+                .username("baiyi")
+                .build();
+        EdsAssetVO.CloudIdentityDetails details = edsFacade.queryCloudIdentityDetails(queryCloudIdentityDetails);
+        System.out.println(details);
     }
 
 }

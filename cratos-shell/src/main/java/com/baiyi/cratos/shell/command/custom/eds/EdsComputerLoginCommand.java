@@ -81,7 +81,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
-        if (CollectionUtils.isEmpty(computerMapper) || computerMapper.containsKey(id)) {
+        if (CollectionUtils.isEmpty(computerMapper) || !computerMapper.containsKey(id)) {
             helper.print("Computer does not exist, exec computer-list first, then login", PromptColor.RED);
             return;
         }

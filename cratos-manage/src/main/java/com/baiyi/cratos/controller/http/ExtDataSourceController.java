@@ -168,4 +168,11 @@ public class ExtDataSourceController {
         return HttpResult.of(edsFacade.getToBusinessTarget(assetId));
     }
 
+    @Operation(summary = "Query eds asset cloud identity by username")
+    @PostMapping(value = "/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsAssetVO.CloudIdentityDetails> queryCloudIdentityDetails(
+            @RequestBody @Valid EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
+        return HttpResult.of(edsFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
+    }
+
 }
