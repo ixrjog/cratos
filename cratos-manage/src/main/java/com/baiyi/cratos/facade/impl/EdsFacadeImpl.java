@@ -187,42 +187,29 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                 .businessId(dbEdsConfig.getId())
                 .build();
-
         IdentityUtil.tryIdentity(updateEdsConfig.getCredentialId())
-                .withValid(
-                        // UpdateEdsConfig credentialId valid
-                        () -> {
-                            IdentityUtil.tryIdentity(dbEdsConfig.getCredentialId())
-                                    .withValid(
-                                            // EdsConfig credentialId valid
-                                            () -> {
-                                                // 吊销凭据
-                                                if (!updateEdsConfig.getCredentialId()
-                                                        .equals(dbEdsConfig.getCredentialId())) {
-                                                    businessCredentialFacade.revokeBusinessCredential(
-                                                            dbEdsConfig.getCredentialId(), business);
-                                                    businessCredentialFacade.issueBusinessCredential(
-                                                            updateEdsConfig.getCredentialId(), business);
-                                                }
-                                            },
-                                            // EdsConfig credentialId invalid
-                                            () -> {
-                                                // 颁发凭据
-                                                businessCredentialFacade.issueBusinessCredential(
-                                                        updateEdsConfig.getCredentialId(), business);
-                                            });
-                        }, () -> {
-                            // UpdateEdsConfig credentialId invalid
-                            if (IdentityUtil.hasIdentity(dbEdsConfig.getCredentialId())) {
-                                // 吊销凭据
-                                businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(),
-                                        business);
-                            }
-                        });
+                .withValid(() -> handleValidCredentialId(updateEdsConfig, dbEdsConfig, business),
+                        () -> handleInvalidCredentialId(dbEdsConfig, business));
         EdsConfig edsConfig = updateEdsConfig.toTarget();
         edsConfig.setInstanceId(dbEdsConfig.getInstanceId());
         edsConfigService.updateByPrimaryKey(edsConfig);
         EdsInstanceProviderFactory.setConfig(edsConfig.getEdsType(), edsConfig);
+    }
+
+    private void handleValidCredentialId(EdsConfigParam.UpdateEdsConfig updateEdsConfig, EdsConfig dbEdsConfig, SimpleBusiness business) {
+        IdentityUtil.tryIdentity(dbEdsConfig.getCredentialId())
+                .withValid(() -> {
+                    if (!updateEdsConfig.getCredentialId().equals(dbEdsConfig.getCredentialId())) {
+                        businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
+                        businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
+                    }
+                }, () -> businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business));
+    }
+
+    private void handleInvalidCredentialId(EdsConfig dbEdsConfig, SimpleBusiness business) {
+        if (IdentityUtil.hasIdentity(dbEdsConfig.getCredentialId())) {
+            businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
+        }
     }
 
     @Override
