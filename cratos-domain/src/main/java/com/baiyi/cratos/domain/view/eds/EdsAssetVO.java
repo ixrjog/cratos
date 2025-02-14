@@ -122,9 +122,10 @@ public class EdsAssetVO {
                 .build();
         private String username;
         @Builder.Default
-        private Map<String, Map<EdsInstanceVO.EdsInstance, List<Asset>>> cloudIdentities = Map.of();
+        private Map<String, Map<Integer, List<Asset>>> cloudIdentities = Map.of();
+        @Builder.Default
+        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
     }
-
 
     @Data
     @Builder
@@ -138,7 +139,9 @@ public class EdsAssetVO {
         private static final long serialVersionUID = 6429767864454283221L;
         private String username;
         @Builder.Default
-        private Map<EdsInstanceVO.EdsInstance, Asset> ldapIdentities = Map.of();
+        private Map<Integer, Asset> ldapIdentities = Map.of();
+        @Builder.Default
+        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
     }
 
 }

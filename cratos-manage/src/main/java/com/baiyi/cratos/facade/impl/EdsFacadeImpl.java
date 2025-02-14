@@ -196,10 +196,12 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsInstanceProviderFactory.setConfig(edsConfig.getEdsType(), edsConfig);
     }
 
-    private void handleValidCredentialId(EdsConfigParam.UpdateEdsConfig updateEdsConfig, EdsConfig dbEdsConfig, SimpleBusiness business) {
+    private void handleValidCredentialId(EdsConfigParam.UpdateEdsConfig updateEdsConfig, EdsConfig dbEdsConfig,
+                                         SimpleBusiness business) {
         IdentityUtil.tryIdentity(dbEdsConfig.getCredentialId())
                 .withValid(() -> {
-                    if (!updateEdsConfig.getCredentialId().equals(dbEdsConfig.getCredentialId())) {
+                    if (!updateEdsConfig.getCredentialId()
+                            .equals(dbEdsConfig.getCredentialId())) {
                         businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
                         businessCredentialFacade.issueBusinessCredential(updateEdsConfig.getCredentialId(), business);
                     }
@@ -329,7 +331,8 @@ public class EdsFacadeImpl implements EdsFacade {
     public EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
         List<EdsAsset> cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
-                .flatMap(type -> edsAssetService.queryByTypeAndKey(type, queryCloudIdentityDetails.getUsername()).stream())
+                .flatMap(type -> edsAssetService.queryByTypeAndKey(type, queryCloudIdentityDetails.getUsername())
+                        .stream())
                 .distinct()
                 .collect(Collectors.toList());
         if (cloudIdentityAssets.isEmpty()) {
@@ -338,27 +341,24 @@ public class EdsFacadeImpl implements EdsFacade {
         Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = cloudIdentityAssets.stream()
                 .map(EdsAsset::getInstanceId)
                 .distinct()
-                .collect(Collectors.toMap(
-                        id -> id,
-                        id -> Optional.ofNullable(edsInstanceService.getById(id))
-                                .map(edsInstanceWrapper::wrapToTarget)
-                                .orElseThrow(() -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))
-                ));
+                .collect(Collectors.toMap(id -> id, id -> Optional.ofNullable(edsInstanceService.getById(id))
+                        .map(edsInstanceWrapper::wrapToTarget)
+                        .orElseThrow(
+                                () -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))));
         return EdsAssetVO.CloudIdentityDetails.builder()
                 .username(queryCloudIdentityDetails.getUsername())
-                .cloudIdentities(makeCloudIdentities(instanceMap, cloudIdentityAssets))
+                .cloudIdentities(makeCloudIdentities(cloudIdentityAssets))
+                .instanceMap(instanceMap)
                 .build();
     }
 
-    private Map<String, Map<EdsInstanceVO.EdsInstance, List<EdsAssetVO.Asset>>> makeCloudIdentities(
-            Map<Integer, EdsInstanceVO.EdsInstance> instanceMap, List<EdsAsset> cloudIdentityAssets) {
-        Map<String, Map<EdsInstanceVO.EdsInstance, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
+    private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> makeCloudIdentities(List<EdsAsset> cloudIdentityAssets) {
+        Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
         cloudIdentityAssets.forEach(cloudIdentityAsset -> {
             String assetType = cloudIdentityAsset.getAssetType();
-            EdsInstanceVO.EdsInstance edsInstance = instanceMap.get(cloudIdentityAsset.getInstanceId());
             EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(cloudIdentityAsset);
             cloudIdentities.computeIfAbsent(assetType, k -> Maps.newHashMap())
-                    .computeIfAbsent(edsInstance, k -> Lists.newArrayList())
+                    .computeIfAbsent(cloudIdentityAsset.getInstanceId(), k -> Lists.newArrayList())
                     .add(assetVO);
         });
         return cloudIdentities;
@@ -372,13 +372,17 @@ public class EdsFacadeImpl implements EdsFacade {
         if (CollectionUtils.isEmpty(assets)) {
             return EdsAssetVO.LdapIdentityDetails.NO_DATA;
         }
-        Map<EdsInstanceVO.EdsInstance, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
-        assets.forEach(asset -> ldapIdentities.put(
-                edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())),
-                edsAssetWrapper.wrapToTarget(asset)));
+        Map<Integer, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
+        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
+        assets.forEach(asset -> {
+            ldapIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
+            instanceMap.put(asset.getInstanceId(),
+                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
+        });
         return EdsAssetVO.LdapIdentityDetails.builder()
                 .username(queryLdapIdentityDetails.getUsername())
                 .ldapIdentities(ldapIdentities)
+                .instanceMap(instanceMap)
                 .build();
     }
 
