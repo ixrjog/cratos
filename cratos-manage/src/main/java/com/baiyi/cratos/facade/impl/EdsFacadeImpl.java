@@ -385,6 +385,24 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    public EdsAssetVO.LdapIdentityDetails queryLdapIdentityDetails(
+            EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
+        List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(),
+                queryLdapIdentityDetails.getUsername());
+        if (CollectionUtils.isEmpty(assets)) {
+            return EdsAssetVO.LdapIdentityDetails.NO_DATA;
+        }
+        Map<EdsInstanceVO.EdsInstance, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
+        assets.forEach(asset -> ldapIdentities.put(
+                edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())),
+                edsAssetWrapper.wrapToTarget(asset)));
+        return EdsAssetVO.LdapIdentityDetails.builder()
+                .username(queryLdapIdentityDetails.getUsername())
+                .ldapIdentities(ldapIdentities)
+                .build();
+    }
+
+    @Override
     public BaseValidService<?, ?> getValidService() {
         return edsConfigService;
     }

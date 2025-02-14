@@ -125,4 +125,20 @@ public class EdsAssetVO {
         private Map<String, Map<EdsInstanceVO.EdsInstance, List<Asset>>> cloudIdentities = Map.of();
     }
 
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class LdapIdentityDetails implements Serializable {
+        public static final LdapIdentityDetails NO_DATA = LdapIdentityDetails.builder()
+                .build();
+        @Serial
+        private static final long serialVersionUID = 6429767864454283221L;
+        private String username;
+        @Builder.Default
+        private Map<EdsInstanceVO.EdsInstance, Asset> ldapIdentities = Map.of();
+    }
+
 }

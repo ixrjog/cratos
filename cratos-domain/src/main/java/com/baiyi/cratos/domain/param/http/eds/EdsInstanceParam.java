@@ -178,4 +178,14 @@ public class EdsInstanceParam {
         private String username;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class QueryLdapIdentityDetails {
+        @NotBlank
+        private String username;
+    }
+
 }

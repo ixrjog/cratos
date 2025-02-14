@@ -56,11 +56,20 @@ public class EdsFacadeTest extends BaseUnit {
     }
 
     @Test
-    void test() {
+    void queryCloudIdentityDetailsTest() {
         EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsInstanceParam.QueryCloudIdentityDetails.builder()
                 .username("baiyi")
                 .build();
         EdsAssetVO.CloudIdentityDetails details = edsFacade.queryCloudIdentityDetails(queryCloudIdentityDetails);
+        System.out.println(details);
+    }
+
+    @Test
+    void test() {
+        EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsInstanceParam.QueryLdapIdentityDetails.builder()
+                .username("baiyi")
+                .build();
+        EdsAssetVO.LdapIdentityDetails details = edsFacade.queryLdapIdentityDetails(queryLdapIdentityDetails);
         System.out.println(details);
     }
 

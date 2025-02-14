@@ -60,4 +60,7 @@ public interface EdsFacade extends HasSetValid {
     EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails);
 
+    EdsAssetVO.LdapIdentityDetails queryLdapIdentityDetails(
+            EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails);
+
 }
