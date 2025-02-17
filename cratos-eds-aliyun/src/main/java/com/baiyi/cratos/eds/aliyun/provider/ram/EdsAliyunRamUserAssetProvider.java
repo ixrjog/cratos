@@ -23,13 +23,14 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
 
@@ -38,6 +39,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Date  2024/5/9 下午4:10
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
 public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
@@ -95,13 +97,13 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
             List<ListPoliciesForUserResponse.Policy> policies = aliyunRamPolicyRepo.listPoliciesForUser(
                     instance.getEdsConfigModel(), entity.getUserName());
             if (!CollectionUtils.isEmpty(policies)) {
-                final String policyName = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
-                        .join(policies.stream()
-                                .map(ListPoliciesForUserResponse.Policy::getPolicyName)
-                                .toList());
+                String policyName = policies.stream()
+                        .map(ListPoliciesForUserResponse.Policy::getPolicyName)
+                        .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
                 indices.add(toEdsAssetIndex(edsAsset, ALIYUN_RAM_POLICIES, policyName));
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.error("Failed to list policies for user: {}", entity.getUserName(), e);
         }
         return indices;
     }

@@ -58,7 +58,7 @@ public interface EdsAssetIndexConstants {
     String VPC_CIDR_BLOCK = "vpc.cidr-block";
     String VIRTUAL_SWITCH_CIDR_BLOCK = "virtual-switch.cidr-block";
     String SUBNET_CIDR_BLOCK = "subnet.cidr-block";
-    String SUBNET_AVAILABLE_IP_ADDRESS_COUNT ="subnet.availableIpAddressCount";
+    String SUBNET_AVAILABLE_IP_ADDRESS_COUNT = "subnet.availableIpAddressCount";
     String VPC_CIDRS = "vpc.cidrs";
     // EIP
     String EIP = "eip";
@@ -66,5 +66,12 @@ public interface EdsAssetIndexConstants {
     String REPO_SSH_URL = "repo.sshUrl";
     String REPO_HTTP_URL = "repo.httpUrl";
     String REPO_WEB_URL = "repo.webUrl";
+
+    //LDAP
+    String LDAP_USER_GROUPS = "ldap.user.groups";
+    String LDAP_USER_DN = "ldap.user.dn";
+
+    String LDAP_GROUP_DN = "ldap.group.dn";
+    String LDAP_GROUP_MEMBERS = "ldap.group.members";
 
 }
