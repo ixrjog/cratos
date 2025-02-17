@@ -38,6 +38,7 @@ import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.google.api.client.util.Lists;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +49,11 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_USER_GROUPS;
 
 /**
  * @Author baiyi
@@ -374,14 +378,21 @@ public class EdsFacadeImpl implements EdsFacade {
         }
         Map<Integer, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
         Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
+        Map<Integer, List<String>> ldapGroupMap = Maps.newHashMap();
         assets.forEach(asset -> {
             ldapIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
             instanceMap.put(asset.getInstanceId(),
                     edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
+            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), LDAP_USER_GROUPS);
+            if (Objects.nonNull(index)) {
+                ldapGroupMap.put(asset.getId(), Lists.newArrayList(Splitter.on(";")
+                        .split(index.getValue())));
+            }
         });
         return EdsAssetVO.LdapIdentityDetails.builder()
                 .username(queryLdapIdentityDetails.getUsername())
                 .ldapIdentities(ldapIdentities)
+                .ldapGroupMap(ldapGroupMap)
                 .instanceMap(instanceMap)
                 .build();
     }

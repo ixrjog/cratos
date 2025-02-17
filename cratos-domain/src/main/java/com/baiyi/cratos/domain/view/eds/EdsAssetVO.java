@@ -140,8 +140,16 @@ public class EdsAssetVO {
         private String username;
         @Builder.Default
         private Map<Integer, Asset> ldapIdentities = Map.of();
+        /**
+         * Map<InstanceId, EdsInstanceVO.EdsInstance>
+         */
         @Builder.Default
         private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
+        /**
+         * Map<AssetId, List<GroupName>>
+         */
+        @Builder.Default
+        private Map<Integer, List<String>> ldapGroupMap = Map.of();
     }
 
 }
