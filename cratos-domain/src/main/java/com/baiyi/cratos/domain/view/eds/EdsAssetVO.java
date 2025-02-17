@@ -125,6 +125,8 @@ public class EdsAssetVO {
         private Map<String, Map<Integer, List<Asset>>> cloudIdentities = Map.of();
         @Builder.Default
         private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
+        @Builder.Default
+        private Map<Integer, List<String>> policyMap = Map.of();
     }
 
     @Data

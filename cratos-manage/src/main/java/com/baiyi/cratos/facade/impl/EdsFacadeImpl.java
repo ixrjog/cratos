@@ -53,6 +53,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_USER_GROUPS;
 
 /**
@@ -349,11 +350,32 @@ public class EdsFacadeImpl implements EdsFacade {
                         .map(edsInstanceWrapper::wrapToTarget)
                         .orElseThrow(
                                 () -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))));
+        Map<Integer, List<String>> policyMap = Maps.newHashMap();
+        cloudIdentityAssets.forEach(asset -> {
+            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), toPolicyIndexName(asset) );
+            if (Objects.nonNull(index)) {
+                policyMap.put(asset.getId(), Lists.newArrayList(Splitter.on(",")
+                        .split(index.getValue())));
+            }
+        });
         return EdsAssetVO.CloudIdentityDetails.builder()
                 .username(queryCloudIdentityDetails.getUsername())
                 .cloudIdentities(makeCloudIdentities(cloudIdentityAssets))
                 .instanceMap(instanceMap)
+                .policyMap(policyMap)
                 .build();
+    }
+
+    /**
+     * TODO 按类型
+     * @param asset
+     * @return
+     */
+    private String toPolicyIndexName(EdsAsset asset) {
+        if(asset.getAssetType().equals(EdsAssetTypeEnum.ALIYUN_RAM_USER.name())){
+            return ALIYUN_RAM_POLICIES;
+        }
+        return "Unsupported types";
     }
 
     private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> makeCloudIdentities(List<EdsAsset> cloudIdentityAssets) {
