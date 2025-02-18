@@ -30,7 +30,6 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.TRAFFIC_LAYER_RECOR
 public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements IBusinessWrapper<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
 
     private final TrafficLayerDomainService domainService;
-
     private final TrafficLayerDomainRecordService recordService;
 
     @Override

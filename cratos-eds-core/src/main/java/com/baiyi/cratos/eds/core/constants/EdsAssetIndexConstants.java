@@ -25,9 +25,12 @@ public interface EdsAssetIndexConstants {
 
     String ALIYUN_ALB_INSTANCE_URL = "aliyun.alb.instance.url";
 
+    String HUAWEICLOUD_IAM_POLICIES = "iam.policies";
+
     String AWS_SNS_SUBSCRIPTION_ENDPOINT = "endpoint";
     String AWS_SNS_SUBSCRIPTION_TOPIC_ARN = "topic.arn";
     String AWS_SNS_SUBSCRIPTION_PROTOCOL = "protocol";
+    String AWS_IAM_POLICIES = "iam.policies";
 
     String DINGTALK_DEPT_PARENT_ID = "dingtalk.department.parentId";
     String DINGTALK_USER_USERNAME = "dingtalk.username";

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +51,10 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
 
     @Override
     public List<String> queryBusinessTagValue(BusinessTagParam.QueryByTag queryByValue) {
-        return businessTagService.queryByValue(queryByValue);
+        return businessTagService.queryByValue(queryByValue)
+                .stream()
+                .filter(StringUtils::hasText)
+                .collect(Collectors.toList());
     }
 
     @Override

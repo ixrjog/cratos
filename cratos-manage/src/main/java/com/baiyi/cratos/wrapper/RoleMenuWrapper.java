@@ -27,9 +27,7 @@ import java.util.stream.Collectors;
 public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Menu> implements IBaseWrapper<RoleMenuVO.Menu> {
 
     private final MenuTitleWrapper menuTitleWrapper;
-
     private final MenuService menuService;
-
     private final RbacRoleMenuService roleMenuService;
 
     @Override

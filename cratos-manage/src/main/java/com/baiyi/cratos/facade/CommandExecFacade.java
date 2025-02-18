@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
+import com.baiyi.cratos.domain.view.command.CommandExecVO;
 
 /**
  * &#064;Author  baiyi
@@ -9,6 +11,10 @@ import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
  */
 public interface CommandExecFacade {
 
+    DataTable<CommandExecVO.CommandExec> queryCommandExecPage(CommandExecParam.CommandExecPageQuery pageQuery);
+
     void addCommandExec(CommandExecParam.AddCommandExec addCommandExec);
+
+    void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec);
 
 }

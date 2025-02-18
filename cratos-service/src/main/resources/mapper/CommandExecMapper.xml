@@ -18,8 +18,32 @@
     <result column="apply_remark" jdbcType="LONGVARCHAR" property="applyRemark" />
     <result column="command" jdbcType="LONGVARCHAR" property="command" />
     <result column="exec_target_content" jdbcType="LONGVARCHAR" property="execTargetContent" />
-    <result column="approve_remark" jdbcType="LONGVARCHAR" property="approveRemark" />
     <result column="out_msg" jdbcType="LONGVARCHAR" property="outMsg" />
     <result column="error_msg" jdbcType="LONGVARCHAR" property="errorMsg" />
   </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.http.command.CommandExecParam$CommandExecPageQuery"
+          resultMap="BaseResultMap">
+      select * from command_exec
+      <where>
+          <if test="namespace != null and namespace != ''">
+              namespace = #{namespace}
+          </if>
+          <if test="completed != null">
+              and completed = #{completed}
+          </if>
+          <if test="applyUsername != null and applyUsername != ''">
+              and username = #{applyUsername}
+          </if>
+          <if test="approvedBy != null and approvedBy != ''">
+              and approved_by = #{approvedBy}
+          </if>
+          <if test="success != null">
+              and success = #{success}
+          </if>
+      </where>
+      order by id desc;
+  </select>
+
 </mapper>

@@ -47,6 +47,7 @@ public enum EdsAssetTypeEnum {
     AWS_ECR_REPOSITORY("ECR Repository", 0),
     AWS_VPC("VPC", 43),
     AWS_SUBNET("Subnet", 44),
+    AWS_IAM_USER("IAM User", 45),
 
     HUAWEICLOUD_ECS("ECS", 0),
     HUAWEICLOUD_IAM_USER("IAM User", 0),
@@ -88,7 +89,7 @@ public enum EdsAssetTypeEnum {
     GOOGLECLOUD_CERTIFICATE("Certificate", 0),
     GOOGLECLOUD_MEMBER("Member", 0),
 
-    DEF("Default",0);
+    DEF("Default", 0);
 
     private final String displayName;
     private final Integer seq;

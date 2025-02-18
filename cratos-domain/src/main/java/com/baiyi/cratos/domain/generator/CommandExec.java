@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +14,9 @@ import java.util.Date;
  */
 @Data
 @Table(name = "command_exec")
-public class CommandExec implements HasIntegerPrimaryKey {
+public class CommandExec implements HasIntegerPrimaryKey, Serializable {
+    @Serial
+    private static final long serialVersionUID = 5177272027658169256L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -51,15 +55,17 @@ public class CommandExec implements HasIntegerPrimaryKey {
     @Column(name = "completed_at")
     private Date completedAt;
 
+    private String namespace;
+
     /**
      * 成功
      */
     private Boolean success;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 
     /**
@@ -72,12 +78,6 @@ public class CommandExec implements HasIntegerPrimaryKey {
 
     @Column(name = "exec_target_content")
     private String execTargetContent;
-
-    /**
-     * 审批说明
-     */
-    @Column(name = "approve_remark")
-    private String approveRemark;
 
     /**
      * 标准输出

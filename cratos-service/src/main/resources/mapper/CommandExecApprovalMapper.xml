@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.CommandExecApprovalMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.CommandExecApproval">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="command_exec_id" jdbcType="INTEGER" property="commandExecId" />
+    <result column="approval_type" jdbcType="VARCHAR" property="approvalType" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="approval_at" jdbcType="TIMESTAMP" property="approvalAt" />
+    <result column="approval_completed" jdbcType="BIT" property="approvalCompleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="approve_remark" jdbcType="LONGVARCHAR" property="approveRemark" />
+  </resultMap>
+</mapper>

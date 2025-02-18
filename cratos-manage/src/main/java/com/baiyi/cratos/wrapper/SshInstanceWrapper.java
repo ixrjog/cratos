@@ -30,7 +30,6 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.SSH_COMMAND;
 public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Instance, SshSessionInstance> implements IBusinessWrapper<SshInstanceVO.HasSessionInstances, SshInstanceVO.Instance> {
 
     private final SshSessionInstanceService instanceService;
-
     private final SshSessionInstanceCommandService commandService;
 
     @Override

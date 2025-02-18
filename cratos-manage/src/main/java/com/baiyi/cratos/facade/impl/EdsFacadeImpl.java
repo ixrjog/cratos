@@ -47,14 +47,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_USER_GROUPS;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * @Author baiyi
@@ -80,7 +76,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final ApplicationResourceFacade applicationResourceFacade;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
-            EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name());
+            EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
@@ -335,10 +331,15 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        List<EdsAsset> cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
-                .flatMap(type -> edsAssetService.queryByTypeAndKey(type, queryCloudIdentityDetails.getUsername())
-                        .stream())
-                .distinct()
+        List<EdsAsset> cloudIdentityAssets;
+        Set<EdsAsset> uniqueValues = new HashSet<>();
+        cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
+                .map(type -> EdsAssetTypeEnum.AWS_IAM_USER.name()
+                        .equals(type) ? edsAssetService.queryByTypeAndName(type,
+                        queryCloudIdentityDetails.getUsername(), false) : edsAssetService.queryByTypeAndKey(type,
+                        queryCloudIdentityDetails.getUsername()))
+                .flatMap(Collection::stream)
+                .filter(uniqueValues::add)
                 .collect(Collectors.toList());
         if (cloudIdentityAssets.isEmpty()) {
             return EdsAssetVO.CloudIdentityDetails.NO_DATA;
@@ -352,7 +353,7 @@ public class EdsFacadeImpl implements EdsFacade {
                                 () -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))));
         Map<Integer, List<String>> policyMap = Maps.newHashMap();
         cloudIdentityAssets.forEach(asset -> {
-            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), toPolicyIndexName(asset) );
+            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), toPolicyIndexName(asset));
             if (Objects.nonNull(index)) {
                 policyMap.put(asset.getId(), Lists.newArrayList(Splitter.on(",")
                         .split(index.getValue())));
@@ -368,12 +369,22 @@ public class EdsFacadeImpl implements EdsFacade {
 
     /**
      * TODO 按类型
+     *
      * @param asset
      * @return
      */
     private String toPolicyIndexName(EdsAsset asset) {
-        if(asset.getAssetType().equals(EdsAssetTypeEnum.ALIYUN_RAM_USER.name())){
+        if (asset.getAssetType()
+                .equals(EdsAssetTypeEnum.ALIYUN_RAM_USER.name())) {
             return ALIYUN_RAM_POLICIES;
+        }
+        if (asset.getAssetType()
+                .equals(EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name())) {
+            return HUAWEICLOUD_IAM_POLICIES;
+        }
+        if (asset.getAssetType()
+                .equals(EdsAssetTypeEnum.AWS_IAM_USER.name())) {
+            return AWS_IAM_POLICIES;
         }
         return "Unsupported types";
     }

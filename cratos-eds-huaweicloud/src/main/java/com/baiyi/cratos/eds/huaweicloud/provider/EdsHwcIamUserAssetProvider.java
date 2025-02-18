@@ -60,4 +60,6 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                 .build();
     }
 
+    // TODO role-assignments https://support.huaweicloud.com/intl/zh-cn/api-iam/iam_10_0014.html
+
 }

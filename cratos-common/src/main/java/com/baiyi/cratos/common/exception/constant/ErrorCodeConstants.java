@@ -46,4 +46,6 @@ public interface ErrorCodeConstants {
     int APPLICATION_RESOURCE_BASELINE_ERROR = 54000;
 
     int USER_PERMISSION_BUSINESS_ERROR = 55000;
+
+    int COMMAND_EXEC_ERROR = 56000;
 }
