@@ -34,10 +34,13 @@ public class CommandExecVO {
         private Boolean success;
         private String applyRemark;
         private String command;
+        @Schema(description = "命令掩盖(私密)")
+        private String commandMask;
         private String execTargetContent;
         private String outMsg;
         private String errorMsg;
         private EnvVO.Env env;
+
         @Override
         public String getEnvName() {
             return this.namespace;

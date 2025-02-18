@@ -3,6 +3,7 @@ package com.baiyi.cratos.common.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,16 @@ public class SessionUtils {
                     username, null);
             SecurityContextHolder.getContext()
                     .setAuthentication(usernamePasswordAuthenticationToken);
+        }
+    }
+
+    public static String getUsername() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+            return authentication.getName();
+        } catch (Exception e) {
+            return null;
         }
     }
 
