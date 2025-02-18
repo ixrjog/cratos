@@ -25,22 +25,37 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.CommandExec, CommandExec> implements IBaseWrapper<CommandExecVO.CommandExec> {
 
+    private static final String MASK = "*********";
+
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.ENV})
     public void wrap(CommandExecVO.CommandExec vo) {
-        if (isMask(vo)) {
+        boolean isMask = isMask(vo);
+        vo.setCommandMask(getCommandMask(vo, isMask));
+        if (isMask) {
+            if (StringUtils.hasText(vo.getOutMsg())) {
+                vo.setOutMsg(MASK);
+            }
+            if (StringUtils.hasText(vo.getErrorMsg())) {
+                vo.setErrorMsg(MASK);
+            }
+        }
+    }
+
+    private String getCommandMask(CommandExecVO.CommandExec vo, boolean isMask) {
+        if (isMask) {
             StringBuilder maskedCommand = new StringBuilder();
             List<String> commands = CommandParser.parseCommand(vo.getCommand());
             for (int i = 0; i < commands.size(); i++) {
                 if (i > 0) {
-                    maskedCommand.append("\n *********");
+                    maskedCommand.append("\n " + MASK);
                 } else {
                     maskedCommand.append(commands.get(i));
                 }
             }
-            vo.setCommandMask(maskedCommand.toString());
+            return maskedCommand.toString();
         } else {
-            vo.setCommandMask(vo.getCommand());
+            return vo.getCommand();
         }
     }
 
