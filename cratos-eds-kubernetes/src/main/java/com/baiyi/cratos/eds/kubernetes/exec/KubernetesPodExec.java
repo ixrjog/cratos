@@ -31,6 +31,28 @@ public class KubernetesPodExec {
     public static final String DEFAULT_CONTAINER = null;
 
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+                     PodExecContext execContext) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
+                .inNamespace(namespace)
+                .withName(podName)
+                // 如果Pod中只有一个容器，不需要指定
+                .writingOutput(execContext.getOut())
+                .writingError(execContext.getError())
+                .usingListener(newListener())
+                .exec(execContext.toExec())) {
+            boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
+            if (!latchTerminationStatus) {
+                log.warn("Latch could not terminate within specified time");
+            }
+            log.info("Exec Output: {} ", execContext.getOut());
+        } catch (InterruptedException ie) {
+            Thread.currentThread()
+                    .interrupt();
+            log.warn("Interrupted while waiting for the exec: {}", ie.getMessage());
+        }
+    }
+
+    public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
                      String containerName, PodExecContext execContext) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)

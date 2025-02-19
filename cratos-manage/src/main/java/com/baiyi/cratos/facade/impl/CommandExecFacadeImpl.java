@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec.DEFAULT_CONTAINER;
-
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/13 15:48
@@ -238,7 +236,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 }
                 kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
                         .getMetadata()
-                        .getName(), DEFAULT_CONTAINER, execContext);
+                        .getName(), execContext);
                 commandExec.setOutMsg(execContext.getOutMsg());
                 commandExec.setErrorMsg(execContext.getErrorMsg());
                 commandExec.setSuccess(execContext.getSuccess());
