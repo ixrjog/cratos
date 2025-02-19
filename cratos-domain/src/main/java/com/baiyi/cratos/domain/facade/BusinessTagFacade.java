@@ -31,4 +31,6 @@ public interface BusinessTagFacade {
 
     void copyBusinessTag(BusinessTagParam.CopyBusinessTag copyBusinessTag);
 
+    List<Integer> queryByBusinessTypeAndTagKey(String businessType, String tagKey);
+
 }

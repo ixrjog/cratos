@@ -49,4 +49,11 @@ public class CommandController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Do command exec")
+    @PostMapping(value = "/do", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> doCommandExec(@RequestBody @Valid CommandExecParam.DoCommandExec doCommandExec) {
+        commandExecFacade.doCommandExec(doCommandExec);
+        return HttpResult.SUCCESS;
+    }
+
 }

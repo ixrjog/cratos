@@ -17,4 +17,6 @@ public interface CommandExecFacade {
 
     void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec);
 
+    void doCommandExec(CommandExecParam.DoCommandExec doCommandExec);
+
 }

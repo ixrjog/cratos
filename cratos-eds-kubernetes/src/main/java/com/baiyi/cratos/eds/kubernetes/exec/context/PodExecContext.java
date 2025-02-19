@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -32,6 +33,18 @@ public class PodExecContext {
     public String[] toExec() {
         return CommandParser.parseCommand(command)
                 .toArray(new String[0]);
+    }
+
+    public String getOutMsg() {
+        return this.out.toString();
+    }
+
+    public String getErrorMsg() {
+        return this.error.toString();
+    }
+
+    public boolean getSuccess() {
+        return !StringUtils.hasText(getErrorMsg());
     }
 
 }

@@ -33,6 +33,7 @@ public class CommandExecModel {
                 .build();
         private EdsInstance instance;
         private Boolean useDefaultExecContainer;
+        private Long maxWaitingTime;
     }
 
     @Data

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -154,6 +155,18 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
     @Override
     public void deleteById(int id) {
         businessTagService.deleteById(id);
+    }
+
+    @Override
+    public List<Integer> queryByBusinessTypeAndTagKey(String businessType, String tagKey) {
+        Tag tag = tagService.getByTagKey(tagKey);
+        if (tag == null) {
+            return List.of();
+        }
+        return businessTagService.queryByBusinessTypeAndTagId(businessType, tag.getId())
+                .stream()
+                .map(BusinessTag::getBusinessId)
+                .toList();
     }
 
 }

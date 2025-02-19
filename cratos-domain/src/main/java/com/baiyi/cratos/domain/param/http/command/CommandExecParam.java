@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -70,6 +71,8 @@ public class CommandExecParam {
         private Integer instanceId;
         private String namespace;
         private final boolean useDefaultExecContainer = true;
+        @Max(60L)
+        private Long maxWaitingTime;
     }
 
     @Data
@@ -84,6 +87,23 @@ public class CommandExecParam {
         @NotBlank
         @Schema(description = "with approvalStatus")
         private String approvalAction;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
+    }
+
+    @Data
+    @Schema
+    public static class DoCommandExec implements HasSessionUser {
+        @NotNull
+        private Integer commandExecId;
+        @Null
+        private String username;
+        @Max(60)
+        @NotNull
+        private Long maxWaitingTime;
 
         @Override
         public void setSessionUser(String username) {

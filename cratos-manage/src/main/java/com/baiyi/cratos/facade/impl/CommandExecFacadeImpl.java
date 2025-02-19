@@ -1,35 +1,45 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.CommandExecApprovalStatusEnum;
 import com.baiyi.cratos.common.enums.CommandExecApprovalTypeEnum;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.CommandExecException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.domain.generator.CommandExec;
-import com.baiyi.cratos.domain.generator.CommandExecApproval;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
+import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.facade.CommandExecFacade;
 import com.baiyi.cratos.model.CommandExecModel;
-import com.baiyi.cratos.service.CommandExecApprovalService;
-import com.baiyi.cratos.service.CommandExecService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.CommandExecWrapper;
+import io.fabric8.kubernetes.api.model.Pod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec.DEFAULT_CONTAINER;
 
 /**
  * &#064;Author  baiyi
@@ -47,7 +57,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     private final BusinessTagFacade businessTagFacade;
     private final EdsInstanceService edsInstanceService;
     private final CommandExecWrapper commandExecWrapper;
-    private static final String TAG_COMMAND_EXEC_APPROVER = "CommandExecApprover";
+    private final KubernetesPodExec kubernetesPodExec;
+    private final KubernetesPodRepo kubernetesPodRepo;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final EdsAssetService edsAssetService;
 
     @Override
     public DataTable<CommandExecVO.CommandExec> queryCommandExecPage(CommandExecParam.CommandExecPageQuery pageQuery) {
@@ -66,7 +79,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             CommandExecException.runtime("The approver {} does not exist.", commandExec.getApprovedBy());
         }
         if (!businessTagFacade.containsTag(BusinessTypeEnum.USER.name(), approverUser.getId(),
-                TAG_COMMAND_EXEC_APPROVER)) {
+                SysTagKeys.COMMAND_EXEC_APPROVER.getKey())) {
             CommandExecException.runtime("The designated approver does not have approval qualifications.");
         }
         // 校验Eds Kubernetes
@@ -94,6 +107,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .instance(instance)
                 .useDefaultExecContainer(addCommandExec.getExecTarget()
                         .isUseDefaultExecContainer())
+                .maxWaitingTime(Optional.of(addCommandExec)
+                        .map(CommandExecParam.AddCommandExec::getExecTarget)
+                        .map(CommandExecParam.ExecTarget::getMaxWaitingTime)
+                        .orElse(10L))
                 .build();
         commandExec.setExecTargetContent(execTarget.dump());
         commandExecService.add(commandExec);
@@ -131,6 +148,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
 
     @Override
     @SetSessionUserToParam
+    @Transactional(rollbackFor = CommandExecException.class)
     public void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec) {
         CommandExec commandExec = commandExecService.getById(approveCommandExec.getCommandExecId());
         if (Objects.isNull(commandExec)) {
@@ -157,6 +175,59 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             commandExecApprovalService.updateByPrimaryKey(commandExecApproval);
         } catch (IllegalArgumentException ex) {
             CommandExecException.runtime("Incorrect approval action.");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @SetSessionUserToParam
+    @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "1m", lockAtLeastFor = "1m")
+    public void doCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
+        CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());
+        if (commandExec.getCompleted()) {
+            return;
+        }
+        CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
+        String namespace = execTarget.getInstance()
+                .getNamespace();
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?>) holderBuilder.newHolder(
+                execTarget.getInstance()
+                        .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        PodExecContext execContext = PodExecContext.builder()
+                .maxWaitingTime(doCommandExec.getMaxWaitingTime())
+                .command(commandExec.getCommand())
+                .build();
+
+        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
+                .getEdsConfigModel();
+
+        // 查询当前实例下打标签的资产
+        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
+                SysTagKeys.COMMAND_EXEC.getKey());
+        if (CollectionUtils.isEmpty(assetIds)) {
+            CommandExecException.runtime("No available execution target.");
+        }
+        for (Integer assetId : assetIds) {
+            EdsAsset asset = edsAssetService.getById(assetId);
+            if (asset.getInstanceId()
+                    .equals(execTarget.getInstance()
+                            .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
+                    .equals(asset.getAssetType())) {
+                List<Pod> pods = kubernetesPodRepo.list(kubernetes, namespace, asset.getName());
+                if (CollectionUtils.isEmpty(pods)) {
+                    CommandExecException.runtime("No available execution pods.");
+                }
+                kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
+                        .getMetadata()
+                        .getName(), DEFAULT_CONTAINER, execContext);
+                commandExec.setOutMsg(execContext.getOutMsg());
+                commandExec.setErrorMsg(execContext.getErrorMsg());
+                commandExec.setSuccess(execContext.getSuccess());
+                commandExec.setCompleted(true);
+                commandExec.setCompletedAt(new Date());
+                commandExecService.updateByPrimaryKey(commandExec);
+                break;
+            }
         }
     }
 

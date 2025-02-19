@@ -28,6 +28,8 @@ public class KubernetesPodExec {
     private final KubernetesClientBuilder kubernetesClientBuilder;
     private static final CountDownLatch execLatch = new CountDownLatch(1);
 
+    public static final String DEFAULT_CONTAINER = null;
+
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
                      String containerName, PodExecContext execContext) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
