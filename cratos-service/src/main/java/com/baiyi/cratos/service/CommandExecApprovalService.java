@@ -11,6 +11,8 @@ import com.baiyi.cratos.service.base.BaseService;
  */
 public interface CommandExecApprovalService extends BaseService<CommandExecApproval, CommandExecApprovalMapper> {
 
-    CommandExecApproval queryUnapprovedRecode(int commandExecId, String username);
+    CommandExecApproval queryUnapprovedRecord(int commandExecId, String username);
+
+    boolean hasUnfinishedApprovals(int commandExecId);
 
 }

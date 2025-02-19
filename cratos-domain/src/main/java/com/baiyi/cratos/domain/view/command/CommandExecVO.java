@@ -3,8 +3,7 @@ package com.baiyi.cratos.domain.view.command;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -40,11 +39,52 @@ public class CommandExecVO {
         private String outMsg;
         private String errorMsg;
         private EnvVO.Env env;
-
+        @Schema(description = "申请人信息")
+        private ApplicantInfo applicantInfo;
+        @Schema(description = "审批人信息")
+        private ApprovalInfo approvalInfo;
         @Override
         public String getEnvName() {
             return this.namespace;
         }
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ApplicantInfo implements Serializable {
+        public static final ApplicantInfo NOT_THE_APPLICANT = ApplicantInfo.builder()
+                .isApplicant(false)
+                .execCommand(false)
+                .build();
+        @Serial
+        private static final long serialVersionUID = -7584357457920941459L;
+        @Schema(description = "是当前审批人")
+        @Builder.Default
+        private boolean isApplicant = true;
+        @Schema(description = "执行命令")
+        private boolean execCommand;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ApprovalInfo implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -2702560971256065616L;
+        public static final ApprovalInfo NOT_THE_CURRENT_APPROVER = ApprovalInfo.builder()
+                .isCurrentApprover(false)
+                .approvalRequired(false)
+                .build();
+        @Schema(description = "是当前审批人")
+        @Builder.Default
+        private boolean isCurrentApprover = true;
+        @Schema(description = "需要审批")
+        private boolean approvalRequired;
     }
 
 }

@@ -140,7 +140,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         if (Boolean.TRUE.equals(commandExec.getCompleted())) {
             CommandExecException.runtime("The commandExec is completed.", approveCommandExec.getCommandExecId());
         }
-        CommandExecApproval commandExecApproval = commandExecApprovalService.queryUnapprovedRecode(
+        CommandExecApproval commandExecApproval = commandExecApprovalService.queryUnapprovedRecord(
                 approveCommandExec.getCommandExecId(), approveCommandExec.getUsername());
         if (Objects.isNull(commandExecApproval)) {
             CommandExecException.runtime("Without your approval item.");

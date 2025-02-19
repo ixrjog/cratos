@@ -28,14 +28,24 @@ public class CommandExecApprovalServiceImpl implements CommandExecApprovalServic
     }
 
     @Override
-    public CommandExecApproval queryUnapprovedRecode(int commandExecId, String username) {
+    public CommandExecApproval queryUnapprovedRecord(int commandExecId, String username) {
         Example example = new Example(CommandExecApproval.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("commandExecId", commandExecId)
                 .andEqualTo("username", username)
-                .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name());
+                .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name())
+                .andEqualTo("approvalCompleted", false);
         return commandExecApprovalMapper.selectOneByExample(example);
     }
 
+    @Override
+    public boolean hasUnfinishedApprovals(int commandExecId) {
+        Example example = new Example(CommandExecApproval.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("commandExecId", commandExecId)
+                .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name())
+                .andEqualTo("approvalCompleted", false);
+        return commandExecApprovalMapper.selectCountByExample(example) > 0;
+    }
 
 }
