@@ -148,7 +148,6 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
 
     @Override
     @SetSessionUserToParam
-    @Transactional(rollbackFor = CommandExecException.class)
     public void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec) {
         CommandExec commandExec = commandExecService.getById(approveCommandExec.getCommandExecId());
         if (Objects.isNull(commandExec)) {
@@ -173,20 +172,42 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             commandExecApproval.setApproveRemark(approveCommandExec.getApproveRemark());
             commandExecApproval.setApprovalCompleted(true);
             commandExecApprovalService.updateByPrimaryKey(commandExecApproval);
+            autoCommandExec(commandExec);
         } catch (IllegalArgumentException ex) {
             CommandExecException.runtime("Incorrect approval action.");
         }
     }
 
-    @SuppressWarnings("unchecked")
+    private void autoCommandExec(CommandExec commandExec) {
+        List<CommandExecApproval> approvals = commandExecApprovalService.queryApprovals(commandExec.getId(),
+                        CommandExecApprovalTypeEnum.APPROVER.name())
+                .stream()
+                .filter(e -> !(Boolean.TRUE.equals(
+                        e.getApprovalCompleted()) && CommandExecApprovalStatusEnum.AGREE.name()
+                        .equals(e.getApprovalStatus())))
+                .toList();
+        if (CollectionUtils.isEmpty(approvals)) {
+            // 可以执行
+            CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
+            doCommandExec(commandExec, execTarget.getMaxWaitingTime());
+        }
+    }
+
     @Override
     @SetSessionUserToParam
-    @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "1m", lockAtLeastFor = "1m")
+    @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "10s", lockAtLeastFor = "10s")
     public void doCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
         CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());
-        if (commandExec.getCompleted()) {
-            return;
+        CommandExecVO.ApplicantInfo applicantInfo = commandExecWrapper.getApplicantInfo(commandExec.getId(),
+                commandExec.getUsername(), commandExec.getCompleted());
+        if (!applicantInfo.isExecCommand()) {
+            CommandExecException.runtime("Cannot execute command.");
         }
+        doCommandExec(commandExec, doCommandExec.getMaxWaitingTime());
+    }
+
+    @SuppressWarnings("unchecked")
+    private void doCommandExec(CommandExec commandExec, Long maxWaitingTime) {
         CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
         String namespace = execTarget.getInstance()
                 .getNamespace();
@@ -194,13 +215,11 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 execTarget.getInstance()
                         .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         PodExecContext execContext = PodExecContext.builder()
-                .maxWaitingTime(doCommandExec.getMaxWaitingTime())
+                .maxWaitingTime(maxWaitingTime)
                 .command(commandExec.getCommand())
                 .build();
-
         EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
                 .getEdsConfigModel();
-
         // 查询当前实例下打标签的资产
         List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
                 SysTagKeys.COMMAND_EXEC.getKey());

@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
@@ -46,6 +48,15 @@ public class CommandExecApprovalServiceImpl implements CommandExecApprovalServic
                 .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name())
                 .andEqualTo("approvalCompleted", false);
         return commandExecApprovalMapper.selectCountByExample(example) > 0;
+    }
+
+    @Override
+    public List<CommandExecApproval> queryApprovals(int commandExecId,String approvalType) {
+        Example example = new Example(CommandExecApproval.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("commandExecId", commandExecId)
+                .andEqualTo("approvalType", approvalType);
+        return commandExecApprovalMapper.selectByExample(example);
     }
 
 }

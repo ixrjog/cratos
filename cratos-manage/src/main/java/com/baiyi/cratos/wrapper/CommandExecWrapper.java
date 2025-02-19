@@ -34,8 +34,8 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.ENV})
     public void wrap(CommandExecVO.CommandExec vo) {
-        String username = SessionUtils.getUsername();
-        boolean isMask = isMask(username, vo);
+        String sessionUsername = SessionUtils.getUsername();
+        boolean isMask = isMask(sessionUsername, vo);
         vo.setCommandMask(getCommandMask(vo, isMask));
         vo.setCommand("");
         if (isMask) {
@@ -47,25 +47,27 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
             }
         }
         // 申请人信息
-        if (!vo.getUsername()
-                .equals(username)) {
-            vo.setApplicantInfo(CommandExecVO.ApplicantInfo.NOT_THE_APPLICANT);
-        } else {
-            if (!vo.getCompleted() && !approvalService.hasUnfinishedApprovals(vo.getId())) {
-                vo.setApplicantInfo(CommandExecVO.ApplicantInfo.builder()
-                        .execCommand(true)
-                        .build());
-            }
-        }
+        vo.setApplicantInfo(getApplicantInfo(vo.getId(), vo.getUsername(), vo.getCompleted()));
         // 审批人信息
         if (!vo.getApprovedBy()
-                .equals(username)) {
+                .equals(sessionUsername)) {
             vo.setApprovalInfo(CommandExecVO.ApprovalInfo.NOT_THE_CURRENT_APPROVER);
         } else {
             vo.setApprovalInfo(CommandExecVO.ApprovalInfo.builder()
-                    .approvalRequired(getApprovalInfoApprovalRequired(username, vo))
+                    .approvalRequired(getApprovalInfoApprovalRequired(sessionUsername, vo))
                     .build());
         }
+    }
+
+    public CommandExecVO.ApplicantInfo getApplicantInfo(int commandExecId, String username, boolean completed) {
+        String sessionUsername = SessionUtils.getUsername();
+        if (!username.equals(sessionUsername)) {
+            return CommandExecVO.ApplicantInfo.NOT_THE_APPLICANT;
+        }
+        return CommandExecVO.ApplicantInfo.builder()
+                .execCommand(!completed && !approvalService.hasUnfinishedApprovals(commandExecId))
+                .build();
+
     }
 
     private boolean getApplicantInfoExecCommand(String username, CommandExecVO.CommandExec vo) {
