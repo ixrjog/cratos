@@ -3,8 +3,14 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.CommandExecFacade;
+import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommandController {
 
     private final CommandExecFacade commandExecFacade;
+    private final EdsFacade edsFacade;
+    private final UserFacade userFacade;
 
     @Operation(summary = "Pagination query command exec")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,6 +62,19 @@ public class CommandController {
     public HttpResult<Boolean> doCommandExec(@RequestBody @Valid CommandExecParam.DoCommandExec doCommandExec) {
         commandExecFacade.doCommandExec(doCommandExec);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Pagination query eds instance")
+    @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryCommandExecEdsInstancePage(
+            @RequestBody @Valid EdsInstanceParam.CommandExecInstancePageQuery  pageQuery) {
+        return HttpResult.of(edsFacade.queryCommandExecEdsInstancePage(pageQuery));
+    }
+
+    @Operation(summary = "Pagination query user")
+    @PostMapping(value = "/user/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<UserVO.User>> queryCommandExecUserPage(@RequestBody @Valid UserParam.CommandExecUserPageQuery pageQuery) {
+        return HttpResult.of(userFacade.queryCommandExecUserPage(pageQuery));
     }
 
 }

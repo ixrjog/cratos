@@ -34,12 +34,6 @@ public class UserController {
         return HttpResult.of(userFacade.queryUserPage(pageQuery));
     }
 
-    @Operation(summary = "Pagination query user")
-    @PostMapping(value = "/command/exec/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserVO.User>> queryCommandExecUserPage(@RequestBody @Valid UserParam.CommandExecUserPageQuery pageQuery) {
-        return HttpResult.of(userFacade.queryCommandExecUserPage(pageQuery));
-    }
-
     @Operation(summary = "Get user by username")
     @GetMapping(value = "/username/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserVO.User> getUserByUsername(@RequestParam @Valid String username) {
