@@ -188,4 +188,14 @@ public class EdsInstanceParam {
         private String username;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class CommandExecInstancePageQuery extends PageParam {
+        @Schema(description = "查询名称")
+        private String queryName;
+    }
+
 }

@@ -181,4 +181,14 @@ public class UserParam {
         private String pubKey;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class CommandExecUserPageQuery extends PageParam  {
+        @Schema(description = "查询名称")
+        private String queryName;
+    }
+
 }

@@ -182,4 +182,11 @@ public class ExtDataSourceController {
         return HttpResult.of(edsFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
     }
 
+    @Operation(summary = "Pagination query eds instance")
+    @PostMapping(value = "/instance/command/exec/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryCommandExecEdsInstancePage(
+            @RequestBody @Valid EdsInstanceParam.CommandExecInstancePageQuery  pageQuery) {
+        return HttpResult.of(edsFacade.queryCommandExecEdsInstancePage(pageQuery));
+    }
+
 }

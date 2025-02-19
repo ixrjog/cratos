@@ -1,17 +1,16 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -20,6 +19,7 @@ import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -28,10 +28,7 @@ import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.EdsScheduleFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsConfigService;
-import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
@@ -42,6 +39,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,12 +75,34 @@ public class EdsFacadeImpl implements EdsFacade {
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
+    private final TagService tagService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
     public DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery) {
         DataTable<EdsInstance> table = edsInstanceService.queryEdsInstancePage(pageQuery.toParam());
         return edsInstanceWrapper.wrapToTarget(table);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public DataTable<EdsInstanceVO.EdsInstance> queryCommandExecEdsInstancePage(
+            EdsInstanceParam.CommandExecInstancePageQuery pageQuery) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.COMMAND_EXEC.getKey());
+        if (Objects.isNull(tag)) {
+            return DataTable.NO_DATA;
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .build();
+        EdsInstanceParam.InstancePageQuery query = EdsInstanceParam.InstancePageQuery.builder()
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .queryName(pageQuery.getQueryName())
+                .edsType(EdsInstanceTypeEnum.KUBERNETES.name())
+                .queryByTag(queryByTag)
+                .build();
+        return ((EdsFacadeImpl) AopContext.currentProxy()).queryEdsInstancePage(query);
     }
 
     @Override

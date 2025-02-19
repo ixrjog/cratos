@@ -4,6 +4,7 @@ import com.baiyi.cratos.annotation.BindAssetsAfterImport;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.IdentityUtil;
@@ -14,7 +15,9 @@ import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
 import com.baiyi.cratos.domain.generator.Credential;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
@@ -23,11 +26,13 @@ import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +40,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +59,7 @@ public class UserFacadeImpl implements UserFacade {
     private final CredentialWrapper credentialWrapper;
     private final BusinessCredentialService businessCredentialService;
     private final CredentialService credentialService;
+    private final TagService tagService;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
 
@@ -61,6 +68,25 @@ public class UserFacadeImpl implements UserFacade {
     public DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery) {
         DataTable<User> table = userService.queryUserPage(pageQuery.toParam());
         return userWrapper.wrapToTarget(table);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public DataTable<UserVO.User> queryCommandExecUserPage(UserParam.CommandExecUserPageQuery pageQuery) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.COMMAND_EXEC.getKey());
+        if (Objects.isNull(tag)) {
+            return DataTable.NO_DATA;
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .build();
+        UserParam.UserPageQuery query = UserParam.UserPageQuery.builder()
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .queryName(pageQuery.getQueryName())
+                .queryByTag(queryByTag)
+                .build();
+        return ((UserFacadeImpl) AopContext.currentProxy()).queryUserPage(query);
     }
 
     @Override

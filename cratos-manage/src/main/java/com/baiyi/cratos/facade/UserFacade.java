@@ -19,6 +19,8 @@ public interface UserFacade extends HasSetValid {
 
     DataTable<UserVO.User> queryUserPage(UserParam.UserPageQuery pageQuery);
 
+    DataTable<UserVO.User> queryCommandExecUserPage(UserParam.CommandExecUserPageQuery pageQuery);
+
     DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery);
 
     User addUser(UserParam.AddUser addUser);

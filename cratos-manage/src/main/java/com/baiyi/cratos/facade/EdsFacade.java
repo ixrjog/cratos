@@ -21,6 +21,9 @@ public interface EdsFacade extends HasSetValid {
 
     DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
+    DataTable<EdsInstanceVO.EdsInstance> queryCommandExecEdsInstancePage(
+            EdsInstanceParam.CommandExecInstancePageQuery pageQuery);
+
     EdsInstanceVO.EdsInstance getEdsInstanceById(int instanceId);
 
     void registerEdsInstance(EdsInstanceParam.RegisterInstance registerEdsInstance);
