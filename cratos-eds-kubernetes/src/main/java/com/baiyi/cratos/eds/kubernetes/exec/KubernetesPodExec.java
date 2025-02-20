@@ -26,16 +26,12 @@ import java.util.concurrent.TimeUnit;
 public class KubernetesPodExec {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
-    //  private static final CountDownLatch execLatch = new CountDownLatch(1);
-
-    public static final String DEFAULT_CONTAINER = null;
 
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
                      PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
-                // 如果Pod中只有一个容器，不需要指定
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
                 .usingListener(newListener(execLatch))
@@ -44,7 +40,7 @@ public class KubernetesPodExec {
             if (!latchTerminationStatus) {
                 log.warn("Latch could not terminate within specified time");
             }
-            log.info("Exec Output: {} ", execContext.getOut());
+            log.debug("Exec Output: {}", execContext.getOut());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -57,7 +53,6 @@ public class KubernetesPodExec {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
-                // 如果Pod中只有一个容器，不需要指定
                 .inContainer(containerName)
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
@@ -67,7 +62,7 @@ public class KubernetesPodExec {
             if (!latchTerminationStatus) {
                 log.warn("Latch could not terminate within specified time");
             }
-            log.info("Exec Output: {} ", execContext.getOut());
+            log.debug("Exec Output: {}", execContext.getOut());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -80,24 +75,26 @@ public class KubernetesPodExec {
     }
 
     private static class PodExecListener implements ExecListener {
+        private final CountDownLatch execLatch;
+
         public PodExecListener(CountDownLatch execLatch) {
             this.execLatch = execLatch;
         }
-        private final CountDownLatch execLatch;
+
         @Override
         public void onOpen() {
             log.info("Shell was opened");
         }
-        
+
         @Override
         public void onFailure(Throwable t, Response failureResponse) {
-            log.info("Some error encountered");
+            log.debug("Some error encountered");
             execLatch.countDown();
         }
 
         @Override
         public void onClose(int i, String s) {
-            log.info("Shell Closing");
+            log.debug("Shell Closing");
             execLatch.countDown();
         }
     }

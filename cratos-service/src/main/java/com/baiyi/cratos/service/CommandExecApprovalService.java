@@ -19,4 +19,6 @@ public interface CommandExecApprovalService extends BaseService<CommandExecAppro
 
     List<CommandExecApproval> queryApprovals(int commandExecId, String approvalType);
 
+    List<CommandExecApproval> queryApprovals(int commandExecId);
+
 }
