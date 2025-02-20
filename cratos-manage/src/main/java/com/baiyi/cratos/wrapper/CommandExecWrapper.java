@@ -94,7 +94,7 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
         if (Boolean.TRUE.equals(vo.getCompleted())) {
             return false;
         }
-        return Objects.isNull(approvalService.queryUnapprovedRecord(vo.getId(), username));
+        return Objects.nonNull(approvalService.queryUnapprovedRecord(vo.getId(), username));
     }
 
     private String getCommandMask(CommandExecVO.CommandExec vo, boolean isMask) {
