@@ -73,7 +73,7 @@ public class UserFacadeImpl implements UserFacade {
     @SuppressWarnings("unchecked")
     @Override
     public DataTable<UserVO.User> queryCommandExecUserPage(UserParam.CommandExecUserPageQuery pageQuery) {
-        Tag tag = tagService.getByTagKey(SysTagKeys.COMMAND_EXEC.getKey());
+        Tag tag = tagService.getByTagKey(SysTagKeys.COMMAND_EXEC_APPROVER.getKey());
         if (Objects.isNull(tag)) {
             return DataTable.NO_DATA;
         }
@@ -86,7 +86,7 @@ public class UserFacadeImpl implements UserFacade {
                 .queryName(pageQuery.getQueryName())
                 .queryByTag(queryByTag)
                 .build();
-        return ((UserFacadeImpl) AopContext.currentProxy()).queryUserPage(query);
+        return ((UserFacade) AopContext.currentProxy()).queryUserPage(query);
     }
 
     @Override
