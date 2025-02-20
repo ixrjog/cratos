@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/13 15:11
@@ -52,7 +54,8 @@ public class CommandController {
 
     @Operation(summary = "Approve command exec")
     @PostMapping(value = "/approve", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> approveCommandExec(@RequestBody @Valid CommandExecParam.ApproveCommandExec approveCommandExec) {
+    public HttpResult<Boolean> approveCommandExec(
+            @RequestBody @Valid CommandExecParam.ApproveCommandExec approveCommandExec) {
         commandExecFacade.approveCommandExec(approveCommandExec);
         return HttpResult.SUCCESS;
     }
@@ -67,13 +70,21 @@ public class CommandController {
     @Operation(summary = "Pagination query eds instance")
     @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryCommandExecEdsInstancePage(
-            @RequestBody @Valid EdsInstanceParam.CommandExecInstancePageQuery  pageQuery) {
+            @RequestBody @Valid EdsInstanceParam.CommandExecInstancePageQuery pageQuery) {
         return HttpResult.of(edsFacade.queryCommandExecEdsInstancePage(pageQuery));
+    }
+
+    @Operation(summary = "Pagination query eds instance namespaces")
+    @PostMapping(value = "/instance/namespace/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Set<String>> queryCommandExecEdsInstanceNamespace(
+            @RequestBody @Valid EdsInstanceParam.QueryCommandExecInstanceNamespace query) {
+        return HttpResult.of(edsFacade.queryCommandExecEdsInstanceNamespace(query));
     }
 
     @Operation(summary = "Pagination query user")
     @PostMapping(value = "/user/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<UserVO.User>> queryCommandExecUserPage(@RequestBody @Valid UserParam.CommandExecUserPageQuery pageQuery) {
+    public HttpResult<DataTable<UserVO.User>> queryCommandExecUserPage(
+            @RequestBody @Valid UserParam.CommandExecUserPageQuery pageQuery) {
         return HttpResult.of(userFacade.queryCommandExecUserPage(pageQuery));
     }
 

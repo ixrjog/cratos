@@ -11,6 +11,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author baiyi
@@ -23,6 +24,8 @@ public interface EdsFacade extends HasSetValid {
 
     DataTable<EdsInstanceVO.EdsInstance> queryCommandExecEdsInstancePage(
             EdsInstanceParam.CommandExecInstancePageQuery pageQuery);
+
+    Set<String> queryCommandExecEdsInstanceNamespace(EdsInstanceParam.QueryCommandExecInstanceNamespace query);
 
     EdsInstanceVO.EdsInstance getEdsInstanceById(int instanceId);
 

@@ -208,4 +208,12 @@ public class EdsInstanceParam {
         private String queryName;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class QueryCommandExecInstanceNamespace {
+        @NotNull
+        private Integer instanceId;
+    }
+
 }

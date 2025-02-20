@@ -1,12 +1,14 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
@@ -39,7 +41,9 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.jersey.internal.guava.Sets;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +78,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsScheduleFacade edsScheduleFacade;
     private final ApplicationResourceFacade applicationResourceFacade;
     private final UserService userService;
+    private final BusinessTagFacade businessTagFacade;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
@@ -105,6 +110,24 @@ public class EdsFacadeImpl implements EdsFacade {
                 .queryByTag(queryByTag)
                 .build();
         return ((EdsFacadeImpl) AopContext.currentProxy()).queryEdsInstancePage(query);
+    }
+
+    @Override
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.VERY_SHORT, key = "'COMMAND_EXEC:EDS_INSTANCE:ID:' + #query.instanceId + ':NAMESPACES'", unless = "#result == null")
+    public Set<String> queryCommandExecEdsInstanceNamespace(EdsInstanceParam.QueryCommandExecInstanceNamespace query) {
+        // 查询当前实例下打标签的资产
+        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
+                SysTagKeys.COMMAND_EXEC.getKey());
+        if (CollectionUtils.isEmpty(assetIds)) {
+            return Set.of();
+        }
+        Set<String> namespaceSet = Sets.newHashSet();
+        assetIds.stream()
+                .map(id -> edsAssetIndexService.getByAssetIdAndName(id, KUBERNETES_NAMESPACE))
+                .filter(Objects::nonNull)
+                .map(EdsAssetIndex::getValue)
+                .forEachOrdered(namespaceSet::add);
+        return namespaceSet;
     }
 
     @Override
