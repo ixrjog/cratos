@@ -51,11 +51,19 @@ public class CommandExecApprovalServiceImpl implements CommandExecApprovalServic
     }
 
     @Override
-    public List<CommandExecApproval> queryApprovals(int commandExecId,String approvalType) {
+    public List<CommandExecApproval> queryApprovals(int commandExecId, String approvalType) {
         Example example = new Example(CommandExecApproval.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("commandExecId", commandExecId)
                 .andEqualTo("approvalType", approvalType);
+        return commandExecApprovalMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<CommandExecApproval> queryApprovals(int commandExecId) {
+        Example example = new Example(CommandExecApproval.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("commandExecId", commandExecId);
         return commandExecApprovalMapper.selectByExample(example);
     }
 

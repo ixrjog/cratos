@@ -8,6 +8,7 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -39,10 +40,13 @@ public class CommandExecVO {
         private String outMsg;
         private String errorMsg;
         private EnvVO.Env env;
+        private boolean isMask;
         @Schema(description = "申请人信息")
         private ApplicantInfo applicantInfo;
         @Schema(description = "审批人信息")
         private ApprovalInfo approvalInfo;
+        private ExecTarget execTarget;
+        private Map<String, Approval> approvals;
         @Override
         public String getEnvName() {
             return this.namespace;
@@ -85,6 +89,42 @@ public class CommandExecVO {
         private boolean isCurrentApprover = true;
         @Schema(description = "需要审批")
         private boolean approvalRequired;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ExecTarget {
+        private EdsInstance instance;
+        private Boolean useDefaultExecContainer;
+        private Long maxWaitingTime;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EdsInstance {
+        private String name;
+        private Integer id;
+        private String namespace;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @Schema
+    public static class Approval extends BaseVO implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -7809805253468967134L;
+        private Integer id;
+        private Integer commandExecId;
+        private String approvalType;
+        private String username;
+        private String approvalStatus;
+        private Date approvalAt;
+        private Boolean approvalCompleted;
+        private String approveRemark;
     }
 
 }

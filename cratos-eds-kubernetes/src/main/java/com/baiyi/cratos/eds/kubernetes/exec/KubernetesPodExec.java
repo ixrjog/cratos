@@ -32,7 +32,6 @@ public class KubernetesPodExec {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
-                // 如果Pod中只有一个容器，不需要指定
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
                 .usingListener(newListener(execLatch))
@@ -54,7 +53,6 @@ public class KubernetesPodExec {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
-                // 如果Pod中只有一个容器，不需要指定
                 .inContainer(containerName)
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
@@ -77,11 +75,11 @@ public class KubernetesPodExec {
     }
 
     private static class PodExecListener implements ExecListener {
+        private final CountDownLatch execLatch;
+
         public PodExecListener(CountDownLatch execLatch) {
             this.execLatch = execLatch;
         }
-
-        private final CountDownLatch execLatch;
 
         @Override
         public void onOpen() {

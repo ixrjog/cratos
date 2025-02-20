@@ -5,7 +5,9 @@ import com.baiyi.cratos.common.util.CommandParser;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.CommandExec;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
+import com.baiyi.cratos.model.CommandExecModel;
 import com.baiyi.cratos.service.CommandExecApprovalService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -36,8 +40,25 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
     public void wrap(CommandExecVO.CommandExec vo) {
         String sessionUsername = SessionUtils.getUsername();
         boolean isMask = isMask(sessionUsername, vo);
+        vo.setMask(isMask);
         vo.setCommandMask(getCommandMask(vo, isMask));
         vo.setCommand("");
+        maskOutputMessages(vo, isMask);
+        vo.setApplicantInfo(getApplicantInfo(vo.getId(), vo.getUsername(), vo.getCompleted()));
+        vo.setApprovalInfo(getApprovalInfo(sessionUsername, vo));
+        CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(vo);
+        vo.setExecTarget(execTarget.toVO());
+        vo.setApprovals(getApprovals(vo.getId()));
+    }
+
+    private Map<String, CommandExecVO.Approval> getApprovals(int commandExecId) {
+        return approvalService.queryApprovals(commandExecId)
+                .stream()
+                .map(e -> BeanCopierUtil.copyProperties(e, CommandExecVO.Approval.class))
+                .collect(Collectors.toMap(CommandExecVO.Approval::getApprovalType, approval -> approval));
+    }
+
+    private void maskOutputMessages(CommandExecVO.CommandExec vo, boolean isMask) {
         if (isMask) {
             if (StringUtils.hasText(vo.getOutMsg())) {
                 vo.setOutMsg(MASK);
@@ -46,16 +67,16 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
                 vo.setErrorMsg(MASK);
             }
         }
-        // 申请人信息
-        vo.setApplicantInfo(getApplicantInfo(vo.getId(), vo.getUsername(), vo.getCompleted()));
-        // 审批人信息
+    }
+
+    private CommandExecVO.ApprovalInfo getApprovalInfo(String sessionUsername, CommandExecVO.CommandExec vo) {
         if (!vo.getApprovedBy()
                 .equals(sessionUsername)) {
-            vo.setApprovalInfo(CommandExecVO.ApprovalInfo.NOT_THE_CURRENT_APPROVER);
+            return CommandExecVO.ApprovalInfo.NOT_THE_CURRENT_APPROVER;
         } else {
-            vo.setApprovalInfo(CommandExecVO.ApprovalInfo.builder()
+            return CommandExecVO.ApprovalInfo.builder()
                     .approvalRequired(getApprovalInfoApprovalRequired(sessionUsername, vo))
-                    .build());
+                    .build();
         }
     }
 
@@ -67,14 +88,6 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
         return CommandExecVO.ApplicantInfo.builder()
                 .execCommand(!completed && !approvalService.hasUnfinishedApprovals(commandExecId))
                 .build();
-
-    }
-
-    private boolean getApplicantInfoExecCommand(String username, CommandExecVO.CommandExec vo) {
-        if (vo.getCompleted()) {
-            return false;
-        }
-        return !approvalService.hasUnfinishedApprovals(vo.getId());
     }
 
     private boolean getApprovalInfoApprovalRequired(String username, CommandExecVO.CommandExec vo) {
@@ -114,5 +127,4 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
         return !StringUtils.hasText(vo.getCcTo()) || !vo.getCcTo()
                 .equals(username);
     }
-
 }
