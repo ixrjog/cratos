@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * &#064;Author  baiyi
@@ -170,7 +171,9 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             commandExecApproval.setApproveRemark(approveCommandExec.getApproveRemark());
             commandExecApproval.setApprovalCompleted(true);
             commandExecApprovalService.updateByPrimaryKey(commandExecApproval);
-            autoCommandExec(commandExec);
+            if (Boolean.TRUE.equals(commandExec.getAutoExec())) {
+                autoCommandExec(commandExec);
+            }
         } catch (IllegalArgumentException ex) {
             CommandExecException.runtime("Incorrect approval action.");
         }
@@ -236,7 +239,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 }
                 kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
                         .getMetadata()
-                        .getName(), execContext);
+                        .getName(), execContext, new CountDownLatch(1));
                 commandExec.setOutMsg(execContext.getOutMsg());
                 commandExec.setErrorMsg(execContext.getErrorMsg());
                 commandExec.setSuccess(execContext.getSuccess());

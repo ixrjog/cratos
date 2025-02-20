@@ -26,19 +26,19 @@ import java.util.concurrent.TimeUnit;
 public class KubernetesPodExec {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
-    private static final CountDownLatch execLatch = new CountDownLatch(1);
+    //  private static final CountDownLatch execLatch = new CountDownLatch(1);
 
     public static final String DEFAULT_CONTAINER = null;
 
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
-                     PodExecContext execContext) {
+                     PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
                 // 如果Pod中只有一个容器，不需要指定
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
-                .usingListener(newListener())
+                .usingListener(newListener(execLatch))
                 .exec(execContext.toExec())) {
             boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {
@@ -53,7 +53,7 @@ public class KubernetesPodExec {
     }
 
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
-                     String containerName, PodExecContext execContext) {
+                     String containerName, PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
                 .withName(podName)
@@ -61,7 +61,7 @@ public class KubernetesPodExec {
                 .inContainer(containerName)
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
-                .usingListener(newListener())
+                .usingListener(newListener(execLatch))
                 .exec(execContext.toExec())) {
             boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {
@@ -75,16 +75,20 @@ public class KubernetesPodExec {
         }
     }
 
-    private static PodExecListener newListener() {
-        return new PodExecListener();
+    private static PodExecListener newListener(CountDownLatch execLatch) {
+        return new PodExecListener(execLatch);
     }
 
     private static class PodExecListener implements ExecListener {
+        public PodExecListener(CountDownLatch execLatch) {
+            this.execLatch = execLatch;
+        }
+        private final CountDownLatch execLatch;
         @Override
         public void onOpen() {
             log.info("Shell was opened");
         }
-
+        
         @Override
         public void onFailure(Throwable t, Response failureResponse) {
             log.info("Some error encountered");
@@ -97,4 +101,5 @@ public class KubernetesPodExec {
             execLatch.countDown();
         }
     }
+
 }
