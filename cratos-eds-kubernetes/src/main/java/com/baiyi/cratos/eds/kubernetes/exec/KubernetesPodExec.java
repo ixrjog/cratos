@@ -88,16 +88,16 @@ public class KubernetesPodExec {
         public void onOpen() {
             log.info("Shell was opened");
         }
-        
+
         @Override
         public void onFailure(Throwable t, Response failureResponse) {
-            log.info("Some error encountered");
+            log.debug("Some error encountered");
             execLatch.countDown();
         }
 
         @Override
         public void onClose(int i, String s) {
-            log.info("Shell Closing");
+            log.debug("Shell Closing");
             execLatch.countDown();
         }
     }
