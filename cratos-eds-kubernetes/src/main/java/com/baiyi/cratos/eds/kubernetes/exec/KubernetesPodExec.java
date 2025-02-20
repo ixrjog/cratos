@@ -26,9 +26,6 @@ import java.util.concurrent.TimeUnit;
 public class KubernetesPodExec {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
-    //  private static final CountDownLatch execLatch = new CountDownLatch(1);
-
-    public static final String DEFAULT_CONTAINER = null;
 
     public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
                      PodExecContext execContext, CountDownLatch execLatch) {
@@ -44,7 +41,7 @@ public class KubernetesPodExec {
             if (!latchTerminationStatus) {
                 log.warn("Latch could not terminate within specified time");
             }
-            log.info("Exec Output: {} ", execContext.getOut());
+            log.debug("Exec Output: {}", execContext.getOut());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -67,7 +64,7 @@ public class KubernetesPodExec {
             if (!latchTerminationStatus) {
                 log.warn("Latch could not terminate within specified time");
             }
-            log.info("Exec Output: {} ", execContext.getOut());
+            log.debug("Exec Output: {}", execContext.getOut());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -83,7 +80,9 @@ public class KubernetesPodExec {
         public PodExecListener(CountDownLatch execLatch) {
             this.execLatch = execLatch;
         }
+
         private final CountDownLatch execLatch;
+
         @Override
         public void onOpen() {
             log.info("Shell was opened");
