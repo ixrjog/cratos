@@ -44,6 +44,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,6 +73,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
     private final EdsScheduleFacade edsScheduleFacade;
     private final ApplicationResourceFacade applicationResourceFacade;
+    private final UserService userService;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
@@ -448,6 +450,26 @@ public class EdsFacadeImpl implements EdsFacade {
                 .ldapGroupMap(ldapGroupMap)
                 .instanceMap(instanceMap)
                 .build();
+    }
+
+    @Override
+    public EdsAssetVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
+            EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
+        // 索引查询用户手机号
+        User user = userService.getByUsername(queryDingtalkIdentityDetails.getUsername());
+        if (Objects.isNull(user)) {
+            return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
+        }
+        Map<Integer,EdsAsset> assetMap = Maps.newHashMap();
+        if (StringUtils.hasText(user.getMobilePhone())) {
+            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE,
+                    user.getMobilePhone());
+
+
+        }
+
+
+        return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
     }
 
     @Override

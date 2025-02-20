@@ -154,4 +154,21 @@ public class EdsAssetVO {
         private Map<Integer, List<String>> ldapGroupMap = Map.of();
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DingtalkIdentityDetails implements Serializable {
+        public static final DingtalkIdentityDetails NO_DATA = DingtalkIdentityDetails.builder()
+                .build();
+        @Serial
+        private static final long serialVersionUID = 5117329244388470820L;
+        private String username;
+        @Builder.Default
+        private Map<Integer, Asset> dingtalkIdentities = Map.of();
+        @Builder.Default
+        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
+    }
+
 }

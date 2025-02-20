@@ -66,4 +66,7 @@ public interface EdsFacade extends HasSetValid {
     EdsAssetVO.LdapIdentityDetails queryLdapIdentityDetails(
             EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails);
 
+    EdsAssetVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
+            EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails);
+
 }

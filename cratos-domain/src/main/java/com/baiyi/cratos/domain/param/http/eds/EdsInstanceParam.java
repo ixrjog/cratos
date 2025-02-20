@@ -188,6 +188,16 @@ public class EdsInstanceParam {
         private String username;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class QueryDingtalkIdentityDetails {
+        @NotBlank
+        private String username;
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)

@@ -182,4 +182,11 @@ public class ExtDataSourceController {
         return HttpResult.of(edsFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
     }
 
+    @Operation(summary = "Query eds asset dingtalk identity by username")
+    @PostMapping(value = "/dingtalk/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsAssetVO.DingtalkIdentityDetails> queryDingtalkIdentityDetails(
+            @RequestBody @Valid EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
+        return HttpResult.of(edsFacade.queryDingtalkIdentityDetails(queryDingtalkIdentityDetails));
+    }
+
 }
