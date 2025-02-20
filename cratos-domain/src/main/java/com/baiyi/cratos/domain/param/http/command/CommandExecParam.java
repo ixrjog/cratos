@@ -44,11 +44,11 @@ public class CommandExecParam {
         @NotNull
         private Boolean autoExec;
         private String ccTo;
-        @NotBlank
+        @NotBlank(message = "Apply remark cannot be empty")
         private String applyRemark;
         @NotBlank
         private String approvedBy;
-        @NotBlank
+        @NotBlank(message = "Command cannot be empty")
         private String command;
         private final Boolean completed = false;
         private final Boolean success = false;
@@ -82,7 +82,7 @@ public class CommandExecParam {
         private Integer commandExecId;
         @Null
         private String username;
-        @NotBlank
+        @NotBlank(message = "Approval remark cannot be empty")
         private String approveRemark;
         @NotBlank
         @Schema(description = "with approvalStatus")
