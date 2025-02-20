@@ -455,21 +455,37 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public EdsAssetVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
             EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        // 索引查询用户手机号
         User user = userService.getByUsername(queryDingtalkIdentityDetails.getUsername());
         if (Objects.isNull(user)) {
             return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
         }
-        Map<Integer,EdsAsset> assetMap = Maps.newHashMap();
-        if (StringUtils.hasText(user.getMobilePhone())) {
-            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE,
-                    user.getMobilePhone());
-
-
+        Map<Integer, EdsAsset> assetMap = getAssetMapByMobile(user.getMobilePhone());
+        if (CollectionUtils.isEmpty(assetMap)) {
+            return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
         }
+        Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = new HashMap<>();
+        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = new HashMap<>();
+        assetMap.forEach((k, asset) -> {
+            dingtalkIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
+            instanceMap.put(asset.getInstanceId(),
+                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
+        });
+        return EdsAssetVO.DingtalkIdentityDetails.builder()
+                .dingtalkIdentities(dingtalkIdentities)
+                .instanceMap(instanceMap)
+                .build();
+    }
 
-
-        return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
+    private Map<Integer, EdsAsset> getAssetMapByMobile(String mobilePhone) {
+        Map<Integer, EdsAsset> assetMap = new HashMap<>();
+        if (StringUtils.hasText(mobilePhone)) {
+            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE,
+                    mobilePhone);
+            if (!CollectionUtils.isEmpty(indices)) {
+                indices.forEach(e -> assetMap.put(e.getAssetId(), edsAssetService.getById(e.getAssetId())));
+            }
+        }
+        return assetMap;
     }
 
     @Override
