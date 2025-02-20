@@ -85,8 +85,13 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
         if (!username.equals(sessionUsername)) {
             return CommandExecVO.ApplicantInfo.NOT_THE_APPLICANT;
         }
+        if (completed) {
+            return CommandExecVO.ApplicantInfo.builder()
+                    .execCommand(false)
+                    .build();
+        }
         return CommandExecVO.ApplicantInfo.builder()
-                .execCommand(!completed && !approvalService.hasUnfinishedApprovals(commandExecId))
+                .execCommand(!approvalService.hasUnfinishedApprovals(commandExecId))
                 .build();
     }
 
