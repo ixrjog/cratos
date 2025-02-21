@@ -173,8 +173,14 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             commandExecApproval.setApproveRemark(approveCommandExec.getApproveRemark());
             commandExecApproval.setApprovalCompleted(true);
             commandExecApprovalService.updateByPrimaryKey(commandExecApproval);
-            if (Boolean.TRUE.equals(commandExec.getAutoExec())) {
-                autoCommandExec(commandExec);
+            if (commandExecApprovalService.approvalCompletedAndApproved(commandExec.getId())) {
+                if (Boolean.TRUE.equals(commandExec.getAutoExec())) {
+                    autoCommandExec(commandExec);
+                }
+            } else {
+                commandExec.setCompleted(true);
+                commandExec.setCompletedAt(new Date());
+                commandExecService.updateByPrimaryKey(commandExec);
             }
         } catch (IllegalArgumentException ex) {
             CommandExecException.runtime("Incorrect approval action.");
