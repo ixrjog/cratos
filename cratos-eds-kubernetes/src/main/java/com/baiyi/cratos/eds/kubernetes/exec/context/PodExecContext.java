@@ -1,6 +1,5 @@
 package com.baiyi.cratos.eds.kubernetes.exec.context;
 
-import com.baiyi.cratos.common.util.CommandParser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PodExecContext {
-
     @Builder.Default
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
     @Builder.Default
@@ -31,8 +29,9 @@ public class PodExecContext {
     private Long maxWaitingTime = 60L;
 
     public String[] toExec() {
-        return CommandParser.parseCommand(command)
-                .toArray(new String[0]);
+//        return CommandParser.parseCommand(command)
+//                .toArray(new String[0]);
+        return new String[]{"sh", "-c", command};
     }
 
     public String getOutMsg() {
