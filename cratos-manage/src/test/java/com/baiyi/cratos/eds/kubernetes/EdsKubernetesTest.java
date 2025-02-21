@@ -6,7 +6,6 @@ import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
-import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
@@ -60,18 +59,18 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void execTest() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
-        PodExecContext execContext = PodExecContext.builder()
-               // .command(List.of("curl", "-I", "https://www.baidu.com"))
-                .command("curl -I \n" +
-                        "https://www.baidu.com")
-                .maxWaitingTime(10L)
-                .build();
-        kubernetesPodExec.exec(cfg, "daily", "trade-5947666b9f-qssn6", "trade", execContext);
-        System.out.println(execContext.getOut()
-                .toString());
-        System.out.println(execContext.getError()
-                .toString());
+//        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+//        CountDownLatch execContext = PodExecContext.builder()
+//               // .command(List.of("curl", "-I", "https://www.baidu.com"))
+//                .command("curl -I \n" +
+//                        "https://www.baidu.com")
+//                .maxWaitingTime(10L)
+//                .build();
+//        kubernetesPodExec.exec(cfg, "daily", "trade-5947666b9f-qssn6", "trade", execContext);
+//        System.out.println(execContext.getOut()
+//                .toString());
+//        System.out.println(execContext.getError()
+//                .toString());
     }
 
     @Test

@@ -24,7 +24,7 @@ import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.facade.CommandExecFacade;
 import com.baiyi.cratos.model.CommandExecModel;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.CommandExecWrapper;
+import com.baiyi.cratos.wrapper.command.CommandExecWrapper;
 import io.fabric8.kubernetes.api.model.Pod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

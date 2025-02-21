@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.common.enums.CommandExecApprovalStatusEnum;
 import com.baiyi.cratos.common.enums.CommandExecApprovalTypeEnum;
 import com.baiyi.cratos.domain.generator.CommandExecApproval;
 import com.baiyi.cratos.mapper.CommandExecApprovalMapper;
@@ -38,6 +39,20 @@ public class CommandExecApprovalServiceImpl implements CommandExecApprovalServic
                 .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name())
                 .andEqualTo("approvalCompleted", false);
         return commandExecApprovalMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public boolean approvalCompletedAndApproved(int commandExecId) {
+       return !hasUnfinishedApprovals(commandExecId) && !hasApprovalRejected(commandExecId);
+    }
+
+    private boolean hasApprovalRejected(int commandExecId) {
+        Example example = new Example(CommandExecApproval.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("commandExecId", commandExecId)
+                .andEqualTo("approvalType", CommandExecApprovalTypeEnum.APPROVER.name())
+                .andEqualTo("approvalStatus", CommandExecApprovalStatusEnum.REJECT.name());
+        return commandExecApprovalMapper.selectCountByExample(example) > 0;
     }
 
     @Override

@@ -40,4 +40,15 @@ public class CommandParser {
         return params;
     }
 
+    public static String maskString(String str) {
+        if (str == null || str.length() <= 4) {
+            return str; // 如果字符串为空或长度小于等于3，直接返回原字符串
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(str, 0, 4); // 添加前3个字符
+        int maskLength = str.length() - 4; // 需要掩码的字符数量
+        sb.append("*".repeat(maskLength)); // 添加掩码字符*
+        return sb.toString();
+    }
+
 }

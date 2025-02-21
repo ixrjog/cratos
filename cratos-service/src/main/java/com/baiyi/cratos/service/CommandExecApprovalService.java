@@ -15,6 +15,8 @@ public interface CommandExecApprovalService extends BaseService<CommandExecAppro
 
     CommandExecApproval queryUnapprovedRecord(int commandExecId, String username);
 
+    boolean approvalCompletedAndApproved(int commandExecId);
+
     boolean hasUnfinishedApprovals(int commandExecId);
 
     List<CommandExecApproval> queryApprovals(int commandExecId, String approvalType);
