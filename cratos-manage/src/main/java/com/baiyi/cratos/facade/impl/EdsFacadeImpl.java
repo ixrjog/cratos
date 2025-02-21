@@ -124,7 +124,8 @@ public class EdsFacadeImpl implements EdsFacade {
         Set<String> namespaceSet = Sets.newHashSet();
         assetIds.stream()
                 .map(id -> edsAssetIndexService.getByAssetIdAndName(id, KUBERNETES_NAMESPACE))
-                .filter(Objects::nonNull)
+                .filter(byAssetIdAndName -> byAssetIdAndName != null && byAssetIdAndName.getInstanceId()
+                        .equals(query.getInstanceId()))
                 .map(EdsAssetIndex::getValue)
                 .forEachOrdered(namespaceSet::add);
         return namespaceSet;
