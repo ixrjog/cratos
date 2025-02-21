@@ -61,6 +61,8 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsAssetService edsAssetService;
 
+    private static final long DEFAULT_MAX_WAITING_TIME = 10L;
+
     @Override
     public DataTable<CommandExecVO.CommandExec> queryCommandExecPage(CommandExecParam.CommandExecPageQuery pageQuery) {
         DataTable<CommandExec> table = commandExecService.queryCommandExecPage(pageQuery);
@@ -109,7 +111,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .maxWaitingTime(Optional.of(addCommandExec)
                         .map(CommandExecParam.AddCommandExec::getExecTarget)
                         .map(CommandExecParam.ExecTarget::getMaxWaitingTime)
-                        .orElse(10L))
+                        .orElse(DEFAULT_MAX_WAITING_TIME))
                 .build();
         commandExec.setExecTargetContent(execTarget.dump());
         commandExecService.add(commandExec);
@@ -227,28 +229,33 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         if (CollectionUtils.isEmpty(assetIds)) {
             CommandExecException.runtime("No available execution target.");
         }
+        EdsAsset asset = getEdsAsset(execTarget, assetIds);
+        List<Pod> pods = kubernetesPodRepo.list(kubernetes, namespace, asset.getName());
+        if (CollectionUtils.isEmpty(pods)) {
+            CommandExecException.runtime("No available execution pods.");
+        }
+        kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
+                .getMetadata()
+                .getName(), execContext, new CountDownLatch(1));
+        commandExec.setOutMsg(execContext.getOutMsg());
+        commandExec.setErrorMsg(execContext.getErrorMsg());
+        commandExec.setSuccess(execContext.getSuccess());
+        commandExec.setCompleted(true);
+        commandExec.setCompletedAt(new Date());
+        commandExecService.updateByPrimaryKey(commandExec);
+    }
+
+    private EdsAsset getEdsAsset(CommandExecModel.ExecTarget execTarget, List<Integer> assetIds) {
         for (Integer assetId : assetIds) {
             EdsAsset asset = edsAssetService.getById(assetId);
             if (asset.getInstanceId()
                     .equals(execTarget.getInstance()
                             .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
                     .equals(asset.getAssetType())) {
-                List<Pod> pods = kubernetesPodRepo.list(kubernetes, namespace, asset.getName());
-                if (CollectionUtils.isEmpty(pods)) {
-                    CommandExecException.runtime("No available execution pods.");
-                }
-                kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
-                        .getMetadata()
-                        .getName(), execContext, new CountDownLatch(1));
-                commandExec.setOutMsg(execContext.getOutMsg());
-                commandExec.setErrorMsg(execContext.getErrorMsg());
-                commandExec.setSuccess(execContext.getSuccess());
-                commandExec.setCompleted(true);
-                commandExec.setCompletedAt(new Date());
-                commandExecService.updateByPrimaryKey(commandExec);
-                break;
+                return asset;
             }
         }
+        throw new CommandExecException("No available execution target.");
     }
 
 }
