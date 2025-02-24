@@ -23,6 +23,9 @@
                 id in
                 <foreach open="(" item="id" separator="," close=")" collection="idList">#{id}</foreach>
             </if>
+            <if test="valid != null">
+                and valid = #{valid}
+            </if>
             <if test="queryName != null and queryName != ''">
                 and name like "%" #{queryName} "%"
                 order by replace(name, #{queryName}, '')

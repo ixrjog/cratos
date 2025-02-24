@@ -33,6 +33,7 @@ public class ApplicationParam {
         @Schema(description = "查询名称")
         private String queryName;
         private BusinessTagParam.QueryByTag queryByTag;
+        private Boolean valid;
         private List<Integer> idList;
 
         public ApplicationPageQueryParam toParam() {
@@ -41,6 +42,7 @@ public class ApplicationParam {
                     .length(getLength())
                     .queryName(queryName)
                     .idList(idList)
+                    .valid(valid)
                     .build();
         }
 
@@ -54,6 +56,7 @@ public class ApplicationParam {
     public static class ApplicationPageQueryParam extends PageParam {
         private String queryName;
         private List<Integer> idList;
+        private Boolean valid;
     }
 
     @Data
