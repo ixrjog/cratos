@@ -56,9 +56,7 @@ public class SshShellRunnable
         implements Factory<Command>, ChannelSessionAware, Runnable {
 
     private static final String SSH_ENV_COLUMNS = "COLUMNS";
-
     private static final String SSH_ENV_LINES = "LINES";
-
     private static final String SSH_ENV_TERM = "TERM";
 
     private final SshShellProperties properties;

@@ -42,7 +42,8 @@ public class LifeCycleVO {
     private static int calculateDateDifferenceByDay(Date from, Date to) {
         long subTime = to.getTime() - from.getTime();
         if (subTime < 0) {
-            throw new RuntimeException("计算时间有误!");
+            //throw new RuntimeException("计算时间有误!");
+            return 0;
         }
         long diff = subTime / TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
         return (int) diff;
@@ -50,7 +51,6 @@ public class LifeCycleVO {
 
     public interface HasLifeCycleExpires {
         Date getExpiredTime();
-
         void setLifeCycleExpires(Expires expires);
     }
 

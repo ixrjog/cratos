@@ -22,12 +22,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SshShellStartedEvent extends BaseSshShellEvent {
 
-    private final SshShellHelper sshShellHelper;
-
     public SshShellStartedEvent(SimpleSshSessionFacade simpleSshSessionFacade, UserService userService,
                                 SshShellHelper sshShellHelper) {
         super(simpleSshSessionFacade, userService);
-        this.sshShellHelper = sshShellHelper;
     }
 
     @Override
@@ -50,15 +47,6 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
                 .getServerSession()
                 .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
         simpleSshSessionFacade.addSshSession(sshSession);
-//        User user = userService.getByUsername(event.getSession()
-//                .getServerSession()
-//                .getUsername());
-//        Date expiredTime = Optional.ofNullable(user)
-//                .map(User::getExpiredTime)
-//                .orElse(null);
-//        if (expiredTime != null) {
-//            sshShellHelper.print("Hi");
-//        }
     }
 
 }

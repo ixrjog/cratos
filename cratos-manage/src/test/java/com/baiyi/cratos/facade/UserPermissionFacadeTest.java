@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.shell.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
@@ -83,6 +84,18 @@ public class UserPermissionFacadeTest extends BaseUnit {
                 .build();
         DataTable<EdsAsset> dataTable = userPermissionBusinessFacade.queryUserPermissionAssets(param);
         System.out.println(dataTable);
+    }
+
+    @Test
+    void test6() {
+        UserPermissionParam.QueryUserPermissionByBusiness queryUserPermissionByBusiness = UserPermissionParam.QueryUserPermissionByBusiness.builder()
+                .businessId(3)
+                .businessType(BusinessTypeEnum.APPLICATION.name())
+                .build();
+
+        PermissionBusinessVO.UserPermissionByBusiness business = userPermissionBusinessFacade.queryUserPermissionByBusiness(
+                queryUserPermissionByBusiness);
+        System.out.println(business);
     }
 
 }
