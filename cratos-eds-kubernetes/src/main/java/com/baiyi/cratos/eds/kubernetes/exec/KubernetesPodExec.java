@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,10 +42,13 @@ public class KubernetesPodExec {
                 log.warn("Latch could not terminate within specified time");
             }
             log.debug("Exec Output: {}", execContext.getOut());
+            execContext.setExitCode(execWatch.exitCode()
+                    .get());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
             log.warn("Interrupted while waiting for the exec: {}", ie.getMessage());
+        } catch (ExecutionException ignored) {
         }
     }
 

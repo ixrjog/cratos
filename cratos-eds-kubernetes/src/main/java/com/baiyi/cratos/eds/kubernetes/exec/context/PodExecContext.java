@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 
@@ -24,6 +23,7 @@ public class PodExecContext {
     @Builder.Default
     private ByteArrayOutputStream error = new ByteArrayOutputStream();
     private String command;
+    private Integer exitCode;
     @Builder.Default
     @Schema(description = "Seconds.")
     private Long maxWaitingTime = 60L;
@@ -43,7 +43,10 @@ public class PodExecContext {
     }
 
     public boolean getSuccess() {
-        return !StringUtils.hasText(getErrorMsg());
+        if (exitCode == null) {
+            return false;
+        }
+        return 0 == exitCode;
     }
 
 }
