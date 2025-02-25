@@ -29,7 +29,7 @@ public class EdsDingtalkMessageFacade {
     private final EdsFacade edsFacade;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
-    public void send(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
+    public void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
         EdsInstanceParam.QueryDingtalkIdentityDetails query = EdsInstanceParam.QueryDingtalkIdentityDetails.builder()
                 .username(sendToUser.getUsername())
                 .build();
@@ -39,19 +39,19 @@ public class EdsDingtalkMessageFacade {
             return;
         }
         dingtalkIdentityDetails.getDingtalkIdentities()
-                .forEach((assetId, asset) -> send(asset, notificationTemplate, msgText));
+                .forEach((assetId, dingtalkUserAsset) -> sendToDingtalkUser(dingtalkUserAsset, notificationTemplate, msgText));
     }
 
     @SuppressWarnings("unchecked")
-    private void send(EdsAssetVO.Asset asset, NotificationTemplate notificationTemplate, String msgText) {
+    private void sendToDingtalkUser(EdsAssetVO.Asset dingtalkUserAsset, NotificationTemplate notificationTemplate, String msgText) {
         EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?>) holderBuilder.newHolder(
-                asset.getInstanceId(), EdsAssetTypeEnum.DINGTALK_USER.name());
+                dingtalkUserAsset.getInstanceId(), EdsAssetTypeEnum.DINGTALK_USER.name());
         EdsDingtalkConfigModel.Dingtalk dingtalk = holder.getInstance()
                 .getEdsConfigModel();
         DingtalkMessageParam.AsyncSendMessage asyncSendMessage = AsyncSendMessageBuilder.newBuilder()
                 .withMsgText(msgText)
                 .withNotificationTemplate(notificationTemplate)
-                .withUserId(asset.getAssetId())
+                .withUserId(dingtalkUserAsset.getAssetId())
                 .build();
         dingtalkMessageSender.asyncSend(dingtalk, asyncSendMessage);
     }

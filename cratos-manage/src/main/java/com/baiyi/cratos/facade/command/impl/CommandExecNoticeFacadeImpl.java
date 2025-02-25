@@ -55,7 +55,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
         }
         try {
             String msgText = toApprovalMsgText(notificationTemplate.getContent(), commandExec, commandExecApproval);
-            dingtalkMessageFacade.send(sendToUser, notificationTemplate, msgText);
+            dingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msgText);
         } catch (IOException ioException) {
             log.debug(ioException.getMessage());
         }
@@ -80,7 +80,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
         try {
             String msgText = toApprovalResultMsgText(notificationTemplate.getContent(), commandExec,
                     commandExecApproval);
-            dingtalkMessageFacade.send(sendToUser, notificationTemplate, msgText);
+            dingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msgText);
         } catch (IOException ioException) {
             log.debug(ioException.getMessage());
         }
