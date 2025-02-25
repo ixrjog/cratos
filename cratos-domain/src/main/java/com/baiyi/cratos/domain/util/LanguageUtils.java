@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Optional;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/25 09:44
@@ -17,10 +19,10 @@ public class LanguageUtils {
     private String language;
 
     public String getUserLanguage(User user) {
-        if (StringUtils.hasText(user.getLang())) {
-            return user.getLang();
-        }
-        return language;
+        return Optional.ofNullable(user)
+                .map(User::getLang)
+                .filter(StringUtils::hasText)
+                .orElse(language);
     }
 
     public String getSysLanguage() {
