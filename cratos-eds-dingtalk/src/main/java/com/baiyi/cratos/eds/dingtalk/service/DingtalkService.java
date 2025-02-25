@@ -1,10 +1,8 @@
 package com.baiyi.cratos.eds.dingtalk.service;
 
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
-import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
+import com.baiyi.cratos.eds.dingtalk.model.*;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkDepartmentParam;
+import com.baiyi.cratos.eds.dingtalk.param.DingtalkMessageParam;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkUserParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,5 +37,14 @@ public interface DingtalkService {
     @PostExchange("/topapi/v2/user/list?access_token={accessToken}")
     DingtalkUserModel.UserResult list(@PathVariable String accessToken,
                                       @RequestBody DingtalkUserParam.QueryUserPage queryUserPage);
+
+    /**
+     * https://developers.dingtalk.com/document/app/asynchronous-sending-of-enterprise-session-messages
+     * @param accessToken
+     * @param asyncSendMessage
+     * @return
+     */
+    @PostExchange("/topapi/message/corpconversation/asyncsend_v2?access_token={accessToken}")
+    DingtalkMessageModel.AsyncSendResult asyncSend(@PathVariable String accessToken, @RequestBody DingtalkMessageParam.AsyncSendMessage asyncSendMessage);
 
 }

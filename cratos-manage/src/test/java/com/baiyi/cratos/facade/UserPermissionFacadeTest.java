@@ -98,4 +98,7 @@ public class UserPermissionFacadeTest extends BaseUnit {
         System.out.println(business);
     }
 
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.command.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
@@ -21,7 +21,8 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
 import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
-import com.baiyi.cratos.facade.CommandExecFacade;
+import com.baiyi.cratos.facade.command.CommandExecFacade;
+import com.baiyi.cratos.facade.command.CommandExecNoticeFacade;
 import com.baiyi.cratos.model.CommandExecModel;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.command.CommandExecWrapper;
@@ -60,6 +61,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     private final KubernetesPodRepo kubernetesPodRepo;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsAssetService edsAssetService;
+    private final CommandExecNoticeFacade commandExecNoticeFacade;
 
     private static final long DEFAULT_MAX_WAITING_TIME = 10L;
 
@@ -132,6 +134,8 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .username(commandExec.getApprovedBy())
                 .build();
         commandExecApprovalService.add(approver);
+        // 通知
+        commandExecNoticeFacade.sendApprovalNotice(approver);
         if (StringUtils.hasText(addCommandExec.getCcTo())) {
             User ccUser = userService.getByUsername(commandExec.getCcTo());
             if (Objects.isNull(ccUser)) {
@@ -182,6 +186,8 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 commandExec.setCompletedAt(new Date());
                 commandExecService.updateByPrimaryKey(commandExec);
             }
+            // 通知
+            commandExecNoticeFacade.sendApprovalResultNotice(commandExecApproval);
         } catch (IllegalArgumentException ex) {
             CommandExecException.runtime("Incorrect approval action.");
         }

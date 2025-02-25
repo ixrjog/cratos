@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.facade.CommandExecFacade;
+import com.baiyi.cratos.facade.command.CommandExecFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;

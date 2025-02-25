@@ -73,4 +73,13 @@ public class EdsFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
+    @Test
+    void test2() {
+        EdsInstanceParam.QueryDingtalkIdentityDetails query = EdsInstanceParam.QueryDingtalkIdentityDetails.builder()
+                .username("baiyi")
+                .build();
+        EdsAssetVO.DingtalkIdentityDetails details = edsFacade.queryDingtalkIdentityDetails(query);
+        System.out.println(details);
+    }
+
 }
