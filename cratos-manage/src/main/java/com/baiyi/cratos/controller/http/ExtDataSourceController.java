@@ -7,9 +7,11 @@ import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.EdsIdentityFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,6 +33,7 @@ import java.util.List;
 public class ExtDataSourceController {
 
     private final EdsFacade edsFacade;
+    private final EdsIdentityFacade edsIdentityFacade;
 
     // Instance
 
@@ -170,23 +173,30 @@ public class ExtDataSourceController {
 
     @Operation(summary = "Query eds asset cloud identity by username")
     @PostMapping(value = "/cloud/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<EdsAssetVO.CloudIdentityDetails> queryCloudIdentityDetails(
+    public HttpResult<EdsIdentityVO.CloudIdentityDetails> queryCloudIdentityDetails(
             @RequestBody @Valid EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        return HttpResult.of(edsFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
+        return HttpResult.of(edsIdentityFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
     }
 
     @Operation(summary = "Query eds asset ldap identity by username")
     @PostMapping(value = "/ldap/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<EdsAssetVO.LdapIdentityDetails> queryLdapIdentityDetails(
+    public HttpResult<EdsIdentityVO.LdapIdentityDetails> queryLdapIdentityDetails(
             @RequestBody @Valid EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
-        return HttpResult.of(edsFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
+        return HttpResult.of(edsIdentityFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
     }
 
     @Operation(summary = "Query eds asset dingtalk identity by username")
     @PostMapping(value = "/dingtalk/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<EdsAssetVO.DingtalkIdentityDetails> queryDingtalkIdentityDetails(
+    public HttpResult<EdsIdentityVO.DingtalkIdentityDetails> queryDingtalkIdentityDetails(
             @RequestBody @Valid EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        return HttpResult.of(edsFacade.queryDingtalkIdentityDetails(queryDingtalkIdentityDetails));
+        return HttpResult.of(edsIdentityFacade.queryDingtalkIdentityDetails(queryDingtalkIdentityDetails));
+    }
+
+    @Operation(summary = "Query eds asset gitLab identity by username")
+    @PostMapping(value = "/gitlab/identity/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsIdentityVO.GitLabIdentityDetails> queryGitLabIdentityDetails(
+            @RequestBody @Valid EdsInstanceParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
+        return HttpResult.of(edsIdentityFacade.queryGitLabIdentityDetails(queryGitLabIdentityDetails));
     }
 
 }

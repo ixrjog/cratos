@@ -209,6 +209,16 @@ public class EdsInstanceParam {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class QueryGitLabIdentityDetails {
+        @NotBlank
+        private String username;
+    }
+
+    @Data
     @NoArgsConstructor
     @Schema
     public static class QueryCommandExecInstanceNamespace {

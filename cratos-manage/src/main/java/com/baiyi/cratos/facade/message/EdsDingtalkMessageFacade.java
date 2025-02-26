@@ -4,12 +4,13 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
-import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.facade.EdsIdentityFacade;
 import com.baiyi.cratos.facade.message.builder.AsyncSendMessageAgency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +28,15 @@ import org.springframework.util.CollectionUtils;
 public class EdsDingtalkMessageFacade {
 
     private final DingtalkMessageSender dingtalkMessageSender;
-    private final EdsFacade edsFacade;
+    private final EdsIdentityFacade edsIdentityFacade;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
         EdsInstanceParam.QueryDingtalkIdentityDetails query = EdsInstanceParam.QueryDingtalkIdentityDetails.builder()
                 .username(sendToUser.getUsername())
                 .build();
-        EdsAssetVO.DingtalkIdentityDetails dingtalkIdentityDetails = edsFacade.queryDingtalkIdentityDetails(query);
+        EdsIdentityVO.DingtalkIdentityDetails dingtalkIdentityDetails = edsIdentityFacade.queryDingtalkIdentityDetails(
+                query);
         if (CollectionUtils.isEmpty(dingtalkIdentityDetails.getDingtalkIdentities())) {
             // 用户没有关联Dingtalk身份
             log.debug("The user {} is not associated with Dingtalk identity.", sendToUser.getUsername());
