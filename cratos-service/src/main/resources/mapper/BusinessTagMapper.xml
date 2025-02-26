@@ -60,7 +60,7 @@
         where tag_id = #{tagGroupId} and tag_value != ''
         <if test="queryName != null and queryName != ''">
             and tag_value like "%" #{queryName} "%"
-            order by replace(name, #{queryName}, '')
+            order by replace(tag_value, #{queryName}, '')
         </if>
     </select>
 
