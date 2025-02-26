@@ -155,7 +155,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         Map<Integer, List<EdsAssetVO.Asset>> sshKeyMap = Maps.newHashMap();
         edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername())
                 .forEach(asset -> {
-                    gitLabIdentities.put(asset.getId(), edsAssetWrapper.wrapToTarget(asset));
+                    gitLabIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
                     instanceMap.put(asset.getInstanceId(),
                             edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
                     List<EdsAsset> assets = edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(),
