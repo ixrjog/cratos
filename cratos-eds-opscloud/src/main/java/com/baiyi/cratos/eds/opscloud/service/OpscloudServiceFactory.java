@@ -19,6 +19,9 @@ public class OpscloudServiceFactory {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         WebClient webClient = WebClient.builder()
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(16 * 1024 * 1024))
                 .baseUrl(opscloud.getUrl())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();

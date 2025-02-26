@@ -10,6 +10,9 @@ import lombok.Getter;
 @Getter
 public enum SysTagKeys {
 
+    LEVEL("Level"),
+    PRODUCT_LINE("ProductLine"),
+    BUSINESS("Business"),
     COMMAND_EXEC_APPROVER("CommandExecApprover"),
     COMMAND_EXEC("CommandExec");
 

@@ -1,6 +1,9 @@
 package com.baiyi.cratos.eds;
 
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
 import com.baiyi.cratos.eds.opscloud.vo.OcApplicationVO;
@@ -20,6 +23,10 @@ public class EdsOpscloudTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud
 
     @Resource
     private ApplicationService applicationService;
+    @Resource
+    private BusinessTagFacade businessTagFacade;
+
+    private static final String[] LEVEL_TAGS = {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"};
 
     @Test
     void importOcApplicationTest() {
@@ -34,9 +41,29 @@ public class EdsOpscloudTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud
                     .comment(ocApp.getComment())
                     .valid(ocApp.getIsActive())
                     .build();
-            if (applicationService.getByName(ocApp.getName()) == null) {
+            Application applicationFromDB = applicationService.getByName(ocApp.getName());
+            if (applicationFromDB == null) {
                 applicationService.add(application);
                 System.out.println(application.getName());
+            } else {
+                application = applicationFromDB;
+            }
+
+            if (!CollectionUtils.isEmpty(ocApp.getTags())) {
+                for (OcApplicationVO.Tag tag : ocApp.getTags()) {
+                    for (String levelTag : LEVEL_TAGS) {
+                        if (levelTag.equals(tag.getTagKey())) {
+                            BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+                                    .businessId(application.getId())
+                                    .businessType(BusinessTypeEnum.APPLICATION.name())
+                                    // Level
+                                    .tagId(37)
+                                    .tagValue(tag.getTagKey())
+                                    .build();
+                            businessTagFacade.saveBusinessTag(saveBusinessTag);
+                        }
+                    }
+                }
             }
         });
     }

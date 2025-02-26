@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -91,7 +92,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
         return BeetlUtil.renderTemplate(templateContent, SimpleMapBuilder.newBuilder()
                 .put("id", commandExecApproval.getCommandExecId())
                 .put("applicant", commandExec.getUsername())
-                .put("applyRemark", commandExec.getApplyRemark())
+                .put("applyRemark", getRemark(commandExec.getApplyRemark()))
                 .build());
     }
 
@@ -101,8 +102,15 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
                 .put("id", commandExecApproval.getCommandExecId())
                 .put("approvedBy", commandExecApproval.getUsername())
                 .put("approvalStatus", commandExecApproval.getApprovalStatus())
-                .put("approveRemark", commandExecApproval.getApproveRemark())
+                .put("approveRemark", getRemark(commandExecApproval.getApproveRemark()))
                 .build());
+    }
+
+    private String getRemark(String remark) {
+        if (!StringUtils.hasText(remark)) {
+            return "The applicant did not fill in any information";
+        }
+        return remark.length() > 30 ? remark.substring(30) : remark;
     }
 
     private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {

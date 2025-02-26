@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/2 11:18
@@ -25,6 +27,16 @@ public class OcApplicationVO {
         @Schema(description = "描述")
         private Boolean isActive;
         private String comment;
+
+        private List<Tag> tags;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Tag {
+        private String tagKey;
     }
 
 }

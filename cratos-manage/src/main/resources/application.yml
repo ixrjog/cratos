@@ -31,6 +31,8 @@ spring:
     timeout-per-shutdown-phase: 45s
   main:
     banner-mode: CONSOLE
+  codec:
+      max-in-memory-size: 20MB
 
 # 开发环境配置
 server:

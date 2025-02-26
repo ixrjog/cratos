@@ -24,7 +24,7 @@ public class OcApplicationRepo {
         int page = 1;
         int length = 10;
         OcApplicationParam.ApplicationPageQuery param = OcApplicationParam.ApplicationPageQuery.builder()
-                .extend(false)
+                .extend(true)
                 .page(page)
                 .length(length)
                 .build();
