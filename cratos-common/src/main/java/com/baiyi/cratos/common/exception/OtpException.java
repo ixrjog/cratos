@@ -10,14 +10,11 @@ import java.io.Serial;
 public class OtpException {
 
     public static class DecodingException extends BaseException {
-
         @Serial
         private static final long serialVersionUID = -6967442817224513199L;
-
         public DecodingException(String message) {
             super(message);
         }
-
     }
 
 }

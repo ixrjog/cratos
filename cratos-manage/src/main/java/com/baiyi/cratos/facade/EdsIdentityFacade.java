@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade;
 
-import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 
 /**
@@ -11,15 +11,17 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 public interface EdsIdentityFacade {
 
     EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
-            EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails);
+            EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails);
 
     EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
-            EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails);
+            EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails);
 
     EdsIdentityVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
-            EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails);
+            EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails);
 
     EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
-            EdsInstanceParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails);
+            EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails);
+
+    EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity);
 
 }

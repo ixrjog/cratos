@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.message;
 
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
@@ -32,7 +32,7 @@ public class EdsDingtalkMessageFacade {
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
-        EdsInstanceParam.QueryDingtalkIdentityDetails query = EdsInstanceParam.QueryDingtalkIdentityDetails.builder()
+        EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username(sendToUser.getUsername())
                 .build();
         EdsIdentityVO.DingtalkIdentityDetails dingtalkIdentityDetails = edsIdentityFacade.queryDingtalkIdentityDetails(

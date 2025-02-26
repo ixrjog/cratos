@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.view.eds;
 
+import com.baiyi.cratos.domain.view.user.UserVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -98,6 +99,21 @@ public class EdsIdentityVO {
          */
         @Builder.Default
         private Map<Integer, List<EdsAssetVO.Asset>> sshKeyMap = Map.of();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class LdapIdentity implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 6814595590160622849L;
+        private String username;
+        private String password;
+        private EdsInstanceVO.EdsInstance instance;
+        private UserVO.User user;
+        private EdsAssetVO.Asset asset;
     }
 
 }

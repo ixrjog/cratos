@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -168,36 +167,6 @@ public class EdsInstanceParam {
         private String assetType;
     }
 
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema
-    public static class QueryCloudIdentityDetails {
-        @NotBlank
-        private String username;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema
-    public static class QueryLdapIdentityDetails {
-        @NotBlank
-        private String username;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema
-    public static class QueryDingtalkIdentityDetails {
-        @NotBlank
-        private String username;
-    }
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
@@ -206,16 +175,6 @@ public class EdsInstanceParam {
     public static class CommandExecInstancePageQuery extends PageParam {
         @Schema(description = "查询名称")
         private String queryName;
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Schema
-    public static class QueryGitLabIdentityDetails {
-        @NotBlank
-        private String username;
     }
 
     @Data
