@@ -20,7 +20,6 @@ import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
@@ -36,9 +35,6 @@ import com.baiyi.cratos.wrapper.EdsAssetIndexWrapper;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsConfigWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
-import com.google.api.client.util.Lists;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.jersey.internal.guava.Sets;
@@ -48,12 +44,13 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_NAMESPACE;
 
 /**
  * @Author baiyi
@@ -77,11 +74,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final EdsAssetIndexWrapper edsAssetIndexWrapper;
     private final EdsScheduleFacade edsScheduleFacade;
     private final ApplicationResourceFacade applicationResourceFacade;
-    private final UserService userService;
     private final BusinessTagFacade businessTagFacade;
-
-    private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
-            EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
     private final TagService tagService;
 
     @Override
@@ -185,7 +178,6 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsConfig edsConfig = edsConfigService.getById(configId);
         edsConfig.setInstanceId(0);
         edsConfigService.updateByPrimaryKey(edsConfig);
-
     }
 
     @Override
@@ -372,144 +364,6 @@ public class EdsFacadeImpl implements EdsFacade {
     public EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
         //TODO
         return null;
-    }
-
-    @Override
-    public EdsAssetVO.CloudIdentityDetails queryCloudIdentityDetails(
-            EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        List<EdsAsset> cloudIdentityAssets;
-        Set<EdsAsset> uniqueValues = new HashSet<>();
-        cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
-                .map(type -> EdsAssetTypeEnum.AWS_IAM_USER.name()
-                        .equals(type) ? edsAssetService.queryByTypeAndName(type,
-                        queryCloudIdentityDetails.getUsername(), false) : edsAssetService.queryByTypeAndKey(type,
-                        queryCloudIdentityDetails.getUsername()))
-                .flatMap(Collection::stream)
-                .filter(uniqueValues::add)
-                .collect(Collectors.toList());
-        if (cloudIdentityAssets.isEmpty()) {
-            return EdsAssetVO.CloudIdentityDetails.NO_DATA;
-        }
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = cloudIdentityAssets.stream()
-                .map(EdsAsset::getInstanceId)
-                .distinct()
-                .collect(Collectors.toMap(id -> id, id -> Optional.ofNullable(edsInstanceService.getById(id))
-                        .map(edsInstanceWrapper::wrapToTarget)
-                        .orElseThrow(
-                                () -> new EdsAssetException("The edsInstance does not exist: instanceId={}.", id))));
-        Map<Integer, List<String>> policyMap = Maps.newHashMap();
-        cloudIdentityAssets.forEach(asset -> {
-            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), toPolicyIndexName(asset));
-            if (Objects.nonNull(index)) {
-                policyMap.put(asset.getId(), Lists.newArrayList(Splitter.on(",")
-                        .split(index.getValue())));
-            }
-        });
-        return EdsAssetVO.CloudIdentityDetails.builder()
-                .username(queryCloudIdentityDetails.getUsername())
-                .cloudIdentities(makeCloudIdentities(cloudIdentityAssets))
-                .instanceMap(instanceMap)
-                .policyMap(policyMap)
-                .build();
-    }
-
-    /**
-     * TODO 按类型
-     *
-     * @param asset
-     * @return
-     */
-    private String toPolicyIndexName(EdsAsset asset) {
-        if (asset.getAssetType()
-                .equals(EdsAssetTypeEnum.ALIYUN_RAM_USER.name())) {
-            return ALIYUN_RAM_POLICIES;
-        }
-        if (asset.getAssetType()
-                .equals(EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name())) {
-            return HUAWEICLOUD_IAM_POLICIES;
-        }
-        if (asset.getAssetType()
-                .equals(EdsAssetTypeEnum.AWS_IAM_USER.name())) {
-            return AWS_IAM_POLICIES;
-        }
-        return "Unsupported types";
-    }
-
-    private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> makeCloudIdentities(List<EdsAsset> cloudIdentityAssets) {
-        Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
-        cloudIdentityAssets.forEach(cloudIdentityAsset -> {
-            String assetType = cloudIdentityAsset.getAssetType();
-            EdsAssetVO.Asset assetVO = edsAssetWrapper.wrapToTarget(cloudIdentityAsset);
-            cloudIdentities.computeIfAbsent(assetType, k -> Maps.newHashMap())
-                    .computeIfAbsent(cloudIdentityAsset.getInstanceId(), k -> Lists.newArrayList())
-                    .add(assetVO);
-        });
-        return cloudIdentities;
-    }
-
-    @Override
-    public EdsAssetVO.LdapIdentityDetails queryLdapIdentityDetails(
-            EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
-        List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(),
-                queryLdapIdentityDetails.getUsername());
-        if (CollectionUtils.isEmpty(assets)) {
-            return EdsAssetVO.LdapIdentityDetails.NO_DATA;
-        }
-        Map<Integer, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
-        Map<Integer, List<String>> ldapGroupMap = Maps.newHashMap();
-        assets.forEach(asset -> {
-            ldapIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
-            instanceMap.put(asset.getInstanceId(),
-                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
-            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), LDAP_USER_GROUPS);
-            if (Objects.nonNull(index)) {
-                ldapGroupMap.put(asset.getId(), Lists.newArrayList(Splitter.on(";")
-                        .split(index.getValue())));
-            }
-        });
-        return EdsAssetVO.LdapIdentityDetails.builder()
-                .username(queryLdapIdentityDetails.getUsername())
-                .ldapIdentities(ldapIdentities)
-                .ldapGroupMap(ldapGroupMap)
-                .instanceMap(instanceMap)
-                .build();
-    }
-
-    @Override
-    public EdsAssetVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
-            EdsInstanceParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        User user = userService.getByUsername(queryDingtalkIdentityDetails.getUsername());
-        if (Objects.isNull(user)) {
-            return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
-        }
-        Map<Integer, EdsAsset> assetMap = getAssetMapByMobile(user.getMobilePhone());
-        if (CollectionUtils.isEmpty(assetMap)) {
-            return EdsAssetVO.DingtalkIdentityDetails.NO_DATA;
-        }
-        Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = new HashMap<>();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = new HashMap<>();
-        assetMap.forEach((k, asset) -> {
-            dingtalkIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
-            instanceMap.put(asset.getInstanceId(),
-                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
-        });
-        return EdsAssetVO.DingtalkIdentityDetails.builder()
-                .dingtalkIdentities(dingtalkIdentities)
-                .instanceMap(instanceMap)
-                .build();
-    }
-
-    private Map<Integer, EdsAsset> getAssetMapByMobile(String mobilePhone) {
-        Map<Integer, EdsAsset> assetMap = new HashMap<>();
-        if (StringUtils.hasText(mobilePhone)) {
-            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE,
-                    mobilePhone);
-            if (!CollectionUtils.isEmpty(indices)) {
-                indices.forEach(e -> assetMap.put(e.getAssetId(), edsAssetService.getById(e.getAssetId())));
-            }
-        }
-        return assetMap;
     }
 
     @Override
