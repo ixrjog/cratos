@@ -19,7 +19,6 @@ import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
-import com.google.common.collect.Lists;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.SshKey;
 import org.gitlab4j.api.models.User;
@@ -28,6 +27,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Author baiyi
@@ -65,18 +66,21 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     private List<SshKeyData> listSshKeyWithEdsUserAssets(
             ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
             List<EdsAsset> edsUserAssets) throws GitLabApiException {
-        List<SshKeyData> keys = Lists.newArrayList();
-        for (EdsAsset edsUserAsset : edsUserAssets) {
-            keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(),
-                            Long.parseLong(edsUserAsset.getAssetId()))
-                    .stream()
-                    .map(key -> SshKeyData.builder()
-                            .sshKey(key)
-                            .username(edsUserAsset.getAssetKey())
-                            .build())
-                    .toList());
-        }
-        return keys;
+        return edsUserAssets.stream()
+                .flatMap(edsUserAsset -> {
+                    try {
+                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(),
+                                        Long.parseLong(edsUserAsset.getAssetId()))
+                                .stream()
+                                .map(key -> SshKeyData.builder()
+                                        .sshKey(key)
+                                        .username(edsUserAsset.getAssetKey())
+                                        .build());
+                    } catch (GitLabApiException e) {
+                        return Stream.empty();
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     private List<SshKeyData> listSshKeyFromRepo(
@@ -85,17 +89,20 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         if (CollectionUtils.isEmpty(users)) {
             return Collections.emptyList();
         }
-        List<SshKeyData> keys = Lists.newArrayList();
-        for (User e : users) {
-            keys.addAll(GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), e.getId())
-                    .stream()
-                    .map(key -> SshKeyData.builder()
-                            .sshKey(key)
-                            .username(e.getUsername())
-                            .build())
-                    .toList());
-        }
-        return keys;
+        return users.stream()
+                .flatMap(user -> {
+                    try {
+                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), user.getId())
+                                .stream()
+                                .map(key -> SshKeyData.builder()
+                                        .sshKey(key)
+                                        .username(user.getUsername())
+                                        .build());
+                    } catch (GitLabApiException e) {
+                        return Stream.empty();
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
