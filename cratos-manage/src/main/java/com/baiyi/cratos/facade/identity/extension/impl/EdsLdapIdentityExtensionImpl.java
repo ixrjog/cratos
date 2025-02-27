@@ -64,6 +64,7 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
         final String password = verifyAndGeneratePassword(createLdapIdentity.getPassword());
         // TODO 判断账户是否过期，锁定
         LdapPerson.Person person = EdsIdentityConverter.toLdapPerson(user);
+        person.setUserPassword(password);
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
                     createLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
