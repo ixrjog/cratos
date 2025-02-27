@@ -190,6 +190,11 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         edsLdapIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
     }
 
+    @Override
+    public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
+        return edsLdapIdentityFacade.queryLdapGroups(queryLdapGroups);
+    }
+
     private List<EdsAssetVO.Asset> querySshKeys(String username, int instanceId) {
         return edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(), username, false)
                 .stream()

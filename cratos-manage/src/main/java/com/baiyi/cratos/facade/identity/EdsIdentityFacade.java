@@ -3,6 +3,8 @@ package com.baiyi.cratos.facade.identity;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 
+import java.util.Set;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/26 10:19
@@ -27,5 +29,7 @@ public interface EdsIdentityFacade {
     void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);
 
     void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup);
+
+    Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups);
 
 }

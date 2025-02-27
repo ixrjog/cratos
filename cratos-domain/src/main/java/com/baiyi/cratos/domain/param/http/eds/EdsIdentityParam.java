@@ -84,6 +84,17 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
+    public static class QueryLdapGroups {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
     public static class QueryDingtalkIdentityDetails {
         @NotBlank
         private String username;

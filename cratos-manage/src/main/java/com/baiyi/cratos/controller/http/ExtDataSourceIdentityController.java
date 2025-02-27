@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/27 09:50
@@ -58,10 +60,17 @@ public class ExtDataSourceIdentityController {
 
     @Operation(summary = "Remove ldap user from group")
     @PostMapping(value = "/ldap/user/removeFromGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean>  removeLdapUserFromGroup(
+    public HttpResult<Boolean> removeLdapUserFromGroup(
             @RequestBody @Valid EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
         edsIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Remove ldap user from group")
+    @PostMapping(value = "/ldap/group/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Set<String>> queryLdapGroups(
+            @RequestBody @Valid EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
+        return HttpResult.of(edsIdentityFacade.queryLdapGroups(queryLdapGroups));
     }
 
     // attach detach

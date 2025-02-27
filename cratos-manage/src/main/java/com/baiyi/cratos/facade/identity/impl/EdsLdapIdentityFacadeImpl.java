@@ -27,7 +27,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -37,6 +40,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
 
     private final EdsAssetWrapper edsAssetWrapper;
@@ -49,7 +53,6 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
     private final LdapGroupRepo ldapGroupRepo;
 
     @Override
-    @SuppressWarnings("unchecked")
     public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
         EdsInstance instance = edsInstanceService.getById(createLdapIdentity.getInstanceId());
         if (Objects.isNull(instance)) {
@@ -92,7 +95,6 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
         EdsInstance instance = edsInstanceService.getById(addLdapUserToTheGroup.getInstanceId());
         if (Objects.isNull(instance)) {
@@ -138,9 +140,31 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
+        EdsInstance instance = edsInstanceService.getById(removeLdapUserFromGroup.getInstanceId());
+        if (Objects.isNull(instance)) {
+            EdsIdentityException.runtime("LDAP instance does not exist.");
+        }
+    }
 
+    @Override
+    public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
+        EdsInstance instance = edsInstanceService.getById(queryLdapGroups.getInstanceId());
+        if (Objects.isNull(instance)) {
+            EdsIdentityException.runtime("LDAP instance does not exist.");
+        }
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+                    queryLdapGroups.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
+            final EdsLdapConfigModel.Ldap ldap = ldapGroupHolder.getInstance()
+                    .getEdsConfigModel();
+            List<LdapGroup.Group> groups = ldapGroupRepo.queryGroup(ldap);
+            return groups.stream()
+                    .map(LdapGroup.Group::getGroupName)
+                    .collect(Collectors.toSet());
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Query Ldap groups error: {}", ex.getMessage());
+        }
     }
 
     private String verifyAndGeneratePassword(String password) {
