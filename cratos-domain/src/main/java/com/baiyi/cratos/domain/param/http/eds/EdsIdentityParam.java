@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.eds;
 
+import com.baiyi.cratos.domain.HasEdsInstanceId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +41,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class CreateLdapIdentity {
+    public static class CreateLdapIdentity implements HasEdsInstanceId{
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -54,7 +55,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddLdapUserToTheGroup {
+    public static class AddLdapUserToTheGroup implements HasEdsInstanceId{
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -69,7 +70,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class RemoveLdapUserFromGroup {
+    public static class RemoveLdapUserFromGroup implements HasEdsInstanceId{
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -84,7 +85,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryLdapGroups {
+    public static class QueryLdapGroups implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;

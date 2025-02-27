@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
-import com.baiyi.cratos.facade.identity.EdsLdapIdentityFacade;
+import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -52,7 +52,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     private final UserService userService;
     private final UserWrapper userWrapper;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-    private final EdsLdapIdentityFacade edsLdapIdentityFacade;
+    private final EdsLdapIdentityExtension ldapIdentityExtension;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
@@ -177,22 +177,22 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
 
     @Override
     public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
-        return edsLdapIdentityFacade.createLdapIdentity(createLdapIdentity);
+        return ldapIdentityExtension.createLdapIdentity(createLdapIdentity);
     }
 
     @Override
     public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
-        edsLdapIdentityFacade.addLdapUserToTheGroup(addLdapUserToTheGroup);
+        ldapIdentityExtension.addLdapUserToTheGroup(addLdapUserToTheGroup);
     }
 
     @Override
     public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
-        edsLdapIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
+        ldapIdentityExtension.removeLdapUserFromGroup(removeLdapUserFromGroup);
     }
 
     @Override
     public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
-        return edsLdapIdentityFacade.queryLdapGroups(queryLdapGroups);
+        return ldapIdentityExtension.queryLdapGroups(queryLdapGroups);
     }
 
     private List<EdsAssetVO.Asset> querySshKeys(String username, int instanceId) {

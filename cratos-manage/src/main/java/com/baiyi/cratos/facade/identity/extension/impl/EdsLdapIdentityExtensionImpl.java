@@ -1,8 +1,10 @@
-package com.baiyi.cratos.facade.identity.impl;
+package com.baiyi.cratos.facade.identity.extension.impl;
 
 import com.baiyi.cratos.common.exception.EdsIdentityException;
+import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.converter.EdsIdentityConverter;
+import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
@@ -17,7 +19,7 @@ import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
 import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
-import com.baiyi.cratos.facade.identity.EdsLdapIdentityFacade;
+import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
@@ -41,7 +43,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @SuppressWarnings("unchecked")
-public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
+public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
 
     private final EdsAssetWrapper edsAssetWrapper;
     private final EdsInstanceService edsInstanceService;
@@ -54,14 +56,7 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
 
     @Override
     public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
-        EdsInstance instance = edsInstanceService.getById(createLdapIdentity.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("LDAP instance does not exist.");
-        }
-        if (!EdsInstanceTypeEnum.LDAP.name()
-                .equals(instance.getEdsType())) {
-            EdsIdentityException.runtime("The instance type is not LDAP.");
-        }
+        EdsInstance instance = getAndVerifyEdsInstance(createLdapIdentity);
         User user = userService.getByUsername(createLdapIdentity.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", createLdapIdentity.getUsername());
@@ -96,14 +91,7 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
 
     @Override
     public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
-        EdsInstance instance = edsInstanceService.getById(addLdapUserToTheGroup.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("LDAP instance does not exist.");
-        }
-        if (!EdsInstanceTypeEnum.LDAP.name()
-                .equals(instance.getEdsType())) {
-            EdsIdentityException.runtime("The instance type is not LDAP.");
-        }
+        EdsInstance instance = getAndVerifyEdsInstance(addLdapUserToTheGroup);
         User user = userService.getByUsername(addLdapUserToTheGroup.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", addLdapUserToTheGroup.getUsername());
@@ -124,13 +112,13 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
             }
             // 新增组成员
             ldapGroupRepo.addGroupMember(ldap, addLdapUserToTheGroup.getGroup(), addLdapUserToTheGroup.getUsername());
-            // 导入person资产
+            // 导入person资产（重写索引）
             LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
                     addLdapUserToTheGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             ldapPersonHolder.getProvider()
                     .importAsset(ldapGroupHolder.getInstance(), person);
-            // 导入group资产
+            // 导入group资产（重写索引）
             ldapGroupHolder.getProvider()
                     .importAsset(ldapGroupHolder.getInstance(),
                             ldapGroupRepo.findGroup(ldap, addLdapUserToTheGroup.getGroup()));
@@ -142,17 +130,45 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
     @Override
     public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
         EdsInstance instance = edsInstanceService.getById(removeLdapUserFromGroup.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("LDAP instance does not exist.");
+        User user = userService.getByUsername(removeLdapUserFromGroup.getUsername());
+        if (Objects.isNull(user)) {
+            EdsIdentityException.runtime("User {} does not exist.", removeLdapUserFromGroup.getUsername());
+        }
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+                    removeLdapUserFromGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
+            final EdsLdapConfigModel.Ldap ldap = ldapGroupHolder.getInstance()
+                    .getEdsConfigModel();
+            if (!ldapPersonRepo.checkPersonInLdap(ldapGroupHolder.getInstance()
+                    .getEdsConfigModel(), removeLdapUserFromGroup.getUsername())) {
+                // 身份不存在
+                EdsIdentityException.runtime("The user does not exist in LDAP instance.");
+            }
+            LdapGroup.Group group = ldapGroupRepo.findGroup(ldap, removeLdapUserFromGroup.getGroup());
+            if (Objects.isNull(group)) {
+                EdsIdentityException.runtime("LDAP group {} does not exist.", removeLdapUserFromGroup.getGroup());
+            }
+            // 移除组成员
+            ldapGroupRepo.removeGroupMember(ldap, removeLdapUserFromGroup.getGroup(),
+                    removeLdapUserFromGroup.getUsername());
+            // 导入person资产（重写索引）
+            LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+                    removeLdapUserFromGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
+            ldapPersonHolder.getProvider()
+                    .importAsset(ldapGroupHolder.getInstance(), person);
+            // 导入group资产（重写索引）
+            ldapGroupHolder.getProvider()
+                    .importAsset(ldapGroupHolder.getInstance(),
+                            ldapGroupRepo.findGroup(ldap, removeLdapUserFromGroup.getGroup()));
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Remove Ldap user from group error: {}", ex.getMessage());
         }
     }
 
     @Override
     public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
-        EdsInstance instance = edsInstanceService.getById(queryLdapGroups.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("LDAP instance does not exist.");
-        }
+        getAndVerifyEdsInstance(queryLdapGroups);
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
                     queryLdapGroups.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
@@ -165,6 +181,22 @@ public class EdsLdapIdentityFacadeImpl implements EdsLdapIdentityFacade {
         } catch (Exception ex) {
             throw new EdsIdentityException("Query Ldap groups error: {}", ex.getMessage());
         }
+    }
+
+
+    private EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
+        if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+            EdsIdentityException.runtime("LDAP instanceId is incorrect.");
+        }
+        EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());
+        if (Objects.isNull(instance)) {
+            EdsIdentityException.runtime("LDAP instance does not exist.");
+        }
+        if (!EdsInstanceTypeEnum.LDAP.name()
+                .equals(instance.getEdsType())) {
+            EdsIdentityException.runtime("The instance type is not LDAP.");
+        }
+        return instance;
     }
 
     private String verifyAndGeneratePassword(String password) {
