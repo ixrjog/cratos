@@ -55,6 +55,20 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
+    public static class ResetLdapUserPassword implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String username;
+        private String password;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
     public static class DeleteLdapIdentity implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")

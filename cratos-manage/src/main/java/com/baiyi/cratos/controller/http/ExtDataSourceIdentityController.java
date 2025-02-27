@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -64,6 +61,13 @@ public class ExtDataSourceIdentityController {
             @RequestBody @Valid EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
         edsIdentityFacade.addLdapUserToTheGroup(addLdapUserToTheGroup);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Reset ldap user password")
+    @PutMapping(value = "/ldap/user/password/reset", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsIdentityVO.LdapIdentity> resetLdapUserPassword(
+            @RequestBody @Valid EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
+        return HttpResult.of(edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword));
     }
 
     @Operation(summary = "Remove ldap user from group")

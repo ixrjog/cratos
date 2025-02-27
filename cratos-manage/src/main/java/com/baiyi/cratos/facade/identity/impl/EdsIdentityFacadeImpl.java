@@ -181,6 +181,12 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     }
 
     @Override
+    public EdsIdentityVO.LdapIdentity resetLdapUserPassword(
+            EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
+        return ldapIdentityExtension.resetLdapUserPassword(resetLdapUserPassword);
+    }
+
+    @Override
     public void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
         ldapIdentityExtension.deleteLdapIdentity(deleteLdapIdentity);
     }

@@ -14,6 +14,8 @@ public interface EdsLdapIdentityExtension {
 
     EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity);
 
+    EdsIdentityVO.LdapIdentity resetLdapUserPassword(EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword);
+
     void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity);
 
     void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);

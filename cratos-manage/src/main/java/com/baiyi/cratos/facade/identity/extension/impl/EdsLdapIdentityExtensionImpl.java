@@ -96,6 +96,39 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
     }
 
     @Override
+    public EdsIdentityVO.LdapIdentity resetLdapUserPassword(
+            EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
+        EdsInstance instance = getAndVerifyEdsInstance(resetLdapUserPassword);
+        User user = userService.getByUsername(resetLdapUserPassword.getUsername());
+        if (Objects.isNull(user)) {
+            EdsIdentityException.runtime("User {} does not exist.", resetLdapUserPassword.getUsername());
+        }
+        final String password = verifyAndGeneratePassword(resetLdapUserPassword.getPassword());
+        LdapPerson.Person person = EdsIdentityConverter.toLdapPerson(user);
+        person.setUserPassword(password);
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+                    resetLdapUserPassword.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
+            if (ldapPersonRepo.checkPersonInLdap(holder.getInstance()
+                    .getEdsConfigModel(), resetLdapUserPassword.getUsername())) {
+                // 身份已存在
+                EdsIdentityException.runtime("The user already exists in the instance.");
+            }
+            ldapPersonRepo.update(holder.getInstance()
+                    .getEdsConfigModel(), person);
+            return EdsIdentityVO.LdapIdentity.builder()
+                    .username(resetLdapUserPassword.getUsername())
+                    .password(password)
+                    .user(userWrapper.wrapToTarget(user))
+                    //.asset(edsAssetWrapper.wrapToTarget(personAsset))
+                    .instance(edsInstanceWrapper.wrapToTarget(instance))
+                    .build();
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Reset LDAP user password error: {}", ex.getMessage());
+        }
+    }
+
+    @Override
     public void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
         EdsInstance instance = getAndVerifyEdsInstance(deleteLdapIdentity);
         User user = userService.getByUsername(deleteLdapIdentity.getUsername());
@@ -170,7 +203,7 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
 
     @Override
     public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
-        EdsInstance instance = edsInstanceService.getById(removeLdapUserFromGroup.getInstanceId());
+        EdsInstance instance = getAndVerifyEdsInstance(removeLdapUserFromGroup);
         User user = userService.getByUsername(removeLdapUserFromGroup.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", removeLdapUserFromGroup.getUsername());
@@ -180,19 +213,15 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
                     removeLdapUserFromGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             final EdsLdapConfigModel.Ldap ldap = ldapGroupHolder.getInstance()
                     .getEdsConfigModel();
-            if (!ldapPersonRepo.checkPersonInLdap(ldapGroupHolder.getInstance()
-                    .getEdsConfigModel(), removeLdapUserFromGroup.getUsername())) {
-                // 身份不存在
+            if (!ldapPersonRepo.checkPersonInLdap(ldap, removeLdapUserFromGroup.getUsername())) {
                 EdsIdentityException.runtime("The user does not exist in LDAP instance.");
             }
             LdapGroup.Group group = ldapGroupRepo.findGroup(ldap, removeLdapUserFromGroup.getGroup());
             if (Objects.isNull(group)) {
                 EdsIdentityException.runtime("LDAP group {} does not exist.", removeLdapUserFromGroup.getGroup());
             }
-            // 移除组成员
             ldapGroupRepo.removeGroupMember(ldap, removeLdapUserFromGroup.getGroup(),
                     removeLdapUserFromGroup.getUsername());
-            // 刷新数据
             postRefreshEdsData(ldap, removeLdapUserFromGroup, user, removeLdapUserFromGroup.getGroup(),
                     ldapGroupHolder);
         } catch (Exception ex) {
