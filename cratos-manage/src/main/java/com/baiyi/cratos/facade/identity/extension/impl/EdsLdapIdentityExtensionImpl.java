@@ -112,16 +112,8 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
             }
             // 新增组成员
             ldapGroupRepo.addGroupMember(ldap, addLdapUserToTheGroup.getGroup(), addLdapUserToTheGroup.getUsername());
-            // 导入person资产（重写索引）
-            LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
-            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
-                    addLdapUserToTheGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            ldapPersonHolder.getProvider()
-                    .importAsset(ldapGroupHolder.getInstance(), person);
-            // 导入group资产（重写索引）
-            ldapGroupHolder.getProvider()
-                    .importAsset(ldapGroupHolder.getInstance(),
-                            ldapGroupRepo.findGroup(ldap, addLdapUserToTheGroup.getGroup()));
+            // 刷新数据
+            postRefreshEdsData(ldap, addLdapUserToTheGroup, user, addLdapUserToTheGroup.getGroup(), ldapGroupHolder);
         } catch (Exception ex) {
             throw new EdsIdentityException("Add Ldap user to the group error: {}", ex.getMessage());
         }
@@ -151,19 +143,26 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
             // 移除组成员
             ldapGroupRepo.removeGroupMember(ldap, removeLdapUserFromGroup.getGroup(),
                     removeLdapUserFromGroup.getUsername());
-            // 导入person资产（重写索引）
-            LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
-            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
-                    removeLdapUserFromGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            ldapPersonHolder.getProvider()
-                    .importAsset(ldapGroupHolder.getInstance(), person);
-            // 导入group资产（重写索引）
-            ldapGroupHolder.getProvider()
-                    .importAsset(ldapGroupHolder.getInstance(),
-                            ldapGroupRepo.findGroup(ldap, removeLdapUserFromGroup.getGroup()));
+            // 刷新数据
+            postRefreshEdsData(ldap, removeLdapUserFromGroup, user, removeLdapUserFromGroup.getGroup(),
+                    ldapGroupHolder);
         } catch (Exception ex) {
             throw new EdsIdentityException("Remove Ldap user from group error: {}", ex.getMessage());
         }
+    }
+
+    private void postRefreshEdsData(EdsLdapConfigModel.Ldap ldap, HasEdsInstanceId hasEdsInstanceId, User user,
+                                    String groupName,
+                                    EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder) {
+        // 导入person资产（重写索引）
+        LdapPerson.Person person = ldapPersonRepo.findPerson(ldap, EdsIdentityConverter.toLdapPerson(user));
+        EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+                hasEdsInstanceId.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
+        ldapPersonHolder.getProvider()
+                .importAsset(ldapGroupHolder.getInstance(), person);
+        // 导入group资产（重写索引）
+        ldapGroupHolder.getProvider()
+                .importAsset(ldapGroupHolder.getInstance(), ldapGroupRepo.findGroup(ldap, groupName));
     }
 
     @Override
@@ -182,7 +181,6 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
             throw new EdsIdentityException("Query Ldap groups error: {}", ex.getMessage());
         }
     }
-
 
     private EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
         if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
