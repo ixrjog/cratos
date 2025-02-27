@@ -26,6 +26,8 @@ public interface EdsIdentityFacade {
 
     EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity);
 
+    void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity);
+
     void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);
 
     void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup);

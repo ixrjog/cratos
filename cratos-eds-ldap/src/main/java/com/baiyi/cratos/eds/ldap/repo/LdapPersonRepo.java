@@ -23,17 +23,17 @@ public class LdapPersonRepo {
 
     private final LdapClient ldapClient;
 
-    public LdapPerson.Person findPerson(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        String userDN = LdapUtils.toUserDN(ldapConfig, person);
-        return ldapClient.findPersonByDn(ldapConfig, userDN);
+    public LdapPerson.Person findPerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+        String userDN = LdapUtils.toUserDN(ldap, person);
+        return ldapClient.findPersonByDn(ldap, userDN);
     }
 
-    public List<LdapPerson.Person> queryGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
-        List<String> usernames = ldapClient.queryGroupMember(ldapConfig, groupName);
+    public List<LdapPerson.Person> queryGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName) {
+        List<String> usernames = ldapClient.queryGroupMember(ldap, groupName);
         List<LdapPerson.Person> people = Lists.newArrayList();
         usernames.forEach(username -> {
             try {
-                people.add(ldapClient.findPersonByDn(ldapConfig, ldapConfig.buildUserDn(username)));
+                people.add(ldapClient.findPersonByDn(ldap, ldap.buildUserDn(username)));
             } catch (Exception e) {
                 log.debug("未找到 {} 对应的 Person", username);
             }
@@ -46,12 +46,12 @@ public class LdapPersonRepo {
      *
      * @return
      */
-    public List<String> getAllPersonNames(EdsLdapConfigModel.Ldap ldapConfig) {
-        return ldapClient.queryPersonNameList(ldapConfig);
+    public List<String> getAllPersonNames(EdsLdapConfigModel.Ldap ldap) {
+        return ldapClient.queryPersonNameList(ldap);
     }
 
-    public List<LdapPerson.Person> queryPerson(EdsLdapConfigModel.Ldap ldapConfig) {
-        return ldapClient.queryPersonList(ldapConfig);
+    public List<LdapPerson.Person> queryPerson(EdsLdapConfigModel.Ldap ldap) {
+        return ldapClient.queryPersonList(ldap);
     }
 
     /**
@@ -60,29 +60,29 @@ public class LdapPersonRepo {
      * @param dn
      * @return
      */
-    public LdapPerson.Person findPersonWithDn(EdsLdapConfigModel.Ldap ldapConfig, String dn) {
-        return ldapClient.findPersonByDn(ldapConfig, dn);
+    public LdapPerson.Person findPersonWithDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+        return ldapClient.findPersonByDn(ldap, dn);
     }
 
-    public void create(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        ldapClient.bindPerson(ldapConfig, person);
+    public void create(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+        ldapClient.bindPerson(ldap, person);
     }
 
-    public void update(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        ldapClient.updatePerson(ldapConfig, person);
+    public void update(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+        ldapClient.updatePerson(ldap, person);
     }
 
-    public void delete(EdsLdapConfigModel.Ldap ldapConfig, String username) {
-        ldapClient.unbind(ldapConfig, ldapConfig.buildUserDn(username));
+    public void delete(EdsLdapConfigModel.Ldap ldap, String username) {
+        ldapClient.unbind(ldap, ldap.buildUserDn(username));
     }
 
-    public Boolean checkPersonInLdap(EdsLdapConfigModel.Ldap ldapConfig, String username) {
-        return ldapClient.hasPersonInLdap(ldapConfig, username);
+    public Boolean checkPersonInLdap(EdsLdapConfigModel.Ldap ldap, String username) {
+        return ldapClient.hasPersonInLdap(ldap, username);
 
     }
 
-    public List<String> searchUserGroupByUsername(EdsLdapConfigModel.Ldap ldapConfig, String username) {
-        return ldapClient.searchLdapGroup(ldapConfig, username);
+    public List<String> searchUserGroupByUsername(EdsLdapConfigModel.Ldap ldap, String username) {
+        return ldapClient.searchLdapGroup(ldap, username);
     }
 
 }

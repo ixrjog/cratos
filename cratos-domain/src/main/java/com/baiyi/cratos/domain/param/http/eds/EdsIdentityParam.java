@@ -41,7 +41,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class CreateLdapIdentity implements HasEdsInstanceId{
+    public static class CreateLdapIdentity implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -55,7 +55,20 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddLdapUserToTheGroup implements HasEdsInstanceId{
+    public static class DeleteLdapIdentity implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String username;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class AddLdapUserToTheGroup implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -70,7 +83,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class RemoveLdapUserFromGroup implements HasEdsInstanceId{
+    public static class RemoveLdapUserFromGroup implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;

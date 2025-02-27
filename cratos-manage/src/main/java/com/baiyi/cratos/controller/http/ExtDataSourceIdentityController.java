@@ -50,6 +50,14 @@ public class ExtDataSourceIdentityController {
         return HttpResult.of(edsIdentityFacade.createLdapIdentity(createLdapIdentity));
     }
 
+    @Operation(summary = "Delete eds ldap identity")
+    @PostMapping(value = "/ldap/user/delete", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteLdapIdentity(
+            @RequestBody @Valid EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
+        edsIdentityFacade.deleteLdapIdentity(deleteLdapIdentity);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add ldap user to the group")
     @PostMapping(value = "/ldap/user/addToGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addLdapUserToTheGroup(

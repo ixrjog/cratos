@@ -181,6 +181,11 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     }
 
     @Override
+    public void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
+        ldapIdentityExtension.deleteLdapIdentity(deleteLdapIdentity);
+    }
+
+    @Override
     public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
         ldapIdentityExtension.addLdapUserToTheGroup(addLdapUserToTheGroup);
     }

@@ -19,7 +19,9 @@ import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
 import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
@@ -28,6 +30,7 @@ import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,6 +56,8 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final LdapPersonRepo ldapPersonRepo;
     private final LdapGroupRepo ldapGroupRepo;
+    private final EdsAssetService edsAssetService;
+    private final EdsFacade edsFacade;
 
     @Override
     public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
@@ -87,6 +92,49 @@ public class EdsLdapIdentityExtensionImpl implements EdsLdapIdentityExtension {
                     .build();
         } catch (Exception ex) {
             throw new EdsIdentityException("Creating LDAP identity error: {}", ex.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
+        EdsInstance instance = getAndVerifyEdsInstance(deleteLdapIdentity);
+        User user = userService.getByUsername(deleteLdapIdentity.getUsername());
+        if (Objects.isNull(user)) {
+            EdsIdentityException.runtime("User {} does not exist.", deleteLdapIdentity.getUsername());
+        }
+        final String username = deleteLdapIdentity.getUsername();
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+                    deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+                    deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
+            EdsLdapConfigModel.Ldap ldap = holder.getInstance()
+                    .getEdsConfigModel();
+            if (!ldapPersonRepo.checkPersonInLdap(holder.getInstance()
+                    .getEdsConfigModel(), deleteLdapIdentity.getUsername())) {
+                // 身份不存在
+                return;
+            }
+            List<LdapGroup.Group> groups = ldapGroupRepo.searchGroupByUsername(ldap, username);
+            // 删除用户的所有组权限
+            if (!CollectionUtils.isEmpty(groups)) {
+                groups.forEach(group -> {
+                    ldapGroupRepo.removeGroupMember(ldap, group.getGroupName(), username);
+                    // 重写Eds Ldap group资产
+                    ldapGroupHolder.getProvider()
+                            .importAsset(ldapGroupHolder.getInstance(),
+                                    ldapGroupRepo.findGroup(ldap, group.getGroupName()));
+                });
+            }
+            // 删除Ldap user
+            ldapPersonRepo.delete(ldap, username);
+            edsAssetService.queryInstanceAssetByTypeAndKey(deleteLdapIdentity.getInstanceId(),
+                            EdsAssetTypeEnum.LDAP_GROUP.name(), username)
+                    .stream()
+                    .mapToInt(EdsAsset::getId)
+                    .forEach(edsFacade::deleteEdsAssetById);
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Delete LDAP identity error: {}", ex.getMessage());
         }
     }
 
