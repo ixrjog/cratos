@@ -3,7 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.facade.EdsIdentityFacade;
+import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * &#064;Version 1.0
  */
 @RestController
-@RequestMapping("/api/eds/identity/")
+@RequestMapping("/api/eds/identity")
 @Tag(name = "External Datasource Identity")
 @RequiredArgsConstructor
 public class ExtDataSourceIdentityController {
@@ -56,10 +56,15 @@ public class ExtDataSourceIdentityController {
         return HttpResult.SUCCESS;
     }
 
-    // Remove users from the group
+    @Operation(summary = "Remove ldap user from group")
+    @PostMapping(value = "/ldap/user/removeFromGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean>  removeLdapUserFromGroup(
+            @RequestBody @Valid EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
+        edsIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
+        return HttpResult.SUCCESS;
+    }
 
     // attach detach
-
 
     @Operation(summary = "Query eds asset dingtalk identity by username")
     @PostMapping(value = "/dingtalk/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

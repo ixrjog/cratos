@@ -1,25 +1,17 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.identity.impl;
 
-import com.baiyi.cratos.common.exception.EdsIdentityException;
-import com.baiyi.cratos.common.util.PasswordGenerator;
-import com.baiyi.cratos.converter.EdsIdentityConverter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.eds.ldap.model.LdapPerson;
-import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
-import com.baiyi.cratos.facade.EdsIdentityFacade;
+import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
+import com.baiyi.cratos.facade.identity.EdsLdapIdentityFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -60,8 +52,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     private final UserService userService;
     private final UserWrapper userWrapper;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-    private final LdapPersonRepo ldapPersonRepo;
-
+    private final EdsLdapIdentityFacade edsLdapIdentityFacade;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
@@ -184,6 +175,21 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
                 .build();
     }
 
+    @Override
+    public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
+        return edsLdapIdentityFacade.createLdapIdentity(createLdapIdentity);
+    }
+
+    @Override
+    public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
+        edsLdapIdentityFacade.addLdapUserToTheGroup(addLdapUserToTheGroup);
+    }
+
+    @Override
+    public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
+        edsLdapIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
+    }
+
     private List<EdsAssetVO.Asset> querySshKeys(String username, int instanceId) {
         return edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(), username, false)
                 .stream()
@@ -230,61 +236,6 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
             }
         }
         return assetMap;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
-        EdsInstance instance = edsInstanceService.getById(createLdapIdentity.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("LDAP instance does not exist.");
-        }
-        if (!EdsInstanceTypeEnum.LDAP.name()
-                .equals(instance.getEdsType())) {
-            EdsIdentityException.runtime("The instance type is not LDAP.");
-        }
-        User user = userService.getByUsername(createLdapIdentity.getUsername());
-        if (Objects.isNull(user)) {
-            EdsIdentityException.runtime("User {} does not exist.", createLdapIdentity.getUsername());
-        }
-        final String password = verifyAndGeneratePassword(createLdapIdentity.getPassword());
-        // TODO 判断账户是否过期，锁定
-        LdapPerson.Person person = EdsIdentityConverter.toLdapPerson(user);
-        try {
-            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
-                    createLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            if (ldapPersonRepo.checkPersonInLdap(holder.getInstance()
-                    .getEdsConfigModel(), person.getUsername())) {
-                // 身份已存在
-                EdsIdentityException.runtime("The user already exists in the instance.");
-            }
-            ldapPersonRepo.create(holder.getInstance()
-                    .getEdsConfigModel(), person);
-            // 导入资产
-            EdsAsset personAsset = holder.getProvider()
-                    .importAsset(holder.getInstance(), person);
-            return EdsIdentityVO.LdapIdentity.builder()
-                    .username(createLdapIdentity.getUsername())
-                    .password(password)
-                    .user(userWrapper.wrapToTarget(user))
-                    .asset(edsAssetWrapper.wrapToTarget(personAsset))
-                    .instance(edsInstanceWrapper.wrapToTarget(instance))
-                    .build();
-        } catch (Exception ex) {
-            throw new EdsIdentityException("Creating LDAP identity error: {}", ex.getMessage());
-        }
-    }
-
-    @Override
-    public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
-
-    }
-
-    private String verifyAndGeneratePassword(String password) {
-        if (PasswordGenerator.isPasswordStrong(password)) {
-            return password;
-        }
-        return PasswordGenerator.generatePassword();
     }
 
 }

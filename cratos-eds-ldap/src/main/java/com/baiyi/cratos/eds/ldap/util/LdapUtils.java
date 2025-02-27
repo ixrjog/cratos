@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class LdapUtil {
+public final class LdapUtils {
 
     public static String toUserRDN(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
         return Joiner.on("=").join(ldapConfig.getUser().getId(), person.getUsername());

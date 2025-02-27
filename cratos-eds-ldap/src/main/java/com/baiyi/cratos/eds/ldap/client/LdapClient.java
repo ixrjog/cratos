@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.ldap.mapper.GroupAttributesMapper;
 import com.baiyi.cratos.eds.ldap.mapper.PersonAttributesMapper;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
-import com.baiyi.cratos.eds.ldap.util.LdapUtil;
+import com.baiyi.cratos.eds.ldap.util.LdapUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,9 @@ import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Component;
 
 import javax.naming.directory.*;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.ldap.client.LdapClient.SEARCH_KEY.OBJECTCLASS;
 import static org.springframework.ldap.query.LdapQueryBuilder.query;
@@ -37,14 +38,14 @@ import static org.springframework.ldap.query.LdapQueryBuilder.query;
 public class LdapClient {
 
     public static final String GROUP_MEMBER = "groupMember";
-    public static final String GROUP_DN = "{}={},{}";
+    //public static final String GROUP_DN = "{}={},{}";
 
     public interface SEARCH_KEY {
         String OBJECTCLASS = "objectclass";
     }
 
-    private LdapTemplate buildLdapTemplate(EdsLdapConfigModel.Ldap config) {
-        return LdapFactory.buildLdapTemplate(config);
+    private LdapTemplate buildLdapTemplate(EdsLdapConfigModel.Ldap ldap) {
+        return LdapFactory.buildLdapTemplate(ldap);
     }
 
     /**
@@ -52,9 +53,9 @@ public class LdapClient {
      *
      * @return
      */
-    public List<LdapPerson.Person> queryPersonList(EdsLdapConfigModel.Ldap ldapConfig) {
-        return buildLdapTemplate(ldapConfig).search(query().where(OBJECTCLASS)
-                .is(ldapConfig.getUser()
+    public List<LdapPerson.Person> queryPersonList(EdsLdapConfigModel.Ldap ldap) {
+        return buildLdapTemplate(ldap).search(query().where(OBJECTCLASS)
+                .is(ldap.getUser()
                         .getObjectClass()), new PersonAttributesMapper());
     }
 
@@ -63,10 +64,10 @@ public class LdapClient {
      *
      * @return
      */
-    public List<String> queryPersonNameList(EdsLdapConfigModel.Ldap ldapConfig) {
-        return buildLdapTemplate(ldapConfig).search(query().where(OBJECTCLASS)
-                .is(ldapConfig.getUser()
-                        .getObjectClass()), (AttributesMapper<String>) attrs -> (String) attrs.get(ldapConfig.getUser()
+    public List<String> queryPersonNameList(EdsLdapConfigModel.Ldap ldap) {
+        return buildLdapTemplate(ldap).search(query().where(OBJECTCLASS)
+                .is(ldap.getUser()
+                        .getObjectClass()), (AttributesMapper<String>) attrs -> (String) attrs.get(ldap.getUser()
                         .getId())
                 .get());
     }
@@ -77,8 +78,8 @@ public class LdapClient {
      * @param dn
      * @return
      */
-    public LdapPerson.Person getPersonWithDN(EdsLdapConfigModel.Ldap ldapConfig, String dn) {
-        return buildLdapTemplate(ldapConfig).lookup(dn, new PersonAttributesMapper());
+    public LdapPerson.Person findPersonByDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+        return buildLdapTemplate(ldap).lookup(dn, new PersonAttributesMapper());
     }
 
     /**
@@ -87,9 +88,10 @@ public class LdapClient {
      * @param dn
      * @return
      */
-    public LdapGroup.Group getGroupWithDN(EdsLdapConfigModel.Ldap ldapConfig, String dn) {
-        LdapGroup.Group group = buildLdapTemplate(ldapConfig).lookup(dn, new GroupAttributesMapper());
-        group.setGroupDn(Joiner.on(",").join(dn, ldapConfig.getBase()));
+    public LdapGroup.Group findGroupByDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+        LdapGroup.Group group = buildLdapTemplate(ldap).lookup(dn, new GroupAttributesMapper());
+        group.setGroupDn(Joiner.on(",")
+                .join(dn, ldap.getBase()));
         return group;
     }
 
@@ -99,7 +101,7 @@ public class LdapClient {
      * @param credential
      * @return
      */
-    public boolean verifyLogin(EdsLdapConfigModel.Ldap ldapConfig, Authorization.Credential credential) {
+    public boolean verifyLogin(EdsLdapConfigModel.Ldap ldap, Authorization.Credential credential) {
         if (credential.isEmpty()) {
             return false;
         }
@@ -108,10 +110,10 @@ public class LdapClient {
         log.info("Verify login content username={}", username);
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter(OBJECTCLASS, "person"))
-                .and(new EqualsFilter(ldapConfig.getUser()
+                .and(new EqualsFilter(ldap.getUser()
                         .getId(), username));
         try {
-            return buildLdapTemplate(ldapConfig).authenticate(ldapConfig.getUser()
+            return buildLdapTemplate(ldap).authenticate(ldap.getUser()
                     .getDn(), filter.toString(), password);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -125,12 +127,12 @@ public class LdapClient {
      *
      * @param dn
      */
-    public void unbind(EdsLdapConfigModel.Ldap ldapConfig, String dn) {
-        buildLdapTemplate(ldapConfig).unbind(dn);
+    public void unbind(EdsLdapConfigModel.Ldap ldap, String dn) {
+        buildLdapTemplate(ldap).unbind(dn);
     }
 
-    private void bind(EdsLdapConfigModel.Ldap ldapConfig, String dn, Object obj, Attributes attrs) {
-        buildLdapTemplate(ldapConfig).bind(dn, obj, attrs);
+    private void bind(EdsLdapConfigModel.Ldap ldap, String dn, Object obj, Attributes attrs) {
+        buildLdapTemplate(ldap).bind(dn, obj, attrs);
     }
 
     /**
@@ -139,15 +141,15 @@ public class LdapClient {
      * @param person
      * @return
      */
-    public void bindPerson(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        final String userId = ldapConfig.getUser()
+    public void bindPerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+        final String userId = ldap.getUser()
                 .getId();
-        final String userBaseDN = ldapConfig.getUser()
+        final String userBaseDN = ldap.getUser()
                 .getDn();
-        final String userObjectClass = ldapConfig.getUser()
+        final String userObjectClass = ldap.getUser()
                 .getObjectClass();
         try {
-            final String rdn = LdapUtil.toUserRDN(ldapConfig, person);
+            final String rdn = LdapUtils.toUserRDN(ldap, person);
             final String dn = Joiner.on(",")
                     .skipNulls()
                     .join(rdn, userBaseDN);
@@ -170,7 +172,7 @@ public class LdapClient {
             attrs.put("mail", person.getEmail());
             attrs.put("userPassword", person.getUserPassword());
             attrs.put("mobile", (StringUtils.isEmpty(person.getMobile()) ? "0" : person.getMobile()));
-            bind(ldapConfig, dn, null, attrs);
+            bind(ldap, dn, null, attrs);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -182,15 +184,15 @@ public class LdapClient {
      * @param group
      * @return
      */
-    public void bindGroup(EdsLdapConfigModel.Ldap ldapConfig, LdapGroup.Group group) {
-        final String groupId = ldapConfig.getGroup()
+    public void bindGroup(EdsLdapConfigModel.Ldap ldap, LdapGroup.Group group) {
+        final String groupId = ldap.getGroup()
                 .getId();
-        final String groupBaseDN = ldapConfig.getGroup()
+        final String groupBaseDN = ldap.getGroup()
                 .getDn();
-        final String groupObjectClass = ldapConfig.getGroup()
+        final String groupObjectClass = ldap.getGroup()
                 .getObjectClass();
 
-        final String rdn = LdapUtil.toGroupRDN(ldapConfig, group);
+        final String rdn = LdapUtils.toGroupRDN(ldap, group);
         final String dn = Joiner.on(",")
                 .skipNulls()
                 .join(rdn, groupBaseDN);
@@ -206,33 +208,33 @@ public class LdapClient {
         // 添加一个空成员
         // attrs.put(GROUP_MEMBER, "");
         try {
-            bind(ldapConfig, dn, null, attrs);
+            bind(ldap, dn, null, attrs);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    public void updatePerson(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        String dn = LdapUtil.toUserDN(ldapConfig, person);
-        LdapPerson.Person checkPerson = getPersonWithDN(ldapConfig, dn);
+    public void updatePerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+        String dn = LdapUtils.toUserDN(ldap, person);
+        LdapPerson.Person checkPerson = findPersonByDn(ldap, dn);
         if (checkPerson == null) {
             return;
         }
         try {
             if (!StringUtils.isEmpty(person.getDisplayName()) && !person.getDisplayName()
                     .equals(checkPerson.getDisplayName())) {
-                modifyAttributes(ldapConfig, dn, "displayName", person.getDisplayName());
+                modifyAttributes(ldap, dn, "displayName", person.getDisplayName());
             }
             if (!StringUtils.isEmpty(person.getEmail()) && !person.getEmail()
                     .equals(checkPerson.getEmail())) {
-                modifyAttributes(ldapConfig, dn, "mail", person.getEmail());
+                modifyAttributes(ldap, dn, "mail", person.getEmail());
             }
             if (!StringUtils.isEmpty(person.getMobile()) && !person.getMobile()
                     .equals(checkPerson.getMobile())) {
-                modifyAttributes(ldapConfig, dn, "mobile", person.getMobile());
+                modifyAttributes(ldap, dn, "mobile", person.getMobile());
             }
             if (!StringUtils.isEmpty(person.getUserPassword())) {
-                modifyAttributes(ldapConfig, dn, "userpassword", person.getUserPassword());
+                modifyAttributes(ldap, dn, "userpassword", person.getUserPassword());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -244,71 +246,68 @@ public class LdapClient {
      *
      * @return
      */
-    public List<LdapGroup.Group> queryGroupList(EdsLdapConfigModel.Ldap ldapConfig) {
-        return buildLdapTemplate(ldapConfig).search(query().where(OBJECTCLASS)
-                .is(ldapConfig.getGroup()
+    public List<LdapGroup.Group> queryGroupList(EdsLdapConfigModel.Ldap ldap) {
+        return buildLdapTemplate(ldap).search(query().where(OBJECTCLASS)
+                .is(ldap.getGroup()
                         .getObjectClass()), new GroupAttributesMapper());
     }
 
-    public List<String> queryGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
+    public List<String> queryGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName) {
         try {
-            DirContextAdapter adapter = (DirContextAdapter) buildLdapTemplate(ldapConfig).lookup(
-                    LdapUtil.toGroupDN(ldapConfig, groupName));
-            String[] members = adapter.getStringAttributes(ldapConfig.getGroup()
+            DirContextAdapter adapter = (DirContextAdapter) buildLdapTemplate(ldap).lookup(
+                    LdapUtils.toGroupDN(ldap, groupName));
+            String[] members = adapter.getStringAttributes(ldap.getGroup()
                     .getMemberAttribute());
-            List<String> usernameList = Lists.newArrayList();
-            for (String member : members) {
-                String[] m = member.split("[=,]");
-                if (m.length > 2 && !m[1].equals("admin")) {
-                    usernameList.add(m[1]);
-                }
-            }
-            return usernameList;
+            return Arrays.stream(members)
+                    .map(member -> member.split("[=,]"))
+                    .filter(m -> m.length > 2 && !m[1].equals("admin"))
+                    .map(m -> m[1])
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return Collections.emptyList();
+        return List.of();
     }
 
-    public void removeGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName, String username) {
-        modificationGroupMember(ldapConfig, groupName, username, DirContext.REMOVE_ATTRIBUTE);
+    public void removeGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username) {
+        modificationGroupMember(ldap, groupName, username, DirContext.REMOVE_ATTRIBUTE);
     }
 
-    public void addGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName, String username) {
-        modificationGroupMember(ldapConfig, groupName, username, DirContext.ADD_ATTRIBUTE);
+    public void addGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username) {
+        modificationGroupMember(ldap, groupName, username, DirContext.ADD_ATTRIBUTE);
     }
 
-    private void modificationGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName, String username,
+    private void modificationGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username,
                                          int modificationType) {
-        String userDn = LdapUtil.toUserDN(ldapConfig, LdapPerson.Person.builder()
+        String userDn = LdapUtils.toUserDN(ldap, LdapPerson.Person.builder()
                 .username(username)
                 .build());
         String userFullDn = Joiner.on(",")
                 .skipNulls()
-                .join(userDn, ldapConfig.getBase());
+                .join(userDn, ldap.getBase());
         try {
-            buildLdapTemplate(ldapConfig).modifyAttributes(LdapUtil.toGroupDN(ldapConfig, groupName),
+            buildLdapTemplate(ldap).modifyAttributes(LdapUtils.toGroupDN(ldap, groupName),
                     new ModificationItem[]{new ModificationItem(modificationType, new BasicAttribute(
-                            ldapConfig.getGroup()
+                            ldap.getGroup()
                                     .getMemberAttribute(), userFullDn))});
         } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
 
-    private void modifyAttributes(EdsLdapConfigModel.Ldap ldapConfig, String dn, String attrId, String value) {
-        buildLdapTemplate(ldapConfig).modifyAttributes(dn,
+    private void modifyAttributes(EdsLdapConfigModel.Ldap ldap, String dn, String attrId, String value) {
+        buildLdapTemplate(ldap).modifyAttributes(dn,
                 new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
                         new BasicAttribute(attrId, value))});
     }
 
-    public boolean hasPersonInLdap(EdsLdapConfigModel.Ldap ldapConfig, String username) {
-        String userDn = LdapUtil.toUserDN(ldapConfig, LdapPerson.Person.builder()
+    public boolean hasPersonInLdap(EdsLdapConfigModel.Ldap ldap, String username) {
+        String userDn = LdapUtils.toUserDN(ldap, LdapPerson.Person.builder()
                 .username(username)
                 .build());
         try {
-            DirContextAdapter adapter = (DirContextAdapter) buildLdapTemplate(ldapConfig).lookup(userDn);
-            String cn = adapter.getStringAttribute(ldapConfig.getUser()
+            DirContextAdapter adapter = (DirContextAdapter) buildLdapTemplate(ldap).lookup(userDn);
+            String cn = adapter.getStringAttribute(ldap.getUser()
                     .getId());
             if (username.equalsIgnoreCase(cn)) {
                 return true;
@@ -319,22 +318,22 @@ public class LdapClient {
         return false;
     }
 
-    public List<String> searchLdapGroup(EdsLdapConfigModel.Ldap ldapConfig, String username) {
+    public List<String> searchLdapGroup(EdsLdapConfigModel.Ldap ldap, String username) {
         List<String> groupList = Lists.newArrayList();
         try {
-            String groupBaseDN = ldapConfig.getGroup()
+            String groupBaseDN = ldap.getGroup()
                     .getDn();
-            String groupMember = ldapConfig.getGroup()
+            String groupMember = ldap.getGroup()
                     .getMemberAttribute();
-            String userId = ldapConfig.getUser()
+            String userId = ldap.getUser()
                     .getId();
-            String userDn = LdapUtil.toUserDN(ldapConfig, LdapPerson.Person.builder()
+            String userDn = LdapUtils.toUserDN(ldap, LdapPerson.Person.builder()
                     .username(username)
                     .build());
             String userFullDn = Joiner.on(",")
                     .skipNulls()
-                    .join(userDn, ldapConfig.getBase());
-            groupList = buildLdapTemplate(ldapConfig).search(LdapQueryBuilder.query()
+                    .join(userDn, ldap.getBase());
+            groupList = buildLdapTemplate(ldap).search(LdapQueryBuilder.query()
                     .base(groupBaseDN)
                     .where(groupMember)
                     .is(userFullDn)

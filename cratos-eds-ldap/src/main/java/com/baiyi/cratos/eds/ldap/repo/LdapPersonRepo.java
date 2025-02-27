@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.ldap.repo;
 import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
+import com.baiyi.cratos.eds.ldap.util.LdapUtils;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,17 @@ public class LdapPersonRepo {
 
     private final LdapClient ldapClient;
 
+    public LdapPerson.Person findPerson(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
+        String userDN = LdapUtils.toUserDN(ldapConfig, person);
+        return ldapClient.findPersonByDn(ldapConfig, userDN);
+    }
+
     public List<LdapPerson.Person> queryGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
         List<String> usernames = ldapClient.queryGroupMember(ldapConfig, groupName);
         List<LdapPerson.Person> people = Lists.newArrayList();
         usernames.forEach(username -> {
             try {
-                people.add(ldapClient.getPersonWithDN(ldapConfig, ldapConfig.buildUserDn(username)));
+                people.add(ldapClient.findPersonByDn(ldapConfig, ldapConfig.buildUserDn(username)));
             } catch (Exception e) {
                 log.debug("未找到 {} 对应的 Person", username);
             }
@@ -55,7 +61,7 @@ public class LdapPersonRepo {
      * @return
      */
     public LdapPerson.Person findPersonWithDn(EdsLdapConfigModel.Ldap ldapConfig, String dn) {
-        return ldapClient.getPersonWithDN(ldapConfig, dn);
+        return ldapClient.findPersonByDn(ldapConfig, dn);
     }
 
     public void create(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {

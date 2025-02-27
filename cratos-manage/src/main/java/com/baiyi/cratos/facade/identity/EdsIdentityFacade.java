@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.facade.identity;
 
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
@@ -25,5 +25,7 @@ public interface EdsIdentityFacade {
     EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity);
 
     void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);
+
+    void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup);
 
 }

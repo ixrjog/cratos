@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.ldap.repo;
 import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
+import com.baiyi.cratos.eds.ldap.util.LdapUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,23 +21,28 @@ public class LdapGroupRepo {
 
     private final LdapClient ldapClient;
 
-    public List<LdapGroup.Group> queryGroup(EdsLdapConfigModel.Ldap ldapConfig) {
-        return ldapClient.queryGroupList(ldapConfig);
+    public LdapGroup.Group findGroup(EdsLdapConfigModel.Ldap ldap, String groupName) {
+        String groupDN = LdapUtils.toGroupDN(ldap, groupName);
+        return ldapClient.findGroupByDn(ldap, groupDN);
     }
 
-    public List<String> queryGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
-        return ldapClient.queryGroupMember(ldapConfig, groupName);
+    public List<LdapGroup.Group> queryGroup(EdsLdapConfigModel.Ldap ldap) {
+        return ldapClient.queryGroupList(ldap);
     }
 
-    public List<LdapGroup.Group> searchGroupByUsername(EdsLdapConfigModel.Ldap ldapConfig, String username) {
-        List<String> groupNames = ldapClient.searchLdapGroup(ldapConfig, username);
+    public List<String> queryGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName) {
+        return ldapClient.queryGroupMember(ldap, groupName);
+    }
+
+    public List<LdapGroup.Group> searchGroupByUsername(EdsLdapConfigModel.Ldap ldap, String username) {
+        List<String> groupNames = ldapClient.searchLdapGroup(ldap, username);
         return groupNames.stream()
-                .map(e -> ldapClient.getGroupWithDN(ldapConfig, ldapConfig.buildGroupDn(e)))
+                .map(e -> ldapClient.findGroupByDn(ldap, ldap.buildGroupDn(e)))
                 .collect(Collectors.toList());
     }
 
-    public void removeGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName, String username) {
-        ldapClient.removeGroupMember(ldapConfig, groupName, username);
+    public void removeGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username) {
+        ldapClient.removeGroupMember(ldap, groupName, username);
     }
 
     public void addGroupMember(EdsLdapConfigModel.Ldap ldapConfig, String groupName, String username) {

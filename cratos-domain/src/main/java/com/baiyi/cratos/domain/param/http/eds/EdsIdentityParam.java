@@ -60,6 +60,22 @@ public class EdsIdentityParam {
         private Integer instanceId;
         @NotBlank
         private String username;
+        @NotBlank
+        private String group;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class RemoveLdapUserFromGroup {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String username;
+        @NotBlank
         private String group;
     }
 
