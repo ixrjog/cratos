@@ -283,7 +283,6 @@ public class LdapClient {
         String userDn = LdapUtil.toUserDN(ldapConfig, LdapPerson.Person.builder()
                 .username(username)
                 .build());
-
         String userFullDn = Joiner.on(",")
                 .skipNulls()
                 .join(userDn, ldapConfig.getBase());

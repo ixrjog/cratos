@@ -275,6 +275,11 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         }
     }
 
+    @Override
+    public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
+
+    }
+
     private String verifyAndGeneratePassword(String password) {
         if (PasswordGenerator.isPasswordStrong(password)) {
             return password;

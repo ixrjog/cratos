@@ -54,6 +54,20 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
+    public static class AddLdapUserToTheGroup {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String username;
+        private String group;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
     public static class QueryDingtalkIdentityDetails {
         @NotBlank
         private String username;
