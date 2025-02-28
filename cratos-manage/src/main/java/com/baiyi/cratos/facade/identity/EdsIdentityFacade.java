@@ -30,10 +30,12 @@ public interface EdsIdentityFacade {
 
     void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity);
 
-    void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);
+    void addLdapUserToGroup(EdsIdentityParam.AddLdapUserToGroup addLdapUserToGroup);
 
     void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup);
 
     Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups);
+
+    EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount);
 
 }

@@ -33,6 +33,19 @@ public class ExtDataSourceIdentityController {
         return HttpResult.of(edsIdentityFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
     }
 
+    @Operation(summary = "Create cloud account")
+    @PostMapping(value = "/cloud/account/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsIdentityVO.CloudAccount> createCloudAccount(
+            @RequestBody @Valid EdsIdentityParam.CreateCloudAccount createCloudAccount) {
+        return HttpResult.of(edsIdentityFacade.createCloudAccount(createCloudAccount));
+    }
+
+    // Grant Permission
+
+    // attach detach
+
+
+
     @Operation(summary = "Query eds asset ldap identity by username")
     @PostMapping(value = "/ldap/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.LdapIdentityDetails> queryLdapIdentityDetails(
@@ -58,8 +71,8 @@ public class ExtDataSourceIdentityController {
     @Operation(summary = "Add ldap user to the group")
     @PostMapping(value = "/ldap/user/addToGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addLdapUserToTheGroup(
-            @RequestBody @Valid EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
-        edsIdentityFacade.addLdapUserToTheGroup(addLdapUserToTheGroup);
+            @RequestBody @Valid EdsIdentityParam.AddLdapUserToGroup addLdapUserToGroup) {
+        edsIdentityFacade.addLdapUserToGroup(addLdapUserToGroup);
         return HttpResult.SUCCESS;
     }
 
@@ -84,8 +97,6 @@ public class ExtDataSourceIdentityController {
             @RequestBody @Valid EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
         return HttpResult.of(edsIdentityFacade.queryLdapGroups(queryLdapGroups));
     }
-
-    // attach detach
 
     @Operation(summary = "Query eds asset dingtalk identity by username")
     @PostMapping(value = "/dingtalk/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

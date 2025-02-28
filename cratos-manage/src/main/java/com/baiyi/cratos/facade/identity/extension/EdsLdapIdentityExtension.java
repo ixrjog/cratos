@@ -18,7 +18,7 @@ public interface EdsLdapIdentityExtension {
 
     void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity);
 
-    void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup);
+    void addLdapUserToGroup(EdsIdentityParam.AddLdapUserToGroup addLdapUserToGroup);
 
     void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup);
 

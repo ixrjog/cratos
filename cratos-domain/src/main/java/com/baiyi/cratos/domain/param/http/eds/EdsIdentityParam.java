@@ -82,7 +82,7 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class AddLdapUserToTheGroup implements HasEdsInstanceId {
+    public static class AddLdapUserToGroup implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
@@ -137,5 +137,48 @@ public class EdsIdentityParam {
         @NotBlank
         private String username;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class CreateCloudAccount implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String username;
+        private String password;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class GrantPermission implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String accountId;
+        private Integer grantAssetId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class RevokePermission implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        @NotBlank
+        private String accountId;
+        private Integer revokeAssetId;
+    }
+
 
 }

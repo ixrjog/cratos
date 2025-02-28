@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
+import com.baiyi.cratos.facade.identity.extension.EdsCloudIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -53,6 +54,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     private final UserWrapper userWrapper;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsLdapIdentityExtension ldapIdentityExtension;
+    private final EdsCloudIdentityExtension edsCloudIdentityExtension;
 
     private static final List<String> CLOUD_IDENTITY_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name());
@@ -192,8 +194,8 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     }
 
     @Override
-    public void addLdapUserToTheGroup(EdsIdentityParam.AddLdapUserToTheGroup addLdapUserToTheGroup) {
-        ldapIdentityExtension.addLdapUserToTheGroup(addLdapUserToTheGroup);
+    public void addLdapUserToGroup(EdsIdentityParam.AddLdapUserToGroup addLdapUserToGroup) {
+        ldapIdentityExtension.addLdapUserToGroup(addLdapUserToGroup);
     }
 
     @Override
@@ -243,15 +245,20 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     }
 
     private Map<Integer, EdsAsset> getAssetMapByMobile(String mobilePhone) {
-        Map<Integer, EdsAsset> assetMap = Maps.newHashMap();
-        if (StringUtils.hasText(mobilePhone)) {
-            List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE,
-                    mobilePhone);
-            if (!CollectionUtils.isEmpty(indices)) {
-                indices.forEach(e -> assetMap.put(e.getAssetId(), edsAssetService.getById(e.getAssetId())));
-            }
+        if (!StringUtils.hasText(mobilePhone)) {
+            return Map.of();
         }
-        return assetMap;
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
+        if (CollectionUtils.isEmpty(indices)) {
+            return Map.of();
+        }
+        return indices.stream()
+                .collect(Collectors.toMap(EdsAssetIndex::getAssetId, e -> edsAssetService.getById(e.getAssetId())));
+    }
+
+    @Override
+    public EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount) {
+        return edsCloudIdentityExtension.createCloudAccount(createCloudAccount);
     }
 
 }

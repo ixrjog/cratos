@@ -49,5 +49,7 @@ public interface ErrorCodeConstants {
 
     int COMMAND_EXEC_ERROR = 56000;
 
-    int EDS_IDENTITY_EXCEPTION = 57000;
+    int EDS_IDENTITY_ERROR = 57000;
+
+    int CLOUD_IDENTITY_ERROR = 57100;
 }

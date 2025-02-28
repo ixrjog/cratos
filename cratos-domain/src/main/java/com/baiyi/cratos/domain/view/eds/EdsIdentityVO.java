@@ -116,4 +116,24 @@ public class EdsIdentityVO {
         private EdsAssetVO.Asset asset;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class CloudAccount implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3029421324469757904L;
+        public static final CloudAccount NO_ACCOUNT = CloudAccount.builder()
+                .isExist(false)
+                .build();
+        private String username;
+        private String password;
+        private EdsInstanceVO.EdsInstance instance;
+        private UserVO.User user;
+        private EdsAssetVO.Asset account;
+        @Builder.Default
+        private boolean isExist = true;
+    }
+
 }
