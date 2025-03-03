@@ -62,16 +62,13 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        List<EdsAsset> cloudIdentityAssets;
         Set<EdsAsset> uniqueValues = Sets.newHashSet();
-        cloudIdentityAssets = CLOUD_IDENTITY_TYPES.stream()
-                .map(type -> EdsAssetTypeEnum.AWS_IAM_USER.name()
-                        .equals(type) ? edsAssetService.queryByTypeAndName(type,
-                        queryCloudIdentityDetails.getUsername(), false) : edsAssetService.queryByTypeAndKey(type,
-                        queryCloudIdentityDetails.getUsername()))
-                .flatMap(Collection::stream)
-                .filter(uniqueValues::add)
-                .collect(Collectors.toList());
+        // 通过标准索引来查询账户
+        List<EdsAsset> cloudIdentityAssets = edsAssetIndexService.queryIndexByNameAndValue(CLOUD_ACCOUNT_USERNAME,
+                        queryCloudIdentityDetails.getUsername())
+                .stream()
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .toList();
         if (cloudIdentityAssets.isEmpty()) {
             return EdsIdentityVO.CloudIdentityDetails.NO_DATA;
         }

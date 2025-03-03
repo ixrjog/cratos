@@ -40,9 +40,8 @@ public class ExtDataSourceIdentityController {
         return HttpResult.of(edsIdentityFacade.createCloudAccount(createCloudAccount));
     }
 
-    // Grant Permission
+    // Grant/Revoke Permission
 
-    // attach detach
 
 
 

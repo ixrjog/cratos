@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Version 1.0
  */
 @Slf4j
+@SuppressWarnings("unchecked")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EdsInstanceProviderFactory {
 
@@ -47,14 +48,12 @@ public class EdsInstanceProviderFactory {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <Asset> Asset produceModel(String instanceType, String assetType, EdsAssetVO.Asset asset) {
         return (Asset) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .assetLoadAs(asset.getOriginalModel());
     }
 
-    @SuppressWarnings("unchecked")
     public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, String assetType,
                                                                         EdsConfig edsConfig) {
         return (Config) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
@@ -74,7 +73,6 @@ public class EdsInstanceProviderFactory {
         return pMap != null ? pMap.keySet() : Sets.newHashSet();
     }
 
-    @SuppressWarnings("unchecked")
     public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, EdsConfig edsConfig) {
         try {
             Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
@@ -111,7 +109,6 @@ public class EdsInstanceProviderFactory {
      * @param <Asset>
      * @return
      */
-    @SuppressWarnings("unchecked")
     public static <Config extends IEdsConfigModel, Asset> EdsInstanceProviderHolder<Config, Asset> buildHolder(
             ExternalDataSourceInstance<Config> instance, String assetType) {
         final String instanceType = instance.getEdsInstance()

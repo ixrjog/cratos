@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AWS_IAM_POLICIES;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
 /**
  * &#064;Author  baiyi
@@ -92,6 +93,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
         } catch (Exception e) {
             log.error("Failed to list policies for user: {}", entity.getUserName(), e);
         }
+        indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;
     }
 

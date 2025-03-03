@@ -16,6 +16,7 @@ import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,18 +36,33 @@ public abstract class BaseEdsIdentityExtension {
     protected final EdsAssetService edsAssetService;
     protected final EdsFacade edsFacade;
 
-    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId,
-                                                  EdsInstanceTypeEnum instanceTypeEnum) {
+    private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
+            EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name());
+
+    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
+        EdsInstance instance = getEdsInstance(hasEdsInstanceId);
+        if (EDS_INSTANCE_TYPES.stream()
+                .noneMatch(e -> e.equals(instance.getEdsType()))) {
+            EdsIdentityException.runtime("Incorrect instance type.");
+        }
+        return instance;
+    }
+
+    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId, EdsInstanceTypeEnum edsInstanceTypeEnum) {
+        EdsInstance instance = getEdsInstance(hasEdsInstanceId);
+        if (!edsInstanceTypeEnum.name().equals(instance.getEdsType())) {
+            EdsIdentityException.runtime("Incorrect instance type.");
+        }
+        return instance;
+    }
+
+    private EdsInstance getEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
         if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
-            EdsIdentityException.runtime("{} instanceId is incorrect.", instanceTypeEnum.name());
+            EdsIdentityException.runtime("InstanceId is incorrect.");
         }
         EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());
         if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("{} instance does not exist.", instanceTypeEnum.name());
-        }
-        if (!EdsInstanceTypeEnum.LDAP.name()
-                .equals(instance.getEdsType())) {
-            EdsIdentityException.runtime("The instance type is not {}.", instanceTypeEnum);
+            EdsIdentityException.runtime("Instance does not exist.");
         }
         return instance;
     }

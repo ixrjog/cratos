@@ -1,9 +1,7 @@
 package com.baiyi.cratos.eds.aws.repo.iam;
 
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
-import com.amazonaws.services.identitymanagement.model.ListUsersRequest;
-import com.amazonaws.services.identitymanagement.model.ListUsersResult;
-import com.amazonaws.services.identitymanagement.model.User;
+import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
@@ -23,6 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AwsIamUserRepo {
 
+    public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
+
+    public com.amazonaws.services.identitymanagement.model.User getUser(EdsAwsConfigModel.Aws aws, String userName) {
+        GetUserRequest request = new GetUserRequest();
+        request.setUserName(userName);
+        GetUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .getUser(request);
+        return result.getUser();
+    }
+
     public List<User> listUsers(EdsAwsConfigModel.Aws aws) {
         ListUsersRequest request = new ListUsersRequest();
         List<User> users = Lists.newArrayList();
@@ -34,6 +42,40 @@ public class AwsIamUserRepo {
             request.setMarker(result.getMarker());
         } while (result.getIsTruncated());
         return users;
+    }
+
+    /**
+     * https://docs.aws.amazon.com/zh_cn/IAM/latest/APIReference/API_CreateUser.html
+     *
+     * @param aws
+     */
+    public com.amazonaws.services.identitymanagement.model.User createUser(EdsAwsConfigModel.Aws aws,
+                                                                           com.baiyi.cratos.domain.generator.User user,
+                                                                           boolean createLoginProfile) {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUserName(user.getUsername());
+        CreateUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .createUser(request);
+        if (createLoginProfile) {
+            this.createLoginProfile(aws, user, NO_PASSWORD_RESET_REQUIRED);
+//            try {
+//                this.createLoginProfile(aws, user, NO_PASSWORD_RESET_REQUIRED);
+//            } catch (PasswordPolicyViolationException e) {
+//                throw new CreateUserException(e.getMessage());
+//            }
+        }
+        return result.getUser();
+    }
+
+    private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, com.baiyi.cratos.domain.generator.User user,
+                                            boolean passwordResetRequired) {
+        CreateLoginProfileRequest request = new CreateLoginProfileRequest();
+        request.setUserName(user.getUsername());
+        request.setPassword(user.getPassword());
+        request.setPasswordResetRequired(passwordResetRequired);
+        CreateLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .createLoginProfile(request);
+        return result.getLoginProfile();
     }
 
 }

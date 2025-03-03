@@ -22,4 +22,6 @@ public interface Global {
     boolean UNLOCKED = false;
     boolean LOCKED = true;
     boolean VALID = true;
+
+    String CREATED_BY = "Created by cratos";
 }

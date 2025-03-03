@@ -23,4 +23,11 @@ public class CloudIdentityFactory {
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
 
+    public static CloudIdentityProvider getProvider(String instanceType) {
+        if (CONTEXT.containsKey(instanceType)) {
+            return CONTEXT.get(instanceType);
+        }
+        throw new IllegalArgumentException("Incorrect instanceType: " + instanceType);
+    }
+
 }

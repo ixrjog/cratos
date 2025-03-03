@@ -61,7 +61,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     @Override
     public EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
-        EdsInstance instance = getAndVerifyEdsInstance(createLdapIdentity);
+        EdsInstance instance = getEdsInstance(createLdapIdentity);
         User user = userService.getByUsername(createLdapIdentity.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", createLdapIdentity.getUsername());
@@ -98,7 +98,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
     @Override
     public EdsIdentityVO.LdapIdentity resetLdapUserPassword(
             EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
-        EdsInstance instance = getAndVerifyEdsInstance(resetLdapUserPassword);
+        EdsInstance instance = getEdsInstance(resetLdapUserPassword);
         User user = userService.getByUsername(resetLdapUserPassword.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", resetLdapUserPassword.getUsername());
@@ -130,7 +130,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     @Override
     public void deleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
-        EdsInstance instance = getAndVerifyEdsInstance(deleteLdapIdentity);
+        EdsInstance instance = getEdsInstance(deleteLdapIdentity);
         User user = userService.getByUsername(deleteLdapIdentity.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", deleteLdapIdentity.getUsername());
@@ -173,7 +173,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     @Override
     public void addLdapUserToGroup(EdsIdentityParam.AddLdapUserToGroup addLdapUserToGroup) {
-        EdsInstance instance = getAndVerifyEdsInstance(addLdapUserToGroup);
+        EdsInstance instance = getEdsInstance(addLdapUserToGroup);
         User user = userService.getByUsername(addLdapUserToGroup.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", addLdapUserToGroup.getUsername());
@@ -203,7 +203,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     @Override
     public void removeLdapUserFromGroup(EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
-        EdsInstance instance = getAndVerifyEdsInstance(removeLdapUserFromGroup);
+        EdsInstance instance = getEdsInstance(removeLdapUserFromGroup);
         User user = userService.getByUsername(removeLdapUserFromGroup.getUsername());
         if (Objects.isNull(user)) {
             EdsIdentityException.runtime("User {} does not exist.", removeLdapUserFromGroup.getUsername());
@@ -245,7 +245,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
 
     @Override
     public Set<String> queryLdapGroups(EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
-        getAndVerifyEdsInstance(queryLdapGroups);
+        getEdsInstance(queryLdapGroups);
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
                     queryLdapGroups.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
@@ -260,7 +260,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         }
     }
 
-    private EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
+    private EdsInstance getEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
         return getAndVerifyEdsInstance(hasEdsInstanceId, EdsInstanceTypeEnum.LDAP);
     }
 

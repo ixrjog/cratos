@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
@@ -20,6 +21,8 @@ import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
 /**
  * &#064;Author  baiyi
@@ -58,6 +61,13 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                 .assetKeyOf(entity.getName())
                 .validOf(entity.getEnabled())
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance, EdsAsset edsAsset,
+            KeystoneListUsersResult entity) {
+        return List.of(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
     }
 
     // TODO role-assignments https://support.huaweicloud.com/intl/zh-cn/api-iam/iam_10_0014.html
