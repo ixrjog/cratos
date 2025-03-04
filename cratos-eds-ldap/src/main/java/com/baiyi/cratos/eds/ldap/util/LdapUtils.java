@@ -5,6 +5,7 @@ import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.google.common.base.Joiner;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -42,12 +43,8 @@ public final class LdapUtils {
     }
 
     public static String toGroupDN(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
-        String groupBase = Joiner.on(",")
-                .skipNulls()
-                .join(ldapConfig.getGroup()
-                        .getDn(), ldapConfig.getBase());
-        if (groupName.endsWith(groupBase)) {
-            return groupName;
+        if (groupName.endsWith(ldapConfig.getBase())) {
+            return StringUtils.removeEnd(groupName, ldapConfig.getBase());
         }
         String rdn = toGroupRDN(ldapConfig, groupName);
         return Joiner.on(",")

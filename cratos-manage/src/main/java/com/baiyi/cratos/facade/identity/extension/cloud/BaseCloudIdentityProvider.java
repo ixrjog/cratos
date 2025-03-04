@@ -21,6 +21,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
@@ -61,7 +62,11 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
 
     @Override
     public void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission) {
-             EdsAsset permissionAsset = edsAssetService.getById(grantPermission.getGrantId());
+        EdsAsset permissionAsset = edsAssetService.getById(grantPermission.getGrantId());
+        if(Objects.isNull(permissionAsset)) {
+
+        }
+
     }
 
     @Override
