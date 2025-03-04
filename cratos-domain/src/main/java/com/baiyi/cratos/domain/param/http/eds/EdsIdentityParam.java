@@ -164,7 +164,7 @@ public class EdsIdentityParam {
         private Integer instanceId;
         @NotBlank
         @Schema(description = "Account assetId")
-        private String accountId;
+        private Integer accountId;
         @NotBlank
         @Schema(description = "Permission assetId")
         private Integer grantId;

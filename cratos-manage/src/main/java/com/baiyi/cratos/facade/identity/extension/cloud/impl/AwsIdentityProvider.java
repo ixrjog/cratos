@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -59,7 +58,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
             if (Objects.isNull(iamUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
-            EdsAsset account = getCloudAccountAsset(instance.getId(), user.getUsername());
+            EdsAsset account = getAccountAsset(instance.getId(), user.getUsername());
             return EdsIdentityVO.CloudAccount.builder()
                     .instance(instanceWrapper.wrapToTarget(instance))
                     .user(userWrapper.wrapToTarget(user))

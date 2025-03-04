@@ -56,4 +56,20 @@ public class AliyunRamPolicyRepo {
         return response == null ? Collections.emptyList() : response.getPolicies();
     }
 
+    public void attachPolicyToUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String policyName ,String policyType) throws ClientException {
+        AttachPolicyToUserRequest request = new AttachPolicyToUserRequest();
+        request.setUserName(ramUsername);
+        request.setPolicyName(policyName);
+        request.setPolicyType(policyType);
+        AttachPolicyToUserResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+    }
+
+    public void detachPolicyFromUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,String policyName ,String policyType) throws ClientException {
+        DetachPolicyFromUserRequest request = new DetachPolicyFromUserRequest();
+        request.setUserName(ramUsername);
+        request.setPolicyName(policyName);
+        request.setPolicyType(policyType);
+        DetachPolicyFromUserResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+    }
+
 }
