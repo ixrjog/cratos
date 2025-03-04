@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.identity.extension.cloud;
 
+import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -64,7 +65,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
     public void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission) {
         EdsAsset permissionAsset = edsAssetService.getById(grantPermission.getGrantId());
         if(Objects.isNull(permissionAsset)) {
-
+          CloudIdentityException.runtime("Permission asset do not exist.");
         }
 
     }
