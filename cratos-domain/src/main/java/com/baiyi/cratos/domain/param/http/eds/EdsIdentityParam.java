@@ -104,6 +104,7 @@ public class EdsIdentityParam {
         @NotBlank
         private String username;
         @NotBlank
+        @Schema(description = "Ldap groupName or groupDN")
         private String group;
     }
 
