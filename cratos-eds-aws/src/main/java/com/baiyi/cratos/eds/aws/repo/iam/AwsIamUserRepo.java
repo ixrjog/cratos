@@ -23,7 +23,7 @@ public class AwsIamUserRepo {
 
     public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
 
-    public com.amazonaws.services.identitymanagement.model.User getUser(EdsAwsConfigModel.Aws aws, String userName) {
+    public User getUser(EdsAwsConfigModel.Aws aws, String userName) {
         GetUserRequest request = new GetUserRequest();
         request.setUserName(userName);
         GetUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)

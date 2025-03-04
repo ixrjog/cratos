@@ -76,7 +76,15 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
 
     @Override
     public void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission) {
-
+        EdsAsset permission = edsAssetService.getById(revokePermission.getRevokeId());
+        if (Objects.isNull(permission)) {
+            CloudIdentityException.runtime("Permission asset do not exist.");
+        }
+        EdsAsset account = edsAssetService.getById(revokePermission.getAccountId());
+        if (Objects.isNull(account)) {
+            CloudIdentityException.runtime("Account asset do not exist.");
+        }
+        this.revokePermission(instance, account, permission);
     }
 
     protected EdsAsset getAccountAsset(int instanceId, String username) {
@@ -98,6 +106,8 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
     abstract protected EdsIdentityVO.CloudAccount getAccount(Config config, EdsInstance instance, User user);
 
     abstract protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission);
+
+    abstract protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission);
 
     @Override
     public void afterPropertiesSet() {

@@ -47,4 +47,34 @@ public class AwsIamPolicyRepo {
         return policies;
     }
 
+    /**
+     * https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html
+     *
+     * @param aws
+     * @param userName
+     * @param policyArn
+     */
+    public void attachUserPolicy(EdsAwsConfigModel.Aws aws, String userName, String policyArn) {
+        AttachUserPolicyRequest request = new AttachUserPolicyRequest();
+        request.setUserName(userName);
+        request.setPolicyArn(policyArn);
+        AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .attachUserPolicy(request);
+    }
+
+    /**
+     * https://docs.aws.amazon.com/IAM/latest/APIReference/API_DetachUserPolicy.html
+     *
+     * @param aws
+     * @param userName
+     * @param policyArn
+     */
+    public void detachUserPolicy(EdsAwsConfigModel.Aws aws, String userName, String policyArn) {
+        DetachUserPolicyRequest request = new DetachUserPolicyRequest();
+        request.setUserName(userName);
+        request.setPolicyArn(policyArn);
+        AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .detachUserPolicy(request);
+    }
+
 }

@@ -104,26 +104,11 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
                 instance.getId(), getAccountAssetType());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        String ramUsername = account.getAssetKey();
+        final String ramUsername = account.getAssetKey();
+        final String policyName = permission.getAssetKey();
+        final String policyType = permission.getKind();
         try {
-            ramPolicyRepo.attachPolicyToUser(aliyun.getRegionId(), aliyun, ramUsername, permission.getAssetKey(),
-                    permission.getKind());
-            GetUserResponse.User ramUser = ramUserRepo.getUser(aliyun, ramUsername);
-            postImportRamUser(holder, ramUser);
-        } catch (ClientException ce) {
-            throw new CloudIdentityException(ce.getMessage());
-        }
-    }
-
-    public void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
-                instance.getId(), getAccountAssetType());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
-        String ramUsername = account.getAssetKey();
-        try {
-            ramPolicyRepo.detachPolicyFromUser(aliyun.getRegionId(), aliyun, account.getAssetKey(),
-                    permission.getAssetKey(), permission.getKind());
+            ramPolicyRepo.attachPolicyToUser(aliyun.getRegionId(), aliyun, ramUsername, policyName, policyType);
             GetUserResponse.User ramUser = ramUserRepo.getUser(aliyun, ramUsername);
             postImportRamUser(holder, ramUser);
         } catch (ClientException ce) {
@@ -132,9 +117,21 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
     }
 
     @Override
-    public String getInstanceType() {
-        return EdsInstanceTypeEnum.ALIYUN.name();
+    protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
+        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+                instance.getId(), getAccountAssetType());
+        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
+                .getEdsConfigModel();
+        final String ramUsername = account.getAssetKey();
+        final String policyName = permission.getAssetKey();
+        final String policyType = permission.getKind();
+        try {
+            ramPolicyRepo.detachPolicyFromUser(aliyun.getRegionId(), aliyun, ramUsername, policyName, policyType);
+            GetUserResponse.User ramUser = ramUserRepo.getUser(aliyun, ramUsername);
+            postImportRamUser(holder, ramUser);
+        } catch (ClientException ce) {
+            throw new CloudIdentityException(ce.getMessage());
+        }
     }
-
 
 }
