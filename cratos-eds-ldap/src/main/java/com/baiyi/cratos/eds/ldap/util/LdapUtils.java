@@ -42,8 +42,11 @@ public final class LdapUtils {
     }
 
     public static String toGroupDN(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
-        if (groupName.endsWith(ldapConfig.getGroup()
-                .getDn())) {
+        String groupBase = Joiner.on(",")
+                .skipNulls()
+                .join(ldapConfig.getGroup()
+                        .getDn(), ldapConfig.getBase());
+        if (groupName.endsWith(groupBase)) {
             return groupName;
         }
         String rdn = toGroupRDN(ldapConfig, groupName);

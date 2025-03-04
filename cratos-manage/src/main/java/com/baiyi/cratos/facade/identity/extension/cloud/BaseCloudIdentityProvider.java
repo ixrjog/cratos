@@ -61,7 +61,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
 
     @Override
     public void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission) {
-
+             EdsAsset permissionAsset = edsAssetService.getById(grantPermission.getGrantId());
     }
 
     @Override
