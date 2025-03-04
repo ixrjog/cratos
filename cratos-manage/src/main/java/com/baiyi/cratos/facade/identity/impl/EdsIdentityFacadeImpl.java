@@ -258,4 +258,14 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         return edsCloudIdentityExtension.createCloudAccount(createCloudAccount);
     }
 
+    @Override
+    public void grantCloudAccountPermission(EdsIdentityParam.GrantPermission grantPermission) {
+        edsCloudIdentityExtension.grantCloudAccountPermission(grantPermission);
+    }
+
+    @Override
+    public void revokeCloudAccountPermission(EdsIdentityParam.RevokePermission revokePermission) {
+        edsCloudIdentityExtension.revokeCloudAccountPermission(revokePermission);
+    }
+
 }

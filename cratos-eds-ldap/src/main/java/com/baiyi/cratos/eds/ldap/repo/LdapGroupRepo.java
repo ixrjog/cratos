@@ -26,6 +26,10 @@ public class LdapGroupRepo {
         return ldapClient.findGroupByDn(ldap, groupDN);
     }
 
+    public LdapGroup.Group getGroup(EdsLdapConfigModel.Ldap ldap, String groupDN) {
+        return ldapClient.findGroupByDn(ldap, groupDN);
+    }
+
     public List<LdapGroup.Group> queryGroup(EdsLdapConfigModel.Ldap ldap) {
         return ldapClient.queryGroupList(ldap);
     }

@@ -216,7 +216,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             if (!ldapPersonRepo.checkPersonInLdap(ldap, removeLdapUserFromGroup.getUsername())) {
                 EdsIdentityException.runtime("The user does not exist in LDAP instance.");
             }
-            LdapGroup.Group group = ldapGroupRepo.findGroup(ldap, removeLdapUserFromGroup.getGroup());
+            LdapGroup.Group group = ldapGroupRepo.getGroup(ldap, removeLdapUserFromGroup.getGroup());
             if (Objects.isNull(group)) {
                 EdsIdentityException.runtime("LDAP group {} does not exist.", removeLdapUserFromGroup.getGroup());
             }

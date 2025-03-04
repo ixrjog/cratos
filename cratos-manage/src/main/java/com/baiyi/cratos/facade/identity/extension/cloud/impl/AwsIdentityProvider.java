@@ -72,14 +72,5 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
         }
     }
 
-    @Override
-    public void grantPermission(EdsIdentityParam.GrantPermission grantPermission) {
-
-    }
-
-    @Override
-    public void revokePermission(EdsIdentityParam.RevokePermission revokePermission) {
-
-    }
 
 }

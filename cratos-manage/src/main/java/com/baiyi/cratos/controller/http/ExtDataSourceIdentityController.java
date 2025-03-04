@@ -40,10 +40,21 @@ public class ExtDataSourceIdentityController {
         return HttpResult.of(edsIdentityFacade.createCloudAccount(createCloudAccount));
     }
 
-    // Grant/Revoke Permission
+    @Operation(summary = "Grant cloud account permission")
+    @PostMapping(value = "/cloud/account/permission/grant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> grantCloudAccountPermission(
+            @RequestBody @Valid EdsIdentityParam.GrantPermission grantPermission) {
+        edsIdentityFacade.grantCloudAccountPermission(grantPermission);
+        return HttpResult.SUCCESS;
+    }
 
-
-
+    @Operation(summary = "Revoke cloud account permission")
+    @PostMapping(value = "/cloud/account/permission/revoke", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> revokeCloudAccountPermission(
+            @RequestBody @Valid EdsIdentityParam.RevokePermission revokePermission) {
+        edsIdentityFacade.revokeCloudAccountPermission(revokePermission);
+        return HttpResult.SUCCESS;
+    }
 
     @Operation(summary = "Query eds asset ldap identity by username")
     @PostMapping(value = "/ldap/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -75,19 +86,19 @@ public class ExtDataSourceIdentityController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Reset ldap user password")
-    @PutMapping(value = "/ldap/user/password/reset", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<EdsIdentityVO.LdapIdentity> resetLdapUserPassword(
-            @RequestBody @Valid EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
-        return HttpResult.of(edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword));
-    }
-
     @Operation(summary = "Remove ldap user from group")
     @PostMapping(value = "/ldap/user/removeFromGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> removeLdapUserFromGroup(
             @RequestBody @Valid EdsIdentityParam.RemoveLdapUserFromGroup removeLdapUserFromGroup) {
         edsIdentityFacade.removeLdapUserFromGroup(removeLdapUserFromGroup);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Reset ldap user password")
+    @PutMapping(value = "/ldap/user/password/reset", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsIdentityVO.LdapIdentity> resetLdapUserPassword(
+            @RequestBody @Valid EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
+        return HttpResult.of(edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword));
     }
 
     @Operation(summary = "Remove ldap user from group")

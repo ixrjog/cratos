@@ -162,8 +162,11 @@ public class EdsIdentityParam {
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
         @NotBlank
+        @Schema(description = "Account assetId")
         private String accountId;
-        private Integer grantAssetId;
+        @NotBlank
+        @Schema(description = "Permission assetId")
+        private Integer grantId;
     }
 
     @Data
@@ -176,8 +179,11 @@ public class EdsIdentityParam {
         @Schema(description = "Eds Instance ID")
         private Integer instanceId;
         @NotBlank
-        private String accountId;
-        private Integer revokeAssetId;
+        @Schema(description = "Account assetId")
+        private Integer accountId;
+        @NotBlank
+        @Schema(description = "Permission assetId")
+        private Integer revokeId;
     }
 
 

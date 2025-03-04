@@ -88,14 +88,5 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         return EdsInstanceTypeEnum.ALIYUN.name();
     }
 
-    @Override
-    public void grantPermission(EdsIdentityParam.GrantPermission grantPermission) {
-
-    }
-
-    @Override
-    public void revokePermission(EdsIdentityParam.RevokePermission revokePermission) {
-
-    }
 
 }

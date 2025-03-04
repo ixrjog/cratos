@@ -12,4 +12,8 @@ public interface EdsCloudIdentityExtension {
 
     EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount);
 
+    void grantCloudAccountPermission(EdsIdentityParam.GrantPermission grantPermission);
+
+    void revokeCloudAccountPermission(EdsIdentityParam.RevokePermission revokePermission);
+
 }

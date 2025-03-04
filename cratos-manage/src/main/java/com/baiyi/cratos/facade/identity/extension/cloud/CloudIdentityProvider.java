@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.identity.extension.cloud;
 
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.EdsAssetTypeOfAnnotate;
@@ -13,20 +14,23 @@ public interface CloudIdentityProvider extends EdsAssetTypeOfAnnotate {
 
     /**
      * 创建账户
+     *
      * @param createCloudAccount
      * @return
      */
-    EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount);
+    EdsIdentityVO.CloudAccount createCloudAccount(EdsInstance instance,
+                                                  EdsIdentityParam.CreateCloudAccount createCloudAccount);
 
     /**
      * 授权
      */
-    void grantPermission(EdsIdentityParam.GrantPermission grantPermission);
+    void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission);
 
     /**
      * 撤销
+     *
      * @param revokePermission
      */
-    void revokePermission(EdsIdentityParam.RevokePermission revokePermission);
+    void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission);
 
 }

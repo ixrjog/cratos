@@ -17,25 +17,39 @@ import static lombok.AccessLevel.PRIVATE;
 public final class LdapUtils {
 
     public static String toUserRDN(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
-        return Joiner.on("=").join(ldapConfig.getUser().getId(), person.getUsername());
+        return Joiner.on("=")
+                .join(ldapConfig.getUser()
+                        .getId(), person.getUsername());
     }
 
     public static String toGroupRDN(EdsLdapConfigModel.Ldap ldapConfig, LdapGroup.Group group) {
-        return Joiner.on("=").join(ldapConfig.getUser().getId(), group.getGroupName());
+        return Joiner.on("=")
+                .join(ldapConfig.getUser()
+                        .getId(), group.getGroupName());
     }
 
     public static String toUserDN(EdsLdapConfigModel.Ldap ldapConfig, LdapPerson.Person person) {
         String rdn = toUserRDN(ldapConfig, person);
-        return Joiner.on(",").join(rdn, ldapConfig.getUser().getDn());
+        return Joiner.on(",")
+                .join(rdn, ldapConfig.getUser()
+                        .getDn());
     }
 
     public static String toGroupRDN(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
-        return Joiner.on("=").join(ldapConfig.getGroup().getId(), groupName);
+        return Joiner.on("=")
+                .join(ldapConfig.getGroup()
+                        .getId(), groupName);
     }
 
     public static String toGroupDN(EdsLdapConfigModel.Ldap ldapConfig, String groupName) {
+        if (groupName.endsWith(ldapConfig.getGroup()
+                .getDn())) {
+            return groupName;
+        }
         String rdn = toGroupRDN(ldapConfig, groupName);
-        return Joiner.on(",").join(rdn, ldapConfig.getGroup().getDn());
+        return Joiner.on(",")
+                .join(rdn, ldapConfig.getGroup()
+                        .getDn());
     }
 
 }

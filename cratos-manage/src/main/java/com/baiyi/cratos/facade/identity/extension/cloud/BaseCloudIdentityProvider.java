@@ -1,8 +1,5 @@
 package com.baiyi.cratos.facade.identity.extension.cloud;
 
-import com.baiyi.cratos.common.exception.EdsIdentityException;
-import com.baiyi.cratos.common.util.IdentityUtil;
-import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -10,7 +7,6 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
-import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -25,7 +21,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
@@ -49,9 +44,8 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
 
     @SuppressWarnings("unchecked")
     @Override
-    public EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount) {
-        EdsInstance instance = getAndVerifyEdsInstance(createCloudAccount,
-                EdsInstanceTypeEnum.valueOf(getInstanceType()));
+    public EdsIdentityVO.CloudAccount createCloudAccount(EdsInstance instance,
+                                                         EdsIdentityParam.CreateCloudAccount createCloudAccount) {
         EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
         User user = userService.getByUsername(createCloudAccount.getUsername());
@@ -63,6 +57,16 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
         }
         return createAccount(holder.getInstance()
                 .getEdsConfigModel(), instance, user);
+    }
+
+    @Override
+    public void grantPermission(EdsInstance instance, EdsIdentityParam.GrantPermission grantPermission) {
+
+    }
+
+    @Override
+    public void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission) {
+
     }
 
     protected EdsAsset getCloudAccountAsset(int instanceId, String username) {
@@ -82,22 +86,6 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
     abstract protected EdsIdentityVO.CloudAccount createAccount(Config config, EdsInstance instance, User user);
 
     abstract protected EdsIdentityVO.CloudAccount getAccount(Config config, EdsInstance instance, User user);
-
-    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId,
-                                                  EdsInstanceTypeEnum instanceTypeEnum) {
-        if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
-            EdsIdentityException.runtime("{} instanceId is incorrect.", instanceTypeEnum.name());
-        }
-        EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());
-        if (Objects.isNull(instance)) {
-            EdsIdentityException.runtime("{} instance does not exist.", instanceTypeEnum.name());
-        }
-        if (!instanceTypeEnum.name()
-                .equals(instance.getEdsType())) {
-            EdsIdentityException.runtime("The instance type is not {}.", instanceTypeEnum);
-        }
-        return instance;
-    }
 
     @Override
     public void afterPropertiesSet() {
