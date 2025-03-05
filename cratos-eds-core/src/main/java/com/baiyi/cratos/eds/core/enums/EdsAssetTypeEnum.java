@@ -16,6 +16,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_DOMAIN("Domain", 0),
     ALIYUN_RAM_USER("RAM User", 10),
     ALIYUN_RAM_POLICY("RAM Policy", 11),
+    ALIYUN_RAM_ACCESS_KEY("RAM AccessKey", 12),
     ALIYUN_OSS_BUCKET("OSS Bucket", 6),
     ALIYUN_ARMS_TRACE_APPS("ARMS Trace Apps", 7),
     ALIYUN_DDS_MONGO_INSTANCE("MongoDB", 8),

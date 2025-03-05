@@ -22,7 +22,6 @@ import java.util.List;
 public class AliyunRamPolicyRepo {
 
     private final AliyunClient aliyunClient;
-
     public static final int PAGE_SIZE = 50;
 
     public List<ListPoliciesResponse.Policy> listPolicies(EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {

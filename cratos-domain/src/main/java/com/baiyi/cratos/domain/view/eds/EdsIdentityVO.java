@@ -36,6 +36,8 @@ public class EdsIdentityVO {
         private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
         @Builder.Default
         private Map<Integer, List<String>> policyMap = Map.of();
+        @Builder.Default
+        private Map<String, List<EdsAssetVO.Asset>> accessKeyMap = Map.of();
     }
 
     @Data

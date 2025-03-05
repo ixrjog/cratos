@@ -76,6 +76,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final ApplicationResourceFacade applicationResourceFacade;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
+    private final BusinessAssetBindService businessAssetBindService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
@@ -310,7 +311,10 @@ public class EdsFacadeImpl implements EdsFacade {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteEdsAssetById(int id) {
+    public void deleteEdsAssetById(Integer id) {
+        if (edsAssetService.getById(id) == null) {
+            return;
+        }
         edsAssetIndexService.queryIndexByAssetId(id)
                 .stream()
                 .mapToInt(EdsAssetIndex::getId)
@@ -320,9 +324,14 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessId(id)
                 .build();
         applicationResourceFacade.deleteByBusiness(byBusiness);
+        // 删除绑定关系
+        List<BusinessAssetBind> assetBinds = businessAssetBindService.queryByAssetId(id);
+        if (!CollectionUtils.isEmpty(assetBinds)) {
+            assetBinds.forEach(e -> businessAssetBindService.deleteById(e.getId()));
+        }
         edsAssetService.deleteById(id);
     }
-
+    
     @Override
     public List<EdsInstance> queryValidEdsInstanceByType(String edsType) {
         return edsInstanceService.queryValidEdsInstanceByType(edsType);

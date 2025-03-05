@@ -1,12 +1,14 @@
 package com.baiyi.cratos.eds.aliyun.provider.ram;
 
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.aliyuncs.ram.model.v20150501.ListAccessKeysResponse;
 import com.aliyuncs.ram.model.v20150501.ListPoliciesForUserResponse;
 import com.aliyuncs.ram.model.v20150501.ListUsersResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -32,8 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -47,17 +48,20 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
 
     private final AliyunRamUserRepo aliyunRamUserRepo;
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
+    private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
 
     public EdsAliyunRamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                          EdsAssetIndexFacade edsAssetIndexFacade,
                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
                                          EdsInstanceProviderHolderBuilder holderBuilder,
-                                         AliyunRamUserRepo aliyunRamUserRepo, AliyunRamPolicyRepo aliyunRamPolicyRepo) {
+                                         AliyunRamUserRepo aliyunRamUserRepo, AliyunRamPolicyRepo aliyunRamPolicyRepo,
+                                         AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
+        this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
     }
 
     @Override
@@ -105,6 +109,18 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
             }
         } catch (Exception e) {
             log.error("Failed to list policies for user: {}", entity.getUserName(), e);
+        }
+        // accessKeys
+        try {
+            List<ListAccessKeysResponse.AccessKey> accessKeys = aliyunRamAccessKeyRepo.listAccessKeys(
+                    instance.getEdsConfigModel(), entity.getUserName());
+            if (!CollectionUtils.isEmpty(accessKeys)) {
+                final String accessKeyIds = accessKeys.stream()
+                        .map(ListAccessKeysResponse.AccessKey::getAccessKeyId)
+                        .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
+                indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+            }
+        } catch (Exception ignored) {
         }
         indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;

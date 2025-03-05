@@ -9,6 +9,8 @@ import com.baiyi.cratos.domain.constant.Global;
  */
 public interface EdsAssetIndexConstants {
 
+    String CLOUD_ACCESS_KEY_IDS = "cloud.access.key.ids";
+
     String CLOUD_ACCOUNT_USERNAME = "cloud.account.username";
 
     String ALIYUN_ACR_INSTANCE_ID = "acr.instanceId";

@@ -18,7 +18,7 @@ import java.util.Set;
  * @Date 2024/2/5 17:07
  * @Version 1.0
  */
-public interface EdsFacade extends HasSetValid {
+public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
 
     DataTable<EdsInstanceVO.EdsInstance> queryEdsInstancePage(EdsInstanceParam.InstancePageQuery pageQuery);
 
@@ -50,8 +50,6 @@ public interface EdsFacade extends HasSetValid {
     EdsInstanceProviderHolder<?, ?> buildHolder(Integer instanceId, String assetType);
 
     DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
-
-    void deleteEdsAssetById(int id);
 
     List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
