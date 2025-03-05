@@ -25,8 +25,8 @@
         <module>cratos-eds-ldap</module>
         <module>cratos-eds-gitlab</module>
         <module>cratos-eds-dingtalk</module>
-        <module>cratos-eds-huaweicloud</module>
-        <module>cratos-eds-googlecloud</module>
+        <module>cratos-eds-hwc</module>
+        <module>cratos-eds-gcp</module>
         <module>cratos-ssh-core</module>
         <module>cratos-eds-domain</module>
         <module>cratos-eds-harbor</module>

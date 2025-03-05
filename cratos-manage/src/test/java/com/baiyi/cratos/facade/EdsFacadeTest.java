@@ -1,9 +1,11 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
-import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +18,9 @@ public class EdsFacadeTest extends BaseUnit {
 
     @Resource
     private EdsFacade edsFacade;
+
+    @Resource
+    private EdsIdentityFacade edsIdentityFacade;
 
     @Test
     void aliyunCertTest() {
@@ -57,28 +62,30 @@ public class EdsFacadeTest extends BaseUnit {
 
     @Test
     void queryCloudIdentityDetailsTest() {
-        EdsInstanceParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsInstanceParam.QueryCloudIdentityDetails.builder()
+        EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsIdentityParam.QueryCloudIdentityDetails.builder()
                 .username("baiyi")
                 .build();
-        EdsAssetVO.CloudIdentityDetails details = edsFacade.queryCloudIdentityDetails(queryCloudIdentityDetails);
+        EdsIdentityVO.CloudIdentityDetails details = edsIdentityFacade.queryCloudIdentityDetails(
+                queryCloudIdentityDetails);
         System.out.println(details);
     }
 
     @Test
     void test() {
-        EdsInstanceParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsInstanceParam.QueryLdapIdentityDetails.builder()
+        EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsIdentityParam.QueryLdapIdentityDetails.builder()
                 .username("baiyi")
                 .build();
-        EdsAssetVO.LdapIdentityDetails details = edsFacade.queryLdapIdentityDetails(queryLdapIdentityDetails);
+        EdsIdentityVO.LdapIdentityDetails details = edsIdentityFacade.queryLdapIdentityDetails(
+                queryLdapIdentityDetails);
         System.out.println(details);
     }
 
     @Test
     void test2() {
-        EdsInstanceParam.QueryDingtalkIdentityDetails query = EdsInstanceParam.QueryDingtalkIdentityDetails.builder()
+        EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username("baiyi")
                 .build();
-        EdsAssetVO.DingtalkIdentityDetails details = edsFacade.queryDingtalkIdentityDetails(query);
+        EdsIdentityVO.DingtalkIdentityDetails details = edsIdentityFacade.queryDingtalkIdentityDetails(query);
         System.out.println(details);
     }
 

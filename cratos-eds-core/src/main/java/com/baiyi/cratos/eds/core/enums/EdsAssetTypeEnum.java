@@ -48,6 +48,7 @@ public enum EdsAssetTypeEnum {
     AWS_VPC("VPC", 43),
     AWS_SUBNET("Subnet", 44),
     AWS_IAM_USER("IAM User", 45),
+    AWS_IAM_POLICY("IAM Policy",46),
 
     HUAWEICLOUD_ECS("ECS", 0),
     HUAWEICLOUD_IAM_USER("IAM User", 0),

@@ -161,8 +161,9 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             }
             // 删除Ldap user
             ldapPersonRepo.delete(ldap, username);
+            // 删除资产
             edsAssetService.queryInstanceAssetByTypeAndKey(deleteLdapIdentity.getInstanceId(),
-                            EdsAssetTypeEnum.LDAP_GROUP.name(), username)
+                            EdsAssetTypeEnum.LDAP_PERSON.name(), username)
                     .stream()
                     .mapToInt(EdsAsset::getId)
                     .forEach(edsFacade::deleteEdsAssetById);

@@ -32,6 +32,7 @@ public class EdsHuaweicloudConfigModel {
         private Cred cred;
         private List<Project> projects;
         private EdsInstance edsInstance;
+        private IAM iam;
     }
 
     @Data
@@ -50,6 +51,13 @@ public class EdsHuaweicloudConfigModel {
     public static class Project {
         private String name;
         private String id;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class IAM {
+        private String loginLink;
     }
 
 }
