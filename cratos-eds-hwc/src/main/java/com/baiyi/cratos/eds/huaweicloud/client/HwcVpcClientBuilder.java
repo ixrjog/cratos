@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.client;
 
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtil;
+import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtils;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
 import com.huaweicloud.sdk.core.region.Region;
@@ -28,7 +28,7 @@ public class HwcVpcClientBuilder {
                         .getAccessKey())
                 .withSk(huaweicloud.getCred()
                         .getSecretKey())
-                .withProjectId(HwcProjectUtil.findProjectId(regionId, huaweicloud));
+                .withProjectId(HwcProjectUtils.findProjectId(regionId, huaweicloud));
         return VpcClient.newBuilder()
                 .withHttpConfig(config)
                 .withCredential(credentials)

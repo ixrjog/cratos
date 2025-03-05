@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.huaweicloud.model.HwcVpc;
 import com.baiyi.cratos.eds.huaweicloud.repo.HwcVpcRepo;
-import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtil;
+import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -60,7 +60,7 @@ public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
     private List<HwcVpc.Vpc> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
                                         List<Vpc> vpcs) {
         return vpcs.stream()
-                .map(e -> HwcVpc.toVpc(regionId, HwcProjectUtil.findProjectId(regionId, configModel),
+                .map(e -> HwcVpc.toVpc(regionId, HwcProjectUtils.findProjectId(regionId, configModel),
                         e))
                 .toList();
     }

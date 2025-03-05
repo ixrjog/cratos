@@ -1,12 +1,11 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.client.HwcIamClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.iam.v3.IamClient;
-import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersRequest;
-import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResponse;
-import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
+import com.huaweicloud.sdk.iam.v3.model.*;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -32,6 +31,31 @@ public class HwcIamRepo {
         KeystoneListUsersRequest request = new KeystoneListUsersRequest();
         KeystoneListUsersResponse response = client.keystoneListUsers(request);
         return response.getUsers();
+    }
+
+    public static KeystoneShowUserResult getUser(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud,
+                                                 String userId) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
+        KeystoneShowUserRequest request = new KeystoneShowUserRequest();
+        request.setUserId(userId);
+        KeystoneShowUserResponse response = client.keystoneShowUser(request);
+        return response.getUser();
+    }
+
+    public static KeystoneCreateUserResult createUser(String regionId,
+                                                      EdsHuaweicloudConfigModel.Huaweicloud huaweicloud, User user) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
+        KeystoneCreateUserRequest request = new KeystoneCreateUserRequest();
+        KeystoneCreateUserRequestBody body = new KeystoneCreateUserRequestBody();
+        KeystoneCreateUserOption createUserOption = new KeystoneCreateUserOption();
+        createUserOption.setName(user.getUsername());
+        createUserOption.setPassword(user.getPassword());
+        createUserOption.setEnabled(true);
+        createUserOption.setDescription(user.getComment());
+        body.setUser(createUserOption);
+        request.setBody(body);
+        KeystoneCreateUserResponse response = client.keystoneCreateUser(request);
+        return response.getUser();
     }
 
 }

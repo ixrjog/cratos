@@ -15,7 +15,7 @@ import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.huaweicloud.model.HwcSubnet;
 import com.baiyi.cratos.eds.huaweicloud.repo.HwcVpcRepo;
-import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtil;
+import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -63,7 +63,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                                               List<Subnet> subnets) {
         return subnets.stream()
                 .map(e -> HwcSubnet.toSubnet(regionId,
-                        HwcProjectUtil.findProjectId(regionId, configModel), e))
+                        HwcProjectUtils.findProjectId(regionId, configModel), e))
                 .toList();
     }
 

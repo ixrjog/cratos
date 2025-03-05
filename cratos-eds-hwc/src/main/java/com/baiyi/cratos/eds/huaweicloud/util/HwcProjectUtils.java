@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class HwcProjectUtil {
+public class HwcProjectUtils {
 
     private static final String NO_PROJECT_ID = null;
 
