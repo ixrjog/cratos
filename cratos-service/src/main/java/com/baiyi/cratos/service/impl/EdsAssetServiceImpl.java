@@ -11,6 +11,7 @@ import com.baiyi.cratos.mapper.EdsAssetMapper;
 import com.baiyi.cratos.query.EdsAssetQuery;
 import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.base.BaseService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -157,6 +159,10 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSET:ID:' + #id")
     public void clearCacheById(int id) {
+        EdsAsset record = getById(id);
+        if(Objects.nonNull(record)) {
+            ((BaseService<?, ?>) AopContext.currentProxy()).clearCacheById(record.getId());
+        }
     }
 
     @Override

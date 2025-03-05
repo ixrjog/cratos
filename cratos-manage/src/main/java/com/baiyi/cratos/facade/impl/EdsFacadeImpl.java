@@ -331,7 +331,7 @@ public class EdsFacadeImpl implements EdsFacade {
         }
         edsAssetService.deleteById(id);
     }
-    
+
     @Override
     public List<EdsInstance> queryValidEdsInstanceByType(String edsType) {
         return edsInstanceService.queryValidEdsInstanceByType(edsType);
