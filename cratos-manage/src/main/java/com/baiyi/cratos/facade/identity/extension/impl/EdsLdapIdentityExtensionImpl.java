@@ -109,10 +109,10 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
                     resetLdapUserPassword.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            if (ldapPersonRepo.checkPersonInLdap(holder.getInstance()
+            if (!ldapPersonRepo.checkPersonInLdap(holder.getInstance()
                     .getEdsConfigModel(), resetLdapUserPassword.getUsername())) {
                 // 身份已存在
-                EdsIdentityException.runtime("The user already exists in the instance.");
+                EdsIdentityException.runtime("The user not exist in the instance.");
             }
             ldapPersonRepo.update(holder.getInstance()
                     .getEdsConfigModel(), person);
