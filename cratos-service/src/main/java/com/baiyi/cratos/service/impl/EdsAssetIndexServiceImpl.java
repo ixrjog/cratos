@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -50,7 +51,7 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSASSETINDEX:ID:' + #id")
     public void clearCacheById(int id) {
         EdsAssetIndex index = getById(id);
-        if (index != null) {
+        if (Objects.nonNull(index)) {
             ((EdsAssetIndexService) AopContext.currentProxy()).clear(index);
         }
     }
