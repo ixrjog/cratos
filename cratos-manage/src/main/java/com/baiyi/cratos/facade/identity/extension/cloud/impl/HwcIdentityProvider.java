@@ -51,9 +51,10 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHuaweiclou
 
     @Override
     protected EdsIdentityVO.CloudAccount createAccount(EdsHuaweicloudConfigModel.Huaweicloud config,
-                                                       EdsInstance instance, User user) {
+                                                       EdsInstance instance, User user, String password) {
         try {
-            KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user);
+            KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user,
+                    password);
             EdsInstanceProviderHolder<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             KeystoneListUsersResult iamUser = HwcUserConvertor.to(createUserResult);

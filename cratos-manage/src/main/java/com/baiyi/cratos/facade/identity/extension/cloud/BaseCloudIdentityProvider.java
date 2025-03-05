@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.identity.extension.cloud;
 
 import com.baiyi.cratos.common.exception.CloudIdentityException;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -20,6 +21,7 @@ import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,8 +59,22 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
         if (cloudAccount.isExist()) {
             return cloudAccount;
         }
-        return createAccount(holder.getInstance()
-                .getEdsConfigModel(), instance, user);
+        final String password = generatePassword(createCloudAccount);
+        cloudAccount = createAccount(holder.getInstance()
+                .getEdsConfigModel(), instance, user, password);
+        cloudAccount.setPassword(password);
+        return cloudAccount;
+    }
+
+    /**
+     * 特殊密码策略可重写
+     *
+     * @param createCloudAccount
+     * @return
+     */
+    protected String generatePassword(EdsIdentityParam.CreateCloudAccount createCloudAccount) {
+        return StringUtils.hasText(
+                createCloudAccount.getPassword()) ? createCloudAccount.getPassword() : PasswordGenerator.generatePassword();
     }
 
     @Override
@@ -101,7 +117,8 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
         return getAssetType();
     }
 
-    abstract protected EdsIdentityVO.CloudAccount createAccount(Config config, EdsInstance instance, User user);
+    abstract protected EdsIdentityVO.CloudAccount createAccount(Config config, EdsInstance instance, User user,
+                                                                String password);
 
     abstract protected EdsIdentityVO.CloudAccount getAccount(Config config, EdsInstance instance, User user);
 

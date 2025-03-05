@@ -51,13 +51,14 @@ public class AwsIamUserRepo {
      */
     public com.amazonaws.services.identitymanagement.model.User createUser(EdsAwsConfigModel.Aws aws,
                                                                            com.baiyi.cratos.domain.generator.User user,
+                                                                           String password,
                                                                            boolean createLoginProfile) {
         CreateUserRequest request = new CreateUserRequest();
         request.setUserName(user.getUsername());
         CreateUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
                 .createUser(request);
         if (createLoginProfile) {
-            this.createLoginProfile(aws, user, NO_PASSWORD_RESET_REQUIRED);
+            this.createLoginProfile(aws, user, password, NO_PASSWORD_RESET_REQUIRED);
 //            try {
 //                this.createLoginProfile(aws, user, NO_PASSWORD_RESET_REQUIRED);
 //            } catch (PasswordPolicyViolationException e) {
@@ -68,10 +69,10 @@ public class AwsIamUserRepo {
     }
 
     private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, com.baiyi.cratos.domain.generator.User user,
-                                            boolean passwordResetRequired) {
+                                            String password, boolean passwordResetRequired) {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(user.getUsername());
-        request.setPassword(user.getPassword());
+        request.setPassword(password);
         request.setPasswordResetRequired(passwordResetRequired);
         CreateLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
                 .createLoginProfile(request);

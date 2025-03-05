@@ -43,13 +43,13 @@ public class HwcIamRepo {
     }
 
     public static KeystoneCreateUserResult createUser(String regionId,
-                                                      EdsHuaweicloudConfigModel.Huaweicloud huaweicloud, User user) {
+                                                      EdsHuaweicloudConfigModel.Huaweicloud huaweicloud, User user ,String password) {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
         KeystoneCreateUserRequest request = new KeystoneCreateUserRequest();
         KeystoneCreateUserRequestBody body = new KeystoneCreateUserRequestBody();
         KeystoneCreateUserOption createUserOption = new KeystoneCreateUserOption();
         createUserOption.setName(user.getUsername());
-        createUserOption.setPassword(user.getPassword());
+        createUserOption.setPassword(password);
         createUserOption.setEnabled(true);
         createUserOption.setDescription(user.getComment());
         body.setUser(createUserOption);

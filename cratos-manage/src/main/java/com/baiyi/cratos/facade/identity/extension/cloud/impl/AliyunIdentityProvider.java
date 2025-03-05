@@ -57,9 +57,9 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
 
     @Override
     protected EdsIdentityVO.CloudAccount createAccount(EdsAliyunConfigModel.Aliyun config, EdsInstance instance,
-                                                       User user) {
+                                                       User user, String password) {
         try {
-            CreateUserResponse.User createUser = ramUserRepo.createUser(config.getRegionId(), config, user,
+            CreateUserResponse.User createUser = ramUserRepo.createUser(config.getRegionId(), config, user, password,
                     CREATE_LOGIN_PROFILE, ENABLE_MFA);
             GetUserResponse.User ramUser = ramUserRepo.getUser(config, user.getUsername());
             EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(

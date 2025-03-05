@@ -53,10 +53,11 @@ public class AliyunRamUserRepo {
     }
 
     public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, User user,
-                                              boolean createLoginProfile, boolean enableMFA) throws ClientException {
+                                              String password, boolean createLoginProfile,
+                                              boolean enableMFA) throws ClientException {
         CreateUserResponse.User createUser = createUser(regionId, aliyun, user);
         if (createLoginProfile) {
-            createLoginProfile(regionId, aliyun, user, NO_PASSWORD_RESET_REQUIRED, enableMFA);
+            createLoginProfile(regionId, aliyun, user, password, NO_PASSWORD_RESET_REQUIRED, enableMFA);
         }
         return createUser;
     }
@@ -73,11 +74,11 @@ public class AliyunRamUserRepo {
      */
     private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
                                                                        EdsAliyunConfigModel.Aliyun aliyun, User user,
-                                                                       boolean passwordResetRequired,
+                                                                       String password, boolean passwordResetRequired,
                                                                        boolean mFABindRequired) throws ClientException {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(user.getUsername());
-        request.setPassword(user.getPassword());
+        request.setPassword(password);
         request.setPasswordResetRequired(passwordResetRequired);
         request.setMFABindRequired(mFABindRequired);
         return aliyunClient.getAcsResponse(regionId, aliyun, request)

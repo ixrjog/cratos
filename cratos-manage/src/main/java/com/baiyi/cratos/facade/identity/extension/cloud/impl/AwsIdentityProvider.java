@@ -52,8 +52,9 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsAwsConfigModel.Aws aws, EdsInstance instance, User user) {
-        iamUserRepo.createUser(aws, user, CREATE_LOGIN_PROFILE);
+    protected EdsIdentityVO.CloudAccount createAccount(EdsAwsConfigModel.Aws aws, EdsInstance instance, User user,
+                                                       String password) {
+        iamUserRepo.createUser(aws, user, password,CREATE_LOGIN_PROFILE);
         return this.getAccount(aws, instance, user);
     }
 
