@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.client.cred;
 
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.huaweicloud.sdk.core.auth.GlobalCredentials;
 
 /**
@@ -10,7 +10,7 @@ import com.huaweicloud.sdk.core.auth.GlobalCredentials;
  */
 public class HuaweicloudCredentialsBuilder {
 
-    public static GlobalCredentials build(EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) {
+    public static GlobalCredentials build(EdsHwcConfigModel.Hwc huaweicloud) {
         return new GlobalCredentials().withAk(huaweicloud.getCred()
                         .getAccessKey())
                 .withSk(huaweicloud.getCred()

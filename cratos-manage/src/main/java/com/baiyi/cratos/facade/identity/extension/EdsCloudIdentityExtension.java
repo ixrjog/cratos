@@ -10,6 +10,9 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
  */
 public interface EdsCloudIdentityExtension {
 
+    EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
+            EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails);
+
     EdsIdentityVO.CloudAccount createCloudAccount(EdsIdentityParam.CreateCloudAccount createCloudAccount);
 
     void grantCloudAccountPermission(EdsIdentityParam.GrantPermission grantPermission);

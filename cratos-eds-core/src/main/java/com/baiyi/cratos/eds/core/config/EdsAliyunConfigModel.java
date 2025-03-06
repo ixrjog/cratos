@@ -1,8 +1,10 @@
 package com.baiyi.cratos.eds.core.config;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.google.common.base.Joiner;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,7 @@ public class EdsAliyunConfigModel {
         private MongoDB mongoDB;
         private ONS ons;
         private ACR acr;
+        private RAM ram;
     }
 
     @Data
@@ -108,6 +111,28 @@ public class EdsAliyunConfigModel {
     @Schema
     public static class RocketMQ {
         private List<String> endpoints;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class RAM {
+        private String domain;
+        private String loginUrl;
+
+        public String toLoginUrl() {
+            try {
+                return StringFormatter.format(loginUrl, domain);
+            } catch (Exception e) {
+                return loginUrl;
+            }
+        }
+
+        public String toUsername(String username) {
+            return Joiner.on("@")
+                    .join(username, domain);
+        }
+
     }
 
 }

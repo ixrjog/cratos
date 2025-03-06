@@ -53,8 +53,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
         EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
         User user = userService.getByUsername(createCloudAccount.getUsername());
-        EdsIdentityVO.CloudAccount cloudAccount = getAccount(holder.getInstance()
-                .getEdsConfigModel(), instance, user);
+        EdsIdentityVO.CloudAccount cloudAccount = getAccount(instance, user, user.getUsername());
         // 账户已存在
         if (cloudAccount.isExist()) {
             return cloudAccount;
@@ -104,8 +103,8 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
     }
 
     protected EdsAsset getAccountAsset(int instanceId, String username) {
-        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByInstanceAndAssetTypeAndNameValue(instanceId,
-                getAccountAssetType(), CLOUD_ACCOUNT_USERNAME, username);
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId,
+                CLOUD_ACCOUNT_USERNAME, username);
         if (CollectionUtils.isEmpty(indices)) {
             return null;
         }
@@ -119,8 +118,6 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
 
     abstract protected EdsIdentityVO.CloudAccount createAccount(Config config, EdsInstance instance, User user,
                                                                 String password);
-
-    abstract protected EdsIdentityVO.CloudAccount getAccount(Config config, EdsInstance instance, User user);
 
     abstract protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission);
 

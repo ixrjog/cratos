@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.param.http.eds;
 
 import com.baiyi.cratos.domain.HasEdsInstanceId;
+import com.baiyi.cratos.domain.HasEdsInstanceType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,9 +22,11 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryCloudIdentityDetails {
+    public static class QueryCloudIdentityDetails implements HasEdsInstanceType {
         @NotBlank
         private String username;
+        @Schema(description = "Query all instances if no parameter is provided")
+        private String instanceType;
     }
 
     @Data

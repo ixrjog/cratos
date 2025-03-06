@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.config;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
@@ -26,7 +27,8 @@ public class EdsAwsConfigModel {
         private Cred cred;
         private String regionId;
         private Set<String> regionIds;
-        private Ec2 ec2;
+        private EC2 ec2;
+        private IAM iam;
         private EdsInstance edsInstance;
     }
 
@@ -45,8 +47,24 @@ public class EdsAwsConfigModel {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Ec2 {
+    public static class EC2 {
         private String instances;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class IAM {
+        private String accountAlias;
+        private String loginUrl;
+
+        public String toLoginUrl() {
+            try {
+                return StringFormatter.format(loginUrl, accountAlias);
+            } catch (Exception e) {
+                return loginUrl;
+            }
+        }
     }
 
 }

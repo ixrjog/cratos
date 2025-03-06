@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AWS_IAM_POLICIES;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/28 11:17
@@ -54,27 +56,31 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
     @Override
     protected EdsIdentityVO.CloudAccount createAccount(EdsAwsConfigModel.Aws aws, EdsInstance instance, User user,
                                                        String password) {
-        iamUserRepo.createUser(aws, user, password,CREATE_LOGIN_PROFILE);
-        return this.getAccount(aws, instance, user);
+        iamUserRepo.createUser(aws, user, password, CREATE_LOGIN_PROFILE);
+        return this.getAccount(instance, user, user.getUsername());
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount getAccount(EdsAwsConfigModel.Aws aws, EdsInstance instance, User user) {
+    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
         try {
-            com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(aws, user.getUsername());
+            EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+                    instance.getId(), getAccountAssetType());
+            com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(holder.getInstance()
+                    .getEdsConfigModel(), username);
             if (Objects.isNull(iamUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
-            EdsAsset account = getAccountAsset(instance.getId(), user.getUsername());
+            EdsAsset account = getAccountAsset(instance.getId(), username);
             return EdsIdentityVO.CloudAccount.builder()
                     .instance(instanceWrapper.wrapToTarget(instance))
                     .user(userWrapper.wrapToTarget(user))
                     .account(Objects.isNull(account) ? null : edsAssetWrapper.wrapToTarget(account))
-                    .username(user.getUsername())
+                    .username(username)
                     .password("******")
+                    .accountLogin(toAccountLoginDetails(account, username))
                     .build();
-        } catch (Exception ex) {
-            throw new CloudIdentityException(ex.getMessage());
+        } catch (Exception e) {
+            throw new CloudIdentityException(e.getMessage());
         }
     }
 
@@ -117,6 +123,27 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
+    }
+
+    @Override
+    public String getPolicyIndexName(EdsAsset asset) {
+        return AWS_IAM_POLICIES;
+    }
+
+    @Override
+    public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
+        EdsAwsConfigModel.Aws aws = (EdsAwsConfigModel.Aws) holderBuilder.newHolder(
+                        asset.getInstanceId(), getAccountAssetType())
+                .getInstance()
+                .getEdsConfigModel();
+        return EdsIdentityVO.AccountLoginDetails.builder()
+                .username(username)
+                .name(asset.getName())
+                .accountId(aws.getCred().getId())
+                .loginUsername(username)
+                .loginUrl(aws.getIam()
+                        .toLoginUrl())
+                .build();
     }
 
 }

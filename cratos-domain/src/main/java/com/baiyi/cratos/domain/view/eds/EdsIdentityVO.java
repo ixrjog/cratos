@@ -30,14 +30,33 @@ public class EdsIdentityVO {
         public static final CloudIdentityDetails NO_DATA = CloudIdentityDetails.builder()
                 .build();
         private String username;
-        @Builder.Default
-        private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Map.of();
-        @Builder.Default
-        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
-        @Builder.Default
-        private Map<Integer, List<String>> policyMap = Map.of();
-        @Builder.Default
-        private Map<String, List<EdsAssetVO.Asset>> accessKeyMap = Map.of();
+        private Map<String, List<CloudAccount>> accounts = Map.of();
+//        @Builder.Default
+//        private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Map.of();
+//        @Builder.Default
+//        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
+//        @Builder.Default
+//        private Map<Integer, List<String>> policyMap = Map.of();
+//        @Builder.Default
+//        private Map<Integer, List<EdsAssetVO.Asset>> accessKeyMap = Map.of();
+//        @Builder.Default
+//        private Map<Integer, AccountLoginDetails> accountMap = Map.of();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AccountLoginDetails implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3029421324469757904L;
+        @Schema(description = "AWS specific")
+        private String accountId;
+        private String username;
+        private String name;
+        private String loginUsername;
+        private String loginUrl;
     }
 
     @Data
@@ -136,6 +155,20 @@ public class EdsIdentityVO {
         private EdsAssetVO.Asset account;
         @Builder.Default
         private boolean isExist = true;
+        private AccountLoginDetails accountLogin;
+        private List<String> policies;
+        private List<AccessKey> accessKeys;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AccessKey implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3471470854571389889L;
+        private String accessKeyId;
     }
 
 }

@@ -20,6 +20,7 @@ import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
@@ -52,9 +53,10 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                                         EdsInstanceWrapper edsInstanceWrapper, UserService userService,
                                         UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
                                         EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                        LdapPersonRepo ldapPersonRepo, LdapGroupRepo ldapGroupRepo) {
+                                        EdsAssetIndexService edsAssetIndexService, LdapPersonRepo ldapPersonRepo,
+                                        LdapGroupRepo ldapGroupRepo) {
         super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade);
+                edsAssetService, edsFacade, edsAssetIndexService);
         this.ldapPersonRepo = ldapPersonRepo;
         this.ldapGroupRepo = ldapGroupRepo;
     }

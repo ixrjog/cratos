@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.client;
 
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.util.HwcProjectUtils;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
@@ -22,7 +22,7 @@ public class HwcScmClientBuilder {
     public static final Region EU_WEST_101 = new Region("eu-west-101", "https://scm.eu-west-101.myhuaweicloud.eu");
 
     public static ScmClient buildScmClient(String regionId,
-                                           EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws IllegalArgumentException {
+                                           EdsHwcConfigModel.Hwc huaweicloud) throws IllegalArgumentException {
         // 配置客户端属性
         HttpConfig config = HttpConfig.getDefaultHttpConfig();
         config.withIgnoreSSLVerification(true);

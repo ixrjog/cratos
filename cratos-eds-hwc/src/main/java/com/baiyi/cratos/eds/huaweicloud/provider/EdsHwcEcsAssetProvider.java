@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -41,7 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.EIP;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
-public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHuaweicloudConfigModel.Huaweicloud, HwcEcs.Ecs> {
+public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHwcConfigModel.Hwc, HwcEcs.Ecs> {
 
     public EdsHwcEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -54,7 +54,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
 
     @Override
     protected List<HwcEcs.Ecs> listEntities(String regionId,
-                                            EdsHuaweicloudConfigModel.Huaweicloud configModel) throws EdsQueryEntitiesException {
+                                            EdsHwcConfigModel.Hwc configModel) throws EdsQueryEntitiesException {
         List<ServerDetail> serverDetails = HwcEcsRepo.listServers(regionId, configModel);
         if (CollectionUtils.isEmpty(serverDetails)) {
             return Collections.emptyList();
@@ -62,7 +62,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
         return toEntities(regionId, configModel, serverDetails);
     }
 
-    private List<HwcEcs.Ecs> toEntities(String regionId, EdsHuaweicloudConfigModel.Huaweicloud configModel,
+    private List<HwcEcs.Ecs> toEntities(String regionId, EdsHwcConfigModel.Hwc configModel,
                                         List<ServerDetail> serverDetails) {
         return serverDetails.stream()
                 .map(e -> HwcEcs.toEcs(regionId, e))
@@ -88,7 +88,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance,
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
                                   HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
                 .getAddresses());
@@ -116,7 +116,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHu
 
     @Override
     protected List<EdsAssetIndex> toEdsAssetIndexList(
-            ExternalDataSourceInstance<EdsHuaweicloudConfigModel.Huaweicloud> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
             HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
                 .getAddresses());

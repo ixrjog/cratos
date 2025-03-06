@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.util;
 
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -20,9 +20,9 @@ public class HwcProjectUtils {
 
     private static final String NO_PROJECT_ID = null;
 
-    public static String findProjectId(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) {
+    public static String findProjectId(String regionId, EdsHwcConfigModel.Hwc huaweicloud) {
         if (!CollectionUtils.isEmpty(huaweicloud.getProjects())) {
-            Optional<EdsHuaweicloudConfigModel.Project> optionalProject = huaweicloud.getProjects()
+            Optional<EdsHwcConfigModel.Project> optionalProject = huaweicloud.getProjects()
                     .stream()
                     .filter(e -> regionId.equals(e.getName()))
                     .findFirst();

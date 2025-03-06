@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.identity.extension.cloud;
 
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.EdsAssetTypeOfAnnotate;
@@ -32,5 +34,12 @@ public interface CloudIdentityProvider extends EdsAssetTypeOfAnnotate {
      * @param revokePermission
      */
     void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission);
+
+
+    String getPolicyIndexName(EdsAsset asset);
+
+    EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset,String username);
+
+    EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username);
 
 }

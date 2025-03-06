@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -28,6 +28,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.HUAWEICLOUD_IAM_POLICIES;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/5 09:48
@@ -37,7 +39,7 @@ import java.util.Objects;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
-public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHuaweicloudConfigModel.Huaweicloud> {
+public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigModel.Hwc> {
 
     public final static boolean ENABLE_MFA = true;
 
@@ -50,42 +52,46 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHuaweiclou
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsHuaweicloudConfigModel.Huaweicloud config,
+    protected EdsIdentityVO.CloudAccount createAccount(EdsHwcConfigModel.Hwc config,
                                                        EdsInstance instance, User user, String password) {
         try {
             KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user,
                     password);
-            EdsInstanceProviderHolder<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             KeystoneListUsersResult iamUser = HwcUserConvertor.to(createUserResult);
             postImportIamUser(holder, iamUser);
-            return this.getAccount(config, instance, user);
+            return this.getAccount(instance, user, user.getUsername());
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
     }
 
     private void postImportIamUser(
-            EdsInstanceProviderHolder<EdsHuaweicloudConfigModel.Huaweicloud, KeystoneListUsersResult> holder,
+            EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> holder,
             KeystoneListUsersResult iamUser) {
         holder.getProvider()
                 .importAsset(holder.getInstance(), iamUser);
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount getAccount(EdsHuaweicloudConfigModel.Huaweicloud config, EdsInstance instance,
-                                                    User user) {
-        EdsAsset account = getAccountAsset(instance.getId(), user.getUsername());
-        if (Objects.isNull(account)) {
-            return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
+    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
+        try {
+            EdsAsset account = getAccountAsset(instance.getId(), username);
+            if (Objects.isNull(account)) {
+                return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
+            }
+            return EdsIdentityVO.CloudAccount.builder()
+                    .instance(instanceWrapper.wrapToTarget(instance))
+                    .user(userWrapper.wrapToTarget(user))
+                    .account(edsAssetWrapper.wrapToTarget(account))
+                    .username(username)
+                    .password("******")
+                    .accountLogin(toAccountLoginDetails(account, username))
+                    .build();
+        } catch (Exception ex) {
+            throw new CloudIdentityException(ex.getMessage());
         }
-        return EdsIdentityVO.CloudAccount.builder()
-                .instance(instanceWrapper.wrapToTarget(instance))
-                .user(userWrapper.wrapToTarget(user))
-                .account(edsAssetWrapper.wrapToTarget(account))
-                .username(user.getUsername())
-                .password("******")
-                .build();
     }
 
     @Override
@@ -96,6 +102,26 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHuaweiclou
     @Override
     protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
         CloudIdentityException.runtime("Operation not supported.");
+    }
+
+    @Override
+    public String getPolicyIndexName(EdsAsset asset) {
+        return HUAWEICLOUD_IAM_POLICIES;
+    }
+
+    @Override
+    public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
+        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(
+                        asset.getInstanceId(), getAccountAssetType())
+                .getInstance()
+                .getEdsConfigModel();
+        return EdsIdentityVO.AccountLoginDetails.builder()
+                .username(username)
+                .name(asset.getName())
+                .loginUsername(username)
+                .loginUrl(hwc.getIam()
+                        .toLoginUrl(hwc.getCred().getUsername()))
+                .build();
     }
 
 }

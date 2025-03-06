@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.client.HwcIamClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.iam.v3.IamClient;
@@ -21,19 +21,19 @@ import static lombok.AccessLevel.PRIVATE;
 public class HwcIamRepo {
 
     public static List<KeystoneListUsersResult> listUsers(
-            EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
+            EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
         return listUsers(huaweicloud.getRegionId(), huaweicloud);
     }
 
     public static List<KeystoneListUsersResult> listUsers(String regionId,
-                                                          EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
+                                                          EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
         KeystoneListUsersRequest request = new KeystoneListUsersRequest();
         KeystoneListUsersResponse response = client.keystoneListUsers(request);
         return response.getUsers();
     }
 
-    public static KeystoneShowUserResult getUser(String regionId, EdsHuaweicloudConfigModel.Huaweicloud huaweicloud,
+    public static KeystoneShowUserResult getUser(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
                                                  String userId) {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
         KeystoneShowUserRequest request = new KeystoneShowUserRequest();
@@ -43,7 +43,7 @@ public class HwcIamRepo {
     }
 
     public static KeystoneCreateUserResult createUser(String regionId,
-                                                      EdsHuaweicloudConfigModel.Huaweicloud huaweicloud, User user ,String password) {
+                                                      EdsHwcConfigModel.Hwc huaweicloud, User user , String password) {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
         KeystoneCreateUserRequest request = new KeystoneCreateUserRequest();
         KeystoneCreateUserRequestBody body = new KeystoneCreateUserRequestBody();

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.config;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
@@ -18,12 +19,12 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class EdsHuaweicloudConfigModel {
+public class EdsHwcConfigModel {
 
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Huaweicloud implements HasRegionsModel, IEdsConfigModel {
+    public static class Hwc implements HasRegionsModel, IEdsConfigModel {
         private String version;
         // default
         private String regionId;
@@ -57,7 +58,14 @@ public class EdsHuaweicloudConfigModel {
     @NoArgsConstructor
     @Schema
     public static class IAM {
-        private String loginLink;
+        private String loginUrl;
+        public String toLoginUrl(String mainUsername) {
+            try {
+                return StringFormatter.format(loginUrl, mainUsername);
+            } catch (Exception e) {
+                return loginUrl;
+            }
+        }
     }
 
 }

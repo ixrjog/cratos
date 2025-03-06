@@ -116,20 +116,6 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryIndexByInstanceAndAssetTypeAndNameValue(@NonNull Integer instanceId,
-                                                                               @NonNull String assetType,
-                                                                               @NonNull String name,
-                                                                               @NonNull String value) {
-        Example example = new Example(EdsAssetIndex.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("instanceId", instanceId)
-                .andEqualTo("assetType", assetType)
-                .andEqualTo("name", name)
-                .andEqualTo("value",value);
-        return edsAssetIndexMapper.selectByExample(example);
-    }
-
-    @Override
     public List<EdsAssetIndex> queryIndexByParam(@NonNull String namePrefix, @NonNull String assetType, int size) {
         int limit = Math.min(size, 100);
         return edsAssetIndexMapper.queryIndexByNamePrefixAndAssetType(namePrefix, assetType, limit);

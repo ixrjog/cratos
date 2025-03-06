@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsHuaweicloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.client.HwcScmClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
@@ -27,7 +27,7 @@ public class HwcScmRepo {
     private static final int MAX_LIMIT = 50;
 
     public static List<CertificateDetail> listCertificates(String regionId,
-                                                           EdsHuaweicloudConfigModel.Huaweicloud huaweicloud) throws ServiceResponseException {
+                                                           EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
         List<CertificateDetail> certificatesList = Lists.newArrayList();
         try {
             ScmClient client = HwcScmClientBuilder.buildScmClient(regionId, huaweicloud);

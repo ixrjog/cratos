@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
@@ -35,6 +36,7 @@ public abstract class BaseEdsIdentityExtension {
     protected final EdsInstanceProviderHolderBuilder holderBuilder;
     protected final EdsAssetService edsAssetService;
     protected final EdsFacade edsFacade;
+    protected final EdsAssetIndexService edsAssetIndexService;
 
     private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
             EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name());

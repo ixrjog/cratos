@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/28 11:17
@@ -65,7 +67,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
             EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             postImportRamUser(holder, ramUser);
-            return this.getAccount(config, instance, user);
+            return this.getAccount(instance, user, user.getUsername());
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
         }
@@ -78,20 +80,23 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount getAccount(EdsAliyunConfigModel.Aliyun config, EdsInstance instance,
-                                                    User user) {
+    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
         try {
-            GetUserResponse.User ramUser = ramUserRepo.getUser(config, user.getUsername());
+            EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+                    instance.getId(), getAccountAssetType());
+            GetUserResponse.User ramUser = ramUserRepo.getUser(holder.getInstance()
+                    .getEdsConfigModel(), username);
             if (Objects.isNull(ramUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
-            EdsAsset account = getAccountAsset(instance.getId(), user.getUsername());
+            EdsAsset account = getAccountAsset(instance.getId(), username);
             return EdsIdentityVO.CloudAccount.builder()
                     .instance(instanceWrapper.wrapToTarget(instance))
                     .user(userWrapper.wrapToTarget(user))
                     .account(Objects.isNull(account) ? null : edsAssetWrapper.wrapToTarget(account))
-                    .username(user.getUsername())
+                    .username(username)
                     .password("******")
+                    .accountLogin(toAccountLoginDetails(account, username))
                     .build();
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
@@ -132,6 +137,27 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
         }
+    }
+
+    @Override
+    public String getPolicyIndexName(EdsAsset asset) {
+        return ALIYUN_RAM_POLICIES;
+    }
+
+    @Override
+    public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
+        EdsAliyunConfigModel.Aliyun aliyun = (EdsAliyunConfigModel.Aliyun) holderBuilder.newHolder(
+                        asset.getInstanceId(), getAccountAssetType())
+                .getInstance()
+                .getEdsConfigModel();
+        return EdsIdentityVO.AccountLoginDetails.builder()
+                .username(username)
+                .name(asset.getName())
+                .loginUsername(aliyun.getRam()
+                        .toUsername(username))
+                .loginUrl(aliyun.getRam()
+                        .toLoginUrl())
+                .build();
     }
 
 }
