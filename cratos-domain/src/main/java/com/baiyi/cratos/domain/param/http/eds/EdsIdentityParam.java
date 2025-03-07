@@ -22,11 +22,12 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryCloudIdentityDetails implements HasEdsInstanceType {
+    public static class QueryCloudIdentityDetails implements HasEdsInstanceType, HasEdsInstanceId {
         @NotBlank
         private String username;
         @Schema(description = "Query all instances if no parameter is provided")
         private String instanceType;
+        private Integer instanceId;
     }
 
     @Data
@@ -34,9 +35,10 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryLdapIdentityDetails {
+    public static class QueryLdapIdentityDetails implements HasEdsInstanceId {
         @NotBlank
         private String username;
+        private Integer instanceId;
     }
 
     @Data
@@ -127,9 +129,10 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryDingtalkIdentityDetails {
+    public static class QueryDingtalkIdentityDetails implements HasEdsInstanceId {
         @NotBlank
         private String username;
+        private Integer instanceId;
     }
 
     @Data
@@ -137,9 +140,10 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class QueryGitLabIdentityDetails {
+    public static class QueryGitLabIdentityDetails implements HasEdsInstanceId {
         @NotBlank
         private String username;
+        private Integer instanceId;
     }
 
     @Data
@@ -189,6 +193,5 @@ public class EdsIdentityParam {
         @Schema(description = "Permission assetId")
         private Integer revokeId;
     }
-
 
 }

@@ -1,5 +1,7 @@
 package com.baiyi.cratos.facade.identity.impl;
 
+import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.User;
@@ -26,7 +28,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,6 +65,16 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         return edsCloudIdentityExtension.queryCloudIdentityDetails(queryCloudIdentityDetails);
     }
 
+    private List<EdsAsset> onlyInTheInstance(List<EdsAsset> assets, HasEdsInstanceId hasEdsInstanceId) {
+        if (IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+            return assets.stream()
+                    .filter(e -> e.getInstanceId()
+                            .equals(hasEdsInstanceId.getInstanceId()))
+                    .toList();
+        }
+        return assets;
+    }
+
     @Override
     public EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
             EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
@@ -72,7 +83,9 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         if (Objects.isNull(user)) {
             return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
         }
-        List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(), username);
+        List<EdsAsset> assets = onlyInTheInstance(
+                edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(), username),
+                queryLdapIdentityDetails);
         if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
         }
@@ -105,12 +118,12 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         if (Objects.isNull(user)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
-        Map<Integer, EdsAsset> assetMap = getAssetMapByMobile(user.getMobilePhone());
-        if (CollectionUtils.isEmpty(assetMap)) {
+        List<EdsAsset> assets = onlyInTheInstance(queryDingtalkAssetByMobile(user.getMobilePhone()),
+                queryDingtalkIdentityDetails);
+        if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
-        List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assetMap.values()
-                .stream()
+        List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assets.stream()
                 .map(asset -> EdsIdentityVO.DingtalkIdentity.builder()
                         .username(username)
                         .user(userWrapper.wrapToTarget(user))
@@ -132,15 +145,19 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         if (Objects.isNull(user)) {
             return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
         }
-        List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = edsAssetService.queryByTypeAndKey(
-                        EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername())
-                .stream()
+        List<EdsAsset> assets = onlyInTheInstance(
+                edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername()),
+                queryGitLabIdentityDetails);
+        if (CollectionUtils.isEmpty(assets)) {
+            return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
+        }
+        List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = assets.stream()
                 .map(asset -> EdsIdentityVO.GitLabIdentity.builder()
                         .username(username)
                         .user(userWrapper.wrapToTarget(user))
                         .account(edsAssetWrapper.wrapToTarget(asset))
                         .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
-                        .sshKeys(querySshKeys(user.getUsername(), asset.getInstanceId()))
+                        .sshKeys(queryGitLabUserSshKeys(user.getUsername(), asset.getInstanceId()))
                         .build())
                 .toList();
         return EdsIdentityVO.GitLabIdentityDetails.builder()
@@ -179,7 +196,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         return ldapIdentityExtension.queryLdapGroups(queryLdapGroups);
     }
 
-    private List<EdsAssetVO.Asset> querySshKeys(String username, int instanceId) {
+    private List<EdsAssetVO.Asset> queryGitLabUserSshKeys(String username, int instanceId) {
         return edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(), username, false)
                 .stream()
                 .filter(e -> e.getInstanceId() == instanceId)
@@ -187,16 +204,20 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
                 .toList();
     }
 
-    private Map<Integer, EdsAsset> getAssetMapByMobile(String mobilePhone) {
+    private List<EdsAsset> queryDingtalkAssetByMobile(String mobilePhone) {
         if (!StringUtils.hasText(mobilePhone)) {
-            return Map.of();
+            return List.of();
         }
         List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
         if (CollectionUtils.isEmpty(indices)) {
-            return Map.of();
+            return List.of();
         }
         return indices.stream()
-                .collect(Collectors.toMap(EdsAssetIndex::getAssetId, e -> edsAssetService.getById(e.getAssetId())));
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
     }
 
     @Override
