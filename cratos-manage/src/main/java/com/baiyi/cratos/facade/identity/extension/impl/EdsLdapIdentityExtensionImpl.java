@@ -89,7 +89,7 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                     .username(createLdapIdentity.getUsername())
                     .password(password)
                     .user(userWrapper.wrapToTarget(user))
-                    .asset(edsAssetWrapper.wrapToTarget(personAsset))
+                    .account(edsAssetWrapper.wrapToTarget(personAsset))
                     .instance(edsInstanceWrapper.wrapToTarget(instance))
                     .build();
         } catch (Exception ex) {

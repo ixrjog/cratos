@@ -6,7 +6,6 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
@@ -19,9 +18,8 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
-import com.google.api.client.util.Lists;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,7 +32,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTALK_USER_MOBILE;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_USER_GROUPS;
 
 /**
  * &#064;Author  baiyi
@@ -69,36 +68,41 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     @Override
     public EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
             EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
-        List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(),
-                queryLdapIdentityDetails.getUsername());
+        String username = queryLdapIdentityDetails.getUsername();
+        User user = userService.getByUsername(username);
+        if (Objects.isNull(user)) {
+            return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
+        }
+        List<EdsAsset> assets = edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(), username);
         if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
         }
-        Map<Integer, EdsAssetVO.Asset> ldapIdentities = Maps.newHashMap();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
-        Map<Integer, List<String>> ldapGroupMap = Maps.newHashMap();
-        assets.forEach(asset -> {
-            ldapIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
-            instanceMap.put(asset.getInstanceId(),
-                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
-            EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), LDAP_USER_GROUPS);
-            if (Objects.nonNull(index)) {
-                ldapGroupMap.put(asset.getId(), Lists.newArrayList(Splitter.on(";")
-                        .split(index.getValue())));
-            }
-        });
+        List<EdsIdentityVO.LdapIdentity> ldapIdentities = assets.stream()
+                .map(asset -> {
+                    EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), LDAP_USER_GROUPS);
+                    List<String> groups = Objects.nonNull(index) ? Splitter.on(";")
+                            .splitToList(index.getValue()) : List.of();
+                    return EdsIdentityVO.LdapIdentity.builder()
+                            .username(username)
+                            .user(userWrapper.wrapToTarget(user))
+                            .instance(
+                                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                            .account(edsAssetWrapper.wrapToTarget(asset))
+                            .groups(groups)
+                            .build();
+                })
+                .toList();
         return EdsIdentityVO.LdapIdentityDetails.builder()
-                .username(queryLdapIdentityDetails.getUsername())
+                .username(username)
                 .ldapIdentities(ldapIdentities)
-                .ldapGroupMap(ldapGroupMap)
-                .instanceMap(instanceMap)
                 .build();
     }
 
     @Override
     public EdsIdentityVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
             EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        User user = userService.getByUsername(queryDingtalkIdentityDetails.getUsername());
+        String username = queryDingtalkIdentityDetails.getUsername();
+        User user = userService.getByUsername(username);
         if (Objects.isNull(user)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
@@ -106,42 +110,45 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         if (CollectionUtils.isEmpty(assetMap)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
-        Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = Maps.newHashMap();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
-        assetMap.forEach((k, asset) -> {
-            dingtalkIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
-            instanceMap.put(asset.getInstanceId(),
-                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
-        });
+        List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assetMap.values()
+                .stream()
+                .map(asset -> EdsIdentityVO.DingtalkIdentity.builder()
+                        .username(username)
+                        .user(userWrapper.wrapToTarget(user))
+                        .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                        .account(edsAssetWrapper.wrapToTarget(asset))
+                        .build())
+                .toList();
         return EdsIdentityVO.DingtalkIdentityDetails.builder()
+                .username(username)
                 .dingtalkIdentities(dingtalkIdentities)
-                .instanceMap(instanceMap)
                 .build();
     }
 
     @Override
     public EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
             EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
-        User user = userService.getByUsername(queryGitLabIdentityDetails.getUsername());
+        String username = queryGitLabIdentityDetails.getUsername();
+        User user = userService.getByUsername(username);
         if (Objects.isNull(user)) {
             return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
         }
-        Map<Integer, EdsAssetVO.Asset> gitLabIdentities = Maps.newHashMap();
-        Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
-        Map<Integer, List<EdsAssetVO.Asset>> sshKeyMap = Maps.newHashMap();
+        List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = Lists.newArrayList();
+
         edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername())
                 .forEach(asset -> {
-                    gitLabIdentities.put(asset.getInstanceId(), edsAssetWrapper.wrapToTarget(asset));
-                    instanceMap.put(asset.getInstanceId(),
-                            edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())));
-                    List<EdsAsset> assets = edsAssetService.queryByTypeAndName(EdsAssetTypeEnum.GITLAB_SSHKEY.name(),
-                            user.getUsername(), false);
-                    sshKeyMap.put(asset.getId(), querySshKeys(user.getUsername(), asset.getInstanceId()));
+                    EdsIdentityVO.GitLabIdentity gitLabIdentity = EdsIdentityVO.GitLabIdentity.builder()
+                            .username(username)
+                            .user(userWrapper.wrapToTarget(user))
+                            .account( edsAssetWrapper.wrapToTarget(asset))
+                            .instance(  edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                            .sshKeys( querySshKeys(user.getUsername(), asset.getInstanceId()))
+                            .build();
+
+                    gitLabIdentities.add(gitLabIdentity);
                 });
         return EdsIdentityVO.GitLabIdentityDetails.builder()
                 .gitLabIdentities(gitLabIdentities)
-                .instanceMap(instanceMap)
-                .sshKeyMap(sshKeyMap)
                 .build();
     }
 

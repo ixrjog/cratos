@@ -34,7 +34,7 @@ public interface CloudIdentityProvider extends EdsAssetTypeOfAnnotate {
      * @param revokePermission
      */
     void revokePermission(EdsInstance instance, EdsIdentityParam.RevokePermission revokePermission);
-    
+
     String getPolicyIndexName(EdsAsset asset);
 
     EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset,String username);

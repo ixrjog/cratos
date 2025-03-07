@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.eds;
 
 import com.baiyi.cratos.domain.view.user.UserVO;
+import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,17 +31,8 @@ public class EdsIdentityVO {
         public static final CloudIdentityDetails NO_DATA = CloudIdentityDetails.builder()
                 .build();
         private String username;
+        @Builder.Default
         private Map<String, List<CloudAccount>> accounts = Map.of();
-//        @Builder.Default
-//        private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Map.of();
-//        @Builder.Default
-//        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
-//        @Builder.Default
-//        private Map<Integer, List<String>> policyMap = Map.of();
-//        @Builder.Default
-//        private Map<Integer, List<EdsAssetVO.Asset>> accessKeyMap = Map.of();
-//        @Builder.Default
-//        private Map<Integer, AccountLoginDetails> accountMap = Map.of();
     }
 
     @Data
@@ -71,17 +63,7 @@ public class EdsIdentityVO {
         private static final long serialVersionUID = 6429767864454283221L;
         private String username;
         @Builder.Default
-        private Map<Integer, EdsAssetVO.Asset> ldapIdentities = Map.of();
-        /**
-         * Map<InstanceId, EdsInstanceVO.EdsInstance>
-         */
-        @Builder.Default
-        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
-        /**
-         * Map<AssetId, List<GroupName>>
-         */
-        @Builder.Default
-        private Map<Integer, List<String>> ldapGroupMap = Map.of();
+        private List<LdapIdentity> ldapIdentities = List.of();
     }
 
     @Data
@@ -96,9 +78,11 @@ public class EdsIdentityVO {
         private static final long serialVersionUID = 5117329244388470820L;
         private String username;
         @Builder.Default
-        private Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = Map.of();
-        @Builder.Default
-        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
+        private List<DingtalkIdentity> dingtalkIdentities = List.of();
+//        @Builder.Default
+//        private Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = Map.of();
+//        @Builder.Default
+//        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
     }
 
     @Data
@@ -112,14 +96,7 @@ public class EdsIdentityVO {
         @Serial
         private static final long serialVersionUID = -3042556825681286896L;
         @Builder.Default
-        private Map<Integer, EdsAssetVO.Asset> gitLabIdentities = Map.of();
-        @Builder.Default
-        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
-        /**
-         * Map<Integer assetId, List<EdsAssetVO.Asset> sshKeys>
-         */
-        @Builder.Default
-        private Map<Integer, List<EdsAssetVO.Asset>> sshKeyMap = Map.of();
+        private List<GitLabIdentity> gitLabIdentities = Lists.newArrayList();
     }
 
     @Data
@@ -134,7 +111,23 @@ public class EdsIdentityVO {
         private String password;
         private EdsInstanceVO.EdsInstance instance;
         private UserVO.User user;
-        private EdsAssetVO.Asset asset;
+        private EdsAssetVO.Asset account;
+        @Builder.Default
+        private List<String> groups = List.of();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DingtalkIdentity implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8230860881836758494L;
+        private String username;
+        private EdsInstanceVO.EdsInstance instance;
+        private UserVO.User user;
+        private EdsAssetVO.Asset account;
     }
 
     @Data
@@ -158,6 +151,22 @@ public class EdsIdentityVO {
         private AccountLoginDetails accountLogin;
         private List<String> policies;
         private List<AccessKey> accessKeys;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GitLabIdentity implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2657322145204336846L;
+        private String username;
+        private EdsInstanceVO.EdsInstance instance;
+        private UserVO.User user;
+        private EdsAssetVO.Asset account;
+        @Builder.Default
+        private List<EdsAssetVO.Asset> sshKeys = Lists.newArrayList();
     }
 
     @Data

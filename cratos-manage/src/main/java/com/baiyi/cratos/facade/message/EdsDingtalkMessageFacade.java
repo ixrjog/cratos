@@ -3,7 +3,6 @@ package com.baiyi.cratos.facade.message;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
-import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -43,21 +42,22 @@ public class EdsDingtalkMessageFacade {
             return;
         }
         dingtalkIdentityDetails.getDingtalkIdentities()
-                .forEach((assetId, dingtalkUserAsset) -> sendToDingtalkUser(dingtalkUserAsset, notificationTemplate,
-                        msgText));
+                .forEach(identity -> sendToDingtalkUser(identity, notificationTemplate, msgText));
     }
 
     @SuppressWarnings("unchecked")
-    private void sendToDingtalkUser(EdsAssetVO.Asset dingtalkUserAsset, NotificationTemplate notificationTemplate,
-                                    String msgText) {
+    private void sendToDingtalkUser(EdsIdentityVO.DingtalkIdentity dingtalkIdentity,
+                                    NotificationTemplate notificationTemplate, String msgText) {
         EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?>) holderBuilder.newHolder(
-                dingtalkUserAsset.getInstanceId(), EdsAssetTypeEnum.DINGTALK_USER.name());
+                dingtalkIdentity.getInstance()
+                        .getId(), EdsAssetTypeEnum.DINGTALK_USER.name());
         EdsDingtalkConfigModel.Dingtalk dingtalk = holder.getInstance()
                 .getEdsConfigModel();
         AsyncSendMessageAgency.newBuilder()
                 .withMsgText(msgText)
                 .withNotificationTemplate(notificationTemplate)
-                .withUserId(dingtalkUserAsset.getAssetId())
+                .withUserId(dingtalkIdentity.getAccount()
+                        .getAssetId())
                 .withDingtalkMessageSender(dingtalkMessageSender)
                 .withDingtalk(dingtalk)
                 .asyncSend();
