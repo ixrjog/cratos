@@ -19,7 +19,6 @@ import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -133,20 +132,17 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
         if (Objects.isNull(user)) {
             return EdsIdentityVO.GitLabIdentityDetails.NO_DATA;
         }
-        List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = Lists.newArrayList();
-
-        edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername())
-                .forEach(asset -> {
-                    EdsIdentityVO.GitLabIdentity gitLabIdentity = EdsIdentityVO.GitLabIdentity.builder()
-                            .username(username)
-                            .user(userWrapper.wrapToTarget(user))
-                            .account( edsAssetWrapper.wrapToTarget(asset))
-                            .instance(  edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
-                            .sshKeys( querySshKeys(user.getUsername(), asset.getInstanceId()))
-                            .build();
-
-                    gitLabIdentities.add(gitLabIdentity);
-                });
+        List<EdsIdentityVO.GitLabIdentity> gitLabIdentities = edsAssetService.queryByTypeAndKey(
+                        EdsAssetTypeEnum.GITLAB_USER.name(), user.getUsername())
+                .stream()
+                .map(asset -> EdsIdentityVO.GitLabIdentity.builder()
+                        .username(username)
+                        .user(userWrapper.wrapToTarget(user))
+                        .account(edsAssetWrapper.wrapToTarget(asset))
+                        .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                        .sshKeys(querySshKeys(user.getUsername(), asset.getInstanceId()))
+                        .build())
+                .toList();
         return EdsIdentityVO.GitLabIdentityDetails.builder()
                 .gitLabIdentities(gitLabIdentities)
                 .build();
