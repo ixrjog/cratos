@@ -23,9 +23,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider.INDEX_VALUE_DIVISION_SYMBOL;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCESS_KEY_IDS;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
 /**
@@ -34,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_A
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel,Account> implements CloudIdentityProvider, InitializingBean {
+public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, Account> implements CloudIdentityProvider, InitializingBean {
 
     private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;
@@ -120,15 +123,19 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel,A
                 .name(policyIndexName)
                 .build();
         EdsAssetIndex policyIndex = edsAssetIndexService.getByUniqueKey(query);
-        if (Objects.isNull(policyIndex)) {
-            return List.of();
-        }
-        return List.of(policyIndex.getValue()
-                .split(","));
+        return Objects.isNull(policyIndex) ? List.of() : List.of(policyIndex.getValue()
+                .split(INDEX_VALUE_DIVISION_SYMBOL));
     }
 
-    protected String getAccountAssetType() {
-        return getAssetType();
+    protected List<EdsIdentityVO.AccessKey> getAccessKeys(EdsAsset account) {
+        EdsAssetIndex query = EdsAssetIndex.builder()
+                .instanceId(account.getInstanceId())
+                .assetId(account.getId())
+                .name(CLOUD_ACCESS_KEY_IDS)
+                .build();
+        EdsAssetIndex accessKeyIdsIndex = edsAssetIndexService.getByUniqueKey(query);
+        return Objects.isNull(accessKeyIdsIndex) ? List.of() :  Arrays.stream(accessKeyIdsIndex.getValue()
+                .split(INDEX_VALUE_DIVISION_SYMBOL)).map(e-> EdsIdentityVO.AccessKey.builder().accessKeyId(e).build()).toList();
     }
 
     @Override
@@ -146,14 +153,14 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel,A
                     .password("******")
                     .accountLogin(toAccountLoginDetails(account, username))
                     .policies(getPolicies(account))
+                    .accessKeys(getAccessKeys(account))
                     .build();
         } catch (Exception ex) {
             throw new CloudIdentityException(ex.getMessage());
         }
     }
 
-    protected void postImportAccountAsset(EdsInstanceProviderHolder<Config, Account> holder,
-                                          Account account) {
+    protected void postImportAccountAsset(EdsInstanceProviderHolder<Config, Account> holder, Account account) {
         holder.getProvider()
                 .importAsset(holder.getInstance(), account);
     }
