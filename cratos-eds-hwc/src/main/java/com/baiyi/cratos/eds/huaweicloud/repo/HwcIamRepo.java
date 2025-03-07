@@ -26,16 +26,16 @@ public class HwcIamRepo {
     }
 
     public static List<KeystoneListUsersResult> listUsers(String regionId,
-                                                          EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
-        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
+                                                          EdsHwcConfigModel.Hwc hwc) throws ServiceResponseException {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
         KeystoneListUsersRequest request = new KeystoneListUsersRequest();
         KeystoneListUsersResponse response = client.keystoneListUsers(request);
         return response.getUsers();
     }
 
-    public static KeystoneShowUserResult getUser(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
+    public static KeystoneShowUserResult getUser(String regionId, EdsHwcConfigModel.Hwc hwc,
                                                  String userId) {
-        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
         KeystoneShowUserRequest request = new KeystoneShowUserRequest();
         request.setUserId(userId);
         KeystoneShowUserResponse response = client.keystoneShowUser(request);
@@ -43,8 +43,8 @@ public class HwcIamRepo {
     }
 
     public static KeystoneCreateUserResult createUser(String regionId,
-                                                      EdsHwcConfigModel.Hwc huaweicloud, User user , String password) {
-        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, huaweicloud);
+                                                      EdsHwcConfigModel.Hwc hwc, User user , String password) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
         KeystoneCreateUserRequest request = new KeystoneCreateUserRequest();
         KeystoneCreateUserRequestBody body = new KeystoneCreateUserRequestBody();
         KeystoneCreateUserOption createUserOption = new KeystoneCreateUserOption();
@@ -56,6 +56,15 @@ public class HwcIamRepo {
         request.setBody(body);
         KeystoneCreateUserResponse response = client.keystoneCreateUser(request);
         return response.getUser();
+    }
+
+    public static List<Credentials> listAccessKeys(String regionId, EdsHwcConfigModel.Hwc hwc,
+                                                 String userId) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId,hwc);
+        ListPermanentAccessKeysRequest request = new ListPermanentAccessKeysRequest ();
+        request.setUserId(userId);
+        ListPermanentAccessKeysResponse response = client.listPermanentAccessKeys(request);
+        return response.getCredentials();
     }
 
 }

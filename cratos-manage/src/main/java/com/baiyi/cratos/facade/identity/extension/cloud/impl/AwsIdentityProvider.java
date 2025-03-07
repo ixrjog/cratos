@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AWS_IAM
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_IAM_USER)
-public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigModel.Aws> {
+public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> {
 
     private final AwsIamUserRepo iamUserRepo;
     private final AwsIamPolicyRepo iamPolicyRepo;
@@ -70,15 +70,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
             if (Objects.isNull(iamUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
-            EdsAsset account = getAccountAsset(instance.getId(), username);
-            return EdsIdentityVO.CloudAccount.builder()
-                    .instance(instanceWrapper.wrapToTarget(instance))
-                    .user(userWrapper.wrapToTarget(user))
-                    .account(Objects.isNull(account) ? null : edsAssetWrapper.wrapToTarget(account))
-                    .username(username)
-                    .password("******")
-                    .accountLogin(toAccountLoginDetails(account, username))
-                    .build();
+            return super.getAccount(instance, user, username);
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
@@ -95,17 +87,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
         try {
             iamPolicyRepo.attachUserPolicy(aws, iamUserName, iamPolicyArn);
             com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(aws, iamUserName);
-            postImportIamUser(holder, iamUser);
+            postImportAccountAsset(holder, iamUser);
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
-    }
-
-    private void postImportIamUser(
-            EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder,
-            com.amazonaws.services.identitymanagement.model.User iamUser) {
-        holder.getProvider()
-                .importAsset(holder.getInstance(), iamUser);
     }
 
     @Override
@@ -119,7 +104,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
         try {
             iamPolicyRepo.detachUserPolicy(aws, iamUserName, iamPolicyArn);
             com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(aws, iamUserName);
-            postImportIamUser(holder, iamUser);
+            postImportAccountAsset(holder, iamUser);
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
@@ -132,14 +117,15 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsAwsConfigModel.Aws aws = (EdsAwsConfigModel.Aws) holderBuilder.newHolder(
-                        asset.getInstanceId(), getAccountAssetType())
+        EdsAwsConfigModel.Aws aws = (EdsAwsConfigModel.Aws) holderBuilder.newHolder(asset.getInstanceId(),
+                        getAccountAssetType())
                 .getInstance()
                 .getEdsConfigModel();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(username)
                 .name(asset.getName())
-                .accountId(aws.getCred().getId())
+                .accountId(aws.getCred()
+                        .getId())
                 .loginUsername(username)
                 .loginUrl(aws.getIam()
                         .toLoginUrl())

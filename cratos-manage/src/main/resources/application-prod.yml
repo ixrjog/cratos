@@ -5,6 +5,7 @@ logging:
     io.swagger.models.parameters.AbstractSerializableParameter: error
     io.fabric8.kubernetes.client.utils.HttpClientUtils: error
     org.springframework: warn
+    HuaweiCloud-SDK-Access: error
 
 # 关闭视图层脱敏
 #cratos:

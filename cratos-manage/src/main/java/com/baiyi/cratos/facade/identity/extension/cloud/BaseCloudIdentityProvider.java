@@ -34,7 +34,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_A
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> implements CloudIdentityProvider, InitializingBean {
+public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel,Account> implements CloudIdentityProvider, InitializingBean {
 
     private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;
@@ -112,8 +112,50 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel> 
                 .getAssetId());
     }
 
+    protected List<String> getPolicies(EdsAsset account) {
+        String policyIndexName = getPolicyIndexName(account);
+        EdsAssetIndex query = EdsAssetIndex.builder()
+                .instanceId(account.getInstanceId())
+                .assetId(account.getId())
+                .name(policyIndexName)
+                .build();
+        EdsAssetIndex policyIndex = edsAssetIndexService.getByUniqueKey(query);
+        if (Objects.isNull(policyIndex)) {
+            return List.of();
+        }
+        return List.of(policyIndex.getValue()
+                .split(","));
+    }
+
     protected String getAccountAssetType() {
         return getAssetType();
+    }
+
+    @Override
+    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
+        try {
+            EdsAsset account = getAccountAsset(instance.getId(), username);
+            if (Objects.isNull(account)) {
+                return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
+            }
+            return EdsIdentityVO.CloudAccount.builder()
+                    .instance(instanceWrapper.wrapToTarget(instance))
+                    .user(userWrapper.wrapToTarget(user))
+                    .account(edsAssetWrapper.wrapToTarget(account))
+                    .username(username)
+                    .password("******")
+                    .accountLogin(toAccountLoginDetails(account, username))
+                    .policies(getPolicies(account))
+                    .build();
+        } catch (Exception ex) {
+            throw new CloudIdentityException(ex.getMessage());
+        }
+    }
+
+    protected void postImportAccountAsset(EdsInstanceProviderHolder<Config, Account> holder,
+                                          Account account) {
+        holder.getProvider()
+                .importAsset(holder.getInstance(), account);
     }
 
     abstract protected EdsIdentityVO.CloudAccount createAccount(Config config, EdsInstance instance, User user,

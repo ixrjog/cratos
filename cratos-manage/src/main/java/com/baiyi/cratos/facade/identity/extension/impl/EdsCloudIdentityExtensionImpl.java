@@ -78,9 +78,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-
         User user = userService.getByUsername(queryCloudIdentityDetails.getUsername());
-
         List<EdsAsset> cloudIdentityAssets = edsAssetIndexService.queryIndexByNameAndValue(CLOUD_ACCOUNT_USERNAME,
                         queryCloudIdentityDetails.getUsername())
                 .stream()

@@ -1,9 +1,11 @@
 package com.baiyi.cratos.eds.aws.provider.iam;
 
+import com.amazonaws.services.identitymanagement.model.AccessKeyMetadata;
 import com.amazonaws.services.identitymanagement.model.AttachedPolicy;
 import com.amazonaws.services.identitymanagement.model.User;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.eds.aws.repo.iam.AwsIamAccessKeyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -29,8 +31,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AWS_IAM_POLICIES;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -92,6 +93,18 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
             }
         } catch (Exception e) {
             log.error("Failed to list policies for user: {}", entity.getUserName(), e);
+        }
+        // accessKeys
+        try {
+            List<AccessKeyMetadata> accessKeys = AwsIamAccessKeyRepo.listAccessKeys(instance.getEdsConfigModel(),
+                    entity.getUserName());
+            if (!CollectionUtils.isEmpty(accessKeys)) {
+                final String accessKeyIds = accessKeys.stream()
+                        .map(AccessKeyMetadata::getAccessKeyId)
+                        .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
+                indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+            }
+        } catch (Exception ignored) {
         }
         indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;

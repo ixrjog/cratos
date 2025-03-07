@@ -4,6 +4,7 @@ logging:
     # swagger 警告日志忽略
     io.swagger.models.parameters.AbstractSerializableParameter: error
     org.springframework: warn
+    HuaweiCloud-SDK-Access: error
 
 # 关闭视图层脱敏
 #cratos:

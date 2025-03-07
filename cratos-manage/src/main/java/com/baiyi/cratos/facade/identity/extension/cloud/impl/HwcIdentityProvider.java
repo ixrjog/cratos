@@ -26,8 +26,6 @@ import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.HUAWEICLOUD_IAM_POLICIES;
 
 /**
@@ -39,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.HUAWEIC
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
-public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigModel.Hwc> {
+public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> {
 
     public final static boolean ENABLE_MFA = true;
 
@@ -52,45 +50,18 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsHwcConfigModel.Hwc config,
-                                                       EdsInstance instance, User user, String password) {
+    protected EdsIdentityVO.CloudAccount createAccount(EdsHwcConfigModel.Hwc config, EdsInstance instance, User user,
+                                                       String password) {
         try {
             KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user,
                     password);
             EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             KeystoneListUsersResult iamUser = HwcUserConvertor.to(createUserResult);
-            postImportIamUser(holder, iamUser);
+            postImportAccountAsset(holder, iamUser);
             return this.getAccount(instance, user, user.getUsername());
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
-        }
-    }
-
-    private void postImportIamUser(
-            EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> holder,
-            KeystoneListUsersResult iamUser) {
-        holder.getProvider()
-                .importAsset(holder.getInstance(), iamUser);
-    }
-
-    @Override
-    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
-        try {
-            EdsAsset account = getAccountAsset(instance.getId(), username);
-            if (Objects.isNull(account)) {
-                return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
-            }
-            return EdsIdentityVO.CloudAccount.builder()
-                    .instance(instanceWrapper.wrapToTarget(instance))
-                    .user(userWrapper.wrapToTarget(user))
-                    .account(edsAssetWrapper.wrapToTarget(account))
-                    .username(username)
-                    .password("******")
-                    .accountLogin(toAccountLoginDetails(account, username))
-                    .build();
-        } catch (Exception ex) {
-            throw new CloudIdentityException(ex.getMessage());
         }
     }
 
@@ -111,8 +82,8 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(
-                        asset.getInstanceId(), getAccountAssetType())
+        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(asset.getInstanceId(),
+                        getAccountAssetType())
                 .getInstance()
                 .getEdsConfigModel();
         return EdsIdentityVO.AccountLoginDetails.builder()
@@ -120,7 +91,8 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
                 .name(asset.getName())
                 .loginUsername(username)
                 .loginUrl(hwc.getIam()
-                        .toLoginUrl(hwc.getCred().getUsername()))
+                        .toLoginUrl(hwc.getCred()
+                                .getUsername()))
                 .build();
     }
 

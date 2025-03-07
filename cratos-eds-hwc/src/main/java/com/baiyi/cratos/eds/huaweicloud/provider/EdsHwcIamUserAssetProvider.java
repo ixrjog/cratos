@@ -17,11 +17,16 @@ import com.baiyi.cratos.eds.huaweicloud.repo.HwcIamRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
+import com.huaweicloud.sdk.iam.v3.model.Credentials;
 import com.huaweicloud.sdk.iam.v3.model.KeystoneListUsersResult;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCESS_KEY_IDS;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
 /**
@@ -64,10 +69,23 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
-            ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
-            KeystoneListUsersResult entity) {
-        return List.of(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+                                                      EdsAsset edsAsset, KeystoneListUsersResult entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
+        // accessKeys
+        try {
+            List<Credentials> accessKeys = HwcIamRepo.listAccessKeys(instance.getEdsConfigModel()
+                    .getRegionId(), instance.getEdsConfigModel(), entity.getId());
+            if (!CollectionUtils.isEmpty(accessKeys)) {
+                final String accessKeyIds = accessKeys.stream()
+                        .map(Credentials::getAccess)
+                        .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
+                indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+            }
+        } catch (Exception ignored) {
+        }
+        return indices;
     }
 
     // TODO role-assignments https://support.huaweicloud.com/intl/zh-cn/api-iam/iam_10_0014.html

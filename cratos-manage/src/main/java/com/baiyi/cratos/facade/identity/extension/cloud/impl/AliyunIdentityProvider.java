@@ -27,9 +27,7 @@ import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
 
 /**
  * &#064;Author  baiyi
@@ -40,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
-public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunConfigModel.Aliyun> {
+public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
 
     private final AliyunRamUserRepo ramUserRepo;
     private final AliyunRamPolicyRepo ramPolicyRepo;
@@ -66,42 +64,18 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
             GetUserResponse.User ramUser = ramUserRepo.getUser(config, user.getUsername());
             EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
-            postImportRamUser(holder, ramUser);
+            postImportAccountAsset(holder, ramUser);
             return this.getAccount(instance, user, user.getUsername());
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
         }
     }
 
-    private void postImportRamUser(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder,
-                                   GetUserResponse.User ramUser) {
-        holder.getProvider()
-                .importAsset(holder.getInstance(), ramUser);
-    }
-
-    @Override
-    public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
-        try {
-            EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
-                    instance.getId(), getAccountAssetType());
-            GetUserResponse.User ramUser = ramUserRepo.getUser(holder.getInstance()
-                    .getEdsConfigModel(), username);
-            if (Objects.isNull(ramUser)) {
-                return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
-            }
-            EdsAsset account = getAccountAsset(instance.getId(), username);
-            return EdsIdentityVO.CloudAccount.builder()
-                    .instance(instanceWrapper.wrapToTarget(instance))
-                    .user(userWrapper.wrapToTarget(user))
-                    .account(Objects.isNull(account) ? null : edsAssetWrapper.wrapToTarget(account))
-                    .username(username)
-                    .password("******")
-                    .accountLogin(toAccountLoginDetails(account, username))
-                    .build();
-        } catch (ClientException ce) {
-            throw new CloudIdentityException(ce.getMessage());
-        }
-    }
+//    private void postImportRamUser(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder,
+//                                   GetUserResponse.User ramUser) {
+//        holder.getProvider()
+//                .importAsset(holder.getInstance(), ramUser);
+//    }
 
     @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
@@ -115,7 +89,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         try {
             ramPolicyRepo.attachPolicyToUser(aliyun.getRegionId(), aliyun, ramUsername, policyName, policyType);
             GetUserResponse.User ramUser = ramUserRepo.getUser(aliyun, ramUsername);
-            postImportRamUser(holder, ramUser);
+            postImportAccountAsset(holder, ramUser);
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
         }
@@ -133,7 +107,7 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         try {
             ramPolicyRepo.detachPolicyFromUser(aliyun.getRegionId(), aliyun, ramUsername, policyName, policyType);
             GetUserResponse.User ramUser = ramUserRepo.getUser(aliyun, ramUsername);
-            postImportRamUser(holder, ramUser);
+            postImportAccountAsset(holder, ramUser);
         } catch (ClientException ce) {
             throw new CloudIdentityException(ce.getMessage());
         }
