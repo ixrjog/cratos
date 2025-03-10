@@ -5,17 +5,16 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.EdsDingtalkIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -34,15 +33,16 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTAL
  */
 @Slf4j
 @Component
-public class EdsDingtalkIdentityExtensionImpl  extends BaseEdsIdentityExtension implements EdsDingtalkIdentityExtension {
+public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension implements EdsDingtalkIdentityExtension {
 
     public EdsDingtalkIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
                                             EdsInstanceWrapper edsInstanceWrapper, UserService userService,
                                             UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
                                             EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                            EdsAssetIndexService edsAssetIndexService) {
+                                            EdsAssetIndexService edsAssetIndexService, TagService tagService,
+                                            BusinessTagService businessTagService) {
         super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService);
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
     }
 
     @Override
@@ -53,8 +53,7 @@ public class EdsDingtalkIdentityExtensionImpl  extends BaseEdsIdentityExtension 
         if (Objects.isNull(user)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
-        List<EdsAsset> assets = onlyInTheInstance(queryDingtalkAssetByMobile(user.getMobilePhone()),
-                queryDingtalkIdentityDetails);
+        List<EdsAsset> assets = queryDingtalkAssets(user, queryDingtalkIdentityDetails);
         if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
         }
@@ -70,6 +69,20 @@ public class EdsDingtalkIdentityExtensionImpl  extends BaseEdsIdentityExtension 
                 .username(username)
                 .dingtalkIdentities(dingtalkIdentities)
                 .build();
+    }
+
+    private List<EdsAsset> queryDingtalkAssets(User user,
+                                               EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
+        List<EdsAsset> assets = Lists.newArrayList();
+        assets.addAll(
+                onlyInTheInstance(queryDingtalkAssetByMobile(user.getMobilePhone()), queryDingtalkIdentityDetails));
+        assets.addAll(onlyInTheInstance(queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name()),
+                queryDingtalkIdentityDetails));
+        return assets.stream()
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
     }
 
     private List<EdsAsset> queryDingtalkAssetByMobile(String mobilePhone) {

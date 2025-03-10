@@ -11,6 +11,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
@@ -18,10 +19,7 @@ import com.baiyi.cratos.facade.identity.extension.EdsCloudIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
@@ -31,10 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
@@ -52,38 +47,50 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                                          EdsInstanceWrapper edsInstanceWrapper, UserService userService,
                                          UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
                                          EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                         EdsAssetIndexService edsAssetIndexService) {
+                                         EdsAssetIndexService edsAssetIndexService, TagService tagService,
+                                         BusinessTagService businessTagService) {
         super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService);
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
     }
 
     private Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> cloudIdentityAssets,
                                                         HasEdsInstanceType hasEdsInstanceType) {
+        Map<Integer, EdsInstance> map = Maps.newHashMap();
+        cloudIdentityAssets.forEach(edsAsset -> {
+            EdsInstance instance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
+                    .orElseThrow(() -> new EdsIdentityException("The edsInstance does not exist: instanceId={}.",
+                            edsAsset.getInstanceId()));
+            if (!StringUtils.hasText(hasEdsInstanceType.getInstanceType()) || hasEdsInstanceType.getInstanceType()
+                    .equals(instance.getEdsType())) {
+                map.put(edsAsset.getInstanceId(), instance);
+            }
+        });
+        return map;
+    }
+
+    private List<EdsAsset> queryAccountAssets(EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
+        List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();
+        List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(CLOUD_ACCOUNT_USERNAME,
+                        queryCloudIdentityDetails.getUsername())
+                .stream()
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                .toList();
+        cloudIdentityAssets.addAll(byIndexUsername);
+        List<String> types = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name(),
+                EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name());
+        cloudIdentityAssets.addAll(queryByUsernameTag(queryCloudIdentityDetails.getUsername(), types));
         return cloudIdentityAssets.stream()
-                .map(cloudIdentityAsset -> {
-                    EdsInstance instance = Optional.ofNullable(
-                                    edsInstanceService.getById(cloudIdentityAsset.getInstanceId()))
-                            .orElseThrow(
-                                    () -> new EdsIdentityException("The edsInstance does not exist: instanceId={}.",
-                                            cloudIdentityAsset.getInstanceId()));
-                    return Map.entry(cloudIdentityAsset.getInstanceId(), instance);
-                })
-                .filter(entry -> !StringUtils.hasText(
-                        hasEdsInstanceType.getInstanceType()) || hasEdsInstanceType.getInstanceType()
-                        .equals(entry.getValue()
-                                .getEdsType()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
     }
 
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
             EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
         User user = userService.getByUsername(queryCloudIdentityDetails.getUsername());
-        List<EdsAsset> cloudIdentityAssets = edsAssetIndexService.queryIndexByNameAndValue(CLOUD_ACCOUNT_USERNAME,
-                        queryCloudIdentityDetails.getUsername())
-                .stream()
-                .map(e -> edsAssetService.getById(e.getAssetId()))
-                .toList();
+        List<EdsAsset> cloudIdentityAssets = queryAccountAssets(queryCloudIdentityDetails);
         if (cloudIdentityAssets.isEmpty()) {
             return EdsIdentityVO.CloudIdentityDetails.NO_DATA;
         }

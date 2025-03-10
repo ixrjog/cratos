@@ -11,10 +11,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.EdsGitLabIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
@@ -38,9 +35,10 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
                                           EdsInstanceWrapper edsInstanceWrapper, UserService userService,
                                           UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
                                           EdsAssetService edsAssetService, EdsFacade edsFacade,
-                                          EdsAssetIndexService edsAssetIndexService) {
+                                          EdsAssetIndexService edsAssetIndexService, TagService tagService,
+                                          BusinessTagService businessTagService) {
         super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService);
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
     }
 
     @Override

@@ -14,7 +14,8 @@ public enum SysTagKeys {
     PRODUCT_LINE("ProductLine"),
     BUSINESS("Business"),
     COMMAND_EXEC_APPROVER("CommandExecApprover"),
-    COMMAND_EXEC("CommandExec");
+    COMMAND_EXEC("CommandExec"),
+    USERNAME("Username");
 
     private final String key;
 

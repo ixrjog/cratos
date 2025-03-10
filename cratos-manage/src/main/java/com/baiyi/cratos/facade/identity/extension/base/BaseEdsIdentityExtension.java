@@ -1,18 +1,19 @@
 package com.baiyi.cratos.facade.identity.extension.base;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsIdentityException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.service.EdsAssetIndexService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
@@ -38,6 +39,8 @@ public abstract class BaseEdsIdentityExtension {
     protected final EdsAssetService edsAssetService;
     protected final EdsFacade edsFacade;
     protected final EdsAssetIndexService edsAssetIndexService;
+    private final TagService tagService;
+    private final BusinessTagService businessTagService;
 
     private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
             EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name());
@@ -61,9 +64,11 @@ public abstract class BaseEdsIdentityExtension {
         return assets;
     }
 
-    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId, EdsInstanceTypeEnum edsInstanceTypeEnum) {
+    protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId,
+                                                  EdsInstanceTypeEnum edsInstanceTypeEnum) {
         EdsInstance instance = getEdsInstance(hasEdsInstanceId);
-        if (!edsInstanceTypeEnum.name().equals(instance.getEdsType())) {
+        if (!edsInstanceTypeEnum.name()
+                .equals(instance.getEdsType())) {
             EdsIdentityException.runtime("Incorrect instance type.");
         }
         return instance;
@@ -85,6 +90,42 @@ public abstract class BaseEdsIdentityExtension {
             return password;
         }
         return PasswordGenerator.generatePassword();
+    }
+
+    protected List<EdsAsset> queryByUsernameTag(String username, List<String> assetTypes) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.USERNAME.getKey());
+        if (Objects.isNull(tag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .tagValue(username)
+                .build();
+        return businessTagService.queryBusinessIdByTag(queryByTag)
+                .stream()
+                .map(edsAssetService::getById)
+                .filter(byId -> assetTypes.stream()
+                        .anyMatch(e -> byId.getAssetType()
+                                .equals(e)))
+                .toList();
+    }
+
+    protected List<EdsAsset> queryByUsernameTag(String username, String assetType) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.USERNAME.getKey());
+        if (Objects.isNull(tag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .tagValue(username)
+                .build();
+        return businessTagService.queryBusinessIdByTag(queryByTag)
+                .stream()
+                .map(edsAssetService::getById)
+                .filter(byId -> assetType.equals(byId.getAssetType()))
+                .toList();
     }
 
 }
