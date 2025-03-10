@@ -89,18 +89,17 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
         }
         Map<Integer, EdsInstance> instanceMap = getEdsInstanceMap(cloudIdentityAssets, queryCloudIdentityDetails);
         Map<String, List<EdsIdentityVO.CloudAccount>> accounts = Maps.newHashMap();
-        cloudIdentityAssets.forEach(asset -> {
-            if (!instanceMap.containsKey(asset.getInstanceId())) {
-                return;
-            }
-            CloudIdentityProvider cloudIdentityProvider = CloudIdentityFactory.getProvider(
-                    instanceMap.get(asset.getInstanceId())
-                            .getEdsType());
-            String policyIndexName = cloudIdentityProvider.getPolicyIndexName(asset);
-            EdsIdentityVO.CloudAccount cloudAccount = cloudIdentityProvider.getAccount(
-                    instanceMap.get(asset.getInstanceId()), user, getAccountUsername(asset));
-            putAccounts(accounts, cloudAccount);
-        }); return EdsIdentityVO.CloudIdentityDetails.builder()
+        cloudIdentityAssets.stream()
+                .filter(asset -> instanceMap.containsKey(asset.getInstanceId()))
+                .forEach(asset -> {
+                    CloudIdentityProvider cloudIdentityProvider = CloudIdentityFactory.getProvider(
+                            instanceMap.get(asset.getInstanceId())
+                                    .getEdsType());
+                    EdsIdentityVO.CloudAccount cloudAccount = cloudIdentityProvider.getAccount(
+                            instanceMap.get(asset.getInstanceId()), user, getAccountUsername(asset));
+                    putAccounts(accounts, cloudAccount);
+                });
+        return EdsIdentityVO.CloudIdentityDetails.builder()
                 .username(queryCloudIdentityDetails.getUsername())
                 .accounts(accounts)
                 .build();
