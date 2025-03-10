@@ -163,6 +163,7 @@ public class EdsIdentityVO {
         private EdsAssetVO.Asset account;
         @Builder.Default
         private List<EdsAssetVO.Asset> sshKeys = Lists.newArrayList();
+        private AccountLoginDetails accountLogin;
     }
 
     @Data

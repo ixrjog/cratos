@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.exception.EdsIdentityException;
 import com.baiyi.cratos.converter.EdsIdentityConverter;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
@@ -27,6 +28,7 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
+import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_USER_GROUPS;
 
 /**
  * &#064;Author  baiyi
@@ -59,6 +63,41 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                 edsAssetService, edsFacade, edsAssetIndexService);
         this.ldapPersonRepo = ldapPersonRepo;
         this.ldapGroupRepo = ldapGroupRepo;
+    }
+
+    @Override
+    public EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
+            EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
+        String username = queryLdapIdentityDetails.getUsername();
+        User user = userService.getByUsername(username);
+        if (Objects.isNull(user)) {
+            return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
+        }
+        List<EdsAsset> assets = onlyInTheInstance(
+                edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(), username),
+                queryLdapIdentityDetails);
+        if (CollectionUtils.isEmpty(assets)) {
+            return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
+        }
+        List<EdsIdentityVO.LdapIdentity> ldapIdentities = assets.stream()
+                .map(asset -> {
+                    EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), LDAP_USER_GROUPS);
+                    List<String> groups = Objects.nonNull(index) ? Splitter.on(";")
+                            .splitToList(index.getValue()) : List.of();
+                    return EdsIdentityVO.LdapIdentity.builder()
+                            .username(username)
+                            .user(userWrapper.wrapToTarget(user))
+                            .instance(
+                                    edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
+                            .account(edsAssetWrapper.wrapToTarget(asset))
+                            .groups(groups)
+                            .build();
+                })
+                .toList();
+        return EdsIdentityVO.LdapIdentityDetails.builder()
+                .username(username)
+                .ldapIdentities(ldapIdentities)
+                .build();
     }
 
     @Override

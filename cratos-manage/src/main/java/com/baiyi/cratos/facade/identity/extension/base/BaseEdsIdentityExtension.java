@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.exception.EdsIdentityException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -48,6 +49,16 @@ public abstract class BaseEdsIdentityExtension {
             EdsIdentityException.runtime("Incorrect instance type.");
         }
         return instance;
+    }
+
+    protected List<EdsAsset> onlyInTheInstance(List<EdsAsset> assets, HasEdsInstanceId hasEdsInstanceId) {
+        if (IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+            return assets.stream()
+                    .filter(e -> e.getInstanceId()
+                            .equals(hasEdsInstanceId.getInstanceId()))
+                    .toList();
+        }
+        return assets;
     }
 
     protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId, EdsInstanceTypeEnum edsInstanceTypeEnum) {

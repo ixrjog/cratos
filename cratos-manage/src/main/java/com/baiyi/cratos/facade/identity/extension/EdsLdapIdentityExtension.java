@@ -12,6 +12,9 @@ import java.util.Set;
  */
 public interface EdsLdapIdentityExtension {
 
+    EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
+            EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails);
+
     EdsIdentityVO.LdapIdentity createLdapIdentity(EdsIdentityParam.CreateLdapIdentity createLdapIdentity);
 
     EdsIdentityVO.LdapIdentity resetLdapUserPassword(EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword);
