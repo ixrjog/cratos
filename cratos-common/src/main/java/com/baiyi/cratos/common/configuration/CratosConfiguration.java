@@ -20,9 +20,7 @@ import java.util.Optional;
 public class CratosConfiguration {
 
     private CratosModel.Auth auth;
-
     private CratosModel.Rbac rbac;
-
     private CratosModel.Credential credential;
 
     public boolean isWhitelistResource(String resourceName) {

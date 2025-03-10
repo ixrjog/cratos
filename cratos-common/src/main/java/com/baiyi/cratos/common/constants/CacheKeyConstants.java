@@ -8,7 +8,6 @@ package com.baiyi.cratos.common.constants;
 public interface CacheKeyConstants {
 
     String CRATOS_PREFIX = "'OC5:'";
-
     String DINGTALK_TOKEN = CRATOS_PREFIX + "V0:DINGTALK:TOKEN:{}'";
 
 }
