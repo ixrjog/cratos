@@ -24,30 +24,25 @@ public class PersonAttributesMapper implements AttributesMapper<LdapPerson.Perso
     @Override
     public LdapPerson.Person mapFromAttributes(Attributes attrs) throws NamingException {
         LdapPerson.Person person = new LdapPerson.Person();
-        person.setUsername((String) attrs.get("cn")
-                .get());
-        try {
-            person.setDisplayName((String) attrs.get("displayName")
-                    .get());
-        } catch (NullPointerException e) {
-            person.setDisplayName(person.getUsername());
-        }
-        try {
-            person.setMobile((String) attrs.get("mobile")
-                    .get());
-        } catch (NullPointerException ignored) {
-        }
-        try {
-            person.setEmail((String) attrs.get("mail")
-                    .get());
-        } catch (NullPointerException ignored) {
-        }
-        try {
-            person.setJobNo((String) attrs.get("jobNo")
-                    .get());
-        } catch (NullPointerException ignored) {
-        }
+        person.setUsername(getAttribute(attrs, "cn"));
+        person.setDisplayName(getAttribute(attrs, "displayName", person.getUsername()));
+        person.setMobile(getAttribute(attrs, "mobile"));
+        person.setEmail(getAttribute(attrs, "mail"));
+        person.setJobNo(getAttribute(attrs, "jobNo"));
         return person;
+    }
+
+    private String getAttribute(Attributes attrs, String attributeName) throws NamingException {
+        return getAttribute(attrs, attributeName, null);
+    }
+
+    private String getAttribute(Attributes attrs, String attributeName, String defaultValue) throws NamingException {
+        try {
+            return (String) attrs.get(attributeName)
+                    .get();
+        } catch (NullPointerException e) {
+            return defaultValue;
+        }
     }
 
 }

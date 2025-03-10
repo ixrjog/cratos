@@ -79,10 +79,6 @@ public class EdsIdentityVO {
         private String username;
         @Builder.Default
         private List<DingtalkIdentity> dingtalkIdentities = List.of();
-//        @Builder.Default
-//        private Map<Integer, EdsAssetVO.Asset> dingtalkIdentities = Map.of();
-//        @Builder.Default
-//        private Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Map.of();
     }
 
     @Data

@@ -50,7 +50,6 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
      * | ACK-DEV    | dev:ingress-plc-dev | tz-pos-dev.palmpay-inc.com -> / | posp    | alb-kk0tykm8bjjzrdumep.eu-central-1.alb.aliyuncs.com              |
      * +------------+---------------------+---------------------------------+---------+-------------------------------------------------------------------+
      *
-     * @param queryIngressHostDetails
      * @return TrafficLayerIngressVO.IngressDetails
      */
     @Override

@@ -25,7 +25,6 @@ public class LdapGroup {
         private String groupId;
         @Attribute(name = "cn")
         private String groupName;
-
         private String groupDn;
     }
 
