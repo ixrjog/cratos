@@ -1,5 +1,7 @@
 package com.baiyi.cratos.common.util;
 
+import org.springframework.util.StringUtils;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/3 14:33
@@ -25,6 +27,13 @@ public class ValidationUtils {
      */
     public static boolean isPhone(String phone) {
         return phone.matches(RegexMatches.PHONE);
+    }
+
+    public static boolean isEmail(String email) {
+        if (!StringUtils.hasText(email)) {
+            return false;
+        }
+        return email.matches(RegexMatches.EMAIL);
     }
 
 }

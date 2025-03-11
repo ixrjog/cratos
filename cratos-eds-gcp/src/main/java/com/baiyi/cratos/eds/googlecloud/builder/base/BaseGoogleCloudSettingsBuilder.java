@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.googlecloud.builder.base;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -23,7 +23,7 @@ public abstract class BaseGoogleCloudSettingsBuilder {
 
     private final CredentialService credentialService;
 
-    protected String getAdc(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) {
+    protected String getAdc(EdsGcpConfigModel.Gcp googleCloud) {
         EdsConfig edsConfig = edsConfigService.getById(googleCloud.getConfigId());
         if (edsConfig == null) {
             throw new EdsConfigException("No data source credentials configured.");

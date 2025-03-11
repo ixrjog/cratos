@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpProjectSettingsBuilder;
 import com.google.api.client.util.Sets;
 import com.google.cloud.resourcemanager.v3.ProjectsClient;
@@ -26,7 +26,7 @@ public class GcpProjectRepo {
 
     private final GcpProjectSettingsBuilder projectSettingsBuilder;
 
-    public Map<String,List<String>>listMembers(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
+    public Map<String,List<String>>listMembers(EdsGcpConfigModel.Gcp googleCloud) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
         try (ProjectsClient client = ProjectsClient.create(settings)) {
             GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()

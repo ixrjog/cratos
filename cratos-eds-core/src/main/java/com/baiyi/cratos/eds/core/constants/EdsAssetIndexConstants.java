@@ -29,6 +29,8 @@ public interface EdsAssetIndexConstants {
 
     String ALIYUN_ALB_INSTANCE_URL = "aliyun.alb.instance.url";
 
+    String GCP_MEMBER_ROLES ="gcp.member.roles";
+
     String HUAWEICLOUD_IAM_POLICIES = "iam.policies";
 
     String AWS_SNS_SUBSCRIPTION_ENDPOINT = "endpoint";

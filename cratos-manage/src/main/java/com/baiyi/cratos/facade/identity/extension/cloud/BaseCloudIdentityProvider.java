@@ -105,7 +105,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
         this.revokePermission(instance, account, permission);
     }
 
-    protected EdsAsset getAccountAsset(int instanceId, String username) {
+    protected EdsAsset queryAccountAsset(int instanceId, User user, String username) {
         List<EdsAssetIndex> indices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId,
                 CLOUD_ACCOUNT_USERNAME, username);
         if (CollectionUtils.isEmpty(indices)) {
@@ -116,15 +116,19 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
     }
 
     protected List<String> getPolicies(EdsAsset account) {
-        String policyIndexName = getPolicyIndexName(account);
-        EdsAssetIndex query = EdsAssetIndex.builder()
-                .instanceId(account.getInstanceId())
-                .assetId(account.getId())
-                .name(policyIndexName)
-                .build();
-        EdsAssetIndex policyIndex = edsAssetIndexService.getByUniqueKey(query);
-        return Objects.isNull(policyIndex) ? List.of() : List.of(policyIndex.getValue()
-                .split(INDEX_VALUE_DIVISION_SYMBOL));
+        try {
+            String policyIndexName = getPolicyIndexName(account);
+            EdsAssetIndex query = EdsAssetIndex.builder()
+                    .instanceId(account.getInstanceId())
+                    .assetId(account.getId())
+                    .name(policyIndexName)
+                    .build();
+            EdsAssetIndex policyIndex = edsAssetIndexService.getByUniqueKey(query);
+            return Objects.isNull(policyIndex) ? List.of() : List.of(policyIndex.getValue()
+                    .split(INDEX_VALUE_DIVISION_SYMBOL));
+        } catch (CloudIdentityException ex) {
+            return List.of();
+        }
     }
 
     protected List<EdsIdentityVO.AccessKey> getAccessKeys(EdsAsset account) {
@@ -134,14 +138,18 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
                 .name(CLOUD_ACCESS_KEY_IDS)
                 .build();
         EdsAssetIndex accessKeyIdsIndex = edsAssetIndexService.getByUniqueKey(query);
-        return Objects.isNull(accessKeyIdsIndex) ? List.of() :  Arrays.stream(accessKeyIdsIndex.getValue()
-                .split(INDEX_VALUE_DIVISION_SYMBOL)).map(e-> EdsIdentityVO.AccessKey.builder().accessKeyId(e).build()).toList();
+        return Objects.isNull(accessKeyIdsIndex) ? List.of() : Arrays.stream(accessKeyIdsIndex.getValue()
+                        .split(INDEX_VALUE_DIVISION_SYMBOL))
+                .map(e -> EdsIdentityVO.AccessKey.builder()
+                        .accessKeyId(e)
+                        .build())
+                .toList();
     }
 
     @Override
     public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
         try {
-            EdsAsset account = getAccountAsset(instance.getId(), username);
+            EdsAsset account = queryAccountAsset(instance.getId(), user, username);
             if (Objects.isNull(account)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }

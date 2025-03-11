@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.builder;
 
-import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.googlecloud.builder.base.BaseGoogleCloudSettingsBuilder;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -27,7 +27,7 @@ public class GcpIAMSettingsBuilder extends BaseGoogleCloudSettingsBuilder {
     }
 
     public IAMSettings buildIAMSettings(
-            EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
+            EdsGcpConfigModel.Gcp googleCloud) throws IOException {
         final String adc = getAdc(googleCloud);
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(
                 new ByteArrayInputStream(adc.getBytes(StandardCharsets.UTF_8)));

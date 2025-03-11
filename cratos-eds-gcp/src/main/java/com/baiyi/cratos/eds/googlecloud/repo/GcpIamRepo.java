@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGoogleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpIAMSettingsBuilder;
 import com.google.cloud.iam.admin.v1.IAMClient;
 import com.google.cloud.iam.admin.v1.IAMSettings;
@@ -22,7 +22,7 @@ public class GcpIamRepo {
 
     private static final int PAGE_SIZE = 10;
 
-    void test1(EdsGoogleCloudConfigModel.GoogleCloud googleCloud) throws IOException {
+    void test1(EdsGcpConfigModel.Gcp googleCloud) throws IOException {
         IAMSettings settings = googleCloudIAMSettingsBuilder.buildIAMSettings(googleCloud);
         try (IAMClient client = IAMClient.create(settings)) {
             IAMClient.ListServiceAccountsPagedResponse listServiceAccountsPagedResponse =  client.listServiceAccounts(googleCloud.getProject().toProjectName());

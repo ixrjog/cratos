@@ -71,12 +71,6 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         }
     }
 
-//    private void postImportRamUser(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder,
-//                                   GetUserResponse.User ramUser) {
-//        holder.getProvider()
-//                .importAsset(holder.getInstance(), ramUser);
-//    }
-
     @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(

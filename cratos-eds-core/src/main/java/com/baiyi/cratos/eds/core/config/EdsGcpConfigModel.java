@@ -19,11 +19,11 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class EdsGoogleCloudConfigModel {
+public class EdsGcpConfigModel {
 
     @Data
     @NoArgsConstructor
-    public static class GoogleCloud implements IEdsConfigModel {
+    public static class Gcp implements IEdsConfigModel {
         private Project project;
         private EdsInstance edsInstance;
         private Certificate certificate;

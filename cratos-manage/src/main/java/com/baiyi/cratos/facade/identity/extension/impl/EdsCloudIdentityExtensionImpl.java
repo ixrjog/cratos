@@ -53,6 +53,10 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                 edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
     }
 
+    private static final List<String> CLOUD_ACCOUNT_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
+            EdsAssetTypeEnum.AWS_IAM_USER.name(), EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(),
+            EdsAssetTypeEnum.GCP_MEMBER.name());
+
     private Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> cloudIdentityAssets,
                                                         HasEdsInstanceType hasEdsInstanceType) {
         Map<Integer, EdsInstance> map = Maps.newHashMap();
@@ -76,9 +80,8 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                 .map(e -> edsAssetService.getById(e.getAssetId()))
                 .toList();
         cloudIdentityAssets.addAll(byIndexUsername);
-        List<String> types = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(), EdsAssetTypeEnum.AWS_IAM_USER.name(),
-                EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name());
-        cloudIdentityAssets.addAll(queryByUsernameTag(queryCloudIdentityDetails.getUsername(), types));
+        cloudIdentityAssets.addAll(
+                queryByUsernameTag(queryCloudIdentityDetails.getUsername(), CLOUD_ACCOUNT_ASSET_TYPES));
         return cloudIdentityAssets.stream()
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
                 .values()
