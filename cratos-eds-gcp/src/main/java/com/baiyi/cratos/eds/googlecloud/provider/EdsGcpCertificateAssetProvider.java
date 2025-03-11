@@ -31,7 +31,7 @@ import java.util.Set;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GOOGLECLOUD, assetTypeOf = EdsAssetTypeEnum.GOOGLECLOUD_CERTIFICATE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_CERTIFICATE)
 public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleCertificateModel.Certificate> {
 
     private final GcpCredentialRepo googleCloudCredentialRepo;

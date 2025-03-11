@@ -26,7 +26,7 @@ public enum EdsInstanceTypeEnum {
     GODADDY,
     // https://goharbor.io/
     HARBOR,
-    GOOGLECLOUD,
+    GCP,
     OPSCLOUD;
 
     public static OptionsVO.Options toOptions(){

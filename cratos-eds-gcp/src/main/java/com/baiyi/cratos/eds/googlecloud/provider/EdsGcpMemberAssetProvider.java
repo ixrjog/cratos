@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GOOGLECLOUD, assetTypeOf = EdsAssetTypeEnum.GOOGLECLOUD_MEMBER)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_MEMBER)
 public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsGoogleCloudConfigModel.GoogleCloud, GoogleMemberModel.Member> {
 
     private final GcpProjectRepo googleCloudProjectRepo;

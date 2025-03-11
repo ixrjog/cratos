@@ -88,8 +88,8 @@ public enum EdsAssetTypeEnum {
     HARBOR_PROJECT("Harbor Project", 0),
     HARBOR_REPOSITORY("Harbor Repository", 0),
 
-    GOOGLECLOUD_CERTIFICATE("Certificate", 0),
-    GOOGLECLOUD_MEMBER("Member", 0),
+    GCP_CERTIFICATE("Certificate", 0),
+    GCP_MEMBER("Member", 0),
 
     DEF("Default", 0);
 
