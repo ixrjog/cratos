@@ -33,6 +33,9 @@ public enum EdsAssetTypeEnum {
     ALIYUN_VPC("VPC", 43),
     ALIYUN_VIRTUAL_SWITCH("vSwitch", 44),
 
+    ALIMAIL_DEPARTMENT("Department", 0),
+    ALIMAIL_USER("User", 1),
+
     AWS_CERT("Certificate", 0),
     AWS_STS_VPN("Site-to-Site VPN", 0),
     AWS_ELB("ELB", 0),

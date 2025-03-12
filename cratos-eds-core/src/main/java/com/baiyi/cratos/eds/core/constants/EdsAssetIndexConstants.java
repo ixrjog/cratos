@@ -29,6 +29,10 @@ public interface EdsAssetIndexConstants {
 
     String ALIYUN_ALB_INSTANCE_URL = "aliyun.alb.instance.url";
 
+    String ALIMAIL_DEPARTMENT_PARENT_ID = "alimail.department.parentId";
+    String ALIMAIL_USER_DEPARTMENT_IDS = "alimail.user.department.ids";
+    String USER_MAIL = "user.mail";
+
     String GCP_MEMBER_ROLES ="gcp.member.roles";
 
     String HUAWEICLOUD_IAM_POLICIES = "iam.policies";

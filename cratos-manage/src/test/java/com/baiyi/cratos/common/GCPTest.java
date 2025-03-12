@@ -36,7 +36,7 @@ public class GCPTest extends BaseUnit {
 
     @Test
     void test1() throws IOException {
-        String credentialPath = "/Users/zl/cratos-data/key.json";
+        String credentialPath = "/ListUsersOfDepartmentResult/zl/cratos-data/key.json";
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
         IAMSettings settings = IAMSettings.newBuilder()
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
@@ -62,7 +62,7 @@ public class GCPTest extends BaseUnit {
 
     @Test
     void certificateTest() throws IOException {
-        String credentialPath = "/Users/zl/cratos-data/key.json";
+        String credentialPath = "/ListUsersOfDepartmentResult/zl/cratos-data/key.json";
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
         CertificateManagerSettings settings = CertificateManagerSettings.newBuilder()
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
@@ -78,7 +78,7 @@ public class GCPTest extends BaseUnit {
 
     @Test
     void projectTest() throws IOException {
-        String credentialPath = "/Users/zl/cratos-data/key.json";
+        String credentialPath = "/ListUsersOfDepartmentResult/zl/cratos-data/key.json";
         GoogleCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(credentialPath));
         ProjectsSettings settings = ProjectsSettings.newBuilder()
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
