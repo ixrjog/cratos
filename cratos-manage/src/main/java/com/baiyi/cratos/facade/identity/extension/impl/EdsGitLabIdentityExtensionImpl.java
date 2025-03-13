@@ -63,6 +63,7 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
                         .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
                         .sshKeys(queryGitLabUserSshKeys(user.getUsername(), asset.getInstanceId()))
                         .accountLogin(toAccountLogin(asset, username))
+                        .avatar(getAvatar(asset))
                         .build())
                 .toList();
         return EdsIdentityVO.GitLabIdentityDetails.builder()

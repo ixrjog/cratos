@@ -48,8 +48,7 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
                 updateBusinessFromAssetHandler, holderBuilder);
         this.ldapGroupRepo = ldapGroupRepo;
     }
-
-
+    
     @Override
     protected List<LdapGroup.Group> listEntities(
             ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance) throws EdsQueryEntitiesException {

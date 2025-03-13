@@ -2,6 +2,10 @@ package com.baiyi.cratos.common.util;
 
 import org.springframework.util.StringUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/3 14:33
@@ -17,6 +21,8 @@ public class ValidationUtils {
         String APPLICATION_NAME = "[a-z][\\d0-9a-z-]{3,32}";
         String EMAIL = "[A-z0-9-_.]+@(\\w+[\\w-]*)(\\.\\w+[-\\w]*)+";
         String JOB_KEY = "[a-z0-9-_]{3,64}";
+
+        String URL_REGEX = "^https://[^\\s/$.?#].[^\\s]*$";
     }
 
     /**
@@ -34,6 +40,15 @@ public class ValidationUtils {
             return false;
         }
         return email.matches(RegexMatches.EMAIL);
+    }
+
+    public static boolean isURL(String url) {
+        if (!StringUtils.hasText(url)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(RegexMatches.URL_REGEX);
+        Matcher matcher = pattern.matcher(url);
+        return matcher.matches();
     }
 
 }

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.gitlab.provider.asset;
 
+import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
@@ -20,6 +22,8 @@ import org.gitlab4j.api.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_AVATAR;
 
 /**
  * @Author baiyi
@@ -51,6 +55,7 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
 
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, User entity) {
+
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getUsername())
@@ -58,6 +63,16 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                 .descriptionOf(entity.getEmail())
                 .createdTimeOf(entity.getCreatedAt())
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                                      EdsAsset edsAsset, User entity) {
+        if (ValidationUtils.isURL(entity.getAvatarUrl())) {
+            return List.of(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatarUrl()));
+
+        }
+        return List.of();
     }
 
 }

@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.HasEdsInstanceType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_AVATAR;
 
 /**
  * &#064;Author  baiyi
@@ -146,6 +149,14 @@ public abstract class BaseEdsIdentityExtension {
                 .map(edsAssetService::getById)
                 .filter(byId -> assetType.equals(byId.getAssetType()))
                 .toList();
+    }
+
+    protected String getAvatar(EdsAsset asset) {
+        EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), USER_AVATAR);
+        if (Objects.nonNull(index)) {
+            return index.getValue();
+        }
+        return null;
     }
 
 }

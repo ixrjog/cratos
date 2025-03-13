@@ -31,7 +31,14 @@ public interface EdsAssetIndexConstants {
 
     String ALIMAIL_DEPARTMENT_PARENT_ID = "alimail.department.parentId";
     String ALIMAIL_USER_DEPARTMENT_IDS = "alimail.user.department.ids";
+    /**
+     * 用户邮箱
+     */
     String USER_MAIL = "user.mail";
+    /**
+     * 用户头像
+     */
+    String USER_AVATAR = "user.avatar";
 
     String GCP_MEMBER_ROLES ="gcp.member.roles";
 

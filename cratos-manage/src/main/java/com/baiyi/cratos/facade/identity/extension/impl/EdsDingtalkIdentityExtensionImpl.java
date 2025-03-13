@@ -63,6 +63,7 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
                         .user(userWrapper.wrapToTarget(user))
                         .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
                         .account(edsAssetWrapper.wrapToTarget(asset))
+                        .avatar(getAvatar(asset))
                         .build())
                 .toList();
         return EdsIdentityVO.DingtalkIdentityDetails.builder()

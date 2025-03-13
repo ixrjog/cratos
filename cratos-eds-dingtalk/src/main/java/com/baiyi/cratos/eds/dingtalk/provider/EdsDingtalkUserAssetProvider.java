@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.dingtalk.provider;
 
+import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -103,6 +104,10 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_BOSS, entity.getBoss()
                 .toString()));
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_JOB_NUMBER, entity.getJobNumber()));
+        // 头像
+        if (ValidationUtils.isURL(entity.getAvatar())) {
+            indices.add(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatar()));
+        }
         return indices;
     }
 

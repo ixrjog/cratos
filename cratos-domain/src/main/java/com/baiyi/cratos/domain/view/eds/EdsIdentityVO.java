@@ -20,6 +20,12 @@ import java.util.Map;
  */
 public class EdsIdentityVO {
 
+    public interface HasAvatar {
+        String getAvatar();
+
+        void setAvatar(String avatar);
+    }
+
     @Data
     @Builder
     @AllArgsConstructor
@@ -132,13 +138,14 @@ public class EdsIdentityVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class DingtalkIdentity implements Serializable {
+    public static class DingtalkIdentity implements HasAvatar, Serializable {
         @Serial
         private static final long serialVersionUID = 8230860881836758494L;
         private String username;
         private EdsInstanceVO.EdsInstance instance;
         private UserVO.User user;
         private EdsAssetVO.Asset account;
+        private String avatar;
     }
 
     @Data
@@ -190,13 +197,14 @@ public class EdsIdentityVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class GitLabIdentity implements Serializable {
+    public static class GitLabIdentity implements HasAvatar, Serializable {
         @Serial
         private static final long serialVersionUID = 2657322145204336846L;
         private String username;
         private EdsInstanceVO.EdsInstance instance;
         private UserVO.User user;
         private EdsAssetVO.Asset account;
+        private String avatar;
         @Builder.Default
         private List<EdsAssetVO.Asset> sshKeys = Lists.newArrayList();
         private AccountLoginDetails accountLogin;
