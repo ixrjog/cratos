@@ -22,7 +22,9 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 
+import static com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider.INDEX_VALUE_DIVISION_SYMBOL;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL_ALIAS;
 
 /**
  * &#064;Author  baiyi
@@ -74,10 +76,22 @@ public abstract class BaseMailIdentityProvider<Config extends IEdsConfigModel, A
                     .username(user.getUsername())
                     .password("******")
                     .accountLogin(toAccountLoginDetails(account, user.getUsername(), mailIndex.getValue()))
+                    .mailAlias(queryMailAlias(instance,account))
                     .build();
         } catch (Exception ex) {
             throw new CloudIdentityException(ex.getMessage());
         }
+    }
+
+    private List<String> queryMailAlias(EdsInstance instance, EdsAsset account) {
+        EdsAssetIndex uk = EdsAssetIndex.builder()
+                .instanceId(instance.getId())
+                .assetId(account.getId())
+                .name(USER_MAIL_ALIAS)
+                .build();
+        EdsAssetIndex mailAliasIndex = edsAssetIndexService.getByUniqueKey(uk);
+        return Objects.isNull(mailAliasIndex) ? List.of() : List.of(mailAliasIndex.getValue()
+                .split(INDEX_VALUE_DIVISION_SYMBOL));
     }
 
     @Override

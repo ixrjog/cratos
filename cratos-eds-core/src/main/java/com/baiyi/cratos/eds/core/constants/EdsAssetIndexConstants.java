@@ -35,6 +35,7 @@ public interface EdsAssetIndexConstants {
      * 用户邮箱
      */
     String USER_MAIL = "user.mail";
+    String USER_MAIL_ALIAS = "user.mail.alias";
     /**
      * 用户头像
      */

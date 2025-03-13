@@ -190,6 +190,7 @@ public class EdsIdentityVO {
         @Builder.Default
         private boolean isExist = true;
         private AccountLoginDetails accountLogin;
+        private List<String> mailAlias;
     }
 
     @Data

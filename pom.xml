@@ -52,6 +52,8 @@
         <aws-java-sdk2.version>2.29.21</aws-java-sdk2.version>
         <!--  net.javacrumbs.shedlock-->
         <shedlock-spring.version>5.13.0</shedlock-spring.version>
+        <!--        https://mvnrepository.com/artifact/com.webauthn4j/webauthn4j-core-->
+        <webauthn4j.version>0.28.6.RELEASE</webauthn4j.version>
     </properties>
 
     <parent>
@@ -172,10 +174,21 @@
             <artifactId>oshi-core</artifactId>
             <version>6.4.0</version>
         </dependency>
+        <!--
+        https://mvnrepository.com/artifact/com.google.guava/guava-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>32.0.0-jre</version>
+            <version>33.4.0-jre</version>
+        </dependency>
+        <!--
+        生物识别
+        https://mvnrepository.com/artifact/com.webauthn4j/webauthn4j-core
+        -->
+        <dependency>
+            <groupId>com.webauthn4j</groupId>
+            <artifactId>webauthn4j-core</artifactId>
+            <version>${webauthn4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

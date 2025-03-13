@@ -26,8 +26,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIMAIL_USER_DEPARTMENT_IDS;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -67,7 +66,9 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
                     entities.addAll(users);
                 }
             });
-            return entities.stream().distinct().collect(Collectors.toList());
+            return entities.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
@@ -93,6 +94,10 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
                     .join(entity.getDepartmentIds())));
         }
         indices.add(toEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
+        if (!CollectionUtils.isEmpty(entity.getEmailAliases())) {
+            indices.add(toEdsAssetIndex(edsAsset, USER_MAIL_ALIAS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+                    .join(entity.getEmailAliases())));
+        }
         return indices;
     }
 

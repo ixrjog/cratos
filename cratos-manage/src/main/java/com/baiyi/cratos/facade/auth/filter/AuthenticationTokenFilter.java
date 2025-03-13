@@ -41,13 +41,9 @@ import static com.baiyi.cratos.domain.constant.Global.AUTHORIZATION;
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
     private final UserTokenFacade userTokenFacade;
-
     private final RobotFacade robotFacade;
-
     private final RbacFacade rbacFacade;
-
     private final CratosConfiguration cratosConfiguration;
-
     private final ObjectMapper objectMapper;
 
     @Override
