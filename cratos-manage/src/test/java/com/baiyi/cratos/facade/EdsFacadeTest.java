@@ -89,4 +89,13 @@ public class EdsFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
+    @Test
+    void test3() {
+        EdsIdentityParam.QueryMailIdentityDetails query = EdsIdentityParam.QueryMailIdentityDetails.builder()
+                .username("baiyi")
+                .build();
+        EdsIdentityVO.MailIdentityDetails details = edsIdentityFacade.queryMailIdentityDetails(query);
+        System.out.println(details);
+    }
+
 }

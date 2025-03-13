@@ -67,6 +67,7 @@ public class UserPermissionController {
 
     /**
      * 查询用户授权详情
+     *
      * @param username
      * @return
      */
@@ -96,7 +97,7 @@ public class UserPermissionController {
 
     @PostMapping(value = "/business/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateUserPermissionBusiness(
-            @RequestBody @Valid  UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness) {
+            @RequestBody @Valid UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness) {
         permissionBusinessFacade.updateUserPermissionBusiness(updateUserPermissionBusiness);
         return HttpResult.SUCCESS;
     }

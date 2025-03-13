@@ -19,7 +19,7 @@ public class AlimailServiceFactory {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         WebClient webClient = WebClient.builder()
-                .baseUrl(alimail.getUrl())
+                .baseUrl(alimail.getApi().getUrl())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);

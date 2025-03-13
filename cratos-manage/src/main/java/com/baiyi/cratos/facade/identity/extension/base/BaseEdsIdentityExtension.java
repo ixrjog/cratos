@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.exception.EdsIdentityException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
+import com.baiyi.cratos.domain.HasEdsInstanceType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -17,10 +18,14 @@ import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -44,6 +49,21 @@ public abstract class BaseEdsIdentityExtension {
 
     private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
             EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name());
+
+    protected Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> identityAssets,
+                                                        HasEdsInstanceType hasEdsInstanceType) {
+        Map<Integer, EdsInstance> map = Maps.newHashMap();
+        identityAssets.forEach(edsAsset -> {
+            EdsInstance instance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
+                    .orElseThrow(() -> new EdsIdentityException("The edsInstance does not exist: instanceId={}.",
+                            edsAsset.getInstanceId()));
+            if (!StringUtils.hasText(hasEdsInstanceType.getInstanceType()) || hasEdsInstanceType.getInstanceType()
+                    .equals(instance.getEdsType())) {
+                map.put(edsAsset.getInstanceId(), instance);
+            }
+        });
+        return map;
+    }
 
     protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
         EdsInstance instance = getEdsInstance(hasEdsInstanceId);

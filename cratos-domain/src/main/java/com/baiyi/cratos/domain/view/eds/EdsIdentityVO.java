@@ -40,6 +40,21 @@ public class EdsIdentityVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class MailIdentityDetails implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8165953149227317860L;
+        public static final MailIdentityDetails NO_DATA = MailIdentityDetails.builder()
+                .build();
+        private String username;
+        @Builder.Default
+        private Map<String, List<MailAccount>> accounts = Map.of();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AccountLoginDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = 3029421324469757904L;
@@ -147,6 +162,27 @@ public class EdsIdentityVO {
         private AccountLoginDetails accountLogin;
         private List<String> policies;
         private List<AccessKey> accessKeys;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class MailAccount implements Serializable {
+        public static final MailAccount NO_ACCOUNT = MailAccount.builder()
+                .isExist(false)
+                .build();
+        @Serial
+        private static final long serialVersionUID = 3015356912073689995L;
+        private String username;
+        private String password;
+        private EdsInstanceVO.EdsInstance instance;
+        private UserVO.User user;
+        private EdsAssetVO.Asset account;
+        @Builder.Default
+        private boolean isExist = true;
+        private AccountLoginDetails accountLogin;
     }
 
     @Data

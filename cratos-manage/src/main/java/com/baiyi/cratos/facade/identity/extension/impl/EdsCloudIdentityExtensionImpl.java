@@ -3,7 +3,6 @@ package com.baiyi.cratos.facade.identity.extension.impl;
 import com.baiyi.cratos.common.exception.EdsIdentityException;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
-import com.baiyi.cratos.domain.HasEdsInstanceType;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -27,9 +26,10 @@ import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
@@ -56,21 +56,6 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
     private static final List<String> CLOUD_ACCOUNT_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
             EdsAssetTypeEnum.AWS_IAM_USER.name(), EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(),
             EdsAssetTypeEnum.GCP_MEMBER.name());
-
-    private Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> cloudIdentityAssets,
-                                                        HasEdsInstanceType hasEdsInstanceType) {
-        Map<Integer, EdsInstance> map = Maps.newHashMap();
-        cloudIdentityAssets.forEach(edsAsset -> {
-            EdsInstance instance = Optional.ofNullable(edsInstanceService.getById(edsAsset.getInstanceId()))
-                    .orElseThrow(() -> new EdsIdentityException("The edsInstance does not exist: instanceId={}.",
-                            edsAsset.getInstanceId()));
-            if (!StringUtils.hasText(hasEdsInstanceType.getInstanceType()) || hasEdsInstanceType.getInstanceType()
-                    .equals(instance.getEdsType())) {
-                map.put(edsAsset.getInstanceId(), instance);
-            }
-        });
-        return map;
-    }
 
     private List<EdsAsset> queryAccountAssets(EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
         List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();

@@ -1,12 +1,13 @@
-package com.baiyi.cratos.eds;
+package com.baiyi.cratos.eds.opscloud;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
-import com.baiyi.cratos.eds.opscloud.vo.OcApplicationVO;
+import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import java.util.List;
  * &#064;Date  2024/12/2 13:46
  * &#064;Version 1.0
  */
-public class EdsOpscloudTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud> {
+public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud> {
 
     @Resource
     private ApplicationService applicationService;

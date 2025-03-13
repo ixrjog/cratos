@@ -35,6 +35,19 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
+    public static class QueryMailIdentityDetails implements HasEdsInstanceType, HasEdsInstanceId {
+        @NotBlank
+        private String username;
+        @Schema(description = "Query all instances if no parameter is provided")
+        private String instanceType;
+        private Integer instanceId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
     public static class QueryLdapIdentityDetails implements HasEdsInstanceId {
         @NotBlank
         private String username;

@@ -1,15 +1,12 @@
 package com.baiyi.cratos.facade.identity;
 
-import com.baiyi.cratos.facade.identity.extension.EdsCloudIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsDingtalkIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsGitLabIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
+import com.baiyi.cratos.facade.identity.extension.*;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/26 10:19
  * &#064;Version 1.0
  */
-public interface EdsIdentityFacade extends EdsCloudIdentityExtension, EdsLdapIdentityExtension, EdsGitLabIdentityExtension, EdsDingtalkIdentityExtension {
+public interface EdsIdentityFacade extends EdsCloudIdentityExtension, EdsLdapIdentityExtension, EdsGitLabIdentityExtension, EdsDingtalkIdentityExtension, EdsMailIdentityExtension {
 
 }

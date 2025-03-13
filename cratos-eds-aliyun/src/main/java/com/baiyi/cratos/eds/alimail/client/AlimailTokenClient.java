@@ -36,7 +36,7 @@ public class AlimailTokenClient {
                 .getId());
         formData.add("client_secret", alimail.getCred()
                 .getSecret());
-        final String api = alimail.getUrl() + "/oauth2/v2.0/token";
+        final String api = alimail.getApi().getUrl() + "/oauth2/v2.0/token";
         return WebClient.create()
                 .post()
                 .uri(api)

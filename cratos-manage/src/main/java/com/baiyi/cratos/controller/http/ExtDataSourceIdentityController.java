@@ -122,4 +122,11 @@ public class ExtDataSourceIdentityController {
         return HttpResult.of(edsIdentityFacade.queryGitLabIdentityDetails(queryGitLabIdentityDetails));
     }
 
+    @Operation(summary = "Query eds asset mail identity by username")
+    @PostMapping(value = "/mail/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsIdentityVO.MailIdentityDetails> queryMailIdentityDetails(
+            @RequestBody @Valid EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails) {
+        return HttpResult.of(edsIdentityFacade.queryMailIdentityDetails(queryMailIdentityDetails));
+    }
+
 }

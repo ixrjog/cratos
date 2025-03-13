@@ -3,10 +3,7 @@ package com.baiyi.cratos.facade.identity.impl;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
-import com.baiyi.cratos.facade.identity.extension.EdsCloudIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsDingtalkIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsGitLabIdentityExtension;
-import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
+import com.baiyi.cratos.facade.identity.extension.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,6 +24,7 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     private final EdsCloudIdentityExtension cloudIdentityExtension;
     private final EdsGitLabIdentityExtension gitLabIdentityExtension;
     private final EdsDingtalkIdentityExtension dingtalkIdentityExtension;
+    private final EdsMailIdentityExtension mailIdentityExtension;
 
     @Override
     public EdsIdentityVO.CloudIdentityDetails queryCloudIdentityDetails(
@@ -96,6 +94,12 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     public EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
             EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
         return gitLabIdentityExtension.queryGitLabIdentityDetails(queryGitLabIdentityDetails);
+    }
+
+    @Override
+    public EdsIdentityVO.MailIdentityDetails queryMailIdentityDetails(
+            EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails) {
+        return mailIdentityExtension.queryMailIdentityDetails(queryMailIdentityDetails);
     }
 
 }

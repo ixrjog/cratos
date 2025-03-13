@@ -20,7 +20,8 @@ public class EdsAlimailConfigModel {
         private String version;
         @Schema(description = "凭据")
         private Cred cred;
-        private String url;
+        private Api api;
+        private String loginUrl;
         private EdsInstance edsInstance;
     }
 
@@ -31,6 +32,13 @@ public class EdsAlimailConfigModel {
         @Schema(description = "应用ID")
         private String id;
         private String secret;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Api {
+        private String url;
     }
 
 }

@@ -2,8 +2,10 @@ package com.baiyi.cratos.eds.opscloud.service;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
+import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.param.OcApplicationParam;
-import com.baiyi.cratos.eds.opscloud.vo.OcApplicationVO;
+import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -17,9 +19,19 @@ import org.springframework.web.service.annotation.PostExchange;
 @HttpExchange(accept = "application/json")
 public interface OpscloudService {
 
-    // Application
     @PostExchange("/api/application/page/query")
-    HttpResult<DataTable<OcApplicationVO.Application>> queryApplicationPage(@RequestHeader("AccessToken") String accessToken,
-                                                                            @RequestBody OcApplicationParam.ApplicationPageQuery pageQuery);
+    HttpResult<DataTable<OcApplicationVO.Application>> queryApplicationPage(
+            @RequestHeader("AccessToken") String accessToken,
+            @RequestBody OcApplicationParam.ApplicationPageQuery pageQuery);
+
+    @PostExchange("/api/user/page/query")
+    HttpResult<DataTable<OcUserVO.User>> queryUserPage(@RequestHeader("AccessToken") String accessToken,
+                                                       @RequestBody OcUserParam.UserPageQuery pageQuery);
+
+    @PostExchange("/api/user/business/permission/query")
+    HttpResult<DataTable<OcApplicationVO.Application>> queryUserApplicationPermissionPage(
+            @RequestHeader("AccessToken") String accessToken,
+            @RequestBody OcUserParam.UserBusinessPermissionPageQuery pageQuery);
+
 
 }

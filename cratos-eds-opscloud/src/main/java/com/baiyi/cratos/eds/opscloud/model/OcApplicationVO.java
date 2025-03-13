@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.opscloud.vo;
+package com.baiyi.cratos.eds.opscloud.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -27,10 +27,9 @@ public class OcApplicationVO {
         @Schema(description = "描述")
         private Boolean isActive;
         private String comment;
-
         private List<Tag> tags;
+        private UserPermissionVO.UserPermission userPermission;
     }
-
 
     @Data
     @NoArgsConstructor
