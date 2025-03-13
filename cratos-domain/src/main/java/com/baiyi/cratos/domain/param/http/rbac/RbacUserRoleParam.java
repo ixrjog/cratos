@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.domain.param.IToTarget;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +20,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class RbacUserRoleParam {
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Schema
     public static class AddUserRole implements IToTarget<RbacUserRole> {
         @NotNull(message = "Username must be specified.")

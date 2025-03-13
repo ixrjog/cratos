@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
@@ -12,6 +13,7 @@ import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserPermissionRepo;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
+import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.facade.UserPermissionBusinessFacade;
@@ -39,7 +41,8 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
     private BusinessTagFacade businessTagFacade;
     @Resource
     private UserPermissionBusinessFacade permissionBusinessFacade;
-
+    @Resource
+    private RbacUserRoleFacade rbacUserRoleFacade;
 
     @Test
     void importOcUserTest() {
@@ -115,5 +118,33 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
         List<OcApplicationVO.Application> permissionApps = OcUserPermissionRepo.queryUserApplicationPermission(cfg, 1);
         System.out.println(permissionApps.size());
     }
+
+    @Test
+    void roleTest() {
+        List<User> users = userService.selectAll();
+        for (User user : users) {
+            if (!user.getValid() || user.getLocked()) {
+                continue;
+            }
+            if (user.getUsername()
+                    .startsWith("ext-")) {
+                continue;
+            }
+            RbacUserRoleParam.AddUserRole addUserBaseRole = RbacUserRoleParam.AddUserRole.builder()
+                    .username(user.getUsername())
+                    .roleId(1)
+                    .build();
+
+            RbacUserRoleParam.AddUserRole addUserDevRole = RbacUserRoleParam.AddUserRole.builder()
+                    .username(user.getUsername())
+                    .roleId(5)
+                    .build();
+            rbacUserRoleFacade.addUserRole(addUserBaseRole);
+            rbacUserRoleFacade.addUserRole(addUserDevRole);
+            System.out.println(user.getUsername());
+        }
+
+    }
+
 
 }

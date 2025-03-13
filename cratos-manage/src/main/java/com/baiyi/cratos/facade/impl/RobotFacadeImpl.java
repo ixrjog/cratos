@@ -151,9 +151,10 @@ public class RobotFacadeImpl implements RobotFacade {
             throw new RobotException("The current session user is invalid.");
         }
         robot.setValid(false);
+        String comment = StringUtils.hasText(robot.getComment()) ? robot.getComment() : null;
         robot.setComment(Joiner.on("|")
                 .skipNulls()
-                .join(robot.getComment(), StringFormatter.format("User {} revokes robot token.", sessionUsername)));
+                .join(comment, StringFormatter.format("User {} revokes robot token.", sessionUsername)));
         robotService.updateByPrimaryKey(robot);
     }
 
