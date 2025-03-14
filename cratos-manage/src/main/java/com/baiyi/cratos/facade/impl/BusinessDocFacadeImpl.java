@@ -2,17 +2,19 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.DocumentTypeEnum;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.doc.BusinessDocParam;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
-import com.baiyi.cratos.facade.BusinessDocFacade;
+import com.baiyi.cratos.domain.BusinessDocFacade;
 import com.baiyi.cratos.facade.impl.base.BaseSupportBusinessFacade;
 import com.baiyi.cratos.service.BusinessDocumentService;
 import com.baiyi.cratos.wrapper.BusinessDocWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +41,18 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
                     businessDocWrapper.wrap(doc);
                     return doc;
                 })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BusinessDocVO.BusinessTextDoc> getBusinessTextDocByBusiness(BusinessParam.GetByBusiness getByBusiness) {
+        return getBusinessDocByBusiness(getByBusiness).stream()
+                .filter(e -> StringUtils.hasText(e.getContent()))
+                .map(e -> BusinessDocVO.BusinessTextDoc.builder()
+                        .id(e.getId())
+                        .name(e.getName())
+                        .text(MarkdownUtils.removeMarkdownTags(e.getContent()))
+                        .build())
                 .collect(Collectors.toList());
     }
 

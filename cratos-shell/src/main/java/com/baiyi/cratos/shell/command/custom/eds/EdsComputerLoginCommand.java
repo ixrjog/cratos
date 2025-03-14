@@ -1,9 +1,12 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
+import com.baiyi.cratos.domain.BusinessDocFacade;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
@@ -60,33 +63,42 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final CredentialService credentialService;
     private final SshAuditProperties sshAuditProperties;
     private final ServerCommandAuditor serverCommandAuditor;
+    private final BusinessDocFacade businessDocFacade;
 
     public static final String GROUP = "computer";
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
     public EdsComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
                                    SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
-                                   SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor) {
+                                   SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
+                                   BusinessDocFacade businessDocFacade) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
         this.simpleSshSessionFacade = simpleSshSessionFacade;
         this.credentialService = credentialService;
         this.sshAuditProperties = sshAuditProperties;
         this.serverCommandAuditor = serverCommandAuditor;
+        this.businessDocFacade = businessDocFacade;
     }
 
     @ClearScreen
     @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl"}, value = "Login to the computer.")
     @ShellAuthentication(resource = "/computer/login")
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
-                              @ShellOption(help = "Account", defaultValue = "") String account) {
+                              @ShellOption(help = "Account", defaultValue = "") String account,
+                              @ShellOption(help = "Preview Docs", defaultValue = "false") boolean docs) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         if (CollectionUtils.isEmpty(computerMapper) || !computerMapper.containsKey(id)) {
             helper.print("Computer does not exist, exec computer-list first, then login", PromptColor.RED);
             return;
         }
-        EdsAsset edsAsset = computerMapper.get(id);
-        final String sshSessionInstanceId = generateInstanceId(edsAsset);
+        EdsAsset asset = computerMapper.get(id);
+        // Preview Docs
+        if (docs) {
+            previewDocs(asset);
+            return;
+        }
+        final String sshSessionInstanceId = generateInstanceId(asset);
         if (!ComputerAssetContext.getAccountContext()
                 .containsKey(account)) {
             helper.print("Account does not exist.", PromptColor.RED);
@@ -108,7 +120,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
-            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(edsAsset, serverAccount, credential);
+            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(asset, serverAccount, credential);
             hostSystem.setInstanceId(sshSessionInstanceId);
             hostSystem.setTerminalSize(helper.terminalSize());
             hostSystem.setAuditPath(auditPath);
@@ -153,6 +165,30 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         } finally {
             JSchSessionHolder.closeSession(sessionId, sshSessionInstanceId);
         }
+    }
+
+    private void previewDocs(EdsAsset asset) {
+        BusinessParam.GetByBusiness hasBusiness = BusinessParam.GetByBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(asset.getId())
+                .build();
+        businessDocFacade.getBusinessTextDocByBusiness(hasBusiness)
+                .forEach(doc -> {
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BLACK);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.RED);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.GREEN);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.YELLOW);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BLUE);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.MAGENTA);
+                    helper.print("Document: " + doc.getName(), PromptColor.CYAN);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.WHITE);
+//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BRIGHT);
+                    helper.print(
+                            "--------------------------------------------------------------------------------------");
+                    helper.print(doc.getText(),PromptColor.BRIGHT);
+                    helper.print(
+                            "--------------------------------------------------------------------------------------");
+                });
     }
 
     private String generateInstanceId(EdsAsset computerAsset) {

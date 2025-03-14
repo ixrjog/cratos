@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.annotation.ApiModelPropertyPro;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class BusinessParam {
 
     @Data
+    @Builder
     @Schema
     public static class GetByBusiness implements BaseBusiness.HasBusiness {
         @NotNull

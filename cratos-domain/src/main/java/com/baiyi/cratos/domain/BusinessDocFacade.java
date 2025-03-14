@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.domain;
 
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.doc.BusinessDocParam;
@@ -14,6 +14,8 @@ import java.util.List;
 public interface BusinessDocFacade {
 
     List<BusinessDocVO.BusinessDoc> getBusinessDocByBusiness(BusinessParam.GetByBusiness getByBusiness);
+
+    List<BusinessDocVO.BusinessTextDoc> getBusinessTextDocByBusiness(BusinessParam.GetByBusiness getByBusiness);
 
     void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc);
 

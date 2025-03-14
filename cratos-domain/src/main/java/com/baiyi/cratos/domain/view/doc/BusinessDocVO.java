@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.view.doc;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.BaseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,17 @@ public class BusinessDocVO {
         private String lastEditor;
         private String comment;
         private String content;
+    }
+
+    @Data
+    @Builder
+    @Schema
+    public static class BusinessTextDoc implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -63250418499610154L;
+        private Integer id;
+        private String name;
+        private String text;
     }
 
 }
