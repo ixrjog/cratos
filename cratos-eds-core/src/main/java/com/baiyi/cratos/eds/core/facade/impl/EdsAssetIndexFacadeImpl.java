@@ -83,4 +83,12 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
         return edsAssetIndexService.queryIndexByValue(value);
     }
 
+    @Override
+    public void deleteIndicesOfAsset(int assetId) {
+        edsAssetIndexService.queryIndexByAssetId(assetId)
+                .stream()
+                .mapToInt(EdsAssetIndex::getId)
+                .forEach(edsAssetIndexService::deleteById);
+    }
+
 }

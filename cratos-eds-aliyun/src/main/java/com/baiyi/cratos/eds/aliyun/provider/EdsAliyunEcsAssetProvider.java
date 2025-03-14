@@ -20,6 +20,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -33,6 +34,7 @@ import java.util.Optional;
  * &#064;Date  2024/4/11 上午10:59
  * &#064;Version  1.0
  */
+@Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
 public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
@@ -71,11 +73,13 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                 .map(e -> {
                     List<DescribeDisksResponse.Disk> disks = aliyunEcsRepo.describeDisks(regionId, configModel,
                             e.getInstanceId());
-                    return AliyunEcs.Ecs.builder()
+                    AliyunEcs.Ecs ecs = AliyunEcs.Ecs.builder()
                             .regionId(regionId)
                             .instance(e)
                             .disks(disks)
                             .build();
+                    log.debug(ecs.toString());
+                    return ecs;
                 })
                 .toList();
     }

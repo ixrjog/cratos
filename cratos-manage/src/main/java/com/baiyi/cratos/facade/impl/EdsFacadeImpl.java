@@ -23,6 +23,7 @@ import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
@@ -77,6 +78,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final BusinessAssetBindService businessAssetBindService;
+    private final EdsAssetIndexFacade  edsAssetIndexFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
@@ -310,15 +312,13 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
-    @Transactional(rollbackFor = {Exception.class})
     public void deleteEdsAssetById(Integer id) {
         if (edsAssetService.getById(id) == null) {
             return;
         }
-        edsAssetIndexService.queryIndexByAssetId(id)
-                .stream()
-                .mapToInt(EdsAssetIndex::getId)
-                .forEach(edsAssetIndexService::deleteById);
+        // 删除索引
+        edsAssetIndexFacade.deleteIndicesOfAsset(id);
+        // 删除应用资源
         SimpleBusiness byBusiness = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(id)

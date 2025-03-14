@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -60,7 +61,7 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-    public static class Asset extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, HasResourceCount, Serializable {
+    public static class Asset extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasResourceCount, Serializable {
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;
         private Integer id;
@@ -83,7 +84,7 @@ public class EdsAssetVO {
         private String description;
         private ToBusiness toBusiness;
         private Map<String, Integer> resourceCount;
-
+        private List<BusinessDocVO.BusinessDoc> businessDocs;
         @Override
         public Integer getBusinessId() {
             return id;

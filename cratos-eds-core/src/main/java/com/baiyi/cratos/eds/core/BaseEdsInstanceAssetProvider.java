@@ -105,8 +105,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
         try {
             EdsAsset edsAsset = enterAsset(toEdsAsset(instance, entity));
-            List<EdsAssetIndex> edsAssetIndexList = toEdsAssetIndexList(instance, edsAsset, entity);
-            edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), edsAssetIndexList);
+            List<EdsAssetIndex> indices = toEdsAssetIndexList(instance, edsAsset, entity);
+            edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), indices);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
             log.error("Asset conversion error. {}", e.getMessage());

@@ -37,7 +37,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     public static final boolean SKIP_LOAD_ASSET = true;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(EdsAssetVO.Asset vo) {
         EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(vo.getInstanceId(),
                 vo.getAssetType());

@@ -13,6 +13,7 @@ public interface EdsAssetIndexFacade {
 
     /**
      * 保存资产索引，删除不存在的索引
+     *
      * @param assetId
      * @param edsAssetIndexList
      */
@@ -21,5 +22,7 @@ public interface EdsAssetIndexFacade {
     List<EdsAssetIndex> queryAssetIndexById(int assetId);
 
     List<EdsAssetIndex> queryAssetIndexByValue(String value);
+
+    void deleteIndicesOfAsset(int assetId);
 
 }

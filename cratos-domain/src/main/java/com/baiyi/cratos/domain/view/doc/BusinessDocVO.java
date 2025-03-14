@@ -23,7 +23,6 @@ public class BusinessDocVO {
 
     public interface HasBusinessDocs extends BaseBusiness.HasBusiness {
         void setBusinessDocs(List<BusinessDoc> businessDocs);
-        // List<BusinessDoc> getBusinessDocs();
     }
 
     @EqualsAndHashCode(callSuper = true)
