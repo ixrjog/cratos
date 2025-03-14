@@ -70,4 +70,12 @@ public class RbacResourceServiceImpl implements RbacResourceService {
     public void clearCacheById(int id) {
     }
 
+    @Override
+    public List<RbacResource> queryAllUiPoints() {
+        Example example = new Example(RbacResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("uiPoint", true);
+        return rbacResourceMapper.selectByExample(example);
+    }
+
 }

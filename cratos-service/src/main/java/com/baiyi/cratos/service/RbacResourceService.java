@@ -8,6 +8,8 @@ import com.baiyi.cratos.mapper.RbacResourceMapper;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.HasUniqueKey;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/17 11:07
@@ -22,5 +24,7 @@ public interface RbacResourceService extends BaseValidService<RbacResource, Rbac
     DataTable<RbacResource> queryRoleResourcePageByParam(RbacRoleResourceParam.RoleResourcePageQuery pageQuery);
 
     int countResourcesAuthorizedByUsername(String username, String resource);
+
+    List<RbacResource> queryAllUiPoints();
 
 }

@@ -174,15 +174,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 .build();
         businessDocFacade.getBusinessTextDocByBusiness(hasBusiness)
                 .forEach(doc -> {
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BLACK);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.RED);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.GREEN);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.YELLOW);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BLUE);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.MAGENTA);
                     helper.print("Document: " + doc.getName(), PromptColor.CYAN);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.WHITE);
-//                    helper.print("Doc Name: " + doc.getName(), PromptColor.BRIGHT);
                     helper.print(
                             "--------------------------------------------------------------------------------------");
                     helper.print(doc.getText(),PromptColor.BRIGHT);

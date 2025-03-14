@@ -63,6 +63,22 @@ public class RbacFacadeImpl implements RbacFacade {
     }
 
     @Override
+    public boolean hasResourceAccessPermissionsForUsername(String username, String resource) {
+        RbacResource rbacResource = Optional.ofNullable(rbacResourceFacade.getByResource(resource))
+                .orElseThrow(() -> new AuthorizationException(ErrorEnum.AUTHENTICATION_RESOURCE_NOT_EXIST));
+        if (!rbacResource.getValid()) {
+            // 登录用户即可访问
+            return true;
+        }
+        // 校验用户是否可以访问资源路径
+        if (rbacResourceService.countResourcesAuthorizedByUsername(username, resource) == 0) {
+            // 管理员跳过验证
+            return verifyRoleAccessLevelByUsername(AccessLevel.ADMIN, username);
+        }
+        return true;
+    }
+
+    @Override
     public void verifyResourceAccessPermissions(String token, String resource) {
         if (!StringUtils.hasText(token)) {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);

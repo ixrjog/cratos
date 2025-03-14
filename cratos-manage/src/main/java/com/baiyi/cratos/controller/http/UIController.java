@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.view.user.FrontVO;
+import com.baiyi.cratos.facade.UiFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UIController {
 
-    @Operation(summary = "Get UI")
-    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<FrontVO.Front> getUI() {
-        // TODO
-        return null;
+    private final UiFacade uiFacade;
+
+    @Operation(summary = "Get UI point")
+    @GetMapping(value = "/point/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<FrontVO.UIPoint> getUIPoint() {
+        return HttpResult.of(uiFacade.getUIPoint());
     }
 
 }
