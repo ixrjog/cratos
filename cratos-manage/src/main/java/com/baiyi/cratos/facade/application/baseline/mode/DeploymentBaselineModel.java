@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.baseline.mode;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;

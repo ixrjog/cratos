@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.util;
+package com.baiyi.cratos.domain;
 
 import com.google.gson.JsonSyntaxException;
 import lombok.NoArgsConstructor;

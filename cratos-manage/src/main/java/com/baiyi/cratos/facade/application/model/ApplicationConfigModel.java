@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.model;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.Application;
 import com.google.common.collect.Maps;

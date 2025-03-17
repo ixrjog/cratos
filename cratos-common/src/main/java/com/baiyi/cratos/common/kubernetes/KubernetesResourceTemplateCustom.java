@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common.kubernetes;
 
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.google.common.collect.Lists;

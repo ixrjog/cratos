@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.util;
 
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.gson.JsonSyntaxException;

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.model;
 
 import com.baiyi.cratos.common.exception.CommandExecException;
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;

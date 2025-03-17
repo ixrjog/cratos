@@ -82,10 +82,10 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
                 roleMembers.add(buildRoleMember("daily", true));
                 roleMembers.add(buildRoleMember("sit", true));
 
-                boolean checked = "admin".equalsIgnoreCase(permissionApp.getUserPermission()
-                        .getPermissionRole());
-                roleMembers.add(buildRoleMember("pre", checked));
-                roleMembers.add(buildRoleMember("prod", checked));
+//                boolean checked = "admin".equalsIgnoreCase(permissionApp.getUserPermission()
+//                        .getPermissionRole());
+//                roleMembers.add(buildRoleMember("pre", checked));
+//                roleMembers.add(buildRoleMember("prod", checked));
 
                 UserPermissionBusinessParam.BusinessPermission businessPermission = UserPermissionBusinessParam.BusinessPermission.builder()
                         .businessId(application.getId())
@@ -93,6 +93,7 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
                         .roleMembers(roleMembers)
                         .build();
                 businessPermissions.add(businessPermission);
+                System.out.println("user: "+user.getUsername() + " app: " + application.getName());
             }
             UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
                     .businessType(BusinessTypeEnum.APPLICATION.name())

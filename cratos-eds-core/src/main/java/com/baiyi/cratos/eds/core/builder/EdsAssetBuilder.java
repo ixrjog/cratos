@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.builder;
 
-import com.baiyi.cratos.common.util.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;

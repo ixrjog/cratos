@@ -220,6 +220,7 @@ public class EdsIdentityVO {
         @Serial
         private static final long serialVersionUID = 3471470854571389889L;
         private String accessKeyId;
+        private Boolean valid;
     }
 
 }
