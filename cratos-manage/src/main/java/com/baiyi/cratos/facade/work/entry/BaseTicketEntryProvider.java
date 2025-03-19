@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/19 13:58
@@ -31,7 +33,6 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
         }
         workOrderTicketEntryService.add(entry);
         return entry;
-
     }
 
     @Override
@@ -39,9 +40,26 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
         Detail detail = loadAs(entry);
         WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
         processEntry(ticket, entry, detail);
+        boolean success = true;
+        try {
+            processEntry(ticket,entry,detail);
+        } catch (Exception e) {
+            success = false;
+            entry.setResult(e.getMessage());
+        }
+        entry.setExecutedAt(new Date());
+        entry.setSuccess(success);
+        entry.setCompletedAt(new Date());
+        entry.setCompleted(true);
+        saveEntry(entry);
     }
 
-    protected abstract void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry, Detail detail);
+    protected void saveEntry(WorkOrderTicketEntry entry) {
+        workOrderTicketEntryService.updateByPrimaryKey(entry);
+    }
+
+    protected abstract void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
+                                         Detail detail) throws WorkOrderTicketException;
 
     @SuppressWarnings("unchecked")
     protected Detail loadAs(WorkOrderTicketEntry entry) {

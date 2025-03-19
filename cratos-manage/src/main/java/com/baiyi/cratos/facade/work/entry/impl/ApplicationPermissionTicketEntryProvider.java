@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.work.entry.impl;
 
+import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
@@ -22,9 +24,13 @@ import java.util.List;
 @Component
 public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
 
+    private final UserPermissionBusinessFacade userPermissionBusinessFacade;
+
     public ApplicationPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                                    WorkOrderTicketService workOrderTicketService) {
+                                                    WorkOrderTicketService workOrderTicketService,
+                                                    UserPermissionBusinessFacade userPermissionBusinessFacade) {
         super(workOrderTicketEntryService, workOrderTicketService);
+        this.userPermissionBusinessFacade = userPermissionBusinessFacade;
     }
 
     @Override
@@ -34,15 +40,17 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                UserPermissionBusinessParam.BusinessPermission businessPermission) {
-
-        UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness =  UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
+                                UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
+        UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
                 .businessPermissions(List.of(businessPermission))
                 .username(workOrderTicket.getUsername())
                 .businessType(BusinessTypeEnum.APPLICATION.name())
                 .build();
-
-
+        try {
+            userPermissionBusinessFacade.updateUserPermissionBusiness(updateUserPermissionBusiness);
+        } catch (Exception e) {
+            WorkOrderTicketException.runtime(e.getMessage());
+        }
     }
 
     @Override
