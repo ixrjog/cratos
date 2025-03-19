@@ -1,12 +1,12 @@
-package com.baiyi.cratos.shell.facade;
+package com.baiyi.cratos.domain.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
-import com.baiyi.cratos.query.EdsAssetQuery;
 
 import java.util.List;
 

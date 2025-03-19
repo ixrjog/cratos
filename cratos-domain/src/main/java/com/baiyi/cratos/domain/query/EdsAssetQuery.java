@@ -1,4 +1,4 @@
-package com.baiyi.cratos.query;
+package com.baiyi.cratos.domain.query;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.param.PageParam;

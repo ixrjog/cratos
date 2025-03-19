@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.mapper.EdsAssetMapper;
-import com.baiyi.cratos.query.EdsAssetQuery;
+import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.service.ApplicationResourceBaselineService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.github.pagehelper.Page;

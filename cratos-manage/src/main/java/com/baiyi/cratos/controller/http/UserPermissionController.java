@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
-import com.baiyi.cratos.shell.facade.UserPermissionBusinessFacade;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

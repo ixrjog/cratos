@@ -1,0 +1,64 @@
+package com.baiyi.cratos.domain.param.http.work;
+
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2025/3/17 17:34
+ * &#064;Version 1.0
+ */
+public class WorkOrderTicketParam {
+
+    public interface HasEntryDetail<T> {
+        T getDetail();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class CreateTicket {
+        @NotBlank(message = "Work order key cannot be empty!")
+        private String workOrderKey;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 2888570476091613323L;
+        private final String businessType = BusinessTypeEnum.APPLICATION.name();
+        private UserPermissionBusinessParam.BusinessPermission detail;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class TicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -6950932321530742135L;
+        private Integer ticketId;
+        private String name;
+        private String displayName;
+        private Integer instanceId;
+        private String businessType;
+        private String subType;
+        private Integer businessId;
+        private String entryKey;
+    }
+
+}

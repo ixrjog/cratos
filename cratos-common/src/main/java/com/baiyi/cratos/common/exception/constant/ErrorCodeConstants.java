@@ -52,4 +52,6 @@ public interface ErrorCodeConstants {
     int EDS_IDENTITY_ERROR = 57000;
 
     int CLOUD_IDENTITY_ERROR = 57100;
+
+    int WORK_ORDER_TICKET_ERROR = 58000;
 }

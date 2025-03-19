@@ -20,8 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkOrderFacadeImpl implements WorkOrderFacade {
 
-    private final WorkOrderService workOrderService;
     private final WorkOrderGroupService workOrderGroupService;
+    private final WorkOrderService workOrderService;
     private final WorkOrderGroupWrapper workOrderGroupWrapper;
 
     @Override
@@ -35,4 +35,5 @@ public class WorkOrderFacadeImpl implements WorkOrderFacade {
                 .groupList(groupList)
                 .build();
     }
+
 }

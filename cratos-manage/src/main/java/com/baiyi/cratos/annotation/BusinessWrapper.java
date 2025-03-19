@@ -15,7 +15,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface BusinessWrapper {
 
-    boolean atBefore() default false;
+    boolean BEFORE = true;
+    boolean AFTER = false;
+
+    boolean invoke() default AFTER;
 
     /**
      * 不指定，则从类注解@BusinessType中获取类型

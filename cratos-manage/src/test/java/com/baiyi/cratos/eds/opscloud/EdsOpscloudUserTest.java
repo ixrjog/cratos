@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
 import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.shell.facade.UserPermissionBusinessFacade;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.google.common.collect.Lists;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

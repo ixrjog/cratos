@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="work_order">
+        <table tableName="work_order_ticket_entry">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

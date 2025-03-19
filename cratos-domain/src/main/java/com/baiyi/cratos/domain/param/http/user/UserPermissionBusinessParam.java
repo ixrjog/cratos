@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.user;
 
+import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -47,10 +48,11 @@ public class UserPermissionBusinessParam {
         private List<BusinessPermission> businessPermissions;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
     @Schema
     @Builder
-    public static class BusinessPermission {
+    public static class BusinessPermission extends YamlDump {
         private Integer businessId;
         private String name;
         private List<RoleMember> roleMembers;

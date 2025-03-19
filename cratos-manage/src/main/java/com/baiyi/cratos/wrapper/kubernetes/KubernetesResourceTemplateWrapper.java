@@ -35,7 +35,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     private final EnvService envService;
 
     @Override
-    @BusinessWrapper(atBefore = true, ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
+    @BusinessWrapper(invoke = BusinessWrapper.BEFORE, ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 vo.getCustom());

@@ -57,7 +57,7 @@
     </select>
 
     <select id="queryUserPermissionBusinessIds"
-            parameterType="com.baiyi.cratos.query.EdsAssetQuery$QueryUserPermissionBusinessIdParam"
+            parameterType="com.baiyi.cratos.domain.query.EdsAssetQuery$QueryUserPermissionBusinessIdParam"
             resultType="int">
         select business_id from business_tag
         where tag_id = #{tagGroupId}
@@ -71,7 +71,7 @@
     </select>
 
     <select id="queryUserPermissionPageByParam"
-            parameterType="com.baiyi.cratos.query.EdsAssetQuery$UserPermissionPageQueryParam"
+            parameterType="com.baiyi.cratos.domain.query.EdsAssetQuery$UserPermissionPageQueryParam"
             resultMap="BaseResultMap">
         select * from eds_asset
         where asset_type in

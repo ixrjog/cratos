@@ -17,10 +17,17 @@ public class PasswordGenerator {
     private static final String DIGITS = "23456789";
     // "!@#$%^&*()-_=+[]{}|;:'\",.<>/?";
     private static final String SPECIAL_CHARS = "!@#$%^&*()_+-=";
-    ;
 
     public static String generatePassword() {
         return generatePassword(16, true, true, true, true);
+    }
+
+    /**
+     * 只包含小写字符和数字,长度为8
+     * @return
+     */
+    public static String generateTicketId() {
+        return generatePassword(8, true, false, true, false);
     }
 
     public static String generatePassword(int length, boolean includeLowercase, boolean includeUppercase,

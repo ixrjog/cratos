@@ -26,7 +26,7 @@ public class WorkOrderController {
 
     @Operation(summary = "Get workOrder menu")
     @GetMapping(value = "/menu/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<WorkOrderVO.Menu> getWorkOrderMenu() {
+    public HttpResult<WorkOrderVO.Menu> getMenu() {
         return new HttpResult<>(workOrderFacade.getWorkOrderMenu());
     }
 

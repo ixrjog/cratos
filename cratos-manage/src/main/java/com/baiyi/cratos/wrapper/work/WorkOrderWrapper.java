@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.util.I18nUtils;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,10 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(WorkOrderVO.WorkOrder vo) {
-        // This is a good idea
+        // I18n Data
         I18nUtils.setI18nData(vo);
+        // Workflow Data
+        WorkflowUtils.setWorkflow(vo);
     }
 
     @Override

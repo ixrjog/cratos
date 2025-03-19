@@ -24,7 +24,6 @@ public class HwcEcsClientBuilder {
         HttpConfig config = HttpConfig.getDefaultHttpConfig();
         config.withIgnoreSSLVerification(true);
         Region region = EcsRegion.valueOf(regionId);
-
         // 创建认证
         BasicCredentials credentials = new BasicCredentials().withAk(huaweicloud.getCred()
                         .getAccessKey())
