@@ -22,8 +22,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addApplicationPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
-        TicketEntryProvider<WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
                 WorkOrderKeys.APPLICATION_PERMISSION.name());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
+    public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+                WorkOrderKeys.COMPUTER_PERMISSION.name());
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 

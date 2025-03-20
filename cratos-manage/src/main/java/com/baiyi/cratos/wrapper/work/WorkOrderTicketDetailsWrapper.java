@@ -4,6 +4,7 @@ import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -26,11 +27,16 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
     private final WorkOrderWrapper workOrderWrapper;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET}, invoke = BusinessWrapper.BEFORE)
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BusinessWrapper.BEFORE)
     public void wrap(WorkOrderTicketVO.TicketDetails vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getTicket()
                 .getWorkOrderId());
         vo.setWorkOrder(workOrderWrapper.wrapToTarget(workOrder));
+        //  Workflow
+        WorkflowModel.Workflow workflow = vo.getWorkOrder()
+                .getWorkflowData();
+
+        vo.setWorkflow(workflow);
     }
 
 }

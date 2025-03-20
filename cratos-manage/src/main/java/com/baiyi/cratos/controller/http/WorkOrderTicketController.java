@@ -37,4 +37,10 @@ public class WorkOrderTicketController {
         return new HttpResult<>(workOrderTicketFacade.getTicket(ticketId));
     }
 
+    @Operation(summary = "Submit application ticket")
+    @PostMapping(value = "/submit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<WorkOrderTicketVO.TicketDetails> submitTicket(@RequestBody @Valid WorkOrderTicketParam.SubmitTicket submitTicket) {
+        return new HttpResult<>(workOrderTicketFacade.submitTicket(submitTicket));
+    }
+
 }

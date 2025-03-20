@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.model;
 
 import com.baiyi.cratos.domain.YamlDump;
+import com.baiyi.cratos.domain.view.user.UserVO;
 import lombok.*;
 
 import java.io.Serial;
@@ -39,6 +40,7 @@ public class WorkflowModel {
         private String comment;
         private Map<String, I18nModel.Alias> langMap;
         private List<String> tags;
+        private List<UserVO.User> selectableUsers;
     }
 
 }

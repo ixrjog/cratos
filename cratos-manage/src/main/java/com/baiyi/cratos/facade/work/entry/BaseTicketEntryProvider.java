@@ -8,11 +8,10 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.util.InvokeEntryResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
-
-import java.util.Date;
 
 /**
  * &#064;Author  baiyi
@@ -20,7 +19,7 @@ import java.util.Date;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> implements TicketEntryProvider<EntryParam>, InitializingBean {
+public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> implements TicketEntryProvider<Detail, EntryParam>, InitializingBean {
 
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
     private final WorkOrderTicketService workOrderTicketService;
@@ -40,17 +39,12 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
         Detail detail = loadAs(entry);
         WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
         processEntry(ticket, entry, detail);
-        boolean success = true;
         try {
-            processEntry(ticket,entry,detail);
+            processEntry(ticket, entry, detail);
+            InvokeEntryResult.success(entry);
         } catch (Exception e) {
-            success = false;
-            entry.setResult(e.getMessage());
+            InvokeEntryResult.failed(entry, e.getMessage());
         }
-        entry.setExecutedAt(new Date());
-        entry.setSuccess(success);
-        entry.setCompletedAt(new Date());
-        entry.setCompleted(true);
         saveEntry(entry);
     }
 
@@ -62,7 +56,7 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
                                          Detail detail) throws WorkOrderTicketException;
 
     @SuppressWarnings("unchecked")
-    protected Detail loadAs(WorkOrderTicketEntry entry) {
+    public Detail loadAs(WorkOrderTicketEntry entry) {
         // Get the entity type of generic `D`
         Class<Detail> clazz = Generics.find(this.getClass(), BaseTicketEntryProvider.class, 0);
         if (!StringUtils.hasText(entry.getContent())) {
@@ -73,7 +67,7 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
 
     protected abstract WorkOrderTicketEntry paramToEntry(EntryParam param);
 
-    private boolean existsEntry(WorkOrderTicketEntry entry) {
+    protected boolean existsEntry(WorkOrderTicketEntry entry) {
         return workOrderTicketEntryService.getByUniqueKey(entry) != null;
     }
 

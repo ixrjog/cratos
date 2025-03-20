@@ -2,21 +2,21 @@ package com.baiyi.cratos.facade.work.impl;
 
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.facade.work.builder.TicketBuilder;
-import com.baiyi.cratos.facade.work.entry.TicketEntryProvider;
-import com.baiyi.cratos.facade.work.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
-import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,6 @@ import java.util.Objects;
  * &#064;Date  2025/3/19 11:08
  * &#064;Version 1.0
  */
-@SuppressWarnings("unchecked")
 @Component
 @RequiredArgsConstructor
 public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
@@ -71,6 +70,12 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     }
 
     @Override
+    public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
+        // TODO
+        return null;
+    }
+
+    @Override
     public void deleteTicketById(int ticketId) {
         WorkOrderTicket ticket = workOrderTicketService.getById(ticketId);
         if (Objects.nonNull(ticket)) {
@@ -89,6 +94,5 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         workOrderTicketService.updateByPrimaryKey(newTicket);
         workOrderTicketSubscriberFacade.publish(newTicket, user);
     }
-
 
 }

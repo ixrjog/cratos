@@ -10,13 +10,14 @@
     <result column="work_order_id" jdbcType="INTEGER" property="workOrderId" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="node_id" jdbcType="INTEGER" property="nodeId" />
-    <result column="current_approval_result" jdbcType="VARCHAR" property="currentApprovalResult" />
+    <result column="ticket_state" jdbcType="VARCHAR" property="ticketState" />
+    <result column="ticket_result" jdbcType="VARCHAR" property="ticketResult" />
     <result column="success" jdbcType="BIT" property="success" />
     <result column="submitted_at" jdbcType="TIMESTAMP" property="submittedAt" />
     <result column="completed" jdbcType="BIT" property="completed" />
     <result column="completed_at" jdbcType="TIMESTAMP" property="completedAt" />
-    <result column="auto_execute" jdbcType="BIT" property="autoExecute" />
-    <result column="executed_at" jdbcType="TIMESTAMP" property="executedAt" />
+    <result column="auto_processing" jdbcType="BIT" property="autoProcessing" />
+    <result column="process_at" jdbcType="TIMESTAMP" property="processAt" />
     <result column="valid" jdbcType="BIT" property="valid" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />

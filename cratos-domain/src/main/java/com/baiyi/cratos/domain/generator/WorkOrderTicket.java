@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "work_order_ticket")
-public class WorkOrderTicket implements HasIntegerPrimaryKey {
+public class WorkOrderTicket implements HasIntegerPrimaryKey, HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -47,10 +48,16 @@ public class WorkOrderTicket implements HasIntegerPrimaryKey {
     private Integer nodeId;
 
     /**
-     * 当前审批结果
+     * 状态
      */
-    @Column(name = "current_approval_result")
-    private String currentApprovalResult;
+    @Column(name = "ticket_state")
+    private String ticketState;
+
+    /**
+     * 结果
+     */
+    @Column(name = "ticket_result")
+    private String ticketResult;
 
     /**
      * 成功
@@ -75,16 +82,16 @@ public class WorkOrderTicket implements HasIntegerPrimaryKey {
     private Date completedAt;
 
     /**
-     * 自动执行
+     * 自动处理
      */
-    @Column(name = "auto_execute")
-    private Boolean autoExecute;
+    @Column(name = "auto_processing")
+    private Boolean autoProcessing;
 
     /**
-     * 执行时间
+     * 处理时间
      */
-    @Column(name = "executed_at")
-    private Date executedAt;
+    @Column(name = "process_at")
+    private Date processAt;
 
     /**
      * 有效
@@ -96,10 +103,10 @@ public class WorkOrderTicket implements HasIntegerPrimaryKey {
      */
     private String comment;
 
-    @Column(name = "create_time", insertable = false, updatable = false)
+    @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", insertable = false, updatable = false)
+    @Column(name = "update_time")
     private Date updateTime;
 
     /**

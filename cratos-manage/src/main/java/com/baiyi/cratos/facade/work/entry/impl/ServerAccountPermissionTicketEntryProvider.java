@@ -1,0 +1,73 @@
+package com.baiyi.cratos.facade.work.entry.impl;
+
+import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.facade.work.builder.entry.ServerAccountPermissionTicketEntryBuilder;
+import com.baiyi.cratos.facade.work.entry.BaseTicketEntryProvider;
+import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2025/3/19 16:19
+ * &#064;Version 1.0
+ */
+@Component
+public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> {
+
+    private final UserPermissionBusinessFacade userPermissionBusinessFacade;
+
+    public ServerAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
+                                                      WorkOrderTicketService workOrderTicketService,
+                                                      UserPermissionBusinessFacade userPermissionBusinessFacade) {
+        super(workOrderTicketEntryService, workOrderTicketService);
+        this.userPermissionBusinessFacade = userPermissionBusinessFacade;
+    }
+
+    @Override
+    public String getKey() {
+        return WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name();
+    }
+
+    @Override
+    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddServerAccountPermissionTicketEntry param) {
+        WorkOrderTicketEntry entry = paramToEntry(param);
+        if (existsEntry(entry)) {
+            return null;
+        }
+        return super.addEntry(param);
+    }
+
+    @Override
+    protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
+                                UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
+        UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
+                .businessPermissions(List.of(businessPermission))
+                .username(workOrderTicket.getUsername())
+                .businessType(BusinessTypeEnum.SERVER_ACCOUNT.name())
+                .build();
+        try {
+            // 账户授权
+            userPermissionBusinessFacade.updateUserPermissionBusiness(updateUserPermissionBusiness);
+        } catch (Exception e) {
+            WorkOrderTicketException.runtime(e.getMessage());
+        }
+    }
+
+    @Override
+    public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddServerAccountPermissionTicketEntry param) {
+        return ServerAccountPermissionTicketEntryBuilder.newBuilder()
+                .withParam(param)
+                .buildEntry();
+    }
+
+}

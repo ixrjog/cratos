@@ -11,4 +11,6 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
+    void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
+
 }

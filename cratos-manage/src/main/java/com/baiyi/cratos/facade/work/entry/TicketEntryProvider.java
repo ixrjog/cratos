@@ -8,16 +8,19 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
  * &#064;Date  2025/3/19 13:48
  * &#064;Version 1.0
  */
-public interface TicketEntryProvider<E extends WorkOrderTicketParam.TicketEntry> {
+public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> {
 
     String getKey();
 
-    WorkOrderTicketEntry addEntry(E param);
+    WorkOrderTicketEntry addEntry(EntryParam param);
 
     /**
      * 处理工单条目
+     *
      * @param entry
      */
     void processEntry(WorkOrderTicketEntry entry);
+
+    Detail loadAs(WorkOrderTicketEntry entry);
 
 }

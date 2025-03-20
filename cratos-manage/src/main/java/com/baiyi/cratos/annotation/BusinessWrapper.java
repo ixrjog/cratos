@@ -18,7 +18,7 @@ public @interface BusinessWrapper {
     boolean BEFORE = true;
     boolean AFTER = false;
 
-    boolean invoke() default AFTER;
+    boolean invokeAt() default AFTER;
 
     /**
      * 不指定，则从类注解@BusinessType中获取类型

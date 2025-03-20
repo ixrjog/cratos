@@ -14,13 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TicketEntryProviderFactory {
 
-    private static final Map<String, TicketEntryProvider<?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, TicketEntryProvider<?,?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(TicketEntryProvider<?> provider) {
+    public static void register(TicketEntryProvider<?,?> provider) {
         CONTEXT.put(provider.getKey(), provider);
     }
 
-    public static TicketEntryProvider<?> getByProvider(String key) {
+    public static TicketEntryProvider<?,?> getByProvider(String key) {
         return CONTEXT.get(key);
     }
 

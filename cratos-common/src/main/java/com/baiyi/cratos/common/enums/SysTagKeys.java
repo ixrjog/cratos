@@ -10,12 +10,16 @@ import lombok.Getter;
 @Getter
 public enum SysTagKeys {
 
+    EDS("EDS"),
     LEVEL("Level"),
     PRODUCT_LINE("ProductLine"),
     BUSINESS("Business"),
     COMMAND_EXEC_APPROVER("CommandExecApprover"),
     COMMAND_EXEC("CommandExec"),
-    USERNAME("Username");
+    USERNAME("Username"),
+    SERVER_ACCOUNT("ServerAccount"),
+    ;
+
 
     private final String key;
 

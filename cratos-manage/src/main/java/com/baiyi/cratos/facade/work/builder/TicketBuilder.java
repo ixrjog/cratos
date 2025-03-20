@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.workorder.enums.TicketStates;
 
 /**
  * &#064;Author  baiyi
@@ -34,7 +35,8 @@ public class TicketBuilder {
                 .ticketId(PasswordGenerator.generateTicketId())
                 .workOrderId(workOrder.getId())
                 .username(user.getUsername())
-                .autoExecute(true)
+                .autoProcessing(true)
+                .ticketState(TicketStates.NEW.name())
                 .completed(false)
                 .valid(true)
                 .nodeId(0)

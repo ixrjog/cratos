@@ -20,17 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/workorder/ticket/entry")
-@Tag(name = "WorkOrder Ticket Entry")
+@Tag(name = "WorkOrder Ticket TicketEntry")
 @RequiredArgsConstructor
 public class WorkOrderTicketEntryController {
 
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
 
     @Operation(summary = "Add application permission ticket entry")
-    @PostMapping(value = "/entry/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationPermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         workOrderTicketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
+
+    @Operation(summary = "Add computer permission ticket entry")
+    @PostMapping(value = "/computer/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addComputerPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
+        workOrderTicketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
 }

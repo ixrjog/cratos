@@ -5,10 +5,7 @@ import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -37,6 +34,8 @@ public class UserPermissionBusinessParam {
      * 批量授权
      */
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema
     @Builder
     public static class UpdateUserPermissionBusiness {
@@ -50,6 +49,8 @@ public class UserPermissionBusinessParam {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema
     @Builder
     public static class BusinessPermission extends YamlDump {
@@ -59,6 +60,8 @@ public class UserPermissionBusinessParam {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema
     @Builder
     public static class RoleMember {

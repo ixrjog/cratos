@@ -5,7 +5,9 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -31,8 +33,29 @@ public class WorkOrderTicketParam {
         private String workOrderKey;
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Schema
+    public static class SubmitTicket {
+
+        @NotNull(message = "必须指定工单票据ID")
+        @Schema(description = "工单票据ID")
+        private Integer ticketId;
+
+        @Schema(description = "申请说明")
+        @NotBlank
+        private String applyRemark;
+
+        //@Schema(description = "工作流")
+        //  private WorkflowVO.WorkflowView workflowView;
+
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
@@ -43,8 +66,35 @@ public class WorkOrderTicketParam {
         private UserPermissionBusinessParam.BusinessPermission detail;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
-    @Builder
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddComputerPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 1150566255112707316L;
+        private final String businessType = BusinessTypeEnum.TAG_GROUP.name();
+        private UserPermissionBusinessParam.BusinessPermission detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddServerAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 2888570476091613323L;
+        private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
+        private UserPermissionBusinessParam.BusinessPermission detail;
+    }
+
+
+    @Data
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
