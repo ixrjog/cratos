@@ -17,6 +17,9 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.state.TicketState;
+import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -71,7 +74,9 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
 
     @Override
     public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
-        // TODO
+        WorkOrderTicket ticket = workOrderTicketService.getById(submitTicket.getTicketId());
+
+        TicketInStateProcessorFactory.getByState(TicketState.NEW).change(ticket, TicketStateChangeAction.SUBMIT);
         return null;
     }
 

@@ -104,7 +104,7 @@ public class WorkOrderTicketVO {
         @Serial
         private static final long serialVersionUID = 7989247189791418176L;
         private Integer id;
-        private Integer ticketNo;
+        private Integer ticketId;
         private String name;
         private String displayName;
         private Integer instanceId;
@@ -140,7 +140,7 @@ public class WorkOrderTicketVO {
         @Serial
         private static final long serialVersionUID = 2685398949349696983L;
         private Integer id;
-        private Integer ticketNo;
+        private Integer ticketId;
         private String approvalType;
         private String nodeName;
         private String username;
