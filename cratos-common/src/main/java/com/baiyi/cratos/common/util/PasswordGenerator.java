@@ -26,7 +26,7 @@ public class PasswordGenerator {
      * 只包含小写字符和数字,长度为8
      * @return
      */
-    public static String generateTicketId() {
+    public static String generateTicketNo() {
         return generatePassword(8, true, false, true, false);
     }
 

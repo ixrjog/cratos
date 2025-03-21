@@ -39,8 +39,8 @@ public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrder
 
     @Override
     public void businessWrap(WorkOrderTicketVO.HasTicketNodes hasTicketNodes) {
-        if (StringUtils.hasText(hasTicketNodes.getTicketId())) {
-            WorkOrderTicket ticket = workOrderTicketService.getByTicketId(hasTicketNodes.getTicketId());
+        if (StringUtils.hasText(hasTicketNodes.getTicketNo())) {
+            WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNodes.getTicketNo());
             if (Objects.isNull(ticket)) {
                 return;
             }

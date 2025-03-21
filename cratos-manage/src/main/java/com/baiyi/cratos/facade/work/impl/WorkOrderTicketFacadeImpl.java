@@ -57,13 +57,13 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
                 .newTicket();
         workOrderTicketService.add(newTicket);
         createWorkflowNodes(user, workOrder, newTicket);
-        return getTicket(newTicket.getTicketId());
+        return getTicket(newTicket.getTicketNo());
     }
 
     @Override
-    public WorkOrderTicketVO.TicketDetails getTicket(String ticketId) {
+    public WorkOrderTicketVO.TicketDetails getTicket(String ticketNo) {
         WorkOrderTicketVO.TicketDetails details = WorkOrderTicketVO.TicketDetails.builder()
-                .ticketId(ticketId)
+                .ticketNo(ticketNo)
                 .build();
         workOrderTicketDetailsWrapper.wrap(details);
         return details;
@@ -87,7 +87,7 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     private void createWorkflowNodes(User user, WorkOrder workOrder, WorkOrderTicket newTicket) {
         workOrderTicketNodeFacade.createWorkflowNodes(workOrder, newTicket);
         WorkOrderTicketVO.TicketDetails details = WorkOrderTicketVO.TicketDetails.builder()
-                .ticketId(newTicket.getTicketId())
+                .ticketNo(newTicket.getTicketNo())
                 .build();
         WorkOrderTicketNode rootNode = workOrderTicketNodeService.getRootNode(newTicket.getId());
         newTicket.setNodeId(rootNode.getId());

@@ -25,10 +25,10 @@ public class WorkOrderTicket implements HasIntegerPrimaryKey, HasValid {
     private Integer id;
 
     /**
-     * 字符串ID
+     * Ticket No.
      */
-    @Column(name = "ticket_id")
-    private String ticketId;
+    @Column(name = "ticket_no")
+    private String ticketNo;
 
     /**
      * 工单ID

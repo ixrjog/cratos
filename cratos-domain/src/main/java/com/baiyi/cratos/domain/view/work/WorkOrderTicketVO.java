@@ -22,19 +22,19 @@ import java.util.Map;
  */
 public class WorkOrderTicketVO {
 
-    public interface HasTicketId {
-        String getTicketId();
+    public interface HasTicketNo {
+        String getTicketNo();
     }
 
-    public interface HasTicket extends HasTicketId {
+    public interface HasTicket extends HasTicketNo {
         void setTicket(Ticket ticket);
     }
 
-    public interface HasTicketEntries extends HasTicketId {
+    public interface HasTicketEntries extends HasTicketNo {
         void setEntries(List<TicketEntry<?>> entries);
     }
 
-    public interface HasTicketNodes extends HasTicketId {
+    public interface HasTicketNodes extends HasTicketNo {
         void setNodes(Map<String, TicketNode> nodes);
     }
 
@@ -48,7 +48,7 @@ public class WorkOrderTicketVO {
         private static final long serialVersionUID = -3837715674384828343L;
         @Schema(description = "工单")
         private WorkOrderVO.WorkOrder workOrder;
-        private String ticketId;
+        private String ticketNo;
         @Schema(description = "工单票据")
         private Ticket ticket;
         @Schema(description = "工单票据条目")
@@ -71,7 +71,7 @@ public class WorkOrderTicketVO {
         @Serial
         private static final long serialVersionUID = 9097666590091735099L;
         private Integer id;
-        private String ticketId;
+        private String ticketNo;
         private Integer workOrderId;
         private String username;
         private Integer nodeId;
@@ -104,7 +104,7 @@ public class WorkOrderTicketVO {
         @Serial
         private static final long serialVersionUID = 7989247189791418176L;
         private Integer id;
-        private Integer ticketId;
+        private Integer ticketNo;
         private String name;
         private String displayName;
         private Integer instanceId;
@@ -140,7 +140,7 @@ public class WorkOrderTicketVO {
         @Serial
         private static final long serialVersionUID = 2685398949349696983L;
         private Integer id;
-        private Integer ticketId;
+        private Integer ticketNo;
         private String approvalType;
         private String nodeName;
         private String username;

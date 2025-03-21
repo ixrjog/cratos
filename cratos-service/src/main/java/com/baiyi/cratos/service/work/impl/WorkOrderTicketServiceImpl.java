@@ -34,7 +34,7 @@ public class WorkOrderTicketServiceImpl implements WorkOrderTicketService {
     public WorkOrderTicket getByUniqueKey(@NonNull WorkOrderTicket record) {
         Example example = new Example(WorkOrderTicket.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("ticketId", record.getTicketId());
+        criteria.andEqualTo("ticketNo", record.getTicketNo());
         return workOrderTicketMapper.selectOneByExample(example);
     }
 

@@ -1,11 +1,11 @@
-package com.baiyi.cratos.workorder.enums;
+package com.baiyi.cratos.workorder.state;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/20 16:49
  * &#064;Version 1.0
  */
-public enum TicketStates {
+public enum TicketState {
 
     /**
      * 新建
@@ -32,8 +32,8 @@ public enum TicketStates {
      */
     PROCESSING_COMPLETED,
     /**
-     * 结束
+     * 完成
      */
-    COMPLETE
+    COMPLETED
 
 }

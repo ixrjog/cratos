@@ -12,10 +12,10 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  */
 public interface WorkOrderTicketService extends BaseUniqueKeyService<WorkOrderTicket, WorkOrderTicketMapper>, SupportBusinessService {
 
-    default WorkOrderTicket getByTicketId(String ticketId) {
+    default WorkOrderTicket getByTicketNo(String ticketNo) {
         return getByUniqueKey(
                 WorkOrderTicket.builder()
-                        .ticketId(ticketId)
+                        .ticketNo(ticketNo)
                         .build());
     }
 
