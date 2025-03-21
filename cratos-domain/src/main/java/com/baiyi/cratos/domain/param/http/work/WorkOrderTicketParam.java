@@ -57,6 +57,24 @@ public class WorkOrderTicketParam {
 
     }
 
+
+    // approvalTicket(@RequestBody @Valid WorkOrderTicketParam.ApproveTicket approveTicket)
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Schema
+    public static class ApprovalTicket implements HasTicketId {
+        @NotNull(message = "必须指定工单票据ID")
+        @Schema(description = "工单票据ID")
+        private Integer ticketId;
+        @Schema(description = "审批意见")
+        private String approveRemark;
+        private String approvalType;
+    }
+
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)

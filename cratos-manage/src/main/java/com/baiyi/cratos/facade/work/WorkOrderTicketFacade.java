@@ -16,6 +16,8 @@ public interface WorkOrderTicketFacade {
 
     WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket);
 
+    WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket);
+
     /**
      * 逻辑删除，设定为无效工单
      *

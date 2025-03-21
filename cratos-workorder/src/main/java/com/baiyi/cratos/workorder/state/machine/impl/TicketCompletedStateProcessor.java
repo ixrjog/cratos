@@ -19,5 +19,4 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Bool
         super(workOrderTicketService);
     }
 
-
 }

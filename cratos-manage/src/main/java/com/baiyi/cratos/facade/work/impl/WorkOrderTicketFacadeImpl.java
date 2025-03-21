@@ -33,6 +33,7 @@ import java.util.Objects;
  * &#064;Date  2025/3/19 11:08
  * &#064;Version 1.0
  */
+@SuppressWarnings("unchecked")
 @Component
 @RequiredArgsConstructor
 public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
@@ -78,13 +79,20 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         return getTicket(ticket.getTicketNo());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
         TicketEvent<WorkOrderTicketParam.SubmitTicket> event = TicketEvent.of(submitTicket);
         TicketInStateProcessorFactory.getByState(TicketState.NEW)
                 .change(submitTicket, TicketStateChangeAction.SUBMIT, event);
         return getTicket(submitTicket);
+    }
+
+    @Override
+    public WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
+        TicketEvent<WorkOrderTicketParam.ApprovalTicket> event = TicketEvent.of(approvalTicket);
+        TicketInStateProcessorFactory.getByState(TicketState.IN_APPROVAL)
+                .change(approvalTicket, TicketStateChangeAction.SUBMIT, event);
+        return getTicket(approvalTicket);
     }
 
     @Override
