@@ -1,6 +1,8 @@
 package com.baiyi.cratos.workorder.state.machine;
 
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.state.HasTicketStateAnnotate;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 
@@ -9,16 +11,16 @@ import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
  * &#064;Date  2025/3/21 11:28
  * &#064;Version 1.0
  */
-public interface TicketStateProcessor {
+@SuppressWarnings("rawtypes")
+public interface TicketStateProcessor<Event> extends HasTicketStateAnnotate {
 
-    TicketStateProcessor setTarget(TicketStateProcessor processor);
+    TicketStateProcessor<Event> setTarget(TicketStateProcessor<Event> processor);
 
     TicketStateProcessor getTarget();
 
-    TicketState getState();
-
     TicketStateProcessor getByState(TicketState ticketState);
 
-    void change(WorkOrderTicket ticket, TicketStateChangeAction action);
+    void change(WorkOrderTicketParam.HasTicketId hasTicketId, TicketStateChangeAction action,
+                TicketEvent<Event> ticketEvent);
 
 }

@@ -34,11 +34,11 @@ public class UserPermissionBusinessException extends BaseException {
     }
 
     public static void runtime(String message) {
-        throw new ApplicationResourceBaselineException(message);
+        throw new UserPermissionBusinessException(message);
     }
 
     public static void notSupported() {
-        throw new ApplicationResourceBaselineException("The specified businessType is not supported.");
+        throw new UserPermissionBusinessException("The specified businessType is not supported.");
     }
 
 }

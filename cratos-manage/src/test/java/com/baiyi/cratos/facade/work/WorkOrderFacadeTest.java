@@ -87,4 +87,14 @@ public class WorkOrderFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
+    @Test
+    void test5() {
+        SessionUtils.setUsername("baiyi");
+        WorkOrderTicketParam.SubmitTicket submitTicket = WorkOrderTicketParam.SubmitTicket.builder()
+                .applyRemark("Test Ticket")
+                .ticketId(1)
+                .build();
+        workOrderTicketFacade.submitTicket(submitTicket);
+    }
+
 }

@@ -35,11 +35,11 @@ public class WorkOrderTicketException extends BaseException {
     }
 
     public static void runtime(String message) {
-        throw new TrafficLayerException(message);
+        throw new WorkOrderTicketException(message);
     }
 
     public static void runtime(String message, Object... var2) {
-        throw new TrafficLayerException(message, var2);
+        throw new WorkOrderTicketException(message, var2);
     }
 
 }

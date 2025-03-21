@@ -23,6 +23,10 @@ public class WorkOrderTicketParam {
         T getDetail();
     }
 
+    public interface HasTicketId {
+        Integer getTicketId();
+    }
+
     @Data
     @Builder
     @AllArgsConstructor
@@ -38,7 +42,7 @@ public class WorkOrderTicketParam {
     @NoArgsConstructor
     @Data
     @Schema
-    public static class SubmitTicket {
+    public static class SubmitTicket implements HasTicketId {
 
         @NotNull(message = "必须指定工单票据ID")
         @Schema(description = "工单票据ID")

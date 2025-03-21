@@ -34,11 +34,11 @@ public class CommandExecException extends BaseException {
     }
 
     public static void runtime(String message) {
-        throw new KubernetesResourceTemplateException(message);
+        throw new CommandExecException(message);
     }
 
     public static void runtime(String message, Object... var2) {
-        throw new KubernetesResourceTemplateException(message, var2);
+        throw new CommandExecException(message, var2);
     }
 
 }

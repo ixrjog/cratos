@@ -54,4 +54,6 @@ public interface ErrorCodeConstants {
     int CLOUD_IDENTITY_ERROR = 57100;
 
     int WORK_ORDER_TICKET_ERROR = 58000;
+
+    int WORK_ORDER_TICKET_STATE_PROCESSOR_ERROR = 58100;
 }

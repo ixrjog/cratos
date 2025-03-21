@@ -40,7 +40,7 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
     @SuppressWarnings("unchecked")
     @Override
     public void wrap(WorkOrderTicketVO.TicketEntry<T> vo) {
-        WorkOrderTicket ticket = workOrderTicketService.getById(vo.getTicketNo());
+        WorkOrderTicket ticket = workOrderTicketService.getById(vo.getTicketId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getByProvider(
                 workOrder.getWorkOrderKey());

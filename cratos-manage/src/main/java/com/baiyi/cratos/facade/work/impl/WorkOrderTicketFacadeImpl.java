@@ -17,6 +17,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
@@ -72,12 +73,18 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         return details;
     }
 
+    private WorkOrderTicketVO.TicketDetails getTicket(WorkOrderTicketParam.HasTicketId hasTicketId) {
+        WorkOrderTicket ticket = workOrderTicketService.getById(hasTicketId.getTicketId());
+        return getTicket(ticket.getTicketNo());
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
-        WorkOrderTicket ticket = workOrderTicketService.getById(submitTicket.getTicketId());
-
-        TicketInStateProcessorFactory.getByState(TicketState.NEW).change(ticket, TicketStateChangeAction.SUBMIT);
-        return null;
+        TicketEvent<WorkOrderTicketParam.SubmitTicket> event = TicketEvent.of(submitTicket);
+        TicketInStateProcessorFactory.getByState(TicketState.NEW)
+                .change(submitTicket, TicketStateChangeAction.SUBMIT, event);
+        return getTicket(submitTicket);
     }
 
     @Override

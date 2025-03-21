@@ -2,6 +2,8 @@ package com.baiyi.cratos.workorder.state.machine.impl;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
@@ -16,27 +18,26 @@ import static com.baiyi.cratos.workorder.state.TicketStateChangeAction.APPROVAL_
  * &#064;Version 1.0
  */
 @Component
-public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor {
+@TicketStates(state = TicketState.IN_APPROVAL)
+public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Boolean> {
 
     public TicketInApprovalStateProcessor(WorkOrderTicketService workOrderTicketService) {
         super(workOrderTicketService);
     }
 
     @Override
-    public TicketState getState() {
-        return TicketState.IN_APPROVAL;
-    }
-
-    @Override
-    public void change(WorkOrderTicket ticket, TicketStateChangeAction action) {
-        if(action.equals(APPROVAL_APPROVED)) {
-           //  DO_NEXT
+    protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action, TicketEvent<Boolean> event) {
+        if (action.equals(APPROVAL_APPROVED)) {
+            //  DO_NEXT
         }
 
-        if(action.equals(APPROVAL_REJECTED)) {
+        if (action.equals(APPROVAL_REJECTED)) {
 
         }
+
+
     }
+
 
     private void changeWithApprovalApproved() {
 
