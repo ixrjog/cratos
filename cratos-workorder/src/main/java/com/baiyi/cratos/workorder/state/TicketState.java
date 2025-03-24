@@ -7,6 +7,7 @@ package com.baiyi.cratos.workorder.state;
  */
 public enum TicketState {
 
+    CREATE,
     /**
      * 新建
      */

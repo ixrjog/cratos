@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.WorkflowModel;
-import com.baiyi.cratos.facade.work.WorkOrderTicketSubscriberFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;

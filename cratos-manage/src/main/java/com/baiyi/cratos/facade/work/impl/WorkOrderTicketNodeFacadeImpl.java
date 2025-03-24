@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
-import com.baiyi.cratos.facade.work.WorkOrderTicketNodeFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.domain.model.WorkflowModel;

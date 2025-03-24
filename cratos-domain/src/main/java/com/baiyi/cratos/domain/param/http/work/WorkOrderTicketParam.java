@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -23,8 +24,8 @@ public class WorkOrderTicketParam {
         T getDetail();
     }
 
-    public interface HasTicketId {
-        Integer getTicketId();
+    public interface HasTicketNo {
+        String getTicketNo();
     }
 
     @Data
@@ -32,9 +33,12 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class CreateTicket {
+    public static class CreateTicket implements HasTicketNo {
         @NotBlank(message = "Work order key cannot be empty!")
         private String workOrderKey;
+        @Schema(description = "Ticket No.")
+        @Null
+        private String ticketNo;
     }
 
     @Builder
@@ -42,11 +46,11 @@ public class WorkOrderTicketParam {
     @NoArgsConstructor
     @Data
     @Schema
-    public static class SubmitTicket implements HasTicketId {
+    public static class SubmitTicket implements HasTicketNo {
 
         @NotNull(message = "必须指定工单票据ID")
-        @Schema(description = "工单票据ID")
-        private Integer ticketId;
+        @Schema(description = "Ticket No.")
+        private String ticketNo;
 
         @Schema(description = "申请说明")
         @NotBlank
@@ -65,10 +69,10 @@ public class WorkOrderTicketParam {
     @NoArgsConstructor
     @Data
     @Schema
-    public static class ApprovalTicket implements HasTicketId {
+    public static class ApprovalTicket implements HasTicketNo {
         @NotNull(message = "必须指定工单票据ID")
-        @Schema(description = "工单票据ID")
-        private Integer ticketId;
+        @Schema(description = "Ticket No.")
+        private String ticketNo;
         @Schema(description = "审批意见")
         private String approveRemark;
         private String approvalType;

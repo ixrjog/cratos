@@ -3,10 +3,16 @@ package com.baiyi.cratos.workorder.state.machine.impl;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
@@ -23,26 +29,42 @@ import java.util.Date;
 @TicketStates(state = TicketState.NEW)
 public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SubmitTicket> {
 
-    public TicketNewStateProcessor(WorkOrderTicketService workOrderTicketService) {
-        super(workOrderTicketService);
+    public TicketNewStateProcessor(UserService userService, WorkOrderService workOrderService,
+                                   WorkOrderTicketService workOrderTicketService,
+                                   WorkOrderTicketNodeService workOrderTicketNodeService,
+                                   WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
+                                   WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
+                                   WorkOrderTicketEntryService workOrderTicketEntryService) {
+        super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
     }
 
     @Override
     protected void preChangeInspection(WorkOrderTicket ticket, TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
+        super.preChangeInspection(ticket, action, event);
         // 是否本人提交
         if (!ticket.getUsername()
                 .equals(SessionUtils.getUsername())) {
             TicketStateProcessorException.runtime("Non personal submission of work order.");
         }
-        super.preChangeInspection(ticket, action, event);
+        // 工单条目未配置
+        if (workOrderTicketEntryService.countByTicketId(ticket.getId()) == 0) {
+            TicketStateProcessorException.runtime("Work order entry not configured.");
+        }
+    }
+
+    @Override
+    protected boolean isTransition(WorkOrderTicket ticket) {
+        return true;
     }
 
     @Override
     protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action,
                               TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
         ticket.setSubmittedAt(new Date());
-        ticket.setApplyRemark(event.getBody().getApplyRemark());
+        ticket.setApplyRemark(event.getBody()
+                .getApplyRemark());
         workOrderTicketService.updateByPrimaryKey(ticket);
     }
 

@@ -1,6 +1,5 @@
-package com.baiyi.cratos.facade.work.builder;
+package com.baiyi.cratos.workorder.builder;
 
-import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -32,11 +31,11 @@ public class TicketBuilder {
 
     public WorkOrderTicket newTicket() {
         return WorkOrderTicket.builder()
-                .ticketNo(PasswordGenerator.generateTicketNo())
+                //.ticketNo(PasswordGenerator.generateTicketNo())
                 .workOrderId(workOrder.getId())
                 .username(user.getUsername())
                 .autoProcessing(true)
-                .ticketState(TicketState.NEW.name())
+                .ticketState(TicketState.CREATE.name())
                 .completed(false)
                 .valid(true)
                 .nodeId(0)

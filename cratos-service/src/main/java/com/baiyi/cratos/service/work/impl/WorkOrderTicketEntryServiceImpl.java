@@ -49,4 +49,12 @@ public class WorkOrderTicketEntryServiceImpl implements WorkOrderTicketEntryServ
         return workOrderTicketEntryMapper.selectByExample(example);
     }
 
+    @Override
+    public int countByTicketId(int ticketId) {
+        Example example = new Example(WorkOrderTicketEntry.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ticketId", ticketId);
+        return workOrderTicketEntryMapper.selectCountByExample(example);
+    }
+
 }

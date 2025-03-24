@@ -14,6 +14,9 @@ public enum TicketStateChangeAction {
      * 提交工单
      */
     SUBMIT,
+
+
+    APPROVAL,
     /**
      * 审批同意
      */

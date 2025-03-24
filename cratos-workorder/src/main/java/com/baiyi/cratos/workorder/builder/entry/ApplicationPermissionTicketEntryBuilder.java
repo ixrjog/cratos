@@ -1,23 +1,23 @@
-package com.baiyi.cratos.facade.work.builder.entry;
+package com.baiyi.cratos.workorder.builder.entry;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/3/19 17:27
+ * &#064;Date  2025/3/19 13:31
  * &#064;Version 1.0
  */
-public class ServerAccountPermissionTicketEntryBuilder {
+public class ApplicationPermissionTicketEntryBuilder {
 
-    private WorkOrderTicketParam.AddServerAccountPermissionTicketEntry param;
+    private WorkOrderTicketParam.AddApplicationPermissionTicketEntry param;
 
-    public static ServerAccountPermissionTicketEntryBuilder newBuilder() {
-        return new ServerAccountPermissionTicketEntryBuilder();
+    public static ApplicationPermissionTicketEntryBuilder newBuilder() {
+        return new ApplicationPermissionTicketEntryBuilder();
     }
 
-    public ServerAccountPermissionTicketEntryBuilder withParam(
-            WorkOrderTicketParam.AddServerAccountPermissionTicketEntry param) {
+    public ApplicationPermissionTicketEntryBuilder withParam(
+            WorkOrderTicketParam.AddApplicationPermissionTicketEntry param) {
         this.param = param;
         return this;
     }

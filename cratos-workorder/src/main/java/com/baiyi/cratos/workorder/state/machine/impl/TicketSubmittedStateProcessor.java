@@ -1,7 +1,14 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
@@ -15,8 +22,19 @@ import org.springframework.stereotype.Component;
 @TicketStates(state = TicketState.SUBMITTED)
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Boolean> {
 
-    public TicketSubmittedStateProcessor(WorkOrderTicketService workOrderTicketService) {
-        super(workOrderTicketService);
+    public TicketSubmittedStateProcessor(UserService userService, WorkOrderService workOrderService,
+                                         WorkOrderTicketService workOrderTicketService,
+                                         WorkOrderTicketNodeService workOrderTicketNodeService,
+                                         WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
+                                         WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
+                                         WorkOrderTicketEntryService workOrderTicketEntryService) {
+        super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
+    }
+
+    @Override
+    protected boolean isTransition(WorkOrderTicket ticket) {
+        return true;
     }
 
 }

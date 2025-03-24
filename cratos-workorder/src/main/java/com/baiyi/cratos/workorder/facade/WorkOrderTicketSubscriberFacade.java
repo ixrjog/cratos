@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.work;
+package com.baiyi.cratos.workorder.facade;
 
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;

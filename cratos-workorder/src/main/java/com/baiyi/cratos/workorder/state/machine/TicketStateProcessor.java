@@ -20,7 +20,7 @@ public interface TicketStateProcessor<Event> extends HasTicketStateAnnotate {
 
     TicketStateProcessor getByState(TicketState ticketState);
 
-    void change(WorkOrderTicketParam.HasTicketId hasTicketId, TicketStateChangeAction action,
+    void change(WorkOrderTicketParam.HasTicketNo hasTicketId, TicketStateChangeAction action,
                 TicketEvent<Event> ticketEvent);
 
 }

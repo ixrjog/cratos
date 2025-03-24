@@ -1,23 +1,18 @@
 package com.baiyi.cratos.facade.work.impl;
 
-import com.baiyi.cratos.common.exception.WorkOrderTicketException;
-import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
-import com.baiyi.cratos.facade.work.WorkOrderTicketNodeFacade;
-import com.baiyi.cratos.facade.work.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.facade.work.builder.TicketBuilder;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
@@ -50,19 +45,11 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket) {
-        final String username = SessionUtils.getUsername();
-        User user = userService.getByUsername(username);
-        WorkOrder workOrder = workOrderService.getByWorkOrderKey(createTicket.getWorkOrderKey());
-        if (Objects.isNull(workOrder)) {
-            WorkOrderTicketException.runtime("The work order does not exist.");
-        }
-        WorkOrderTicket newTicket = TicketBuilder.newBuilder()
-                .withWorkOrder(workOrder)
-                .withUser(user)
-                .newTicket();
-        workOrderTicketService.add(newTicket);
-        createWorkflowNodes(user, workOrder, newTicket);
-        return getTicket(newTicket.getTicketNo());
+        final String ticketNo = PasswordGenerator.generateTicketNo();
+        createTicket.setTicketNo(ticketNo);
+        TicketEvent<WorkOrderTicketParam.CreateTicket> event = TicketEvent.of(createTicket);
+        TicketInStateProcessorFactory.change(TicketState.CREATE, createTicket, TicketStateChangeAction.CREATE, event);
+        return getTicket(ticketNo);
     }
 
     @Override
@@ -74,24 +61,23 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         return details;
     }
 
-    private WorkOrderTicketVO.TicketDetails getTicket(WorkOrderTicketParam.HasTicketId hasTicketId) {
-        WorkOrderTicket ticket = workOrderTicketService.getById(hasTicketId.getTicketId());
+    private WorkOrderTicketVO.TicketDetails getTicket(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNo.getTicketNo());
         return getTicket(ticket.getTicketNo());
     }
 
     @Override
     public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
         TicketEvent<WorkOrderTicketParam.SubmitTicket> event = TicketEvent.of(submitTicket);
-        TicketInStateProcessorFactory.getByState(TicketState.NEW)
-                .change(submitTicket, TicketStateChangeAction.SUBMIT, event);
+        TicketInStateProcessorFactory.change(TicketState.NEW, submitTicket, TicketStateChangeAction.SUBMIT, event);
         return getTicket(submitTicket);
     }
 
     @Override
     public WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
         TicketEvent<WorkOrderTicketParam.ApprovalTicket> event = TicketEvent.of(approvalTicket);
-        TicketInStateProcessorFactory.getByState(TicketState.IN_APPROVAL)
-                .change(approvalTicket, TicketStateChangeAction.SUBMIT, event);
+        TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, approvalTicket, TicketStateChangeAction.APPROVAL,
+                event);
         return getTicket(approvalTicket);
     }
 
@@ -102,17 +88,6 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
             ticket.setValid(false);
             workOrderTicketService.updateByPrimaryKey(ticket);
         }
-    }
-
-    private void createWorkflowNodes(User user, WorkOrder workOrder, WorkOrderTicket newTicket) {
-        workOrderTicketNodeFacade.createWorkflowNodes(workOrder, newTicket);
-        WorkOrderTicketVO.TicketDetails details = WorkOrderTicketVO.TicketDetails.builder()
-                .ticketNo(newTicket.getTicketNo())
-                .build();
-        WorkOrderTicketNode rootNode = workOrderTicketNodeService.getRootNode(newTicket.getId());
-        newTicket.setNodeId(rootNode.getId());
-        workOrderTicketService.updateByPrimaryKey(newTicket);
-        workOrderTicketSubscriberFacade.publish(newTicket, user);
     }
 
 }

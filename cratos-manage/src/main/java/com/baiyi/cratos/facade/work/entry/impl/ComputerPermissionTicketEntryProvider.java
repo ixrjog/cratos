@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.facade.work.builder.entry.ComputerPermissionTicketEntryBuilder;
+import com.baiyi.cratos.workorder.builder.entry.ComputerPermissionTicketEntryBuilder;
 import com.baiyi.cratos.facade.work.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.facade.work.entry.TicketEntryProvider;
 import com.baiyi.cratos.facade.work.entry.TicketEntryProviderFactory;
