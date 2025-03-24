@@ -87,7 +87,6 @@ public class WorkOrderTicketParam {
         private String approvalType;
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
@@ -126,7 +125,6 @@ public class WorkOrderTicketParam {
         private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
         private UserPermissionBusinessParam.BusinessPermission detail;
     }
-
 
     @Data
     @SuperBuilder(toBuilder = true)
