@@ -14,6 +14,7 @@ public class TicketBuilder {
 
     private User user;
     private WorkOrder workOrder;
+    private String ticketNo;
 
     public static TicketBuilder newBuilder() {
         return new TicketBuilder();
@@ -29,10 +30,16 @@ public class TicketBuilder {
         return this;
     }
 
+    public TicketBuilder withTicketNo(String ticketNo) {
+        this.ticketNo = ticketNo;
+        return this;
+    }
+
     public WorkOrderTicket newTicket() {
         return WorkOrderTicket.builder()
                 //.ticketNo(PasswordGenerator.generateTicketNo())
                 .workOrderId(workOrder.getId())
+                .ticketNo(ticketNo)
                 .username(user.getUsername())
                 .autoProcessing(true)
                 .ticketState(TicketState.CREATE.name())

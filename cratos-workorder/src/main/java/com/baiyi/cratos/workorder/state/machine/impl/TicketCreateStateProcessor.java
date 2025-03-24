@@ -79,6 +79,7 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         WorkOrderTicket newTicket = TicketBuilder.newBuilder()
                 .withWorkOrder(workOrder)
                 .withUser(user)
+                .withTicketNo(event.getBody().getTicketNo())
                 .newTicket();
         workOrderTicketService.add(newTicket);
         createWorkflowNodes(user, workOrder, newTicket);

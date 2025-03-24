@@ -87,6 +87,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                 .getApprovalType());
         if (ApprovalStatus.AGREE.equals(approvalStatus)) {
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
+            // 更新审批节点
             TicketNodeUpdater.newUpdater()
                     .withApprovalTicket(event.getBody())
                     .withUsername(SessionUtils.getUsername())
