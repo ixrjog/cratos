@@ -76,13 +76,13 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         if (Objects.isNull(workOrder)) {
             WorkOrderTicketException.runtime("The work order does not exist.");
         }
-        WorkOrderTicket newTicket = TicketBuilder.newBuilder()
+        WorkOrderTicket createTicket = TicketBuilder.newBuilder()
                 .withWorkOrder(workOrder)
                 .withUser(user)
                 .withTicketNo(event.getBody().getTicketNo())
                 .newTicket();
-        workOrderTicketService.add(newTicket);
-        createWorkflowNodes(user, workOrder, newTicket);
+        workOrderTicketService.add(createTicket);
+        createWorkflowNodes(user, workOrder, createTicket);
     }
 
 }

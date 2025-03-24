@@ -13,7 +13,6 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
-import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
@@ -86,8 +85,8 @@ public abstract class BaseTicketStateProcessor<Event> implements TicketStateProc
     }
 
     protected void transitionToNextState(WorkOrderTicket ticket) {
-        TicketStateProcessor<Event> processor = (TicketStateProcessor<Event>) TicketInStateProcessorFactory.getByState(
-                TicketState.valueOf(ticket.getTicketState()));
+//        TicketStateProcessor<Event> processor = (TicketStateProcessor<Event>) TicketInStateProcessorFactory.getByState(
+//                TicketState.valueOf(ticket.getTicketState()));
         TicketStateProcessor<Event> nextProcessor = getTarget();
         if (Objects.nonNull(nextProcessor)) {
             ticket.setTicketState(nextProcessor.getState()
