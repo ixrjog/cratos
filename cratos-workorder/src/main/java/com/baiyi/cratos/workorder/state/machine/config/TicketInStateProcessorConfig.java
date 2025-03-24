@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TicketInStateProcessorConfig implements InitializingBean {
 
+    private final TicketCreateStateProcessor ticketCreateStateProcessor;
     private final TicketNewStateProcessor ticketNewStateProcessor;
     private final TicketSubmittedStateProcessor ticketSubmittedStateProcessor;
     private final TicketInApprovalStateProcessor ticketInApprovalStateProcessor;
@@ -27,13 +28,14 @@ public class TicketInStateProcessorConfig implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // 状态链
-        ticketNewStateProcessor.setTarget(ticketSubmittedStateProcessor)
+        ticketCreateStateProcessor.setTarget(ticketNewStateProcessor)
+                .setTarget(ticketSubmittedStateProcessor)
                 .setTarget(ticketInApprovalStateProcessor)
                 .setTarget(ticketInApprovalCompletedStateProcessor)
                 .setTarget(ticketInProgressStateProcessor)
                 .setTarget(ticketProcessingCompletedStateProcessor)
                 .setTarget(ticketCompletedStateProcessor);
-        TicketInStateProcessorFactory.setContext(ticketNewStateProcessor);
+        TicketInStateProcessorFactory.setContext(ticketCreateStateProcessor);
     }
 
 }

@@ -12,6 +12,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.builder.TicketNodeUpdater;
 import com.baiyi.cratos.workorder.enums.ApprovalStatus;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.event.TicketEvent;
@@ -86,7 +87,12 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                 .getApprovalType());
         if (ApprovalStatus.AGREE.equals(approvalStatus)) {
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
-
+            TicketNodeUpdater.newUpdater()
+                    .withApprovalTicket(event.getBody())
+                    .withUsername(SessionUtils.getUsername())
+                    .withNode(ticketNode)
+                    .withService(workOrderTicketNodeService)
+                    .updateNode();
         }
 
         if (ApprovalStatus.REJECT.equals(approvalStatus)) {

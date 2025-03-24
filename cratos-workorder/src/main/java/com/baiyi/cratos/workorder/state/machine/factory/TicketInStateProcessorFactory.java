@@ -4,8 +4,8 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import com.baiyi.cratos.workorder.state.machine.TicketStateProcessor;
-import com.baiyi.cratos.workorder.state.machine.impl.TicketNewStateProcessor;
 
 /**
  * &#064;Author  baiyi
@@ -17,7 +17,7 @@ public class TicketInStateProcessorFactory<Event> {
 
     private static TicketStateProcessor context;
 
-    public static void setContext(TicketNewStateProcessor context) {
+    public static <Event> void setContext(BaseTicketStateProcessor<Event> context) {
         TicketInStateProcessorFactory.context = context;
     }
 
