@@ -40,10 +40,11 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
     }
 
     @Override
-    protected void preChangeInspection(WorkOrderTicket ticket, TicketStateChangeAction action,
+    protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
-        super.preChangeInspection(ticket, action, event);
+        super.preChangeInspection(action, event);
         // 是否本人提交
+        WorkOrderTicket ticket = getTicketByNo(event.getBody());
         if (!ticket.getUsername()
                 .equals(SessionUtils.getUsername())) {
             TicketStateProcessorException.runtime("Non personal submission of work order.");
@@ -55,13 +56,13 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
     }
 
     @Override
-    protected boolean isTransition(WorkOrderTicket ticket) {
+    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
         return true;
     }
 
     @Override
-    protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action,
-                              TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
+    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
+        WorkOrderTicket ticket = getTicketByNo(event.getBody());
         ticket.setSubmittedAt(new Date());
         ticket.setApplyRemark(event.getBody()
                 .getApplyRemark());

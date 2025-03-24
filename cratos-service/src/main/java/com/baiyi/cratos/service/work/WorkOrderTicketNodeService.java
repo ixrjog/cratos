@@ -17,4 +17,6 @@ public interface WorkOrderTicketNodeService extends BaseUniqueKeyService<WorkOrd
 
     WorkOrderTicketNode getRootNode(int ticketId);
 
+    WorkOrderTicketNode getByTicketParentId(int ticketId, int parentId);
+
 }

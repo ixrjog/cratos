@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor
-public abstract class BaseTicketStateProcessor<Event> implements TicketStateProcessor<Event> {
+public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketParam.HasTicketNo> implements TicketStateProcessor<Event> {
 
     protected final UserService userService;
     protected final WorkOrderService workOrderService;
@@ -52,43 +52,56 @@ public abstract class BaseTicketStateProcessor<Event> implements TicketStateProc
         return targetProcessor;
     }
 
-    protected void preChangeInspection(WorkOrderTicket ticket, TicketStateChangeAction action,
+    protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<Event> event) {
-        if (getState() != TicketState.valueOf(ticket.getTicketState())) {
+        if (getState() != TicketState.valueOf(getTicketByNo(event.getBody().getTicketNo()).getTicketState())) {
             TicketStateProcessorException.runtime(
                     "The work order status is incorrect, and the current operation cannot be executed.");
         }
     }
 
-    private void change(WorkOrderTicket ticket, TicketStateChangeAction action, TicketEvent<Event> event) {
-        preChangeInspection(ticket, action, event);
-        processing(ticket, action, event);
-        transitionToNextState(ticket);
-        doNextState(ticket);
+    protected WorkOrderTicket getTicketByNo(String ticketNo) {
+        return workOrderTicketService.getByTicketNo(ticketNo);
     }
 
-    protected abstract boolean isTransition(WorkOrderTicket ticket);
+    protected WorkOrderTicket getTicketByNo(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        return workOrderTicketService.getByTicketNo(hasTicketNo.getTicketNo());
+    }
+
+    /**
+     * 是否转换到下一状态
+     *
+     * @param hasTicketNo
+     * @return
+     */
+    protected abstract boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo);
 
     protected void doNextState(WorkOrderTicket ticket) {
-
     }
 
 
-    protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action, TicketEvent<Event> event) {
+    protected void processing( TicketStateChangeAction action,
+                              TicketEvent<Event> event) {
     }
 
     @Override
-    public void change(WorkOrderTicketParam.HasTicketNo hasTicketId, TicketStateChangeAction action,
-                       TicketEvent<Event> ticketEvent) {
-        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketId.getTicketNo());
-        this.change(ticket, action, ticketEvent);
+    public void change(TicketStateChangeAction action,
+                       TicketEvent<Event> event) {
+
+        //WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNo.getTicketNo());
+        preChangeInspection( action, event);
+        processing(action, event);
+        if (isTransition(event.getBody())) {
+            transitionToNextState(event.getBody());
+        }
     }
 
-    protected void transitionToNextState(WorkOrderTicket ticket) {
+    protected void transitionToNextState(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
 //        TicketStateProcessor<Event> processor = (TicketStateProcessor<Event>) TicketInStateProcessorFactory.getByState(
 //                TicketState.valueOf(ticket.getTicketState()));
         TicketStateProcessor<Event> nextProcessor = getTarget();
         if (Objects.nonNull(nextProcessor)) {
+            WorkOrderTicket ticket = getTicketByNo(hasTicketNo);
             ticket.setTicketState(nextProcessor.getState()
                     .name());
             workOrderTicketService.updateByPrimaryKey(ticket);

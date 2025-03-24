@@ -12,7 +12,7 @@ import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
  * &#064;Version 1.0
  */
 @SuppressWarnings("rawtypes")
-public interface TicketStateProcessor<Event> extends HasTicketStateAnnotate {
+public interface TicketStateProcessor<Event extends WorkOrderTicketParam.HasTicketNo> extends HasTicketStateAnnotate {
 
     TicketStateProcessor<Event> setTarget(TicketStateProcessor<Event> processor);
 
@@ -20,7 +20,6 @@ public interface TicketStateProcessor<Event> extends HasTicketStateAnnotate {
 
     TicketStateProcessor getByState(TicketState ticketState);
 
-    void change(WorkOrderTicketParam.HasTicketNo hasTicketId, TicketStateChangeAction action,
-                TicketEvent<Event> ticketEvent);
+    void change(TicketStateChangeAction action, TicketEvent<Event> ticketEvent);
 
 }

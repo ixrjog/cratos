@@ -41,6 +41,15 @@ public class WorkOrderTicketParam {
         private String ticketNo;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class SimpleTicketNo implements HasTicketNo {
+        private String ticketNo;
+    }
+
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor

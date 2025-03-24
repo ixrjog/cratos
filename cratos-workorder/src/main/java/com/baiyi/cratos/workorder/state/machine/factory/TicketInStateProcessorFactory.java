@@ -13,11 +13,12 @@ import com.baiyi.cratos.workorder.state.machine.TicketStateProcessor;
  * &#064;Version 1.0
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class TicketInStateProcessorFactory<Event> {
+public class TicketInStateProcessorFactory<Event extends WorkOrderTicketParam.HasTicketNo> {
 
     private static TicketStateProcessor context;
 
-    public static <Event> void setContext(BaseTicketStateProcessor<Event> context) {
+    public static <Event extends WorkOrderTicketParam.HasTicketNo> void setContext(
+            BaseTicketStateProcessor<Event> context) {
         TicketInStateProcessorFactory.context = context;
     }
 
@@ -25,9 +26,9 @@ public class TicketInStateProcessorFactory<Event> {
         return context.getByState(ticketState);
     }
 
-    public static <Event> void change(TicketState ticketState, WorkOrderTicketParam.HasTicketNo hasTicketId,
-                                      TicketStateChangeAction action, TicketEvent<Event> ticketEvent) {
-        getByState(ticketState).change(hasTicketId, action, ticketEvent);
+    public static <Event> void change(TicketState ticketState, TicketStateChangeAction action,
+                                      TicketEvent<Event> ticketEvent) {
+        getByState(ticketState).change(action, ticketEvent);
     }
 
 //    public static <Event> void change(TicketStateChangeAction action, TicketEvent<Event> ticketEvent) {

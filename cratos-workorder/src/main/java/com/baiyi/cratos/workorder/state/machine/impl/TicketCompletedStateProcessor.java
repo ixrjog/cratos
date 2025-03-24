@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @TicketStates(state = TicketState.COMPLETED)
-public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Boolean> {
+public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     public TicketCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                          WorkOrderTicketService workOrderTicketService,
@@ -33,7 +33,7 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Bool
     }
 
     @Override
-    protected boolean isTransition(WorkOrderTicket ticket) {
+    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
         return false;
     }
 }

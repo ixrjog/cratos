@@ -54,6 +54,15 @@ public class WorkOrderTicketNodeServiceImpl implements WorkOrderTicketNodeServic
     }
 
     @Override
+    public WorkOrderTicketNode getByTicketParentId(int ticketId, int parentId) {
+        Example example = new Example(WorkOrderTicketNode.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ticketId", ticketId)
+                .andEqualTo("parentId", parentId);
+        return workOrderTicketNodeMapper.selectOneByExample(example);
+    }
+
+    @Override
     public WorkOrderTicketNode getRootNode(int ticketId) {
         Example example = new Example(WorkOrderTicketNode.class);
         Example.Criteria criteria = example.createCriteria();

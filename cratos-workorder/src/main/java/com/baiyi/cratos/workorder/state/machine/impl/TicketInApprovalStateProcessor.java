@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -51,10 +52,12 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
     }
 
     @Override
-    protected void preChangeInspection(WorkOrderTicket ticket, TicketStateChangeAction action,
+    protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
-        super.preChangeInspection(ticket, action, event);
+        super.preChangeInspection(action, event);
         // 是否当前审批人
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
+                .getTicketNo());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
         if (ticketNode.getApprovalCompleted()) {
@@ -74,17 +77,19 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
     }
 
     @Override
-    protected boolean isTransition(WorkOrderTicket ticket) {
+    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        WorkOrderTicket ticket = getTicketByNo(hasTicketNo);
         List<WorkOrderTicketNode> ticketNodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
         return CollectionUtils.isEmpty(ticketNodes) || ticketNodes.stream()
                 .allMatch(ticketNode -> Boolean.TRUE.equals(ticketNode.getApprovalCompleted()));
     }
 
     @Override
-    protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action,
+    protected void processing( TicketStateChangeAction action,
                               TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
         ApprovalStatus approvalStatus = ApprovalStatus.valueOf(event.getBody()
                 .getApprovalType());
+        WorkOrderTicket ticket = getTicketByNo(event.getBody());
         if (ApprovalStatus.AGREE.equals(approvalStatus)) {
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
             // 更新审批节点
@@ -94,6 +99,13 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                     .withNode(ticketNode)
                     .withService(workOrderTicketNodeService)
                     .updateNode();
+            // 更新工单节点ID
+            WorkOrderTicketNode nextNode = workOrderTicketNodeService.getByTicketParentId(ticket.getId(),
+                    ticketNode.getId());
+            if (Objects.nonNull(nextNode)) {
+                ticket.setNodeId(nextNode.getId());
+                workOrderTicketService.updateByPrimaryKey(ticket);
+            }
         }
 
         if (ApprovalStatus.REJECT.equals(approvalStatus)) {

@@ -48,7 +48,7 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         final String ticketNo = PasswordGenerator.generateTicketNo();
         createTicket.setTicketNo(ticketNo);
         TicketEvent<WorkOrderTicketParam.CreateTicket> event = TicketEvent.of(createTicket);
-        TicketInStateProcessorFactory.change(TicketState.CREATE, createTicket, TicketStateChangeAction.CREATE, event);
+        TicketInStateProcessorFactory.change(TicketState.CREATE, TicketStateChangeAction.CREATE, event);
         return getTicket(ticketNo);
     }
 
@@ -69,15 +69,14 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     @Override
     public WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket) {
         TicketEvent<WorkOrderTicketParam.SubmitTicket> event = TicketEvent.of(submitTicket);
-        TicketInStateProcessorFactory.change(TicketState.NEW, submitTicket, TicketStateChangeAction.SUBMIT, event);
+        TicketInStateProcessorFactory.change(TicketState.NEW, TicketStateChangeAction.SUBMIT, event);
         return getTicket(submitTicket);
     }
 
     @Override
     public WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
         TicketEvent<WorkOrderTicketParam.ApprovalTicket> event = TicketEvent.of(approvalTicket);
-        TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, approvalTicket, TicketStateChangeAction.APPROVAL,
-                event);
+        TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, TicketStateChangeAction.APPROVAL, event);
         return getTicket(approvalTicket);
     }
 

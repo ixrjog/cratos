@@ -45,10 +45,15 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
     }
 
     @Override
-    protected void preChangeInspection(WorkOrderTicket ticket, TicketStateChangeAction action,
+    protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
-         // 新建工单超过3个不允许继续创建
-          //  WorkOrderTicketException.runtime("The work order does not exist.");
+        // 新建工单超过3个不允许继续创建
+        //  WorkOrderTicketException.runtime("The work order does not exist.");
+    }
+
+    @Override
+    protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        return true;
     }
 
     private void createWorkflowNodes(User user, WorkOrder workOrder, WorkOrderTicket newTicket) {
@@ -63,23 +68,19 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
     }
 
     @Override
-    protected boolean isTransition(WorkOrderTicket ticket) {
-        return true;
-    }
-
-    @Override
-    protected void processing(WorkOrderTicket ticket, TicketStateChangeAction action,
-                              TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
+    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
         final String username = SessionUtils.getUsername();
         User user = userService.getByUsername(username);
-        WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody().getWorkOrderKey());
+        WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody()
+                .getWorkOrderKey());
         if (Objects.isNull(workOrder)) {
             WorkOrderTicketException.runtime("The work order does not exist.");
         }
         WorkOrderTicket createTicket = TicketBuilder.newBuilder()
                 .withWorkOrder(workOrder)
                 .withUser(user)
-                .withTicketNo(event.getBody().getTicketNo())
+                .withTicketNo(event.getBody()
+                        .getTicketNo())
                 .newTicket();
         workOrderTicketService.add(createTicket);
         createWorkflowNodes(user, workOrder, createTicket);
