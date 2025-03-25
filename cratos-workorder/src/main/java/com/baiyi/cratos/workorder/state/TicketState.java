@@ -37,6 +37,6 @@ public enum TicketState {
      */
     COMPLETED,
 
-    NULL
+    END
 
 }

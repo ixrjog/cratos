@@ -16,6 +16,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.BusinessTagService;
+import com.baiyi.cratos.service.ServerAccountService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -45,15 +46,18 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final BusinessTagService businessTagService;
     private final TagService tagService;
+    private final ServerAccountService serverAccountService;
 
     public ComputerPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                  WorkOrderTicketService workOrderTicketService,
                                                  UserPermissionBusinessFacade userPermissionBusinessFacade,
-                                                 BusinessTagService businessTagService, TagService tagService) {
+                                                 BusinessTagService businessTagService, TagService tagService,
+                                                 ServerAccountService serverAccountService) {
         super(workOrderTicketEntryService, workOrderTicketService);
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
         this.businessTagService = businessTagService;
         this.tagService = tagService;
+        this.serverAccountService = serverAccountService;
     }
 
     @Override
@@ -122,27 +126,33 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         WorkOrderTicketEntry entry = super.addEntry(param);
         // 给用户授权所有的ServerAccount
-        TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
-                WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name());
-        Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
-        if (Objects.isNull(edsTag)) {
-            return entry;
+        try {
+            TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+                    WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name());
+            Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
+            if (Objects.isNull(edsTag)) {
+                return entry;
+            }
+            List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
+                    BusinessTypeEnum.SERVER_ACCOUNT.name(), edsTag.getId());
+            if (CollectionUtils.isEmpty(businessTags)) {
+                return entry;
+            }
+            businessTags.forEach(businessTag -> {
+                UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
+                        .businessId(businessTag.getBusinessId())
+                        .roleMembers(toRoleMembers(param))
+                        .name(serverAccountService.getById(businessTag.getBusinessId())
+                                .getName())
+                        .build();
+                WorkOrderTicketParam.AddServerAccountPermissionTicketEntry addServerAccountPermissionTicketEntry = WorkOrderTicketParam.AddServerAccountPermissionTicketEntry.builder()
+                        .detail(detail)
+                        .ticketId(param.getTicketId())
+                        .build();
+                serverAccountProvider.addEntry(addServerAccountPermissionTicketEntry);
+            });
+        } catch (Exception ignored) {
         }
-        List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
-                BusinessTypeEnum.SERVER_ACCOUNT.name(), edsTag.getId());
-        if (CollectionUtils.isEmpty(businessTags)) {
-            return entry;
-        }
-        businessTags.forEach(businessTag -> {
-            UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
-                    .businessId(businessTag.getBusinessId())
-                    .roleMembers(toRoleMembers(param))
-                    .build();
-            WorkOrderTicketParam.AddServerAccountPermissionTicketEntry addServerAccountPermissionTicketEntry = WorkOrderTicketParam.AddServerAccountPermissionTicketEntry.builder()
-                    .detail(detail)
-                    .build();
-            serverAccountProvider.addEntry(addServerAccountPermissionTicketEntry);
-        });
         return entry;
     }
 

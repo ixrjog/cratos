@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Component
-@TicketStates(state = TicketState.APPROVAL_COMPLETED)
+@TicketStates(state = TicketState.APPROVAL_COMPLETED, target = TicketState.IN_PROGRESS)
 public class TicketInApprovalCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     public TicketInApprovalCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,

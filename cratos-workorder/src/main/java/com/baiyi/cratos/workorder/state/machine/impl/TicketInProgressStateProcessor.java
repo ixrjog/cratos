@@ -29,7 +29,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
-@TicketStates(state = TicketState.IN_PROGRESS)
+@TicketStates(state = TicketState.IN_PROGRESS, target = TicketState.PROCESSING_COMPLETED)
 public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
     public TicketInProgressStateProcessor(UserService userService, WorkOrderService workOrderService,

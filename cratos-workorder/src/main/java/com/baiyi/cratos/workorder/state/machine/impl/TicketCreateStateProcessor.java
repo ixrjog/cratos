@@ -31,7 +31,7 @@ import java.util.Objects;
  * &#064;Version 1.0
  */
 @Component
-@TicketStates(state = TicketState.CREATE)
+@TicketStates(state = TicketState.CREATE, target = TicketState.NEW)
 public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.CreateTicket> {
 
     public TicketCreateStateProcessor(UserService userService, WorkOrderService workOrderService,

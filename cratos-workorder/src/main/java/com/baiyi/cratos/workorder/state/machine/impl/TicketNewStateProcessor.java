@@ -26,7 +26,7 @@ import java.util.Date;
  * &#064;Version 1.0
  */
 @Component
-@TicketStates(state = TicketState.NEW)
+@TicketStates(state = TicketState.NEW, target = TicketState.SUBMITTED)
 public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SubmitTicket> {
 
     public TicketNewStateProcessor(UserService userService, WorkOrderService workOrderService,

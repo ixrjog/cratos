@@ -17,6 +17,6 @@ public @interface TicketStates {
 
     com.baiyi.cratos.workorder.state.TicketState state();
 
-    com.baiyi.cratos.workorder.state.TicketState target() default TicketState.NULL;
+    com.baiyi.cratos.workorder.state.TicketState target() default TicketState.END;
 
 }

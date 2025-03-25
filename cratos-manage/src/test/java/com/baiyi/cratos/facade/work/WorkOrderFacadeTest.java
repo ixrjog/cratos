@@ -76,10 +76,45 @@ public class WorkOrderFacadeTest extends BaseUnit {
                 .roleMembers(roleMembers)
                 .build();
         WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry = WorkOrderTicketParam.AddApplicationPermissionTicketEntry.builder()
-                .ticketId(1)
+                .ticketId(3)
                 .detail(detail)
                 .build();
         workOrderTicketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
+    }
+
+    @Test
+    void test31() {
+        List<UserPermissionBusinessParam.RoleMember> roleMembers = Lists.newArrayList();
+        roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
+                .role("dev")
+                .checked(false)
+                .build());
+        roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
+                .role("daily")
+                .checked(false)
+                .build());
+        roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
+                .role("sit")
+                .checked(false)
+                .build());
+        roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
+                .role("pre")
+                .checked(false)
+                .build());
+        roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
+                .role("prod")
+                .checked(false)
+                .expiredTime(ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS))
+                .build());
+        UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
+                .name("tms-newpos")
+                .roleMembers(roleMembers)
+                .build();
+        WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry = WorkOrderTicketParam.AddComputerPermissionTicketEntry.builder()
+                .ticketId(3)
+                .detail(detail)
+                .build();
+        workOrderTicketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
     }
 
     @Test

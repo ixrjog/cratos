@@ -36,7 +36,7 @@ import java.util.Objects;
  * &#064;Version 1.0
  */
 @Component
-@TicketStates(state = TicketState.IN_APPROVAL)
+@TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
 public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.ApprovalTicket> {
 
     private final TicketWorkflowFacade ticketWorkflowFacade;
