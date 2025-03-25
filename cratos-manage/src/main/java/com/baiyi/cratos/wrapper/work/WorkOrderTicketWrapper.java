@@ -43,8 +43,6 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
     @Override
     public void wrap(WorkOrderTicketVO.Ticket vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getWorkOrderId());
-        TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
-        List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(vo.getId());
         Map<String, List<WorkOrderTicketEntry>> entriesMap = workOrderTicketEntryService.queryTicketEntries(vo.getId())
                 .stream()
                 .collect(Collectors.groupingBy(WorkOrderTicketEntry::getBusinessType));
@@ -52,11 +50,14 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
             List<String> tables = Lists.newArrayList();
             entriesMap.forEach((k, v) -> {
                 StringBuilder rows = new StringBuilder();
-                for (WorkOrderTicketEntry entry : entries) {
+                for (WorkOrderTicketEntry entry : v) {
+                    TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(
+                            entry.getBusinessType());
                     rows.append(provider.getEntryTableRow(entry))
                             .append("\n");
                 }
-                tables.add(provider.getTableTitle(entries.getFirst()) + rows);
+                tables.add(TicketEntryProviderFactory.getByBusinessType(k)
+                        .getTableTitle(v.getFirst()) + rows);
             });
             WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
                     .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))

@@ -135,7 +135,7 @@ public class WorkOrderFacadeTest extends BaseUnit {
 
     @Test
     void test6() {
-        SessionUtils.setUsername("baiyi");
+        SessionUtils.setUsername("xiuyuan");
         WorkOrderTicketParam.MyTicketPageQuery pageQuery = WorkOrderTicketParam.MyTicketPageQuery.builder()
                 .mySubmitted(true)
                 .length(10)

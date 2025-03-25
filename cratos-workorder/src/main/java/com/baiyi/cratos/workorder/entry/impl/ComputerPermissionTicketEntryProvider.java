@@ -4,9 +4,7 @@ import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
-import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
-import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.BusinessTag;
@@ -25,14 +23,13 @@ import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
-import com.google.common.base.Joiner;
+import com.baiyi.cratos.workorder.util.TableUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -85,13 +82,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
      */
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
-        List<String> fields = businessPermission.getRoleMembers()
-                .stream()
-                .map(e -> e.getChecked() ? TimeUtils.parse(e.getExpiredTime(), Global.ISO8601) : "-")
-                .collect(Collectors.toList());
-        return Joiner.on(" | ")
-                .join(businessPermission.getName(), fields);
+        return TableUtils.getBusinessPermissionEntryTableRow(entry);
     }
 
     @Override
