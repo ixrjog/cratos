@@ -121,22 +121,27 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
                 .buildEntry();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         WorkOrderTicketEntry entry = super.addEntry(param);
         // 给用户授权所有的ServerAccount
+        addServerAccounts(param);
+        return entry;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addServerAccounts(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         try {
             TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
                     WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name());
             Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
             if (Objects.isNull(edsTag)) {
-                return entry;
+                return;
             }
             List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
                     BusinessTypeEnum.SERVER_ACCOUNT.name(), edsTag.getId());
             if (CollectionUtils.isEmpty(businessTags)) {
-                return entry;
+                return ;
             }
             businessTags.forEach(businessTag -> {
                 UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
@@ -153,7 +158,6 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
             });
         } catch (Exception ignored) {
         }
-        return entry;
     }
 
     @Override
