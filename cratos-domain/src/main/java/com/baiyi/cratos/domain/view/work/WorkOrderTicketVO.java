@@ -92,6 +92,20 @@ public class WorkOrderTicketVO {
 
         @Schema(description = "申请人")
         private UserVO.User applicant;
+        @Schema(description = "工单摘要")
+        private TicketAbstract ticketAbstract;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class TicketAbstract implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3119031268624002323L;
+        private Integer entryCnt;
+        private String markdown;
     }
 
     @EqualsAndHashCode(callSuper = true)

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -12,6 +14,7 @@ import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,6 +37,11 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
     }
 
     @Override
+    public String getTableTitle(WorkOrderTicketEntry entry) {
+        return "";
+    }
+
+    @Override
     public String getKey() {
         return WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name();
     }
@@ -45,6 +53,21 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
             return null;
         }
         return super.addEntry(param);
+    }
+
+    /**
+     * @param entry
+     * @return
+     */
+    @Override
+    public String getEntryTableRow(WorkOrderTicketEntry entry) {
+        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        List<String> fields = businessPermission.getRoleMembers()
+                .stream()
+                .map(e -> e.getChecked() ? TimeUtils.parse(e.getExpiredTime(), Global.ISO8601) : "-")
+                .toList();
+        return Joiner.on(" | ")
+                .join(businessPermission.getName(), fields);
     }
 
     @Override

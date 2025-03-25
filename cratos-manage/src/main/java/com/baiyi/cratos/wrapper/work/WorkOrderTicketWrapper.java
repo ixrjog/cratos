@@ -2,15 +2,24 @@ package com.baiyi.cratos.wrapper.work;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
+import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -24,9 +33,26 @@ import org.springframework.util.StringUtils;
 public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTicketVO.Ticket, WorkOrderTicket> implements IBusinessWrapper<WorkOrderTicketVO.HasTicket, WorkOrderTicketVO.Ticket> {
 
     private final WorkOrderTicketService workOrderTicketService;
+    private final WorkOrderService workOrderService;
+    private final WorkOrderTicketEntryService workOrderTicketEntryService;
 
     @Override
     public void wrap(WorkOrderTicketVO.Ticket vo) {
+        WorkOrder workOrder = workOrderService.getById(vo.getWorkOrderId());
+        TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
+        List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(vo.getId());
+        if (!CollectionUtils.isEmpty(entries)) {
+            StringBuilder rows = new StringBuilder();
+            for (WorkOrderTicketEntry entry : entries) {
+                rows.append(provider.getEntryTableRow(entry))
+                        .append("\n");
+            }
+            WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
+                    .entryCnt(entries.size())
+                    .markdown(provider.getTableTitle(entries.getFirst()) + rows)
+                    .build();
+            vo.setTicketAbstract(ticketAbstract);
+        }
     }
 
     @Override

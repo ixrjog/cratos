@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.Generics;
+import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.util.InvokeEntryResult;
@@ -27,11 +28,12 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
     @Override
     public WorkOrderTicketEntry addEntry(EntryParam param) {
         WorkOrderTicketEntry entry = paramToEntry(param);
-        if (existsEntry(entry)) {
-            WorkOrderTicketException.runtime("Repeat adding entries.");
+        try {
+            workOrderTicketEntryService.add(entry);
+            return entry;
+        } catch (DaoServiceException daoServiceException) {
+            throw new WorkOrderTicketException("Repeat adding entries.");
         }
-        workOrderTicketEntryService.add(entry);
-        return entry;
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.BusinessTag;
@@ -12,21 +14,23 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.workorder.builder.entry.ComputerPermissionTicketEntryBuilder;
-import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
-import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
-import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.builder.entry.ComputerPermissionTicketEntryBuilder;
+import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -48,6 +52,40 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
         this.businessTagService = businessTagService;
         this.tagService = tagService;
+    }
+
+    @Override
+    public String getTableTitle(WorkOrderTicketEntry entry) {
+        /**
+         * | Group Name |DEV |DAILY |SIT |PRE |PROD |
+         * | --- |--- |--- |--- |--- |--- |
+         */
+        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        StringBuilder row = new StringBuilder("| Group Name |");
+        businessPermission.getRoleMembers()
+                .forEach(e -> row.append(e.getRole()
+                                .toUpperCase())
+                        .append(" |"));
+        row.append("\n| --- |");
+        businessPermission.getRoleMembers()
+                .forEach(e -> row.append("--- |"));
+        row.append("\n");
+        return row.toString();
+    }
+
+    /**
+     * @param entry
+     * @return
+     */
+    @Override
+    public String getEntryTableRow(WorkOrderTicketEntry entry) {
+        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        List<String> fields = businessPermission.getRoleMembers()
+                .stream()
+                .map(e -> e.getChecked() ? TimeUtils.parse(e.getExpiredTime(), Global.ISO8601) : "-")
+                .collect(Collectors.toList());
+        return Joiner.on(" | ")
+                .join(businessPermission.getName(), fields);
     }
 
     @Override

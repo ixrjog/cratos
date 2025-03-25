@@ -23,4 +23,8 @@ public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketP
 
     Detail loadAs(WorkOrderTicketEntry entry);
 
+    String getTableTitle(WorkOrderTicketEntry entry);
+
+    String getEntryTableRow(WorkOrderTicketEntry entry);
+
 }
