@@ -50,7 +50,8 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| Application Name |");
         businessPermission.getRoleMembers()
-                .forEach(e -> row.append(e.getRole()
+                .forEach(e -> row.append(" ")
+                        .append(e.getRole()
                                 .toUpperCase())
                         .append(" |"));
         row.append("\n| --- |");

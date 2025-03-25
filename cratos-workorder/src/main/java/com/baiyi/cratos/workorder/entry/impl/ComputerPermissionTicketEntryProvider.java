@@ -66,7 +66,8 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| Group Name |");
         businessPermission.getRoleMembers()
-                .forEach(e -> row.append(e.getRole()
+                .forEach(e -> row.append(" ")
+                        .append(e.getRole()
                                 .toUpperCase())
                         .append(" |"));
         row.append("\n| --- |");
@@ -132,7 +133,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
             List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
                     BusinessTypeEnum.SERVER_ACCOUNT.name(), edsTag.getId());
             if (CollectionUtils.isEmpty(businessTags)) {
-                return ;
+                return;
             }
             businessTags.forEach(businessTag -> {
                 UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
