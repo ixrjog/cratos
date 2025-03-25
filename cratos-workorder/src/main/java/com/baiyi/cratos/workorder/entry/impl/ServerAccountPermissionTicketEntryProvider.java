@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
@@ -25,6 +26,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @Component
+@BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
 public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
@@ -44,15 +46,6 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
     @Override
     public String getKey() {
         return WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name();
-    }
-
-    @Override
-    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddServerAccountPermissionTicketEntry param) {
-        WorkOrderTicketEntry entry = paramToEntry(param);
-        if (existsEntry(entry)) {
-            return null;
-        }
-        return super.addEntry(param);
     }
 
     /**

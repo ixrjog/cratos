@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
  * &#064;Version 1.0
  */
 @Component
+@BusinessType(type = BusinessTypeEnum.TAG_GROUP)
 public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddComputerPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;

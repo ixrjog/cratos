@@ -13,6 +13,8 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.google.api.client.util.Joiner;
+import com.google.api.client.util.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -41,15 +45,23 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
         WorkOrder workOrder = workOrderService.getById(vo.getWorkOrderId());
         TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(vo.getId());
-        if (!CollectionUtils.isEmpty(entries)) {
-            StringBuilder rows = new StringBuilder();
-            for (WorkOrderTicketEntry entry : entries) {
-                rows.append(provider.getEntryTableRow(entry))
-                        .append("\n");
-            }
+        Map<String, List<WorkOrderTicketEntry>> entriesMap = workOrderTicketEntryService.queryTicketEntries(vo.getId())
+                .stream()
+                .collect(Collectors.groupingBy(WorkOrderTicketEntry::getBusinessType));
+        if (!CollectionUtils.isEmpty(entriesMap)) {
+            List<String> tables = Lists.newArrayList();
+            entriesMap.forEach((k, v) -> {
+                StringBuilder rows = new StringBuilder();
+                for (WorkOrderTicketEntry entry : entries) {
+                    rows.append(provider.getEntryTableRow(entry))
+                            .append("\n");
+                }
+                tables.add(provider.getTableTitle(entries.getFirst()) + rows);
+            });
             WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
-                    .entryCnt(entries.size())
-                    .markdown(provider.getTableTitle(entries.getFirst()) + rows)
+                    .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))
+                    .markdown(Joiner.on('\n')
+                            .join(tables))
                     .build();
             vo.setTicketAbstract(ticketAbstract);
         }
