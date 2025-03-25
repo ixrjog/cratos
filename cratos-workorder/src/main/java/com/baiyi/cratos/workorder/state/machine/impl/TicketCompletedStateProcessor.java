@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -7,11 +8,15 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketState;
+import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * &#064;Author  baiyi
@@ -34,6 +39,16 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Work
 
     @Override
     protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
+        // 结束了
         return false;
     }
+
+    @Override
+    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        WorkOrderTicket ticket = getTicketByNo(event.getBody());
+        ticket.setCompletedAt(new Date());
+        ticket.setCompleted(true);
+        workOrderTicketService.updateByPrimaryKey(ticket);
+    }
+
 }

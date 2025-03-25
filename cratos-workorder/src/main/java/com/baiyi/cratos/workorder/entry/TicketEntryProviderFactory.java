@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.work.entry;
+package com.baiyi.cratos.workorder.entry;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

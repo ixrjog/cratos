@@ -1,15 +1,21 @@
 package com.baiyi.cratos.service.work.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.mapper.WorkOrderTicketMapper;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -28,6 +34,13 @@ public class WorkOrderTicketServiceImpl implements WorkOrderTicketService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:WORKORDER_TICKET:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    public DataTable<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.MyTicketPageQuery pageQuery) {
+        Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<WorkOrderTicket> data = workOrderTicketMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
     @Override

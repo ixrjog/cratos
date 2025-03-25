@@ -34,7 +34,7 @@ public class TicketInApprovalCompletedStateProcessor extends BaseTicketStateProc
 
     @Override
     protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-        return false;
+        return true;
     }
 
 }

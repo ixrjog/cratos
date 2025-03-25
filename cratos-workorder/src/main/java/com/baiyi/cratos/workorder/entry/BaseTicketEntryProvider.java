@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.work.entry;
+package com.baiyi.cratos.workorder.entry;
 
 import com.baiyi.cratos.common.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.YamlUtil;

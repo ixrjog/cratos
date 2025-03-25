@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.work.entry;
+package com.baiyi.cratos.workorder.entry;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;

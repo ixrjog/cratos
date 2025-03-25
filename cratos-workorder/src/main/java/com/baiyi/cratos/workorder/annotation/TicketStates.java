@@ -1,5 +1,7 @@
 package com.baiyi.cratos.workorder.annotation;
 
+import com.baiyi.cratos.workorder.state.TicketState;
+
 import java.lang.annotation.*;
 
 /**
@@ -14,5 +16,7 @@ import java.lang.annotation.*;
 public @interface TicketStates {
 
     com.baiyi.cratos.workorder.state.TicketState state();
+
+    com.baiyi.cratos.workorder.state.TicketState target() default TicketState.NULL;
 
 }

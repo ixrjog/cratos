@@ -24,7 +24,9 @@ import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,32 +87,46 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
     }
 
     @Override
-    protected void processing( TicketStateChangeAction action,
-                              TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
+    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
         ApprovalStatus approvalStatus = ApprovalStatus.valueOf(event.getBody()
                 .getApprovalType());
         WorkOrderTicket ticket = getTicketByNo(event.getBody());
+        WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
+        // 更新审批节点
+        TicketNodeUpdater.newUpdater()
+                .withApprovalTicket(event.getBody())
+                .withUsername(SessionUtils.getUsername())
+                .withNode(ticketNode)
+                .withService(workOrderTicketNodeService)
+                .updateNode();
+        // 更新工单节点ID
         if (ApprovalStatus.AGREE.equals(approvalStatus)) {
-            WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
-            // 更新审批节点
-            TicketNodeUpdater.newUpdater()
-                    .withApprovalTicket(event.getBody())
-                    .withUsername(SessionUtils.getUsername())
-                    .withNode(ticketNode)
-                    .withService(workOrderTicketNodeService)
-                    .updateNode();
-            // 更新工单节点ID
-            WorkOrderTicketNode nextNode = workOrderTicketNodeService.getByTicketParentId(ticket.getId(),
-                    ticketNode.getId());
-            if (Objects.nonNull(nextNode)) {
-                ticket.setNodeId(nextNode.getId());
-                workOrderTicketService.updateByPrimaryKey(ticket);
-            }
+            approveAgree(ticket, ticketNode);
+            return;
         }
-
         if (ApprovalStatus.REJECT.equals(approvalStatus)) {
-
+            approveReject(ticket, event);
         }
+    }
+
+    private void approveAgree(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
+        WorkOrderTicketNode nextNode = workOrderTicketNodeService.getByTicketParentId(ticket.getId(),
+                ticketNode.getId());
+        if (Objects.nonNull(nextNode)) {
+            ticket.setNodeId(nextNode.getId());
+            workOrderTicketService.updateByPrimaryKey(ticket);
+        }
+    }
+
+    private void approveReject(WorkOrderTicket ticket, TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
+        ticket.setCompleted(true);
+        ticket.setCompletedAt(new Date());
+        ticket.setTicketState(TicketState.COMPLETED.name());
+        ticket.setSuccess(false);
+        ticket.setTicketResult(StringUtils.hasText(event.getBody()
+                .getApproveRemark()) ? event.getBody()
+                .getApproveRemark() : "Approval rejected.");
+        workOrderTicketService.updateByPrimaryKey(ticket);
     }
 
 }

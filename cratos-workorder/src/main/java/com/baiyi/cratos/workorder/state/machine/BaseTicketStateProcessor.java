@@ -52,9 +52,9 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
         return targetProcessor;
     }
 
-    protected void preChangeInspection(TicketStateChangeAction action,
-                                       TicketEvent<Event> event) {
-        if (getState() != TicketState.valueOf(getTicketByNo(event.getBody().getTicketNo()).getTicketState())) {
+    protected void preChangeInspection(TicketStateChangeAction action, TicketEvent<Event> event) {
+        if (getState() != TicketState.valueOf(getTicketByNo(event.getBody()
+                .getTicketNo()).getTicketState())) {
             TicketStateProcessorException.runtime(
                     "The work order status is incorrect, and the current operation cannot be executed.");
         }
@@ -76,20 +76,12 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
      */
     protected abstract boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo);
 
-    protected void doNextState(WorkOrderTicket ticket) {
-    }
-
-
-    protected void processing( TicketStateChangeAction action,
-                              TicketEvent<Event> event) {
+    protected void processing(TicketStateChangeAction action, TicketEvent<Event> event) {
     }
 
     @Override
-    public void change(TicketStateChangeAction action,
-                       TicketEvent<Event> event) {
-
-        //WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNo.getTicketNo());
-        preChangeInspection( action, event);
+    public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
+        preChangeInspection(action, event);
         processing(action, event);
         if (isTransition(event.getBody())) {
             transitionToNextState(event.getBody());
@@ -97,8 +89,6 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     protected void transitionToNextState(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
-//        TicketStateProcessor<Event> processor = (TicketStateProcessor<Event>) TicketInStateProcessorFactory.getByState(
-//                TicketState.valueOf(ticket.getTicketState()));
         TicketStateProcessor<Event> nextProcessor = getTarget();
         if (Objects.nonNull(nextProcessor)) {
             WorkOrderTicket ticket = getTicketByNo(hasTicketNo);

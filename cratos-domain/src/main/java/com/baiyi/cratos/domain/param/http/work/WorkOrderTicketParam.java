@@ -1,7 +1,9 @@
 package com.baiyi.cratos.domain.param.http.work;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +28,25 @@ public class WorkOrderTicketParam {
 
     public interface HasTicketNo {
         String getTicketNo();
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class MyTicketPageQuery extends PageParam implements HasSessionUser {
+        private String ticketNo;
+        private String ticketState;
+        private String workOrderKey;
+        private String username;
+        @Schema(description = "我的提交")
+        private Boolean mySubmitted;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
     }
 
     @Data
@@ -69,9 +90,6 @@ public class WorkOrderTicketParam {
         //  private WorkflowVO.WorkflowView workflowView;
 
     }
-
-
-    // approvalTicket(@RequestBody @Valid WorkOrderTicketParam.ApproveTicket approveTicket)
 
     @Builder
     @AllArgsConstructor

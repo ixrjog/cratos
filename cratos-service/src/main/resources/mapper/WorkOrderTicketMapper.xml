@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.WorkOrderTicketMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.WorkOrderTicket">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="ticket_no" jdbcType="VARCHAR" property="ticketNo" />
-    <result column="work_order_id" jdbcType="INTEGER" property="workOrderId" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
-    <result column="node_id" jdbcType="INTEGER" property="nodeId" />
-    <result column="ticket_state" jdbcType="VARCHAR" property="ticketState" />
-    <result column="ticket_result" jdbcType="VARCHAR" property="ticketResult" />
-    <result column="success" jdbcType="BIT" property="success" />
-    <result column="submitted_at" jdbcType="TIMESTAMP" property="submittedAt" />
-    <result column="completed" jdbcType="BIT" property="completed" />
-    <result column="completed_at" jdbcType="TIMESTAMP" property="completedAt" />
-    <result column="auto_processing" jdbcType="BIT" property="autoProcessing" />
-    <result column="process_at" jdbcType="TIMESTAMP" property="processAt" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="apply_remark" jdbcType="LONGVARCHAR" property="applyRemark" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.WorkOrderTicket">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ticket_no" jdbcType="VARCHAR" property="ticketNo"/>
+        <result column="work_order_id" jdbcType="INTEGER" property="workOrderId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="node_id" jdbcType="INTEGER" property="nodeId"/>
+        <result column="ticket_state" jdbcType="VARCHAR" property="ticketState"/>
+        <result column="ticket_result" jdbcType="VARCHAR" property="ticketResult"/>
+        <result column="success" jdbcType="BIT" property="success"/>
+        <result column="submitted_at" jdbcType="TIMESTAMP" property="submittedAt"/>
+        <result column="completed" jdbcType="BIT" property="completed"/>
+        <result column="completed_at" jdbcType="TIMESTAMP" property="completedAt"/>
+        <result column="auto_processing" jdbcType="BIT" property="autoProcessing"/>
+        <result column="process_at" jdbcType="TIMESTAMP" property="processAt"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="apply_remark" jdbcType="LONGVARCHAR" property="applyRemark"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam$MyTicketPageQuery"
+            resultMap="BaseResultMap">
+        select * from work_order_ticket
+        <where>
+            <if test="ticketState != null and ticketState != ''">
+                ticket_state = #{ticketState}
+            </if>
+            <if test="ticketNo != null and ticketNo != ''">
+                and ticket_no = #{ticketNo}
+            </if>
+            <if test="workOrderKey != null and workOrderKey != ''">
+                and work_order_id in ( select id from work_order where work_order_key = #{workOrderKey} )
+            </if>
+            <choose>
+                <when test="mySubmitted != null and mySubmitted">
+                    and username = #{username}
+                </when>
+                <otherwise>
+                    and id in ( select work_order_ticket_id from work_order_ticket_subscriber where username = #{username}
+                    and valid = true )
+                </otherwise>
+            </choose>
+        </where>
+        order by id desc
+    </select>
+
 </mapper>

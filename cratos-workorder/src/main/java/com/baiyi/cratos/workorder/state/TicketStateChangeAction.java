@@ -15,7 +15,6 @@ public enum TicketStateChangeAction {
      */
     SUBMIT,
 
-
     APPROVAL,
     /**
      * 审批同意
@@ -25,7 +24,6 @@ public enum TicketStateChangeAction {
      * 审批拒绝
      */
     APPROVAL_REJECTED,
-
 
     DO_NEXT
 

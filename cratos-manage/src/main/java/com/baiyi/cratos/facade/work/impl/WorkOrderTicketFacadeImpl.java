@@ -1,6 +1,8 @@
 package com.baiyi.cratos.facade.work.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.util.PasswordGenerator;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
@@ -17,6 +19,7 @@ import com.baiyi.cratos.workorder.state.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
+import com.baiyi.cratos.wrapper.work.WorkOrderTicketWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +31,26 @@ import java.util.Objects;
  * &#064;Date  2025/3/19 11:08
  * &#064;Version 1.0
  */
-@SuppressWarnings("unchecked")
 @Component
 @RequiredArgsConstructor
 public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
 
     private final WorkOrderService workOrderService;
     private final WorkOrderTicketService workOrderTicketService;
+    private final WorkOrderTicketWrapper workOrderTicketWrapper;
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
     private final WorkOrderTicketDetailsWrapper workOrderTicketDetailsWrapper;
     private final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
     private final UserService userService;
     private final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
+
+    @Override
+    @SetSessionUserToParam(desc = "set Username")
+    public DataTable<WorkOrderTicketVO.Ticket> queryMyTicketPage(WorkOrderTicketParam.MyTicketPageQuery pageQuery) {
+        DataTable<WorkOrderTicket> table = workOrderTicketService.queryPageByParam(pageQuery);
+        return workOrderTicketWrapper.wrapToTarget(table);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

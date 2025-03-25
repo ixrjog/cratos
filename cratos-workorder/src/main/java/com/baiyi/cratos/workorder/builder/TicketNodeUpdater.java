@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.builder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
+import com.baiyi.cratos.workorder.enums.ApprovalStatus;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -49,8 +50,12 @@ public class TicketNodeUpdater {
         }
         node.setApprovalAt(new Date());
         node.setApprovalCompleted(true);
-        node.setApprovalStatus(approvalTicket.getApprovalType());
-        node.setApproveRemark(approvalTicket.getApproveRemark());
+        ApprovalStatus approvalStatus = ApprovalStatus.valueOf(approvalTicket
+                .getApprovalType());
+        node.setApprovalStatus(approvalStatus.name());
+        if(!StringUtils.hasText(approvalTicket.getApproveRemark())) {
+            node.setApproveRemark(approvalStatus.name());
+        }
         service.updateByPrimaryKey(node);
     }
 

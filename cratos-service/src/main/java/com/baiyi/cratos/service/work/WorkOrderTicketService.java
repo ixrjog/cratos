@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.work;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.mapper.WorkOrderTicketMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
@@ -11,6 +13,8 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
  * &#064;Version 1.0
  */
 public interface WorkOrderTicketService extends BaseUniqueKeyService<WorkOrderTicket, WorkOrderTicketMapper>, SupportBusinessService {
+
+    DataTable<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
 
     default WorkOrderTicket getByTicketNo(String ticketNo) {
         return getByUniqueKey(

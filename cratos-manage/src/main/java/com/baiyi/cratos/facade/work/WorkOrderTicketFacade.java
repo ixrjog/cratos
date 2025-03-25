@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.work;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 
@@ -9,6 +10,8 @@ import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
  * &#064;Version 1.0
  */
 public interface WorkOrderTicketFacade {
+
+    DataTable<WorkOrderTicketVO.Ticket> queryMyTicketPage(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
 
     WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket);
 

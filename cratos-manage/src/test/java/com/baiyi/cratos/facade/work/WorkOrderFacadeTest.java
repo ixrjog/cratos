@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.work;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
@@ -87,14 +88,26 @@ public class WorkOrderFacadeTest extends BaseUnit {
         System.out.println(details);
     }
 
+//    @Test
+//    void test5() {
+//        SessionUtils.setUsername("baiyi");
+//        WorkOrderTicketParam.SubmitTicket submitTicket = WorkOrderTicketParam.SubmitTicket.builder()
+//                .applyRemark("Test Ticket")
+//                .ticketId(1)
+//                .build();
+//        workOrderTicketFacade.submitTicket(submitTicket);
+//    }
+
     @Test
-    void test5() {
+    void test6() {
         SessionUtils.setUsername("baiyi");
-        WorkOrderTicketParam.SubmitTicket submitTicket = WorkOrderTicketParam.SubmitTicket.builder()
-                .applyRemark("Test Ticket")
-                .ticketId(1)
+        WorkOrderTicketParam.MyTicketPageQuery pageQuery = WorkOrderTicketParam.MyTicketPageQuery.builder()
+                .mySubmitted(true)
+                .length(10)
+                .page(1)
                 .build();
-        workOrderTicketFacade.submitTicket(submitTicket);
+        DataTable<WorkOrderTicketVO.Ticket> dataTable = workOrderTicketFacade.queryMyTicketPage(pageQuery);
+        System.out.println(dataTable);
     }
 
 }

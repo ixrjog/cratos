@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.work.entry.impl;
+package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
@@ -13,9 +13,9 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.workorder.builder.entry.ComputerPermissionTicketEntryBuilder;
-import com.baiyi.cratos.facade.work.entry.BaseTicketEntryProvider;
-import com.baiyi.cratos.facade.work.entry.TicketEntryProvider;
-import com.baiyi.cratos.facade.work.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;

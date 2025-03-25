@@ -1,6 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
@@ -23,6 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public class WorkOrderTicketController {
 
     private final WorkOrderTicketFacade workOrderTicketFacade;
+
+    @Operation(summary = "Pagination query my workOrder ticket")
+    @PostMapping(value = "/my/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<WorkOrderTicketVO.Ticket>> queryMyTicketPage(
+            @RequestBody @Valid WorkOrderTicketParam.MyTicketPageQuery pageQuery) {
+        return HttpResult.of(workOrderTicketFacade.queryMyTicketPage(pageQuery));
+    }
 
     @Operation(summary = "Create workOrder ticket")
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
