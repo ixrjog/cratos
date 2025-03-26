@@ -1,7 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.config;
 
-import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
-import com.baiyi.cratos.workorder.state.machine.impl.*;
+import com.baiyi.cratos.workorder.state.config.AutoConfigurationTicketStateProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -11,31 +10,33 @@ import org.springframework.stereotype.Component;
  * &#064;Date  2025/3/21 11:41
  * &#064;Version 1.0
  */
-@SuppressWarnings("unchecked")
 @Component
 @RequiredArgsConstructor
 public class TicketInStateProcessorConfig implements InitializingBean {
 
-    private final TicketCreateStateProcessor ticketCreateStateProcessor;
-    private final TicketNewStateProcessor ticketNewStateProcessor;
-    private final TicketSubmittedStateProcessor ticketSubmittedStateProcessor;
-    private final TicketInApprovalStateProcessor ticketInApprovalStateProcessor;
-    private final TicketInApprovalCompletedStateProcessor ticketInApprovalCompletedStateProcessor;
-    private final TicketInProgressStateProcessor ticketInProgressStateProcessor;
-    private final TicketProcessingCompletedStateProcessor ticketProcessingCompletedStateProcessor;
-    private final TicketCompletedStateProcessor ticketCompletedStateProcessor;
+//    private final TicketCreateStateProcessor ticketCreateStateProcessor;
+//    private final TicketNewStateProcessor ticketNewStateProcessor;
+//    private final TicketSubmittedStateProcessor ticketSubmittedStateProcessor;
+//    private final TicketInApprovalStateProcessor ticketInApprovalStateProcessor;
+//    private final TicketInApprovalCompletedStateProcessor ticketInApprovalCompletedStateProcessor;
+//    private final TicketInProgressStateProcessor ticketInProgressStateProcessor;
+//    private final TicketProcessingCompletedStateProcessor ticketProcessingCompletedStateProcessor;
+//    private final TicketCompletedStateProcessor ticketCompletedStateProcessor;
+
+    private final AutoConfigurationTicketStateProcessor autoConfigurationTicketStateProcessor;
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        autoConfigurationTicketStateProcessor.config();
         // 状态链
-        ticketCreateStateProcessor.setTarget(ticketNewStateProcessor)
-                .setTarget(ticketSubmittedStateProcessor)
-                .setTarget(ticketInApprovalStateProcessor)
-                .setTarget(ticketInApprovalCompletedStateProcessor)
-                .setTarget(ticketInProgressStateProcessor)
-                .setTarget(ticketProcessingCompletedStateProcessor)
-                .setTarget(ticketCompletedStateProcessor);
-        TicketInStateProcessorFactory.setContext(ticketCreateStateProcessor);
+//        ticketCreateStateProcessor.setTarget(ticketNewStateProcessor)
+//                .setTarget(ticketSubmittedStateProcessor)
+//                .setTarget(ticketInApprovalStateProcessor)
+//                .setTarget(ticketInApprovalCompletedStateProcessor)
+//                .setTarget(ticketInProgressStateProcessor)
+//                .setTarget(ticketProcessingCompletedStateProcessor)
+//                .setTarget(ticketCompletedStateProcessor);
+//        TicketInStateProcessorFactory.setContext(ticketCreateStateProcessor);
     }
 
 }

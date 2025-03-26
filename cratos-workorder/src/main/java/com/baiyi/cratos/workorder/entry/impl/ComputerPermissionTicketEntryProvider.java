@@ -59,10 +59,6 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        /**
-         * | Group Name |DEV |DAILY |SIT |PRE |PROD |
-         * | --- |--- |--- |--- |--- |--- |
-         */
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| Group Name |");
         businessPermission.getRoleMembers()

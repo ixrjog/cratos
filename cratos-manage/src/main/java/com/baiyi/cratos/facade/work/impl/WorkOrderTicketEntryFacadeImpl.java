@@ -16,7 +16,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.state.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

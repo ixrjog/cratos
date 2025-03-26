@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.state.machine.factory;
 
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.workorder.event.TicketEvent;
-import com.baiyi.cratos.workorder.state.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import com.baiyi.cratos.workorder.state.machine.TicketStateProcessor;
@@ -30,9 +30,5 @@ public class TicketInStateProcessorFactory<Event extends WorkOrderTicketParam.Ha
                                       TicketEvent<Event> ticketEvent) {
         getByState(ticketState).change(action, ticketEvent);
     }
-
-//    public static <Event> void change(TicketStateChangeAction action, TicketEvent<Event> ticketEvent) {
-//        context.change(null, action, ticketEvent);
-//    }
 
 }

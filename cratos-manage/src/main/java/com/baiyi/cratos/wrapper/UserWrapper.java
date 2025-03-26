@@ -6,9 +6,10 @@ import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
+import com.baiyi.cratos.domain.util.SpringContextUtil;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.facade.identity.extension.EdsDingtalkIdentityExtension;
+import com.baiyi.cratos.facade.identity.extension.impl.EdsDingtalkIdentityExtensionImpl;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -36,7 +37,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_USER_ROLE;
 public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements IBaseWrapper<UserVO.User> {
 
     private final RbacUserRoleService rbacUserRoleService;
-    private final EdsDingtalkIdentityExtension edsDingtalkIdentityExtension;
+    // private final EdsDingtalkIdentityExtensionImpl edsDingtalkIdentityExtension;
 
     @Override
     @Sensitive
@@ -55,8 +56,9 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
         EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username(username)
                 .build();
-        EdsIdentityVO.DingtalkIdentityDetails details = edsDingtalkIdentityExtension.queryDingtalkIdentityDetails(
-                query);
+        EdsIdentityVO.DingtalkIdentityDetails details = SpringContextUtil.getBean(
+                        EdsDingtalkIdentityExtensionImpl.class)
+                .queryDingtalkIdentityDetails(query);
         if (CollectionUtils.isEmpty(details.getDingtalkIdentities())) {
             return UserVO.UserAvatar.NO_DATA;
         }

@@ -43,10 +43,6 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        /**
-         * | Application Name |DEV |DAILY |SIT |PRE |PROD |
-         * | --- |--- |--- |--- |--- |--- |
-         */
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
         StringBuilder row = new StringBuilder("| Application Name |");
         businessPermission.getRoleMembers()

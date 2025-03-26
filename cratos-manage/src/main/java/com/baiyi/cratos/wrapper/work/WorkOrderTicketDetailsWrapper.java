@@ -11,7 +11,7 @@ import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.state.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

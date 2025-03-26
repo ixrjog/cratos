@@ -1,6 +1,7 @@
 package com.baiyi.cratos.workorder.state;
 
 import com.baiyi.cratos.workorder.annotation.TicketStates;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import org.springframework.aop.support.AopUtils;
 
 /**

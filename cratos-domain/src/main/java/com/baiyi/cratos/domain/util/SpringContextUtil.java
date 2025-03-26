@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.util;
 
+import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
 
+    @Getter
     private static ApplicationContext context;
 
     private static void setContext(ApplicationContext context) {
