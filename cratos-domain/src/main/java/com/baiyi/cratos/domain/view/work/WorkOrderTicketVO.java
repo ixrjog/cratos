@@ -127,7 +127,7 @@ public class WorkOrderTicketVO {
         private String name;
         private String displayName;
         private Integer instanceId;
-        private Integer businessType;
+        private String businessType;
         private String subType;
         private Integer businessId;
         private Boolean completed;

@@ -119,7 +119,7 @@ public class WorkOrderFacadeTest extends BaseUnit {
 
     @Test
     void test4() {
-        WorkOrderTicketVO.TicketDetails details = workOrderTicketFacade.getTicket("iaw9e998");
+        WorkOrderTicketVO.TicketDetails details = workOrderTicketFacade.getTicket("y64gn54l");
         System.out.println(details);
     }
 
