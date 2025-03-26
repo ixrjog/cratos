@@ -55,7 +55,15 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
             vo.setTicketAbstract(WorkOrderTicketVO.TicketAbstract.NO_DATA);
             return;
         }
-        List<String> tables = entriesMap.entrySet()
+        WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
+                .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))
+                .markdown(String.join("\n\n", toTables(entriesMap)))
+                .build();
+        vo.setTicketAbstract(ticketAbstract);
+    }
+
+    private List<String> toTables(Map<String, List<WorkOrderTicketEntry>> entriesMap) {
+        return entriesMap.entrySet()
                 .stream()
                 .map(entry -> {
                     String businessType = entry.getKey();
@@ -67,11 +75,6 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
                     return provider.getTableTitle(entries.getFirst()) + rows;
                 })
                 .collect(Collectors.toList());
-        WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
-                .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))
-                .markdown(String.join("\n\n", tables))
-                .build();
-        vo.setTicketAbstract(ticketAbstract);
     }
 
     @Override
