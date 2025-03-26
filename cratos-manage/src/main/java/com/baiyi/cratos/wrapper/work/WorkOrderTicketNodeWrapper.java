@@ -40,16 +40,23 @@ public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrder
     @Override
     public void businessWrap(WorkOrderTicketVO.HasTicketNodes hasTicketNodes) {
         if (StringUtils.hasText(hasTicketNodes.getTicketNo())) {
-            WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNodes.getTicketNo());
-            if (Objects.isNull(ticket)) {
-                return;
-            }
-            Map<String, WorkOrderTicketVO.TicketNode> nodes = workOrderTicketNodeService.queryByTicketId(ticket.getId())
-                    .stream()
-                    .map(this::wrapToTarget)
-                    .collect(Collectors.toMap(WorkOrderTicketVO.TicketNode::getNodeName, Function.identity()));
-            hasTicketNodes.setNodes(nodes);
+            return;
         }
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNodes.getTicketNo());
+        if (Objects.isNull(ticket)) {
+            return;
+        }
+        Map<String, WorkOrderTicketVO.TicketNode> nodes = workOrderTicketNodeService.queryByTicketId(ticket.getId())
+                .stream()
+                .map(this::wrapToTarget)
+                .collect(Collectors.toMap(WorkOrderTicketVO.TicketNode::getNodeName, Function.identity()));
+        hasTicketNodes.setNodes(nodes);
+        nodes.values()
+                .stream()
+                .filter(value -> value.getId()
+                        .equals(ticket.getNodeId()))
+                .findFirst()
+                .ifPresent(value -> hasTicketNodes.setCurrentNode(value.getNodeName()));
     }
 
 }

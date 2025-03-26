@@ -36,6 +36,8 @@ public class WorkOrderTicketVO {
 
     public interface HasTicketNodes extends HasTicketNo {
         void setNodes(Map<String, TicketNode> nodes);
+
+        void setCurrentNode(String currentNode);
     }
 
     @Data
@@ -60,6 +62,8 @@ public class WorkOrderTicketVO {
          */
         @Schema(description = "节点详情")
         private Map<String, TicketNode> nodes;
+
+        private String currentNode;
     }
 
     @Data
