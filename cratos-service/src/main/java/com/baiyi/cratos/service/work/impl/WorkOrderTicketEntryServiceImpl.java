@@ -37,6 +37,7 @@ public class WorkOrderTicketEntryServiceImpl implements WorkOrderTicketEntryServ
         Example example = new Example(WorkOrderTicketEntry.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("ticketId", record.getTicketId())
+                .andEqualTo("businessType", record.getBusinessType())
                 .andEqualTo("entryKey", record.getEntryKey());
         return workOrderTicketEntryMapper.selectOneByExample(example);
     }

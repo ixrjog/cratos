@@ -63,11 +63,43 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     }
 
     @Override
+    public List<String> queryNodeApprovalUsernames(WorkOrder workOrder, String nodeName) {
+        return WorkflowUtils.loadAs(workOrder)
+                .getNodes()
+                .stream()
+                .filter(node -> node.getName()
+                        .equals(nodeName))
+                .findFirst()
+                .map(node -> querySelectableUsernameByTags(node.getTags()))
+                .orElse(List.of());
+    }
+
+    private List<String> querySelectableUsernameByTags(List<String> tags) {
+        if (CollectionUtils.isEmpty(tags)) {
+            return List.of();
+        }
+        Map<Integer, String> usernameMap = Maps.newHashMap();
+        tags.stream()
+                .map(tagService::getByTagKey)
+                .filter(Objects::nonNull)
+                .forEach(
+                        tag -> businessTagService.queryByBusinessTypeAndTagId(BusinessTypeEnum.USER.name(), tag.getId())
+                                .forEach(businessTag -> usernameMap.computeIfAbsent(businessTag.getBusinessId(),
+                                        this::getUsername)));
+        return new ArrayList<>(usernameMap.values());
+    }
+
+    @Override
     public boolean isApprover(WorkOrder workOrder, String nodeName, String username) {
         return queryNodeApprovalUsers(workOrder, nodeName).stream()
                 .anyMatch(e -> e.getUsername()
                         .equals(username));
     }
+
+    private String getUsername(int userId) {
+        return userService.getById(userId).getUsername();
+    }
+
 
     private UserVO.User getUser(int userId) {
         return BeanCopierUtil.copyProperties(userService.getById(userId), UserVO.User.class);

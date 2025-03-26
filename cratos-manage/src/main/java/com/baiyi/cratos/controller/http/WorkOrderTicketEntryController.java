@@ -8,10 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * &#064;Author  baiyi
@@ -24,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class WorkOrderTicketEntryController {
 
-    private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
+    private final WorkOrderTicketEntryFacade ticketEntryFacade;
 
     @Operation(summary = "Add application permission ticket entry")
     @PostMapping(value = "/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationPermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
-        workOrderTicketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
+        ticketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
 
@@ -38,7 +35,29 @@ public class WorkOrderTicketEntryController {
     @PostMapping(value = "/computer/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addComputerPermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
-        workOrderTicketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+        ticketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Update ticket entry valid")
+    @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> setTicketEntryValidById(@RequestParam int id) {
+        ticketEntryFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete ticket entry by id")
+    @DeleteMapping(value = "/del/by/id", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTicketEntryById(@RequestParam int id) {
+        ticketEntryFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete ticket entry by id")
+    @DeleteMapping(value = "/del", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTicketEntry(
+            @RequestBody WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry) {
+        ticketEntryFacade.deleteTicketEntry(deleteTicketEntry);
         return HttpResult.SUCCESS;
     }
 

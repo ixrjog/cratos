@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
-import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;

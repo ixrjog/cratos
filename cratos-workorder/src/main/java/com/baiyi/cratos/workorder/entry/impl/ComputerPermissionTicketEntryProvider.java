@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;

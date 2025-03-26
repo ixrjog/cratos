@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.http.work;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -142,6 +143,30 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = 2888570476091613323L;
         private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
         private UserPermissionBusinessParam.BusinessPermission detail;
+    }
+
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DeleteTicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3693164673834109532L;
+        @NotNull
+        private Integer ticketId;
+        @NotBlank
+        private String businessType;
+        @NotBlank
+        private String entryKey;
+
+        public WorkOrderTicketEntry totEntryUniqueKey() {
+            return WorkOrderTicketEntry.builder()
+                    .ticketId(ticketId)
+                    .businessType(businessType)
+                    .entryKey(entryKey)
+                    .build();
+        }
     }
 
     @Data

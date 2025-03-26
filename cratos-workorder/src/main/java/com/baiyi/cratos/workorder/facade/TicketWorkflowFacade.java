@@ -18,4 +18,6 @@ public interface TicketWorkflowFacade {
 
     boolean isApprover(WorkOrder workOrder, String nodeName, String username);
 
+    List<String> queryNodeApprovalUsernames(WorkOrder workOrder, String nodeName);
+
 }

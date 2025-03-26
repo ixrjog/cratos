@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry;
 
-import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.YamlUtil;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;

@@ -1,5 +1,6 @@
-package com.baiyi.cratos.common.exception;
+package com.baiyi.cratos.workorder.exception;
 
+import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.common.util.StringFormatter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

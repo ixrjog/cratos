@@ -13,4 +13,10 @@ public interface WorkOrderTicketEntryFacade {
 
     void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
 
+    void deleteById(int id);
+
+    void setValidById(int id);
+
+    void deleteTicketEntry(WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry);
+
 }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
-import com.baiyi.cratos.common.exception.WorkOrderTicketException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
