@@ -2,9 +2,13 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.annotation.Sensitive;
+import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
+import com.baiyi.cratos.facade.identity.extension.EdsDingtalkIdentityExtension;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
@@ -12,7 +16,10 @@ import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
@@ -29,6 +36,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_USER_ROLE;
 public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements IBaseWrapper<UserVO.User> {
 
     private final RbacUserRoleService rbacUserRoleService;
+    private final EdsDingtalkIdentityExtension edsDingtalkIdentityExtension;
 
     @Override
     @Sensitive
@@ -38,6 +46,26 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
                 .put(buildRbacUserRoleResourceCount(vo))
                 .build();
         vo.setResourceCount(resourceCount);
+        // 头像
+        vo.setAvatar(((UserWrapper) AopContext.currentProxy()).queryUserAvatar(vo.getUsername()));
+    }
+
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'USER:AVATAR:USERNAME:' + #username", unless = "#result == null")
+    public UserVO.UserAvatar queryUserAvatar(String username) {
+        EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
+                .username(username)
+                .build();
+        EdsIdentityVO.DingtalkIdentityDetails details = edsDingtalkIdentityExtension.queryDingtalkIdentityDetails(
+                query);
+        if (CollectionUtils.isEmpty(details.getDingtalkIdentities())) {
+            return UserVO.UserAvatar.NO_DATA;
+        }
+        return UserVO.UserAvatar.builder()
+                .url(details.getDingtalkIdentities()
+                        .getFirst()
+                        .getAvatar())
+                .source("Dingtalk")
+                .build();
     }
 
     private Map<String, Integer> buildRbacUserRoleResourceCount(UserVO.User user) {

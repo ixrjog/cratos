@@ -12,9 +12,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -38,9 +36,7 @@ public class UserVO {
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class User extends BaseVO implements BaseBusiness.IBusinessAnnotate,
             // Business
-            BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs,
-            RbacRoleVO.IRbacRoles, HasResourceCount,
-            Serializable {
+            BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, RbacRoleVO.IRbacRoles, HasResourceCount, Serializable {
 
         @Serial
         private static final long serialVersionUID = 7642003154901654181L;
@@ -66,10 +62,12 @@ public class UserVO {
         @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd HH:mm:ss")
         private Date expiredTime;
         private Boolean locked;
+
         @Override
         public Integer getBusinessId() {
             return this.id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
@@ -78,6 +76,25 @@ public class UserVO {
         private List<RbacRoleVO.Role> rbacRoles;
         @Schema(description = "Resource Count")
         private Map<String, Integer> resourceCount;
+
+        private UserAvatar avatar;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class UserAvatar implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8580940372670729638L;
+        public static final UserAvatar NO_DATA = UserAvatar.builder()
+                .valid(false)
+                .build();
+        @Builder.Default
+        private Boolean valid = true;
+        private String source;
+        private String url;
     }
 
 }
