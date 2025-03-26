@@ -28,7 +28,7 @@ public class TicketInStateProcessorConfig implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         autoConfigurationTicketStateProcessor.config();
-        // 状态链
+        // 状态链| 手动装配
 //        ticketCreateStateProcessor.setTarget(ticketNewStateProcessor)
 //                .setTarget(ticketSubmittedStateProcessor)
 //                .setTarget(ticketInApprovalStateProcessor)
