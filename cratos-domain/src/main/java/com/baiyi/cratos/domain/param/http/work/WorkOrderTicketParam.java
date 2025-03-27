@@ -15,7 +15,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -88,11 +90,27 @@ public class WorkOrderTicketParam {
         @NotBlank
         private String applyRemark;
 
+        @Schema(description = "节点审批人信息")
+        private List<NodeApprover> nodeApprovers;
+
         /**
          * key=nodeName, value=username
          */
-        @Schema(description = "节点审批人信息")
-        private Map<String,String> nodeApprover;
+        public Map<String, String> toApprover() {
+            return nodeApprovers.stream()
+                    .collect(Collectors.toMap(NodeApprover::getNodeName, NodeApprover::getUsername));
+        }
+
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Schema
+    public static class NodeApprover {
+        private String nodeName;
+        private String username;
     }
 
     @Builder

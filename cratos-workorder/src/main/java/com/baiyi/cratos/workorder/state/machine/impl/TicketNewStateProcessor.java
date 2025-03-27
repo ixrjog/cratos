@@ -70,7 +70,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         List<WorkOrderTicketNode> nodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
         if (!CollectionUtils.isEmpty(nodes)) {
             Map<String, String> nodeApprover = Optional.ofNullable(event.getBody())
-                    .map(WorkOrderTicketParam.SubmitTicket::getNodeApprover)
+                    .map(WorkOrderTicketParam.SubmitTicket::toApprover)
                     .orElse(Map.of());
             nodes.stream()
                     .filter(node -> ApprovalTypes.USER_SPECIFIED.equals(ApprovalTypes.valueOf(node.getApprovalType())))
@@ -93,7 +93,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         // 更新审批节点信息
         WorkOrderTicket ticket = getTicketByNo(event.getBody());
         Map<String, String> nodeApprover = Optional.ofNullable(event.getBody())
-                .map(WorkOrderTicketParam.SubmitTicket::getNodeApprover)
+                .map(WorkOrderTicketParam.SubmitTicket::toApprover)
                 .orElse(Map.of());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         workOrderTicketNodeService.queryByTicketId(ticket.getId())

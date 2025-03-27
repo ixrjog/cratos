@@ -79,12 +79,21 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     protected void processing(TicketStateChangeAction action, TicketEvent<Event> event) {
     }
 
+    protected void doNext(TicketEvent<Event> event) {
+        WorkOrderTicketParam.SimpleTicketNo simpleTicketNo = WorkOrderTicketParam.SimpleTicketNo.builder()
+                .ticketNo(event.getBody()
+                        .getTicketNo())
+                .build();
+        getTarget().change(TicketStateChangeAction.DO_NEXT, (TicketEvent<Event>) TicketEvent.of(simpleTicketNo));
+    }
+
     @Override
     public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
         preChangeInspection(action, event);
         processing(action, event);
         if (isTransition(event.getBody())) {
             transitionToNextState(event.getBody());
+            doNext(event);
         }
     }
 
