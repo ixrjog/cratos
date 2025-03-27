@@ -173,6 +173,47 @@ public class WorkOrderTicketVO {
         private Boolean approvalCompleted;
         private String comment;
         private String approveRemark;
+        @Schema(description = "申请人信息")
+        private ApplicantInfo applicantInfo;
+        @Schema(description = "审批人信息")
+        private ApprovalInfo approvalInfo;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ApplicantInfo implements Serializable {
+        public static final ApplicantInfo NOT_THE_APPLICANT = ApplicantInfo.builder()
+                .isApplicant(false)
+                .build();
+        public static final ApplicantInfo THE_APPLICANT = ApplicantInfo.builder()
+                .build();
+        @Serial
+        private static final long serialVersionUID = -5845232251566479793L;
+        @Schema(description = "是当前申请人")
+        @Builder.Default
+        private boolean isApplicant = true;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class ApprovalInfo implements Serializable {
+        public static final ApprovalInfo NOT_THE_CURRENT_APPROVER = ApprovalInfo.builder()
+                .isCurrentApprover(false)
+                .approvalRequired(false)
+                .build();
+        @Serial
+        private static final long serialVersionUID = -4541730852330178327L;
+        @Schema(description = "是当前审批人")
+        @Builder.Default
+        private boolean isCurrentApprover = true;
+        @Schema(description = "需要审批")
+        private boolean approvalRequired;
     }
 
 }

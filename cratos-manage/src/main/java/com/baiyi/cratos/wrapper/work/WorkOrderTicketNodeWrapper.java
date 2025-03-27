@@ -1,12 +1,16 @@
 package com.baiyi.cratos.wrapper.work;
 
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +34,35 @@ import java.util.stream.Collectors;
 @BusinessType(type = BusinessTypeEnum.WORKORDER_TICKET_NODE)
 public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrderTicketVO.TicketNode, WorkOrderTicketNode> implements IBusinessWrapper<WorkOrderTicketVO.HasTicketNodes, WorkOrderTicketVO.TicketNode> {
 
+    private final WorkOrderService workOrderService;
     private final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
+    private final TicketWorkflowFacade ticketWorkflowFacade;
 
     @Override
     public void wrap(WorkOrderTicketVO.TicketNode vo) {
+        if (!Boolean.TRUE.equals(vo.getApprovalCompleted())) {
+            return;
+        }
+        WorkOrderTicket ticket = workOrderTicketService.getById(vo.getTicketId());
+        // 申请人
+        vo.setApplicantInfo(WorkOrderTicketVO.ApplicantInfo.builder()
+                .isApplicant(ticket.getUsername()
+                        .equals(SessionUtils.getUsername()))
+                .build());
+        if (TicketState.IN_APPROVAL.equals(TicketState.valueOf(ticket.getTicketState()))) {
+            boolean isCurrentApprover;
+            if (StringUtils.hasText(vo.getUsername())) {
+                isCurrentApprover = vo.getUsername()
+                        .equals(SessionUtils.getUsername());
+            } else {
+                isCurrentApprover = ticketWorkflowFacade.isApprover(workOrderService.getById(ticket.getWorkOrderId()),
+                        vo.getNodeName(), SessionUtils.getUsername());
+            }
+            vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()
+                    .isCurrentApprover(isCurrentApprover)
+                    .build());
+        }
     }
 
     @Override
