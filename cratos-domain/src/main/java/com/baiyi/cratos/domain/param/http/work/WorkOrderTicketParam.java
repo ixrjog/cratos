@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -87,9 +88,11 @@ public class WorkOrderTicketParam {
         @NotBlank
         private String applyRemark;
 
-        //@Schema(description = "工作流")
-        //  private WorkflowVO.WorkflowView workflowView;
-
+        /**
+         * key=nodeName, value=username
+         */
+        @Schema(description = "节点审批人信息")
+        private Map<String,String> nodeApprover;
     }
 
     @Builder
