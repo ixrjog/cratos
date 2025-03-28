@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -45,6 +46,10 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
 
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        // 发布订阅关系
+        WorkOrderTicket ticket = getTicketByNo(event.getBody()
+                .getTicketNo());
+        workOrderTicketSubscriberFacade.publish(ticket);
         // 发送通知
     }
 

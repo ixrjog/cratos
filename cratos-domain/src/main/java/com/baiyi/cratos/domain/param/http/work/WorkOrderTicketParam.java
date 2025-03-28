@@ -93,13 +93,13 @@ public class WorkOrderTicketParam {
         @NotBlank
         private String applyRemark;
         @Schema(description = "节点审批人信息")
-        private List<NodeApprover> nodeApprovals;
+        private List<NodeApprover> nodeApprovers;
 
         /**
          * key=nodeName, value=username
          */
-        public Map<String, String> toApprover() {
-            return CollectionUtils.isEmpty(nodeApprovals) ? Map.of() : nodeApprovals.stream()
+        public Map<String, String> toApprovers() {
+            return CollectionUtils.isEmpty(nodeApprovers) ? Map.of() : nodeApprovers.stream()
                     .collect(Collectors.toMap(NodeApprover::getNodeName, NodeApprover::getUsername));
         }
     }

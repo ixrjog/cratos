@@ -42,7 +42,7 @@ public class WorkOrderTicketController {
     @Operation(summary = "Get workOrder ticket")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> getTicket(@RequestParam @Valid String ticketNo) {
-        return new HttpResult<>(workOrderTicketFacade.getTicket(ticketNo));
+        return new HttpResult<>(workOrderTicketFacade.makeTicketDetails(ticketNo));
     }
 
     @Operation(summary = "Submit application ticket")

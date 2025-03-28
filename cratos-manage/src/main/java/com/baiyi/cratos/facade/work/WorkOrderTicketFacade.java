@@ -15,7 +15,7 @@ public interface WorkOrderTicketFacade {
 
     WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket);
 
-    WorkOrderTicketVO.TicketDetails getTicket(String ticketNo);
+    WorkOrderTicketVO.TicketDetails makeTicketDetails(String ticketNo);
 
     WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket);
 
