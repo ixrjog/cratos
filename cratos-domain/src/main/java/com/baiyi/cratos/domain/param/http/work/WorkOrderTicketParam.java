@@ -76,21 +76,22 @@ public class WorkOrderTicketParam {
         private String ticketNo;
     }
 
+    @Schema
+    public static class DoNextStateOfTicket extends SimpleTicketNo {
+    }
+
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     @Schema
     public static class SubmitTicket implements HasTicketNo {
-
         @NotNull(message = "必须指定工单票据ID")
         @Schema(description = "Ticket No.")
         private String ticketNo;
-
         @Schema(description = "申请说明")
         @NotBlank
         private String applyRemark;
-
         @Schema(description = "节点审批人信息")
         private List<NodeApprover> nodeApprovals;
 
@@ -101,7 +102,6 @@ public class WorkOrderTicketParam {
             return CollectionUtils.isEmpty(nodeApprovals) ? Map.of() : nodeApprovals.stream()
                     .collect(Collectors.toMap(NodeApprover::getNodeName, NodeApprover::getUsername));
         }
-
     }
 
     @Builder

@@ -12,10 +12,10 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
@@ -81,6 +81,16 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         TicketEvent<WorkOrderTicketParam.SubmitTicket> event = TicketEvent.of(submitTicket);
         TicketInStateProcessorFactory.change(TicketState.NEW, TicketStateChangeAction.SUBMIT, event);
         return getTicket(submitTicket);
+    }
+
+    @Override
+    public WorkOrderTicketVO.TicketDetails doNextStateOfTicket(
+            WorkOrderTicketParam.SimpleTicketNo simpleTicketNo) {
+        TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event = TicketEvent.of(simpleTicketNo);
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(simpleTicketNo.getTicketNo());
+        TicketInStateProcessorFactory.change(TicketState.valueOf(ticket.getTicketState()),
+                TicketStateChangeAction.DO_NEXT, event);
+        return getTicket(simpleTicketNo);
     }
 
     @Override

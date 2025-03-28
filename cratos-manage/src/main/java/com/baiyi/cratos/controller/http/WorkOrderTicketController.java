@@ -57,4 +57,10 @@ public class WorkOrderTicketController {
         return new HttpResult<>(workOrderTicketFacade.approvalTicket(approvalTicket));
     }
 
+    @Operation(summary = "Ticket do next state")
+    @PostMapping(value = "/next", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<WorkOrderTicketVO.TicketDetails> doNextStateOfTicket(@RequestBody @Valid WorkOrderTicketParam.DoNextStateOfTicket doNextStateOfTicket) {
+        return new HttpResult<>(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
+    }
+
 }
