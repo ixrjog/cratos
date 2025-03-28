@@ -68,11 +68,13 @@ public class WorkOrderTicketParam {
     }
 
     @Data
-    @Builder
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
     public static class SimpleTicketNo implements HasTicketNo {
+        @NotNull(message = "必须指定工单票据ID")
+        @Schema(description = "Ticket No.")
         private String ticketNo;
     }
 
@@ -117,15 +119,12 @@ public class WorkOrderTicketParam {
     }
 
     @EqualsAndHashCode(callSuper = true)
-    @Builder
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     @Schema
     public static class ApprovalTicket extends SimpleTicketNo {
-        @NotNull(message = "必须指定工单票据ID")
-        @Schema(description = "Ticket No.")
-        private String ticketNo;
         @Schema(description = "审批意见")
         private String approveRemark;
         private String approvalType;
