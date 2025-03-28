@@ -47,7 +47,7 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         return true;
     }
 
-    protected boolean nextState() {
+    protected boolean nextState(TicketStateChangeAction action) {
         return false;
     }
 

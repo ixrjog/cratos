@@ -40,7 +40,8 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         return true;
     }
 
-    protected boolean nextState() {
+    @Override
+    protected boolean nextState(TicketStateChangeAction action) {
         return true;
     }
 

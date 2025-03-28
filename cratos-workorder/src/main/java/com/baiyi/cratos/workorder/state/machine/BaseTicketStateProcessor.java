@@ -76,7 +76,7 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
      */
     protected abstract boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo);
 
-    protected abstract boolean nextState();
+    protected abstract boolean nextState(TicketStateChangeAction action);
 
     protected void processing(TicketStateChangeAction action, TicketEvent<Event> event) {
     }
@@ -97,7 +97,7 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
             return;
         }
         transitionToNextState(event.getBody());
-        if (nextState()) {
+        if (nextState(action)) {
             changeToTarget(event);
         }
     }

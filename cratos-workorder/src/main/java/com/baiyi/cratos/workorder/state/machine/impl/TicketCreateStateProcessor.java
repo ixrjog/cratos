@@ -68,7 +68,7 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
     }
 
     @Override
-    protected boolean nextState() {
+    protected boolean nextState(TicketStateChangeAction action) {
         return false;
     }
 

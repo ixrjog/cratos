@@ -83,8 +83,9 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         }
     }
 
-    protected boolean nextState() {
-        return false;
+    @Override
+    protected boolean nextState(TicketStateChangeAction action) {
+        return TicketStateChangeAction.SUBMIT.equals(action);
     }
 
     @Override

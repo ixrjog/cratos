@@ -78,7 +78,8 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
         }
     }
 
-    protected boolean nextState() {
+    @Override
+    protected boolean nextState(TicketStateChangeAction action) {
         return false;
     }
 
