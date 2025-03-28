@@ -1,6 +1,5 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
-import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -15,11 +14,13 @@ import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.builder.TicketNodeUpdater;
 import com.baiyi.cratos.workorder.enums.ApprovalStatus;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketDoNextException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,8 @@ import java.util.Objects;
  */
 @Component
 @TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
-public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.ApprovalTicket> {
+public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
+    // WorkOrderTicketParam.ApprovalTicket
 
     private final TicketWorkflowFacade ticketWorkflowFacade;
 
@@ -55,26 +57,34 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
 
     @Override
     protected void preChangeInspection(TicketStateChangeAction action,
-                                       TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
+                                       TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
         super.preChangeInspection(action, event);
-        // 是否当前审批人
         WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
                 .getTicketNo());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
-        if (ticketNode.getApprovalCompleted()) {
-            WorkOrderTicketException.runtime("The current node has been approved.");
+        // 工单无审批节点
+        if (ticket.getNodeId() == 0) {
+            return;
+        } else if (TicketStateChangeAction.DO_NEXT.equals(action)) {
+            WorkOrderTicketDoNextException.runtime("There are approval nodes.");
         }
-        if (ApprovalTypes.USER_SPECIFIED.name()
-                .equals(ticketNode.getApprovalType())) {
-            if (!ticketNode.getUsername()
-                    .equals(SessionUtils.getUsername())) {
+        if (event.getBody() instanceof WorkOrderTicketParam.ApprovalTicket) {
+            // 是否当前审批人
+            WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
+            if (ticketNode.getApprovalCompleted()) {
+                WorkOrderTicketException.runtime("The current node has been approved.");
+            }
+            if (ApprovalTypes.USER_SPECIFIED.name()
+                    .equals(ticketNode.getApprovalType())) {
+                if (!ticketNode.getUsername()
+                        .equals(SessionUtils.getUsername())) {
+                    WorkOrderTicketException.runtime("You are not the current approver.");
+                }
+                return;
+            }
+            if (!ticketWorkflowFacade.isApprover(workOrder, ticketNode.getNodeName(), SessionUtils.getUsername())) {
                 WorkOrderTicketException.runtime("You are not the current approver.");
             }
-            return;
-        }
-        if (!ticketWorkflowFacade.isApprover(workOrder, ticketNode.getNodeName(), SessionUtils.getUsername())) {
-            WorkOrderTicketException.runtime("You are not the current approver.");
         }
     }
 
@@ -93,26 +103,28 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
     }
 
     @Override
-    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
-        ApprovalStatus approvalStatus = ApprovalStatus.valueOf(event.getBody()
-                .getApprovalType());
-        WorkOrderTicket ticket = getTicketByNo(event.getBody());
-        WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
-        // 更新审批节点
-        TicketNodeUpdater.newUpdater()
-                .withApprovalTicket(event.getBody())
-                .withUsername(SessionUtils.getUsername())
-                .withNode(ticketNode)
-                .withService(workOrderTicketNodeService)
-                .updateNode();
-        // 更新工单节点ID
-        if (ApprovalStatus.AGREE.equals(approvalStatus)) {
-            approveAgree(ticket, ticketNode);
-            return;
+    protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        if (event.getBody() instanceof WorkOrderTicketParam.ApprovalTicket approvalTicket) {
+            ApprovalStatus approvalStatus = ApprovalStatus.valueOf(approvalTicket.getApprovalType());
+            WorkOrderTicket ticket = getTicketByNo(event.getBody());
+            WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
+            // 更新审批节点
+            TicketNodeUpdater.newUpdater()
+                    .withApprovalTicket(approvalTicket)
+                    .withUsername(SessionUtils.getUsername())
+                    .withNode(ticketNode)
+                    .withService(workOrderTicketNodeService)
+                    .updateNode();
+            // 更新工单节点ID
+            if (ApprovalStatus.AGREE.equals(approvalStatus)) {
+                approveAgree(ticket, ticketNode);
+                return;
+            }
+            if (ApprovalStatus.REJECT.equals(approvalStatus)) {
+                approveReject(ticket, approvalTicket);
+            }
         }
-        if (ApprovalStatus.REJECT.equals(approvalStatus)) {
-            approveReject(ticket, event);
-        }
+        WorkOrderTicketException.runtime("Incorrect approval type.");
     }
 
     private void approveAgree(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
@@ -124,14 +136,13 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
         }
     }
 
-    private void approveReject(WorkOrderTicket ticket, TicketEvent<WorkOrderTicketParam.ApprovalTicket> event) {
+    private void approveReject(WorkOrderTicket ticket, WorkOrderTicketParam.ApprovalTicket approvalTicket) {
         ticket.setCompleted(true);
         ticket.setCompletedAt(new Date());
         ticket.setTicketState(TicketState.COMPLETED.name());
         ticket.setSuccess(false);
-        ticket.setTicketResult(StringUtils.hasText(event.getBody()
-                .getApproveRemark()) ? event.getBody()
-                .getApproveRemark() : "Approval rejected.");
+        ticket.setTicketResult(StringUtils.hasText(
+                approvalTicket.getApproveRemark()) ? approvalTicket.getApproveRemark() : "Approval rejected.");
         workOrderTicketService.updateByPrimaryKey(ticket);
     }
 

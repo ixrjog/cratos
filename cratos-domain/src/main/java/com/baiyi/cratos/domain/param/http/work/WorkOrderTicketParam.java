@@ -116,12 +116,13 @@ public class WorkOrderTicketParam {
         private String username;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     @Schema
-    public static class ApprovalTicket implements HasTicketNo {
+    public static class ApprovalTicket extends SimpleTicketNo {
         @NotNull(message = "必须指定工单票据ID")
         @Schema(description = "Ticket No.")
         private String ticketNo;

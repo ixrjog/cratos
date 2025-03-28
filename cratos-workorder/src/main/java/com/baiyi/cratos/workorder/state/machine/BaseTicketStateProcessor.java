@@ -9,6 +9,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketDoNextException;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.enums.TicketState;
@@ -91,14 +92,18 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
 
     @Override
     public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
-        preChangeInspection(action, event);
-        processing(action, event);
-        if (!isTransition(event.getBody())) {
-            return;
-        }
-        transitionToNextState(event.getBody());
-        if (nextState(action)) {
-            changeToTarget(event);
+        try {
+            preChangeInspection(action, event);
+            preChangeInspection(action, event);
+            processing(action, event);
+            if (!isTransition(event.getBody())) {
+                return;
+            }
+            transitionToNextState(event.getBody());
+            if (nextState(action)) {
+                changeToTarget(event);
+            }
+        } catch (WorkOrderTicketDoNextException ignored) {
         }
     }
 

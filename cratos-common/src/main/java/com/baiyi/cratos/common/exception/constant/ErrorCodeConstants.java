@@ -56,4 +56,6 @@ public interface ErrorCodeConstants {
     int WORK_ORDER_TICKET_ERROR = 58000;
 
     int WORK_ORDER_TICKET_STATE_PROCESSOR_ERROR = 58100;
+
+    int WORK_ORDER_TICKET_DO_NEXT_ERROR = 58200;
 }
