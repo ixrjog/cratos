@@ -42,11 +42,22 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
     private final TagService tagService;
     private final BusinessTagService businessTagService;
 
+    /**
+     * 申请人订阅
+     *
+     * @param ticket
+     * @param user
+     */
     @Override
     public void publish(WorkOrderTicket ticket, User user) {
         createSubscriber(ticket, user, SubscribeStatus.APPLICANT);
     }
 
+    /**
+     * 审批人订阅
+     *
+     * @param ticket
+     */
     @Override
     public void publish(WorkOrderTicket ticket) {
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
@@ -91,7 +102,7 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
 
     private void createSubscriber(WorkOrderTicket ticket, User user, SubscribeStatus constants) {
         // 生成128位Token
-        String token = PasswordGenerator.generatePassword(128, true, true, true, false);
+        final String token = PasswordGenerator.generatePassword(128, true, true, true, false);
         WorkOrderTicketSubscriber subscriber = WorkOrderTicketSubscriber.builder()
                 .ticketId(ticket.getId())
                 .username(user.getUsername())
@@ -99,7 +110,9 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
                 .valid(true)
                 .token(token)
                 .build();
-        workOrderTicketSubscriberService.add(subscriber);
+        if (Objects.nonNull(workOrderTicketSubscriberService.getByUniqueKey(subscriber))) {
+            workOrderTicketSubscriberService.add(subscriber);
+        }
     }
 
 }
