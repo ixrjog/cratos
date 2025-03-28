@@ -66,9 +66,9 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         workOrderTicketService.updateByPrimaryKey(newTicket);
         workOrderTicketSubscriberFacade.publish(newTicket, user);
     }
-
+    
     protected boolean isNext() {
-        return true;
+        return false;
     }
 
     @Override
