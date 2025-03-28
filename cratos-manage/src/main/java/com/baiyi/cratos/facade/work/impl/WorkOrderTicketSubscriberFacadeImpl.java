@@ -101,6 +101,14 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
     }
 
     private void createSubscriber(WorkOrderTicket ticket, User user, SubscribeStatus constants) {
+        WorkOrderTicketSubscriber uk = WorkOrderTicketSubscriber.builder()
+                .ticketId(ticket.getId())
+                .username(user.getUsername())
+                .subscribeStatus(constants.name())
+                .build();
+        if (Objects.nonNull(workOrderTicketSubscriberService.getByUniqueKey(uk))) {
+            return;
+        }
         // 生成128位Token
         final String token = PasswordGenerator.generatePassword(128, true, true, true, false);
         WorkOrderTicketSubscriber subscriber = WorkOrderTicketSubscriber.builder()
@@ -110,9 +118,7 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
                 .valid(true)
                 .token(token)
                 .build();
-        if (Objects.nonNull(workOrderTicketSubscriberService.getByUniqueKey(subscriber))) {
-            workOrderTicketSubscriberService.add(subscriber);
-        }
+        workOrderTicketSubscriberService.add(subscriber);
     }
 
 }
