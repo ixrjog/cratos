@@ -67,6 +67,10 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         workOrderTicketSubscriberFacade.publish(newTicket, user);
     }
 
+    protected boolean isNext() {
+        return true;
+    }
+
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
         final String username = SessionUtils.getUsername();

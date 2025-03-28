@@ -43,6 +43,10 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Work
         return false;
     }
 
+    protected boolean isNext() {
+        return false;
+    }
+
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
         WorkOrderTicket ticket = getTicketByNo(event.getBody());

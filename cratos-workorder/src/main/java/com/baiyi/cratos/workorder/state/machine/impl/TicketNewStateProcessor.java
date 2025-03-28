@@ -83,6 +83,10 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         }
     }
 
+    protected boolean isNext() {
+        return false;
+    }
+
     @Override
     protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
         return true;

@@ -37,4 +37,8 @@ public class TicketProcessingCompletedStateProcessor  extends BaseTicketStatePro
         return false;
     }
 
+    protected boolean isNext() {
+        return false;
+    }
+
 }

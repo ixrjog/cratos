@@ -76,10 +76,12 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
      */
     protected abstract boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo);
 
+    protected abstract boolean isNext();
+
     protected void processing(TicketStateChangeAction action, TicketEvent<Event> event) {
     }
 
-    protected void doNext(TicketEvent<Event> event) {
+    protected void changeToTarget(TicketEvent<Event> event) {
         WorkOrderTicketParam.SimpleTicketNo simpleTicketNo = WorkOrderTicketParam.SimpleTicketNo.builder()
                 .ticketNo(event.getBody()
                         .getTicketNo())
@@ -91,9 +93,12 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
         preChangeInspection(action, event);
         processing(action, event);
-        if (isTransition(event.getBody())) {
-            transitionToNextState(event.getBody());
-            doNext(event);
+        if (!isTransition(event.getBody())) {
+            return;
+        }
+        transitionToNextState(event.getBody());
+        if (isNext()) {
+            changeToTarget(event);
         }
     }
 

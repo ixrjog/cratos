@@ -32,6 +32,10 @@ public class TicketInApprovalCompletedStateProcessor extends BaseTicketStateProc
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
     }
 
+    protected boolean isNext() {
+        return false;
+    }
+
     @Override
     protected boolean isTransition(WorkOrderTicketParam.HasTicketNo hasTicketNo) {
         return true;

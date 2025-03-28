@@ -39,6 +39,10 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         return true;
     }
 
+    protected boolean isNext() {
+        return false;
+    }
+
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
         // 发送通知
