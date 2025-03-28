@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -97,7 +98,7 @@ public class WorkOrderTicketParam {
          * key=nodeName, value=username
          */
         public Map<String, String> toApprover() {
-            return nodeApprovals.stream()
+            return CollectionUtils.isEmpty(nodeApprovals) ? Map.of() : nodeApprovals.stream()
                     .collect(Collectors.toMap(NodeApprover::getNodeName, NodeApprover::getUsername));
         }
 

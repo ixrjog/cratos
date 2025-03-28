@@ -83,7 +83,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         }
     }
 
-    protected boolean isNext() {
+    protected boolean nextState() {
         return false;
     }
 

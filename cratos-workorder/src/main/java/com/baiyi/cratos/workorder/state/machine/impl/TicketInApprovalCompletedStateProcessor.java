@@ -32,7 +32,7 @@ public class TicketInApprovalCompletedStateProcessor extends BaseTicketStateProc
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
     }
 
-    protected boolean isNext() {
+    protected boolean nextState() {
         return false;
     }
 

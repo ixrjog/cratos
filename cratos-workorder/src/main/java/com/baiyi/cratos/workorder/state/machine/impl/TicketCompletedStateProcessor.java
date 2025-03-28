@@ -43,7 +43,7 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Work
         return false;
     }
 
-    protected boolean isNext() {
+    protected boolean nextState() {
         return false;
     }
 
