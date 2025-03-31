@@ -62,8 +62,8 @@ public class WorkOrderFacade2Test extends BaseUnit {
                 .nodeApprovers(nodeApprovers)
                 .applyRemark("这是测试")
                 .build();
-        workOrderTicketFacade.submitTicket(submitTicket);
-
+        WorkOrderTicketVO.TicketDetails details2 = workOrderTicketFacade.submitTicket(submitTicket);
+        System.out.println(details2);
     }
 
     private List<UserPermissionBusinessParam.RoleMember> makeRoleMember() {

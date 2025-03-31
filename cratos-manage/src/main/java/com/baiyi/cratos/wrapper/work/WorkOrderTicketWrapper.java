@@ -5,9 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
-import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -39,14 +37,20 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
     private final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderService workOrderService;
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
+    private final WorkOrderWrapper workOrderWrapper;
 
     @Override
     public void wrap(WorkOrderTicketVO.Ticket vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getWorkOrderId());
         wrapTicketAbstract(vo, workOrder);
-        vo.setWorkOrder(BeanCopierUtil.copyProperties(workOrder, WorkOrderVO.WorkOrder.class));
+        vo.setWorkOrder(workOrderWrapper.wrapToTarget(workOrder));
     }
 
+    /**
+     * 工单摘要
+     * @param vo
+     * @param workOrder
+     */
     private void wrapTicketAbstract(WorkOrderTicketVO.Ticket vo, WorkOrder workOrder) {
         Map<String, List<WorkOrderTicketEntry>> entriesMap = workOrderTicketEntryService.queryTicketEntries(vo.getId())
                 .stream()
