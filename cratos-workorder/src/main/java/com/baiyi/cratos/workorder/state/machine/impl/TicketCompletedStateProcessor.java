@@ -53,6 +53,7 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Work
 
     protected boolean nextState(TicketStateChangeAction action,
                                 TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        // 结束了
         return false;
     }
 
