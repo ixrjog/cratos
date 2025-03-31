@@ -26,6 +26,7 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
+import com.baiyi.cratos.workorder.util.ApprovalNotificationHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -43,6 +44,8 @@ import java.util.Objects;
 @TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
 public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
+    private final ApprovalNotificationHelper approvalNotificationHelper;
+
     public TicketInApprovalStateProcessor(UserService userService, WorkOrderService workOrderService,
                                           WorkOrderTicketService workOrderTicketService,
                                           WorkOrderTicketNodeService workOrderTicketNodeService,
@@ -51,10 +54,12 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketEntryService workOrderTicketEntryService,
                                           NotificationTemplateService notificationTemplateService,
                                           EdsDingtalkMessageFacade edsDingtalkMessageFacade,
-                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade) {
+                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade,
+                                          ApprovalNotificationHelper approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
+        this.approvalNotificationHelper = approvalNotificationHelper;
     }
 
     @Override
@@ -139,12 +144,18 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
         WorkOrderTicketException.runtime("Incorrect approval type.");
     }
 
+    protected void sendMsg(WorkOrderTicket ticket, WorkOrderTicketNode nextNode) {
+        WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
+        approvalNotificationHelper.sendMsg(workOrder, ticket, nextNode);
+    }
+
     private void approveAgree(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
         WorkOrderTicketNode nextNode = workOrderTicketNodeService.getByTicketParentId(ticket.getId(),
                 ticketNode.getId());
         if (Objects.nonNull(nextNode)) {
             ticket.setNodeId(nextNode.getId());
             workOrderTicketService.updateByPrimaryKey(ticket);
+            sendMsg(ticket, nextNode);
         }
     }
 

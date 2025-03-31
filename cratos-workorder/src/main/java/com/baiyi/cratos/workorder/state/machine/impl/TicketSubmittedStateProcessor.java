@@ -1,10 +1,9 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
-import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -14,22 +13,15 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
-import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
-import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
+import com.baiyi.cratos.workorder.util.ApprovalNotificationHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -40,6 +32,8 @@ import java.util.Map;
 @TicketStates(state = TicketState.SUBMITTED, target = TicketState.IN_APPROVAL)
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
+    private final ApprovalNotificationHelper approvalNotificationHelper;
+
     public TicketSubmittedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                          WorkOrderTicketService workOrderTicketService,
                                          WorkOrderTicketNodeService workOrderTicketNodeService,
@@ -48,10 +42,11 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
                                          WorkOrderTicketEntryService workOrderTicketEntryService,
                                          NotificationTemplateService notificationTemplateService,
                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
-                                         TicketWorkflowFacade ticketWorkflowFacade) {
+                                         TicketWorkflowFacade ticketWorkflowFacade,ApprovalNotificationHelper approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
+        this.approvalNotificationHelper = approvalNotificationHelper;
     }
 
     @Override
@@ -78,39 +73,7 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         }
         WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        List<User> approvers = queryApprovers(workOrder, ticket, ticketNode);
-        List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
-                .stream()
-                .map(entry -> {
-                    TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getByBusinessType(
-                            entry.getBusinessType());
-                    return ticketEntryProvider.getEntryDesc(entry);
-                })
-                .toList();
-        Map<String, Object> dict = SimpleMapBuilder.newBuilder()
-                .put("ticketNo", ticket.getTicketNo())
-                .put("workOrderName", workOrder.getName())
-                .put("applicant", ticket.getUsername())
-                .put("ticketEntities",ticketEntities)
-                .build();
-        sendMsgToApprover(approvers, dict);
-    }
-
-    private List<User> queryApprovers(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
-        if (StringUtils.hasText(ticketNode.getUsername())) {
-            return List.of(userService.getByUsername(ticketNode.getUsername()));
-        }
-        return BeanCopierUtil.copyListProperties(
-                ticketWorkflowFacade.queryNodeApprovalUsers(workOrder, ticketNode.getNodeName()), User.class);
-    }
-
-    private void sendMsgToApprover(List<User> approvers, Map<String, Object> dict) {
-        if (CollectionUtils.isEmpty(approvers)) {
-            return;
-        }
-        approvers.forEach(
-                approver -> sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(),
-                        dict));
+        approvalNotificationHelper.sendMsg(workOrder,ticket,ticketNode);
     }
 
 }
