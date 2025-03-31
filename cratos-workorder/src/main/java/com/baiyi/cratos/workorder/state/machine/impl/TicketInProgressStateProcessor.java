@@ -66,9 +66,10 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         ticket.setProcessAt(new Date());
         workOrderTicketService.updateByPrimaryKey(ticket);
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
+        //  TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
         for (WorkOrderTicketEntry entry : entries) {
+            TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(entry.getBusinessType());
             provider.processEntry(entry);
         }
     }
