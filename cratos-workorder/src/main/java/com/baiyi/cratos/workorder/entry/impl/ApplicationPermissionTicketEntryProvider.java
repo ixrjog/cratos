@@ -71,13 +71,15 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
         UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        String namespaces = Joiner.on(",")
+                .join(businessPermission.getRoleMembers()
+                        .stream()
+                        .filter(UserPermissionBusinessParam.RoleMember::getChecked)
+                        .map(UserPermissionBusinessParam.RoleMember::getRole)
+                        .toList());
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
-                .namespaces(Joiner.on(",")
-                        .join(businessPermission.getRoleMembers()
-                                .stream()
-                                .filter(UserPermissionBusinessParam.RoleMember::getChecked)
-                                .toList()))
+                .namespaces(namespaces)
                 .desc("Application permission")
                 .build();
     }
