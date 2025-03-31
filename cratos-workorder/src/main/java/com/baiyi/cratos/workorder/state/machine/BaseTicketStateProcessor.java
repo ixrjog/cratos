@@ -133,8 +133,8 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     protected void sendMsgToUser(User sendToUser, String notificationTemplateKey, Map<String, Object> dict) {
-        NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
         try {
+            NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
             String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
             edsDingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msg);
         } catch (IOException ioException) {

@@ -73,7 +73,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
         if (event.getBody() instanceof WorkOrderTicketParam.ApprovalTicket) {
             // 是否当前审批人
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
-            if (ticketNode.getApprovalCompleted()) {
+            if (Boolean.TRUE.equals(ticketNode.getApprovalCompleted())) {
                 WorkOrderTicketException.runtime("The current node has been approved.");
             }
             if (ApprovalTypes.USER_SPECIFIED.name()
