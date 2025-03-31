@@ -4,6 +4,9 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.LanguageUtils;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -13,6 +16,7 @@ import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.enums.TicketState;
@@ -37,9 +41,13 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketNodeService workOrderTicketNodeService,
                                           WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                           WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
-                                          WorkOrderTicketEntryService workOrderTicketEntryService) {
+                                          WorkOrderTicketEntryService workOrderTicketEntryService,
+                                          NotificationTemplateService notificationTemplateService,
+                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade,
+                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
+                notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
     }
 
     @Override
@@ -47,8 +55,9 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         return true;
     }
 
-    protected boolean nextState(TicketStateChangeAction action) {
-        return false;
+    protected boolean nextState(TicketStateChangeAction action,
+                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        return true;
     }
 
     @Override

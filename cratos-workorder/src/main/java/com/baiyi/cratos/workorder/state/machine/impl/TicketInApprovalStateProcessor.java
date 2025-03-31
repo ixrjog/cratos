@@ -5,6 +5,9 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.LanguageUtils;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -39,9 +42,6 @@ import java.util.Objects;
 @Component
 @TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
 public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
-    // WorkOrderTicketParam.ApprovalTicket
-
-    private final TicketWorkflowFacade ticketWorkflowFacade;
 
     public TicketInApprovalStateProcessor(UserService userService, WorkOrderService workOrderService,
                                           WorkOrderTicketService workOrderTicketService,
@@ -49,10 +49,12 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                           WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                           WorkOrderTicketEntryService workOrderTicketEntryService,
-                                          TicketWorkflowFacade ticketWorkflowFacade) {
+                                          NotificationTemplateService notificationTemplateService,
+                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade,
+                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
-        this.ticketWorkflowFacade = ticketWorkflowFacade;
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
+                notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
     }
 
     @Override
@@ -89,9 +91,19 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
     }
 
     @Override
-    protected boolean nextState(TicketStateChangeAction action) {
-        // 需要判断
-        return false;
+    protected boolean nextState(TicketStateChangeAction action,
+                                TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        // 判断是否审批完成
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
+                .getTicketNo());
+        // 工单无审批节点
+        if (ticket.getNodeId() == 0) {
+            return true;
+        }
+        // Approval Completed
+        return workOrderTicketNodeService.queryByTicketId(ticket.getId())
+                .stream()
+                .allMatch(e -> Boolean.TRUE.equals(e.getApprovalCompleted()));
     }
 
     @Override

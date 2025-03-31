@@ -86,7 +86,7 @@ public class WorkOrderFacade2Test extends BaseUnit {
                 .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
                 .role("prod")
-                .checked(false)
+                .checked(true)
                 .expiredTime(ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS))
                 .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()

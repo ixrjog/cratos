@@ -1,5 +1,8 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
+import com.baiyi.cratos.domain.util.LanguageUtils;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.User;
@@ -16,6 +19,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.builder.TicketBuilder;
 import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.enums.TicketState;
@@ -39,9 +43,13 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
                                       WorkOrderTicketNodeService workOrderTicketNodeService,
                                       WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                       WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
-                                      WorkOrderTicketEntryService workOrderTicketEntryService) {
+                                      WorkOrderTicketEntryService workOrderTicketEntryService,
+                                      NotificationTemplateService notificationTemplateService,
+                                      EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
+                                      TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
+                notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
     }
 
     @Override
@@ -68,12 +76,13 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
     }
 
     @Override
-    protected boolean nextState(TicketStateChangeAction action) {
+    protected boolean nextState(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
         return false;
     }
 
     /**
      * 创建工单
+     *
      * @param action
      * @param event
      */

@@ -5,6 +5,9 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.LanguageUtils;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -38,18 +41,18 @@ import java.util.Optional;
 @TicketStates(state = TicketState.NEW, target = TicketState.SUBMITTED)
 public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SubmitTicket> {
 
-    private final TicketWorkflowFacade ticketWorkflowFacade;
-
     public TicketNewStateProcessor(UserService userService, WorkOrderService workOrderService,
                                    WorkOrderTicketService workOrderTicketService,
                                    WorkOrderTicketNodeService workOrderTicketNodeService,
                                    WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                    WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                    WorkOrderTicketEntryService workOrderTicketEntryService,
+                                   NotificationTemplateService notificationTemplateService,
+                                   EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
                                    TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService);
-        this.ticketWorkflowFacade = ticketWorkflowFacade;
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
+                notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
     }
 
     @Override
-    protected boolean nextState(TicketStateChangeAction action) {
+    protected boolean nextState(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SubmitTicket> event) {
         return TicketStateChangeAction.SUBMIT.equals(action);
     }
 

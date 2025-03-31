@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
@@ -24,12 +25,13 @@ import org.springframework.util.CollectionUtils;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsDingtalkMessageFacade {
+public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
 
     private final DingtalkMessageSender dingtalkMessageSender;
     private final EdsIdentityFacade edsIdentityFacade;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
+    @Override
     public void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText) {
         EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username(sendToUser.getUsername())

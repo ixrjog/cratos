@@ -13,7 +13,9 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.builder.entry.ServerAccountPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
+import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -87,6 +89,20 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
         return ServerAccountPermissionTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .buildEntry();
+    }
+
+    @Override
+    public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
+        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        return TicketEntryModel.EntryDesc.builder()
+                .name(entry.getName())
+                .namespaces(Joiner.on(",")
+                        .join(businessPermission.getRoleMembers()
+                                .stream()
+                                .filter(UserPermissionBusinessParam.RoleMember::getChecked)
+                                .toList()))
+                .desc("ServerAccount permission")
+                .build();
     }
 
 }

@@ -8,6 +8,8 @@ package com.baiyi.cratos.common.enums;
 public enum NotificationTemplateKeys {
 
     COMMAND_EXEC_APPROVAL_NOTICE,
-    COMMAND_EXEC_APPROVAL_RESULT_NOTICE
+    COMMAND_EXEC_APPROVAL_RESULT_NOTICE,
+    // WorkOrder
+    WORK_ORDER_TICKET_APPROVAL_NOTICE
 
 }

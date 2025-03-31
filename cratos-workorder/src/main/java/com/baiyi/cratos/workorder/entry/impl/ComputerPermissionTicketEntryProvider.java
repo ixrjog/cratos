@@ -23,7 +23,9 @@ import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
+import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -171,6 +173,20 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
                                 TimeUnit.DAYS))
                         .build())
                 .toList();
+    }
+
+    @Override
+    public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
+        UserPermissionBusinessParam.BusinessPermission businessPermission = loadAs(entry);
+        return TicketEntryModel.EntryDesc.builder()
+                .name(entry.getName())
+                .namespaces(Joiner.on(",")
+                        .join(businessPermission.getRoleMembers()
+                                .stream()
+                                .filter(UserPermissionBusinessParam.RoleMember::getChecked)
+                                .toList()))
+                .desc("Computer permission")
+                .build();
     }
 
 }

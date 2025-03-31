@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.entry;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.workorder.model.TicketEntryModel;
 
 /**
  * &#064;Author  baiyi
@@ -27,5 +28,7 @@ public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketP
     String getTableTitle(WorkOrderTicketEntry entry);
 
     String getEntryTableRow(WorkOrderTicketEntry entry);
+
+    TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry);
 
 }

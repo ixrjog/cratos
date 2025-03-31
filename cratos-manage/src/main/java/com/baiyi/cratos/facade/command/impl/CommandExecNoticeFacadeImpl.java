@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.facade.command.CommandExecNoticeFacade;
-import com.baiyi.cratos.facade.message.EdsDingtalkMessageFacade;
+import com.baiyi.cratos.facade.message.EdsDingtalkMessageFacadeImpl;
 import com.baiyi.cratos.service.CommandExecService;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
@@ -34,7 +34,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
 
     private final CommandExecService commandExecService;
     private final NotificationTemplateService notificationTemplateService;
-    private final EdsDingtalkMessageFacade dingtalkMessageFacade;
+    private final EdsDingtalkMessageFacadeImpl dingtalkMessageFacade;
     private final UserService userService;
     private final LanguageUtils languageUtils;
 
@@ -110,7 +110,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
         if (!StringUtils.hasText(remark)) {
             return "The applicant did not fill in any information";
         }
-        return remark.length() > 30 ? remark.substring(30) : remark;
+        return remark.length() > 30 ? remark.substring(0, 30) : remark;
     }
 
     private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
