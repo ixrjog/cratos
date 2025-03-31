@@ -100,6 +100,11 @@ public class WorkOrderTicketVO {
         private TicketAbstract ticketAbstract;
 
         private WorkOrderVO.WorkOrder workOrder;
+
+        @Schema(description = "申请人信息")
+        private ApplicantInfo applicantInfo;
+        @Schema(description = "审批人信息")
+        private ApprovalInfo approvalInfo;
     }
 
     @Data

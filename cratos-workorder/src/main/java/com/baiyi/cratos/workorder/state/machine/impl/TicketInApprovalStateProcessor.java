@@ -135,6 +135,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
             }
             if (ApprovalStatus.REJECT.equals(approvalStatus)) {
                 approveReject(ticket, approvalTicket);
+                return;
             }
         }
         WorkOrderTicketException.runtime("Incorrect approval type.");
