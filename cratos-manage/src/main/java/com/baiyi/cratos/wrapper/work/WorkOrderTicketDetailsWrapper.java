@@ -4,18 +4,22 @@ import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
-import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
+import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -34,6 +38,7 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
     private final BusinessTagService businessTagService;
     private final UserService userService;
     private final TicketWorkflowFacade workflowFacade;
+    private final WorkOrderTicketNodeService workOrderTicketNodeService;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BusinessWrapper.BEFORE)
@@ -44,12 +49,21 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
         //  Workflow
         WorkflowModel.Workflow workflow = vo.getWorkOrder()
                 .getWorkflowData();
-        if (TicketState.NEW.name()
+        // 审批中
+        if (TicketState.IN_APPROVAL.name()
                 .equals(vo.getTicket()
                         .getTicketState())) {
-            workflow.getNodes()
-                    .forEach(node -> node.setSelectableUsers(workflowFacade.querySelectableUsersByTags(node.getTags())));
+            if (vo.getTicket()
+                    .getNodeId() != 0) {
+                WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(vo.getTicket()
+                        .getNodeId());
+                if (Objects.nonNull(ticketNode)) {
+                    vo.setCurrentNode(ticketNode.getNodeName());
+                }
+            }
         }
+        workflow.getNodes()
+                .forEach(node -> node.setSelectableUsers(workflowFacade.querySelectableUsersByTags(node.getTags())));
         vo.setWorkflow(workflow);
     }
 
