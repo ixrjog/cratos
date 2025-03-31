@@ -63,4 +63,11 @@ public class WorkOrderTicketController {
         return new HttpResult<>(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
     }
 
+    @Operation(summary = "Delete ticket by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTicketById(@RequestParam int id) {
+        workOrderTicketFacade.deleteTicketById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }
