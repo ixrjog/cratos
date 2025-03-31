@@ -1,13 +1,8 @@
 package com.baiyi.cratos.workorder.state.machine;
 
-import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.LanguageUtils;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -24,8 +19,6 @@ import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,8 +39,6 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     protected final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
     protected final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
     protected final WorkOrderTicketEntryService workOrderTicketEntryService;
-    private final NotificationTemplateService notificationTemplateService;
-    private final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
     private final LanguageUtils languageUtils;
     protected final TicketWorkflowFacade ticketWorkflowFacade;
 
@@ -130,24 +121,6 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
                     .name());
             workOrderTicketService.updateByPrimaryKey(ticket);
         }
-    }
-
-    protected void sendMsgToUser(User sendToUser, String notificationTemplateKey, Map<String, Object> dict) {
-        try {
-            NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
-            String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
-            edsDingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msg);
-        } catch (IOException ioException) {
-            log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
-        }
-    }
-
-    private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
-        NotificationTemplate query = NotificationTemplate.builder()
-                .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getUserLanguage(user))
-                .build();
-        return notificationTemplateService.getByUniqueKey(query);
     }
 
 }

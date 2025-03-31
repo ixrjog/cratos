@@ -6,8 +6,6 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.LanguageUtils;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
-import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -46,13 +44,11 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
                                    WorkOrderTicketNodeService workOrderTicketNodeService,
                                    WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                    WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
-                                   WorkOrderTicketEntryService workOrderTicketEntryService,
-                                   NotificationTemplateService notificationTemplateService,
-                                   EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
+                                   WorkOrderTicketEntryService workOrderTicketEntryService, LanguageUtils languageUtils,
                                    TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
-                notificationTemplateService, edsDingtalkMessageFacade, languageUtils, ticketWorkflowFacade);
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService, languageUtils,
+                ticketWorkflowFacade);
     }
 
     @Override
