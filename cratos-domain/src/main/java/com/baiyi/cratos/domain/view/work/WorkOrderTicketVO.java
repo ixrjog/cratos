@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.work;
 
 import com.baiyi.cratos.domain.TicketWorkflow;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
@@ -84,13 +85,13 @@ public class WorkOrderTicketVO {
         private String ticketState;
         private String ticketResult;
         private Boolean success;
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date submittedAt;
         private Boolean completed;
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date completedAt;
         private Boolean autoProcessing;
-        @JsonFormat(timezone = "UTC", pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date processAt;
         private String applyRemark;
         private Boolean valid;

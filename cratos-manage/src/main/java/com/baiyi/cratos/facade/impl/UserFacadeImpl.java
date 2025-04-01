@@ -6,10 +6,7 @@ import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
-import com.baiyi.cratos.common.util.IdentityUtil;
-import com.baiyi.cratos.common.util.SshFingerprintUtil;
-import com.baiyi.cratos.common.util.SshKeyUtils;
+import com.baiyi.cratos.common.util.*;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -185,6 +182,13 @@ public class UserFacadeImpl implements UserFacade {
         user.setMobilePhone(updateUser.getMobilePhone());
         user.setValid(updateUser.getValid());
         user.setExpiredTime(updateUser.getExpiredTime());
+        userService.updateByPrimaryKey(user);
+    }
+
+    @Override
+    public void updateMyLanguage(UserParam.UpdateMyLanguage updateMyLanguage) {
+        User user = userService.getByUsername(SessionUtils.getUsername());
+        user.setLang(updateMyLanguage.getLang());
         userService.updateByPrimaryKey(user);
     }
 

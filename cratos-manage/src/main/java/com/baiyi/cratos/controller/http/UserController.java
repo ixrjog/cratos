@@ -54,6 +54,13 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update my language")
+    @PutMapping(value = "/my/language/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateMyLanguage(@RequestBody @Valid UserParam.UpdateMyLanguage updateMyLanguage) {
+        userFacade.updateMyLanguage(updateMyLanguage);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update user")
     @PutMapping(value = "/my/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> updateMy(@RequestBody @Valid UserParam.UpdateMy updateMy) {

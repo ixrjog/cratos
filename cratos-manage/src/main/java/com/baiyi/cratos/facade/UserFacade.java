@@ -33,6 +33,8 @@ public interface UserFacade extends HasSetValid {
 
     void updateUser(UserParam.UpdateUser updateUser);
 
+    void updateMyLanguage(UserParam.UpdateMyLanguage updateMyLanguage);
+
     void updateUser(UserParam.UpdateMy updateMy);
 
     List<CredentialVO.Credential> queryMySshKey();

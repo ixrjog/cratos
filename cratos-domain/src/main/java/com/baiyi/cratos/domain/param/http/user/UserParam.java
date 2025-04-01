@@ -114,6 +114,12 @@ public class UserParam {
     }
 
     @Data
+    public static class UpdateMyLanguage {
+        @NotBlank
+        private String lang;
+    }
+
+    @Data
     @Schema
     @Builder
     @BusinessType(type = BusinessTypeEnum.USER)

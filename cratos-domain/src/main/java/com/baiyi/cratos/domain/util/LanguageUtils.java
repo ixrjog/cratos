@@ -3,7 +3,8 @@ package com.baiyi.cratos.domain.util;
 import com.baiyi.cratos.domain.generator.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
 
 /**
  * &#064;Author  baiyi
@@ -16,8 +17,11 @@ public class LanguageUtils {
     @Value("${cratos.language:en-us}")
     private String language;
 
+    private static final String[] LANGUAGES = {"zh-cn", "en-us"};
+
     public String getLanguageOf(User user) {
-        return StringUtils.hasText(user.getLang()) ? user.getLang() : getSysLanguage();
+        return Arrays.asList(LANGUAGES)
+                .contains(user.getLang()) ? user.getLang() : getSysLanguage();
     }
 
     public String getSysLanguage() {
