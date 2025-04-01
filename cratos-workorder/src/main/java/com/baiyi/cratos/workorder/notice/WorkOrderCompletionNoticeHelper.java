@@ -1,8 +1,6 @@
 package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -17,7 +15,6 @@ import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,12 +42,10 @@ public class WorkOrderCompletionNoticeHelper extends BaseWorkOrderNoticeHelper {
         User applicantUser = userService.getByUsername(ticket.getUsername());
         List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
                 .stream()
-                .map(e ->
-                        TicketEntryModel.EntryDesc.builder()
-                                .name(e.getName())
-                                .desc(e.getSuccess() ? "Success" : "Failed")
-                                .build()
-                )
+                .map(e -> TicketEntryModel.EntryDesc.builder()
+                        .name(e.getName())
+                        .desc(e.getSuccess() ? "Success" : "Failed")
+                        .build())
                 .toList();
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
@@ -61,14 +56,7 @@ public class WorkOrderCompletionNoticeHelper extends BaseWorkOrderNoticeHelper {
     }
 
     protected void sendMsgToApplicant(User applicantUser, Map<String, Object> dict) {
-        try {
-            NotificationTemplate notificationTemplate = getNotificationTemplate(WORK_ORDER_COMPLETION_NOTICE.name(),
-                    applicantUser);
-            String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
-            edsDingtalkMessageFacade.sendToDingtalkUser(applicantUser, notificationTemplate, msg);
-        } catch (IOException ioException) {
-            log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
-        }
+        sendMsgToUser(applicantUser, WORK_ORDER_COMPLETION_NOTICE.name(), dict);
     }
 
 }

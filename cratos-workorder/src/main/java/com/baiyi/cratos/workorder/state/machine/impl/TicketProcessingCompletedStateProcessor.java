@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.state.machine.impl;
 
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.service.UserService;
@@ -19,6 +20,8 @@ import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import com.baiyi.cratos.workorder.notice.WorkOrderCompletionNoticeHelper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -58,9 +61,15 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
 
     @Override
     protected void processing(TicketStateChangeAction action, TicketEvent<WorkOrderTicketParam.SimpleTicketNo> event) {
+        // 设置工单success
+        WorkOrderTicket ticket = getTicketByNo(event.getBody());
+        List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
+        boolean success = entries.stream()
+                .noneMatch(e -> Boolean.TRUE.equals(e.getSuccess()));
+        ticket.setSuccess(success);
+        workOrderTicketService.updateByPrimaryKey(ticket);
+
         // 工单处理完成通知
-        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
-                .getTicketNo());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         workOrderCompletionNoticeHelper.sendMsg(workOrder, ticket);
     }

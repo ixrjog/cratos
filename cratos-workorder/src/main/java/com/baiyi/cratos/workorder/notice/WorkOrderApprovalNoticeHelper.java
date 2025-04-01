@@ -2,8 +2,10 @@ package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
-import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -75,16 +76,6 @@ public class WorkOrderApprovalNoticeHelper extends BaseWorkOrderNoticeHelper {
         approvers.forEach(
                 approver -> sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(),
                         dict));
-    }
-
-    protected void sendMsgToUser(User sendToUser, String notificationTemplateKey, Map<String, Object> dict) {
-        try {
-            NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
-            String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
-            edsDingtalkMessageFacade.sendToDingtalkUser(sendToUser, notificationTemplate, msg);
-        } catch (IOException ioException) {
-            log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
-        }
     }
 
 }
