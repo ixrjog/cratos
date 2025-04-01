@@ -58,4 +58,15 @@ public class WorkOrderTicketServiceImpl implements WorkOrderTicketService {
         return workOrderTicketMapper.selectOneByExample(example);
     }
 
+    @Override
+    public int countUserWorkOrderTicketByState(String username, int workOrderId, String ticketState) {
+        Example example = new Example(WorkOrderTicket.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username", username)
+                .andEqualTo("workOrderId", workOrderId)
+                .andEqualTo("ticketState", ticketState)
+                .andEqualTo("valid", true);
+        return workOrderTicketMapper.selectCountByExample(example);
+    }
+
 }

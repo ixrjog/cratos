@@ -6,7 +6,6 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -51,7 +50,17 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
     protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
         // 新建工单超过3个不允许继续创建
-        //  WorkOrderTicketException.runtime("The work order does not exist.");
+        WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody()
+                .getWorkOrderKey());
+        if (Objects.isNull(workOrder)) {
+            WorkOrderTicketException.runtime("The work order does not exist.");
+        }
+        if (workOrderTicketService.countUserWorkOrderTicketByState(SessionUtils.getUsername(), workOrder.getId(),
+                TicketState.NEW.name()) >= 3) {
+            WorkOrderTicketException.runtime(
+                    "The type of work order you created={} exceeds 3 and has not been submitted", event.getBody()
+                            .getWorkOrderKey());
+        }
     }
 
     @Override
@@ -61,12 +70,11 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
 
     private void createWorkflowNodes(User user, WorkOrder workOrder, WorkOrderTicket newTicket) {
         workOrderTicketNodeFacade.createWorkflowNodes(workOrder, newTicket);
-        WorkOrderTicketVO.TicketDetails details = WorkOrderTicketVO.TicketDetails.builder()
-                .ticketNo(newTicket.getTicketNo())
-                .build();
         WorkOrderTicketNode rootNode = workOrderTicketNodeService.getRootNode(newTicket.getId());
-        newTicket.setNodeId(rootNode.getId());
-        workOrderTicketService.updateByPrimaryKey(newTicket);
+        if (Objects.nonNull(rootNode)) {
+            newTicket.setNodeId(rootNode.getId());
+            workOrderTicketService.updateByPrimaryKey(newTicket);
+        }
         workOrderTicketSubscriberFacade.publish(newTicket, user);
     }
 

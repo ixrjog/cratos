@@ -58,8 +58,10 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     protected void preChangeInspection(TicketStateChangeAction action, TicketEvent<Event> event) {
-        if (getState() != TicketState.valueOf(getTicketByNo(event.getBody()
-                .getTicketNo()).getTicketState())) {
+        TicketState processorState = getState();
+        TicketState currentTicketState = TicketState.valueOf(getTicketByNo(event.getBody()
+                .getTicketNo()).getTicketState());
+        if (!processorState.equals(currentTicketState)) {
             TicketStateProcessorException.runtime(
                     "The work order status is incorrect, and the current operation cannot be executed.");
         }
@@ -97,7 +99,6 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     @Override
     public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
         try {
-            preChangeInspection(action, event);
             preChangeInspection(action, event);
             processing(action, event);
             if (!isTransition(event.getBody())) {

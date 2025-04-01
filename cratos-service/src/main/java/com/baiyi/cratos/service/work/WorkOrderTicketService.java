@@ -18,6 +18,8 @@ public interface WorkOrderTicketService extends BaseUniqueKeyService<WorkOrderTi
 
     DataTable<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.TicketPageQuery pageQuery);
 
+    int countUserWorkOrderTicketByState(String username, int workOrderId, String ticketState);
+
     default WorkOrderTicket getByTicketNo(String ticketNo) {
         return getByUniqueKey(WorkOrderTicket.builder()
                 .ticketNo(ticketNo)

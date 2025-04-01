@@ -136,8 +136,8 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                 approveReject(ticket, approvalTicket);
                 return;
             }
+            WorkOrderTicketException.runtime("Incorrect approval type.");
         }
-        WorkOrderTicketException.runtime("Incorrect approval type.");
     }
 
     protected void sendMsg(WorkOrderTicket ticket, WorkOrderTicketNode nextNode) {

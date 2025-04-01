@@ -20,7 +20,9 @@ import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -64,10 +66,14 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
                 }
             }
         }
-        workflow.getNodes()
-                .forEach(node -> node.setSelectableUsers(
-                        BeanCopierUtil.copyListProperties(workflowFacade.querySelectableUsersByTags(node.getTags()),
-                                UserVO.User.class)));
+        if (!CollectionUtils.isEmpty(workflow.getNodes())) {
+            workflow.getNodes()
+                    .forEach(node -> {
+                        List<UserVO.User> selectableUsers = BeanCopierUtil.copyListProperties(
+                                workflowFacade.querySelectableUsersByTags(node.getTags()), UserVO.User.class);
+                        node.setSelectableUsers(selectableUsers);
+                    });
+        }
         vo.setWorkflow(workflow);
     }
 
