@@ -1,9 +1,12 @@
 package com.baiyi.cratos.facade.work.impl;
 
+import com.baiyi.cratos.common.util.VersionValidator;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.work.WorkOrderFacade;
 import com.baiyi.cratos.service.work.WorkOrderGroupService;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.exception.WorkOrderException;
 import com.baiyi.cratos.wrapper.work.WorkOrderGroupWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,6 +37,14 @@ public class WorkOrderFacadeImpl implements WorkOrderFacade {
         return WorkOrderVO.Menu.builder()
                 .groupList(groupList)
                 .build();
+    }
+
+    @Override
+    public void updateWorkOrder(WorkOrderParam.UpdateWorkOrder updateWorkOrder) {
+        if (VersionValidator.isValidVersion(updateWorkOrder.getVersion())) {
+            WorkOrderException.runtime("Version number format error.");
+        }
+        workOrderService.updateByPrimaryKey(updateWorkOrder.toTarget());
     }
 
 }

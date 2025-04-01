@@ -50,12 +50,11 @@ public class TicketNodeUpdater {
         }
         node.setApprovalAt(new Date());
         node.setApprovalCompleted(true);
-        ApprovalStatus approvalStatus = ApprovalStatus.valueOf(approvalTicket
-                .getApprovalType());
+        ApprovalStatus approvalStatus = ApprovalStatus.valueOf(approvalTicket.getApprovalType());
         node.setApprovalStatus(approvalStatus.name());
-        if(!StringUtils.hasText(approvalTicket.getApproveRemark())) {
-            node.setApproveRemark(approvalStatus.name());
-        }
+        final String approveRemark = StringUtils.hasText(
+                approvalTicket.getApproveRemark()) ? approvalTicket.getApproveRemark() : approvalStatus.name();
+        node.setApproveRemark(approveRemark);
         service.updateByPrimaryKey(node);
     }
 
