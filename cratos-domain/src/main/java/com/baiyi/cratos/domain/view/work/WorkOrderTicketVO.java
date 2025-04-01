@@ -67,12 +67,13 @@ public class WorkOrderTicketVO {
         private String currentNode;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class Ticket implements TicketWorkflow.HasWorkflowData, Serializable {
+    public static class Ticket extends BaseVO implements TicketWorkflow.HasWorkflowData, Serializable {
         @Serial
         private static final long serialVersionUID = 9097666590091735099L;
         private Integer id;
