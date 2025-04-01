@@ -31,10 +31,10 @@ public abstract class BaseWorkOrderNoticeHelper {
     private final LanguageUtils languageUtils;
     private final NotificationTemplateService notificationTemplateService;
 
-    protected NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
+    private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
         NotificationTemplate query = NotificationTemplate.builder()
                 .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getUserLanguage(user))
+                .lang(languageUtils.getLanguageOf(user))
                 .build();
         return notificationTemplateService.getByUniqueKey(query);
     }

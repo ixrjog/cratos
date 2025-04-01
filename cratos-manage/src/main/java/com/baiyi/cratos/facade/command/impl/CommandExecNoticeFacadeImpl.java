@@ -116,7 +116,7 @@ public class CommandExecNoticeFacadeImpl implements CommandExecNoticeFacade {
     private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
         NotificationTemplate query = NotificationTemplate.builder()
                 .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getUserLanguage(user))
+                .lang(languageUtils.getLanguageOf(user))
                 .build();
         return notificationTemplateService.getByUniqueKey(query);
     }

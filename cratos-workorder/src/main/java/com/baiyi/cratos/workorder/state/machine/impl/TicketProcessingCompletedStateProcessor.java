@@ -65,10 +65,9 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
         WorkOrderTicket ticket = getTicketByNo(event.getBody());
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
         boolean success = entries.stream()
-                .noneMatch(e -> Boolean.FALSE.equals(e.getSuccess()));
+                .allMatch(e -> Boolean.TRUE.equals(e.getSuccess()));
         ticket.setSuccess(success);
         workOrderTicketService.updateByPrimaryKey(ticket);
-
         // 工单处理完成通知
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         workOrderCompletionNoticeHelper.sendMsg(workOrder, ticket);

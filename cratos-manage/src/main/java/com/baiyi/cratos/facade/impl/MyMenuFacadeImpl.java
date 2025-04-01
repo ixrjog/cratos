@@ -52,7 +52,7 @@ public class MyMenuFacadeImpl implements MyMenuFacade {
 
     private String getUserLang(String username) {
         User user = userService.getByUsername(username);
-        return languageUtils.getUserLanguage(user);
+        return languageUtils.getLanguageOf(user);
     }
 
     @Override
