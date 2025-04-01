@@ -1,7 +1,7 @@
 package com.baiyi.cratos.domain.view.work;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.domain.HasWorkflow;
+import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.model.I18nModel;
@@ -66,7 +66,7 @@ public class WorkOrderVO {
     @AllArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.WORKORDER)
-    public static class WorkOrder implements BaseBusiness.IBusinessAnnotate, I18nModel.HasI18n, HasWorkflow, BusinessDocVO.HasBusinessDocs, BusinessTagVO.HasBusinessTags, Serializable {
+    public static class WorkOrder implements BaseBusiness.IBusinessAnnotate, I18nModel.HasI18n, TicketWorkflow.HasWorkflowData, BusinessDocVO.HasBusinessDocs, BusinessTagVO.HasBusinessTags, Serializable {
         @Serial
         private static final long serialVersionUID = 883502875092939363L;
         private Integer id;

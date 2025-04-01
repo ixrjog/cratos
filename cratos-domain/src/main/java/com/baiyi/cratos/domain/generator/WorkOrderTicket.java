@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,13 +14,13 @@ import java.util.Date;
 /**
  * 表名：work_order_ticket
  * 表注释：工单票据
-*/
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "work_order_ticket")
-public class WorkOrderTicket implements HasIntegerPrimaryKey, HasValid {
+public class WorkOrderTicket implements TicketWorkflow.HasWorkflow, HasIntegerPrimaryKey, HasValid {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

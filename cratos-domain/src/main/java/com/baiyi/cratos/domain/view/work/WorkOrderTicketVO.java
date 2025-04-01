@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.view.work;
 
-import com.baiyi.cratos.domain.HasWorkflow;
+import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
@@ -72,7 +72,7 @@ public class WorkOrderTicketVO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class Ticket implements HasWorkflow, Serializable {
+    public static class Ticket implements TicketWorkflow.HasWorkflowData, Serializable {
         @Serial
         private static final long serialVersionUID = 9097666590091735099L;
         private Integer id;

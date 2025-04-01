@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "work_order")
-public class WorkOrder implements HasIntegerPrimaryKey, HasValid, Serializable {
+public class WorkOrder implements TicketWorkflow.HasWorkflow, HasIntegerPrimaryKey, HasValid, Serializable {
     @Serial
     private static final long serialVersionUID = 2061586323874022357L;
     @Id
