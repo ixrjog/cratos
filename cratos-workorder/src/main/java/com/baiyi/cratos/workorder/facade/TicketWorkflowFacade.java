@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.facade;
 
-import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.view.user.UserVO;
 
 import java.util.List;
@@ -14,10 +14,10 @@ public interface TicketWorkflowFacade {
 
     List<UserVO.User> querySelectableUsersByTags(List<String> tags);
 
-    List<UserVO.User> queryNodeApprovalUsers(WorkOrder workOrder, String nodeName);
+    List<UserVO.User> queryNodeApprovalUsers(WorkOrderTicket ticket, String nodeName);
 
-    boolean isApprover(WorkOrder workOrder, String nodeName, String username);
+    boolean isApprover(WorkOrderTicket ticket, String nodeName, String username);
 
-    List<String> queryNodeApprovalUsernames(WorkOrder workOrder, String nodeName);
+    List<String> queryNodeApprovalUsernames(WorkOrderTicket ticket, String nodeName);
 
 }

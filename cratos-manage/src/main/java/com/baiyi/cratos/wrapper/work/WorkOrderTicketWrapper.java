@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
+import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
@@ -48,30 +50,30 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
 
     @Override
-   public void wrap(WorkOrderTicketVO.Ticket vo) {
+    public void wrap(WorkOrderTicketVO.Ticket vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getWorkOrderId());
         wrapTicketAbstract(vo, workOrder);
         vo.setWorkOrder(workOrderWrapper.wrapToTarget(workOrder));
         setApplicantInfo(vo);
         setApprovalInfo(vo);
+        WorkflowUtils.setWorkflow(vo);
     }
 
     private void setApplicantInfo(WorkOrderTicketVO.Ticket vo) {
         User applicantUser = userService.getByUsername(vo.getUsername());
         vo.setApplicant(userWrapper.wrapToTarget(applicantUser));
-        vo.setApplicantInfo(vo.getUsername().equals(SessionUtils.getUsername())
-                ? WorkOrderTicketVO.ApplicantInfo.THE_APPLICANT
-                : WorkOrderTicketVO.ApplicantInfo.NOT_THE_APPLICANT);
+        vo.setApplicantInfo(vo.getUsername()
+                .equals(SessionUtils.getUsername()) ? WorkOrderTicketVO.ApplicantInfo.THE_APPLICANT : WorkOrderTicketVO.ApplicantInfo.NOT_THE_APPLICANT);
     }
 
     private void setApprovalInfo(WorkOrderTicketVO.Ticket vo) {
         if (TicketState.IN_APPROVAL.equals(TicketState.valueOf(vo.getTicketState())) && vo.getNodeId() != 0) {
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(vo.getNodeId());
             if (ticketNode != null && !Boolean.TRUE.equals(ticketNode.getApprovalCompleted())) {
-                boolean isCurrentApprover = StringUtils.hasText(vo.getUsername())
-                        ? vo.getUsername().equals(SessionUtils.getUsername())
-                        : ticketWorkflowFacade.isApprover(workOrderService.getById(vo.getWorkOrderId()),
-                                ticketNode.getNodeName(), SessionUtils.getUsername());
+                boolean isCurrentApprover = StringUtils.hasText(vo.getUsername()) ? vo.getUsername()
+                        .equals(SessionUtils.getUsername()) : ticketWorkflowFacade.isApprover(
+                        BeanCopierUtil.copyProperties(vo, WorkOrderTicket.class), ticketNode.getNodeName(),
+                        SessionUtils.getUsername());
                 vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()
                         .isCurrentApprover(isCurrentApprover)
                         .build());

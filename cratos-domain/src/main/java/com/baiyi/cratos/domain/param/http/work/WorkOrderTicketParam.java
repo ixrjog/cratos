@@ -54,6 +54,19 @@ public class WorkOrderTicketParam {
         }
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class TicketPageQuery extends PageParam  {
+        private String ticketNo;
+        private String ticketState;
+        private String workOrderKey;
+        private String username;
+        private String version;
+    }
+
     @Data
     @Builder
     @AllArgsConstructor

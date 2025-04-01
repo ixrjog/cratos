@@ -46,6 +46,8 @@ public class TicketBuilder {
                 .completed(false)
                 .valid(true)
                 .nodeId(0)
+                .workflow(workOrder.getWorkflow())
+                .version(workOrder.getVersion())
                 .build();
     }
 

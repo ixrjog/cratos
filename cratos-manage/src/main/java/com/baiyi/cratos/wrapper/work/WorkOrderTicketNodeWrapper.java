@@ -56,7 +56,7 @@ public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrder
                 isCurrentApprover = vo.getUsername()
                         .equals(SessionUtils.getUsername());
             } else {
-                isCurrentApprover = ticketWorkflowFacade.isApprover(workOrderService.getById(ticket.getWorkOrderId()),
+                isCurrentApprover = ticketWorkflowFacade.isApprover(ticket,
                         vo.getNodeName(), SessionUtils.getUsername());
             }
             vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()

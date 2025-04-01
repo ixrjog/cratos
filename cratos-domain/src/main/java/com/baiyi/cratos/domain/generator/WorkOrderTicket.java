@@ -99,6 +99,13 @@ public class WorkOrderTicket implements HasIntegerPrimaryKey, HasValid {
     private Boolean valid;
 
     /**
+     * 工作流快照
+     */
+    private String workflow;
+
+    private String version;
+
+    /**
      * 说明
      */
     private String comment;

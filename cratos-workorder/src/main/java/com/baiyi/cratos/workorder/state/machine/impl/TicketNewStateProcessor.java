@@ -105,7 +105,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
                 .filter(node -> ApprovalTypes.USER_SPECIFIED.equals(
                         ApprovalTypes.valueOf(node.getApprovalType())) && nodeApprover.containsKey(node.getNodeName()))
                 .forEach(node -> {
-                    if (ticketWorkflowFacade.isApprover(workOrder, node.getNodeName(),
+                    if (ticketWorkflowFacade.isApprover(ticket, node.getNodeName(),
                             nodeApprover.get(node.getNodeName()))) {
                         node.setUsername(nodeApprover.get(node.getNodeName()));
                         workOrderTicketNodeService.updateByPrimaryKey(node);

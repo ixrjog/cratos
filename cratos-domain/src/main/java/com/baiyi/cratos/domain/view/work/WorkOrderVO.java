@@ -85,6 +85,7 @@ public class WorkOrderVO {
 
         private I18nModel.I18nData i18nData;
         private WorkflowModel.Workflow workflowData;
+        private String version;
 
         @Override
         public Integer getBusinessId() {

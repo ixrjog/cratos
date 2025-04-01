@@ -65,7 +65,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         }
         WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
         WorkOrderTicketNode workOrderTicketNode = workOrderTicketNodeService.getById(workOrderTicket.getNodeId());
-        if (!workflowFacade.isApprover(workOrder, workOrderTicketNode.getNodeName(), SessionUtils.getUsername())) {
+        if (!workflowFacade.isApprover(workOrderTicket, workOrderTicketNode.getNodeName(),
+                SessionUtils.getUsername())) {
             WorkOrderTicketException.runtime("Only the approver of the current node can set valid settings.");
         }
         workOrderTicketEntryService.updateValidById(id);

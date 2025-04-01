@@ -65,7 +65,7 @@ public class ApprovalNotificationHelper {
             return List.of(userService.getByUsername(ticketNode.getUsername()));
         }
         return BeanCopierUtil.copyListProperties(
-                ticketWorkflowFacade.queryNodeApprovalUsers(workOrder, ticketNode.getNodeName()), User.class);
+                ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName()), User.class);
     }
 
     private void sendMsgToApprover(List<User> approvers, Map<String, Object> dict) {

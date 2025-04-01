@@ -47,7 +47,7 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
                 .getWorkOrderId());
         vo.setWorkOrder(workOrderWrapper.wrapToTarget(workOrder));
         //  Workflow
-        WorkflowModel.Workflow workflow = vo.getWorkOrder()
+        WorkflowModel.Workflow workflow = vo.getTicket()
                 .getWorkflowData();
         // 审批中
         if (TicketState.IN_APPROVAL.name()

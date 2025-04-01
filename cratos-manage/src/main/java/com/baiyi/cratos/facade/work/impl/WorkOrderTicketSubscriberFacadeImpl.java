@@ -61,7 +61,7 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
     @Override
     public void publish(WorkOrderTicket ticket) {
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        Map<String, WorkflowModel.Node> nodeMap = WorkflowUtils.toNodeMap(workOrder);
+        Map<String, WorkflowModel.Node> nodeMap = WorkflowUtils.toNodeMap(ticket);
         List<WorkOrderTicketNode> ticketNodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
         ticketNodes.forEach(n -> {
             if (nodeMap.containsKey(n.getNodeName())) {

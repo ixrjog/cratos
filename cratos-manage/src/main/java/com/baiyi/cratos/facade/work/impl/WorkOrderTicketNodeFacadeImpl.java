@@ -32,7 +32,7 @@ public class WorkOrderTicketNodeFacadeImpl implements WorkOrderTicketNodeFacade 
 
     @Override
     public void createWorkflowNodes(WorkOrder workOrder, WorkOrderTicket newTicket) {
-        WorkflowModel.Workflow workflow = WorkflowUtils.loadAs(workOrder);
+        WorkflowModel.Workflow workflow = WorkflowUtils.loadAs(newTicket);
         if (CollectionUtils.isEmpty(workflow.getNodes())) {
             return;
         }
@@ -53,9 +53,9 @@ public class WorkOrderTicketNodeFacadeImpl implements WorkOrderTicketNodeFacade 
     }
 
     @Override
-    public void verifyWorkflowNodes(WorkOrder workOrder, WorkOrderTicket workOrderTicket) {
-        Map<String, WorkflowModel.Node> nodeMap = WorkflowUtils.toNodeMap(workOrder);
-        List<WorkOrderTicketNode> nodes = workOrderTicketNodeService.queryByTicketId(workOrderTicket.getId());
+    public void verifyWorkflowNodes(WorkOrder workOrder, WorkOrderTicket ticket) {
+        Map<String, WorkflowModel.Node> nodeMap = WorkflowUtils.toNodeMap(ticket);
+        List<WorkOrderTicketNode> nodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
         for (WorkOrderTicketNode node : nodes) {
             WorkflowModel.Node workflowNode = nodeMap.get(node.getNodeName());
             if (workflowNode == null) {

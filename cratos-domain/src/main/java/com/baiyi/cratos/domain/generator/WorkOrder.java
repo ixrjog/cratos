@@ -94,4 +94,6 @@ public class WorkOrder implements HasIntegerPrimaryKey, HasValid, Serializable {
      * 工作流配置
      */
     private String workflow;
+
+    private String version;
 }

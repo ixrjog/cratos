@@ -85,7 +85,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                 }
                 return;
             }
-            if (!ticketWorkflowFacade.isApprover(workOrder, ticketNode.getNodeName(), SessionUtils.getUsername())) {
+            if (!ticketWorkflowFacade.isApprover(ticket, ticketNode.getNodeName(), SessionUtils.getUsername())) {
                 WorkOrderTicketException.runtime("You are not the current approver.");
             }
         }
