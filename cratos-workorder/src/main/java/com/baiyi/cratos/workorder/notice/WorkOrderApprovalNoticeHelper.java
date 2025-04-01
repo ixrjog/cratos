@@ -6,7 +6,6 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -65,8 +64,7 @@ public class WorkOrderApprovalNoticeHelper extends BaseWorkOrderNoticeHelper {
         if (StringUtils.hasText(ticketNode.getUsername())) {
             return List.of(userService.getByUsername(ticketNode.getUsername()));
         }
-        return BeanCopierUtil.copyListProperties(
-                ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName()), User.class);
+        return ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
     }
 
     private void sendMsgToApprover(List<User> approvers, Map<String, Object> dict) {

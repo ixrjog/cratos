@@ -2,7 +2,6 @@ package com.baiyi.cratos.workorder.state.machine;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -39,7 +38,6 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     protected final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
     protected final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
     protected final WorkOrderTicketEntryService workOrderTicketEntryService;
-    private final LanguageUtils languageUtils;
     protected final TicketWorkflowFacade ticketWorkflowFacade;
 
     @SuppressWarnings("rawtypes")

@@ -55,6 +55,7 @@ public class UserVO {
         private Integer otp;
         private String createdBy;
         private String source;
+        private String lang;
         @FieldSensitive(type = SensitiveType.PASSWORD)
         private String password;
         private String comment;

@@ -2,7 +2,6 @@ package com.baiyi.cratos.workorder.state.machine.impl;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -35,9 +34,9 @@ public class TicketCompletedStateProcessor extends BaseTicketStateProcessor<Work
                                          WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                          WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                          WorkOrderTicketEntryService workOrderTicketEntryService,
-                                         LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade) {
+                                         TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService, languageUtils,
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
     }
 

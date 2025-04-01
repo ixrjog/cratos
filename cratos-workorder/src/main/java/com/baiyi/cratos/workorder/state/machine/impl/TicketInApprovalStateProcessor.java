@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -22,9 +21,9 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
+import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeHelper;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
-import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -50,10 +49,10 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                           WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                           WorkOrderTicketEntryService workOrderTicketEntryService,
-                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade,
+                                          TicketWorkflowFacade ticketWorkflowFacade,
                                           WorkOrderApprovalNoticeHelper approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
-                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService, languageUtils,
+                workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
         this.approvalNotificationHelper = approvalNotificationHelper;
     }

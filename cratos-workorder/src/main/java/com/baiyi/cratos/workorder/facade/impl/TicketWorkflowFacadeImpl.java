@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.facade.impl;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.user.UserVO;
@@ -36,11 +36,11 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     private final UserService userService;
 
     @Override
-    public List<UserVO.User> querySelectableUsersByTags(List<String> tags) {
+    public List<User> querySelectableUsersByTags(List<String> tags) {
         if (CollectionUtils.isEmpty(tags)) {
             return List.of();
         }
-        Map<Integer, UserVO.User> userMap = Maps.newHashMap();
+        Map<Integer, User> userMap = Maps.newHashMap();
         tags.stream()
                 .map(tagService::getByTagKey)
                 .filter(Objects::nonNull)
@@ -52,7 +52,7 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     }
 
     @Override
-    public List<UserVO.User> queryNodeApprovalUsers(WorkOrderTicket ticket, String nodeName) {
+    public List<User> queryNodeApprovalUsers(WorkOrderTicket ticket, String nodeName) {
         return WorkflowUtils.loadAs(ticket)
                 .getNodes()
                 .stream()
@@ -102,8 +102,8 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     }
 
 
-    private UserVO.User getUser(int userId) {
-        return BeanCopierUtil.copyProperties(userService.getById(userId), UserVO.User.class);
+    private User getUser(int userId) {
+        return userService.getById(userId);
     }
 
 }

@@ -6,6 +6,8 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.model.WorkflowModel;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
@@ -63,7 +65,9 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
             }
         }
         workflow.getNodes()
-                .forEach(node -> node.setSelectableUsers(workflowFacade.querySelectableUsersByTags(node.getTags())));
+                .forEach(node -> node.setSelectableUsers(
+                        BeanCopierUtil.copyListProperties(workflowFacade.querySelectableUsersByTags(node.getTags()),
+                                UserVO.User.class)));
         vo.setWorkflow(workflow);
     }
 
