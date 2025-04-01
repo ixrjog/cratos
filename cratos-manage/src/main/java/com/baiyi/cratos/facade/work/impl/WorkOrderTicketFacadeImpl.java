@@ -41,6 +41,12 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     }
 
     @Override
+    public DataTable<WorkOrderTicketVO.Ticket> queryTicketPage(WorkOrderTicketParam.TicketPageQuery pageQuery) {
+        DataTable<WorkOrderTicket> table = workOrderTicketService.queryPageByParam(pageQuery);
+        return workOrderTicketWrapper.wrapToTarget(table);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket) {
         final String ticketNo = PasswordGenerator.generateTicketNo();

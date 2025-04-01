@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.util;
+package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
@@ -14,7 +14,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -31,15 +31,15 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class ApprovalNotificationHelper {
+public class WorkOrderApprovalNoticeHelper extends BaseWorkOrderNoticeHelper {
 
-    private final WorkOrderTicketEntryService workOrderTicketEntryService;
-    private final UserService userService;
-    private final TicketWorkflowFacade ticketWorkflowFacade;
-    private final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
-    private final LanguageUtils languageUtils;
-    private final NotificationTemplateService notificationTemplateService;
+    public WorkOrderApprovalNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
+                                         UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
+                                         EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
+                                         NotificationTemplateService notificationTemplateService) {
+        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
+                notificationTemplateService);
+    }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
         List<User> approvers = queryApprovers(workOrder, ticket, ticketNode);
@@ -85,14 +85,6 @@ public class ApprovalNotificationHelper {
         } catch (IOException ioException) {
             log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
         }
-    }
-
-    private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
-        NotificationTemplate query = NotificationTemplate.builder()
-                .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getUserLanguage(user))
-                .build();
-        return notificationTemplateService.getByUniqueKey(query);
     }
 
 }

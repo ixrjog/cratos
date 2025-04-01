@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface WorkOrderTicketMapper extends Mapper<WorkOrderTicket> {
 
-    List<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
+    List<WorkOrderTicket> queryMyTicketPageByParam(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
+
+    List<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.TicketPageQuery pageQuery);
 
 }

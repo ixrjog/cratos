@@ -13,6 +13,8 @@ public interface WorkOrderTicketFacade {
 
     DataTable<WorkOrderTicketVO.Ticket> queryMyTicketPage(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
 
+    DataTable<WorkOrderTicketVO.Ticket> queryTicketPage(WorkOrderTicketParam.TicketPageQuery pageQuery);
+
     WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket);
 
     WorkOrderTicketVO.TicketDetails makeTicketDetails(String ticketNo);

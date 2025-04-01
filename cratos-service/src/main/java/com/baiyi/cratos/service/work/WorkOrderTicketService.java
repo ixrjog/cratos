@@ -16,11 +16,12 @@ public interface WorkOrderTicketService extends BaseUniqueKeyService<WorkOrderTi
 
     DataTable<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.MyTicketPageQuery pageQuery);
 
+    DataTable<WorkOrderTicket> queryPageByParam(WorkOrderTicketParam.TicketPageQuery pageQuery);
+
     default WorkOrderTicket getByTicketNo(String ticketNo) {
-        return getByUniqueKey(
-                WorkOrderTicket.builder()
-                        .ticketNo(ticketNo)
-                        .build());
+        return getByUniqueKey(WorkOrderTicket.builder()
+                .ticketNo(ticketNo)
+                .build());
     }
 
 }

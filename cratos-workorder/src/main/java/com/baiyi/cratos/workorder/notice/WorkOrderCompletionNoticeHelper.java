@@ -1,8 +1,11 @@
-package com.baiyi.cratos.workorder.util;
+package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -10,7 +13,7 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,33 +30,32 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.WORK_ORDER_
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class ApplicantNotificationHelper {
+public class WorkOrderCompletionNoticeHelper extends BaseWorkOrderNoticeHelper {
 
-    private final WorkOrderTicketEntryService workOrderTicketEntryService;
-    private final UserService userService;
-    private final TicketWorkflowFacade ticketWorkflowFacade;
-    private final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
-    private final LanguageUtils languageUtils;
-    private final NotificationTemplateService notificationTemplateService;
+    public WorkOrderCompletionNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
+                                           UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
+                                           EdsDingtalkMessageFacade edsDingtalkMessageFacade,
+                                           LanguageUtils languageUtils,
+                                           NotificationTemplateService notificationTemplateService) {
+        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
+                notificationTemplateService);
+    }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket) {
         User applicantUser = userService.getByUsername(ticket.getUsername());
         List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
                 .stream()
                 .map(e ->
-
                         TicketEntryModel.EntryDesc.builder()
                                 .name(e.getName())
                                 .desc(e.getSuccess() ? "Success" : "Failed")
                                 .build()
-
                 )
                 .toList();
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
                 .put("workOrderName", workOrder.getName())
-                .put("ticketEntities ", ticketEntities)
+                .put("ticketEntities", ticketEntities)
                 .build();
         sendMsgToApplicant(applicantUser, dict);
     }
@@ -67,14 +69,6 @@ public class ApplicantNotificationHelper {
         } catch (IOException ioException) {
             log.error("WorkOrder ticket send msg to user err: {}", ioException.getMessage());
         }
-    }
-
-    private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {
-        NotificationTemplate query = NotificationTemplate.builder()
-                .notificationTemplateKey(notificationTemplateKey)
-                .lang(languageUtils.getUserLanguage(user))
-                .build();
-        return notificationTemplateService.getByUniqueKey(query);
     }
 
 }

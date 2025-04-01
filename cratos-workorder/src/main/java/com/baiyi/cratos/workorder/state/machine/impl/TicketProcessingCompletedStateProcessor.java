@@ -17,7 +17,7 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
-import com.baiyi.cratos.workorder.util.ApplicantNotificationHelper;
+import com.baiyi.cratos.workorder.notice.WorkOrderCompletionNoticeHelper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 @TicketStates(state = TicketState.PROCESSING_COMPLETED, target = TicketState.COMPLETED)
 public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final ApplicantNotificationHelper applicantNotificationHelper;
+    private final WorkOrderCompletionNoticeHelper workOrderCompletionNoticeHelper;
 
     public TicketProcessingCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                                    WorkOrderTicketService workOrderTicketService,
@@ -39,11 +39,11 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
                                                    WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    LanguageUtils languageUtils,
                                                    TicketWorkflowFacade ticketWorkflowFacade,
-                                                   ApplicantNotificationHelper applicantNotificationHelper) {
+                                                   WorkOrderCompletionNoticeHelper applicantNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService, languageUtils,
                 ticketWorkflowFacade);
-        this.applicantNotificationHelper = applicantNotificationHelper;
+        this.workOrderCompletionNoticeHelper = applicantNotificationHelper;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
         WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
                 .getTicketNo());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        applicantNotificationHelper.sendMsg(workOrder, ticket);
+        workOrderCompletionNoticeHelper.sendMsg(workOrder, ticket);
     }
 
 }

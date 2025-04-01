@@ -18,7 +18,7 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
-import com.baiyi.cratos.workorder.util.ApprovalNotificationHelper;
+import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeHelper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @TicketStates(state = TicketState.SUBMITTED, target = TicketState.IN_APPROVAL)
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final ApprovalNotificationHelper approvalNotificationHelper;
+    private final WorkOrderApprovalNoticeHelper workOrderApprovalNoticeHelper;
 
     public TicketSubmittedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                          WorkOrderTicketService workOrderTicketService,
@@ -39,11 +39,11 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
                                          WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                          WorkOrderTicketEntryService workOrderTicketEntryService,
                                          LanguageUtils languageUtils, TicketWorkflowFacade ticketWorkflowFacade,
-                                         ApprovalNotificationHelper approvalNotificationHelper) {
+                                         WorkOrderApprovalNoticeHelper approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService, languageUtils,
                 ticketWorkflowFacade);
-        this.approvalNotificationHelper = approvalNotificationHelper;
+        this.workOrderApprovalNoticeHelper = approvalNotificationHelper;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         }
         WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        approvalNotificationHelper.sendMsg(workOrder, ticket, ticketNode);
+        workOrderApprovalNoticeHelper.sendMsg(workOrder, ticket, ticketNode);
     }
 
 }
