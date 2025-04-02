@@ -1,9 +1,11 @@
 package com.baiyi.cratos.eds.core.comparer;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.util.AssetUtil;
+import com.baiyi.cratos.eds.core.util.AssetUtils;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,8 +14,27 @@ import org.springframework.util.StringUtils;
  * @Version 1.0
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class EdsAssetComparer {
+
+    private EdsAsset a1;
+    private EdsAsset a2;
+
+    public static EdsAssetComparer newBuilder() {
+        return new EdsAssetComparer();
+    }
+
+    public EdsAssetComparer withAsset1(EdsAsset a1) {
+        this.a1 = a1;
+        return this;
+    }
+
+    public EdsAssetComparer withAsset2(EdsAsset a2) {
+        this.a2 = a2;
+        return this;
+    }
 
     public static final EdsAssetComparer SAME = EdsAssetComparer.builder()
             .equal(true)
@@ -59,55 +80,37 @@ public class EdsAssetComparer {
     @Builder.Default
     private boolean equal = false;
 
-    public boolean compare(EdsAsset a1, EdsAsset a2) {
-        // 相同
+    public boolean compare() {
         if (this.isEqual()) {
             return true;
         }
-        if (this.isComparisonOfName()) {
-            if (!AssetUtil.equals(a2.getName(), a1.getName())) {
-                return false;
-            }
+        if (this.isComparisonOfName() && !AssetUtils.equals(a2.getName(), a1.getName())) {
+            return false;
         }
-        if (this.isComparisonOfAssetId()) {
-            if (!AssetUtil.equals(a2.getAssetId(), a1.getAssetId())) {
-                return false;
-            }
+        if (this.isComparisonOfAssetId() && !AssetUtils.equals(a2.getAssetId(), a1.getAssetId())) {
+            return false;
         }
-        if (this.isComparisonOfKey()) {
-            if (!AssetUtil.equals(a2.getAssetKey(), a1.getAssetKey())) {
-                return false;
-            }
+        if (this.isComparisonOfKey() && !AssetUtils.equals(a2.getAssetKey(), a1.getAssetKey())) {
+            return false;
         }
-        if (this.isComparisonOfDescription()) {
-            if (!AssetUtil.equals(a2.getDescription(), a1.getDescription())) {
-                return false;
-            }
+        if (this.isComparisonOfDescription() && !AssetUtils.equals(a2.getDescription(), a1.getDescription())) {
+            return false;
         }
-        if (this.isComparisonOfKind()) {
-            if (!AssetUtil.equals(a2.getKind(), a1.getKind())) {
-                return false;
-            }
+        if (this.isComparisonOfKind() && !AssetUtils.equals(a2.getKind(), a1.getKind())) {
+            return false;
         }
-        if (this.isComparisonOfExpiredTime()) {
-            if (!AssetUtil.equals(a2.getExpiredTime(), a1.getExpiredTime())) {
-                return false;
-            }
+        if (this.isComparisonOfExpiredTime() && !AssetUtils.equals(a2.getExpiredTime(), a1.getExpiredTime())) {
+            return false;
         }
-        if (this.isComparisonOfCreatedTime()) {
-            if (a2.getCreatedTime() != a1.getCreatedTime()) {
-                return false;
-            }
+        if (this.isComparisonOfCreatedTime() && a2.getCreatedTime() != a1.getCreatedTime()) {
+            return false;
         }
         if (this.isComparisonOfValid()) {
             return a2.getValid()
                     .equals(a1.getValid());
         }
         if (this.isComparisonOfOriginalModel()) {
-            if (!StringUtils.hasText(a1.getOriginalModel())) {
-                return false;
-            }
-            return a1.getOriginalModel()
+            return StringUtils.hasText(a1.getOriginalModel()) && a1.getOriginalModel()
                     .equals(a2.getOriginalModel());
         }
         return true;

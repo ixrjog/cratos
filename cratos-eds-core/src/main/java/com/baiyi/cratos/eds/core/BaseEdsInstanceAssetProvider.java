@@ -21,9 +21,9 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
-import com.baiyi.cratos.eds.core.util.AssetUtil;
+import com.baiyi.cratos.eds.core.util.AssetUtils;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.core.util.ConfigUtil;
+import com.baiyi.cratos.eds.core.util.ConfigUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -185,7 +185,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @return
      */
     protected boolean equals(EdsAsset a1, EdsAsset a2) {
-        return EdsAssetComparer.SAME.compare(a1, a2);
+        return EdsAssetComparer.SAME.compare();
     }
 
     abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance,
@@ -224,7 +224,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
-        return ConfigUtil.loadAs(configContent, clazz);
+        return ConfigUtils.loadAs(configContent, clazz);
     }
 
     @SuppressWarnings("unchecked")
@@ -232,7 +232,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     public A assetLoadAs(String originalModel) {
         // Get the entity type of generic `A`
         Class<A> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 1);
-        return AssetUtil.loadAs(originalModel, clazz);
+        return AssetUtils.loadAs(originalModel, clazz);
     }
 
     @Override

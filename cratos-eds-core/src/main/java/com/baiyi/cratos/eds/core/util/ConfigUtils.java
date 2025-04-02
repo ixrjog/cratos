@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class ConfigUtil {
+public final class ConfigUtils {
 
     /**
      * https://stackabuse.com/reading-and-writing-yaml-files-in-java-with-snakeyaml/

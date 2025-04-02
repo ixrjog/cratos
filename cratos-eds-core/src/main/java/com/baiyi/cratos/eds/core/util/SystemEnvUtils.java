@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class SystemEnvUtil {
+public final class SystemEnvUtils {
 
     public static String renderEnvHome(String str) {
         try {

@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -95,14 +96,12 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                 .getFirst() : entity.getInstance()
                 .getInnerIpAddress()
                 .getFirst();
-
         Date expiredTime = null;
         Optional<String> optionalExpiredTime = Optional.of(entity.getInstance())
                 .map(DescribeInstancesResponse.Instance::getExpiredTime);
         if (optionalExpiredTime.isPresent()) {
             expiredTime = toUtcDate(optionalExpiredTime.get());
         }
-
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
                         .getInstanceId())
                 .nameOf(entity.getInstance()
@@ -119,6 +118,14 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                 .descriptionOf(entity.getInstance()
                         .getDescription())
                 .build();
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.newBuilder()
+                .withAsset1(a1)
+                .withAsset2(a2)
+                .compare();
     }
 
 }
