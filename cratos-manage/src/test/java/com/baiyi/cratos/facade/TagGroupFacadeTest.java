@@ -20,7 +20,7 @@ public class TagGroupFacadeTest extends BaseUnit {
 
     @Test
     void test() {
-        TagGroupParam.ComputerGroupPageQuery pageQuery = TagGroupParam.ComputerGroupPageQuery.builder()
+        TagGroupParam.GroupAssetPageQuery pageQuery = TagGroupParam.GroupAssetPageQuery.builder()
                 .tagGroup("tms-itel")
                 .page(1)
                 .length(10)

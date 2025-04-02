@@ -1,8 +1,10 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.tag.TagGroupParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.facade.tag.TagGroupFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,4 +36,11 @@ public class TagGroupController {
         return HttpResult.of(tagGroupFacade.getGroupOptions(getGroupOptions));
     }
 
+    @Operation(summary = "Pagination query tag group asset")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<EdsAssetVO.Asset>> queryGroupAssetPage(
+            @RequestBody @Valid TagGroupParam.GroupAssetPageQuery pageQuery) {
+        return HttpResult.of(tagGroupFacade.queryGroupAssetPage(pageQuery));
+    }
+    
 }

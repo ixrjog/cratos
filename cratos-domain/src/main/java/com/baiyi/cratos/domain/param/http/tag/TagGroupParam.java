@@ -26,7 +26,7 @@ public class TagGroupParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class ComputerGroupPageQuery extends PageParam {
+    public static class GroupAssetPageQuery extends PageParam {
         @NotBlank
         private String tagGroup;
         private String queryName;

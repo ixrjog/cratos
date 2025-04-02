@@ -50,7 +50,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     }
 
     @Override
-    public DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.ComputerGroupPageQuery pageQuery) {
+    public DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.GroupAssetPageQuery pageQuery) {
         Tag tag = getGroupTag();
         BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
                 .tagId(tag.getId())
