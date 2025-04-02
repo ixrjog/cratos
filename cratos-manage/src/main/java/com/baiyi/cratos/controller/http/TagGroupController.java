@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/tag/group")
-@Tag(name = "Tag")
+@Tag(name = "Tag Group")
 @RequiredArgsConstructor
 public class TagGroupController {
 
@@ -42,5 +42,5 @@ public class TagGroupController {
             @RequestBody @Valid TagGroupParam.GroupAssetPageQuery pageQuery) {
         return HttpResult.of(tagGroupFacade.queryGroupAssetPage(pageQuery));
     }
-    
+
 }
