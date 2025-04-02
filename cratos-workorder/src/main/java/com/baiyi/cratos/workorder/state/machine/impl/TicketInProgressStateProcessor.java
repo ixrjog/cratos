@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.state.machine.impl;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -12,6 +13,8 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.enums.ApprovalStatus;
+import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
@@ -20,6 +23,7 @@ import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -61,12 +65,33 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         ticket.setProcessAt(new Date());
         workOrderTicketService.updateByPrimaryKey(ticket);
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
+        // 判断是否审批通过
+        boolean pass = passApproval(ticket);
         //  TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
-        for (WorkOrderTicketEntry entry : entries) {
-            TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(entry.getBusinessType());
-            provider.processEntry(entry);
+        entries.forEach(entry -> {
+            if (pass) {
+                TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(
+                        entry.getBusinessType());
+                provider.processEntry(entry);
+            } else {
+                entry.setCompleted(true);
+                entry.setCompletedAt(new Date());
+                entry.setSuccess(false);
+                entry.setResult("Approval rejected");
+                workOrderTicketEntryService.updateByPrimaryKey(entry);
+            }
+        });
+    }
+
+    private boolean passApproval(WorkOrderTicket ticket) {
+        List<WorkOrderTicketNode> ticketNodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
+        if (CollectionUtils.isEmpty(ticketNodes)) {
+            return true;
         }
+        return ticketNodes.stream()
+                .filter(e -> !ApprovalTypes.CC_TO.equals(ApprovalTypes.valueOf(e.getApprovalType())))
+                .allMatch(e -> ApprovalStatus.AGREE.equals(ApprovalStatus.valueOf(e.getApprovalStatus())));
     }
 
 }
