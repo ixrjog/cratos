@@ -20,7 +20,7 @@ import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;

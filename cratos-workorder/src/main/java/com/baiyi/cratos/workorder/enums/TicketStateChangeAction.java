@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.state;
+package com.baiyi.cratos.workorder.enums;
 
 /**
  * &#064;Author  baiyi

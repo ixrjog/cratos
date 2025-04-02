@@ -3,7 +3,7 @@ package com.baiyi.cratos.workorder.state.machine.factory;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.enums.TicketState;
-import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import com.baiyi.cratos.workorder.state.machine.TicketStateProcessor;
 

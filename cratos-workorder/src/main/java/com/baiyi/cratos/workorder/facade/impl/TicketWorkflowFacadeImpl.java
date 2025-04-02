@@ -3,8 +3,6 @@ package com.baiyi.cratos.workorder.facade.impl;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
-import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
@@ -98,9 +96,9 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     }
 
     private String getUsername(int userId) {
-        return userService.getById(userId).getUsername();
+        return userService.getById(userId)
+                .getUsername();
     }
-
 
     private User getUser(int userId) {
         return userService.getById(userId);

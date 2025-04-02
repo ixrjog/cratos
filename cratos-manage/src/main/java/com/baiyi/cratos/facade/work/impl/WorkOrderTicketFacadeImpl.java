@@ -10,7 +10,7 @@ import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.event.TicketEvent;
-import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketWrapper;

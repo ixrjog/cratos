@@ -14,7 +14,7 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketDoNextException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.state.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
