@@ -58,8 +58,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     @SuppressWarnings("unchecked")
     protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
-      return (EdsInstanceProviderHolder<C, A>) holderBuilder.newHolder(
-                instanceId, getAssetType());
+        return (EdsInstanceProviderHolder<C, A>) holderBuilder.newHolder(instanceId, getAssetType());
     }
 
     /**
@@ -185,7 +184,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @return
      */
     protected boolean equals(EdsAsset a1, EdsAsset a2) {
-        return EdsAssetComparer.SAME.compare();
+        return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
     abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance,

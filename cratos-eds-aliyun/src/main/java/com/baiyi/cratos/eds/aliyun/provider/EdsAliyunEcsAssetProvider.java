@@ -122,10 +122,15 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     @Override
     protected boolean equals(EdsAsset a1, EdsAsset a2) {
-        return EdsAssetComparer.newBuilder()
-                .withAsset1(a1)
-                .withAsset2(a2)
-                .compare();
+        return EdsAssetComparer.builder()
+                .comparisonName(true)
+                .comparisonKey(true)
+                .comparisonDescription(true)
+                .comparisonExpiredTime(true)
+                .comparisonOriginalModel(true)
+                .comparisonKind(true)
+                .build()
+                .compare(a1, a2);
     }
 
 }
