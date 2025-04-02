@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade;
+package com.baiyi.cratos.facade.tag;
 
 import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;

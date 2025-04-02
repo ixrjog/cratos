@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.impl;
+package com.baiyi.cratos.facade.tag.impl;
 
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.DataTable;
@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
-import com.baiyi.cratos.facade.TagFacade;
+import com.baiyi.cratos.facade.tag.TagFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.base.BaseValidService;

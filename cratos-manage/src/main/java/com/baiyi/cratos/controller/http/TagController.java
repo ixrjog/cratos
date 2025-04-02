@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.TagParam;
 import com.baiyi.cratos.domain.view.tag.TagVO;
-import com.baiyi.cratos.facade.TagFacade;
+import com.baiyi.cratos.facade.tag.TagFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

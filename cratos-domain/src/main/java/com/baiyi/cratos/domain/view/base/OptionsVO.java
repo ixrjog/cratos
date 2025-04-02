@@ -3,7 +3,6 @@ package com.baiyi.cratos.domain.view.base;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,7 +39,7 @@ public class OptionsVO {
     public static class Options {
         private String message;
         @Builder.Default
-        private List<Option> options = Collections.emptyList();
+        private List<Option> options = List.of();
     }
 
     @Data

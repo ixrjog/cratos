@@ -12,12 +12,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
-import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.*;
 
 /**
  * @Author baiyi
@@ -47,6 +48,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    @Cacheable(cacheNames = VERY_SHORT, key = "'DOMAIN:TAG:KEY:'+ #tagKey", unless = "#result == null")
     public Tag getByTagKey(String tagKey) {
         Tag uniqueKey = Tag.builder()
                 .tagKey(tagKey)

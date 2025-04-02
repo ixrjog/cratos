@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.facade.TagFacade;
+import com.baiyi.cratos.facade.tag.TagFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployingFacade;
 import com.baiyi.cratos.facade.application.baseline.factory.BaselineMemberProcessorFactory;
