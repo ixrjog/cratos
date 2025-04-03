@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.facade;
 
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface TicketWorkflowFacade {
     List<User> queryNodeApprovalUsers(WorkOrderTicket ticket, String nodeName);
 
     boolean isApprover(WorkOrderTicket ticket, String nodeName, String username);
+
+    boolean isApprover(WorkOrderTicketVO.Ticket ticket, String nodeName, String username);
 
     List<String> queryNodeApprovalUsernames(WorkOrderTicket ticket, String nodeName);
 

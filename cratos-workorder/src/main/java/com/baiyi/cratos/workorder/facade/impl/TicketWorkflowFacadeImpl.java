@@ -1,8 +1,10 @@
 package com.baiyi.cratos.workorder.facade.impl;
 
+import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
@@ -51,7 +53,11 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
 
     @Override
     public List<User> queryNodeApprovalUsers(WorkOrderTicket ticket, String nodeName) {
-        return WorkflowUtils.loadAs(ticket)
+        return queryNodeApprovalUsersByWorkflow(ticket, nodeName);
+    }
+
+    private List<User> queryNodeApprovalUsersByWorkflow(TicketWorkflow.HasWorkflow hasWorkflow, String nodeName) {
+        return WorkflowUtils.loadAs(hasWorkflow)
                 .getNodes()
                 .stream()
                 .filter(node -> node.getName()
@@ -91,6 +97,13 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
     @Override
     public boolean isApprover(WorkOrderTicket ticket, String nodeName, String username) {
         return queryNodeApprovalUsers(ticket, nodeName).stream()
+                .anyMatch(e -> e.getUsername()
+                        .equals(username));
+    }
+
+    @Override
+    public boolean isApprover(WorkOrderTicketVO.Ticket ticket, String nodeName, String username) {
+        return queryNodeApprovalUsersByWorkflow(ticket, nodeName).stream()
                 .anyMatch(e -> e.getUsername()
                         .equals(username));
     }

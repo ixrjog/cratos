@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -70,9 +69,7 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
         if (TicketState.IN_APPROVAL.equals(TicketState.valueOf(vo.getTicketState())) && vo.getNodeId() != 0) {
             WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(vo.getNodeId());
             if (ticketNode != null && !Boolean.TRUE.equals(ticketNode.getApprovalCompleted())) {
-                boolean isCurrentApprover = StringUtils.hasText(vo.getUsername()) ? vo.getUsername()
-                        .equals(SessionUtils.getUsername()) : ticketWorkflowFacade.isApprover(
-                        BeanCopierUtil.copyProperties(vo, WorkOrderTicket.class), ticketNode.getNodeName(),
+                boolean isCurrentApprover = ticketWorkflowFacade.isApprover(vo, ticketNode.getNodeName(),
                         SessionUtils.getUsername());
                 vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()
                         .isCurrentApprover(isCurrentApprover)
