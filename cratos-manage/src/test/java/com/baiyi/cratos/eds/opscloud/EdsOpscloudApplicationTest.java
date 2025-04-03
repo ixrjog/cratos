@@ -8,12 +8,14 @@ import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
+import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -49,7 +51,7 @@ public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigMod
             } else {
                 application = applicationFromDB;
             }
-
+            // 同步标签
             if (!CollectionUtils.isEmpty(ocApp.getTags())) {
                 for (OcApplicationVO.Tag tag : ocApp.getTags()) {
                     for (String levelTag : LEVEL_TAGS) {
@@ -65,6 +67,35 @@ public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigMod
                         }
                     }
                 }
+            }
+            // 同步仓库
+
+            ApplicationConfigModel.Config config = ApplicationConfigModel.loadAs(application);
+            if (Optional.ofNullable(config)
+                    .map(ApplicationConfigModel.Config::getRepository)
+                    .isEmpty()) {
+
+                if (!CollectionUtils.isEmpty(ocApp.getResourceMap()) && ocApp.getResourceMap()
+                        .containsKey("GITLAB_PROJECT")) {
+                    String gitSsh = ocApp.getResourceMap()
+                            .get("GITLAB_PROJECT")
+                            .getFirst()
+                            .getName();
+
+                    ApplicationConfigModel.Repository repository = ApplicationConfigModel.Repository.builder()
+
+                            .sshUrl(gitSsh)
+                            .type("gitLab")
+                            .build();
+
+                    config.setRepository(repository);
+                    application.setConfig(config.dump());
+                    applicationService.updateByPrimaryKey(application);
+
+
+                }
+
+
             }
         });
     }

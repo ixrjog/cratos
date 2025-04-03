@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/workorder/ticket/entry")
-@Tag(name = "WorkOrder Ticket TicketEntry")
+@Tag(name = "WorkOrder Ticket Entry")
 @RequiredArgsConstructor
 public class WorkOrderTicketEntryController {
 

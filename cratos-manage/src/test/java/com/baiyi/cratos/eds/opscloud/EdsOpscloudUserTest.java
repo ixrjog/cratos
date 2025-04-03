@@ -77,6 +77,9 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
             List<UserPermissionBusinessParam.BusinessPermission> businessPermissions = Lists.newArrayList();
             for (OcApplicationVO.Application permissionApp : permissionApps) {
                 Application application = applicationService.getByName(permissionApp.getName());
+                if (Objects.isNull(application)) {
+                    continue;
+                }
                 List<UserPermissionBusinessParam.RoleMember> roleMembers = Lists.newArrayList();
                 roleMembers.add(buildRoleMember("dev", true));
                 roleMembers.add(buildRoleMember("daily", true));
@@ -87,13 +90,14 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
 //                roleMembers.add(buildRoleMember("pre", checked));
 //                roleMembers.add(buildRoleMember("prod", checked));
 
+
                 UserPermissionBusinessParam.BusinessPermission businessPermission = UserPermissionBusinessParam.BusinessPermission.builder()
                         .businessId(application.getId())
                         .name(application.getName())
                         .roleMembers(roleMembers)
                         .build();
                 businessPermissions.add(businessPermission);
-                System.out.println("user: "+user.getUsername() + " app: " + application.getName());
+                System.out.println("user: " + user.getUsername() + " app: " + application.getName());
             }
             UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
                     .businessType(BusinessTypeEnum.APPLICATION.name())

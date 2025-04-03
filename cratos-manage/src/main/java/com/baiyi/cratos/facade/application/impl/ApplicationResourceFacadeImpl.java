@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -52,10 +53,9 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     public void scan(String applicationName) {
         // 扫描资产
         Application application = applicationService.getByName(applicationName);
-        if (application == null) {
-            return;
+        if (Objects.nonNull(application)) {
+            doScan(application);
         }
-        doScan(application);
     }
 
     private void doScan(Application application) {

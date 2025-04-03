@@ -1,10 +1,10 @@
 package com.baiyi.cratos.eds.opscloud.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
@@ -29,6 +29,7 @@ public class OcApplicationVO {
         private String comment;
         private List<Tag> tags;
         private UserPermissionVO.UserPermission userPermission;
+        private Map<String, List<Resource>> resourceMap;
     }
 
     @Data
@@ -36,6 +37,31 @@ public class OcApplicationVO {
     @Schema
     public static class Tag {
         private String tagKey;
+    }
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Resource {
+        private String instanceUuid;
+        @Schema(description = "主键", example = "1")
+        private Integer id;
+        private Integer applicationId;
+        private String name;
+        @Schema(description = "虚拟资源", example = "true")
+        @Builder.Default
+        private Boolean virtualResource = false;
+        private String resourceType;
+        private Integer businessId;
+        private Integer businessType;
+        private String comment;
+        /**
+         * 前端选择用
+         */
+        @Builder.Default
+        private Boolean checked = false;
     }
 
 }
