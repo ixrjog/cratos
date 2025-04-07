@@ -42,12 +42,12 @@ public class CratosInstanceController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "负载均衡健康检查接口")
+    @Operation(summary = "Load balancing health check interface")
     @GetMapping(value = "/health/lb-check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<CratosInstanceVO.Health> checkHealth() {
         CratosInstanceVO.Health health = cratosInstanceFacade.checkHealth();
         if (health.isHealth()) {
-            return new HttpResult<>(health);
+            return HttpResult.of(health);
         }
         throw new ResourceInactiveException();
     }

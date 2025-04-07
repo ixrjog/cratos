@@ -18,7 +18,6 @@ import com.baiyi.cratos.service.CratosInstanceService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.CratosInstanceWrapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,7 +30,6 @@ import static com.baiyi.cratos.domain.constant.Global.ENV_PROD;
  * &#064;Date  2025/4/7 10:51
  * &#064;Version 1.0
  */
-@Lazy
 @Component
 @RequiredArgsConstructor
 public class CratosInstanceFacadeImpl implements CratosInstanceFacade {
