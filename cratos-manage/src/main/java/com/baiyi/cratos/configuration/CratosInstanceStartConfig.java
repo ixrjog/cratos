@@ -84,7 +84,7 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
                 .build();
         cratosInstanceService.add(instance);
         // 打Env标签
-        Tag envTag = tagService.getByTagKey(SysTagKeys.EDS);
+        Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
         if (Objects.nonNull(envTag)) {
             BusinessTag businessTag = BusinessTag.builder()
                     .tagId(envTag.getId())

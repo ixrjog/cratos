@@ -90,7 +90,7 @@ public class CratosInstanceFacadeImpl implements CratosInstanceFacade {
                 .tagId(envTag.getId())
                 .build();
         BusinessTag businessTag = businessTagService.getByUniqueKey(uk);
-        if (!ENV_PROD.equalsIgnoreCase(businessTag.getTagValue())) {
+        if (Objects.isNull(businessTag) || !ENV_PROD.equalsIgnoreCase(businessTag.getTagValue())) {
             return;
         }
         List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
