@@ -18,4 +18,6 @@ public interface CratosInstanceFacade {
 
     void setValidById(int id);
 
+    void deleteById(int id);
+
 }

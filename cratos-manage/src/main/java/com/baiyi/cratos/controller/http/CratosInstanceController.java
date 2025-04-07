@@ -35,10 +35,17 @@ public class CratosInstanceController {
         return HttpResult.of(cratosInstanceFacade.queryRegisteredInstancePage(pageQuery));
     }
 
-    @Operation(summary = "Update application valid")
+    @Operation(summary = "Update Cratos instance valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setInstanceValidById(@RequestParam int id) {
         cratosInstanceFacade.setValidById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete Cratos instance by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteInstanceById(@RequestParam int id) {
+        cratosInstanceFacade.deleteById(id);
         return HttpResult.SUCCESS;
     }
 

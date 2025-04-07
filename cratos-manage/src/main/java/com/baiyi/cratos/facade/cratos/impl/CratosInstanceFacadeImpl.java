@@ -66,9 +66,14 @@ public class CratosInstanceFacadeImpl implements CratosInstanceFacade {
         if (Objects.isNull(cratosInstance)) {
             return;
         }
-        // 保证生产环境有一个实例为有效
+        // 保证生产环境有一个有效实例
         checkInstanceValid(cratosInstance);
         cratosInstanceService.updateValidById(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        cratosInstanceService.deleteById(id);
     }
 
     private void checkInstanceValid(CratosInstance cratosInstance) {

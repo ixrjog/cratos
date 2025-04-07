@@ -27,7 +27,7 @@ public class CratosInstanceVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CRATOS_INSTANCE)
-    public static class RegisteredInstance extends BaseVO implements  BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, Serializable {
+    public static class RegisteredInstance extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, Serializable {
         @Serial
         private static final long serialVersionUID = -7855855047753656754L;
 
