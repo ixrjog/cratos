@@ -258,16 +258,14 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     private EdsAsset getEdsAsset(CommandExecModel.ExecTarget execTarget, List<Integer> assetIds) {
-        for (Integer assetId : assetIds) {
-            EdsAsset asset = edsAssetService.getById(assetId);
-            if (asset.getInstanceId()
-                    .equals(execTarget.getInstance()
-                            .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
-                    .equals(asset.getAssetType())) {
-                return asset;
-            }
-        }
-        throw new CommandExecException("No available execution target.");
+        return assetIds.stream()
+                .map(edsAssetService::getById)
+                .filter(asset -> asset.getInstanceId()
+                        .equals(execTarget.getInstance()
+                                .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
+                        .equals(asset.getAssetType()))
+                .findFirst()
+                .orElseThrow(() -> new CommandExecException("No available execution target."));
     }
 
 }
