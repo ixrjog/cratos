@@ -65,6 +65,7 @@ cratos:
         - /swagger-ui/
         - /v3/api-docs
         - /api/log/login
+        - /api/instance/health/lb-check
         # WebSocket独立鉴权
         - /socket/
         # health
