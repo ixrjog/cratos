@@ -18,9 +18,8 @@ public enum SysTagKeys {
     COMMAND_EXEC("CommandExec"),
     USERNAME("Username"),
     SERVER_ACCOUNT("ServerAccount"),
-    GROUP("Group")
-    ;
-
+    GROUP("Group"),
+    ENV("Env");
 
     private final String key;
 

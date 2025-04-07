@@ -38,13 +38,9 @@ import java.util.Optional;
 public class RbacAutoConfigInitializer implements CommandLineRunner {
 
     private final RequestMappingHandlerMapping handlerMapping;
-
     private final RbacGroupService rbacGroupService;
-
     private final RbacResourceService rbacResourceService;
-
     private final CratosConfiguration cratosConfiguration;
-
     private static final String[] SCAN_PACKAGES = {"com.baiyi.cratos.controller"};
 
     @Override

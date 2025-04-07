@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.CratosInstanceMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.CratosInstance">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="hostname" jdbcType="VARCHAR" property="hostname" />
+    <result column="host_ip" jdbcType="VARCHAR" property="hostIp" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="commit" jdbcType="LONGVARCHAR" property="commit" />
+    <result column="license" jdbcType="LONGVARCHAR" property="license" />
+  </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.http.cratos.CratosInstanceParam$RegisteredInstancePageQueryParam"
+          resultMap="BaseResultMap">
+      select * from cratos_instance
+      <where>
+          <if test="idList != null and idList.size() > 0">
+              id in
+              <foreach open="(" item="id" separator="," close=")" collection="idList">#{id}</foreach>
+          </if>
+          <if test="valid != null">
+              and valid = #{valid}
+          </if>
+          <if test="queryName != null and queryName != ''">
+              and name like "%" #{queryName} "%"
+              order by replace(name, #{queryName}, '')
+          </if>
+      </where>
+  </select>
+
+</mapper>

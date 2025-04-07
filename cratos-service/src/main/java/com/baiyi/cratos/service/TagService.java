@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.TagParam;
@@ -17,5 +18,9 @@ public interface TagService extends BaseUniqueKeyService<Tag, TagMapper>, BaseVa
     DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery);
 
     Tag getByTagKey(String tagKey);
+
+    default Tag getByTagKey(SysTagKeys sysTagKey) {
+        return getByTagKey(sysTagKey.getKey());
+    }
 
 }

@@ -15,6 +15,8 @@ public interface ErrorCodeConstants {
 
     int SQL_ERROR = 10000;
 
+    int CRATOS_INSTANCE_ERROR = 11000;
+
     int BUSINESS_ERROR = 40000;
 
     int CRED_ERROR = 41000;
