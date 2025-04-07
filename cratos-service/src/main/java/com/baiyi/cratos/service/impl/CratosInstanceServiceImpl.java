@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -61,8 +62,9 @@ public class CratosInstanceServiceImpl implements CratosInstanceService {
     }
 
     @Override
-    public void add(CratosInstance cratosInstance) {
-        cratosInstanceMapper.insert(cratosInstance);
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    public void deleteById(int id) {
+        CratosInstanceService.super.deleteById(id);
     }
 
 }
