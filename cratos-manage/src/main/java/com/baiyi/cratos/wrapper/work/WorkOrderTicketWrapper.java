@@ -66,16 +66,18 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
     }
 
     private void setApprovalInfo(WorkOrderTicketVO.Ticket vo) {
-        if (TicketState.IN_APPROVAL.equals(TicketState.valueOf(vo.getTicketState())) && vo.getNodeId() != 0) {
-            WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(vo.getNodeId());
-            if (ticketNode != null && !Boolean.TRUE.equals(ticketNode.getApprovalCompleted())) {
-                boolean isCurrentApprover = ticketWorkflowFacade.isApprover(vo, ticketNode.getNodeName(),
-                        SessionUtils.getUsername());
-                vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()
-                        .isCurrentApprover(isCurrentApprover)
-                        .build());
-            }
+        // 审批中才处理
+        if (!TicketState.IN_APPROVAL.equals(TicketState.valueOf(vo.getTicketState())) || vo.getNodeId() == 0) {
+            return;
         }
+        WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(vo.getNodeId());
+        if (ticketNode == null || Boolean.TRUE.equals(ticketNode.getApprovalCompleted())) {
+            return;
+        }
+        boolean isCurrentApprover = ticketWorkflowFacade.isApprover(vo, ticketNode, SessionUtils.getUsername());
+        vo.setApprovalInfo(WorkOrderTicketVO.ApprovalInfo.builder()
+                .isCurrentApprover(isCurrentApprover)
+                .build());
     }
 
     /**

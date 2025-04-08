@@ -4,17 +4,20 @@ import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,11 +104,23 @@ public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
                         .equals(username));
     }
 
-    @Override
-    public boolean isApprover(WorkOrderTicketVO.Ticket ticket, String nodeName, String username) {
+    private boolean isApprover(WorkOrderTicketVO.Ticket ticket, String nodeName, String username) {
         return queryNodeApprovalUsersByWorkflow(ticket, nodeName).stream()
                 .anyMatch(e -> e.getUsername()
                         .equals(username));
+    }
+
+    @Override
+    public boolean isApprover(WorkOrderTicketVO.Ticket ticket, WorkOrderTicketNode ticketNode, String username) {
+        // 用户指定审批人
+        if (ApprovalTypes.USER_SPECIFIED.equals(ApprovalTypes.valueOf(ticketNode.getApprovalType()))) {
+            return StringUtils.hasText(username) && username.equals(ticketNode.getUsername());
+        }
+        // 或批
+        if (ApprovalTypes.OR_BATCH.equals(ApprovalTypes.valueOf(ticketNode.getApprovalType()))) {
+            return isApprover(ticket, ticketNode.getNodeName(), username);
+        }
+        return false;
     }
 
     private String getUsername(int userId) {

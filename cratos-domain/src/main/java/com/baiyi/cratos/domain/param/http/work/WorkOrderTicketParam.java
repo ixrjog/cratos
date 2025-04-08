@@ -59,7 +59,7 @@ public class WorkOrderTicketParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class TicketPageQuery extends PageParam  {
+    public static class TicketPageQuery extends PageParam {
         private String ticketNo;
         private String ticketState;
         private String workOrderKey;
