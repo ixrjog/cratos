@@ -5,10 +5,6 @@ import com.baiyi.cratos.domain.generator.WorkOrderGroup;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.mapper.WorkOrderGroupMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-
-import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -17,11 +13,7 @@ import java.util.List;
  */
 public interface WorkOrderGroupService extends BaseUniqueKeyService<WorkOrderGroup, WorkOrderGroupMapper> {
 
-    default DataTable<WorkOrderGroup> queryPageByParam(WorkOrderParam.GroupPageQuery pageQuery) {
-        Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
-        List<WorkOrderGroup> data = getMapper().queryPageByParam(pageQuery);
-        return new DataTable<>(data, page.getTotal());
-    }
+    DataTable<WorkOrderGroup> queryPageByParam(WorkOrderParam.GroupPageQuery pageQuery);
 
     default WorkOrderGroup getByName(String name) {
         return getByUniqueKey(WorkOrderGroup.builder()

@@ -1,10 +1,14 @@
 package com.baiyi.cratos.service.work.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.mapper.WorkOrderMapper;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -46,6 +50,13 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("groupId", groupId);
         return workOrderMapper.selectByExample(example);
+    }
+
+    @Override
+    public DataTable<WorkOrder> queryPageByParam(WorkOrderParam.WorkOrderPageQuery pageQuery) {
+        Page<WorkOrder> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<WorkOrder> data = getMapper().queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
 }

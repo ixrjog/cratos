@@ -1,13 +1,19 @@
 package com.baiyi.cratos.service.work.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.WorkOrderGroup;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.mapper.WorkOrderGroupMapper;
 import com.baiyi.cratos.service.work.WorkOrderGroupService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -33,6 +39,13 @@ public class WorkOrderGroupServiceImpl implements WorkOrderGroupService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("name", record.getName());
         return workOrderGroupMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public DataTable<WorkOrderGroup> queryPageByParam(WorkOrderParam.GroupPageQuery pageQuery) {
+        Page<WorkOrderGroup> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
+        List<WorkOrderGroup> data = workOrderGroupMapper.queryPageByParam(pageQuery);
+        return new DataTable<>(data, page.getTotal());
     }
 
 }

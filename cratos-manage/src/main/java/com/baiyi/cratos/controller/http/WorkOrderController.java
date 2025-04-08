@@ -59,6 +59,9 @@ public class WorkOrderController {
         return HttpResult.of(workOrderFacade.queryWorkOrderGroupPage(pageQuery));
     }
 
+    // report
+    // Monthly report
+
 
 
 }
