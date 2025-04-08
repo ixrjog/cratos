@@ -1,6 +1,7 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.work.WorkOrderFacade;
@@ -32,10 +33,32 @@ public class WorkOrderController {
 
     @Operation(summary = "Update workOrder")
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateWorkOrder(
-            @RequestBody @Valid WorkOrderParam.UpdateWorkOrder updateWorkOrder) {
+    public HttpResult<Boolean> updateWorkOrder(@RequestBody @Valid WorkOrderParam.UpdateWorkOrder updateWorkOrder) {
         workOrderFacade.updateWorkOrder(updateWorkOrder);
         return HttpResult.SUCCESS;
     }
+
+    @Operation(summary = "Pagination query workOrder")
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<WorkOrderVO.WorkOrder>> queryWorkOrderPage(
+            @RequestBody @Valid WorkOrderParam.WorkOrderPageQuery pageQuery) {
+        return HttpResult.of(workOrderFacade.queryWorkOrderPage(pageQuery));
+    }
+
+    @Operation(summary = "Update workOrder group")
+    @PutMapping(value = "/group/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateWorkOrderGroup(@RequestBody @Valid WorkOrderParam.UpdateGroup updateGroup) {
+        workOrderFacade.updateWorkOrderGroup(updateGroup);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Pagination query workOrder group")
+    @PostMapping(value = "/group/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<WorkOrderVO.Group>> queryWorkOrderGroupPage(
+            @RequestBody @Valid WorkOrderParam.GroupPageQuery pageQuery) {
+        return HttpResult.of(workOrderFacade.queryWorkOrderGroupPage(pageQuery));
+    }
+
+
 
 }

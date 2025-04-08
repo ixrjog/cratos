@@ -15,4 +15,17 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="queryPageByParam"
+          parameterType="com.baiyi.cratos.domain.param.http.work.WorkOrderParam$GroupPageQuery"
+          resultMap="BaseResultMap">
+      select * from work_order_group
+      <where>
+          <if test="queryName != null and queryName != ''">
+              name like "%" #{queryName} "%"
+          </if>
+      </where>
+      order by seq
+  </select>
+
 </mapper>

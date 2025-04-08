@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.WorkOrderMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.WorkOrder">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="seq" jdbcType="INTEGER" property="seq" />
-    <result column="work_order_key" jdbcType="VARCHAR" property="workOrderKey" />
-    <result column="group_id" jdbcType="INTEGER" property="groupId" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="icon" jdbcType="VARCHAR" property="icon" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="color" jdbcType="CHAR" property="color" />
-    <result column="docs" jdbcType="VARCHAR" property="docs" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="i18n" jdbcType="LONGVARCHAR" property="i18n" />
-    <result column="workflow" jdbcType="LONGVARCHAR" property="workflow" />
-    <result column="version" jdbcType="VARCHAR" property="version" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.WorkOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="seq" jdbcType="INTEGER" property="seq"/>
+        <result column="work_order_key" jdbcType="VARCHAR" property="workOrderKey"/>
+        <result column="group_id" jdbcType="INTEGER" property="groupId"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="color" jdbcType="CHAR" property="color"/>
+        <result column="docs" jdbcType="VARCHAR" property="docs"/>
+        <result column="comment" jdbcType="VARCHAR" property="comment"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="i18n" jdbcType="LONGVARCHAR" property="i18n"/>
+        <result column="workflow" jdbcType="LONGVARCHAR" property="workflow"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.work.WorkOrderParam$WorkOrderPageQuery"
+            resultMap="BaseResultMap">
+        select * from work_order
+        <where>
+            <if test="groupId != null and groupId > 0'">
+                group_id = #{groupId}
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and name like "%" #{queryName} "%"
+            </if>
+        </where>
+        order by seq
+    </select>
+
 </mapper>

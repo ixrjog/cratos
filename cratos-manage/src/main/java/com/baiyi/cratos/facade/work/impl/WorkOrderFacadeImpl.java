@@ -1,13 +1,18 @@
 package com.baiyi.cratos.facade.work.impl;
 
 import com.baiyi.cratos.common.util.VersionValidator;
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderGroup;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.work.WorkOrderFacade;
 import com.baiyi.cratos.service.work.WorkOrderGroupService;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.enums.WorkOrderGroupTypes;
 import com.baiyi.cratos.workorder.exception.WorkOrderException;
 import com.baiyi.cratos.wrapper.work.WorkOrderGroupWrapper;
+import com.baiyi.cratos.wrapper.work.WorkOrderWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +31,7 @@ public class WorkOrderFacadeImpl implements WorkOrderFacade {
     private final WorkOrderGroupService workOrderGroupService;
     private final WorkOrderService workOrderService;
     private final WorkOrderGroupWrapper workOrderGroupWrapper;
+    private final WorkOrderWrapper workOrderWrapper;
 
     @Override
     public WorkOrderVO.Menu getWorkOrderMenu() {
@@ -45,6 +51,25 @@ public class WorkOrderFacadeImpl implements WorkOrderFacade {
             WorkOrderException.runtime("Version number format error.");
         }
         workOrderService.updateByPrimaryKey(updateWorkOrder.toTarget());
+    }
+
+    @Override
+    public void updateWorkOrderGroup(WorkOrderParam.UpdateGroup updateGroup) {
+        WorkOrderGroup workOrderGroup = updateGroup.toTarget();
+        WorkOrderGroupTypes.valueOf(workOrderGroup.getGroupType());
+        workOrderGroupService.updateByPrimaryKey(workOrderGroup);
+    }
+
+    @Override
+    public DataTable<WorkOrderVO.Group> queryWorkOrderGroupPage(WorkOrderParam.GroupPageQuery pageQuery) {
+        DataTable<WorkOrderGroup> table = workOrderGroupService.queryPageByParam(pageQuery);
+        return workOrderGroupWrapper.wrapToTarget(table);
+    }
+
+    @Override
+    public DataTable<WorkOrderVO.WorkOrder> queryWorkOrderPage(WorkOrderParam.WorkOrderPageQuery pageQuery) {
+        DataTable<WorkOrder> table = workOrderService.queryPageByParam(pageQuery);
+        return workOrderWrapper.wrapToTarget(table);
     }
 
 }

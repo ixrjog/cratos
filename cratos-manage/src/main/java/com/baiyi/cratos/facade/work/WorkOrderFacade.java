@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.work;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 
@@ -13,5 +14,11 @@ public interface WorkOrderFacade {
     WorkOrderVO.Menu getWorkOrderMenu();
 
     void updateWorkOrder(WorkOrderParam.UpdateWorkOrder updateWorkOrder);
+
+    void updateWorkOrderGroup(WorkOrderParam.UpdateGroup updateGroup);
+
+    DataTable<WorkOrderVO.Group> queryWorkOrderGroupPage(WorkOrderParam.GroupPageQuery pageQuery);
+
+    DataTable<WorkOrderVO.WorkOrder> queryWorkOrderPage(WorkOrderParam.WorkOrderPageQuery pageQuery);
 
 }
