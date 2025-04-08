@@ -28,7 +28,7 @@
             resultMap="BaseResultMap">
         select * from work_order
         <where>
-            <if test="groupId != null and groupId > 0'">
+            <if test="groupId != null and groupId > 0">
                 group_id = #{groupId}
             </if>
             <if test="queryName != null and queryName != ''">
