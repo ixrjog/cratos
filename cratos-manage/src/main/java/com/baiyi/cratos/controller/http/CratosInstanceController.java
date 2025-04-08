@@ -49,7 +49,7 @@ public class CratosInstanceController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Load balancing health check interface")
+    @Operation(summary = "Load balancing health check")
     @GetMapping(value = "/health/lb-check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<CratosInstanceVO.Health> checkHealth() {
         CratosInstanceVO.Health health = cratosInstanceFacade.checkHealth();
