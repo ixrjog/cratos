@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.work.impl;
 
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.Report;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -21,7 +22,7 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/3/17 17:45
+ * &#064;BaseData  2025/3/17 17:45
  * &#064;Version 1.0
  */
 @Service
@@ -69,6 +70,14 @@ public class WorkOrderTicketServiceImpl implements WorkOrderTicketService {
         return workOrderTicketMapper.selectCountByExample(example);
     }
 
-    // Search for all month dates
+    @Override
+    public List<Report.BaseData> statByMonth(int workOrderId) {
+        return workOrderTicketMapper.statByMonth(workOrderId);
+    }
+
+    @Override
+    public List<Report.BaseData> statByName() {
+        return workOrderTicketMapper.statByName();
+    }
 
 }

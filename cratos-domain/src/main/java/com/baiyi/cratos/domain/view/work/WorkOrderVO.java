@@ -25,6 +25,12 @@ import java.util.List;
  */
 public class WorkOrderVO {
 
+    public interface HasWorkOrderGroup {
+        Integer getGroupId();
+
+        void setWorkOrderGroup(WorkOrderVO.Group workOrderGroup);
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
@@ -66,7 +72,7 @@ public class WorkOrderVO {
     @AllArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.WORKORDER)
-    public static class WorkOrder implements BaseBusiness.IBusinessAnnotate, I18nModel.HasI18n, TicketWorkflow.HasWorkflowData, BusinessDocVO.HasBusinessDocs, BusinessTagVO.HasBusinessTags, Serializable {
+    public static class WorkOrder implements HasWorkOrderGroup, BaseBusiness.IBusinessAnnotate, I18nModel.HasI18n, TicketWorkflow.HasWorkflowData, BusinessDocVO.HasBusinessDocs, BusinessTagVO.HasBusinessTags, Serializable {
         @Serial
         private static final long serialVersionUID = 883502875092939363L;
         private Integer id;
@@ -83,6 +89,8 @@ public class WorkOrderVO {
         private String comment;
         private String workflow;
 
+        private Group workOrderGroup;
+
         private I18nModel.I18nData i18nData;
         private WorkflowModel.Workflow workflowData;
         private String version;
@@ -91,6 +99,7 @@ public class WorkOrderVO {
         public Integer getBusinessId() {
             return id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
