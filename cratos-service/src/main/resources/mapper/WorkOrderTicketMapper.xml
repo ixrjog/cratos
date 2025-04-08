@@ -19,12 +19,20 @@
         <result column="auto_processing" jdbcType="BIT" property="autoProcessing"/>
         <result column="process_at" jdbcType="TIMESTAMP" property="processAt"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
-        <result column="workflow" jdbcType="LONGVARCHAR" property="workflow" />
-        <result column="version" jdbcType="VARCHAR" property="version" />
+        <result column="workflow" jdbcType="LONGVARCHAR" property="workflow"/>
+        <result column="version" jdbcType="VARCHAR" property="version"/>
         <result column="comment" jdbcType="VARCHAR" property="comment"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="apply_remark" jdbcType="LONGVARCHAR" property="applyRemark"/>
+    </resultMap>
+
+    <!--
+    report-->
+    <resultMap id="ReportDateMap" type="com.baiyi.cratos.domain.Report$BaseData">
+        <result column="c_name" jdbcType="VARCHAR" property="cName"/>
+        <result column="value" jdbcType="INTEGER" property="value"/>
+        <result column="color" jdbcType="VARCHAR" property="color"/>
     </resultMap>
 
     <select id="queryMyTicketPageByParam"
@@ -76,6 +84,28 @@
             </if>
         </where>
         order by id desc
+    </select>
+
+    <select id="statByMonth" resultMap="ReportDateMap">
+        select date_format(a0.completed_at, '%Y-%m') as `c_name`
+        <if test="workOrderId > 0">
+            , sum(if(a0.work_order_id = #{workOrderId}, 1, 0)) as `value`
+        </if>
+        from work_order_ticket a0
+        join work_order a1 on a1.id = a0.work_order_id
+        where
+        a0.completed = true and a0.success = true
+        group by `c_name` order by `c_name`
+    </select>
+
+    <select id="statByName" resultMap="ReportDateMap">
+        select a1.name as `c_name`, count(*) as `value`, a1.color
+        from work_order_ticket a0
+                 join work_order a1 on a1.id = a0.work_order_id
+        where a0.completed = true
+          and a0.success = true
+        group by a0.work_order_id
+        order by a0.work_order_id
     </select>
 
 </mapper>

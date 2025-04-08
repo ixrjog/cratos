@@ -2,9 +2,12 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.Report;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderParam;
+import com.baiyi.cratos.domain.view.work.WorkOrderReportVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.work.WorkOrderFacade;
+import com.baiyi.cratos.facade.work.WorkOrderReporter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/3/17 14:02
+ * &#064;BaseData  2025/3/17 14:02
  * &#064;Version 1.0
  */
 @RestController
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class WorkOrderController {
 
     private final WorkOrderFacade workOrderFacade;
+    private final WorkOrderReporter workOrderReporter;
 
     @Operation(summary = "Get workOrder menu")
     @GetMapping(value = "/menu/get", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,9 +66,16 @@ public class WorkOrderController {
         return HttpResult.of(workOrderFacade.queryWorkOrderGroupPage(pageQuery));
     }
 
-    // report
-    // Monthly report
+    @Operation(summary = "WorkOrder report (summary by name)")
+    @GetMapping(value = "/report/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<Report.BaseData>> getTicketNameReport() {
+        return HttpResult.of(workOrderReporter.getTicketNameReport());
+    }
 
-
+    @Operation(summary = "WorkOrder report (summary by month)")
+    @GetMapping(value = "/report/monthly", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<WorkOrderReportVO.Monthly> getTicketMonthlyReport() {
+        return HttpResult.of(workOrderReporter.getTicketMonthlyReport());
+    }
 
 }
