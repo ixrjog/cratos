@@ -32,7 +32,7 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
     private final WorkOrderService workOrderService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_GROUP, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(WorkOrderVO.WorkOrder vo) {
         // I18n Data
         I18nUtils.setI18nData(vo);
