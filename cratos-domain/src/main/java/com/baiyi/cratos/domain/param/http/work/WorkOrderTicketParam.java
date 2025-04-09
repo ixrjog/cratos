@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.param.http.work.content.ApplicationElasticScalingEntryContent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -180,6 +181,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = 2888570476091613323L;
         private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
         private UserPermissionBusinessParam.BusinessPermission detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationElasticScalingTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationElasticScalingEntryContent.Content>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -3439626371006888379L;
+        private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
+        private ApplicationElasticScalingEntryContent.Content detail;
     }
 
     @Data

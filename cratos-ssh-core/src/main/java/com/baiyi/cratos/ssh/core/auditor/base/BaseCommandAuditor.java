@@ -82,7 +82,7 @@ public abstract class BaseCommandAuditor {
                             builder = null;
                         }
                     }
-                    builder = builder(sshSessionInstance.getId(), lineStr);
+                    builder = newInstanceCommandBuilder(sshSessionInstance.getId(), lineStr);
                 } else {
                     if (builder != null) {
                         builder.addOutput(lineStr);
@@ -116,7 +116,7 @@ public abstract class BaseCommandAuditor {
         return ImmutablePair.of(index1, index2);
     }
 
-    public InstanceCommandBuilder builder(Integer sshSessionInstanceId, String inputStr) {
+    public InstanceCommandBuilder newInstanceCommandBuilder(Integer sshSessionInstanceId, String inputStr) {
         ImmutablePair<Integer, Integer> ip = getIndex(inputStr);
         int index = ip.getLeft() != -1 ? ip.getLeft() : ip.getRight();
         if (index == -1) {

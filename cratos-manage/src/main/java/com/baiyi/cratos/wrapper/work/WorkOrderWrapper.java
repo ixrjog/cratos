@@ -1,13 +1,16 @@
 package com.baiyi.cratos.wrapper.work;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.util.I18nUtils;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
+import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
@@ -30,6 +33,7 @@ import java.util.List;
 public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements IBusinessWrapper<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
 
     private final WorkOrderService workOrderService;
+    private final RbacRoleFacade rbacRoleFacade;
 
     @Override
     @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_GROUP, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
@@ -38,6 +42,11 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
         I18nUtils.setI18nData(vo);
         // Workflow Data
         WorkflowUtils.setWorkflow(vo);
+        if (WorkOrderStatus.DEVELOPING.equals(WorkOrderStatus.valueOf(vo.getStatus()))) {
+            vo.setIsUsable(rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS));
+        } else {
+            vo.setIsUsable(true);
+        }
     }
 
     @Override

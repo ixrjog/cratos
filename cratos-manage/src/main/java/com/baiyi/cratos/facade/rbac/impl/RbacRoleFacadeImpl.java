@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.rbac.impl;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
@@ -68,6 +69,11 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
                 .map(RbacRole::getAccessLevel)
                 .max(Comparator.comparing(Integer::intValue))
                 .orElse(0) >= accessLevel.getLevel();
+    }
+
+    @Override
+    public boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel) {
+        return verifyRoleAccessLevelByUsername(accessLevel, SessionUtils.getUsername());
     }
 
     @Override

@@ -95,6 +95,9 @@ public class WorkOrderVO {
         private WorkflowModel.Workflow workflowData;
         private String version;
 
+        @Schema(description = "当前用户可以使用此工单")
+        private Boolean isUsable;
+
         @Override
         public Integer getBusinessId() {
             return id;

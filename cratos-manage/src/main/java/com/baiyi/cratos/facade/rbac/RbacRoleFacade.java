@@ -27,4 +27,6 @@ public interface RbacRoleFacade {
 
     boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel, String username);
 
+    boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel);
+
 }

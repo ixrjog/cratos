@@ -1,16 +1,22 @@
 package com.baiyi.cratos.facade.work.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
+import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.TicketState;
-import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
+import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
+import com.baiyi.cratos.workorder.event.TicketEvent;
+import com.baiyi.cratos.workorder.exception.WorkOrderException;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketWrapper;
@@ -29,9 +35,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
 
+    private final WorkOrderService workOrderService;
     private final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderTicketWrapper workOrderTicketWrapper;
     private final WorkOrderTicketDetailsWrapper workOrderTicketDetailsWrapper;
+    private final RbacRoleFacade rbacRoleFacade;
 
     @Override
     @SetSessionUserToParam(desc = "set Username")
@@ -49,6 +57,13 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public WorkOrderTicketVO.TicketDetails createTicket(WorkOrderTicketParam.CreateTicket createTicket) {
+        WorkOrder workOrder = workOrderService.getByWorkOrderKey(createTicket.getWorkOrderKey());
+        // 开发中
+        if (WorkOrderStatus.DEVELOPING.equals(WorkOrderStatus.valueOf(workOrder.getStatus()))) {
+            if (!rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS)) {
+                WorkOrderException.runtime("Work order development in progress. Please wait for the work order to be completed.");
+            }
+        }
         final String ticketNo = PasswordGenerator.generateTicketNo();
         createTicket.setTicketNo(ticketNo);
         TicketEvent<WorkOrderTicketParam.CreateTicket> event = TicketEvent.of(createTicket);
