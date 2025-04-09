@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.SshSessionInstanceCommand;
 import com.baiyi.cratos.service.session.SshSessionInstanceCommandService;
 import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.ssh.core.auditor.InstanceCommandBuilder;
+import com.baiyi.cratos.ssh.core.auditor.line.ShellLineNumberReader;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.regex.Pattern;
 
 /**
@@ -55,7 +55,7 @@ public abstract class BaseCommandAuditor {
 
         final String auditPath = sshSessionInstance.getAuditPath();
         String lineStr;
-        InstanceCommandBuilder builder = null;
+        InstanceCommandBuilder instanceCommandBuilder = null;
         String regex = getInputRegex();
         File file = new File(auditPath);
         if (!file.exists()) {
@@ -64,28 +64,28 @@ public abstract class BaseCommandAuditor {
             return;
         }
         // FIXME 多行输入
-        try (LineNumberReader reader = new LineNumberReader(new FileReader(auditPath))) {
-            while ((lineStr = reader.readLine()) != null) {
+        try (ShellLineNumberReader reader = new ShellLineNumberReader(new FileReader(auditPath))) {
+            while ((lineStr = reader.readShellLine()) != null) {
                 if (lineStr.isEmpty()) {
                     continue;
                 }
                 // 判断input
                 boolean isInput = Pattern.matches(regex, lineStr);
                 if (isInput) {
-                    if (builder != null) {
+                    if (instanceCommandBuilder != null) {
                         // save
-                        SshSessionInstanceCommand auditCommand = builder.build();
+                        SshSessionInstanceCommand auditCommand = instanceCommandBuilder.build();
                         if (auditCommand != null) {
                             if (!StringUtils.isEmpty(auditCommand.getInputFormatted())) {
                                 sshSessionInstanceCommandService.add(auditCommand);
                             }
-                            builder = null;
+                            instanceCommandBuilder = null;
                         }
                     }
-                    builder = newInstanceCommandBuilder(sshSessionInstance.getId(), lineStr);
+                    instanceCommandBuilder = newInstanceCommandBuilder(sshSessionInstance.getId(), lineStr);
                 } else {
-                    if (builder != null) {
-                        builder.addOutput(lineStr);
+                    if (instanceCommandBuilder != null) {
+                        instanceCommandBuilder.addOutput(lineStr);
                     }
                 }
             }
