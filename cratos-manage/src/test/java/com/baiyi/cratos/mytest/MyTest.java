@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 
+import java.util.regex.Pattern;
+
 /**
  * @Author baiyi
  * @Date 2024/2/13 21:47
@@ -87,7 +89,20 @@ public class MyTest extends BaseUnit {
 
         }
 
+    }
 
+    @Test
+    void test4 () {
+        String x = """
+                [Ksh-4.2# curl -H 'Host: augustus-pos.palmmerchant.com' \
+                > -H "country: GH" \
+                > https://alb-2dbx7at8fxzcw4hnoc.eu-central-1.alb.aliyuncs.com/api/pos/init
+                """;
+
+        // "(?s).*# \\u001b?.*"
+        // ".*# \\u001b?.*"
+        boolean isInput = Pattern.matches("(?s).*# \\u001b?.*", x);
+        System.out.println(isInput);
     }
 
 }

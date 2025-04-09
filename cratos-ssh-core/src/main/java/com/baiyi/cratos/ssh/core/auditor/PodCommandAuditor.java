@@ -13,8 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class PodCommandAuditor extends BaseCommandAuditor {
 
-    // fix 匹配\u001b 0次或1次
-    private static final String INPUT_REGEX = ".*# \\u001b?.*";
+    /**
+     * fix1 匹配\u001b 0次或1次
+     * fix2 (?s) 使点号匹配换行符
+     */
+    private static final String INPUT_REGEX = "(?s).*# \\u001b?.*";
 
     // ".?\b\\u001b\\[J"
     private static final String BS_REGEX = ".*# \\u001b?[\\[J]?";
