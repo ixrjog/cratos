@@ -20,7 +20,7 @@ public class ShellLineNumberReader extends LineNumberReader {
         String line;
         while ((line = super.readLine()) != null) {
             sb.append(line);
-            if (!line.endsWith("\\n")) {
+            if (!line.endsWith("\n")) {
                 break;
             }
         }
