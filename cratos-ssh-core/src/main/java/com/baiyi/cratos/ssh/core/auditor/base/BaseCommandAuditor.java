@@ -30,6 +30,7 @@ public abstract class BaseCommandAuditor {
     private final SshSessionInstanceCommandService sshSessionInstanceCommandService;
 
     protected abstract String getInputRegex();
+
     protected abstract String getBsRegex();
 
     /**
@@ -53,7 +54,7 @@ public abstract class BaseCommandAuditor {
         }
 
         final String auditPath = sshSessionInstance.getAuditPath();
-        String str;
+        String lineStr;
         InstanceCommandBuilder builder = null;
         String regex = getInputRegex();
         File file = new File(auditPath);
@@ -64,11 +65,12 @@ public abstract class BaseCommandAuditor {
         }
         // FIXME 多行输入
         try (LineNumberReader reader = new LineNumberReader(new FileReader(auditPath))) {
-            while ((str = reader.readLine()) != null) {
-                if (str.isEmpty()) {
+            while ((lineStr = reader.readLine()) != null) {
+                if (lineStr.isEmpty()) {
                     continue;
                 }
-                boolean isInput = Pattern.matches(regex, str);
+                // 判断input
+                boolean isInput = Pattern.matches(regex, lineStr);
                 if (isInput) {
                     if (builder != null) {
                         // save
@@ -80,15 +82,15 @@ public abstract class BaseCommandAuditor {
                             builder = null;
                         }
                     }
-                    builder = builder(sshSessionInstance.getId(), str);
+                    builder = builder(sshSessionInstance.getId(), lineStr);
                 } else {
                     if (builder != null) {
-                        builder.addOutput(str);
+                        builder.addOutput(lineStr);
                     }
                 }
             }
-        } catch (IOException ex) {
-            log.error("Ssh instance audit write error: {}", ex.getMessage());
+        } catch (IOException ioException) {
+            log.error("Ssh instance audit write error: {}", ioException.getMessage());
         }
     }
 
