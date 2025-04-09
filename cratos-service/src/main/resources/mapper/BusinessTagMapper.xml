@@ -27,13 +27,15 @@
     <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryByTag"
             resultType="java.lang.String">
         select distinct tag_value from business_tag
-        <where>
-            tag_id = #{tagId}
-            <if test="queryTagValue != null and queryTagValue != ''">
-                and tag_value like "%" #{queryTagValue} "%"
-                order by replace( tag_value, #{queryTagValue}, '' )
-            </if>
-        </where>
+        where
+        tag_id = #{tagId}
+        <if test="businessType != null and businessType != ''">
+            and business_type = #{businessType}
+        </if>
+        <if test="queryTagValue != null and queryTagValue != ''">
+            and tag_value like "%" #{queryTagValue} "%"
+            order by replace( tag_value, #{queryTagValue}, '' )
+        </if>
     </select>
 
     <select id="queryTagIdByBusinessType"
