@@ -6,9 +6,11 @@ import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderGroup;
 import com.baiyi.cratos.domain.util.I18nUtils;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.service.work.WorkOrderGroupService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
@@ -33,10 +35,12 @@ import java.util.List;
 public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements IBusinessWrapper<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
 
     private final WorkOrderService workOrderService;
+    private final WorkOrderGroupService workOrderGroupService;
     private final RbacRoleFacade rbacRoleFacade;
+    private final WorkOrderGroupWrapper workOrderGroupWrapper;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_GROUP, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(WorkOrderVO.WorkOrder vo) {
         // I18n Data
         I18nUtils.setI18nData(vo);
@@ -47,6 +51,8 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
         } else {
             vo.setIsUsable(true);
         }
+        WorkOrderGroup workOrderGroup = workOrderGroupService.getById(vo.getGroupId());
+        vo.setWorkOrderGroup(workOrderGroupWrapper.convert(workOrderGroup));
     }
 
     @Override
