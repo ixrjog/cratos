@@ -31,9 +31,6 @@ public class TagServiceImpl implements TagService {
 
     private final TagMapper tagMapper;
 
-    public static final String GROUP = "Group";
-    public static final String ENV = "Env";
-
     @Override
     public DataTable<Tag> queryPageByParam(TagParam.TagPageQuery pageQuery) {
         Page<?> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());

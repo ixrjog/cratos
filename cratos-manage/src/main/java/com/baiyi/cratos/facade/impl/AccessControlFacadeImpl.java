@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
 import com.baiyi.cratos.service.UserPermissionService;
-import com.baiyi.cratos.service.access.AccessControlFacade;
+import com.baiyi.cratos.facade.AccessControlFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

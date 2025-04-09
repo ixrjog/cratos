@@ -23,7 +23,7 @@ public class SupportBusinessServiceFactory {
     public static void register(SupportBusinessService bean) {
         CONTEXT.put(bean.getBusinessType(), bean);
         log.debug("=============================== SupportBusinessServiceFactory ===============================");
-        log.debug("BusinessWrapperFactory Registered: serviceName={}, businessType={}", bean.getClass()
+        log.debug("SupportBusinessServiceFactory Registered: serviceName={}, businessType={}", bean.getClass()
                 .getSimpleName(), bean.getBusinessType());
     }
 

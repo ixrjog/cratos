@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.access.AccessControlFacade;
+import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;

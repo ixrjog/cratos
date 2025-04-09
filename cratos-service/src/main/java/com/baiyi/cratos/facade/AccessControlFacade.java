@@ -1,4 +1,4 @@
-package com.baiyi.cratos.service.access;
+package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;

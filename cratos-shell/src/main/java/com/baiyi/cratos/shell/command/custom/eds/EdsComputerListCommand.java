@@ -1,5 +1,6 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
@@ -10,20 +11,19 @@ import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.domain.query.EdsAssetQuery;
+import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.impl.TagServiceImpl;
 import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
-import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.baiyi.cratos.shell.writer.ComputerTableWriter;
 import com.google.common.base.Joiner;
@@ -113,8 +113,8 @@ public class EdsComputerListCommand extends AbstractCommand {
                 EdsInstance edsInstance = edsInstanceService.getById(asset.getInstanceId());
                 edsInstanceMap.put(edsInstance.getId(), edsInstance.getInstanceName());
             }
-            final String env = getTagValue(asset, TagServiceImpl.ENV);
-            final String group = getTagValue(asset, TagServiceImpl.GROUP);
+            final String env = getTagValue(asset, SysTagKeys.ENV);
+            final String group = getTagValue(asset, SysTagKeys.GROUP);
             ComputerTableWriter.newBuilder()
                     .withTable(computerTable)
                     .withId(id)
@@ -160,8 +160,8 @@ public class EdsComputerListCommand extends AbstractCommand {
                 .getPromptColor())) : env;
     }
 
-    private String getTagValue(EdsAsset edsAsset, String tagKey) {
-        BusinessTag businessTag = businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), tagKey);
+    private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
+        BusinessTag businessTag = businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
         return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "-";
     }
 
