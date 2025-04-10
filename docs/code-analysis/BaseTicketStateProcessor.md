@@ -4,10 +4,10 @@
 
 ## 1. 类的基本结构和设计
 
-• **抽象基类**：提供了工单状态处理器的通用实现
-• **泛型设计**：使用泛型参数 <Event extends WorkOrderTicketParam.HasTicketNo>，确保事件包含工单号
-• **实现接口**：TicketStateProcessor<Event> 定义了状态处理器的行为
-• **状态机设计**：每个处理器实例代表一个状态，处理器之间通过 targetProcessor 链接形成状态链
++ **抽象基类**：提供了工单状态处理器的通用实现
++ **泛型设计**：使用泛型参数 <Event extends WorkOrderTicketParam.HasTicketNo>，确保事件包含工单号
++ **实现接口**：TicketStateProcessor<Event> 定义了状态处理器的行为
++ **状态机设计**：每个处理器实例代表一个状态，处理器之间通过 targetProcessor 链接形成状态链
 
 ## 2. 核心功能
 
@@ -16,10 +16,10 @@
 StateProcessor1 -> StateProcessor2 -> StateProcessor3 -> ...
 
 
-• 每个处理器代表一个工单状态
-• 处理器通过 targetProcessor 引用链接到下一个状态
-• 通过 setTarget() 方法设置下一个状态处理器
-• 通过 getByState() 方法在状态链中查找特定状态的处理器
++ 每个处理器代表一个工单状态
++ 处理器通过 targetProcessor 引用链接到下一个状态
++ 通过 setTarget() 方法设置下一个状态处理器
++ 通过 getByState() 方法在状态链中查找特定状态的处理器
 
 ### 2.2 状态转换流程
 
@@ -36,45 +36,45 @@ change → preChangeInspection → processing → isTransition → transitionToN
 
 ### 2.3 抽象方法
 
-• **isTransition**: 判断是否需要转换到下一状态
-• **nextState**: 判断是否需要继续执行下一状态的处理
-• **getState**: (接口中定义) 获取当前处理器对应的状态
++ **isTransition**: 判断是否需要转换到下一状态
++ **nextState**: 判断是否需要继续执行下一状态的处理
++ **getState**: (接口中定义) 获取当前处理器对应的状态
 
 ### 2.4 可重写的钩子方法
 
-• **processing**: 执行当前状态的处理逻辑
-• **preChangeInspection**: 状态变更前的检查逻辑
++ **processing**: 执行当前状态的处理逻辑
++ **preChangeInspection**: 状态变更前的检查逻辑
 
 ## 3. 技术特点
 
 ### 3.1 注解使用
 
-• **@Slf4j**: 提供日志功能
-• **@RequiredArgsConstructor**: 生成包含所有 final 字段的构造函数
-• **@SuppressWarnings("unchecked")**: 抑制类型转换警告
++ **@Slf4j**: 提供日志功能
++ **@RequiredArgsConstructor**: 生成包含所有 final 字段的构造函数
++ **@SuppressWarnings("unchecked")**: 抑制类型转换警告
 
 ### 3.2 依赖注入
 
 通过构造函数注入多个依赖服务：
-• UserService
-• WorkOrderService
-• WorkOrderTicketService
-• WorkOrderTicketNodeService
-• WorkOrderTicketSubscriberFacade
-• WorkOrderTicketNodeFacade
-• WorkOrderTicketEntryService
-• TicketWorkflowFacade
++ UserService
++ WorkOrderService
++ WorkOrderTicketService
++ WorkOrderTicketNodeService
++ WorkOrderTicketSubscriberFacade
++ WorkOrderTicketNodeFacade
++ WorkOrderTicketEntryService
++ TicketWorkflowFacade
 
 ### 3.3 异常处理
 
-• 使用自定义异常 TicketStateProcessorException 处理状态处理器错误
-• 捕获 WorkOrderTicketDoNextException 异常，用于控制状态转换流程
++ 使用自定义异常 TicketStateProcessorException 处理状态处理器错误
++ 捕获 WorkOrderTicketDoNextException 异常，用于控制状态转换流程
 
 ## 4. 设计模式
 
-• **状态模式**: 将工单的不同状态封装到不同的处理器中，状态转换通过处理器之间的链接实现
-• **责任链模式**: 处理器通过 targetProcessor 链接形成责任链，用于查找特定状态的处理器
-• **模板方法模式**: 定义了状态转换的骨架，让子类实现特定步骤
++ **状态模式**: 将工单的不同状态封装到不同的处理器中，状态转换通过处理器之间的链接实现
++ **责任链模式**: 处理器通过 targetProcessor 链接形成责任链，用于查找特定状态的处理器
++ **模板方法模式**: 定义了状态转换的骨架，让子类实现特定步骤
 
 ## 5. 优点
 
