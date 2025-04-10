@@ -38,9 +38,9 @@
             </if>
             <choose>
                 <when test="queryName != null and queryName != ''">
-                    and username like "%" #{queryName} "%"
+                    and ( username like "%" #{queryName} "%"
                     or name like "%" #{queryName} "%"
-                    or display_name like "%" #{queryName} "%"
+                    or display_name like "%" #{queryName} "%" )
                     order by replace( name, #{queryName}, '' ), create_time
                 </when>
                 <otherwise>
@@ -62,9 +62,9 @@
         </if>
         <choose>
             <when test="queryName != null and queryName != ''">
-                and username like "%" #{queryName} "%"
+                and ( username like "%" #{queryName} "%"
                 or name like "%" #{queryName} "%"
-                or display_name like "%" #{queryName} "%"
+                or display_name like "%" #{queryName} "%" )
                 order by replace( name, #{queryName}, '' ), expired_time
             </when>
             <otherwise>
