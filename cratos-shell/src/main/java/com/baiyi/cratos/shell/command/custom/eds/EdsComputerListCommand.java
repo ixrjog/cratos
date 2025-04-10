@@ -39,6 +39,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
@@ -115,7 +116,6 @@ public class EdsComputerListCommand extends AbstractCommand {
             }
             final String env = getTagValue(asset, SysTagKeys.ENV);
             final String group = getTagValue(asset, SysTagKeys.GROUP);
-            BusinessTag nameTag = getBusinessTag(asset, SysTagKeys.NAME);
             ComputerTableWriter.newBuilder()
                     .withTable(computerTable)
                     .withId(id)
@@ -125,7 +125,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withEnv(renderEnv(envMap, env))
                     .withServerAccounts(toServerAccounts(serverAccounts))
                     .withPermission(toPermission(user, group, env))
-                    .withNameAlias(Objects.nonNull(nameTag) ? nameTag.getTagValue() : "")
+                    .withServerName(getServerName(asset))
                     .addRow();
             computerMapper.put(id, asset);
             id++;
@@ -167,8 +167,10 @@ public class EdsComputerListCommand extends AbstractCommand {
         return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "-";
     }
 
-    private BusinessTag getBusinessTag(EdsAsset edsAsset, SysTagKeys sysTagKey) {
-        return businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
+    private String getServerName(EdsAsset edsAsset) {
+        return Optional.ofNullable(businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), SysTagKeys.NAME.getKey()))
+                .map(BusinessTag::getTagValue)
+                .orElse(edsAsset.getName());
     }
 
     private BaseBusiness.HasBusiness toHasBusiness(EdsAsset edsAsset) {
