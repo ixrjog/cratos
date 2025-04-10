@@ -2,6 +2,7 @@ package com.baiyi.cratos.shell.writer;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import org.springframework.util.StringUtils;
 
 /**
  * &#064;Author  baiyi
@@ -17,6 +18,7 @@ public class ComputerTableWriter {
     private String env;
     private String serverAccounts;
     private String permission;
+    private String nameAlias;
 
     private PrettyTable table;
 
@@ -64,11 +66,16 @@ public class ComputerTableWriter {
         return this;
     }
 
+    public ComputerTableWriter withNameAlias(String nameAlias) {
+        this.nameAlias = nameAlias;
+        return this;
+    }
+
     public void addRow() {
         final String instanceId = this.asset.getAssetId();
         final String region = asset.getRegion();
         final String type = asset.getAssetType();
-        final String serverName = asset.getName();
+        final String serverName = StringUtils.hasText(nameAlias) ? nameAlias : asset.getName();
         final String ip = asset.getAssetKey();
         this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, serverName, ip,
                 this.serverAccounts, this.permission);

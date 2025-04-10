@@ -115,6 +115,7 @@ public class EdsComputerListCommand extends AbstractCommand {
             }
             final String env = getTagValue(asset, SysTagKeys.ENV);
             final String group = getTagValue(asset, SysTagKeys.GROUP);
+            BusinessTag nameTag = getBusinessTag(asset, SysTagKeys.NAME);
             ComputerTableWriter.newBuilder()
                     .withTable(computerTable)
                     .withId(id)
@@ -124,6 +125,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withEnv(renderEnv(envMap, env))
                     .withServerAccounts(toServerAccounts(serverAccounts))
                     .withPermission(toPermission(user, group, env))
+                    .withNameAlias(Objects.nonNull(nameTag) ? nameTag.getTagValue() : "")
                     .addRow();
             computerMapper.put(id, asset);
             id++;
@@ -163,6 +165,10 @@ public class EdsComputerListCommand extends AbstractCommand {
     private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
         BusinessTag businessTag = businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
         return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "-";
+    }
+
+    private BusinessTag getBusinessTag(EdsAsset edsAsset, SysTagKeys sysTagKey) {
+        return businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
     }
 
     private BaseBusiness.HasBusiness toHasBusiness(EdsAsset edsAsset) {

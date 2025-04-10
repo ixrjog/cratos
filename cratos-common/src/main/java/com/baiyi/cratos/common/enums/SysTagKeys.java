@@ -19,7 +19,9 @@ public enum SysTagKeys {
     USERNAME("Username"),
     SERVER_ACCOUNT("ServerAccount"),
     GROUP("Group"),
-    ENV("Env");
+    ENV("Env"),
+    NAME("Name")
+    ;
 
     private final String key;
 
