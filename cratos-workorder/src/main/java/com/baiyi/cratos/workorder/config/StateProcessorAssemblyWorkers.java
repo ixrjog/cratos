@@ -53,7 +53,7 @@ public class StateProcessorAssemblyWorkers {
             currentProcessor.setTarget(processorMap.get(targetState));
             currentState = targetState;
         }
-        TicketInStateProcessorFactory.setContext(processorMap.get(startState));
+        TicketInStateProcessorFactory.setStateProcessor(processorMap.get(startState));
     }
 
     public void config(TicketState startState) {

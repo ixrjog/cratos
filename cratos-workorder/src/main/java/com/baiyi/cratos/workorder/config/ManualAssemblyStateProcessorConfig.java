@@ -39,7 +39,7 @@ public class ManualAssemblyStateProcessorConfig implements InitializingBean {
                 .setTarget(ticketInProgressStateProcessor)
                 .setTarget(ticketProcessingCompletedStateProcessor)
                 .setTarget(ticketCompletedStateProcessor);
-        TicketInStateProcessorFactory.setContext(ticketCreateStateProcessor);
+        TicketInStateProcessorFactory.setStateProcessor(ticketCreateStateProcessor);
     }
 
 }
