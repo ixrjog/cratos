@@ -11,6 +11,7 @@ import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -27,7 +28,7 @@ public class StateProcessorAssemblyWorkers {
      * @param startState
      * @param endState
      */
-    public void config(TicketState startState, TicketState endState) {
+    public void config(TicketState startState, TicketState endState) throws NullPointerException {
         log.info("Start the automatic assembly work order state processor.");
         Map<String, Object> annotatedBeans = SpringContextUtil.getContext()
                 .getBeansWithAnnotation(TicketStates.class);
@@ -43,8 +44,15 @@ public class StateProcessorAssemblyWorkers {
                     processorMap.put(state, processor);
                 });
         TicketState currentState = startState;
-        while (!currentState.equals(endState)) {
+
+        int MAXIMUM_RECURSIVE_COUNT = processorMap.size();
+        int recursiveCount = 0;
+        while (!currentState.equals(endState) && recursiveCount < MAXIMUM_RECURSIVE_COUNT) {
             BaseTicketStateProcessor<?> currentProcessor = processorMap.get(currentState);
+            if (Objects.isNull(currentProcessor)) {
+                throw new NullPointerException(
+                        "The work order state processor is not configured, please check whether the state processor is configured correctly.");
+            }
             TicketState targetState = AopUtils.getTargetClass(currentProcessor)
                     .getAnnotation(TicketStates.class)
                     .target();
@@ -52,15 +60,20 @@ public class StateProcessorAssemblyWorkers {
                     .getSimpleName(), currentState.name(), targetState.name());
             currentProcessor.setTarget(processorMap.get(targetState));
             currentState = targetState;
+            recursiveCount++;
+        }
+        if (recursiveCount > MAXIMUM_RECURSIVE_COUNT) {
+            log.error(
+                    "The assembly of the work order state processor is abnormal, please check whether the state processor is configured correctly.");
         }
         TicketInStateProcessorFactory.setStateProcessor(processorMap.get(startState));
     }
 
-    public void config(TicketState startState) {
+    public void config(TicketState startState) throws NullPointerException {
         config(startState, TicketState.END);
     }
 
-    public void config() {
+    public void config() throws NullPointerException {
         config(TicketState.CREATE, TicketState.END);
     }
 
