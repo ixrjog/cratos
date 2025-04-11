@@ -50,9 +50,12 @@ public class CustomPasswordConfiguration {
             }
             try {
                 IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
-                        .orElseThrow(() -> new AuthenticationException(AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
+                        .orElseThrow(() -> new AuthenticationException(
+                                AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
                 User user = Optional.ofNullable(userService.getByUsername(username))
                         .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
+                log.info("Username {} attempts to login {}", username, serverSession.getClientAddress()
+                        .toString());
                 return authProvider.verifyPassword(user, pass);
             } catch (AuthenticationException e) {
                 return false;
