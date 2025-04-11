@@ -24,11 +24,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+@SuppressWarnings("rawtypes")
 @Slf4j
 public class BuildWithDetails extends Build {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     public static final String TEXT_SIZE_HEADER = "x-text-size";
     public static final String MORE_DATA_HEADER = "x-more-data";
+
     public static final BuildWithDetails BUILD_HAS_NEVER_RUN = new BuildWithDetails() {
         public List getActions() {
             return Collections.emptyList();
@@ -50,6 +52,7 @@ public class BuildWithDetails extends Build {
             return BuildResult.NOT_BUILT;
         }
     };
+
     public static final BuildWithDetails BUILD_HAS_BEEN_CANCELLED = new BuildWithDetails() {
         public List getActions() {
             return Collections.emptyList();
@@ -71,6 +74,7 @@ public class BuildWithDetails extends Build {
             return BuildResult.CANCELLED;
         }
     };
+
     @Getter
     private List actions;
     @Getter
@@ -149,10 +153,12 @@ public class BuildWithDetails extends Build {
         return result;
     }
 
-    public void updateDisplayNameAndDescription(String displayName, String description, boolean crumbFlag) throws IOException {
+    public void updateDisplayNameAndDescription(String displayName, String description,
+                                                boolean crumbFlag) throws IOException {
         Objects.requireNonNull(displayName, "displayName is not allowed to be null.");
         Objects.requireNonNull(description, "description is not allowed to be null.");
-        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description, "core:apply", "", "Submit", "Save");
+        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description,
+                "core:apply", "", "Submit", "Save");
         this.client.post_form(this.getUrl() + "/configSubmit?", params, crumbFlag);
     }
 
@@ -163,7 +169,8 @@ public class BuildWithDetails extends Build {
     public void updateDisplayName(String displayName, boolean crumbFlag) throws IOException {
         Objects.requireNonNull(displayName, "displayName is not allowed to be null.");
         String description = this.getDescription() == null ? "" : this.getDescription();
-        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description, "core:apply", "", "Submit", "Save");
+        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description,
+                "core:apply", "", "Submit", "Save");
         this.client.post_form(this.getUrl() + "/configSubmit?", params, crumbFlag);
     }
 
@@ -174,7 +181,8 @@ public class BuildWithDetails extends Build {
     public void updateDescription(String description, boolean crumbFlag) throws IOException {
         Objects.requireNonNull(description, "description is not allowed to be null.");
         String displayName = this.getDisplayName() == null ? "" : this.getDisplayName();
-        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description, "core:apply", "", "Submit", "Save");
+        ImmutableMap<String, String> params = ImmutableMap.of("displayName", displayName, "description", description,
+                "core:apply", "", "Submit", "Save");
         this.client.post_form(this.getUrl() + "/configSubmit?", params, crumbFlag);
     }
 
@@ -246,7 +254,8 @@ public class BuildWithDetails extends Build {
         return this.client.get(this.getUrl() + "/logText/progressiveHtml");
     }
 
-    public void streamConsoleOutput(BuildConsoleStreamListener listener, long poolingInterval, long poolingTimeout) throws InterruptedException, IOException {
+    public void streamConsoleOutput(BuildConsoleStreamListener listener, long poolingInterval,
+                                    long poolingTimeout) throws InterruptedException, IOException {
         long startTime = System.currentTimeMillis();
         long timeoutTime = startTime + poolingTimeout * 1000;
         int bufferOffset = 0;
@@ -266,7 +275,8 @@ public class BuildWithDetails extends Build {
                 if (var11 <= timeoutTime) {
                     continue;
                 }
-                log.warn("Pooling for build {} for {} timeout! Check if job stuck in jenkins", this.getDisplayName(), this.getNumber());
+                log.warn("Pooling for build {} for {} timeout! Check if job stuck in jenkins", this.getDisplayName(),
+                        this.getNumber());
                 break;
             }
 
@@ -286,7 +296,8 @@ public class BuildWithDetails extends Build {
         String response = EntityUtils.toString(httpResponse.getEntity());
         boolean hasMoreData = false;
         if (moreDataHeader != null) {
-            hasMoreData = Boolean.TRUE.toString().equals(moreDataHeader.getValue());
+            hasMoreData = Boolean.TRUE.toString()
+                    .equals(moreDataHeader.getValue());
         }
 
         int currentBufferSize = bufferOffset;
@@ -294,7 +305,8 @@ public class BuildWithDetails extends Build {
             try {
                 currentBufferSize = Integer.parseInt(textSizeHeader.getValue());
             } catch (NumberFormatException var11) {
-                log.warn("Cannot parse buffer size for job {} build {}. Using current offset!", this.getDisplayName(), this.getNumber());
+                log.warn("Cannot parse buffer size for job {} build {}. Using current offset!", this.getDisplayName(),
+                        this.getNumber());
             }
         }
 
@@ -330,7 +342,8 @@ public class BuildWithDetails extends Build {
     public InputStream downloadArtifact(Artifact a) throws IOException, URISyntaxException {
         URI uri = new URI(this.getUrl());
         String artifactPath = uri.getPath() + "artifact/" + a.getRelativePath();
-        URI artifactUri = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), artifactPath, "", "");
+        URI artifactUri = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(), artifactPath, "",
+                "");
         return this.client.getFile(artifactUri);
     }
 

@@ -7,7 +7,7 @@
 package com.baiyi.cratos.eds.jenkins.model;
 
 import com.baiyi.cratos.eds.jenkins.client.util.EncodingUtils;
-import com.baiyi.cratos.eds.jenkins.util.ComputerNameUtil;
+import com.baiyi.cratos.eds.jenkins.util.ComputerNameUtils;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -60,7 +60,7 @@ public class ComputerWithDetails extends Computer {
     public LoadStatistics getLoadStatistics() throws IOException {
         // TODO: Think about the following handling, cause that has also being
         // done in Computer#details().
-        String name = ComputerNameUtil.toName(displayName);
+        String name = ComputerNameUtils.toName(displayName);
         // TODO: ?depth=2 good idea or could this being done better?
         return client.get("/computer/" + name + "/" + "loadStatistics/?depth=2", LoadStatistics.class);
     }

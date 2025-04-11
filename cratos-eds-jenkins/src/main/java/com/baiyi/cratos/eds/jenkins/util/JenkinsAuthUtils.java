@@ -12,16 +12,12 @@ import com.baiyi.cratos.eds.core.config.EdsJenkinsConfigModel;
  * @Date 2022/1/5 11:00 AM
  * @Version 1.0
  */
-public class JenkinsAuthUtil {
+public class JenkinsAuthUtils {
 
-    private JenkinsAuthUtil() {
+    private JenkinsAuthUtils() {
     }
 
     public static Authorization.Credential buildAuthentication(EdsJenkinsConfigModel.Jenkins jenkins) {
-//        return Authentication.builder()
-//                .token(Joiner.on(" ")
-//                        .join("Basic", toAuthBasic(jenkins)))
-//                .build();
         return Authorization.Credential.builder()
                 .username(jenkins.getCred()
                         .getUsername())

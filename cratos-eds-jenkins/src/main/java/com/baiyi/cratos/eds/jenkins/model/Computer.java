@@ -6,7 +6,7 @@
 
 package com.baiyi.cratos.eds.jenkins.model;
 
-import com.baiyi.cratos.eds.jenkins.util.ComputerNameUtil;
+import com.baiyi.cratos.eds.jenkins.util.ComputerNameUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
@@ -43,7 +43,7 @@ public class Computer extends BaseModel {
     }
 
     public ComputerWithDetails details() throws IOException {
-        String name = ComputerNameUtil.toName(displayName);
+        String name = ComputerNameUtils.toName(displayName);
         // TODO: Check if depth=2 is a good idea or if it could be solved
         // better.
         ComputerWithDetails computerWithDetails = client.get("/computer/" + name + "/?depth=2",

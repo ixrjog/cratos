@@ -1,9 +1,9 @@
 package com.baiyi.cratos.common.util;
 
+import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +23,7 @@ public class CommandParser {
      * @return 解析后的参数列表
      */
     public static List<String> parseCommand(String command) {
-        List<String> params = new ArrayList<>();
+        List<String> params = Lists.newArrayList();
         // 正则表达式匹配双引号内的内容或非空白字符
         Pattern pattern = Pattern.compile("\"([^\"]*)\"|(\\S+)");
         Matcher matcher = pattern.matcher(command);
@@ -37,7 +37,13 @@ public class CommandParser {
                 params.add(matcher.group(2));
             }
         }
-        return params;
+        return addLineBreakSymbol(params);
+    }
+
+    private static List<String> addLineBreakSymbol(List<String> params) {
+        return params.stream()
+                .map(e -> e + "\n")
+                .toList();
     }
 
     public static String maskString(String str) {
