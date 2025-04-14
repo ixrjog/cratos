@@ -122,7 +122,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     private void addServerAccounts(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         try {
             TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                    WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name(), param.getBusinessType());
+                    getKey(), BusinessTypeEnum.SERVER_ACCOUNT.name());
             Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
             if (Objects.isNull(edsTag)) {
                 return;
