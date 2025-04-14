@@ -61,6 +61,13 @@ public class ApplicationParam {
 
     @Data
     @Schema
+    public static class GetApplication {
+        @NotBlank
+        private String name;
+    }
+
+    @Data
+    @Schema
     public static class AddApplication implements IToTarget<Application> {
         @Null
         private Integer id;

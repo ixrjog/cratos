@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/15 11:16
@@ -37,6 +39,15 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     public DataTable<ApplicationVO.Application> queryApplicationPage(ApplicationParam.ApplicationPageQuery pageQuery) {
         DataTable<Application> table = applicationService.queryApplicationPage(pageQuery.toParam());
         return applicationWrapper.wrapToTarget(table);
+    }
+
+    @Override
+    public ApplicationVO.Application getApplicationByName(ApplicationParam.GetApplication getApplication) {
+        Application application = applicationService.getByName(getApplication.getName());
+        if (Objects.isNull(application)) {
+            throw new NullPointerException("Application not found");
+        }
+        return applicationWrapper.wrapToTarget(application);
     }
 
     @Override

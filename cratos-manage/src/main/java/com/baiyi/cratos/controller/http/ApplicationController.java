@@ -36,6 +36,13 @@ public class ApplicationController {
         return HttpResult.of(applicationFacade.queryApplicationPage(pageQuery));
     }
 
+    @Operation(summary = "Get application by name")
+    @GetMapping(value = "/get/by/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<ApplicationVO.Application> getApplicationByName(
+            @RequestBody @Valid ApplicationParam.GetApplication getApplication) {
+        return HttpResult.of(applicationFacade.getApplicationByName(getApplication));
+    }
+
     @Operation(summary = "Add application")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplication(@RequestBody @Valid ApplicationParam.AddApplication addApplication) {
