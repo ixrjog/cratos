@@ -36,8 +36,8 @@ public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgor
 
     @Override
     public void calcAndFillInFingerprint(Credential credential) {
-        String fingerprint = calcFingerprint(credential.getCredential());
-        credential.setFingerprint(fingerprint);
+        // Private key不能计算指纹
+        credential.setFingerprint("-");
     }
 
     @Override

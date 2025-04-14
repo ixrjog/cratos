@@ -16,14 +16,12 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.google.common.base.Joiner;
-import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/9 13:34
  * &#064;Version 1.0
  */
-@Component
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {

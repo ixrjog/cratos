@@ -15,7 +15,6 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Slf4j
-@Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.REVOKE_USER)
 public  class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
