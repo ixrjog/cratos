@@ -33,4 +33,8 @@ public class InvalidCredentialException extends BaseException {
         this.code = INVALID_CREDENTIAL_ERROR;
     }
 
+    public static void runtime(String message) {
+        throw new InvalidCredentialException(message);
+    }
+
 }

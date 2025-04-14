@@ -96,18 +96,19 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
         }
         WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
                 .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))
-                .markdown(String.join("\n\n", toTables(entriesMap)))
+                .markdown(String.join("\n\n", toTables(workOrder.getWorkOrderKey(), entriesMap)))
                 .build();
         vo.setTicketAbstract(ticketAbstract);
     }
 
-    private List<String> toTables(Map<String, List<WorkOrderTicketEntry>> entriesMap) {
+    private List<String> toTables(String workOrderKey, Map<String, List<WorkOrderTicketEntry>> entriesMap) {
         return entriesMap.entrySet()
                 .stream()
                 .map(entry -> {
                     String businessType = entry.getKey();
                     List<WorkOrderTicketEntry> entries = entry.getValue();
-                    TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(businessType);
+                    TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(workOrderKey,
+                            businessType);
                     String rows = entries.stream()
                             .map(provider::getEntryTableRow)
                             .collect(Collectors.joining("\n"));

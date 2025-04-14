@@ -1,5 +1,8 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -27,20 +30,17 @@ import java.util.List;
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
+@WorkOrderKey(key = WorkOrderKeys.APPLICATION_PERMISSION)
 public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
 
     public ApplicationPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
+                                                    WorkOrderService workOrderService,
                                                     UserPermissionBusinessFacade userPermissionBusinessFacade) {
-        super(workOrderTicketEntryService, workOrderTicketService);
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
-    }
-
-    @Override
-    public String getKey() {
-        return WorkOrderKeys.APPLICATION_PERMISSION.name();
     }
 
     @Override
@@ -65,7 +65,8 @@ public class ApplicationPermissionTicketEntryProvider extends BaseTicketEntryPro
      */
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        return TableUtils.getBusinessPermissionEntryTableRow(entry);
+        WorkOrder workOrder = getWorkOrder(entry);
+        return TableUtils.getBusinessPermissionEntryTableRow(workOrder.getWorkOrderKey(), entry);
     }
 
     @Override

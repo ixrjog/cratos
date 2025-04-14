@@ -2,27 +2,26 @@ package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
-import com.baiyi.cratos.domain.generator.BusinessTag;
-import com.baiyi.cratos.domain.generator.Tag;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ComputerPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
@@ -40,6 +39,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.TAG_GROUP)
+@WorkOrderKey(key = WorkOrderKeys.COMPUTER_PERMISSION)
 public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddComputerPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
@@ -49,10 +49,11 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
 
     public ComputerPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                  WorkOrderTicketService workOrderTicketService,
+                                                 WorkOrderService workOrderService,
                                                  UserPermissionBusinessFacade userPermissionBusinessFacade,
                                                  BusinessTagService businessTagService, TagService tagService,
                                                  ServerAccountService serverAccountService) {
-        super(workOrderTicketEntryService, workOrderTicketService);
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
         this.businessTagService = businessTagService;
         this.tagService = tagService;
@@ -81,12 +82,8 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
      */
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        return TableUtils.getBusinessPermissionEntryTableRow(entry);
-    }
-
-    @Override
-    public String getKey() {
-        return WorkOrderKeys.COMPUTER_PERMISSION.name();
+        WorkOrder workOrder = getWorkOrder(entry);
+        return TableUtils.getBusinessPermissionEntryTableRow(workOrder.getWorkOrderKey(), entry);
     }
 
     @Override
@@ -122,7 +119,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     @SuppressWarnings("unchecked")
     private void addServerAccounts(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         try {
-            TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+            TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                     WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name());
             Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
             if (Objects.isNull(edsTag)) {
@@ -154,7 +151,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     public UserPermissionBusinessParam.BusinessPermission loadAs(WorkOrderTicketEntry entry) {
         if (BusinessTypeEnum.SERVER_ACCOUNT.name()
                 .equals(entry.getBusinessType())) {
-            return (UserPermissionBusinessParam.BusinessPermission) TicketEntryProviderFactory.getByProvider(
+            return (UserPermissionBusinessParam.BusinessPermission) TicketEntryProviderFactory.getProvider(
                             WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name())
                     .loadAs(entry);
         }

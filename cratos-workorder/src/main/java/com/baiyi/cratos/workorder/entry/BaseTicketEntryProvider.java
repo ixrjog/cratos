@@ -1,14 +1,16 @@
 package com.baiyi.cratos.workorder.entry;
 
-import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.exception.DaoServiceException;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.util.InvokeEntryResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,6 +26,7 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
 
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
     private final WorkOrderTicketService workOrderTicketService;
+    private final WorkOrderService workOrderService;
 
     @Override
     public WorkOrderTicketEntry addEntry(EntryParam param) {
@@ -56,6 +59,11 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
 
     protected abstract void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                          Detail detail) throws WorkOrderTicketException;
+
+    protected WorkOrder getWorkOrder(WorkOrderTicketEntry entry) {
+        return workOrderService.getById(workOrderTicketService.getById(entry.getTicketId())
+                .getWorkOrderId());
+    }
 
     @SuppressWarnings("unchecked")
     public Detail loadAs(WorkOrderTicketEntry entry) {

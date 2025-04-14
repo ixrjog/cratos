@@ -34,6 +34,7 @@ public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgor
         return CredentialTypeEnum.SSH_USERNAME_WITH_PRIVATE_KEY;
     }
 
+    @Override
     public void calcAndFillInFingerprint(Credential credential) {
         String fingerprint = calcFingerprint(credential.getCredential());
         credential.setFingerprint(fingerprint);

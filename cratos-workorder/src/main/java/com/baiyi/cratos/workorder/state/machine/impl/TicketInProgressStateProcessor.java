@@ -16,11 +16,11 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.ApprovalStatus;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -67,12 +67,11 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         // 判断是否审批通过
         boolean pass = passApproval(ticket);
-        //  TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByProvider(workOrder.getWorkOrderKey());
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
         entries.forEach(entry -> {
             if (pass) {
-                TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getByBusinessType(
-                        entry.getBusinessType());
+                TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(
+                        workOrder.getWorkOrderKey(), entry.getBusinessType());
                 provider.processEntry(entry);
             } else {
                 entry.setCompleted(true);

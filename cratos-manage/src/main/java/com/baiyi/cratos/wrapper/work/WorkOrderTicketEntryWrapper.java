@@ -6,11 +6,11 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
-import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
-import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
     public void wrap(WorkOrderTicketVO.TicketEntry<T> vo) {
         WorkOrderTicket ticket = workOrderTicketService.getById(vo.getTicketId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getByProvider(
+        TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getProvider(
                 workOrder.getWorkOrderKey());
         vo.setDetail((T) ticketEntryProvider.loadAs(vo.toTicketEntry()));
     }

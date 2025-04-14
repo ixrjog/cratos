@@ -1,18 +1,21 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
-import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
+import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ServerAccountPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
+import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
@@ -27,14 +30,17 @@ import java.util.List;
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
+//@WorkOrderKey(key = WorkOrderKeys.SERVER_ACCOUNT_PERMISSION)
+@WorkOrderKey(key = WorkOrderKeys.COMPUTER_PERMISSION)
 public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
 
     public ServerAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                       WorkOrderTicketService workOrderTicketService,
+                                                      WorkOrderService workOrderService,
                                                       UserPermissionBusinessFacade userPermissionBusinessFacade) {
-        super(workOrderTicketEntryService, workOrderTicketService);
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
     }
 
@@ -54,18 +60,14 @@ public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryP
         return row.toString();
     }
 
-    @Override
-    public String getKey() {
-        return WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name();
-    }
-
     /**
      * @param entry
      * @return
      */
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        return TableUtils.getBusinessPermissionEntryTableRow(entry);
+        WorkOrder workOrder = getWorkOrder(entry);
+        return TableUtils.getBusinessPermissionEntryTableRow(workOrder.getWorkOrderKey(), entry);
     }
 
     @Override

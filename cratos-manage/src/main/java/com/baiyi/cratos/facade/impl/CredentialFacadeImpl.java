@@ -131,7 +131,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
         CredentialTypeEnum credentialTypeEnum = CredentialTypeEnum.valueOf(credential.getCredentialType());
         ICredentialValidator credValidator = CredentialValidatorFactory.getValidator(credentialTypeEnum);
         if (credValidator == null) {
-            throw new InvalidCredentialException("The credential type is incorrect.");
+            InvalidCredentialException.runtime("The credential type is incorrect.");
         }
         credValidator.verify(credential);
         if (credValidator instanceof BaseFingerprintAlgorithm fingerprintAlgorithm) {

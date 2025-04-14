@@ -8,26 +8,39 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/3/19 13:48
+ * &#064;Date  2025/4/14 10:56
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TicketEntryProviderFactory {
 
-    private static final Map<String, TicketEntryProvider<?, ?>> CONTEXT = new ConcurrentHashMap<>();
-    private static final Map<String, String> BUSINESS_CONTEXT = new ConcurrentHashMap<>();
+    /**
+     * Map<WorkOrderKey, Map<BusinessType, TicketEntryProvider>>
+     */
+    private static final Map<String, Map<String, TicketEntryProvider<?, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
     public static void register(TicketEntryProvider<?, ?> provider) {
-        CONTEXT.put(provider.getKey(), provider);
-        BUSINESS_CONTEXT.put(provider.getBusinessType(), provider.getKey());
+        if (CONTEXT.containsKey(provider.getKey())) {
+            CONTEXT.get(provider.getKey())
+                    .put(provider.getBusinessType(), provider);
+        } else {
+            CONTEXT.put(provider.getKey(), new ConcurrentHashMap<>());
+            CONTEXT.get(provider.getKey())
+                    .put(provider.getBusinessType(), provider);
+        }
     }
 
-    public static TicketEntryProvider<?, ?> getByProvider(String key) {
-        return CONTEXT.get(key);
+    public static TicketEntryProvider<?, ?> getProvider(String key) {
+        return CONTEXT.get(key)
+                .values()
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
-    public static TicketEntryProvider<?, ?> getByBusinessType(String businessType) {
-        return CONTEXT.get(BUSINESS_CONTEXT.get(businessType));
+    public static TicketEntryProvider<?, ?> getProvider(String key, String businessType) {
+        return CONTEXT.get(key)
+                .get(businessType);
     }
 
 }

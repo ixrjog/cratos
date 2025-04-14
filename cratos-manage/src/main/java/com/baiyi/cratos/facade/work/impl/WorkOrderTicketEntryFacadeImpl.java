@@ -13,10 +13,10 @@ import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.enums.TicketState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,14 +41,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addApplicationPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
-        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_PERMISSION.name());
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 
     @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
-        TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getByProvider(
+        TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.COMPUTER_PERMISSION.name());
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }

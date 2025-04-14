@@ -46,8 +46,8 @@ public class WorkOrderApprovalNoticeHelper extends BaseWorkOrderNoticeHelper {
         List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
                 .stream()
                 .map(entry -> {
-                    TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getByBusinessType(
-                            entry.getBusinessType());
+                    TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getProvider(
+                            workOrder.getWorkOrderKey(), entry.getBusinessType());
                     return ticketEntryProvider.getEntryDesc(entry);
                 })
                 .toList();

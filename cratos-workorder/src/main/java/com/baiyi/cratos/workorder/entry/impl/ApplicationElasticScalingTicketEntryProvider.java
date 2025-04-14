@@ -6,14 +6,15 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ApplicationPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +25,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
+@WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
 
     public ApplicationElasticScalingTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                                        WorkOrderTicketService workOrderTicketService) {
-        super(workOrderTicketEntryService, workOrderTicketService);
-    }
-
-    @Override
-    public String getKey() {
-        return WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name();
+                                                        WorkOrderTicketService workOrderTicketService,
+                                                        WorkOrderService workOrderService) {
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
     }
 
     @Override
@@ -50,7 +48,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
      */
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        return TableUtils.getBusinessPermissionEntryTableRow(entry);
+        return "";
     }
 
     @Override
