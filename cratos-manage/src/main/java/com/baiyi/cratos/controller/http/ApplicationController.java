@@ -37,7 +37,7 @@ public class ApplicationController {
     }
 
     @Operation(summary = "Get application by name")
-    @GetMapping(value = "/get/by/name", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/get/by/name", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<ApplicationVO.Application> getApplicationByName(
             @RequestBody @Valid ApplicationParam.GetApplication getApplication) {
         return HttpResult.of(applicationFacade.getApplicationByName(getApplication));
