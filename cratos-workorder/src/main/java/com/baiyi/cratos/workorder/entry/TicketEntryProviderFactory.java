@@ -30,7 +30,8 @@ public class TicketEntryProviderFactory {
         }
     }
 
-    public static TicketEntryProvider<?, ?> getProvider(String key) {
+    @Deprecated
+    private static TicketEntryProvider<?, ?> getProvider(String key) {
         return CONTEXT.get(key)
                 .values()
                 .stream()

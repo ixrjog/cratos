@@ -43,7 +43,7 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
         WorkOrderTicket ticket = workOrderTicketService.getById(vo.getTicketId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getProvider(
-                workOrder.getWorkOrderKey());
+                workOrder.getWorkOrderKey(),vo.getBusinessType());
         vo.setDetail((T) ticketEntryProvider.loadAs(vo.toTicketEntry()));
     }
 

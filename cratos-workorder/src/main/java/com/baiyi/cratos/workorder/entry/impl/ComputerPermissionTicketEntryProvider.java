@@ -25,6 +25,7 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * &#064;Date  2025/3/19 15:56
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.TAG_GROUP)
 @WorkOrderKey(key = WorkOrderKeys.COMPUTER_PERMISSION)
@@ -120,7 +122,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
     private void addServerAccounts(WorkOrderTicketParam.AddComputerPermissionTicketEntry param) {
         try {
             TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> serverAccountProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                    WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name());
+                    WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name(), param.getBusinessType());
             Tag edsTag = tagService.getByTagKey(SysTagKeys.EDS.getKey());
             if (Objects.isNull(edsTag)) {
                 return;
@@ -143,7 +145,8 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
                         .build();
                 serverAccountProvider.addEntry(addServerAccountPermissionTicketEntry);
             });
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
         }
     }
 
@@ -152,7 +155,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
         if (BusinessTypeEnum.SERVER_ACCOUNT.name()
                 .equals(entry.getBusinessType())) {
             return (UserPermissionBusinessParam.BusinessPermission) TicketEntryProviderFactory.getProvider(
-                            WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name())
+                            WorkOrderKeys.SERVER_ACCOUNT_PERMISSION.name(), entry.getBusinessType())
                     .loadAs(entry);
         }
         return super.loadAs(entry);
