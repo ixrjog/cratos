@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.param.http.work;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
@@ -205,9 +206,22 @@ public class WorkOrderTicketParam {
     @Schema
     public static class AddRevokeUserPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
-        private static final long serialVersionUID = 2888570476091613323L;
+        private static final long serialVersionUID = -7031252644626013496L;
         private final String businessType = BusinessTypeEnum.USER.name();
         private UserVO.User detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddRevokeUserEdsAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<EdsAsset>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 8822817329834870519L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private EdsAsset detail;
     }
 
     @Data

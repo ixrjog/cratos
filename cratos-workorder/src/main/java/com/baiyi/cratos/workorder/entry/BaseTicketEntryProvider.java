@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/19 13:58
@@ -63,6 +65,10 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
     protected WorkOrder getWorkOrder(WorkOrderTicketEntry entry) {
         return workOrderService.getById(workOrderTicketService.getById(entry.getTicketId())
                 .getWorkOrderId());
+    }
+
+    protected List<WorkOrderTicketEntry> queryTicketEntries(int ticketId) {
+        return workOrderTicketEntryService.queryTicketEntries(ticketId);
     }
 
     @SuppressWarnings("unchecked")

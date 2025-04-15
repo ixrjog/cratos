@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class RevokeUserTicketEntryBuilder {
+public class RevokeUserPermissionTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param;
 
-    public static RevokeUserTicketEntryBuilder newBuilder() {
-        return new RevokeUserTicketEntryBuilder();
+    public static RevokeUserPermissionTicketEntryBuilder newBuilder() {
+        return new RevokeUserPermissionTicketEntryBuilder();
     }
 
-    public RevokeUserTicketEntryBuilder withParam(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+    public RevokeUserPermissionTicketEntryBuilder withParam(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
         this.param = param;
         return this;
     }

@@ -14,12 +14,13 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
-import com.baiyi.cratos.workorder.builder.entry.RevokeUserTicketEntryBuilder;
+import com.baiyi.cratos.workorder.builder.entry.RevokeUserPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -31,15 +32,16 @@ import java.util.stream.Collectors;
  * &#064;Version 1.0
  */
 @Slf4j
+@Component
 @BusinessType(type = BusinessTypeEnum.USER)
 @WorkOrderKey(key = WorkOrderKeys.REVOKE_USER_PERMISSION)
-public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> {
+public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> {
 
     private final BusinessTagFacade businessTagFacade;
 
-    public RevokeUserTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                         WorkOrderTicketService workOrderTicketService,
-                                         WorkOrderService workOrderService, BusinessTagFacade businessTagFacade) {
+    public RevokeUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
+                                                   WorkOrderTicketService workOrderTicketService,
+                                                   WorkOrderService workOrderService, BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.businessTagFacade = businessTagFacade;
     }
@@ -60,7 +62,7 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
     @Override
     protected WorkOrderTicketEntry paramToEntry(
             WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addRevokeUserTicketEntry) {
-        return RevokeUserTicketEntryBuilder.newBuilder()
+        return RevokeUserPermissionTicketEntryBuilder.newBuilder()
                 .withParam(addRevokeUserTicketEntry)
                 .buildEntry();
     }
@@ -96,6 +98,12 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
 
     @Override
     public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        boolean userEntryExists = queryTicketEntries(param.getTicketId()).stream()
+                .anyMatch(entry -> BusinessTypeEnum.USER.name()
+                        .equals(entry.getBusinessType()));
+        if (userEntryExists) {
+            WorkOrderTicketException.runtime("Only one user information can be inserted.");
+        }
         WorkOrderTicketEntry entry = super.addEntry(param);
         addUserAccountAssets(param);
         return entry;
