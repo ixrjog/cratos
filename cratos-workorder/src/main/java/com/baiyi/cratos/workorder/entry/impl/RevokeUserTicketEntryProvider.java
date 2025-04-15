@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @BusinessType(type = BusinessTypeEnum.USER)
 @WorkOrderKey(key = WorkOrderKeys.REVOKE_USER_PERMISSION)
-public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserTicketEntry> {
+public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> {
 
     private final BusinessTagFacade businessTagFacade;
 
@@ -49,6 +49,8 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
             | --- | --- | --- | --- | --- |
             """;
 
+    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
+
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 UserVO.User user) throws WorkOrderTicketException {
@@ -57,7 +59,7 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
 
     @Override
     protected WorkOrderTicketEntry paramToEntry(
-            WorkOrderTicketParam.AddRevokeUserTicketEntry addRevokeUserTicketEntry) {
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addRevokeUserTicketEntry) {
         return RevokeUserTicketEntryBuilder.newBuilder()
                 .withParam(addRevokeUserTicketEntry)
                 .buildEntry();
@@ -71,7 +73,6 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         UserVO.User user = loadAs(entry);
-        String tpl = "| {} | {} | {} | {} | {} |";
         BusinessParam.GetByBusiness getByBusiness = BusinessParam.GetByBusiness.builder()
                 .businessType(BusinessTypeEnum.USER.name())
                 .businessId(user.getId())
@@ -81,7 +82,7 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
                 .map(e -> e.getTag()
                         .getTagKey())
                 .collect(Collectors.joining(","));
-        return StringFormatter.arrayFormat(tpl, user.getUsername(), user.getName(), user.getDisplayName(),
+        return StringFormatter.arrayFormat(ROW_TPL, user.getUsername(), user.getName(), user.getDisplayName(),
                 user.getEmail(), tags);
     }
 
@@ -94,13 +95,13 @@ public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserV
     }
 
     @Override
-    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddRevokeUserTicketEntry param) {
+    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
         WorkOrderTicketEntry entry = super.addEntry(param);
         addUserAccountAssets(param);
         return entry;
     }
 
-    private void addUserAccountAssets(WorkOrderTicketParam.AddRevokeUserTicketEntry param) {
+    private void addUserAccountAssets(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
 
     }
 

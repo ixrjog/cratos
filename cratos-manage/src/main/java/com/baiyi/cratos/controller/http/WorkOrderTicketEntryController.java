@@ -39,6 +39,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add revoke user permission ticket entry")
+    @PostMapping(value = "/user/revoke/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addRevokeUserPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addRevokeUserPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Update ticket entry valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setTicketEntryValidById(@RequestParam int id) {

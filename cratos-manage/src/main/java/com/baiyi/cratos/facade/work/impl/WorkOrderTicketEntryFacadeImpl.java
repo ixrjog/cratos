@@ -54,6 +54,13 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public  void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.REVOKE_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {

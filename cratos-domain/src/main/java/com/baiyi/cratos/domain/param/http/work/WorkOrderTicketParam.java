@@ -203,7 +203,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRevokeUserTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRevokeUserPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 2888570476091613323L;
         private final String businessType = BusinessTypeEnum.USER.name();
