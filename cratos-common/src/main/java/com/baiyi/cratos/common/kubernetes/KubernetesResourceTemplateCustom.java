@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common.kubernetes;
 
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.google.common.collect.Lists;
@@ -33,7 +33,7 @@ public class KubernetesResourceTemplateCustom {
             return Custom.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(content, Custom.class);
+            return YamlUtils.loadAs(content, Custom.class);
         } catch (JsonSyntaxException e) {
             throw new KubernetesResourceTemplateException("Custom content format error: {}", e.getMessage());
         }

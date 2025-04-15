@@ -2,12 +2,15 @@ package com.baiyi.cratos.workorder.builder.entry;
 
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/19 16:36
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComputerPermissionTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddComputerPermissionTicketEntry param;

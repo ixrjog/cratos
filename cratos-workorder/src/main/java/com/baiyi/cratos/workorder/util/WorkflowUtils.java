@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.util;
 
 import com.baiyi.cratos.domain.TicketWorkflow;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.google.gson.JsonSyntaxException;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ public class WorkflowUtils {
         if (!org.springframework.util.StringUtils.hasText(hasWorkflow.getWorkflow())) {
             return WorkflowModel.Workflow.NO_DATA;
         }
-        return YamlUtil.loadAs(hasWorkflow.getWorkflow(), WorkflowModel.Workflow.class);
+        return YamlUtils.loadAs(hasWorkflow.getWorkflow(), WorkflowModel.Workflow.class);
     }
 
     public static void setWorkflow(TicketWorkflow.HasWorkflowData hasWorkflowData) {

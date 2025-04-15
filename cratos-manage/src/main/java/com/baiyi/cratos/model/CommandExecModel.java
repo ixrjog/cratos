@@ -1,7 +1,7 @@
 package com.baiyi.cratos.model;
 
 import com.baiyi.cratos.common.exception.CommandExecException;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
@@ -18,7 +18,7 @@ public class CommandExecModel {
             return ExecTarget.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
+            return YamlUtils.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
         } catch (JsonSyntaxException e) {
             throw new CommandExecException("ExecTarget content format error: {}", e.getMessage());
         }
@@ -29,7 +29,7 @@ public class CommandExecModel {
             return ExecTarget.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
+            return YamlUtils.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
         } catch (JsonSyntaxException e) {
             throw new CommandExecException("ExecTarget content format error: {}", e.getMessage());
         }

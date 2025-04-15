@@ -1,20 +1,29 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
-import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
+import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
+import com.baiyi.cratos.workorder.builder.entry.RevokeUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -22,41 +31,77 @@ import lombok.extern.slf4j.Slf4j;
  * &#064;Version 1.0
  */
 @Slf4j
-@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-@WorkOrderKey(key = WorkOrderKeys.REVOKE_USER)
-public  class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
+@BusinessType(type = BusinessTypeEnum.USER)
+@WorkOrderKey(key = WorkOrderKeys.REVOKE_USER_PERMISSION)
+public class RevokeUserTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserTicketEntry> {
 
+    private final BusinessTagFacade businessTagFacade;
 
     public RevokeUserTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                          WorkOrderTicketService workOrderTicketService,
-                                         WorkOrderService workOrderService) {
+                                         WorkOrderService workOrderService, BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
+        this.businessTagFacade = businessTagFacade;
     }
+
+    private static final String TABLE_TITLE = """
+            | Username | Name | DisplayName | Email | Tags |
+            | --- | --- | --- | --- | --- |
+            """;
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
+                                UserVO.User user) throws WorkOrderTicketException {
 
     }
 
     @Override
     protected WorkOrderTicketEntry paramToEntry(
-            WorkOrderTicketParam.AddApplicationPermissionTicketEntry addApplicationPermissionTicketEntry) {
-        return null;
+            WorkOrderTicketParam.AddRevokeUserTicketEntry addRevokeUserTicketEntry) {
+        return RevokeUserTicketEntryBuilder.newBuilder()
+                .withParam(addRevokeUserTicketEntry)
+                .buildEntry();
     }
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return "";
+        return TABLE_TITLE;
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        return "";
+        UserVO.User user = loadAs(entry);
+        String tpl = "| {} | {} | {} | {} | {} |";
+        BusinessParam.GetByBusiness getByBusiness = BusinessParam.GetByBusiness.builder()
+                .businessType(BusinessTypeEnum.USER.name())
+                .businessId(user.getId())
+                .build();
+        List<BusinessTagVO.BusinessTag> businessTags = businessTagFacade.getBusinessTagByBusiness(getByBusiness);
+        String tags = CollectionUtils.isEmpty(businessTags) ? "-" : businessTags.stream()
+                .map(e -> e.getTag()
+                        .getTagKey())
+                .collect(Collectors.joining(","));
+        return StringFormatter.arrayFormat(tpl, user.getUsername(), user.getName(), user.getDisplayName(),
+                user.getEmail(), tags);
     }
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        return null;
+        return TicketEntryModel.EntryDesc.builder()
+                .name(entry.getName())
+                .desc("User")
+                .build();
     }
+
+    @Override
+    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddRevokeUserTicketEntry param) {
+        WorkOrderTicketEntry entry = super.addEntry(param);
+        addUserAccountAssets(param);
+        return entry;
+    }
+
+    private void addUserAccountAssets(WorkOrderTicketParam.AddRevokeUserTicketEntry param) {
+
+    }
+
 }

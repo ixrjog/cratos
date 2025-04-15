@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import lombok.AccessLevel;
@@ -7,20 +8,19 @@ import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/3/19 13:31
+ * &#064;Date  2025/4/15 09:56
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ApplicationPermissionTicketEntryBuilder {
+public class RevokeUserTicketEntryBuilder {
 
-    private WorkOrderTicketParam.AddApplicationPermissionTicketEntry param;
+    private WorkOrderTicketParam.AddRevokeUserTicketEntry param;
 
-    public static ApplicationPermissionTicketEntryBuilder newBuilder() {
-        return new ApplicationPermissionTicketEntryBuilder();
+    public static RevokeUserTicketEntryBuilder newBuilder() {
+        return new RevokeUserTicketEntryBuilder();
     }
 
-    public ApplicationPermissionTicketEntryBuilder withParam(
-            WorkOrderTicketParam.AddApplicationPermissionTicketEntry param) {
+    public RevokeUserTicketEntryBuilder withParam(WorkOrderTicketParam.AddRevokeUserTicketEntry param) {
         this.param = param;
         return this;
     }
@@ -29,19 +29,18 @@ public class ApplicationPermissionTicketEntryBuilder {
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(param.getDetail()
-                        .getName())
+                        .getUsername())
                 .displayName(param.getDetail()
-                        .getName())
+                        .getDisplayName())
                 .instanceId(0)
                 .businessType(param.getBusinessType())
                 .businessId(param.getDetail()
                         .getBusinessId())
                 .completed(false)
                 .entryKey(param.getDetail()
-                        .getName())
+                        .getUsername())
                 .valid(true)
-                .content(param.getDetail()
-                        .dump())
+                .content(YamlUtils.dump(param.getDetail()))
                 .build();
     }
 

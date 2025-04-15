@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry;
 
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
@@ -72,7 +72,7 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
         if (!StringUtils.hasText(entry.getContent())) {
             WorkOrderTicketException.runtime("Ticket entry content is empty.");
         }
-        return YamlUtil.loadAs(entry.getContent(), clazz);
+        return YamlUtils.loadAs(entry.getContent(), clazz);
     }
 
     protected abstract WorkOrderTicketEntry paramToEntry(EntryParam param);

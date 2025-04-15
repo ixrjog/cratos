@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.util;
 
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.model.I18nModel;
 import com.google.gson.JsonSyntaxException;
 import lombok.AccessLevel;
@@ -18,7 +18,7 @@ public class I18nUtils {
         if (!org.springframework.util.StringUtils.hasText(hasI18n.getI18n())) {
             return I18nModel.I18nData.NO_DATA;
         }
-        return YamlUtil.loadAs(hasI18n.getI18n(), I18nModel.I18nData.class);
+        return YamlUtils.loadAs(hasI18n.getI18n(), I18nModel.I18nData.class);
     }
 
     public static void setI18nData(I18nModel.HasI18n hasI18n) {

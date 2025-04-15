@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.baseline.mode.converter;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.facade.application.baseline.mode.DeploymentBaselineModel;
 import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
@@ -73,7 +73,7 @@ public class DeploymentBaselineConverter {
             return DeploymentBaselineModel.Lifecycle.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(lifecycle, DeploymentBaselineModel.Lifecycle.class);
+            return YamlUtils.loadAs(lifecycle, DeploymentBaselineModel.Lifecycle.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
         }
@@ -84,7 +84,7 @@ public class DeploymentBaselineConverter {
             return DeploymentBaselineModel.Probe.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(probe, DeploymentBaselineModel.Probe.class);
+            return YamlUtils.loadAs(probe, DeploymentBaselineModel.Probe.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application actuator lifecycle format error: {}", e.getMessage());
         }

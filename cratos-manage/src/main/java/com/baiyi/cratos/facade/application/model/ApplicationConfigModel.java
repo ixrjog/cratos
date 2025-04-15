@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.model;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.YamlDump;
 import com.baiyi.cratos.domain.generator.Application;
 import com.google.common.collect.Maps;
@@ -31,7 +31,7 @@ public class ApplicationConfigModel {
             return ApplicationConfigModel.Config.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(content, ApplicationConfigModel.Config.class);
+            return YamlUtils.loadAs(content, ApplicationConfigModel.Config.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application config format error: {}", e.getMessage());
         }

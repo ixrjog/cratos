@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.baseline.mode;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.YamlDump;
 import com.google.gson.JsonSyntaxException;
 import lombok.*;
@@ -95,7 +95,7 @@ public class DeploymentBaselineModel {
             return Lifecycle.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(lifecycle, Lifecycle.class);
+            return YamlUtils.loadAs(lifecycle, Lifecycle.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application resource container lifecycle format error: {}", e.getMessage());
         }
@@ -106,7 +106,7 @@ public class DeploymentBaselineModel {
             return Probe.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(probe, Probe.class);
+            return YamlUtils.loadAs(probe, Probe.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application resource container probe format error: {}", e.getMessage());
         }
@@ -140,7 +140,7 @@ public class DeploymentBaselineModel {
             return EnvVar.EMPTY;
         }
         try {
-            return YamlUtil.loadAs(envVar, EnvVar.class);
+            return YamlUtils.loadAs(envVar, EnvVar.class);
         } catch (JsonSyntaxException e) {
             throw new ApplicationConfigException("Application resource container envVar format error: {}", e.getMessage());
         }

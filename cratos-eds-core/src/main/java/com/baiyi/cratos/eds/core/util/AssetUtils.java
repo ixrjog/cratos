@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.util;
 
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.google.gson.JsonSyntaxException;
 import lombok.NoArgsConstructor;
@@ -40,7 +40,7 @@ public final class AssetUtils {
             throw new EdsAssetException("The eds asset original model is empty.");
         }
         try {
-            return YamlUtil.loadAs(yaml, targetClass);
+            return YamlUtils.loadAs(yaml, targetClass);
         } catch (JsonSyntaxException e) {
             throw new EdsAssetException("Eds asset original model conversion error.");
         }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.util;
 
-import com.baiyi.cratos.domain.YamlUtil;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.gson.JsonSyntaxException;
@@ -30,7 +30,7 @@ public final class ConfigUtils {
             throw new EdsConfigException("The eds config file is empty.");
         }
         try {
-            return YamlUtil.loadAs(yaml, targetClass);
+            return YamlUtils.loadAs(yaml, targetClass);
         } catch (JsonSyntaxException e) {
             throw new EdsConfigException("Eds config file conversion error.");
         }

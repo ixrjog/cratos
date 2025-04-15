@@ -30,7 +30,6 @@ import java.util.List;
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.SERVER_ACCOUNT)
-//@WorkOrderKey(key = WorkOrderKeys.SERVER_ACCOUNT_PERMISSION)
 @WorkOrderKey(key = WorkOrderKeys.COMPUTER_PERMISSION)
 public class ServerAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddServerAccountPermissionTicketEntry> {
 
