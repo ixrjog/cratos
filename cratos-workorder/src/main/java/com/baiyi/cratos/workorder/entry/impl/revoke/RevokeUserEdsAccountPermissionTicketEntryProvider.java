@@ -1,16 +1,21 @@
 package com.baiyi.cratos.workorder.entry.impl.revoke;
 
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.view.user.UserVO;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
+import com.baiyi.cratos.workorder.builder.entry.revoke.*;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -27,12 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.REVOKE_USER_PERMISSION)
-public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> {
+public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> {
+
+    private final EdsInstanceService edsInstanceService;
 
     public RevokeUserEdsAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                                   WorkOrderTicketService workOrderTicketService,
-                                                   WorkOrderService workOrderService, BusinessTagFacade businessTagFacade) {
+                                                             WorkOrderTicketService workOrderTicketService,
+                                                             WorkOrderService workOrderService,
+                                                             BusinessTagFacade businessTagFacade,
+                                                             EdsInstanceService edsInstanceService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
+        this.edsInstanceService = edsInstanceService;
     }
 
     private static final String TABLE_TITLE = """
@@ -41,22 +51,34 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
             """;
 
     private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
-    @Override
-    protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                UserVO.User user) throws WorkOrderTicketException {
-
-    }
-
+    
     @Override
     protected WorkOrderTicketEntry paramToEntry(
             WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry addRevokeUserEdsAccountPermissionTicketEntry) {
-        // RevokeUserEdsAccountPermissionTicketEntryBuilder
-
-//        return RevokeUserPermissionTicketEntryBuilder.newBuilder()
-//                .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
-//                .buildEntry();
-        return null;
+        EdsAssetVO.Asset asset = addRevokeUserEdsAccountPermissionTicketEntry.getDetail();
+        String assetType = asset.getAssetType();
+        return switch (EdsAssetTypeEnum.valueOf(assetType)) {
+            case EdsAssetTypeEnum.LDAP_PERSON -> RevokeUserEdsLdapUserPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            case EdsAssetTypeEnum.ALIYUN_RAM_USER -> RevokeUserEdsAliyunRamUserPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            case EdsAssetTypeEnum.AWS_IAM_USER -> RevokeUserEdsAwsIamUserPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            case EdsAssetTypeEnum.GCP_MEMBER -> RevokeUserEdsGcpMemberPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            case EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER ->
+                    RevokeUserEdsHwcIamUserPermissionTicketEntryBuilder.newBuilder()
+                            .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                            .buildEntry();
+            case EdsAssetTypeEnum.GITLAB_USER -> RevokeUserEdsGitLabUserPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            default -> throw new WorkOrderTicketException("不支持的资产类型: " + assetType);
+        };
     }
 
     @Override
@@ -66,41 +88,24 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-//        UserVO.User user = loadAs(entry);
-//        BusinessParam.GetByBusiness getByBusiness = BusinessParam.GetByBusiness.builder()
-//                .businessType(BusinessTypeEnum.USER.name())
-//                .businessId(user.getId())
-//                .build();
-//        List<BusinessTagVO.BusinessTag> businessTags = businessTagFacade.getBusinessTagByBusiness(getByBusiness);
-//        String tags = CollectionUtils.isEmpty(businessTags) ? "-" : businessTags.stream()
-//                .map(e -> e.getTag()
-//                        .getTagKey())
-//                .collect(Collectors.joining(","));
-//        return StringFormatter.arrayFormat(ROW_TPL, user.getUsername(), user.getName(), user.getDisplayName(),
-//                user.getEmail(), tags);
-        return null;
+        EdsAssetVO.Asset asset = loadAs(entry);
+        EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
+        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), instance.getEdsType(),
+                entry.getSubType(), entry.getName());
     }
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
-                .desc("User")
+                .desc("Account")
                 .build();
     }
 
     @Override
-    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry param) {
-        boolean userEntryExists = queryTicketEntries(param.getTicketId()).stream()
-                .anyMatch(entry -> BusinessTypeEnum.USER.name()
-                        .equals(entry.getBusinessType()));
-        if (userEntryExists) {
-            WorkOrderTicketException.runtime("Only one user information can be inserted.");
-        }
-        WorkOrderTicketEntry entry = super.addEntry(param);
-       // addUserAccountAssets(param);
-        return entry;
-    }
+    protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
+                                EdsAssetVO.Asset asset) throws WorkOrderTicketException {
 
+    }
 
 }

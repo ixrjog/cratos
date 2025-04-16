@@ -2,8 +2,7 @@ package com.baiyi.cratos.facade.identity.impl;
 
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
-import com.baiyi.cratos.facade.identity.extension.*;
+import com.baiyi.cratos.eds.core.facade.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

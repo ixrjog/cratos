@@ -3,11 +3,11 @@ package com.baiyi.cratos.domain.param.http.work;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.content.ApplicationElasticScalingEntryContent;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -217,11 +217,11 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRevokeUserEdsAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<EdsAsset>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRevokeUserEdsAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<EdsAssetVO.Asset>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 8822817329834870519L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
-        private EdsAsset detail;
+        private EdsAssetVO.Asset detail;
     }
 
     @Data

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 

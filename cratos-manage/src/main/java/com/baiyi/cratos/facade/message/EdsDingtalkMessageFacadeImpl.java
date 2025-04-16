@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
-import com.baiyi.cratos.facade.identity.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.facade.message.builder.AsyncSendMessageAgency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

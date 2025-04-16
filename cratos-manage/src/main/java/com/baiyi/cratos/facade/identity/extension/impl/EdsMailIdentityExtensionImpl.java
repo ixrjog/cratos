@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.facade.identity.extension.EdsMailIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.mail.MailIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.mail.MailIdentityProvider;

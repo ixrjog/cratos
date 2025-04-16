@@ -19,7 +19,7 @@ import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
 import com.baiyi.cratos.eds.ldap.repo.LdapPersonRepo;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.facade.identity.extension.EdsLdapIdentityExtension;
+import com.baiyi.cratos.eds.core.facade.EdsLdapIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;

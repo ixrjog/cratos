@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.identity.extension;
+package com.baiyi.cratos.eds.core.facade;
 
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;

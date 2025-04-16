@@ -7,15 +7,21 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
+import com.baiyi.cratos.eds.core.facade.*;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.RevokeUserPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -25,6 +31,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * &#064;Author  baiyi
@@ -38,12 +45,16 @@ import java.util.stream.Collectors;
 public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserVO.User, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> {
 
     private final BusinessTagFacade businessTagFacade;
+    private final EdsIdentityFacade edsIdentityFacade;
 
     public RevokeUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
-                                                   WorkOrderService workOrderService, BusinessTagFacade businessTagFacade) {
+                                                   WorkOrderService workOrderService,
+                                                   BusinessTagFacade businessTagFacade,
+                                                   EdsIdentityFacade edsIdentityFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.businessTagFacade = businessTagFacade;
+        this.edsIdentityFacade = edsIdentityFacade;
     }
 
     private static final String TABLE_TITLE = """
@@ -109,8 +120,105 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         return entry;
     }
 
+    @SuppressWarnings("unchecked")
     private void addUserAccountAssets(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        TicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> revokeUserEdsAccountPermissionTicketEntryProvider = (TicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                getKey(), BusinessTypeEnum.EDS_ASSET.name());
+        List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> allAccounts = Stream.of(
+                        getUserLdapAccounts(param), getUserCloudAccounts(param), getUserGitLabAccounts(param))
+                .flatMap(List::stream)
+                .toList();
+        if (!CollectionUtils.isEmpty(allAccounts)) {
+            allAccounts.forEach(revokeUserEdsAccountPermissionTicketEntryProvider::addEntry);
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    private List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> getUserLdapAccounts(
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsIdentityParam.QueryLdapIdentityDetails.builder()
+                .username(param.getDetail()
+                        .getUsername())
+                .build();
+        EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
+                queryLdapIdentityDetails);
+        if (CollectionUtils.isEmpty(ldapIdentityDetails.getLdapIdentities())) {
+            return List.of();
+        }
+        return (List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) ldapIdentityDetails.getLdapIdentities()
+                .stream()
+                .map(e -> WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry.builder()
+                        .ticketId(param.getTicketId())
+                        .detail(e.getAccount())
+                        .build())
+                .toList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> getUserCloudAccounts(
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsIdentityParam.QueryCloudIdentityDetails.builder()
+                .username(param.getDetail()
+                        .getUsername())
+                .build();
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+                queryCloudIdentityDetails);
+        if (CollectionUtils.isEmpty(cloudIdentityDetails.getAccounts())) {
+            return List.of();
+        }
+        return (List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) cloudIdentityDetails.getAccounts()
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .map(e -> WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry.builder()
+                        .ticketId(param.getTicketId())
+                        .detail(e.getAccount())
+                        .build())
+                .toList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> getUserGitLabAccounts(
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails = EdsIdentityParam.QueryGitLabIdentityDetails.builder()
+                .username(param.getDetail()
+                        .getUsername())
+                .build();
+        EdsIdentityVO.GitLabIdentityDetails gitLabIdentityDetails = edsIdentityFacade.queryGitLabIdentityDetails(
+                queryGitLabIdentityDetails);
+        if (CollectionUtils.isEmpty(gitLabIdentityDetails.getGitLabIdentities())) {
+            return List.of();
+        }
+        return (List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) gitLabIdentityDetails.getGitLabIdentities()
+                .stream()
+                .map(e -> WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry.builder()
+                        .ticketId(param.getTicketId())
+                        .detail(e.getAccount())
+                        .build())
+                .toList();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> getUserMailAccounts(
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry param) {
+        EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails = EdsIdentityParam.QueryMailIdentityDetails.builder()
+                .username(param.getDetail()
+                        .getUsername())
+                .build();
+        EdsIdentityVO.MailIdentityDetails mailIdentityDetails = edsIdentityFacade.queryMailIdentityDetails(
+                queryMailIdentityDetails);
+        if (CollectionUtils.isEmpty(mailIdentityDetails.getAccounts())) {
+            return List.of();
+        }
+        return (List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) mailIdentityDetails.getAccounts()
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .map(e -> WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry.builder()
+                        .ticketId(param.getTicketId())
+                        .detail(e.getAccount())
+                        .build())
+                .toList();
     }
 
 }
