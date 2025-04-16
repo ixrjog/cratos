@@ -51,7 +51,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
             """;
 
     private static final String ROW_TPL = "| {} | {} | {} | {} |";
-    
+
     @Override
     protected WorkOrderTicketEntry paramToEntry(
             WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry addRevokeUserEdsAccountPermissionTicketEntry) {

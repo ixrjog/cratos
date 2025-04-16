@@ -1,11 +1,13 @@
 package com.baiyi.cratos.domain.view.work;
 
+import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.BaseVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -134,7 +136,7 @@ public class WorkOrderTicketVO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class TicketEntry<T> extends BaseVO implements Serializable {
+    public static class TicketEntry<T> extends BaseVO implements HasEdsInstanceId, Serializable {
         @Serial
         private static final long serialVersionUID = 7989247189791418176L;
         private Integer id;
@@ -158,6 +160,8 @@ public class WorkOrderTicketVO {
         private String content;
         private T detail;
         private String result;
+
+        private EdsInstanceVO.EdsInstance instance;
 
         public WorkOrderTicketEntry toTicketEntry() {
             return BeanCopierUtil.copyProperties(this, WorkOrderTicketEntry.class);
