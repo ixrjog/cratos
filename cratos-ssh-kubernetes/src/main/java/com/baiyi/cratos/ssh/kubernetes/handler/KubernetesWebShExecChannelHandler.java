@@ -27,6 +27,7 @@ import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -151,6 +152,9 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     }
 
     protected void closeSession(String sessionId) {
+        if (!StringUtils.hasText(sessionId)) {
+            return;
+        }
         Map<String, KubernetesSession> kubernetesSessionMap = KubernetesSessionPool.getBySessionId(sessionId);
         if (!CollectionUtils.isEmpty(kubernetesSessionMap)) {
             kubernetesSessionMap.forEach((instanceId, kubernetesSession) -> doExit(sessionId, instanceId));

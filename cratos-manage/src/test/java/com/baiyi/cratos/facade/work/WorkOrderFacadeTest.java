@@ -145,4 +145,13 @@ public class WorkOrderFacadeTest extends BaseUnit {
         System.out.println(dataTable);
     }
 
+
+    @Test
+    void test7() {
+        WorkOrderTicketParam.SimpleTicketNo simpleTicketNo = WorkOrderTicketParam.SimpleTicketNo.builder()
+                .ticketNo("welmynju")
+                .build();
+        workOrderTicketFacade.doNextStateOfTicket(simpleTicketNo);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.identity.extension.cloud.impl;
 
+import com.amazonaws.services.identitymanagement.model.LoginProfile;
 import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -83,7 +84,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
                 instance.getId(), getAccountAssetType());
         EdsAwsConfigModel.Aws aws = holder.getInstance()
                 .getEdsConfigModel();
-        iamUserRepo.deleteLoginProfile(aws, blockCloudAccount.getAccount());
+        LoginProfile loginProfile = iamUserRepo.getLoginProfile(aws, blockCloudAccount.getUsername());
+        if (Objects.nonNull(loginProfile)) {
+            iamUserRepo.deleteLoginProfile(aws, blockCloudAccount.getAccount());
+        }
     }
 
     @Override

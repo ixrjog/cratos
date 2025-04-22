@@ -71,8 +71,12 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
                             .instance(
                                     edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
                             .account(edsAssetWrapper.wrapToTarget(asset))
-                            .email(Optional.ofNullable(mailIndex).map(EdsAssetIndex::getValue).orElse(null))
-                            .mobile(Optional.ofNullable(mobileIndex).map(EdsAssetIndex::getValue).orElse(null))
+                            .email(Optional.ofNullable(mailIndex)
+                                    .map(EdsAssetIndex::getValue)
+                                    .orElse(null))
+                            .mobile(Optional.ofNullable(mobileIndex)
+                                    .map(EdsAssetIndex::getValue)
+                                    .orElse(null))
                             .avatar(getAvatar(asset))
                             .build();
                 })
@@ -86,7 +90,7 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
     private List<EdsAsset> queryDingtalkAssets(User user,
                                                EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
         return Stream.of(queryDingtalkAssetByMobile(user.getMobilePhone()),
-                        queryDingtalkAssetByEmail(user.getMobilePhone()),
+                        queryDingtalkAssetByEmail(user.getEmail()),
                         queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name()))
                 .flatMap(assets -> onlyInTheInstance(assets, queryDingtalkIdentityDetails).stream())
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
@@ -108,6 +112,8 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         }
         return indices.stream()
                 .map(e -> edsAssetService.getById(e.getAssetId()))
+                // 过滤掉 null 值
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
                 .values()
                 .stream()
@@ -121,6 +127,8 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         return edsAssetIndexService.queryIndexByNameAndValue(USER_MAIL, email)
                 .stream()
                 .map(e -> edsAssetService.getById(e.getAssetId()))
+                // 过滤掉 null 值
+                .filter(Objects::nonNull)
                 .filter(asset -> EdsAssetTypeEnum.DINGTALK_USER.name()
                         .equals(asset.getAssetType()))
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))

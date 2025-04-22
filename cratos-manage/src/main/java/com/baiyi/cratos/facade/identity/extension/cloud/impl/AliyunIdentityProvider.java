@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.identity.extension.cloud.impl;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.CreateUserResponse;
+import com.aliyuncs.ram.model.v20150501.GetLoginProfileResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -27,6 +28,8 @@ import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_RAM_POLICIES;
 
@@ -135,7 +138,19 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
                         blockCloudAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getEdsConfigModel();
-        ramUserRepo.deleteLoginProfile(aliyun.getRegionId(), aliyun, blockCloudAccount.getAccount());
+        try {
+            GetLoginProfileResponse.LoginProfile loginProfile = ramUserRepo.getLoginProfile(aliyun.getRegionId(),
+                    aliyun, blockCloudAccount.getAccount());
+            if (Objects.nonNull(loginProfile)) {
+                ramUserRepo.deleteLoginProfile(aliyun.getRegionId(), aliyun, blockCloudAccount.getAccount());
+            }
+        } catch (ClientException ce) {
+            if (ce.getMessage()
+                    .contains("login policy not exists")) {
+                return;
+            }
+            throw new CloudIdentityException(ce.getMessage());
+        }
     }
 
 }

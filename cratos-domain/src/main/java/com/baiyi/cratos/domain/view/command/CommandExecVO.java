@@ -1,7 +1,9 @@
 package com.baiyi.cratos.domain.view.command;
 
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.env.EnvVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -29,6 +31,7 @@ public class CommandExecVO {
         private String approvedBy;
         private String ccTo;
         private Boolean completed;
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date completedAt;
         private String namespace;
         private Boolean success;

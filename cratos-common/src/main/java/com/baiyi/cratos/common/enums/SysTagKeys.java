@@ -20,7 +20,9 @@ public enum SysTagKeys {
     SERVER_ACCOUNT("ServerAccount"),
     GROUP("Group"),
     ENV("Env"),
-    NAME("Name")
+    NAME("Name"),
+    // 标识用户类型为非人员
+    USER_TYPE("UserType")
     ;
 
     private final String key;

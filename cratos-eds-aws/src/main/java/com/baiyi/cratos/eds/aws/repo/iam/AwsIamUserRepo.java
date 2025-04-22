@@ -79,6 +79,14 @@ public class AwsIamUserRepo {
         return result.getLoginProfile();
     }
 
+    public LoginProfile getLoginProfile(EdsAwsConfigModel.Aws aws, String userName) {
+        GetLoginProfileRequest request = new GetLoginProfileRequest();
+        request.setUserName(userName);
+        GetLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .getLoginProfile(request);
+        return result.getLoginProfile();
+    }
+
     public void deleteLoginProfile(EdsAwsConfigModel.Aws aws, String userName) {
         DeleteLoginProfileRequest request = new DeleteLoginProfileRequest();
         request.setUserName(userName);

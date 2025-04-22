@@ -51,7 +51,7 @@ public abstract class BaseEdsIdentityExtension {
     private final BusinessTagService businessTagService;
 
     private static final List<String> EDS_INSTANCE_TYPES = List.of(EdsInstanceTypeEnum.AWS.name(),
-            EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name());
+            EdsInstanceTypeEnum.ALIYUN.name(), EdsInstanceTypeEnum.HUAWEICLOUD.name(),EdsInstanceTypeEnum.ALIMAIL.name());
 
     protected Map<Integer, EdsInstance> getEdsInstanceMap(List<EdsAsset> identityAssets,
                                                         HasEdsInstanceType hasEdsInstanceType) {
