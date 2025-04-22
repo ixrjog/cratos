@@ -111,4 +111,19 @@ public class AliyunRamUserRepo {
         return response == null ? Collections.emptyList() : response.getUsers();
     }
 
+
+    public boolean deleteLoginProfile(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String username) {
+        DeleteLoginProfileRequest request = new DeleteLoginProfileRequest();
+        request.setUserName(username);
+        try {
+            DeleteLoginProfileResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+            if (!StringUtils.isEmpty(response.getRequestId())) {
+                return true;
+            }
+        } catch (ClientException e) {
+            log.error(e.getMessage());
+        }
+        return false;
+    }
+
 }

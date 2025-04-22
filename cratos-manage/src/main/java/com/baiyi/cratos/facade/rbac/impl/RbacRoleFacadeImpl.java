@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.RbacRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
-import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.RbacRoleService;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.RbacRoleWrapper;

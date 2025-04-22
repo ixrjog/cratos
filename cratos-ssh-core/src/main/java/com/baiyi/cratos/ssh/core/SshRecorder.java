@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.core;
 
 
-import com.baiyi.cratos.common.util.IOUtil;
+import com.baiyi.cratos.common.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -15,7 +15,7 @@ public class SshRecorder {
 
     public static void record(String auditPath, char[] buf, int off, int len) {
         try {
-            IOUtil.appendFile(new String(buf).substring(off, len), auditPath);
+            IOUtils.appendFile(new String(buf).substring(off, len), auditPath);
         } catch (Exception e) {
             log.error("Ssh session audit log write failed. {}", auditPath);
         }
@@ -36,7 +36,7 @@ public class SshRecorder {
                 // 退格处理
                 log = log.replaceFirst(".\b", "");
             }
-            // IOUtil.appendFile(log, sshAuditProperties.buildCommanderLogPath(sessionId, instanceId));
+            // IOUtils.appendFile(log, sshAuditProperties.buildCommanderLogPath(sessionId, instanceId));
         } catch (Exception e) {
             log.error("Ssh session audit log write failed. sessionId={}, instanceId={}", sessionId, instanceId);
         }

@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class IpUtil {
+public class IpUtils {
 
     /**
      * 功能：判断一个IP是不是在一个网段下的

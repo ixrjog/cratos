@@ -76,6 +76,13 @@ public class EdsMailIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                 .build();
     }
 
+    @Override
+    public void blockMailAccount(EdsIdentityParam.BlockMailAccount blockMailAccount) {
+        EdsInstance instance = getAndVerifyEdsInstance(blockMailAccount);
+        MailIdentityProvider identityProvider = MailIdentityFactory.getProvider(instance.getEdsType());
+        identityProvider.blockMailAccount(blockMailAccount);
+    }
+
     private void putAccounts(Map<String, List<EdsIdentityVO.MailAccount>> accounts,
                              EdsIdentityVO.MailAccount mailAccount) {
         accounts.computeIfAbsent(mailAccount.getInstance()
@@ -89,6 +96,8 @@ public class EdsMailIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(USER_MAIL, user.getEmail())
                     .stream()
                     .map(e -> edsAssetService.getById(e.getAssetId()))
+                    .filter(e -> EdsAssetTypeEnum.ALIMAIL_USER.name()
+                            .equals(e.getAssetType()))
                     .toList();
             if (!CollectionUtils.isEmpty(byIndexUsername)) {
                 mailIdentityAssets.addAll(byIndexUsername);

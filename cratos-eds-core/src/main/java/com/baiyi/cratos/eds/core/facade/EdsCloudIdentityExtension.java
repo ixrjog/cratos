@@ -19,4 +19,6 @@ public interface EdsCloudIdentityExtension {
 
     void revokeCloudAccountPermission(EdsIdentityParam.RevokePermission revokePermission);
 
+    void blockCloudAccount(EdsIdentityParam.BlockCloudAccount blockCloudAccount);
+
 }

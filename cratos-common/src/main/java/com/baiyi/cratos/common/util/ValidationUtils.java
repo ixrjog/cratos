@@ -51,4 +51,12 @@ public class ValidationUtils {
         return matcher.matches();
     }
 
+    public static boolean containsHyphenBetweenDigits(String phoneNumber) {
+        if (phoneNumber == null) {
+            return false;
+        }
+        // 检查是否存在数字-数字的模式
+        return phoneNumber.matches(".*\\d-\\d.*");
+    }
+
 }

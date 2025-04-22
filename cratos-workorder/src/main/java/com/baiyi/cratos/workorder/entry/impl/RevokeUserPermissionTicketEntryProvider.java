@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
@@ -13,7 +14,8 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.facade.*;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -46,15 +48,17 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     private final BusinessTagFacade businessTagFacade;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final UserService userService;
 
     public RevokeUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    WorkOrderTicketService workOrderTicketService,
                                                    WorkOrderService workOrderService,
                                                    BusinessTagFacade businessTagFacade,
-                                                   EdsIdentityFacade edsIdentityFacade) {
+                                                   EdsIdentityFacade edsIdentityFacade, UserService userService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.businessTagFacade = businessTagFacade;
         this.edsIdentityFacade = edsIdentityFacade;
+        this.userService = userService;
     }
 
     private static final String TABLE_TITLE = """
@@ -66,8 +70,12 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                UserVO.User user) throws WorkOrderTicketException {
-
+                                UserVO.User detail) throws WorkOrderTicketException {
+        User user = userService.getByUsername(detail.getUsername());
+        if (user != null && user.getValid()) {
+            user.setValid(false);
+            userService.updateByPrimaryKey(user);
+        }
     }
 
     @Override
@@ -125,7 +133,8 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         TicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> revokeUserEdsAccountPermissionTicketEntryProvider = (TicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 getKey(), BusinessTypeEnum.EDS_ASSET.name());
         List<WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> allAccounts = Stream.of(
-                        getUserLdapAccounts(param), getUserCloudAccounts(param), getUserGitLabAccounts(param))
+                        getUserLdapAccounts(param), getUserCloudAccounts(param), getUserGitLabAccounts(param),
+                        getUserMailAccounts(param))
                 .flatMap(List::stream)
                 .toList();
         if (!CollectionUtils.isEmpty(allAccounts)) {

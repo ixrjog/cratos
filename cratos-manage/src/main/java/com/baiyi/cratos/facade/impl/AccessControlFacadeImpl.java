@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.facade.AccessControlFacade;
 import lombok.RequiredArgsConstructor;

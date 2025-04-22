@@ -90,15 +90,30 @@ public class EdsIdentityFacadeImpl implements EdsIdentityFacade {
     }
 
     @Override
+    public void blockCloudAccount(EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        cloudIdentityExtension.blockCloudAccount(blockCloudAccount);
+    }
+
+    @Override
     public EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
             EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
         return gitLabIdentityExtension.queryGitLabIdentityDetails(queryGitLabIdentityDetails);
     }
 
     @Override
+    public void blockGitLabIdentity(EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity) {
+        gitLabIdentityExtension.blockGitLabIdentity(blockGitLabIdentity);
+    }
+
+    @Override
     public EdsIdentityVO.MailIdentityDetails queryMailIdentityDetails(
             EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails) {
         return mailIdentityExtension.queryMailIdentityDetails(queryMailIdentityDetails);
+    }
+
+    @Override
+    public void blockMailAccount(EdsIdentityParam.BlockMailAccount blockMailAccount) {
+        mailIdentityExtension.blockMailAccount(blockMailAccount);
     }
 
 }

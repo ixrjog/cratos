@@ -37,26 +37,28 @@ public class AlimailDepartmentRepo {
         AlimailToken.Token token = alimailTokenClient.getToken(alimail);
         List<AlimailDepartment.Department> result = Lists.newArrayList();
         int offset = 0;
-        int limit = 100;
-        while (true) {
-            AlimailDepartment.ListSubDepartmentsResult dept = alimailService.listSubDepartments(token.toBearer(), id, limit, offset);
-            if (CollectionUtils.isEmpty(dept.getDepartments())) {
-                break;
+        final int limit = 100;
+        AlimailDepartment.ListSubDepartmentsResult dept;
+        do {
+            dept = alimailService.listSubDepartments(token.toBearer(), id, limit, offset);
+            if (!CollectionUtils.isEmpty(dept.getDepartments())) {
+                result.addAll(dept.getDepartments());
+                offset += limit;
             }
-            result.addAll(dept.getDepartments());
-            offset += limit;
-        }
+        } while (!CollectionUtils.isEmpty(dept.getDepartments()));
         return result;
     }
 
     public List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail,
                                                                  List<AlimailDepartment.Department> departments) {
         List<AlimailDepartment.Department> result = Lists.newArrayList();
-        for (AlimailDepartment.Department department : departments) {
-            List<AlimailDepartment.Department> list = listSubDepartments(alimail, department.getId());
-            if (!CollectionUtils.isEmpty(list)) {
-                result.addAll(list);
-                result.addAll(listSubDepartments(alimail, list)); // 递归查询子部门
+        List<AlimailDepartment.Department> stack = Lists.newArrayList(departments); // 使用显式栈代替递归
+        while (!stack.isEmpty()) {
+            AlimailDepartment.Department current = stack.removeLast();
+            List<AlimailDepartment.Department> subDepartments = listSubDepartments(alimail, current.getId());
+            if (!CollectionUtils.isEmpty(subDepartments)) {
+                result.addAll(subDepartments);
+                stack.addAll(subDepartments); // 将子部门加入栈中
             }
         }
         return result;

@@ -145,6 +145,8 @@ public class EdsIdentityVO {
         private EdsInstanceVO.EdsInstance instance;
         private UserVO.User user;
         private EdsAssetVO.Asset account;
+        private String email;
+        private String mobile;
         private String avatar;
     }
 

@@ -1,15 +1,21 @@
 package com.baiyi.cratos.facade.identity.extension.impl;
 
+import com.baiyi.cratos.common.exception.EdsIdentityException;
+import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.facade.EdsFacade;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsGitLabIdentityExtension;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
@@ -71,6 +77,28 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
                 .build();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void blockGitLabIdentity(EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity) {
+        EdsInstance instance = getEdsInstance(blockGitLabIdentity);
+        try {
+            EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, org.gitlab4j.api.models.User> holder = (EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, org.gitlab4j.api.models.User>) holderBuilder.newHolder(
+                    blockGitLabIdentity.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name());
+
+            org.gitlab4j.api.models.User gitLabUser = GitLabUserRepo.getUser(holder.getInstance()
+                    .getEdsConfigModel(), blockGitLabIdentity.getUserId());
+            if (Objects.nonNull(gitLabUser)) {
+                // blockUser
+                GitLabUserRepo.blockUser(holder.getInstance()
+                        .getEdsConfigModel(), blockGitLabIdentity.getUserId());
+                holder.importAsset(GitLabUserRepo.getUser(holder.getInstance()
+                        .getEdsConfigModel(), blockGitLabIdentity.getUserId()));
+            }
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Block gitLab user error: {}", ex.getMessage());
+        }
+    }
+
     private EdsIdentityVO.AccountLoginDetails toAccountLogin(EdsAsset asset, String username) {
         EdsGitLabConfigModel.GitLab gitLab = (EdsGitLabConfigModel.GitLab) holderBuilder.newHolder(
                         asset.getInstanceId(), EdsAssetTypeEnum.GITLAB_USER.name())
@@ -90,6 +118,10 @@ public class EdsGitLabIdentityExtensionImpl extends BaseEdsIdentityExtension imp
                 .filter(e -> e.getInstanceId() == instanceId)
                 .map(edsAssetWrapper::wrapToTarget)
                 .toList();
+    }
+
+    private EdsInstance getEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
+        return getAndVerifyEdsInstance(hasEdsInstanceId, EdsInstanceTypeEnum.GITLAB);
     }
 
 }

@@ -93,7 +93,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         Set<Integer> idSet = listAssetsIdSet(instance);
         entities.forEach(e -> enterEntity(instance, idSet, e));
         idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
+        // post processing
+        postEnterEntities(instance);
     }
+
+    protected void postEnterEntities(ExternalDataSourceInstance<C> instance) {}
 
     protected void enterEntity(ExternalDataSourceInstance<C> instance, Set<Integer> idSet, A entity) {
         EdsAsset asset = enterEntity(instance, entity);

@@ -2,11 +2,17 @@ package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.aliyuncs.ecs.model.v20140526.DescribeDisksResponse;
 import com.aliyuncs.ecs.model.v20140526.DescribeInstancesResponse;
+import com.aliyuncs.ecs.model.v20140526.ListTagResourcesResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.aliyun.model.AliyunEcs;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
@@ -21,14 +27,12 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * &#064;Author  baiyi
@@ -41,18 +45,28 @@ import java.util.Optional;
 public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
 
     private final AliyunEcsRepo aliyunEcsRepo;
+    private final AliyunTagRepo aliyunTagRepo;
+    private final TagService tagService;
+    private final BusinessTagFacade businessTagFacade;
 
     private static final String VPC = "vpc";
     private static final String PRE_PAID = "PrePaid";
+
+    private static final String[] TAGS = {"Group", "Env", "Name"};
 
     public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                      EdsAssetIndexFacade edsAssetIndexFacade,
                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                     EdsInstanceProviderHolderBuilder holderBuilder, AliyunEcsRepo aliyunEcsRepo) {
+                                     EdsInstanceProviderHolderBuilder holderBuilder, AliyunEcsRepo aliyunEcsRepo,
+                                     AliyunTagRepo aliyunTagRepo, TagService tagService,
+                                     BusinessTagFacade businessTagFacade) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
         this.aliyunEcsRepo = aliyunEcsRepo;
+        this.aliyunTagRepo = aliyunTagRepo;
+        this.tagService = tagService;
+        this.businessTagFacade = businessTagFacade;
     }
 
     public static Date toUtcDate(String time) {
@@ -131,6 +145,40 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                 .comparisonKind(true)
                 .build()
                 .compare(a1, a2);
+    }
+
+    @Override
+    protected EdsAsset enterEntity(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                   AliyunEcs.Ecs entity) {
+        EdsAsset asset = super.enterEntity(instance, entity);
+        // 获取符合条件的标签资源
+        List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(entity.getRegionId(),
+                        instance.getEdsConfigModel(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
+                                .getInstanceId())
+                .stream()
+                .filter(tagResource -> List.of(TAGS)
+                        .contains(tagResource.getTagKey()))
+                .toList();
+        if (CollectionUtils.isEmpty(tagResources)) {
+            return asset;
+        }
+        // 保存业务标签
+        tagResources.stream()
+                .map(tagResource -> {
+                    Tag tag = tagService.getByTagKey(tagResource.getTagKey());
+                    if (Objects.isNull(tag)) {
+                        return null;
+                    }
+                    return BusinessTagParam.SaveBusinessTag.builder()
+                            .businessId(asset.getId())
+                            .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                            .tagId(tag.getId())
+                            .tagValue(tagResource.getTagValue())
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .forEach(businessTagFacade::saveBusinessTag);
+        return asset;
     }
 
 }

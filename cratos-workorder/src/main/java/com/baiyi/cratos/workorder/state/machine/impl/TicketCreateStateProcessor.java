@@ -1,11 +1,13 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
+import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -14,12 +16,12 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.builder.TicketBuilder;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 
@@ -34,21 +36,28 @@ import java.util.Objects;
 @TicketStates(state = TicketState.CREATE, target = TicketState.NEW)
 public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.CreateTicket> {
 
+    private final RbacRoleFacade rbacRoleFacade;
+
     public TicketCreateStateProcessor(UserService userService, WorkOrderService workOrderService,
                                       WorkOrderTicketService workOrderTicketService,
                                       WorkOrderTicketNodeService workOrderTicketNodeService,
                                       WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                       WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                       WorkOrderTicketEntryService workOrderTicketEntryService,
-                                      TicketWorkflowFacade ticketWorkflowFacade) {
+                                      TicketWorkflowFacade ticketWorkflowFacade, RbacRoleFacade rbacRoleFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
+        this.rbacRoleFacade = rbacRoleFacade;
     }
 
     @Override
     protected void preChangeInspection(TicketStateChangeAction action,
                                        TicketEvent<WorkOrderTicketParam.CreateTicket> event) {
+        // 运维不限制工单数量
+        if (rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS, SessionUtils.getUsername())) {
+            return;
+        }
         // 新建工单超过3个不允许继续创建
         WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody()
                 .getWorkOrderKey());

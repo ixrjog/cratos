@@ -23,9 +23,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractOutputTask implements IRecordOutputTask {
 
     private InputStream outFromChannel;
-
     private SessionOutput sessionOutput;
-
     private String auditPath;
 
     private static final int BUFF_SIZE = 1024 * 8;

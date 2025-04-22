@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
@@ -94,6 +95,15 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
                         .toLoginUrl(hwc.getCred()
                                 .getUsername()))
                 .build();
+    }
+
+    @Override
+    public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(blockCloudAccount.getInstanceId(),
+                        getAccountAssetType())
+                .getInstance()
+                .getEdsConfigModel();
+        HwcIamRepo.blockUser(hwc.getRegionId(), hwc, blockCloudAccount.getAccountId());
     }
 
 }

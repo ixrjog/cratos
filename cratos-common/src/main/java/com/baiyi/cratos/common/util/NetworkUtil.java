@@ -27,9 +27,9 @@ public class NetworkUtil {
     public static boolean inNetwork(String network, String subnet) {
         final String subnetIp = StringUtils.substringBefore(subnet, "/");
         final String subnetMask = StringUtils.substringAfter(subnet, "/");
-        final String subnetBeginIp = IpUtil.getBeginIpStr(subnetIp, subnetMask);
-        final String subnetEndIp = IpUtil.getEndIpStr(subnetIp, subnetMask);
-        return IpUtil.isInRange(subnetBeginIp, network) && IpUtil.isInRange(subnetEndIp, network);
+        final String subnetBeginIp = IpUtils.getBeginIpStr(subnetIp, subnetMask);
+        final String subnetEndIp = IpUtils.getEndIpStr(subnetIp, subnetMask);
+        return IpUtils.isInRange(subnetBeginIp, network) && IpUtils.isInRange(subnetEndIp, network);
     }
 
     private static final Pattern IP_PATTERN =

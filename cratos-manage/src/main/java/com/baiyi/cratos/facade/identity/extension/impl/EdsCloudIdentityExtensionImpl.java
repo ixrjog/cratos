@@ -150,6 +150,13 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
         cloudIdentityProvider.revokePermission(instance, revokePermission);
     }
 
+    @Override
+    public void blockCloudAccount(EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        EdsInstance instance = getAndVerifyEdsInstance(blockCloudAccount);
+        CloudIdentityProvider cloudIdentityProvider = CloudIdentityFactory.getProvider(instance.getEdsType());
+        cloudIdentityProvider.blockCloudAccount(instance, blockCloudAccount);
+    }
+
     private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> makeCloudIdentities(List<EdsAsset> cloudIdentityAssets) {
         Map<String, Map<Integer, List<EdsAssetVO.Asset>>> cloudIdentities = Maps.newHashMap();
         cloudIdentityAssets.forEach(cloudIdentityAsset -> {

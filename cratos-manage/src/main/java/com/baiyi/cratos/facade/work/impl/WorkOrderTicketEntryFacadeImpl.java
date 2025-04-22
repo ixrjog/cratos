@@ -97,7 +97,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         WorkOrderTicket workOrderTicket = workOrderTicketService.getById(workOrderTicketEntry.getTicketId());
         if (!workOrderTicket.getUsername()
                 .equals(SessionUtils.getUsername())) {
-            WorkOrderTicketException.runtime("Only the applicant can delete the entry");
+            WorkOrderTicketException.runtime("Only the applicant can delete the entry.");
         }
         if (!TicketState.NEW.equals(TicketState.valueOf(workOrderTicket.getTicketState()))) {
             WorkOrderTicketException.runtime("Only in the new state can it be deleted.");

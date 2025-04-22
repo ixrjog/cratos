@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,7 @@ public class DataTable<T> {
     private long totalNum;
 
     public DataTable(List<T> data, long totalNum) {
-        this.data = data;
+        this.data = CollectionUtils.isEmpty(data) ? List.of() : data;
         this.totalNum = totalNum;
     }
 

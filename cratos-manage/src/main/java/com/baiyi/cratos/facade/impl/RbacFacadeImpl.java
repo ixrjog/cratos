@@ -11,7 +11,7 @@ import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
 import com.baiyi.cratos.facade.rbac.RbacResourceFacade;
-import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.baiyi.cratos.service.RbacRoleResourceService;
 import com.baiyi.cratos.wrapper.RbacRoleWrapper;

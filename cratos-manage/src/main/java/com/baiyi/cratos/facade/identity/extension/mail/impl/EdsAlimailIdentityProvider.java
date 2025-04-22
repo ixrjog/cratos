@@ -1,8 +1,10 @@
 package com.baiyi.cratos.facade.identity.extension.mail.impl;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
+import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -29,13 +31,16 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
 public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsAlimailConfigModel.Alimail, AlimailUser.User> {
 
+    private final AlimailUserRepo alimailUserRepo;
+
     public EdsAlimailIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                       EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
                                       UserService userService, UserWrapper userWrapper,
                                       EdsInstanceWrapper instanceWrapper,
-                                      EdsInstanceProviderHolderBuilder holderBuilder) {
+                                      EdsInstanceProviderHolderBuilder holderBuilder, AlimailUserRepo alimailUserRepo) {
         super(edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
                 instanceWrapper, holderBuilder);
+        this.alimailUserRepo = alimailUserRepo;
     }
 
     @Override
@@ -50,6 +55,15 @@ public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsAlim
                 .loginUsername(mail)
                 .loginUrl(alimail.getLoginUrl())
                 .build();
+    }
+
+    @Override
+    public void blockMailAccount(EdsIdentityParam.BlockMailAccount blockMailAccount) {
+        EdsAlimailConfigModel.Alimail alimail = (EdsAlimailConfigModel.Alimail) holderBuilder.newHolder(
+                        blockMailAccount.getInstanceId(), getAccountAssetType())
+                .getInstance()
+                .getEdsConfigModel();
+        alimailUserRepo.freezeUser(alimail, blockMailAccount.getUserId());
     }
 
 }

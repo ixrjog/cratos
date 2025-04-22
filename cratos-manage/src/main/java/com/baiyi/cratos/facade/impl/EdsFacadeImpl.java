@@ -288,6 +288,7 @@ public class EdsFacadeImpl implements EdsFacade {
                     importInstanceAsset.getAssetType());
             providerHolder.importAssets();
         } catch (Exception e) {
+            e.printStackTrace();
             log.warn(e.getMessage());
         }
     }

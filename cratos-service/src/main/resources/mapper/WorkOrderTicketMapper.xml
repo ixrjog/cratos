@@ -39,26 +39,25 @@
             parameterType="com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam$MyTicketPageQuery"
             resultMap="BaseResultMap">
         select * from work_order_ticket
-        <where>
-            <if test="ticketState != null and ticketState != ''">
-                ticket_state = #{ticketState}
-            </if>
-            <if test="ticketNo != null and ticketNo != ''">
-                and ticket_no = #{ticketNo}
-            </if>
-            <if test="workOrderKey != null and workOrderKey != ''">
-                and work_order_id in ( select id from work_order where work_order_key = #{workOrderKey} )
-            </if>
-            <choose>
-                <when test="mySubmitted != null and mySubmitted">
-                    and username = #{username}
-                </when>
-                <otherwise>
-                    and id in ( select ticket_id from work_order_ticket_subscriber where username = #{username}
-                    and valid = true )
-                </otherwise>
-            </choose>
-        </where>
+        where valid = true
+        <if test="ticketState != null and ticketState != ''">
+            and ticket_state = #{ticketState}
+        </if>
+        <if test="ticketNo != null and ticketNo != ''">
+            and ticket_no = #{ticketNo}
+        </if>
+        <if test="workOrderKey != null and workOrderKey != ''">
+            and work_order_id in ( select id from work_order where work_order_key = #{workOrderKey} )
+        </if>
+        <choose>
+            <when test="mySubmitted != null and mySubmitted">
+                and username = #{username}
+            </when>
+            <otherwise>
+                and id in ( select ticket_id from work_order_ticket_subscriber where username = #{username}
+                and valid = true )
+            </otherwise>
+        </choose>
         order by id desc
     </select>
 

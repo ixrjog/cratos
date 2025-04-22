@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
@@ -74,6 +75,15 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
         } catch (Exception e) {
             throw new CloudIdentityException(e.getMessage());
         }
+    }
+
+    @Override
+    public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+                instance.getId(), getAccountAssetType());
+        EdsAwsConfigModel.Aws aws = holder.getInstance()
+                .getEdsConfigModel();
+        iamUserRepo.deleteLoginProfile(aws, blockCloudAccount.getAccount());
     }
 
     @Override

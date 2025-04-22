@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.domain.view.rbac.RbacResourceVO;
 import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import com.baiyi.cratos.facade.RbacFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.facade.rbac.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

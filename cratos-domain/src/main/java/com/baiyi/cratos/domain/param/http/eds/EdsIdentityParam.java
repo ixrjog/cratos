@@ -100,6 +100,22 @@ public class EdsIdentityParam {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
+    public static class BlockGitLabIdentity implements HasEdsInstanceId {
+        // blockUser
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        private String username;
+        private String account;
+        @Schema(description = "GitLab userId")
+        private Long userId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
     public static class AddLdapUserToGroup implements HasEdsInstanceId {
         @NotNull
         @Schema(description = "Eds Instance ID")
@@ -171,6 +187,34 @@ public class EdsIdentityParam {
         @NotBlank
         private String username;
         private String password;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class BlockCloudAccount implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        private String username;
+        private String account;
+        private String accountId;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class BlockMailAccount implements HasEdsInstanceId {
+        @NotNull
+        @Schema(description = "Eds Instance ID")
+        private Integer instanceId;
+        private String username;
+        private String email;
+        private String userId;
     }
 
     @Data

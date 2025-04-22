@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.alimail.repo;
 import com.baiyi.cratos.eds.alimail.client.AlimailTokenClient;
 import com.baiyi.cratos.eds.alimail.model.AlimailToken;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
+import com.baiyi.cratos.eds.alimail.param.AlimailUserParam;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
@@ -29,16 +30,22 @@ public class AlimailUserRepo {
         AlimailToken.Token token = alimailTokenClient.getToken(alimail);
         List<AlimailUser.User> users = Lists.newArrayList();
         int offset = 0;
-        int limit = 100;
-        while (true) {
-            AlimailUser.ListUsersOfDepartmentResult result= alimailService.listUsersOfDepartment(token.toBearer(), deptId, limit, offset);
-            if (CollectionUtils.isEmpty(result.getUsers())) {
-                break;
+        final int limit = 100;
+        AlimailUser.ListUsersOfDepartmentResult result;
+        do {
+            result = alimailService.listUsersOfDepartment(token.toBearer(), deptId, limit, offset);
+            if (!CollectionUtils.isEmpty(result.getUsers())) {
+                users.addAll(result.getUsers());
+                offset += limit;
             }
-            users.addAll(result.getUsers());
-            offset += limit;
-        }
+        } while (!CollectionUtils.isEmpty(result.getUsers()));
         return users;
+    }
+
+    public void freezeUser(EdsAlimailConfigModel.Alimail alimail, String userId) {
+        AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
+        AlimailToken.Token token = alimailTokenClient.getToken(alimail);
+        alimailService.freezeUser(token.toBearer(), userId, AlimailUserParam.UpdateUser.FREEZE_USER);
     }
 
 }

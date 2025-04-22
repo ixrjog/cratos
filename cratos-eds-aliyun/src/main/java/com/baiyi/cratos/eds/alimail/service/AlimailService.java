@@ -4,11 +4,13 @@ import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.model.AlimailToken;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.param.AlimailTokenParam;
+import com.baiyi.cratos.eds.alimail.param.AlimailUserParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
+import org.springframework.web.service.annotation.PatchExchange;
 
 /**
  * &#064;Author  baiyi
@@ -40,6 +42,7 @@ public interface AlimailService {
 
     /**
      * https://mailhelp.aliyun.com/openapi/index.html#/operations/alimailpb_ud_DepartmentService_ListUsersOfDepartment
+     *
      * @param authorization
      * @param id
      * @param limit
@@ -50,5 +53,10 @@ public interface AlimailService {
     AlimailUser.ListUsersOfDepartmentResult listUsersOfDepartment(@RequestHeader("Authorization") String authorization,
                                                                   @PathVariable String id, @PathVariable Integer limit,
                                                                   @PathVariable Integer offset);
+
+
+    @PatchExchange("/v2/users/{id}")
+    void freezeUser(@RequestHeader("Authorization") String authorization, @PathVariable String id,
+                    @RequestBody AlimailUserParam.UpdateUser freezeUser);
 
 }

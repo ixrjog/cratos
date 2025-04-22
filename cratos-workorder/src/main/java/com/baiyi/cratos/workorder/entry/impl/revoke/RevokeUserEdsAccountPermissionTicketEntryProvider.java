@@ -4,12 +4,16 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -23,6 +27,10 @@ import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/15 11:18
@@ -35,14 +43,20 @@ import org.springframework.stereotype.Component;
 public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicketEntryProvider<EdsAssetVO.Asset, WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
+    private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public RevokeUserEdsAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                              WorkOrderTicketService workOrderTicketService,
                                                              WorkOrderService workOrderService,
                                                              BusinessTagFacade businessTagFacade,
-                                                             EdsInstanceService edsInstanceService) {
+                                                             EdsInstanceService edsInstanceService,
+                                                             EdsIdentityFacade edsIdentityFacade,
+                                                             EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
+        this.edsIdentityFacade = edsIdentityFacade;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     private static final String TABLE_TITLE = """
@@ -57,7 +71,13 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
             WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry addRevokeUserEdsAccountPermissionTicketEntry) {
         EdsAssetVO.Asset asset = addRevokeUserEdsAccountPermissionTicketEntry.getDetail();
         String assetType = asset.getAssetType();
-        return switch (EdsAssetTypeEnum.valueOf(assetType)) {
+        EdsAssetTypeEnum edsAssetTypeEnum;
+        try {
+            edsAssetTypeEnum = EdsAssetTypeEnum.valueOf(assetType);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            throw new WorkOrderTicketException("不支持的资产类型: {}", asset.getAssetType());
+        }
+        return switch (edsAssetTypeEnum) {
             case EdsAssetTypeEnum.LDAP_PERSON -> RevokeUserEdsLdapUserPermissionTicketEntryBuilder.newBuilder()
                     .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
                     .buildEntry();
@@ -77,7 +97,19 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
             case EdsAssetTypeEnum.GITLAB_USER -> RevokeUserEdsGitLabUserPermissionTicketEntryBuilder.newBuilder()
                     .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
                     .buildEntry();
-            default -> throw new WorkOrderTicketException("不支持的资产类型: " + assetType);
+            case EdsAssetTypeEnum.ALIMAIL_USER -> {
+                EdsAssetIndex mailIndex = edsAssetIndexService.getByAssetIdAndName(
+                        addRevokeUserEdsAccountPermissionTicketEntry.getDetail()
+                                .getId(), USER_MAIL);
+                if (Objects.isNull(mailIndex)) {
+                    throw new WorkOrderTicketException("Assets are missing mail");
+                }
+                yield RevokeUserEdsAliMailUserPermissionTicketEntryBuilder.newBuilder()
+                        .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                        .withEmail(mailIndex.getValue())
+                        .buildEntry();
+            }
+            default -> throw new WorkOrderTicketException("不支持的账户类型类型: {}", assetType);
         };
     }
 
@@ -104,8 +136,51 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                EdsAssetVO.Asset asset) throws WorkOrderTicketException {
-
+                                EdsAssetVO.Asset detail) throws WorkOrderTicketException {
+        String assetType = detail.getAssetType();
+        switch (EdsAssetTypeEnum.valueOf(assetType)) {
+            case EdsAssetTypeEnum.LDAP_PERSON -> {
+                EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity = EdsIdentityParam.DeleteLdapIdentity.builder()
+                        .instanceId(entry.getInstanceId())
+                        .username(entry.getName())
+                        .build();
+                edsIdentityFacade.deleteLdapIdentity(deleteLdapIdentity);
+            }
+            case EdsAssetTypeEnum.ALIYUN_RAM_USER, EdsAssetTypeEnum.AWS_IAM_USER -> {
+                EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
+                        .instanceId(entry.getInstanceId())
+                        .account(entry.getName())
+                        .build();
+                edsIdentityFacade.blockCloudAccount(blockCloudAccount);
+            }
+            case EdsAssetTypeEnum.GCP_MEMBER -> {
+                // TODO
+            }
+            case EdsAssetTypeEnum.ALIMAIL_USER -> {
+                EdsIdentityParam.BlockMailAccount blockMailAccount = EdsIdentityParam.BlockMailAccount.builder()
+                        .instanceId(entry.getInstanceId())
+                        .userId(detail.getAssetId())
+                        .build();
+                edsIdentityFacade.blockMailAccount(blockMailAccount);
+            }
+            case EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER -> {
+                EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
+                        .instanceId(entry.getInstanceId())
+                        .account(entry.getName())
+                        .accountId(detail.getAssetId())
+                        .build();
+                edsIdentityFacade.blockCloudAccount(blockCloudAccount);
+            }
+            case EdsAssetTypeEnum.GITLAB_USER -> {
+                EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity = EdsIdentityParam.BlockGitLabIdentity.builder()
+                        .instanceId(entry.getInstanceId())
+                        .account(entry.getName())
+                        .userId(Long.valueOf(detail.getAssetId()))
+                        .build();
+                edsIdentityFacade.blockGitLabIdentity(blockGitLabIdentity);
+            }
+            default -> throw new WorkOrderTicketException("不支持的资产类型: {}", assetType);
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
-import com.baiyi.cratos.common.util.IpUtil;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -56,7 +56,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
             throw new GlobalNetworkException("cidrBlock is invalid.");
         }
         try {
-            int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
+            int resourceTotal = IpUtils.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
             globalNetwork.setResourceTotal(resourceTotal);
             globalNetworkService.add(globalNetwork);
         } catch (Exception e) {

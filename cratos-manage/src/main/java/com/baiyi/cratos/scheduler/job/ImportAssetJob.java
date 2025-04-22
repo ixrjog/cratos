@@ -20,9 +20,7 @@ import org.springframework.stereotype.Component;
 public class ImportAssetJob extends QuartzJobBean {
 
     public static final String ASSET_TYPE = "assetType";
-
     public static final String INSTANCE_ID = "instanceId";
-
     private static EdsFacade edsFacade;
 
     @Autowired

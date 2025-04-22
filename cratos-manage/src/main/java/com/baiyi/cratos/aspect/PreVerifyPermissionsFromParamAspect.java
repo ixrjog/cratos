@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.facade.rbac.RbacRoleFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

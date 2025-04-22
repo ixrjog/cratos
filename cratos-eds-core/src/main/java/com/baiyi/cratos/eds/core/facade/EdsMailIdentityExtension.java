@@ -13,4 +13,6 @@ public interface EdsMailIdentityExtension {
     EdsIdentityVO.MailIdentityDetails queryMailIdentityDetails(
             EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails);
 
+    void blockMailAccount(EdsIdentityParam.BlockMailAccount blockMailAccount);
+
 }

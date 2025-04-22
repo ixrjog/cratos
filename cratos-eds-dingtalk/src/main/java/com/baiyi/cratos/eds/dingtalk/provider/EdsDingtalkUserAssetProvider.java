@@ -20,10 +20,12 @@ import com.baiyi.cratos.eds.dingtalk.repo.DingtalkUserRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +99,9 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
             DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, entity.getMobile()));
+        String mobilePhone = Joiner.on("-").skipNulls()
+                .join(entity.getStateCode(), entity.getMobile());
+        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, mobilePhone));
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
                 .toString()));
         indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_AVATAR, entity.getAvatar()));
@@ -107,6 +111,10 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
         // 头像
         if (ValidationUtils.isURL(entity.getAvatar())) {
             indices.add(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatar()));
+        }
+        // Email
+        if (StringUtils.hasText(entity.getEmail())) {
+            indices.add(toEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
         }
         return indices;
     }

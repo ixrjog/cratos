@@ -37,12 +37,14 @@ public interface CloudIdentityProvider extends EdsAssetTypeOfAnnotate {
 
     String getPolicyIndexName(EdsAsset asset);
 
-    EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset,String username);
+    EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username);
 
     EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username);
 
     default String getAccountAssetType() {
         return getAssetType();
     }
+
+    void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount);
 
 }

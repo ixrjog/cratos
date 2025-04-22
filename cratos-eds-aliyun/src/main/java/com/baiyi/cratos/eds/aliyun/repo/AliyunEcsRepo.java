@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,50 +31,68 @@ public class AliyunEcsRepo {
     public List<DescribeInstancesResponse.Instance> listInstances(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
         List<DescribeInstancesResponse.Instance> instanceList = Lists.newArrayList();
         String nextToken;
+        DescribeInstancesRequest describe = new DescribeInstancesRequest();
         try {
-            DescribeInstancesRequest describe = new DescribeInstancesRequest();
             do {
                 DescribeInstancesResponse response = aliyunClient.getAcsResponse(regionId, aliyun, describe);
-                instanceList.addAll(response.getInstances());
-                nextToken = response.getNextToken();
+                if (response != null && !CollectionUtils.isEmpty(response.getInstances())) {
+                    instanceList.addAll(response.getInstances());
+                }
+                nextToken = response != null ? response.getNextToken() : null;
                 describe.setNextToken(nextToken);
             } while (StringUtils.isNotBlank(nextToken));
         } catch (ClientException e) {
-            log.error(e.getMessage());
+            log.error("Failed to list instances for regionId: {}, error: {}", regionId, e.getMessage(), e);
         }
-        return instanceList;
+        return instanceList.isEmpty() ? Collections.emptyList() : instanceList;
     }
 
+    /**
+     * @param regionId
+     * @param aliyun
+     * @return
+     */
     public List<DescribeImagesResponse.Image> listImages(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
         List<DescribeImagesResponse.Image> images = Lists.newArrayList();
+        DescribeImagesRequest describe = new DescribeImagesRequest();
+        describe.setSysRegionId(regionId);
+        describe.setPageSize(PAGE_SIZE);
+        /*
+         * system：阿里云提供的公共镜像。
+         * self：您创建的自定义镜像。
+         * others：其他阿里云用户共享给您的镜像。
+         * marketplace：镜像市场提供的镜像
+         */
+        describe.setImageOwnerAlias("self");
+        int pageNumber = 1;
         try {
-            DescribeImagesRequest describe = new DescribeImagesRequest();
-            describe.setSysRegionId(regionId);
-            describe.setPageSize(PAGE_SIZE);
-            /*
-             * system：阿里云提供的公共镜像。
-             * self：您创建的自定义镜像。
-             * others：其他阿里云用户共享给您的镜像。
-             * marketplace：镜像市场提供的镜像
-             */
-            describe.setImageOwnerAlias("self");
-            int size = PAGE_SIZE;
-            int pageNumber = 1;
-            // 循环取值
-            while (PAGE_SIZE <= size) {
+            while (true) {
                 describe.setPageNumber(pageNumber);
                 DescribeImagesResponse response = aliyunClient.getAcsResponse(regionId, aliyun, describe);
+                if (response == null || CollectionUtils.isEmpty(response.getImages())) {
+                    break;
+                }
                 images.addAll(response.getImages());
-                size = response.getImages().size();
+                if (response.getImages()
+                        .size() < PAGE_SIZE) {
+                    break;
+                }
                 pageNumber++;
             }
         } catch (ClientException e) {
-            log.error(e.getMessage());
+            log.error("Failed to list images for regionId: {}, error: {}", regionId, e.getMessage(), e);
         }
         return images;
     }
 
-    public List<DescribeDisksResponse.Disk> describeDisks(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    /**
+     * @param regionId
+     * @param aliyun
+     * @param instanceId
+     * @return
+     */
+    public List<DescribeDisksResponse.Disk> describeDisks(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+                                                          String instanceId) {
         try {
             DescribeDisksRequest describe = new DescribeDisksRequest();
             describe.setSysRegionId(regionId);

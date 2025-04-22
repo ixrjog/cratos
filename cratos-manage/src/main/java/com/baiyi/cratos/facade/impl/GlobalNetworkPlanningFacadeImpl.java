@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
-import com.baiyi.cratos.common.util.IpUtil;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -51,7 +51,7 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
         GlobalNetworkPlanning globalNetworkPlanning = addGlobalNetworkPlanning.toTarget();
         // 需要判断子网
         tryNetwork(globalNetworkPlanning);
-        int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(globalNetworkPlanning.getCidrBlock(), "/"));
+        int resourceTotal = IpUtils.getIpCount(StringUtils.substringAfter(globalNetworkPlanning.getCidrBlock(), "/"));
         globalNetworkPlanning.setResourceTotal(resourceTotal);
         globalNetworkPlanningService.add(globalNetworkPlanning);
     }
@@ -64,7 +64,7 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
         final String cidrBlock = globalNetworkPlanning.getCidrBlock()
                 .trim();
         try {
-            int resourceTotal = IpUtil.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
+            int resourceTotal = IpUtils.getIpCount(StringUtils.substringAfter(cidrBlock, "/"));
             globalNetworkPlanning.setResourceTotal(resourceTotal);
             globalNetworkPlanningService.updateByPrimaryKey(globalNetworkPlanning);
         } catch (Exception e) {

@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public final class IOUtil {
+public final class IOUtils {
 
     public static final String COMMENT_SIGN = "#";
 
@@ -71,6 +71,7 @@ public final class IOUtil {
         try {
             FileUtils.forceMkdir(file);
         } catch (IOException e) {
+            e.printStackTrace();
             log.error(e.getMessage());
         }
     }
@@ -83,7 +84,7 @@ public final class IOUtil {
      */
     public static void writeFile(String body, String path) {
         log.info("Write file: path={}", path);
-        if (StringUtils.isEmpty(path)) {
+        if (org.springframework.util.StringUtils.hasText(path)) {
             log.error("Write file path is null!");
             return;
         }
@@ -93,7 +94,6 @@ public final class IOUtil {
             //将字符串写入到指定的路径下的文件中
             fw.write(body);
         } catch (Exception e) {
-            log.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -114,8 +114,8 @@ public final class IOUtil {
      * 追加文件内容：使用FileWriter
      */
     public static void appendFile(String body, String path) {
-        if (StringUtils.isEmpty(path)) {
-            log.error("Write file path is null!");
+        if (org.springframework.util.StringUtils.hasText(path)) {
+            log.error("Append file path is null!");
             return;
         }
         mkdir(getPath(path));

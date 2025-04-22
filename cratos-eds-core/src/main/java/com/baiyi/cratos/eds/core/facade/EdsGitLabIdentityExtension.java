@@ -13,4 +13,6 @@ public interface EdsGitLabIdentityExtension {
     EdsIdentityVO.GitLabIdentityDetails queryGitLabIdentityDetails(
             EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails);
 
+    void blockGitLabIdentity(EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity);
+
 }

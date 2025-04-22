@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
@@ -102,6 +103,11 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsGcpConfigM
                 .loginUsername(asset.getName())
                 .loginUrl(GCP_LOGIN_URL)
                 .build();
+    }
+
+    @Override
+    public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+
     }
 
 }

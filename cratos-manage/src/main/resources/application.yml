@@ -42,14 +42,15 @@ server:
     # 项目contextPath
     context-path: /
   tomcat:
+    # 调整为4C8G参数
     # tomcat的URI编码
     uri-encoding: UTF-8
-    accept-count: 150
-    max-connections: 200
+    accept-count: 400
+    max-connections: 800
     max-http-form-post-size: 209715200
     threads:
       # tomcat最大线程数，默认为200
-      max: 200
+      max: 800
       # Tomcat启动初始化的线程数，默认值25
       min-spare: 25
   shutdown: graceful

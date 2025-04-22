@@ -33,8 +33,7 @@ public class HwcIamRepo {
         return response.getUsers();
     }
 
-    public static KeystoneShowUserResult getUser(String regionId, EdsHwcConfigModel.Hwc hwc,
-                                                 String userId) {
+    public static KeystoneShowUserResult getUser(String regionId, EdsHwcConfigModel.Hwc hwc, String userId) {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
         KeystoneShowUserRequest request = new KeystoneShowUserRequest();
         request.setUserId(userId);
@@ -42,8 +41,8 @@ public class HwcIamRepo {
         return response.getUser();
     }
 
-    public static KeystoneCreateUserResult createUser(String regionId,
-                                                      EdsHwcConfigModel.Hwc hwc, User user , String password) {
+    public static KeystoneCreateUserResult createUser(String regionId, EdsHwcConfigModel.Hwc hwc, User user,
+                                                      String password) {
         IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
         KeystoneCreateUserRequest request = new KeystoneCreateUserRequest();
         KeystoneCreateUserRequestBody body = new KeystoneCreateUserRequestBody();
@@ -58,13 +57,26 @@ public class HwcIamRepo {
         return response.getUser();
     }
 
-    public static List<Credentials> listAccessKeys(String regionId, EdsHwcConfigModel.Hwc hwc,
-                                                 String userId) {
-        IamClient client = HwcIamClientBuilder.buildIamClient(regionId,hwc);
-        ListPermanentAccessKeysRequest request = new ListPermanentAccessKeysRequest ();
+    public static List<Credentials> listAccessKeys(String regionId, EdsHwcConfigModel.Hwc hwc, String userId) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
+        ListPermanentAccessKeysRequest request = new ListPermanentAccessKeysRequest();
         request.setUserId(userId);
         ListPermanentAccessKeysResponse response = client.listPermanentAccessKeys(request);
         return response.getCredentials();
+    }
+
+    public static KeystoneUpdateUserByAdminResult blockUser(String regionId, EdsHwcConfigModel.Hwc hwc, String userId) {
+        IamClient client = HwcIamClientBuilder.buildIamClient(regionId, hwc);
+        KeystoneUpdateUserByAdminRequest request = new KeystoneUpdateUserByAdminRequest();
+        KeystoneUpdateUserByAdminRequestBody body = new KeystoneUpdateUserByAdminRequestBody();
+        KeystoneUpdateUserOption user = new KeystoneUpdateUserOption();
+        user.setEnabled(false);
+        body.withUser(user);
+        request.setUserId(userId);
+        request.setBody(body);
+        request.setBody(body);
+        KeystoneUpdateUserByAdminResponse response = client.keystoneUpdateUserByAdmin(request);
+        return response.getUser();
     }
 
 }

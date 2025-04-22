@@ -47,7 +47,7 @@ public class WorkOrderFacadeImpl implements WorkOrderFacade {
 
     @Override
     public void updateWorkOrder(WorkOrderParam.UpdateWorkOrder updateWorkOrder) {
-        if (VersionValidator.isValidVersion(updateWorkOrder.getVersion())) {
+        if (!VersionValidator.isValidVersion(updateWorkOrder.getVersion())) {
             WorkOrderException.runtime("Version number format error.");
         }
         workOrderService.updateByPrimaryKey(updateWorkOrder.toTarget());
