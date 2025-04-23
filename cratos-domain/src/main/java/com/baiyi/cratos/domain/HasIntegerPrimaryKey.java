@@ -7,4 +7,6 @@ package com.baiyi.cratos.domain;
  */
 public interface HasIntegerPrimaryKey {
     Integer getId();
+
+    void setId(Integer id);
 }

@@ -231,7 +231,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                     .withMemberCustom(memberCustom)
                     .withCreatedBy(createdBy)
                     .get();
-            resourceService.add(resource);
+            resourceService.save(resource);
         });
     }
 

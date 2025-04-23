@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.ClosedInputStream;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,7 +78,9 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
      */
     @Override
     public void record(char[] buf, int off, int len) {
-        SshRecorder.record(auditPath, buf, off, len);
+        if (StringUtils.hasText(auditPath)) {
+            SshRecorder.record(auditPath, buf, off, len);
+        }
     }
 
     protected byte[] toBytes(char[] chars) {
