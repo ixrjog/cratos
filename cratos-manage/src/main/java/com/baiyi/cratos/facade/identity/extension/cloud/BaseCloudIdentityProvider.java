@@ -154,7 +154,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
             }
             EdsAssetIndex loginProfileIndex = edsAssetIndexService.getByAssetIdAndName(account.getId(),
                     CLOUD_LOGIN_PROFILE);
-            boolean loginProfileEnabled = Objects.nonNull(loginProfileIndex) && "Enabled".equalsIgnoreCase(
+            Boolean loginProfileEnabled = Objects.isNull(loginProfileIndex) ? null : "Enabled".equalsIgnoreCase(
                     loginProfileIndex.getValue());
             EdsIdentityVO.LoginProfile loginProfile = EdsIdentityVO.LoginProfile.builder()
                     .enabled(loginProfileEnabled)
