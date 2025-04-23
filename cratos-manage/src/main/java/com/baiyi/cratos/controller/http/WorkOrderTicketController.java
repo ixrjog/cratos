@@ -43,34 +43,34 @@ public class WorkOrderTicketController {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> createTicket(
             @RequestBody @Valid WorkOrderTicketParam.CreateTicket createTicket) {
-        return new HttpResult<>(workOrderTicketFacade.createTicket(createTicket));
+        return HttpResult.of(workOrderTicketFacade.createTicket(createTicket));
     }
 
     @Operation(summary = "Get workOrder ticket")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> getTicket(@RequestParam @Valid String ticketNo) {
-        return new HttpResult<>(workOrderTicketFacade.makeTicketDetails(ticketNo));
+        return HttpResult.of(workOrderTicketFacade.makeTicketDetails(ticketNo));
     }
 
     @Operation(summary = "Submit application ticket")
     @PostMapping(value = "/submit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> submitTicket(
             @RequestBody @Valid WorkOrderTicketParam.SubmitTicket submitTicket) {
-        return new HttpResult<>(workOrderTicketFacade.submitTicket(submitTicket));
+        return HttpResult.of(workOrderTicketFacade.submitTicket(submitTicket));
     }
 
     @Operation(summary = "Approval ticket")
     @PostMapping(value = "/approval", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<WorkOrderTicketVO.TicketDetails> approvalTicket(
-            @RequestBody @Valid WorkOrderTicketParam.ApprovalTicket approvalTicket) {
-        return new HttpResult<>(workOrderTicketFacade.approvalTicket(approvalTicket));
+    public HttpResult<Boolean> approvalTicket(@RequestBody @Valid WorkOrderTicketParam.ApprovalTicket approvalTicket) {
+        workOrderTicketFacade.approvalTicket(approvalTicket);
+        return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Ticket do next state")
     @PostMapping(value = "/next", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> doNextStateOfTicket(
             @RequestBody @Valid WorkOrderTicketParam.DoNextStateOfTicket doNextStateOfTicket) {
-        return new HttpResult<>(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
+        return HttpResult.of(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
     }
 
     @Operation(summary = "Delete ticket by id")

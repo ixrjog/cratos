@@ -21,6 +21,7 @@ import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFa
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketWrapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,7 +62,8 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
         // 开发中
         if (WorkOrderStatus.DEVELOPING.equals(WorkOrderStatus.valueOf(workOrder.getStatus()))) {
             if (!rbacRoleFacade.verifyRoleAccessLevelByUsername(AccessLevel.OPS)) {
-                WorkOrderException.runtime("Work order development in progress. Please wait for the work order to be completed.");
+                WorkOrderException.runtime(
+                        "Work order development in progress. Please wait for the work order to be completed.");
             }
         }
         final String ticketNo = PasswordGenerator.generateTicketNo();
@@ -101,10 +103,10 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     }
 
     @Override
-    public WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
+    @Async
+    public void approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
         TicketEvent<WorkOrderTicketParam.ApprovalTicket> event = TicketEvent.of(approvalTicket);
         TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, TicketStateChangeAction.APPROVAL, event);
-        return makeTicketDetails(approvalTicket);
     }
 
     @Override

@@ -21,7 +21,7 @@ public interface WorkOrderTicketFacade {
 
     WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket);
 
-    WorkOrderTicketVO.TicketDetails approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket);
+    void approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket);
 
     WorkOrderTicketVO.TicketDetails doNextStateOfTicket(WorkOrderTicketParam.SimpleTicketNo simpleTicketNo);
 
