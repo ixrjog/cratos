@@ -5,6 +5,7 @@ import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,7 +67,9 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
 
     @Override
     public void record(char[] buf, int off, int len) {
-        SshRecorder.record(auditPath, buf, off, len);
+        if (StringUtils.hasText(auditPath)) {
+            SshRecorder.record(auditPath, buf, off, len);
+        }
     }
 
 }
