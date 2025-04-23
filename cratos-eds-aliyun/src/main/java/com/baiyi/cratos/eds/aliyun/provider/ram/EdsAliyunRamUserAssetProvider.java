@@ -1,9 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider.ram;
 
-import com.aliyuncs.ram.model.v20150501.GetUserResponse;
-import com.aliyuncs.ram.model.v20150501.ListAccessKeysResponse;
-import com.aliyuncs.ram.model.v20150501.ListPoliciesForUserResponse;
-import com.aliyuncs.ram.model.v20150501.ListUsersResponse;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.ram.model.v20150501.*;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -32,6 +30,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
@@ -121,6 +120,16 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                 indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
             }
         } catch (Exception ignored) {
+        }
+        // loginProfile
+        try {
+            GetLoginProfileResponse.LoginProfile loginProfile = aliyunRamUserRepo.getLoginProfile(
+                    instance.getEdsConfigModel()
+                            .getRegionId(), instance.getEdsConfigModel(), entity.getUserName());
+            if (Objects.nonNull(loginProfile)) {
+                indices.add(toEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
+            }
+        } catch (ClientException ignored) {
         }
         indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;

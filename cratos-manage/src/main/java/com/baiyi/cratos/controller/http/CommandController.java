@@ -67,6 +67,13 @@ public class CommandController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Admin do command exec")
+    @PostMapping(value = "/admin/do", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> adminDoCommandExec(@RequestBody @Valid CommandExecParam.DoCommandExec doCommandExec) {
+        commandExecFacade.adminDoCommandExec(doCommandExec);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Pagination query eds instance")
     @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryCommandExecEdsInstancePage(

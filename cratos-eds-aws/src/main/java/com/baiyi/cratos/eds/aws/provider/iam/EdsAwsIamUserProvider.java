@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.aws.provider.iam;
 
 import com.amazonaws.services.identitymanagement.model.AccessKeyMetadata;
 import com.amazonaws.services.identitymanagement.model.AttachedPolicy;
+import com.amazonaws.services.identitymanagement.model.LoginProfile;
 import com.amazonaws.services.identitymanagement.model.User;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
@@ -103,6 +105,15 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
                         .map(AccessKeyMetadata::getAccessKeyId)
                         .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
                 indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+            }
+        } catch (Exception ignored) {
+        }
+        // loginProfile
+        try {
+            LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getEdsConfigModel(),
+                    entity.getUserName());
+            if (Objects.nonNull(loginProfile)) {
+                indices.add(toEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }
         } catch (Exception ignored) {
         }

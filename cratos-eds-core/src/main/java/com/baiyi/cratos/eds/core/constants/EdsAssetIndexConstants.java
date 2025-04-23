@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.constant.Global;
 public interface EdsAssetIndexConstants {
 
     String CLOUD_ACCESS_KEY_IDS = "cloud.access.key.ids";
+    String CLOUD_LOGIN_PROFILE = "cloud.login.profile";
 
     String CLOUD_ACCOUNT_USERNAME = "cloud.account.username";
 
@@ -41,7 +42,7 @@ public interface EdsAssetIndexConstants {
      */
     String USER_AVATAR = "user.avatar";
 
-    String GCP_MEMBER_ROLES ="gcp.member.roles";
+    String GCP_MEMBER_ROLES = "gcp.member.roles";
 
     String HUAWEICLOUD_IAM_POLICIES = "iam.policies";
 

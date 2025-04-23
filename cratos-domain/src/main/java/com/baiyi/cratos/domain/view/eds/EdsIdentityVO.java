@@ -77,6 +77,17 @@ public class EdsIdentityVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class LoginProfile implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 4684246547065388005L;
+        private Boolean enabled;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class LdapIdentityDetails implements Serializable {
         public static final LdapIdentityDetails NO_DATA = LdapIdentityDetails.builder()
                 .build();
@@ -171,6 +182,7 @@ public class EdsIdentityVO {
         private AccountLoginDetails accountLogin;
         private List<String> policies;
         private List<AccessKey> accessKeys;
+        private LoginProfile loginProfile;
     }
 
     @Data

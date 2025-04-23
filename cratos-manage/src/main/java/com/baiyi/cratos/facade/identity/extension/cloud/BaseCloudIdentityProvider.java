@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider.INDEX_VALUE_DIVISION_SYMBOL;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCESS_KEY_IDS;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -153,6 +152,13 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
             if (Objects.isNull(account)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
+            EdsAssetIndex loginProfileIndex = edsAssetIndexService.getByAssetIdAndName(account.getId(),
+                    CLOUD_LOGIN_PROFILE);
+            boolean loginProfileEnabled = Objects.nonNull(loginProfileIndex) && "Enabled".equalsIgnoreCase(
+                    loginProfileIndex.getValue());
+            EdsIdentityVO.LoginProfile loginProfile = EdsIdentityVO.LoginProfile.builder()
+                    .enabled(loginProfileEnabled)
+                    .build();
             return EdsIdentityVO.CloudAccount.builder()
                     .instance(instanceWrapper.wrapToTarget(instance))
                     .user(userWrapper.wrapToTarget(user))
@@ -162,6 +168,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
                     .accountLogin(toAccountLoginDetails(account, username))
                     .policies(getPolicies(account))
                     .accessKeys(getAccessKeys(account))
+                    .loginProfile(loginProfile)
                     .build();
         } catch (Exception ex) {
             throw new CloudIdentityException(ex.getMessage());

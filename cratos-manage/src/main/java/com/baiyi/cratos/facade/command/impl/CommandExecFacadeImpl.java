@@ -221,6 +221,17 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         doCommandExec(commandExec, doCommandExec.getMaxWaitingTime());
     }
 
+    @Override
+    @SetSessionUserToParam
+    @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "10s", lockAtLeastFor = "10s")
+    public void adminDoCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
+        CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());
+        if (Boolean.TRUE.equals(commandExec.getCompleted())) {
+            CommandExecException.runtime("Cannot execute command, Task execution completed.");
+        }
+        doCommandExec(commandExec, doCommandExec.getMaxWaitingTime());
+    }
+
     @SuppressWarnings("unchecked")
     private void doCommandExec(CommandExec commandExec, Long maxWaitingTime) {
         CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
