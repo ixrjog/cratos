@@ -80,6 +80,10 @@ public class EdsIdentityVO {
     public static class LoginProfile implements Serializable {
         @Serial
         private static final long serialVersionUID = 4684246547065388005L;
+        public static final LoginProfile ENABLED = LoginProfile.builder()
+                .enabled(true)
+                .build();
+
         private Boolean enabled;
     }
 

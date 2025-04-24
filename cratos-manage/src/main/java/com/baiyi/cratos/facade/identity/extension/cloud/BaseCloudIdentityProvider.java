@@ -152,13 +152,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
             if (Objects.isNull(account)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
-            EdsAssetIndex loginProfileIndex = edsAssetIndexService.getByAssetIdAndName(account.getId(),
-                    CLOUD_LOGIN_PROFILE);
-            Boolean loginProfileEnabled = Objects.isNull(loginProfileIndex) ? null : "Enabled".equalsIgnoreCase(
-                    loginProfileIndex.getValue());
-            EdsIdentityVO.LoginProfile loginProfile = EdsIdentityVO.LoginProfile.builder()
-                    .enabled(loginProfileEnabled)
-                    .build();
+
             return EdsIdentityVO.CloudAccount.builder()
                     .instance(instanceWrapper.wrapToTarget(instance))
                     .user(userWrapper.wrapToTarget(user))
@@ -168,11 +162,21 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
                     .accountLogin(toAccountLoginDetails(account, username))
                     .policies(getPolicies(account))
                     .accessKeys(getAccessKeys(account))
-                    .loginProfile(loginProfile)
+                    .loginProfile(getLoginProfile(instance, account))
                     .build();
         } catch (Exception ex) {
             throw new CloudIdentityException(ex.getMessage());
         }
+    }
+
+    protected EdsIdentityVO.LoginProfile getLoginProfile(EdsInstance instance, EdsAsset account) {
+        EdsAssetIndex loginProfileIndex = edsAssetIndexService.getByAssetIdAndName(account.getId(),
+                CLOUD_LOGIN_PROFILE);
+        Boolean loginProfileEnabled = Objects.nonNull(loginProfileIndex) && "Enabled".equalsIgnoreCase(
+                loginProfileIndex.getValue());
+        return EdsIdentityVO.LoginProfile.builder()
+                .enabled(loginProfileEnabled)
+                .build();
     }
 
     protected void postImportAccountAsset(EdsInstanceProviderHolder<Config, Account> holder, Account account) {
