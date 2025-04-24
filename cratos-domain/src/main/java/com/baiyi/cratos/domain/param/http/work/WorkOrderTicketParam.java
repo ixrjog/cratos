@@ -51,9 +51,11 @@ public class WorkOrderTicketParam {
         @Schema(description = "我的提交")
         private Boolean mySubmitted;
 
+        private String myUsername;
+
         @Override
         public void setSessionUser(String username) {
-            this.username = username;
+            this.myUsername = username;
         }
     }
 

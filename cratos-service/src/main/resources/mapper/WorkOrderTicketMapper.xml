@@ -46,15 +46,18 @@
         <if test="ticketNo != null and ticketNo != ''">
             and ticket_no = #{ticketNo}
         </if>
+        <if test="username != null and username != ''">
+            and username = #{username}
+        </if>
         <if test="workOrderKey != null and workOrderKey != ''">
             and work_order_id in ( select id from work_order where work_order_key = #{workOrderKey} )
         </if>
         <choose>
             <when test="mySubmitted != null and mySubmitted">
-                and username = #{username}
+                and username = #{myUsername}
             </when>
             <otherwise>
-                and id in ( select ticket_id from work_order_ticket_subscriber where username = #{username}
+                and id in ( select ticket_id from work_order_ticket_subscriber where username = #{myUsername}
                 and valid = true )
             </otherwise>
         </choose>
