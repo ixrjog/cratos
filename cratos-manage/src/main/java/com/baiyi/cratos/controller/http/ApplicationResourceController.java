@@ -3,6 +3,7 @@ package com.baiyi.cratos.controller.http;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
@@ -42,6 +43,14 @@ public class ApplicationResourceController {
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
         return new HttpResult<>(
                 kubernetesDetailsFacade.queryKubernetesDeploymentOptions(queryKubernetesDeploymentOptions));
+    }
+
+    @Operation(summary = "Query kubernetes deployment pod container image version")
+    @PostMapping(value = "/kubernetes/deployment/pod/container/image/version/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<KubernetesContainerVO.ImageVersion> queryApplicationResourceKubernetesDeploymentImageVersion(
+            @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
+        return new HttpResult<>(
+                kubernetesDetailsFacade.queryKubernetesDeploymentImageVersion(queryKubernetesDeploymentImageVersion));
     }
 
 }

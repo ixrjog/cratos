@@ -34,4 +34,13 @@ public class ApplicationKubernetesParam {
         private String namespace;
     }
 
+    @Data
+    @Builder
+    @Schema
+    public static class QueryKubernetesDeploymentImageVersion {
+        private String applicationName;
+        @NotBlank
+        private String image;
+    }
+
 }

@@ -3,8 +3,10 @@ package com.baiyi.cratos.eds.opscloud.service;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
+import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.param.OcApplicationParam;
+import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
 import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,5 +35,8 @@ public interface OpscloudService {
             @RequestHeader("AccessToken") String accessToken,
             @RequestBody OcUserParam.UserBusinessPermissionPageQuery pageQuery);
 
+    @PostExchange("/api/leo/build/image/version/query")
+    HttpResult<OcLeoVO.BuildImage> queryBuildImageVersion(@RequestHeader("AccessToken") String accessToken,
+                                                          @RequestBody OcLeoParam.QueryBuildImageVersion queryBuildImageVersion);
 
 }

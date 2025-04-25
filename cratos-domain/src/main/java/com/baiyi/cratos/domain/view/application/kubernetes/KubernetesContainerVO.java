@@ -34,4 +34,26 @@ public class KubernetesContainerVO {
         private Integer restartCount;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ImageVersion implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -7907030787557723546L;
+
+        public static ImageVersion notFound(String image) {
+            return ImageVersion.builder()
+                    .image(image)
+                    .isExist(false)
+                    .build();
+        }
+
+        @Builder.Default
+        private boolean isExist = true;
+        private String image;
+        private String versionName;
+        private String versionDesc;
+    }
+
 }

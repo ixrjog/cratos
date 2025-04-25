@@ -24,7 +24,8 @@ public class RevokeUserEdsAliMailUserPermissionTicketEntryBuilder {
         return new RevokeUserEdsAliMailUserPermissionTicketEntryBuilder();
     }
 
-    public RevokeUserEdsAliMailUserPermissionTicketEntryBuilder withParam(WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry param) {
+    public RevokeUserEdsAliMailUserPermissionTicketEntryBuilder withParam(
+            WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry param) {
         this.param = param;
         return this;
     }

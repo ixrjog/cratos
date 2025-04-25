@@ -54,9 +54,9 @@ public abstract class BaseMailIdentityProvider<Config extends IEdsConfigModel, A
     }
 
     @Override
-    public EdsIdentityVO.MailAccount getAccount(EdsInstance instance, User user) {
+    public EdsIdentityVO.MailAccount getAccount(User user, EdsInstance instance, EdsAsset account) {
         try {
-            EdsAsset account = queryAccountAsset(instance.getId(), user);
+            //EdsAsset account = queryAccountAsset(instance.getId(), user);
             if (Objects.isNull(account)) {
                 return EdsIdentityVO.MailAccount.NO_ACCOUNT;
             }

@@ -8,6 +8,8 @@ import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudService;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudServiceFactory;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
  * &#064;Date  2025/3/12 13:58
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OcUserRepo {
 
     public static List<OcUserVO.User> listUser(EdsOpscloudConfigModel.Opscloud opscloud) {
@@ -47,6 +50,5 @@ public class OcUserRepo {
         }
         return result;
     }
-
 
 }

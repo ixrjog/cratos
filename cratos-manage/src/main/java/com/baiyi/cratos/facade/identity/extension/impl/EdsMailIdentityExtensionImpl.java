@@ -66,8 +66,8 @@ public class EdsMailIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                     MailIdentityProvider identityProvider = MailIdentityFactory.getProvider(
                             instanceMap.get(asset.getInstanceId())
                                     .getEdsType());
-                    EdsIdentityVO.MailAccount mailAccount = identityProvider.getAccount(
-                            instanceMap.get(asset.getInstanceId()), user);
+                    EdsIdentityVO.MailAccount mailAccount = identityProvider.getAccount(user,
+                            instanceMap.get(asset.getInstanceId()), asset);
                     putAccounts(accounts, mailAccount);
                 });
         return EdsIdentityVO.MailIdentityDetails.builder()

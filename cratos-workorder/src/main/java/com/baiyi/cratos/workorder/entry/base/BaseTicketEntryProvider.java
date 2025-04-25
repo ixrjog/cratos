@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry;
+package com.baiyi.cratos.workorder.entry.base;
 
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrder;
@@ -10,6 +10,8 @@ import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.util.InvokeEntryResult;
 import lombok.RequiredArgsConstructor;

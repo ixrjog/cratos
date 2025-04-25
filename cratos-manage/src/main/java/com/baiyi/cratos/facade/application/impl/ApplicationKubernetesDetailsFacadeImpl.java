@@ -1,21 +1,32 @@
 package com.baiyi.cratos.facade.application.impl;
 
+import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesServiceConverter;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
+import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
+import com.baiyi.cratos.eds.opscloud.repo.OcLeoRepo;
 import com.baiyi.cratos.facade.AccessControlFacade;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +53,9 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final ApplicationService applicationService;
     private final ApplicationWrapper applicationWrapper;
     private final AccessControlFacade accessControlFacade;
+    private final EdsInstanceService edsInstanceService;
+    private final EdsFacade edsFacade;
+    private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -108,6 +122,33 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .network(makeNetwork(param))
                 .build();
         return (KubernetesVO.KubernetesDetails) accessControlFacade.invoke(kubernetesDetails);
+    }
+
+    @Override
+    //@Cacheable(cacheNames = SHORT_TERM, key = "'OC:LEO:BUILD:IMAGE:VERSION:'+ #queryKubernetesDeploymentImageVersion.image", unless = "#result == null")
+    public KubernetesContainerVO.ImageVersion queryKubernetesDeploymentImageVersion(
+            ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
+        List<EdsInstance> opscloudInstances = edsFacade.queryValidEdsInstanceByType(
+                EdsInstanceTypeEnum.OPSCLOUD.name());
+        if (CollectionUtils.isEmpty(opscloudInstances)) {
+            return KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage());
+        }
+        EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(opscloudInstances.getFirst()
+                .getConfigId());
+        OcLeoParam.QueryBuildImageVersion queryParam = OcLeoParam.QueryBuildImageVersion.builder()
+                .image(queryKubernetesDeploymentImageVersion.getImage())
+                .build();
+        HttpResult<OcLeoVO.BuildImage> httpResult = OcLeoRepo.queryBuildImageVersion(opscloud, queryParam);
+        if (httpResult.isSuccess()) {
+            OcLeoVO.BuildImage buildImage = httpResult.getBody();
+            return KubernetesContainerVO.ImageVersion.builder()
+                    .image(buildImage.getImage())
+                    .versionName(buildImage.getVersionName())
+                    .versionDesc(buildImage.getVersionDesc())
+                    .build();
+        } else {
+            return KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage());
+        }
     }
 
 }

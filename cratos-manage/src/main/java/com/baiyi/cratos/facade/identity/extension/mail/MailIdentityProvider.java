@@ -16,7 +16,7 @@ public interface MailIdentityProvider extends EdsAssetTypeOfAnnotate {
 
     EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username, String mail);
 
-    EdsIdentityVO.MailAccount getAccount(EdsInstance instance, User user);
+    EdsIdentityVO.MailAccount getAccount(User user, EdsInstance instance, EdsAsset account);
 
     default String getAccountAssetType() {
         return getAssetType();

@@ -8,6 +8,8 @@ import com.baiyi.cratos.eds.opscloud.service.OpscloudService;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudServiceFactory;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
  * &#064;Date  2024/12/2 11:42
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OcApplicationRepo {
 
     public static List<OcApplicationVO.Application> listApplication(EdsOpscloudConfigModel.Opscloud opscloud) {

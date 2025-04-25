@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import jakarta.annotation.Resource;
@@ -28,6 +29,16 @@ public class ApplicationKubernetesWorkloadFacadeTest extends BaseUnit {
         MessageResponse<KubernetesVO.KubernetesDetails> response = applicationKubernetesWorkloadFacade.queryKubernetesDetails(
                 param);
         System.out.println(response);
+    }
+
+    @Test
+    void test2() {
+        ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion query = ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion.builder()
+                .image("502076313352.dkr.ecr.eu-west-1.amazonaws.com/prod/leo-demo:b15ac794-1")
+                .build();
+        KubernetesContainerVO.ImageVersion version = applicationKubernetesWorkloadFacade.queryKubernetesDeploymentImageVersion(
+                query);
+        System.out.println(version);
     }
 
 }
