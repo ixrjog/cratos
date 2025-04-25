@@ -45,9 +45,9 @@ public class SshSessionServiceImpl implements SshSessionService {
 
     @Override
     public SshSession getBySessionId(@NonNull String sessionId) {
-        SshSession uniqueKey = getByUniqueKey(SshSession.builder()
+        SshSession uniqueKey = SshSession.builder()
                 .sessionId(sessionId)
-                .build());
+                .build();
         return getByUniqueKey(uniqueKey);
     }
 
