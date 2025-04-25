@@ -8,6 +8,7 @@ import com.baiyi.cratos.service.session.SshSessionService;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.Objects;
@@ -80,6 +81,9 @@ public class SimpleSshSessionFacadeImpl implements SimpleSshSessionFacade {
 
     @Override
     public void closeSshSession(String sessionId) {
+        if (!StringUtils.hasText(sessionId)) {
+            return;
+        }
         SshSession sshSession = sshSessionService.getBySessionId(sessionId);
         if (Objects.isNull(sshSession)) {
             return;

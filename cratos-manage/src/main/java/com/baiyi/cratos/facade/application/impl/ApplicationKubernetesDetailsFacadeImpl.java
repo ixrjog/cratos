@@ -7,7 +7,6 @@ import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
@@ -30,11 +29,13 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.SHORT_TERM;
 import static com.baiyi.cratos.domain.view.base.OptionsVO.NO_OPTIONS_AVAILABLE;
 
 /**
@@ -125,30 +126,31 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     }
 
     @Override
-    //@Cacheable(cacheNames = SHORT_TERM, key = "'OC:LEO:BUILD:IMAGE:VERSION:'+ #queryKubernetesDeploymentImageVersion.image", unless = "#result == null")
+    @Cacheable(cacheNames = SHORT_TERM, key = "'OC:LEO:BUILD:IMAGE:VERSION:'+ #queryKubernetesDeploymentImageVersion.image", unless = "#result == null")
     public KubernetesContainerVO.ImageVersion queryKubernetesDeploymentImageVersion(
             ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
-        List<EdsInstance> opscloudInstances = edsFacade.queryValidEdsInstanceByType(
-                EdsInstanceTypeEnum.OPSCLOUD.name());
-        if (CollectionUtils.isEmpty(opscloudInstances)) {
-            return KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage());
-        }
-        EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(opscloudInstances.getFirst()
-                .getConfigId());
-        OcLeoParam.QueryBuildImageVersion queryParam = OcLeoParam.QueryBuildImageVersion.builder()
-                .image(queryKubernetesDeploymentImageVersion.getImage())
-                .build();
-        HttpResult<OcLeoVO.BuildImage> httpResult = OcLeoRepo.queryBuildImageVersion(opscloud, queryParam);
-        if (httpResult.isSuccess()) {
-            OcLeoVO.BuildImage buildImage = httpResult.getBody();
-            return KubernetesContainerVO.ImageVersion.builder()
-                    .image(buildImage.getImage())
-                    .versionName(buildImage.getVersionName())
-                    .versionDesc(buildImage.getVersionDesc())
-                    .build();
-        } else {
-            return KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage());
-        }
+        return edsFacade.queryValidEdsInstanceByType(EdsInstanceTypeEnum.OPSCLOUD.name())
+                .stream()
+                .findFirst()
+                .map(instance -> {
+                    EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
+                            instance.getConfigId());
+                    OcLeoParam.QueryBuildImageVersion queryParam = OcLeoParam.QueryBuildImageVersion.builder()
+                            .image(queryKubernetesDeploymentImageVersion.getImage())
+                            .build();
+                    HttpResult<OcLeoVO.BuildImage> httpResult = OcLeoRepo.queryBuildImageVersion(opscloud, queryParam);
+                    if (httpResult.isSuccess()) {
+                        OcLeoVO.BuildImage buildImage = httpResult.getBody();
+                        return KubernetesContainerVO.ImageVersion.builder()
+                                .image(buildImage.getImage())
+                                .versionName(buildImage.getVersionName())
+                                .versionDesc(buildImage.getVersionDesc())
+                                .build();
+                    }
+                    return KubernetesContainerVO.ImageVersion.notFound(
+                            queryKubernetesDeploymentImageVersion.getImage());
+                })
+                .orElse(KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage()));
     }
 
 }
