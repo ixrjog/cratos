@@ -1,0 +1,76 @@
+package com.baiyi.cratos.eds.gitlab.provider.asset;
+
+import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
+import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
+import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GITLAB_PROJECT_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GITLAB_USER_ID;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2025/4/27 13:46
+ * &#064;Version 1.0
+ */
+@Component
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_PROJECT)
+public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, GitLabEventParam.SystemHook> {
+
+    public EdsGitLabSystemHookAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                            EdsAssetIndexFacade edsAssetIndexFacade,
+                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                            EdsInstanceProviderHolderBuilder holderBuilder) {
+        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler, holderBuilder);
+    }
+
+    @Override
+    protected List<GitLabEventParam.SystemHook> listEntities(
+            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+        throw new EdsQueryEntitiesException("Query not supported.");
+    }
+
+    @Override
+    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                  GitLabEventParam.SystemHook entity) {
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.hashCode())
+                .nameOf(entity.getEvent_name())
+                .kindOf(entity.getEvent_name())
+                .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                                      EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        Optional.ofNullable(entity.getUser_id())
+                .filter(IdentityUtil::hasIdentity)
+                .ifPresent(userId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_USER_ID, userId)));
+        Optional.ofNullable(entity.getProject_id())
+                .filter(IdentityUtil::hasIdentity)
+                .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
+        return indices;
+    }
+
+}

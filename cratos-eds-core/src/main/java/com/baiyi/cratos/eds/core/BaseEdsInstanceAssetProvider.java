@@ -258,7 +258,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         EdsInstanceProviderFactory.register(this);
     }
 
-
     @Override
     public A getAsset(EdsAsset edsAsset) {
         // 用到的时候再重写

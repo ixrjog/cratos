@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.core.holder;
 
 
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
@@ -25,7 +26,7 @@ public class EdsInstanceProviderHolder<Config extends IEdsConfigModel, A> {
     private ExternalDataSourceInstance<Config> instance;
 
     @Schema(description = "Eds provider")
-    private  EdsInstanceAssetProvider<Config, A> provider;
+    private EdsInstanceAssetProvider<Config, A> provider;
 
     @Schema(description = "导入所有资产")
     public void importAssets() {
@@ -33,12 +34,8 @@ public class EdsInstanceProviderHolder<Config extends IEdsConfigModel, A> {
     }
 
     @Schema(description = "导入单个资产")
-    public void importAsset(A asset) {
-        provider.importAsset(instance, asset);
+    public EdsAsset importAsset(A asset) {
+        return provider.importAsset(instance, asset);
     }
-
-//    public void pushAsset(A asset) {
-//        provider.importAsset(instance, asset);
-//    }
 
 }

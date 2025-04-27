@@ -29,9 +29,21 @@ public class GitLabSshKeyRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<SshKey> getSshKeysByUserId(EdsGitLabConfigModel.GitLab gitlab, Long userId) throws GitLabApiException {
+    public static List<SshKey> getSshKeysByUserId(EdsGitLabConfigModel.GitLab gitlab,
+                                                  Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
-            return gitLabApi.getUserApi().getSshKeys(userId);
+            return gitLabApi.getUserApi()
+                    .getSshKeys(userId);
+        } catch (GitLabApiException e) {
+            log.debug(e.getMessage());
+            throw e;
+        }
+    }
+
+    public static SshKey getSshKey(EdsGitLabConfigModel.GitLab gitlab, Long keyId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+            return gitLabApi.getUserApi()
+                    .getSshKey(keyId);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
             throw e;

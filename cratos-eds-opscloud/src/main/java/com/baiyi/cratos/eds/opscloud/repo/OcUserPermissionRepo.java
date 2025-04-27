@@ -54,7 +54,6 @@ public class OcUserPermissionRepo {
                     .getTotalNum()) {
                 break;
             }
-
             param.setPage(++page);
         }
         return result;

@@ -23,6 +23,13 @@ public final class IdentityUtil {
         return id > 0;
     }
 
+    public static boolean hasIdentity(Long id) {
+        if (id == null) {
+            return false;
+        }
+        return id > 0;
+    }
+
     public static HasRun validIdentityRun(Integer id) {
         return (trueHandle) -> {
             if (hasIdentity(id)) {

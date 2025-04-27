@@ -96,4 +96,7 @@ public interface EdsAssetIndexConstants {
     String LDAP_GROUP_DN = "ldap.group.dn";
     String LDAP_GROUP_MEMBERS = "ldap.group.members";
 
+    String GITLAB_USER_ID = "gitlab.user.id";
+    String GITLAB_PROJECT_ID = "gitlab.project.id";
+
 }

@@ -22,7 +22,8 @@ public enum SysTagKeys {
     ENV("Env"),
     NAME("Name"),
     // 标识用户类型为非人员
-    USER_TYPE("UserType")
+    USER_TYPE("UserType"),
+    EVENT("Event")
     ;
 
     private final String key;

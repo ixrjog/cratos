@@ -84,6 +84,7 @@ public enum EdsAssetTypeEnum {
     GITLAB_GROUP("Group", 0),
     GITLAB_USER("User", 0),
     GITLAB_SSHKEY("SSH Key", 0),
+    GITLAB_SYSTEM_HOOK("System Hooks", 0),
     GANDI_DOMAIN("Domain", 0),
 
     GODADDY_DOMAIN("Domain", 0),
