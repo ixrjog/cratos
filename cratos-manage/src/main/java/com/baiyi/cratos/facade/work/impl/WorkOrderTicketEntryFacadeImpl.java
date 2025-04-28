@@ -42,7 +42,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_PERMISSION.name(),addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_PERMISSION.name(), addTicketEntry.getBusinessType());
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 
@@ -54,9 +54,26 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
-    public  void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
+    public void addRevokeUserPermissionTicketEntry(
+            WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.REVOKE_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
+    public void addGitLabProjectPermissionTicketEntry(
+            WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.GITLAB_PROJECT_PERMISSION.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
+    public void addGitLabGroupPermissionTicketEntry(
+            WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.GITLAB_GROUP_PERMISSION.name(), addTicketEntry.getBusinessType());
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 

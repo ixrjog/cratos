@@ -15,6 +15,12 @@ public interface WorkOrderTicketEntryFacade {
 
     void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry);
 
+    void addGitLabProjectPermissionTicketEntry(
+            WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry);
+
+    void addGitLabGroupPermissionTicketEntry(
+            WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry);
+
     void deleteById(int id);
 
     void setValidById(int id);

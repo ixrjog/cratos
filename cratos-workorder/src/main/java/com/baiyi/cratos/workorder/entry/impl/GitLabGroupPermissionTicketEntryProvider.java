@@ -1,6 +1,5 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
-
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -28,27 +27,25 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Member;
 import org.gitlab4j.api.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_SSH_URL;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/4/27 17:46
+ * &#064;Date  2025/4/28 11:22
  * &#064;Version 1.0
  */
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-@WorkOrderKey(key = WorkOrderKeys.GITLAB_PROJECT_PERMISSION)
-public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryProvider<GitLabPermissionModel.Permission, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> {
+@WorkOrderKey(key = WorkOrderKeys.GITLAB_GROUP_PERMISSION)
+public class GitLabGroupPermissionTicketEntryProvider extends BaseTicketEntryProvider<GitLabPermissionModel.Permission, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> {
 
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -57,7 +54,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryP
     private final GitLabProjectFacade gitLabProjectFacade;
     private final EdsAssetService edsAssetService;
 
-    public GitLabProjectPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public GitLabGroupPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                       WorkOrderTicketService workOrderTicketService,
                                                       WorkOrderService workOrderService,
                                                       EdsInstanceService edsInstanceService,
@@ -76,7 +73,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryP
     }
 
     private static final String TABLE_TITLE = """
-            | Instance Name | Project SshURL | Role |
+            | Instance Name | Group | Role |
             | --- | --- | --- |
             """;
 
@@ -104,7 +101,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryP
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 GitLabPermissionModel.Permission projectPermission) throws WorkOrderTicketException {
         EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, ?> holder = (EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, ?>) edsInstanceProviderHolderBuilder.newHolder(
-                entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
+                entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_GROUP.name());
 
         EdsGitLabConfigModel.GitLab gitLab = holder.getInstance()
                 .getEdsConfigModel();
@@ -123,39 +120,39 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryP
         org.gitlab4j.api.models.AccessLevel accessLevel = org.gitlab4j.api.models.AccessLevel.forValue(
                 gitlabAccessLevel.getAccessValue());
 
-        EdsAsset gitLabProjectAsset = edsAssetService.getById(entry.getBusinessId());
-        if (Objects.isNull(gitLabProjectAsset)) {
-            WorkOrderTicketException.runtime("GitLab project asset not found: id={}", entry.getBusinessId());
+        EdsAsset gitLabGroupAsset = edsAssetService.getById(entry.getBusinessId());
+        if (Objects.isNull(gitLabGroupAsset)) {
+            WorkOrderTicketException.runtime("GitLab group asset not found: id={}", entry.getBusinessId());
         }
-        final Long gitLabProjectId = Long.valueOf(gitLabProjectAsset.getAssetId());
-        try {
-            List<Member> projectMembers = gitLabProjectFacade.getProjectMembers(gitLab, gitLabProjectId);
-            Optional<Member> optionalProjectMember = projectMembers.stream()
-                    .filter(e -> e.getId()
-                            .equals(gitLabUser.getId()))
-                    .findFirst();
-            if (optionalProjectMember.isPresent()) {
-                if (accessLevel.equals(optionalProjectMember.get()
-                        .getAccessLevel())) {
-                    // 角色一致
-                    return;
-                }
-                log.debug("Work order update user gitLab project member: userId={}, projectId={}, accessLevel={}",
-                        gitLabUserId, gitLabProjectId, accessLevel.name());
-                gitLabProjectFacade.updateProjectMember(gitLab, gitLabProjectId, gitLabUserId, accessLevel);
-            } else {
-                log.info("Work order create user gitLab project member: userId={}, projectId={}, accessLevel={}",
-                        gitLabUserId, gitLabProjectId, accessLevel.name());
-                gitLabProjectFacade.addProjectMember(gitLab, gitLabProjectId, gitLabUserId, accessLevel);
-            }
-        } catch (GitLabApiException gitLabApiException) {
-            if (gitLabApiException.getMessage()
-                    .contains("is not included in the list")) {
-                throw new WorkOrderTicketException(
-                        "GitLab added project member error: does not support authorizing {} roles", accessLevel.name());
-            }
-            throw new WorkOrderTicketException("GitLab API err: {}", gitLabApiException.getMessage());
-        }
+        final Long gitLabGroupId = Long.valueOf(gitLabGroupAsset.getAssetId());
+//        try {
+//            List<Member> projectMembers = gitLabProjectFacade.getProjectMembers(gitLab, gitLabProjectId);
+//            Optional<Member> optionalProjectMember = projectMembers.stream()
+//                    .filter(e -> e.getId()
+//                            .equals(gitLabUser.getId()))
+//                    .findFirst();
+//            if (optionalProjectMember.isPresent()) {
+//                if (accessLevel.equals(optionalProjectMember.get()
+//                        .getAccessLevel())) {
+//                    // 角色一致
+//                    return;
+//                }
+//                log.debug("Work order update user gitLab project member: userId={}, projectId={}, accessLevel={}",
+//                        gitLabUserId, gitLabProjectId, accessLevel.name());
+//                gitLabProjectFacade.updateProjectMember(gitLab, gitLabProjectId, gitLabUserId, accessLevel);
+//            } else {
+//                log.info("Work order create user gitLab project member: userId={}, projectId={}, accessLevel={}",
+//                        gitLabUserId, gitLabProjectId, accessLevel.name());
+//                gitLabProjectFacade.addProjectMember(gitLab, gitLabProjectId, gitLabUserId, accessLevel);
+//            }
+//        } catch (GitLabApiException gitLabApiException) {
+//            if (gitLabApiException.getMessage()
+//                    .contains("is not included in the list")) {
+//                throw new WorkOrderTicketException(
+//                        "GitLab added project member error: does not support authorizing {} roles", accessLevel.name());
+//            }
+//            throw new WorkOrderTicketException("GitLab API err: {}", gitLabApiException.getMessage());
+//        }
     }
 
     private User getOrCreateUser(EdsGitLabConfigModel.GitLab gitLab, String username) throws WorkOrderTicketException {
@@ -200,7 +197,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseTicketEntryP
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(projectPermission.getRole())
-                .desc("Project permission")
+                .desc("Group permission")
                 .build();
     }
 

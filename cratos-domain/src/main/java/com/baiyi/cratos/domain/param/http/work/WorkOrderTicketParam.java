@@ -239,6 +239,19 @@ public class WorkOrderTicketParam {
         private GitLabPermissionModel.Permission detail;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddGitLabGroupPermissionTicketEntry extends TicketEntry implements HasEntryDetail<GitLabPermissionModel.Permission>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -5401570571721716981L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private GitLabPermissionModel.Permission detail;
+    }
+
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor

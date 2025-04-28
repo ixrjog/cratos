@@ -42,16 +42,16 @@ public class WorkOrderTicketEntryController {
     @Operation(summary = "Add gitLab project permission ticket entry")
     @PostMapping(value = "/gitlab/project/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addGitLabProjectPermissionTicketEntry(
-            @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
-        ticketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+            @RequestBody @Valid WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addGitLabProjectPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Add gitLab group permission ticket entry")
     @PostMapping(value = "/gitlab/group/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addGitLabGroupPermissionTicketEntry(
-            @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
-        ticketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+            @RequestBody @Valid WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addGitLabGroupPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
 
