@@ -15,6 +15,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.util.InvokeEntryResult;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
@@ -25,6 +26,7 @@ import java.util.List;
  * &#064;Date  2025/3/19 13:58
  * &#064;Version 1.0
  */
+@Slf4j
 @RequiredArgsConstructor
 public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> implements TicketEntryProvider<Detail, EntryParam>, InitializingBean {
 
@@ -47,11 +49,13 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
     public void processEntry(WorkOrderTicketEntry entry) {
         Detail detail = loadAs(entry);
         WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
-        processEntry(ticket, entry, detail);
         try {
             processEntry(ticket, entry, detail);
             InvokeEntryResult.success(entry);
         } catch (Exception e) {
+            if (!(e instanceof WorkOrderTicketException)) {
+                log.debug("Error processing ticket entry: {}", e.getMessage());
+            }
             InvokeEntryResult.failed(entry, e.getMessage());
         }
         saveEntry(entry);

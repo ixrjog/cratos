@@ -36,7 +36,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
     protected final EdsInstanceService edsInstanceService;
     protected final EdsAssetIndexService edsAssetIndexService;
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-    protected final GitLabUserFacade gitLabUserFacade;
+    private final GitLabUserFacade gitLabUserFacade;
     protected final GitLabProjectFacade gitLabProjectFacade;
     protected final GitLabGroupFacade gitLabGroupFacade;
     protected final EdsAssetService edsAssetService;
