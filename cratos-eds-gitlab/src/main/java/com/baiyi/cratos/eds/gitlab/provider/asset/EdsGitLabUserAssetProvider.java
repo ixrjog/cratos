@@ -69,7 +69,6 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                                                       EdsAsset edsAsset, User entity) {
         if (ValidationUtils.isURL(entity.getAvatarUrl())) {
             return List.of(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatarUrl()));
-
         }
         return List.of();
     }

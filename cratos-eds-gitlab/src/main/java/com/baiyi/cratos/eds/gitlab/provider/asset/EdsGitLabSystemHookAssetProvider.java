@@ -33,7 +33,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GITLAB_
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_PROJECT)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_SYSTEM_HOOK)
 public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, GitLabEventParam.SystemHook> {
 
     public EdsGitLabSystemHookAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
@@ -55,8 +55,8 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                   GitLabEventParam.SystemHook entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.hashCode())
-                .nameOf(entity.getEvent_name())
-                .kindOf(entity.getEvent_name())
+                .nameOf(entity.getEventName())
+                .kindOf(entity.getEventName())
                 .build();
     }
 
@@ -64,10 +64,10 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                                       EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        Optional.ofNullable(entity.getUser_id())
+        Optional.ofNullable(entity.getUserId())
                 .filter(IdentityUtil::hasIdentity)
                 .ifPresent(userId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_USER_ID, userId)));
-        Optional.ofNullable(entity.getProject_id())
+        Optional.ofNullable(entity.getProjectId())
                 .filter(IdentityUtil::hasIdentity)
                 .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
         return indices;

@@ -26,7 +26,7 @@ public class GitLabFacadeImpl implements GitLabFacade {
     private final EdsGitLabInstanceManager edsGitLabInstanceManager;
 
     public void consumeEvent(GitLabEventParam.SystemHook systemHook, String hookToken) {
-        if (StringUtils.isAnyBlank(systemHook.getEvent_name(), hookToken)) {
+        if (StringUtils.isAnyBlank(systemHook.getEventName(), hookToken)) {
             log.debug("Invalid event: missing event name or hook token.");
             return;
         }
@@ -35,11 +35,11 @@ public class GitLabFacadeImpl implements GitLabFacade {
             log.debug("No matching instance found for the provided hook token.");
             return;
         }
-        GitLabEventConsumer gitLabEventConsumer = GitLabEventConsumerFactory.getByEventName(systemHook.getEvent_name());
+        GitLabEventConsumer gitLabEventConsumer = GitLabEventConsumerFactory.getByEventName(systemHook.getEventName());
         if (Objects.nonNull(gitLabEventConsumer)) {
             gitLabEventConsumer.consumeEventV4(edsInstance, systemHook);
         } else {
-            log.debug("No consumer found for event: {}", systemHook.getEvent_name());
+            log.debug("No consumer found for event: {}", systemHook.getEventName());
         }
     }
 

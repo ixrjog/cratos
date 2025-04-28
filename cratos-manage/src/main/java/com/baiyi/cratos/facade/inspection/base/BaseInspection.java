@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.inspection.base;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

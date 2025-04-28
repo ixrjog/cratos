@@ -28,15 +28,15 @@ public class GitLabProjectRepo {
     /**
      * 查询项目中所有成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param projectId
      * @param itemsPerPage 分页查询长度
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitlab, Long projectId,
+    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
                                                      int itemsPerPage) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getProjectApi()
                     .getMembers(projectId, itemsPerPage);
             return memberPager.all();
@@ -49,14 +49,14 @@ public class GitLabProjectRepo {
     /**
      * 查询项目中所有成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param projectId
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitlab,
+    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitLab,
                                                      Long projectId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getProjectApi()
                     .getMembers(projectId, ITEMS_PER_PAGE);
             return memberPager.all();
@@ -69,15 +69,15 @@ public class GitLabProjectRepo {
     /**
      * 修改项目成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param projectId
      * @param userId
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void updateMember(EdsGitLabConfigModel.GitLab gitlab, Long projectId, Long userId,
+    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
                                     AccessLevel accessLevel) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getProjectApi()
                     .updateMember(projectId, userId, accessLevel);
         } catch (GitLabApiException e) {
@@ -89,15 +89,15 @@ public class GitLabProjectRepo {
     /**
      * 新增项目成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param projectId
      * @param userId
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void addMember(EdsGitLabConfigModel.GitLab gitlab, Long projectId, Long userId,
+    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
                                  AccessLevel accessLevel) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getProjectApi()
                     .addMember(projectId, userId, accessLevel);
         } catch (GitLabApiException e) {
@@ -109,12 +109,12 @@ public class GitLabProjectRepo {
     /**
      * 查询GitLab实例中所有项目
      *
-     * @param gitlab
+     * @param gitLab
      * @return
      * @throws GitLabApiException
      */
-    public static List<Project> getProjects(EdsGitLabConfigModel.GitLab gitlab) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<Project> getProjects(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getProjectApi()
                     .getProjects();
         } catch (GitLabApiException e) {
@@ -123,8 +123,8 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Project getProject(EdsGitLabConfigModel.GitLab gitlab, Long projectId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static Project getProject(EdsGitLabConfigModel.GitLab gitLab, Long projectId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getProjectApi()
                     .getProject(projectId);
         } catch (GitLabApiException e) {
@@ -133,9 +133,9 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static List<Tag> getTagsByProjectId(EdsGitLabConfigModel.GitLab gitlab,
+    public static List<Tag> getTagsByProjectId(EdsGitLabConfigModel.GitLab gitLab,
                                                Long projectId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getTagsApi()
                     .getTags(projectId);
         } catch (GitLabApiException e) {
@@ -144,9 +144,9 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Optional<Tag> getTagByProjectIdAndTagName(EdsGitLabConfigModel.GitLab gitlab, Long projectId,
+    public static Optional<Tag> getTagByProjectIdAndTagName(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
                                                             String tagName) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getTagsApi()
                     .getOptionalTag(projectId, tagName);
         } catch (GitLabApiException e) {
@@ -155,9 +155,9 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static List<Branch> getBranchesByProjectId(EdsGitLabConfigModel.GitLab gitlab,
+    public static List<Branch> getBranchesByProjectId(EdsGitLabConfigModel.GitLab gitLab,
                                                       Long projectId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
                     .getBranches(projectId);
         } catch (GitLabApiException e) {
@@ -166,9 +166,9 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Optional<Branch> getBranchByProjectIdAndBranchName(EdsGitLabConfigModel.GitLab gitlab, Long projectId,
+    public static Optional<Branch> getBranchByProjectIdAndBranchName(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
                                                                      String branchName) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
                     .getOptionalBranch(projectId, branchName);
         } catch (GitLabApiException e) {
@@ -177,13 +177,23 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Branch createBranch(EdsGitLabConfigModel.GitLab gitlab, Long projectId, String branchName,
+    public static Branch createBranch(EdsGitLabConfigModel.GitLab gitLab, Long projectId, String branchName,
                                       String ref) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
                     .createBranch(projectId, branchName, ref);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
+            throw e;
+        }
+    }
+
+    public static List<Member> getMembersWithProjectId(EdsGitLabConfigModel.GitLab gitLab, Long projectId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
+            Pager<Member> memberPager = gitLabApi.getProjectApi().getMembers(projectId, ITEMS_PER_PAGE);
+            return memberPager.all();
+        } catch (GitLabApiException e) {
+            log.error(e.getMessage());
             throw e;
         }
     }

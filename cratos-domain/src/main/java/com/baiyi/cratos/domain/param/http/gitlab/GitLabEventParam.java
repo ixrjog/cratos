@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.param.http.gitlab;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,30 +28,40 @@ public class GitLabEventParam {
     @Schema
     public static class SystemHook {
         private final String ver = "1.0.0";
-        private String object_kind;
+        @JsonProperty("object_kind")
+        private String objectKind;
         private Long id;
-        private String event_name;
+        @JsonProperty("event_name")
+        private String eventName;
         private String name;
         private String before;
         private String after;
         private String ref;
         private List<String> refs;
-        // @JsonProperty("checkout_sha")
-        private String checkout_sha;
-        private Long user_id;
+        @JsonProperty("checkout_sha")
+        private String checkoutSha;
+        @JsonProperty("user_id")
+        private Long userId;
         private String user_name; // 显示名
         private String username; // 显示名
-        private String user_username; // 登录名
-        private String user_email;
-        private String user_avatar;
-        private Long group_id;
-        private Long project_id;
+        @JsonProperty("user_username")
+        private String userUsername; // 登录名
+        @JsonProperty("user_email")
+        private String userEmail;
+        @JsonProperty("user_avatar")
+        private String userAvatar;
+        @JsonProperty("group_id")
+        private Long groupId;
+        @JsonProperty("project_id")
+        private Long projectId;
         private Project project;
         private Repository repository;
         private List<Commits> commits;
-        private int total_commits_count;
+        @JsonProperty("total_commits_count")
+        private int totalCommitsCount;
         private String key;
-        private ObjectAttributes object_attributes;
+        @JsonProperty("object_attributes")
+        private ObjectAttributes objectAttributes;
     }
 
     @Builder

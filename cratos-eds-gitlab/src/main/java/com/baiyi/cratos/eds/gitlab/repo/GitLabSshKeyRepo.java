@@ -24,14 +24,14 @@ public class GitLabSshKeyRepo {
     /**
      * 查询用户所有SshKey
      *
-     * @param gitlab
+     * @param gitLab
      * @param userId
      * @return
      * @throws GitLabApiException
      */
-    public static List<SshKey> getSshKeysByUserId(EdsGitLabConfigModel.GitLab gitlab,
+    public static List<SshKey> getSshKeysByUserId(EdsGitLabConfigModel.GitLab gitLab,
                                                   Long userId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getSshKeys(userId);
         } catch (GitLabApiException e) {
@@ -40,8 +40,8 @@ public class GitLabSshKeyRepo {
         }
     }
 
-    public static SshKey getSshKey(EdsGitLabConfigModel.GitLab gitlab, Long keyId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static SshKey getSshKey(EdsGitLabConfigModel.GitLab gitLab, Long keyId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getSshKey(keyId);
         } catch (GitLabApiException e) {

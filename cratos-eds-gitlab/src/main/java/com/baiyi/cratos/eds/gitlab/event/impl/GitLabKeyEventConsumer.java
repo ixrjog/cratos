@@ -51,7 +51,7 @@ public class GitLabKeyEventConsumer extends BaseGitLabEventConsumer<SshKey> {
             return;
         }
         Long keyId = systemHook.getId();
-        if (GitLabEventName.KEY_DESTROY.equals(GitLabEventName.valueOf(systemHook.getEvent_name()))) {
+        if (GitLabEventName.KEY_DESTROY.equals(GitLabEventName.valueOf(systemHook.getEventName()))) {
             List<EdsAsset> keyAssets = edsAssetService.queryInstanceAssetsById(instance.getId(), getAssetType(),
                     String.valueOf(keyId));
             if (!CollectionUtils.isEmpty(keyAssets)) {

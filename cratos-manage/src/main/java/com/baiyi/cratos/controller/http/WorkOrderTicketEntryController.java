@@ -39,6 +39,22 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add gitLab project permission ticket entry")
+    @PostMapping(value = "/gitlab/project/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addGitLabProjectPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add gitLab group permission ticket entry")
+    @PostMapping(value = "/gitlab/group/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addGitLabGroupPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addComputerPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add revoke user permission ticket entry")
     @PostMapping(value = "/user/revoke/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addRevokeUserPermissionTicketEntry(

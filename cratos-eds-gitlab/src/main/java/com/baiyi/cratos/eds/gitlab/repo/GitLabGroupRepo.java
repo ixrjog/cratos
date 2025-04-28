@@ -30,13 +30,13 @@ public class GitLabGroupRepo {
     /**
      * 查询群组中所有成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param groupId
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByGroupId(EdsGitLabConfigModel.GitLab gitlab, Long groupId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<Member> getMembersByGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getGroupApi().getMembers(groupId, ITEMS_PER_PAGE);
             return memberPager.all();
         } catch (GitLabApiException e) {
@@ -48,12 +48,12 @@ public class GitLabGroupRepo {
     /**
      * 查询群组中所有项目
      *
-     * @param gitlab
+     * @param gitLab
      * @return
      * @throws GitLabApiException
      */
-    public static List<Project> getProjectsByGroupId(EdsGitLabConfigModel.GitLab gitlab, Long groupId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<Project> getProjectsByGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Project> projectPager = gitLabApi.getGroupApi().getProjects(groupId, ITEMS_PER_PAGE);
             return projectPager.all();
         } catch (GitLabApiException e) {
@@ -65,14 +65,14 @@ public class GitLabGroupRepo {
     /**
      * 修改群组成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param groupId
      * @param userId
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void updateMember(EdsGitLabConfigModel.GitLab gitlab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getGroupApi().updateMember(groupId, userId, accessLevel);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
@@ -83,14 +83,14 @@ public class GitLabGroupRepo {
     /**
      * 新增群组成员
      *
-     * @param gitlab
+     * @param gitLab
      * @param groupId
      * @param userId
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void addMember(EdsGitLabConfigModel.GitLab gitlab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getGroupApi().addMember(groupId, userId, accessLevel);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
@@ -101,12 +101,12 @@ public class GitLabGroupRepo {
     /**
      * 查询GitLab实例中所有群组
      *
-     * @param gitlab
+     * @param gitLab
      * @return
      * @throws GitLabApiException
      */
-    public static List<Group> getGroups(EdsGitLabConfigModel.GitLab gitlab) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<Group> getGroups(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getGroupApi().getGroups();
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());

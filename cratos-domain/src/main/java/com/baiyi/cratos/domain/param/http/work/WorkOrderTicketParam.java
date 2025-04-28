@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.content.ApplicationElasticScalingEntryContent;
@@ -50,7 +51,6 @@ public class WorkOrderTicketParam {
         private String username;
         @Schema(description = "我的提交")
         private Boolean mySubmitted;
-
         private String myUsername;
 
         @Override
@@ -224,6 +224,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = 8822817329834870519L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private EdsAssetVO.Asset detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddGitLabProjectPermissionTicketEntry extends TicketEntry implements HasEntryDetail<GitLabPermissionModel.Permission>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 3955830707586605830L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private GitLabPermissionModel.Permission detail;
     }
 
     @Data

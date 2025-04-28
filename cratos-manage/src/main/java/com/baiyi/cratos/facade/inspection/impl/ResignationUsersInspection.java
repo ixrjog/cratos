@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.UserExtFacade;

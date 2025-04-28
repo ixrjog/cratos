@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;

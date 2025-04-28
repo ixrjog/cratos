@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

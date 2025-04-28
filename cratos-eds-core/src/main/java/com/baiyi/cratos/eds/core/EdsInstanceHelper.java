@@ -2,18 +2,24 @@ package com.baiyi.cratos.eds.core;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -30,6 +36,8 @@ public class EdsInstanceHelper {
 
     private final EdsInstanceService edsInstanceService;
     private final TagService tagService;
+    private final BusinessTagService businessTagService;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public List<EdsInstance> queryInstance(EdsInstanceTypeEnum[] instanceTypes, String tag) {
         return Arrays.stream(instanceTypes)
@@ -58,6 +66,36 @@ public class EdsInstanceHelper {
     private List<EdsInstance> queryInstance(EdsInstanceParam.InstancePageQuery pageQuery) {
         DataTable<EdsInstance> table = edsInstanceService.queryEdsInstancePage(pageQuery.toParam());
         return table.getData();
+    }
+
+    public List<EdsInstance> queryValidEdsInstance(EdsInstanceTypeEnum edsInstanceTypeEnum, String tagKey) {
+        List<EdsInstance> edsInstanceList = edsInstanceService.queryValidEdsInstanceByType(edsInstanceTypeEnum.name());
+        if (CollectionUtils.isEmpty(edsInstanceList)) {
+            return Collections.emptyList();
+        }
+        Tag uniqueKey = Tag.builder()
+                .tagKey(tagKey)
+                .build();
+        Tag tag = tagService.getByUniqueKey(uniqueKey);
+        if (tag == null) {
+            return Collections.emptyList();
+        }
+        return edsInstanceList.stream()
+                .filter(e -> {
+                    BusinessTag businessTagUniqueKey = BusinessTag.builder()
+                            .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                            .businessId(e.getId())
+                            .tagId(tag.getId())
+                            .build();
+                    return businessTagService.getByUniqueKey(businessTagUniqueKey) != null;
+                })
+                .toList();
+    }
+
+    public List<? extends EdsInstanceProviderHolder<?, ?>> buildHolder(List<EdsInstance> edsInstanceList, String assetType) {
+        return edsInstanceList.stream()
+                .map(e -> holderBuilder.newHolder(e.getId(), assetType))
+                .toList();
     }
 
 }

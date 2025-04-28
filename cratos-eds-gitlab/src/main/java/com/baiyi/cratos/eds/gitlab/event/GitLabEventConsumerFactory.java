@@ -1,5 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.event;
 
+import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -22,7 +24,15 @@ public class GitLabEventConsumerFactory {
     public static void register(GitLabEventConsumer bean) {
         for (String eventName : bean.getEventNames()) {
             CONTEXT.put(eventName, bean);
-            log.debug("GitLabEventConsumeFactory Registered: eventName={}, beanName={}", eventName, bean.getClass().getSimpleName());
+            log.debug("GitLabEventConsumeFactory Registered: eventName={}, beanName={}", eventName, bean.getClass()
+                    .getSimpleName());
+        }
+    }
+
+    public static void consumeEventV4(String eventName, EdsInstance instance, GitLabEventParam.SystemHook systemHook) {
+        if (CONTEXT.containsKey(eventName)) {
+            CONTEXT.get(eventName)
+                    .consumeEventV4(instance, systemHook);
         }
     }
 

@@ -40,8 +40,6 @@ public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer,
      */
     protected abstract GitLabEventName[] getEventNameList();
 
-    // protected final ThreadLocal<GitlabEventContext> eventContext = ThreadLocal.withInitial(GitlabEventContext::new);
-
     @Override
     public List<String> getEventNames() {
         return Arrays.stream(getEventNameList())

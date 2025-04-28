@@ -26,13 +26,13 @@ public class GitLabUserRepo {
     /**
      * 按email或username查询用户
      *
-     * @param gitlab
+     * @param gitLab
      * @param emailOrUsername
      * @return
      * @throws GitLabApiException
      */
-    public static List<User> findUsers(EdsGitLabConfigModel.GitLab gitlab, String emailOrUsername) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<User> findUsers(EdsGitLabConfigModel.GitLab gitLab, String emailOrUsername) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .findUsers(emailOrUsername);
         } catch (GitLabApiException e) {
@@ -44,13 +44,13 @@ public class GitLabUserRepo {
     /**
      * 查询用户
      *
-     * @param gitlab
+     * @param gitLab
      * @param userId
      * @return
      * @throws GitLabApiException
      */
-    public static User getUser(EdsGitLabConfigModel.GitLab gitlab, Long userId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static User getUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getUser(userId);
         } catch (GitLabApiException e) {
@@ -62,12 +62,12 @@ public class GitLabUserRepo {
     /**
      * 查询GitLab实例中所有用户
      *
-     * @param gitlab
+     * @param gitLab
      * @return
      * @throws GitLabApiException
      */
-    public static List<User> getUsers(EdsGitLabConfigModel.GitLab gitlab) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<User> getUsers(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getUsers();
         } catch (GitLabApiException e) {
@@ -76,8 +76,8 @@ public class GitLabUserRepo {
         }
     }
 
-    public static List<Membership> getUserMemberships(EdsGitLabConfigModel.GitLab gitlab, Long userId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static List<Membership> getUserMemberships(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getMemberships(userId);
         } catch (GitLabApiException e) {
@@ -89,13 +89,13 @@ public class GitLabUserRepo {
     /**
      * 设置用户头像
      *
-     * @param gitlab
+     * @param gitLab
      * @param userId
      * @param avatarFile
      * @throws GitLabApiException
      */
-    public static void updateUser(EdsGitLabConfigModel.GitLab gitlab, Long userId, File avatarFile) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static void updateUser(EdsGitLabConfigModel.GitLab gitLab, Long userId, File avatarFile) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .setUserAvatar(userId, avatarFile);
         } catch (GitLabApiException e) {
@@ -107,12 +107,12 @@ public class GitLabUserRepo {
     /**
      * 锁定用户
      *
-     * @param gitlab
+     * @param gitLab
      * @param userId
      * @throws GitLabApiException
      */
-    public static void blockUser(EdsGitLabConfigModel.GitLab gitlab, Long userId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static void blockUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .blockUser(userId);
         } catch (GitLabApiException e) {
@@ -124,12 +124,12 @@ public class GitLabUserRepo {
     /**
      * 解锁用户
      *
-     * @param gitlab
+     * @param gitLab
      * @param userId
      * @throws GitLabApiException
      */
-    public static void unblockUser(EdsGitLabConfigModel.GitLab gitlab, Long userId) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static void unblockUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .unblockUser(userId);
         } catch (GitLabApiException e) {
@@ -138,8 +138,8 @@ public class GitLabUserRepo {
         }
     }
 
-    public static User createUser(EdsGitLabConfigModel.GitLab gitlab, User user, String password) throws GitLabApiException {
-        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
+    public static User createUser(EdsGitLabConfigModel.GitLab gitLab, User user, String password) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .createUser(user, password, false);
         } catch (GitLabApiException e) {
