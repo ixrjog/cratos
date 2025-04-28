@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
@@ -20,6 +21,8 @@ import org.gitlab4j.api.models.Group;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WEB_URL;
 
 /**
  * @Author baiyi
@@ -52,10 +55,17 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     @Override
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Group entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
-                .nameOf(entity.getName())
+                .nameOf(entity.getFullName())
+                .assetKeyOf(entity.getFullPath())
                 .createdTimeOf(entity.getCreatedAt())
                 .descriptionOf(entity.getDescription())
                 .build();
+    }
+
+    @Override
+    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                                      EdsAsset edsAsset, Group entity) {
+        return List.of(toEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
     }
 
 }

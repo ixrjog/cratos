@@ -114,4 +114,14 @@ public class GitLabGroupRepo {
         }
     }
 
+    public static List<Member> getMembersWithGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
+            Pager<Member> memberPager = gitLabApi.getGroupApi().getMembers(groupId, ITEMS_PER_PAGE);
+            return memberPager.all();
+        } catch (GitLabApiException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
+
 }
