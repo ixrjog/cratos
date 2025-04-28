@@ -70,6 +70,9 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();
         Deployment deployment = kubernetesDeploymentRepo.get(kubernetes, namespace, resource.getName());
+        if (Objects.isNull(deployment)) {
+            return null;
+        }
         Map<String, String> labels = deployment.getMetadata()
                 .getLabels();
         List<Pod> pods = labels.containsKey("group") ? kubernetesPodRepo.list(kubernetes, namespace,
