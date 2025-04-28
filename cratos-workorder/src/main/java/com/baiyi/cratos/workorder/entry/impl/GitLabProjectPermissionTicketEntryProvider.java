@@ -94,9 +94,8 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
                 entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
         EdsGitLabConfigModel.GitLab gitLab = holder.getInstance()
                 .getEdsConfigModel();
-        String username = workOrderTicket.getUsername();
         String role = projectPermission.getRole();
-        org.gitlab4j.api.models.User gitLabUser = getOrCreateUser(gitLab, username);
+        org.gitlab4j.api.models.User gitLabUser = getOrCreateUser(gitLab, workOrderTicket.getUsername());
         Long gitLabUserId = gitLabUser.getId();
         GitLabAccessLevelConstants gitlabAccessLevel = Arrays.stream(GitLabAccessLevelConstants.values())
                 .filter(e -> e.getRole()

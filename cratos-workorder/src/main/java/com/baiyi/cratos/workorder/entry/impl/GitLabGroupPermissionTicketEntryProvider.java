@@ -98,9 +98,8 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
                 entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_GROUP.name());
         EdsGitLabConfigModel.GitLab gitLab = holder.getInstance()
                 .getEdsConfigModel();
-        String username = workOrderTicket.getUsername();
         String role = projectPermission.getRole();
-        org.gitlab4j.api.models.User gitLabUser = getOrCreateUser(gitLab, username);
+        org.gitlab4j.api.models.User gitLabUser = getOrCreateUser(gitLab, workOrderTicket.getUsername());
         Long gitLabUserId = gitLabUser.getId();
         GitLabAccessLevelConstants gitlabAccessLevel = Arrays.stream(GitLabAccessLevelConstants.values())
                 .filter(e -> e.getRole()
@@ -110,7 +109,6 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
                         () -> new WorkOrderTicketException("The GitLab role name applied for is incorrect: role={}",
                                 role));
         AccessLevel accessLevel = AccessLevel.forValue(gitlabAccessLevel.getAccessValue());
-
         EdsAsset gitLabGroupAsset = edsAssetService.getById(entry.getBusinessId());
         if (Objects.isNull(gitLabGroupAsset)) {
             WorkOrderTicketException.runtime("GitLab group asset not found: id={}", entry.getBusinessId());
