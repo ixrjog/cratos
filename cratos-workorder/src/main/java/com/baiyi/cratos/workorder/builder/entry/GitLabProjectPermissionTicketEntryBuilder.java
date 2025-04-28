@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class GitLabProjectPermissionTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry param;
-
     private EdsAssetIndex projectGitSshUrl;
 
     public static GitLabProjectPermissionTicketEntryBuilder newBuilder() {
@@ -36,14 +36,15 @@ public class GitLabProjectPermissionTicketEntryBuilder {
 
     public WorkOrderTicketEntry buildEntry() {
         String gitSshUrl = projectGitSshUrl.getValue();
+        EdsAssetVO.Asset projectAsset = param.getDetail()
+                .getTarget();
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(gitSshUrl)
                 .displayName(gitSshUrl)
-                .instanceId(param.getDetail().getTarget().getInstanceId())
+                .instanceId(projectAsset.getInstanceId())
                 .businessType(param.getBusinessType())
-                .businessId(param.getDetail().getTarget()
-                        .getBusinessId())
+                .businessId(projectAsset.getBusinessId())
                 .completed(false)
                 .entryKey(gitSshUrl)
                 .valid(true)

@@ -1,8 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.util.StringFormatter;
-import com.baiyi.cratos.domain.annotation.BusinessType;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -11,6 +9,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabGroupFacade;
+import com.baiyi.cratos.eds.gitlab.facade.GitLabProjectFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabUserFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -19,8 +18,8 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
-import com.baiyi.cratos.workorder.builder.entry.GitLabProjectPermissionTicketEntryBuilder;
-import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.builder.entry.GitLabGroupPermissionTicketEntryBuilder;
+import com.baiyi.cratos.workorder.entry.base.BaseGitLabPermissionTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.GitLabAccessLevelConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.AccessLevel;
 import org.gitlab4j.api.models.Member;
-import org.gitlab4j.api.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -37,7 +35,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_SSH_URL;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WEB_URL;
 
 /**
@@ -47,16 +44,15 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WE
  */
 @Slf4j
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.GITLAB_GROUP_PERMISSION)
-public class GitLabGroupPermissionTicketEntryProvider extends BaseTicketEntryProvider<GitLabPermissionModel.Permission, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> {
+public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissionTicketEntryProvider<WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> {
 
-    private final EdsInstanceService edsInstanceService;
-    private final EdsAssetIndexService edsAssetIndexService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-    private final GitLabUserFacade gitLabUserFacade;
-    private final GitLabGroupFacade gitLabGroupFacade;
-    private final EdsAssetService edsAssetService;
+    private static final String TABLE_TITLE = """
+            | Instance Name | Group Name | Group WebURL | Role |
+            | --- | --- | --- | --- |
+            """;
+
+    private static final String ROW_TPL = "| {} | {} | {} | {} |";
 
     public GitLabGroupPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
@@ -65,23 +61,13 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseTicketEntryPro
                                                     EdsAssetIndexService edsAssetIndexService,
                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                     GitLabUserFacade gitLabUserFacade,
+                                                    GitLabProjectFacade gitLabProjectFacade,
                                                     GitLabGroupFacade gitLabGroupFacade,
                                                     EdsAssetService edsAssetService) {
-        super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
-        this.edsInstanceService = edsInstanceService;
-        this.edsAssetIndexService = edsAssetIndexService;
-        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
-        this.gitLabUserFacade = gitLabUserFacade;
-        this.gitLabGroupFacade = gitLabGroupFacade;
-        this.edsAssetService = edsAssetService;
+        super(workOrderTicketEntryService, workOrderTicketService, workOrderService, edsInstanceService,
+                edsAssetIndexService, edsInstanceProviderHolderBuilder, gitLabUserFacade, gitLabProjectFacade,
+                gitLabGroupFacade, edsAssetService);
     }
-
-    private static final String TABLE_TITLE = """
-            | Instance Name | Group Name | Group WebURL | Role |
-            | --- | --- | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
@@ -155,38 +141,17 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseTicketEntryPro
         }
     }
 
-    private User getOrCreateUser(EdsGitLabConfigModel.GitLab gitLab, String username) throws WorkOrderTicketException {
-        try {
-            List<org.gitlab4j.api.models.User> gitLabUsers = gitLabUserFacade.findUsers(gitLab, username);
-            return gitLabUsers.stream()
-                    .filter(user -> user.getUsername()
-                            .equals(username))
-                    .findFirst()
-                    .orElseGet(() -> createGitLabUser(gitLab, username));
-        } catch (GitLabApiException e) {
-            throw new WorkOrderTicketException("Error handling GitLab user {}: {}", username, e.getMessage());
-        }
-    }
-
-    private User createGitLabUser(EdsGitLabConfigModel.GitLab gitLab, String username) throws WorkOrderTicketException {
-        try {
-            return gitLabUserFacade.createUser(gitLab, username);
-        } catch (GitLabApiException e) {
-            throw new WorkOrderTicketException("Failed to create GitLab user {}: {}", username, e.getMessage());
-        }
-    }
-
     @Override
-    public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry param) {
-        EdsAssetIndex sshUrlIndex = edsAssetIndexService.getByAssetIdAndName(param.getDetail()
+    public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry param) {
+        EdsAssetIndex webUrlIndex = edsAssetIndexService.getByAssetIdAndName(param.getDetail()
                 .getTarget()
-                .getId(), REPO_SSH_URL);
-        if (Objects.isNull(sshUrlIndex)) {
-            throw new WorkOrderTicketException("GitLab group assets are missing ssh url.");
+                .getId(), REPO_WEB_URL);
+        if (Objects.isNull(webUrlIndex)) {
+            throw new WorkOrderTicketException("GitLab group assets are missing web url.");
         }
-        return GitLabProjectPermissionTicketEntryBuilder.newBuilder()
+        return GitLabGroupPermissionTicketEntryBuilder.newBuilder()
                 .withParam(param)
-                .withProjectGitSshUrl(sshUrlIndex)
+                .withGroupWebUrl(webUrlIndex)
                 .buildEntry();
     }
 
