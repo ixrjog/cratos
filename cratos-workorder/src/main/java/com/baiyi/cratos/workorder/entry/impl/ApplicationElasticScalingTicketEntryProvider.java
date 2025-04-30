@@ -4,20 +4,23 @@ import com.baiyi.cratos.common.util.GroupingUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.service.ApplicationResourceService;
+import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ApplicationElasticScalingTicketEntryBuilder;
+import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
+import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -28,27 +31,36 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/9 13:34
  * &#064;Version 1.0
  */
+@SuppressWarnings("unchecked")
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntryProvider<ApplicationReplicasModel.ApplicationConfigurationChange, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> {
 
     private final ApplicationResourceService applicationResourceService;
     private final ListAppGroup listAppGroup;
+    private final EdsAssetService edsAssetService;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public ApplicationElasticScalingTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
                                                         WorkOrderService workOrderService,
                                                         ApplicationResourceService applicationResourceService,
-                                                        ListAppGroup listAppGroup) {
+                                                        ListAppGroup listAppGroup, EdsAssetService edsAssetService,
+                                                        EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.applicationResourceService = applicationResourceService;
         this.listAppGroup = listAppGroup;
+        this.edsAssetService = edsAssetService;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     @Override
@@ -103,39 +115,85 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         }
         Map<String, AppGroupSpec.GroupSpec> groupingMap = listAppGroup.getGroupMap(applicationName, true);
         if (groupingMap.size() != 1) {
-            WorkOrderTicketException.runtime(
-                    "There is only one application group with name {}.", applicationName);
+            WorkOrderTicketException.runtime("There is only one application group with name {}.", applicationName);
         }
         AppGroupSpec.GroupSpec groupSpec = groupingMap.values()
                 .stream()
                 .findFirst()
                 .get();
         int total = groupSpec.countTotalReplicas();
-
         allocateReplicas(param.getDetail()
                 .getConfig()
                 .getExpectedReplicas(), groupSpec);
         // 下一步要做的
         int compensateReplicas = 0;
-        if(StringUtils.hasText(groupSpec.getG4().getName())) {
+        // G4
 
-            resources.stream().filter(resource -> resource.getName().equals(groupSpec.getG4().getName())).findFirst().ifPresent(resource -> {
+        compensateReplicas = xG(groupSpec.getG4(), resources, param.getTicketId(), param.getDetail()
+                .getNamespace(), compensateReplicas);
+        compensateReplicas = xG(groupSpec.getG3(), resources, param.getTicketId(), param.getDetail()
+                .getNamespace(), compensateReplicas);
+        compensateReplicas = xG(groupSpec.getG2(), resources, param.getTicketId(), param.getDetail()
+                .getNamespace(), compensateReplicas);
+        xG(groupSpec.getG1(), resources, param.getTicketId(), param.getDetail()
+                .getNamespace(), compensateReplicas);
+    }
 
-            });
 
-        }else{
+    private int xG(AppGroupSpec.Group group, List<ApplicationResource> resources, int ticketId, String namespace,
+                   int compensateReplicas) {
+        if (StringUtils.hasText(group.getName())) {
+            Optional<ApplicationResource> optionalApplicationResource = resources.stream()
+                    .filter(resource -> resource.getName()
+                            .equals(group.getName()))
+                    .findFirst();
+            if (optionalApplicationResource.isPresent()) {
+                EdsAsset asset = getDeploymentAsset(optionalApplicationResource.get());
+                EdsAssetIndex replicasIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(),
+                        KUBERNETES_REPLICAS);
+                int expectedReplicas = group.getExpectedReplicas() + compensateReplicas;
+                ApplicationDeploymentModel.DeploymentScale detail = ApplicationDeploymentModel.DeploymentScale.builder()
+                        .deployment(asset)
+                        .namespace(namespace)
+                        .currentReplicas(replicasIndex != null ? Integer.parseInt(replicasIndex.getValue()) : -1)
+                        .expectedReplicas(expectedReplicas)
+                        .build();
+                WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addDeploymentParam = WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry.builder()
+                        .ticketId(ticketId)
+                        .detail(detail)
+                        .build();
+                addDeploymentParam(addDeploymentParam);
+                return 0;
+            } else {
+                return compensateReplicas + group.getExpectedReplicas();
+            }
 
+        } else {
+            return compensateReplicas + group.getExpectedReplicas();
         }
+    }
 
 
+    private EdsAsset getDeploymentAsset(ApplicationResource resource) {
+        return edsAssetService.getById(resource.getBusinessId());
+    }
+
+    private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {
+        TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> applicationDeploymentScaleTicketEntryProvider = (TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
+                getKey(), BusinessTypeEnum.EDS_ASSET.name());
+        applicationDeploymentScaleTicketEntryProvider.addEntry(param);
     }
 
     private void allocateReplicas(int total, AppGroupSpec.GroupSpec groupingSpecifications) {
         List<Integer> groups = GroupingUtils.getGroups(total);
-        groupingSpecifications.setG1(setGroupExpectedReplicas(groupingSpecifications.getG1(),!groups.isEmpty() ? groups.getFirst() : 0));
-        groupingSpecifications.setG2(setGroupExpectedReplicas(groupingSpecifications.getG2(),groups.size() > 1 ? groups.get(1) : 0));
-        groupingSpecifications.setG3(setGroupExpectedReplicas(groupingSpecifications.getG3(),groups.size() > 2 ? groups.get(2) : 0));
-        groupingSpecifications.setG4(setGroupExpectedReplicas(groupingSpecifications.getG4(),groups.size() > 3 ? groups.get(3) : 0));
+        groupingSpecifications.setG1(
+                setGroupExpectedReplicas(groupingSpecifications.getG1(), !groups.isEmpty() ? groups.getFirst() : 0));
+        groupingSpecifications.setG2(
+                setGroupExpectedReplicas(groupingSpecifications.getG2(), groups.size() > 1 ? groups.get(1) : 0));
+        groupingSpecifications.setG3(
+                setGroupExpectedReplicas(groupingSpecifications.getG3(), groups.size() > 2 ? groups.get(2) : 0));
+        groupingSpecifications.setG4(
+                setGroupExpectedReplicas(groupingSpecifications.getG4(), groups.size() > 3 ? groups.get(3) : 0));
     }
 
     private AppGroupSpec.Group setGroupExpectedReplicas(AppGroupSpec.Group group, int expectedReplicas) {

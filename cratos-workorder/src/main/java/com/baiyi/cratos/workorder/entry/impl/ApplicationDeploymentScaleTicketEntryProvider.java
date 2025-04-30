@@ -11,6 +11,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
+import com.baiyi.cratos.workorder.builder.entry.ApplicationDeploymentScaleTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -21,10 +22,9 @@ import com.baiyi.cratos.workorder.model.TicketEntryModel;
  * &#064;Date  2025/4/30 11:36
  * &#064;Version 1.0
  */
-@BusinessType(type = BusinessTypeEnum.APPLICATION)
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_DEPLOYMENT_SCALE)
 public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> {
-
 
     public ApplicationDeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                          WorkOrderTicketService workOrderTicketService,
@@ -55,14 +55,12 @@ public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        //ApplicationDeploymentModel.DeploymentScale deploymentScale = loadAs(entry);
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("Application elastic scaling")
+                .desc("Application deployment")
                 .build();
     }
-
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
@@ -72,11 +70,9 @@ public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {
-//        return ApplicationElasticScalingTicketEntryBuilder.newBuilder()
-//                .withParam(param)
-//                .buildEntry();
-        // TODO
-        return null;
+        return ApplicationDeploymentScaleTicketEntryBuilder.newBuilder()
+                .withParam(param)
+                .buildEntry();
     }
 
 }
