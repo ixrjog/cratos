@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.PageParam;
@@ -250,6 +251,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = 3960401331035241929L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
         private ApplicationReplicasModel.ApplicationConfigurationChange detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationDeploymentScaleTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeploymentScale>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 8210926100811483441L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private ApplicationDeploymentModel.DeploymentScale detail;
     }
 
     @Data

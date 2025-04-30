@@ -23,15 +23,15 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @TicketStates(state = TicketState.APPROVAL_COMPLETED, target = TicketState.IN_PROGRESS)
-public class TicketInApprovalCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
+public class TicketApprovalCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    public TicketInApprovalCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
-                                                   WorkOrderTicketService workOrderTicketService,
-                                                   WorkOrderTicketNodeService workOrderTicketNodeService,
-                                                   WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
-                                                   WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
-                                                   WorkOrderTicketEntryService workOrderTicketEntryService,
-                                                   TicketWorkflowFacade ticketWorkflowFacade) {
+    public TicketApprovalCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
+                                                 WorkOrderTicketService workOrderTicketService,
+                                                 WorkOrderTicketNodeService workOrderTicketNodeService,
+                                                 WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
+                                                 WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
+                                                 WorkOrderTicketEntryService workOrderTicketEntryService,
+                                                 TicketWorkflowFacade ticketWorkflowFacade) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);

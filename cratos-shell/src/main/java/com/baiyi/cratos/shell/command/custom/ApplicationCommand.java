@@ -201,7 +201,6 @@ public class ApplicationCommand extends AbstractCommand {
         desc.add(getSpecifications(groupingSpecifications.getG2(), groups.size() > 1 ? groups.get(1) : 0));
         desc.add(getSpecifications(groupingSpecifications.getG3(), groups.size() > 2 ? groups.get(2) : 0));
         desc.add(getSpecifications(groupingSpecifications.getG4(), groups.size() > 3 ? groups.get(3) : 0));
-
         return Joiner.on(",")
                 .join(desc);
     }

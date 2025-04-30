@@ -67,62 +67,8 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         update(kubernetes, deployment);
     }
 
-
-    /**
-     * 扩容
-     *
-     * @param kubernetes
-     * @param namespace
-     * @param name
-     * @param replicas
-     * @throws KubernetesDeploymentException
-     */
     public void scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
                       int replicas) throws KubernetesDeploymentException {
-        Deployment deployment = get(kubernetes, namespace, name);
-        final Integer nowReplicas = Optional.ofNullable(deployment)
-                .map(Deployment::getSpec)
-                .map(DeploymentSpec::getReplicas)
-                .orElseThrow(() -> new KubernetesDeploymentException("扩容失败: 读取副本数量错误！"));
-        // 更新副本数
-        if (nowReplicas >= replicas) {
-            throw new KubernetesDeploymentException("只能扩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
-        }
-        try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            client.apps()
-                    .deployments()
-                    .inNamespace(namespace)
-                    .withName(name)
-                    .scale(replicas);
-        } catch (Exception e) {
-            log.warn(e.getMessage());
-            throw e;
-        }
-    }
-
-    /**
-     * 缩容
-     *
-     * @param kubernetes
-     * @param namespace
-     * @param name
-     * @param replicas
-     * @throws KubernetesDeploymentException
-     */
-    public void reduce(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
-                       int replicas) throws KubernetesDeploymentException {
-        Deployment deployment = get(kubernetes, namespace, name);
-        final Integer nowReplicas = Optional.ofNullable(deployment)
-                .map(Deployment::getSpec)
-                .map(DeploymentSpec::getReplicas)
-                .orElseThrow(() -> new KubernetesDeploymentException("缩容失败: 读取副本数量错误！"));
-        // 更新副本数
-        if (replicas < 1) {
-            throw new KubernetesDeploymentException("指定副本数不能少于1, replicas={} ！", replicas);
-        }
-        if (replicas >= nowReplicas) {
-            throw new KubernetesDeploymentException("只能缩容 nowReplicas={}, newReplicas={} ！", nowReplicas, replicas);
-        }
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
             client.apps()
                     .deployments()

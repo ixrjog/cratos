@@ -24,7 +24,8 @@ public enum SysTagKeys {
     // 标识用户类型为非人员
     USER_TYPE("UserType"),
     EVENT("Event"),
-    FRAMEWORK("Framework")
+    FRAMEWORK("Framework"),
+    INGRESS_ORDER("IngressOrder"),
     ;
 
     private final String key;

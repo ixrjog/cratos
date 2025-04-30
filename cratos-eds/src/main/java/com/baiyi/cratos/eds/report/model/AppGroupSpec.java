@@ -53,6 +53,8 @@ public class AppGroupSpec {
     public static class Group {
         private String name;
         private Integer replicas;
+        // 弹性扩所容后的期望副本数
+        private Integer expectedReplicas;
         public String acqDesc() {
             return Joiner.on("|")
                     .join(name, replicas);

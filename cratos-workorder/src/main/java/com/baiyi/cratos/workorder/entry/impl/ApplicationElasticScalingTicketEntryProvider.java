@@ -22,12 +22,12 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -101,50 +101,52 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         if (CollectionUtils.isEmpty(resources)) {
             WorkOrderTicketException.runtime("No application deployment resources found.");
         }
+        Map<String, AppGroupSpec.GroupSpec> groupingMap = listAppGroup.getGroupMap(applicationName, true);
+        if (groupingMap.size() != 1) {
+            WorkOrderTicketException.runtime(
+                    "There is only one application group with name {}.", applicationName);
+        }
+        AppGroupSpec.GroupSpec groupSpec = groupingMap.values()
+                .stream()
+                .findFirst()
+                .get();
+        int total = groupSpec.countTotalReplicas();
 
+        allocateReplicas(param.getDetail()
+                .getConfig()
+                .getExpectedReplicas(), groupSpec);
+        // 下一步要做的
+        int compensateReplicas = 0;
+        if(StringUtils.hasText(groupSpec.getG4().getName())) {
 
-        Map<String, AppGroupSpec.GroupSpec> groupingMap = listAppGroup.getGroupMap(applicationName, false);
+            resources.stream().filter(resource -> resource.getName().equals(groupSpec.getG4().getName())).findFirst().ifPresent(resource -> {
 
-        groupingMap.keySet()
-                .forEach(k -> {
-                    final AppGroupSpec.GroupSpec groupSpec = groupingMap.get(k);
-                    int total = groupSpec.countTotalReplicas();
-                    final String rowCanary = Optional.ofNullable(groupSpec.getCanary())
-                            .map(AppGroupSpec.Group::getName)
-                            .orElse("");
-                    final String g1Name = groupSpec.getG1() != null ? groupSpec.getG1()
-                            .getName() : "";
-                    int g1Replicas = groupSpec.getG1() != null ? groupSpec.getG1()
-                            .getReplicas() : 0;
-                    final String g2Name = groupSpec.getG2() != null ? groupSpec.getG2()
-                            .getName() : "";
-                    int g2Replicas = groupSpec.getG2() != null ? groupSpec.getG2()
-                            .getReplicas() : 0;
+            });
 
-                    final String g3Name = groupSpec.getG3() != null ? groupSpec.getG3()
-                            .getName() : "";
-                    int g3Replicas = groupSpec.getG3() != null ? groupSpec.getG3()
-                            .getReplicas() : 0;
+        }else{
 
-                    final String g4Name = groupSpec.getG4() != null ? groupSpec.getG4()
-                            .getName() : "";
-                    int g4Replicas = groupSpec.getG4() != null ? groupSpec.getG4()
-                            .getReplicas() : 0;
+        }
 
-                    groupSpec.getSpecifications().getIsCompliant();
-
-                    List<Integer> groups = Lists.newArrayList();
-                    GroupingUtils.grouping(total, groups);
-
-
-//                        table.addRow(rowAppName, total, rowCanary, rowG1, rowG1Replicas, rowG2, rowG2Replicas, rowG3,
-//                                rowG3Replicas, rowG4, rowG4Replicas, getSpecifications(e));
-
-
-                });
 
     }
 
+    private void allocateReplicas(int total, AppGroupSpec.GroupSpec groupingSpecifications) {
+        List<Integer> groups = GroupingUtils.getGroups(total);
+        groupingSpecifications.setG1(setGroupExpectedReplicas(groupingSpecifications.getG1(),!groups.isEmpty() ? groups.getFirst() : 0));
+        groupingSpecifications.setG2(setGroupExpectedReplicas(groupingSpecifications.getG2(),groups.size() > 1 ? groups.get(1) : 0));
+        groupingSpecifications.setG3(setGroupExpectedReplicas(groupingSpecifications.getG3(),groups.size() > 2 ? groups.get(2) : 0));
+        groupingSpecifications.setG4(setGroupExpectedReplicas(groupingSpecifications.getG4(),groups.size() > 3 ? groups.get(3) : 0));
+    }
+
+    private AppGroupSpec.Group setGroupExpectedReplicas(AppGroupSpec.Group group, int expectedReplicas) {
+        if (Objects.isNull(group)) {
+            return AppGroupSpec.Group.builder()
+                    .expectedReplicas(expectedReplicas)
+                    .build();
+        }
+        group.setExpectedReplicas(expectedReplicas);
+        return group;
+    }
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,

@@ -22,7 +22,7 @@ public class ManualAssemblyStateProcessorConfig implements InitializingBean {
     private final TicketNewStateProcessor ticketNewStateProcessor;
     private final TicketSubmittedStateProcessor ticketSubmittedStateProcessor;
     private final TicketInApprovalStateProcessor ticketInApprovalStateProcessor;
-    private final TicketInApprovalCompletedStateProcessor ticketInApprovalCompletedStateProcessor;
+    private final TicketApprovalCompletedStateProcessor ticketInApprovalCompletedStateProcessor;
     private final TicketInProgressStateProcessor ticketInProgressStateProcessor;
     private final TicketProcessingCompletedStateProcessor ticketProcessingCompletedStateProcessor;
     private final TicketCompletedStateProcessor ticketCompletedStateProcessor;
