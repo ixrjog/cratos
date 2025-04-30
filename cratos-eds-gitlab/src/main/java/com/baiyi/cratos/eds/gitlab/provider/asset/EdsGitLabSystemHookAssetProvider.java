@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GITLAB_PROJECT_ID;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GITLAB_USER_ID;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -70,6 +69,9 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
         Optional.ofNullable(entity.getProjectId())
                 .filter(IdentityUtil::hasIdentity)
                 .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
+        Optional.ofNullable(entity.getGroupId())
+                .filter(IdentityUtil::hasIdentity)
+                .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_GROUP_ID, projectId)));
         return indices;
     }
 

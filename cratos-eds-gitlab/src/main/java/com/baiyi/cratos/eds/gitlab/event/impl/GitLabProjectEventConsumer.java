@@ -77,4 +77,3 @@ public class GitLabProjectEventConsumer extends BaseGitLabEventConsumer<Project>
     }
 
 }
-

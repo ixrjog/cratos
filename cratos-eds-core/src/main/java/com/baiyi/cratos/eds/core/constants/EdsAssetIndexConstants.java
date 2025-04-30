@@ -98,5 +98,6 @@ public interface EdsAssetIndexConstants {
 
     String GITLAB_USER_ID = "gitlab.user.id";
     String GITLAB_PROJECT_ID = "gitlab.project.id";
+    String GITLAB_GROUP_ID = "gitlab.group.id";
 
 }

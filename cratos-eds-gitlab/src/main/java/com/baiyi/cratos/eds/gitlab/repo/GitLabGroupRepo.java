@@ -35,9 +35,11 @@ public class GitLabGroupRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+    public static List<Member> getMembersByGroupId(EdsGitLabConfigModel.GitLab gitLab,
+                                                   Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            Pager<Member> memberPager = gitLabApi.getGroupApi().getMembers(groupId, ITEMS_PER_PAGE);
+            Pager<Member> memberPager = gitLabApi.getGroupApi()
+                    .getMembers(groupId, ITEMS_PER_PAGE);
             return memberPager.all();
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
@@ -52,9 +54,11 @@ public class GitLabGroupRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Project> getProjectsByGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+    public static List<Project> getProjectsByGroupId(EdsGitLabConfigModel.GitLab gitLab,
+                                                     Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            Pager<Project> projectPager = gitLabApi.getGroupApi().getProjects(groupId, ITEMS_PER_PAGE);
+            Pager<Project> projectPager = gitLabApi.getGroupApi()
+                    .getProjects(groupId, ITEMS_PER_PAGE);
             return projectPager.all();
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
@@ -71,9 +75,11 @@ public class GitLabGroupRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
+    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+                                    AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            gitLabApi.getGroupApi().updateMember(groupId, userId, accessLevel);
+            gitLabApi.getGroupApi()
+                    .updateMember(groupId, userId, accessLevel);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
             throw e;
@@ -89,9 +95,11 @@ public class GitLabGroupRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId, AccessLevel accessLevel) throws GitLabApiException {
+    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+                                 AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            gitLabApi.getGroupApi().addMember(groupId, userId, accessLevel);
+            gitLabApi.getGroupApi()
+                    .addMember(groupId, userId, accessLevel);
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
             throw e;
@@ -107,16 +115,29 @@ public class GitLabGroupRepo {
      */
     public static List<Group> getGroups(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            return gitLabApi.getGroupApi().getGroups();
+            return gitLabApi.getGroupApi()
+                    .getGroups();
         } catch (GitLabApiException e) {
             log.debug(e.getMessage());
             throw e;
         }
     }
 
-    public static List<Member> getMembersWithGroupId(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+    public static Group getGroup(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
-            Pager<Member> memberPager = gitLabApi.getGroupApi().getMembers(groupId, ITEMS_PER_PAGE);
+            return gitLabApi.getGroupApi()
+                    .getGroup(groupId);
+        } catch (GitLabApiException e) {
+            log.debug(e.getMessage());
+            throw e;
+        }
+    }
+
+    public static List<Member> getMembersWithGroupId(EdsGitLabConfigModel.GitLab gitLab,
+                                                     Long groupId) throws GitLabApiException {
+        try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
+            Pager<Member> memberPager = gitLabApi.getGroupApi()
+                    .getMembers(groupId, ITEMS_PER_PAGE);
             return memberPager.all();
         } catch (GitLabApiException e) {
             log.error(e.getMessage());

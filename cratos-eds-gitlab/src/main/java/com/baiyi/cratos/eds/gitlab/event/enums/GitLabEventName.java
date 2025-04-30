@@ -13,6 +13,11 @@ public enum GitLabEventName {
     PROJECT_CREATE,
     PROJECT_DESTROY,
     PROJECT_RENAME,
+
+    GROUP_CREATE,
+    GROUP_DESTROY,
+    GROUP_RENAME,
+
     KEY_CREATE,
     KEY_DESTROY,
 
