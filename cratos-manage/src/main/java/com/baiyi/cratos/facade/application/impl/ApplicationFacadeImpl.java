@@ -14,6 +14,7 @@ import com.baiyi.cratos.wrapper.application.ApplicationResourceWrapper;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -54,6 +55,8 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     public void addApplication(ApplicationParam.AddApplication addApplication) {
         Application application = addApplication.toTarget();
         applicationService.add(application);
+        // 异步处理
+        ((ApplicationFacadeImpl) AopContext.currentProxy()).asyncScanApplicationResource(application.getName());
     }
 
     @Override
@@ -65,6 +68,14 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
             application.setComment(updateApplication.getComment());
             applicationService.updateByPrimaryKey(application);
         }
+    }
+
+    @Async
+    public void asyncScanApplicationResource(String name) {
+        ApplicationParam.ScanResource scanResource = ApplicationParam.ScanResource.builder()
+                .name(name)
+                .build();
+        this.scanApplicationResource(scanResource);
     }
 
     @Override

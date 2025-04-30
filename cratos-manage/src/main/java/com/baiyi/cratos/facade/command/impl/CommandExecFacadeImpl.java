@@ -179,6 +179,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             commandExecApproval.setApprovalStatus(approvalStatus.name());
             commandExecApproval.setApproveRemark(approveCommandExec.getApproveRemark());
             commandExecApproval.setApprovalCompleted(true);
+            commandExecApproval.setApprovalAt(new Date());
             commandExecApprovalService.updateByPrimaryKey(commandExecApproval);
             if (commandExecApprovalService.approvalCompletedAndApproved(commandExec.getId())) {
                 if (Boolean.TRUE.equals(commandExec.getAutoExec())) {

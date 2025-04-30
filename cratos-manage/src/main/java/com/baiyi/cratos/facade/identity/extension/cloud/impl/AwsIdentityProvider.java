@@ -84,7 +84,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
                 instance.getId(), getAccountAssetType());
         EdsAwsConfigModel.Aws aws = holder.getInstance()
                 .getEdsConfigModel();
-        LoginProfile loginProfile = iamUserRepo.getLoginProfile(aws, blockCloudAccount.getUsername());
+        LoginProfile loginProfile = iamUserRepo.getLoginProfile(aws, blockCloudAccount.getAccount());
         if (Objects.nonNull(loginProfile)) {
             iamUserRepo.deleteLoginProfile(aws, blockCloudAccount.getAccount());
         }

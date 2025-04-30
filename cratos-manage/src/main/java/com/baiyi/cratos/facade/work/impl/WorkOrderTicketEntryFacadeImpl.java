@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
+import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -47,6 +49,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addApplicationElasticScalingTicketEntry(
+            WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.COMPUTER_PERMISSION.name(), addTicketEntry.getBusinessType());
@@ -66,6 +76,12 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.GITLAB_PROJECT_PERMISSION.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(addTicketEntry.getDetail())
+                .map(GitLabPermissionModel.Permission::getRole)
+                .orElseThrow(() -> new WorkOrderTicketException("GitLab project permission role cannot be empty."));
+        Optional.of(addTicketEntry.getDetail())
+                .map(GitLabPermissionModel.Permission::getTarget)
+                .orElseThrow(() -> new WorkOrderTicketException("GitLab project permission target cannot be empty."));
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 
@@ -74,6 +90,12 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.GITLAB_GROUP_PERMISSION.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(addTicketEntry.getDetail())
+                .map(GitLabPermissionModel.Permission::getRole)
+                .orElseThrow(() -> new WorkOrderTicketException("GitLab group permission role cannot be empty."));
+        Optional.of(addTicketEntry.getDetail())
+                .map(GitLabPermissionModel.Permission::getTarget)
+                .orElseThrow(() -> new WorkOrderTicketException("GitLab group permission target cannot be empty."));
         WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
     }
 

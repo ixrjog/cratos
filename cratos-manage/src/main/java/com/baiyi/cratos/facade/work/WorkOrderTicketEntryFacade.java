@@ -11,6 +11,9 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
+    void addApplicationElasticScalingTicketEntry(
+            WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry);
+
     void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
 
     void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry);
@@ -18,8 +21,7 @@ public interface WorkOrderTicketEntryFacade {
     void addGitLabProjectPermissionTicketEntry(
             WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry);
 
-    void addGitLabGroupPermissionTicketEntry(
-            WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry);
+    void addGitLabGroupPermissionTicketEntry(WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry);
 
     void deleteById(int id);
 

@@ -67,6 +67,9 @@ public class ApplicationParam {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Schema
     public static class AddApplication implements IToTarget<Application> {
         @Null
@@ -89,6 +92,9 @@ public class ApplicationParam {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Schema
     public static class ScanResource {
         @NotBlank

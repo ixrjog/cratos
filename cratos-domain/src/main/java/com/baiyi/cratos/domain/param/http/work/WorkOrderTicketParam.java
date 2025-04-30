@@ -4,10 +4,10 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
-import com.baiyi.cratos.domain.param.http.work.content.ApplicationElasticScalingEntryContent;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -193,19 +193,6 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationElasticScalingTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationElasticScalingEntryContent.Content>, BaseBusiness.HasBusinessType, Serializable {
-        @Serial
-        private static final long serialVersionUID = -3439626371006888379L;
-        private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
-        private ApplicationElasticScalingEntryContent.Content detail;
-    }
-
-    @EqualsAndHashCode(callSuper = true)
-    @Data
-    @SuperBuilder(toBuilder = true)
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Schema
     public static class AddRevokeUserPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -7031252644626013496L;
@@ -250,6 +237,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = -5401570571721716981L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private GitLabPermissionModel.Permission detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationElasticScalingTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationReplicasModel.ApplicationConfigurationChange>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 3960401331035241929L;
+        private final String businessType = BusinessTypeEnum.APPLICATION.name();
+        private ApplicationReplicasModel.ApplicationConfigurationChange detail;
     }
 
     @Data

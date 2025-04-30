@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -133,6 +134,19 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
         }
         indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.builder()
+                .comparisonName(true)
+                .comparisonKey(true)
+                .comparisonDescription(true)
+                .comparisonExpiredTime(true)
+                .comparisonOriginalModel(true)
+                .comparisonKind(true)
+                .build()
+                .compare(a1, a2);
     }
 
 }

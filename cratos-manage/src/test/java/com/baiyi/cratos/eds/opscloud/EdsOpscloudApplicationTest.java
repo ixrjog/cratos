@@ -8,6 +8,7 @@ import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
+import com.baiyi.cratos.facade.application.OcApplicationFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;
@@ -27,6 +28,9 @@ public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigMod
     private ApplicationService applicationService;
     @Resource
     private BusinessTagFacade businessTagFacade;
+
+    @Resource
+    private OcApplicationFacade ocApplicationFacade;
 
     private static final String[] LEVEL_TAGS = {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"};
 
@@ -88,6 +92,11 @@ public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigMod
                 applicationService.updateByPrimaryKey(application);
             }
         });
+    }
+
+    @Test
+    void test2() {
+        ocApplicationFacade.importAllApplication();
     }
 
 }

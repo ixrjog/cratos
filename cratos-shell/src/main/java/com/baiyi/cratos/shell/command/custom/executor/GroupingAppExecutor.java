@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.command.custom.executor;
 
-import com.baiyi.cratos.common.util.GroupingUtil;
+import com.baiyi.cratos.common.util.GroupingUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -37,15 +37,10 @@ import java.util.Optional;
 public class GroupingAppExecutor {
 
     private final EdsAssetIndexService indexService;
-
     private final EdsAssetService assetService;
-
     private final SshShellHelper helper;
-
     private final EdsInstanceService edsInstanceService;
-
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     // 按规则平衡分组副本数
@@ -54,7 +49,7 @@ public class GroupingAppExecutor {
 
 
         List<Integer> groups = Lists.newArrayList();
-        GroupingUtil.grouping(newReplicas, groups);
+        GroupingUtils.grouping(newReplicas, groups);
         groups = groups.stream()
                 .sorted(Comparator.comparingInt(Integer::intValue))
                 .toList();

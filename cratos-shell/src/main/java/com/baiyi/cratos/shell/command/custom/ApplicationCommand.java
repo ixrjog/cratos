@@ -1,7 +1,7 @@
 package com.baiyi.cratos.shell.command.custom;
 
 import com.baiyi.cratos.common.table.PrettyTable;
-import com.baiyi.cratos.common.util.GroupingUtil;
+import com.baiyi.cratos.common.util.GroupingUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
@@ -193,7 +193,7 @@ public class ApplicationCommand extends AbstractCommand {
         }
         List<String> desc = Lists.newArrayList();
         List<Integer> groups = Lists.newArrayList();
-        GroupingUtil.grouping(total, groups);
+        GroupingUtils.grouping(total, groups);
         groups = groups.stream()
                 .sorted(Comparator.comparingInt(Integer::intValue))
                 .toList();
@@ -231,25 +231,25 @@ public class ApplicationCommand extends AbstractCommand {
         int loop = 25;
         for (int i = 1; i <= loop; i++) {
             List<Integer> groups1 = Lists.newArrayList();
-            GroupingUtil.grouping(i, groups1);
+            GroupingUtils.grouping(i, groups1);
             groups1 = groups1.stream()
                     .sorted(Comparator.comparingInt(Integer::intValue))
                     .toList();
 
             List<Integer> groups2 = Lists.newArrayList();
-            GroupingUtil.grouping(i + loop, groups2);
+            GroupingUtils.grouping(i + loop, groups2);
             groups2 = groups2.stream()
                     .sorted(Comparator.comparingInt(Integer::intValue))
                     .toList();
 
             List<Integer> groups3 = Lists.newArrayList();
-            GroupingUtil.grouping(i + loop * 2, groups3);
+            GroupingUtils.grouping(i + loop * 2, groups3);
             groups3 = groups3.stream()
                     .sorted(Comparator.comparingInt(Integer::intValue))
                     .toList();
 
             List<Integer> groups4 = Lists.newArrayList();
-            GroupingUtil.grouping(i + loop * 3, groups4);
+            GroupingUtils.grouping(i + loop * 3, groups4);
             groups4 = groups4.stream()
                     .sorted(Comparator.comparingInt(Integer::intValue))
                     .toList();

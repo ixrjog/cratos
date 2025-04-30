@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class GroupingUtil {
+public final class GroupingUtils {
 
     public static void grouping(int total, List<Integer> groups) {
         int remaining = total;
@@ -32,6 +32,22 @@ public final class GroupingUtil {
             groups.add(x);
             grouping(total, groups);
         }
+    }
+
+    public static void groupingX(int total, List<Integer> groups) {
+        int remaining = total - groups.stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+        if (remaining <= 0) {
+            return;
+        }
+        if (remaining <= 2) {
+            groups.add(remaining);
+            return;
+        }
+        int x = (int) Math.floor((0.5 + groups.size() * 0.1) * remaining) + 1;
+        groups.add(x);
+        groupingX(total, groups);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.GroupingUtil;
+import com.baiyi.cratos.common.util.GroupingUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -187,7 +187,7 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
                             .orElse(0);
 
                     List<Integer> groups = Lists.newArrayList();
-                    GroupingUtil.grouping(total, groups);
+                    GroupingUtils.grouping(total, groups);
                     groups = groups.stream()
                             .sorted(Comparator.comparingInt(Integer::intValue))
                             .toList();

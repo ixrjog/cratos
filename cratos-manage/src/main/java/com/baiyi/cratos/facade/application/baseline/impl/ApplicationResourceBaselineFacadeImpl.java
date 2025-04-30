@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.application.baseline.impl;
 
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.ApplicationResourceBaselineException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
@@ -65,17 +66,15 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
-    private static final String TAG_FRAMEWORK = "Framework";
-
     @Override
     @SchedulerLock(name = SchedulerLockNameConstants.SCAN_ALL_APPLICATION_RESOURCE_BASELINE_TASK, lockAtMostFor = "3m", lockAtLeastFor = "3m")
     public void scanAll() {
-        Tag frameworkTag = tagService.getByTagKey(TAG_FRAMEWORK);
+        Tag frameworkTag = tagService.getByTagKey(SysTagKeys.FRAMEWORK);
         List<Application> applications = applicationService.selectAll();
         Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders = Maps.newHashMap();
         applications.forEach(application -> {
             boolean hasFramework = businessTagFacade.containsTag(BusinessTypeEnum.APPLICATION.name(),
-                    application.getId(), TAG_FRAMEWORK);
+                    application.getId(), SysTagKeys.FRAMEWORK.getKey());
             if (hasFramework) {
                 List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                         application.getName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
@@ -124,7 +123,6 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         }
     }
 
-
     private Deployment getKubernetesDeployment(EdsInstanceProviderHolder<?, Deployment> holder, EdsAsset edsAsset) {
         return holder.getProvider()
                 .getAsset(edsAsset);
@@ -159,7 +157,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (application == null) {
             ApplicationResourceBaselineException.runtime("Application does not exist.");
         }
-        Tag frameworkTag = tagService.getByTagKey(TAG_FRAMEWORK);
+        Tag frameworkTag = tagService.getByTagKey(SysTagKeys.FRAMEWORK);
         BusinessTag uniqueKey = BusinessTag.builder()
                 .tagId(frameworkTag.getId())
                 .businessType(BusinessTypeEnum.APPLICATION.name())
