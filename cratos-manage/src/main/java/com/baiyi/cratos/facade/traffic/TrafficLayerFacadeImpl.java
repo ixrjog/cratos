@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerRecordVO;
 import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_ORDER;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_INGRESS_SOURCE_IP;
 import static com.baiyi.cratos.facade.proxy.TrafficLayerProxy.RULES;
 
@@ -36,7 +38,7 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
 
     public final static String[] RECORD_TABLE_FIELD_NAME = {"Record Name", "Env Name", "Route Traffic To", "Origin Server"};
     public final static String[] LB_TABLE_FIELD_NAME = {"Load Balancer Name", "DNS Name", "Load Balancer Provider"};
-    public final static String[] RULE_TABLE_FIELD_NAME = {"Ingress Rule", "Kubernetes Service"};
+    public final static String[] RULE_TABLE_FIELD_NAME = {"Ingress Rule", "Source IP", "Order", "Kubernetes Service"};
 
     @Override
     public TrafficLayerRecordVO.RecordDetails queryRecordDetails(
@@ -67,50 +69,37 @@ public class TrafficLayerFacadeImpl implements TrafficLayerFacade {
                 .build();
     }
 
-//    private String toIngressRuleTableStr(TrafficLayerRecordVO.OriginServer originServer) {
-//        PrettyTable ingressRuleTable = PrettyTable.fieldNames(RULE_TABLE_FIELD_NAME);
-//        Optional.of(originServer)
-//                .map(TrafficLayerRecordVO.OriginServer::getDetails)
-//                .ifPresent(stringListMap -> {
-//                    if (stringListMap.containsKey(RULES)) {
-//                        stringListMap.get(RULES)
-//                                .forEach(e -> {
-//                                    EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
-//                                            .instanceId(e.getInstanceId())
-//                                            .assetId(e.getAssetId())
-//                                            .name(KUBERNETES_INGRESS_SOURCE_IP)
-//                                            .build();
-//                                    EdsAssetIndex sourceIPIndex = edsAssetIndexService.getByUniqueKey(uniqueKey);
-//                                    if (sourceIPIndex == null) {
-//                                        ingressRuleTable.addRow(e.getName(), e.getValue());
-//                                    } else {
-//                                        final String sourceIPWrap = Joiner.on("")
-//                                                .join("[", sourceIPIndex.getValue(), "]");
-//                                        ingressRuleTable.addRow(Joiner.on(" ")
-//                                                .join(e.getName(), sourceIPWrap), e.getValue());
-//                                    }
-//                                });
-//                    }
-//                });
-//        return ingressRuleTable.toString();
-//    }
-
     private String toIngressRuleTableStr(TrafficLayerRecordVO.OriginServer originServer) {
         PrettyTable ingressRuleTable = PrettyTable.fieldNames(RULE_TABLE_FIELD_NAME);
         Optional.ofNullable(originServer)
                 .map(TrafficLayerRecordVO.OriginServer::getDetails)
                 .map(details -> details.get(RULES))
                 .ifPresent(rules -> rules.forEach(e -> {
-                    EdsAssetIndex uniqueKey = EdsAssetIndex.builder()
-                            .instanceId(e.getInstanceId())
-                            .assetId(e.getAssetId())
-                            .name(KUBERNETES_INGRESS_SOURCE_IP)
-                            .build();
-                    EdsAssetIndex sourceIPIndex = edsAssetIndexService.getByUniqueKey(uniqueKey);
-                    String sourceIPWrap = sourceIPIndex == null ? "" : "[" + sourceIPIndex.getValue() + "]";
-                    ingressRuleTable.addRow(e.getName() + " " + sourceIPWrap, e.getValue());
+                    String sourceIP = getRuleSourceIp(e);
+                    String order = getRuleOrder(e);
+                    ingressRuleTable.addRow(e.getName(), sourceIP, order, e.getValue());
                 }));
         return ingressRuleTable.toString();
+    }
+
+    private String getRuleSourceIp(EdsAssetVO.Index ruleIndex) {
+        EdsAssetIndex uk = EdsAssetIndex.builder()
+                .instanceId(ruleIndex.getInstanceId())
+                .assetId(ruleIndex.getAssetId())
+                .name(KUBERNETES_INGRESS_SOURCE_IP)
+                .build();
+        EdsAssetIndex sourceIPIndex = edsAssetIndexService.getByUniqueKey(uk);
+        return sourceIPIndex == null ? "-" : "[" + sourceIPIndex.getValue() + "]";
+    }
+
+    private String getRuleOrder(EdsAssetVO.Index ruleIndex) {
+        EdsAssetIndex uk = EdsAssetIndex.builder()
+                .instanceId(ruleIndex.getInstanceId())
+                .assetId(ruleIndex.getAssetId())
+                .name(KUBERNETES_INGRESS_ORDER)
+                .build();
+        EdsAssetIndex orderIndex = edsAssetIndexService.getByUniqueKey(uk);
+        return orderIndex == null ? "-" : orderIndex.getValue();
     }
 
     private String toLbTableStr(TrafficLayerRecordVO.OriginServer originServer) {
