@@ -30,6 +30,7 @@ import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
@@ -108,18 +110,20 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private EdsAssetIndex getEdsAssetIndexSourceIP(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
-        Map<String, String> AnnotationMap = entity.getMetadata()
+        Map<String, String> annotations = entity.getMetadata()
                 .getAnnotations();
-        // True EKS
-        boolean providerType = KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
+        if (CollectionUtils.isEmpty(annotations)) {
+            return null;
+        }
+        boolean isEksProvider = KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
                 .equals(instance.getEdsConfigModel()
                         .getProvider());
-        // alb.ingress.kubernetes.io/conditions.source-ip-example
-        return AnnotationMap.keySet()
+        return annotations.entrySet()
                 .stream()
-                .filter(key -> key.startsWith("alb.ingress.kubernetes.io/conditions."))
-                .map(key -> providerType ? EksIngressConditionsModel.getSourceIP(
-                        AnnotationMap.get(key)) : AckIngressConditionsModel.getSourceIP(AnnotationMap.get(key)))
+                .filter(entry -> entry.getKey()
+                        .startsWith("alb.ingress.kubernetes.io/conditions."))
+                .map(entry -> isEksProvider ? EksIngressConditionsModel.getSourceIP(
+                        entry.getValue()) : AckIngressConditionsModel.getSourceIP(entry.getValue()))
                 .filter(StringUtils::hasText)
                 .findFirst()
                 .map(sourceIP -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_SOURCE_IP, sourceIP))
@@ -129,16 +133,15 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private EdsAssetIndex getEdsAssetIndexOrder(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
-        Map<String, String> AnnotationMap = entity.getMetadata()
+        Map<String, String> annotations = entity.getMetadata()
                 .getAnnotations();
-        // alb.ingress.kubernetes.io/conditions.source-ip-example
-        return AnnotationMap.keySet()
+        return annotations.entrySet()
                 .stream()
-                .filter(key -> key.equals("alb.ingress.kubernetes.io/order"))
-                .map(AnnotationMap::get)
+                .filter(entry -> "alb.ingress.kubernetes.io/order".equals(entry.getKey()))
+                .map(Map.Entry::getValue)
                 .filter(StringUtils::hasText)
                 .findFirst()
-                .map(qps -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_ORDER, qps))
+                .map(order -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_ORDER, order))
                 .orElse(null);
     }
 
@@ -146,52 +149,42 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     private EdsAssetIndex getEdsAssetIndexTrafficLimitQps(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
-        Map<String, String> AnnotationMap = entity.getMetadata()
-                .getAnnotations();
-        // alb.ingress.kubernetes.io/conditions.source-ip-example
-        return AnnotationMap.keySet()
-                .stream()
-                .filter(key -> key.equals("alb.ingress.kubernetes.io/traffic-limit-qps"))
-                .map(AnnotationMap::get)
+        return Optional.ofNullable(entity.getMetadata())
+                .map(ObjectMeta::getAnnotations)
+                .map(annotations -> annotations.get("alb.ingress.kubernetes.io/traffic-limit-qps"))
                 .filter(StringUtils::hasText)
-                .findFirst()
                 .map(qps -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_TRAFFIC_LIMIT_QPS, qps))
                 .orElse(null);
     }
 
     private EdsAssetIndex getEdsAssetIndexOfLoadBalancer(EdsAsset edsAsset, Ingress entity) {
-        Optional<List<IngressLoadBalancerIngress>> optionalIngressLoadBalancerIngresses = Optional.of(entity)
+        return Optional.of(entity)
                 .map(Ingress::getStatus)
                 .map(IngressStatus::getLoadBalancer)
-                .map(IngressLoadBalancerStatus::getIngress);
-        if (optionalIngressLoadBalancerIngresses.isPresent() && !CollectionUtils.isEmpty(
-                optionalIngressLoadBalancerIngresses.get())) {
-            IngressLoadBalancerIngress ingressLoadBalancerIngress = optionalIngressLoadBalancerIngresses.get()
-                    .getFirst();
-            return toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME,
-                    ingressLoadBalancerIngress.getHostname());
-        }
-        return null;
+                .map(IngressLoadBalancerStatus::getIngress)
+                .filter(ingresses -> !CollectionUtils.isEmpty(ingresses))
+                .map(List::getFirst)
+                .map(ingressLoadBalancerIngress -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME,
+                        ingressLoadBalancerIngress.getHostname()))
+                .orElse(null);
     }
 
     private List<EdsAssetIndex> getEdsAssetIndexFromRules(EdsAsset edsAsset, List<IngressRule> ingressRules) {
-        List<EdsAssetIndex> indices = Lists.newArrayList();
-        ingressRules.forEach(ingressRule -> {
-            String host = ingressRule.getHost();
-            ingressRule.getHttp()
-                    .getPaths()
-                    .forEach(path -> {
-                        final String service = Optional.of(path)
-                                .map(HTTPIngressPath::getBackend)
-                                .map(IngressBackend::getService)
-                                .map(IngressServiceBackend::getName)
-                                .orElse(UNDEFINED_SERVICE);
-                        indices.add(
-                                toEdsAssetIndex(edsAsset, StringFormatter.arrayFormat("{} -> {}", host, path.getPath()),
-                                        service));
-                    });
-        });
-        return indices;
+        return ingressRules.stream()
+                .flatMap(ingressRule -> Optional.ofNullable(ingressRule.getHttp())
+                        .map(HTTPIngressRuleValue::getPaths)
+                        .orElse(Lists.newArrayList())
+                        .stream()
+                        .map(path -> {
+                            String service = Optional.ofNullable(path.getBackend())
+                                    .map(IngressBackend::getService)
+                                    .map(IngressServiceBackend::getName)
+                                    .orElse(UNDEFINED_SERVICE);
+                            String formattedKey = StringFormatter.arrayFormat("{} -> {}", ingressRule.getHost(),
+                                    path.getPath());
+                            return toEdsAssetIndex(edsAsset, formattedKey, service);
+                        }))
+                .collect(Collectors.toList());
     }
 
     @Override
