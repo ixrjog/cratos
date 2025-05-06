@@ -74,12 +74,12 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Application Name | Namespace | Current Replicas | Expected Replicas |
-                | --- | --- | --- | --- |
+                | Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |
+                | --- | --- | --- | --- | --- |
                 """;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
+    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     /**
      * @param entry
@@ -91,7 +91,8 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         return StringFormatter.arrayFormat(ROW_TPL, entry.getName(), entry.getNamespace(),
                 configurationChange.getConfig()
                         .getCurrentReplicas(), configurationChange.getConfig()
-                        .getExpectedReplicas());
+                        .getExpectedReplicas(), configurationChange.getConfig()
+                        .getElasticScalingType());
     }
 
     @Override
@@ -209,7 +210,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     }
 
     private EdsAssetVO.Asset getDeploymentAsset(ApplicationResource resource) {
-        return BeanCopierUtil.copyProperties(edsAssetService.getById(resource.getBusinessId()),EdsAssetVO.Asset.class);
+        return BeanCopierUtil.copyProperties(edsAssetService.getById(resource.getBusinessId()), EdsAssetVO.Asset.class);
     }
 
     private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {

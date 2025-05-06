@@ -164,7 +164,6 @@ public class WorkOrderFacadeTest extends BaseUnit {
         workOrderTicketFacade.doNextStateOfTicket(simpleTicketNo);
     }
 
-
     @Test
     void test8() {
         SessionUtils.setUsername("baiyi");
@@ -197,9 +196,8 @@ public class WorkOrderFacadeTest extends BaseUnit {
 
     @Test
     void test10() {
-        workOrderTicketFacade.adminDeleteTicketById(207);
-        workOrderTicketFacade.adminDeleteTicketById(208);
-        workOrderTicketFacade.adminDeleteTicketById(209);
+        workOrderTicketFacade.adminDeleteTicketById(210);
+        workOrderTicketFacade.adminDeleteTicketById(211);
     }
 
 }

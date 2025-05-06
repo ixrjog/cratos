@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -23,6 +26,16 @@ public class WorkOrderTicketEntryController {
 
     private final WorkOrderTicketEntryFacade ticketEntryFacade;
 
+    // query entry
+    @Operation(summary = "Query aliyun dataWorks instance")
+    @PostMapping(value = "/aliyun/dataworks/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDataWorksInstanceTicketEntry() {
+      //   ticketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
+      //   return HttpResult.SUCCESS;
+        return null;
+    }
+
+    // add entry
     @Operation(summary = "Add application permission ticket entry")
     @PostMapping(value = "/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationPermissionTicketEntry(
@@ -70,6 +83,9 @@ public class WorkOrderTicketEntryController {
         ticketEntryFacade.addRevokeUserPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
+
+
+    // other
 
     @Operation(summary = "Update ticket entry valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

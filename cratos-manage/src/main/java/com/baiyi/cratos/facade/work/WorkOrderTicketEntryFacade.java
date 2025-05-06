@@ -1,6 +1,9 @@
 package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -8,6 +11,8 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
  * &#064;Version 1.0
  */
 public interface WorkOrderTicketEntryFacade {
+
+    List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry();
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 

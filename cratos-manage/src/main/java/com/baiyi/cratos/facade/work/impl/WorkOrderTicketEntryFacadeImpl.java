@@ -1,13 +1,18 @@
 package com.baiyi.cratos.facade.work.impl;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.generator.WorkOrder;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
+import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
@@ -41,6 +46,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
     private final TicketWorkflowFacade workflowFacade;
+    private final TagService tagService;
+    private final EdsFacade edsFacade;
 
     @Override
     public void addApplicationPermissionTicketEntry(
@@ -154,6 +161,26 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketException.runtime("Only in the new state can it be deleted.");
         }
         workOrderTicketEntryService.deleteById(id);
+    }
+
+
+    @Override
+    public List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry() {
+        Tag dataWorksTag = tagService.getByTagKey(SysTagKeys.DATAWORKS);
+        if (Objects.isNull(dataWorksTag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(dataWorksTag.getId())
+                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                .build();
+        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
+                .page(1)
+                .length(5)
+                .queryByTag(queryByTag)
+                .build();
+        DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
+        return dataTable.getData();
     }
 
 }
