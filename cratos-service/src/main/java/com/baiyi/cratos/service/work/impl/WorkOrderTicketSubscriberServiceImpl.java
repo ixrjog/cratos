@@ -11,6 +11,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
 /**
@@ -38,6 +40,14 @@ public class WorkOrderTicketSubscriberServiceImpl implements WorkOrderTicketSubs
                 .andEqualTo("username", record.getUsername())
                 .andEqualTo("subscribeStatus", record.getSubscribeStatus());
         return workOrderTicketSubscriberMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public List<WorkOrderTicketSubscriber> queryByTicketId(int ticketId) {
+        Example example = new Example(WorkOrderTicketSubscriber.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ticketId", ticketId);
+        return workOrderTicketSubscriberMapper.selectByExample(example);
     }
 
 }

@@ -80,4 +80,11 @@ public class WorkOrderTicketController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete ticket by id (admin)")
+    @DeleteMapping(value = "/admin/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> adminDeleteTicketById(@RequestParam int id) {
+        workOrderTicketFacade.adminDeleteTicketById(id);
+        return HttpResult.SUCCESS;
+    }
+
 }

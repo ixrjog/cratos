@@ -32,4 +32,6 @@ public interface WorkOrderTicketFacade {
      */
     void deleteTicketById(int ticketId);
 
+    void adminDeleteTicketById(int ticketId);
+
 }

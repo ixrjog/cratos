@@ -29,4 +29,6 @@ public interface WorkOrderTicketEntryFacade {
 
     void deleteTicketEntry(WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry);
 
+    void deleteByTicketId(int ticketId);
+
 }

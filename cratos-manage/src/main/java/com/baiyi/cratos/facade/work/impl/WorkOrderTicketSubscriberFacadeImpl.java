@@ -83,6 +83,16 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
         });
     }
 
+    @Override
+    public void deleteByTicketId(int ticketId) {
+        List<WorkOrderTicketSubscriber> workOrderTicketSubscribers = workOrderTicketSubscriberService.queryByTicketId(ticketId);
+        if (!CollectionUtils.isEmpty(workOrderTicketSubscribers)) {
+            for (WorkOrderTicketSubscriber workOrderTicketSubscriber : workOrderTicketSubscribers) {
+                workOrderTicketSubscriberService.deleteById(workOrderTicketSubscriber.getId());
+            }
+        }
+    }
+
     private List<User> queryApprovers(List<String> tags) {
         if (CollectionUtils.isEmpty(tags)) {
             return List.of();

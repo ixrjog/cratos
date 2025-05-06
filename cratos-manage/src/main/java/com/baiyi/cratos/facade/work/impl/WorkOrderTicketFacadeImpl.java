@@ -9,14 +9,18 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.facade.RbacRoleFacade;
+import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
 import com.baiyi.cratos.service.work.WorkOrderService;
+import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.WorkOrderException;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.state.machine.factory.TicketInStateProcessorFactory;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketDetailsWrapper;
 import com.baiyi.cratos.wrapper.work.WorkOrderTicketWrapper;
@@ -40,6 +44,10 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     private final WorkOrderTicketWrapper workOrderTicketWrapper;
     private final WorkOrderTicketDetailsWrapper workOrderTicketDetailsWrapper;
     private final RbacRoleFacade rbacRoleFacade;
+    private final WorkOrderTicketEntryService workOrderTicketEntryService;
+    private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
+    private final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
+    private final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
 
     @Override
     @SetSessionUserToParam(desc = "set Username")
@@ -114,6 +122,19 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
             ticket.setValid(false);
             workOrderTicketService.updateByPrimaryKey(ticket);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void adminDeleteTicketById(int ticketId) {
+        WorkOrderTicket ticket = workOrderTicketService.getById(ticketId);
+        if (Objects.isNull(ticket)) {
+            return;
+        }
+        workOrderTicketEntryFacade.deleteByTicketId(ticketId);
+        workOrderTicketNodeFacade.deleteByTicketId(ticketId);
+        workOrderTicketSubscriberFacade.deleteByTicketId(ticketId);
+        workOrderTicketService.deleteById(ticketId);
     }
 
 }

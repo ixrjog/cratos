@@ -14,4 +14,6 @@ public interface WorkOrderTicketSubscriberFacade {
 
     void publish(WorkOrderTicket ticket);
 
+    void deleteByTicketId(int ticketId);
+
 }

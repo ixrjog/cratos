@@ -16,4 +16,6 @@ public interface WorkOrderTicketNodeFacade {
 
     void specifyNodeApprovalUser(int ticketId, String nodeName, String username);
 
+    void deleteByTicketId(int ticketId);
+
 }

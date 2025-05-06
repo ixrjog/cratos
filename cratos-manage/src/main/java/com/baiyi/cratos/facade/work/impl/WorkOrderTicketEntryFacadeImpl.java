@@ -20,7 +20,9 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -124,6 +126,16 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                 deleteTicketEntry.totEntryUniqueKey());
         if (Objects.nonNull(workOrderTicketEntry)) {
             deleteById(workOrderTicketEntry.getId());
+        }
+    }
+
+    @Override
+    public void deleteByTicketId(int ticketId) {
+        List<WorkOrderTicketEntry> workOrderTicketEntries = workOrderTicketEntryService.queryTicketEntries(ticketId);
+        if (!CollectionUtils.isEmpty(workOrderTicketEntries)) {
+            for (WorkOrderTicketEntry workOrderTicketEntry : workOrderTicketEntries) {
+                workOrderTicketEntryService.deleteById(workOrderTicketEntry.getId());
+            }
         }
     }
 
