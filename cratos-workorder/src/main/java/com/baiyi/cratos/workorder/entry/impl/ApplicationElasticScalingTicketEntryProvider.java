@@ -9,6 +9,8 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
@@ -182,7 +184,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
                             .equals(group.getName()))
                     .findFirst();
             if (optionalApplicationResource.isPresent()) {
-                EdsAsset asset = getDeploymentAsset(optionalApplicationResource.get());
+                EdsAssetVO.Asset asset = getDeploymentAsset(optionalApplicationResource.get());
                 EdsAssetIndex replicasIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(),
                         KUBERNETES_REPLICAS);
                 int expectedReplicas = group.getExpectedReplicas() + compensateReplicas;
@@ -206,8 +208,8 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         }
     }
 
-    private EdsAsset getDeploymentAsset(ApplicationResource resource) {
-        return edsAssetService.getById(resource.getBusinessId());
+    private EdsAssetVO.Asset getDeploymentAsset(ApplicationResource resource) {
+        return BeanCopierUtil.copyProperties(edsAssetService.getById(resource.getBusinessId()),EdsAssetVO.Asset.class);
     }
 
     private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {

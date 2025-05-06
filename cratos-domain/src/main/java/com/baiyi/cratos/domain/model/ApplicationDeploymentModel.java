@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.model;
 
-import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ public class ApplicationDeploymentModel {
     public static class DeploymentScale implements Serializable {
         @Serial
         private static final long serialVersionUID = 3183391109623141815L;
-        private EdsAsset deployment;
+        private EdsAssetVO.Asset deployment;
         private String namespace;
         private Integer currentReplicas;
         private Integer expectedReplicas;

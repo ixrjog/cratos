@@ -1,9 +1,9 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
 import com.baiyi.cratos.domain.YamlUtils;
-import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.google.common.base.Joiner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class ApplicationDeploymentScaleTicketEntryBuilder {
     }
 
     public WorkOrderTicketEntry buildEntry() {
-        EdsAsset deployment = param.getDetail()
+        EdsAssetVO.Asset deployment = param.getDetail()
                 .getDeployment();
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
