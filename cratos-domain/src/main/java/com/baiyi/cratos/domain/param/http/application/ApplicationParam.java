@@ -60,6 +60,9 @@ public class ApplicationParam {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Schema
     public static class GetApplication {
         @NotBlank

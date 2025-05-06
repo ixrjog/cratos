@@ -51,6 +51,15 @@ public class WorkOrderTicketEntryServiceImpl implements WorkOrderTicketEntryServ
     }
 
     @Override
+    public List<WorkOrderTicketEntry> queryTicketEntries(int ticketId, String businessType) {
+        Example example = new Example(WorkOrderTicketEntry.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("ticketId", ticketId)
+                .andEqualTo("businessType", businessType);
+        return workOrderTicketEntryMapper.selectByExample(example);
+    }
+
+    @Override
     public int countByTicketId(int ticketId) {
         Example example = new Example(WorkOrderTicketEntry.class);
         Example.Criteria criteria = example.createCriteria();

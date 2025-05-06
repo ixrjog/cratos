@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.model;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -31,6 +32,7 @@ public class ApplicationReplicasModel {
     }
 
     @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ApplicationConfig implements Serializable {

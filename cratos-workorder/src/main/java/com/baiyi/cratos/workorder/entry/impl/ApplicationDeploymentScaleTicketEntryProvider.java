@@ -16,14 +16,16 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import org.springframework.stereotype.Component;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/30 11:36
  * &#064;Version 1.0
  */
+@Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-@WorkOrderKey(key = WorkOrderKeys.APPLICATION_DEPLOYMENT_SCALE)
+@WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> {
 
     public ApplicationDeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,

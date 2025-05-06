@@ -16,6 +16,8 @@ public interface WorkOrderTicketEntryService extends BaseValidService<WorkOrderT
 
     List<WorkOrderTicketEntry> queryTicketEntries(int ticketId);
 
+    List<WorkOrderTicketEntry> queryTicketEntries(int ticketId, String businessType);
+
     int countByTicketId(int ticketId);
 
 }

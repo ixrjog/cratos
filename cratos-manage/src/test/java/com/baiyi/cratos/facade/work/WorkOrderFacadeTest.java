@@ -4,10 +4,15 @@ import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
+import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
+import com.baiyi.cratos.facade.application.ApplicationFacade;
+import com.baiyi.cratos.service.ApplicationService;
 import com.google.api.client.util.Lists;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -23,13 +28,19 @@ import java.util.concurrent.TimeUnit;
 public class WorkOrderFacadeTest extends BaseUnit {
 
     @Resource
-    public WorkOrderFacade workOrderFacade;
+    private WorkOrderFacade workOrderFacade;
 
     @Resource
-    public WorkOrderTicketFacade workOrderTicketFacade;
+    private WorkOrderTicketFacade workOrderTicketFacade;
 
     @Resource
-    public WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
+    private WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
+
+    @Resource
+    private ApplicationService applicationService;
+
+    @Resource
+    private ApplicationFacade applicationFacade;
 
     @Test
     void test1() {
@@ -145,13 +156,43 @@ public class WorkOrderFacadeTest extends BaseUnit {
         System.out.println(dataTable);
     }
 
-
     @Test
     void test7() {
         WorkOrderTicketParam.SimpleTicketNo simpleTicketNo = WorkOrderTicketParam.SimpleTicketNo.builder()
                 .ticketNo("welmynju")
                 .build();
         workOrderTicketFacade.doNextStateOfTicket(simpleTicketNo);
+    }
+
+
+    @Test
+    void test8() {
+        SessionUtils.setUsername("baiyi");
+        WorkOrderTicketParam.CreateTicket createTicket = WorkOrderTicketParam.CreateTicket.builder()
+                .workOrderKey("APPLICATION_ELASTIC_SCALING")
+                .build();
+        workOrderTicketFacade.createTicket(createTicket);
+    }
+
+    @Test
+    void test9() {
+        ApplicationVO.Application application = applicationFacade.getApplicationByName(
+                ApplicationParam.GetApplication.builder()
+                        .name("leo-demo")
+                        .build());
+        ApplicationReplicasModel.ApplicationConfig config = ApplicationReplicasModel.ApplicationConfig.builder()
+                .expectedReplicas(10)
+                .build();
+        ApplicationReplicasModel.ApplicationConfigurationChange detail = ApplicationReplicasModel.ApplicationConfigurationChange.builder()
+                .application(application)
+                .config(config)
+                .namespace("prod")
+                .build();
+        WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry = WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry.builder()
+                .detail(detail)
+                .ticketId(207)
+                .build();
+        workOrderTicketEntryFacade.addApplicationElasticScalingTicketEntry(addTicketEntry);
     }
 
 }

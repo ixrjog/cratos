@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.util.GroupingUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -25,6 +26,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -41,6 +43,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  * &#064;Version 1.0
  */
 @SuppressWarnings("unchecked")
+@Component
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntryProvider<ApplicationReplicasModel.ApplicationConfigurationChange, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> {
@@ -49,6 +52,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     private final ListAppGroup listAppGroup;
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
+    private final WorkOrderTicketEntryService workOrderTicketEntryService;
 
     public ApplicationElasticScalingTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
@@ -61,6 +65,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         this.listAppGroup = listAppGroup;
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
+        this.workOrderTicketEntryService = workOrderTicketEntryService;
     }
 
     @Override
@@ -98,8 +103,26 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry param) {
+        WorkOrderTicketEntry workOrderTicketEntry = super.addEntry(param);
         addApplicationDeploymentAssets(param);
-        return super.addEntry(param);
+        TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> ticketEntryProvider = (TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), BusinessTypeEnum.EDS_ASSET.name());
+        int currentReplicas = workOrderTicketEntryService.queryTicketEntries(workOrderTicketEntry.getTicketId(),
+                        BusinessTypeEnum.EDS_ASSET.name())
+                .stream()
+                .map(e -> {
+                    ApplicationDeploymentModel.DeploymentScale deploymentScale = ticketEntryProvider.loadAs(e);
+                    return deploymentScale.getCurrentReplicas();
+                })
+                .mapToInt(Integer::intValue)
+                .sum();
+        ApplicationReplicasModel.ApplicationConfigurationChange applicationConfigurationChange = loadAs(
+                workOrderTicketEntry);
+        applicationConfigurationChange.getConfig()
+                .setCurrentReplicas(currentReplicas);
+        workOrderTicketEntry.setContent(YamlUtils.dump(applicationConfigurationChange));
+        workOrderTicketEntryService.save(workOrderTicketEntry);
+        return workOrderTicketEntry;
     }
 
     private void addApplicationDeploymentAssets(WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry param) {
@@ -128,20 +151,18 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         // 下一步要做的
         int compensateReplicas = 0;
         // G4
-
-        compensateReplicas = xG(groupSpec.getG4(), resources, param.getTicketId(), param.getDetail()
+        compensateReplicas = compute(groupSpec.getG4(), resources, param.getTicketId(), param.getDetail()
                 .getNamespace(), compensateReplicas);
-        compensateReplicas = xG(groupSpec.getG3(), resources, param.getTicketId(), param.getDetail()
+        compensateReplicas = compute(groupSpec.getG3(), resources, param.getTicketId(), param.getDetail()
                 .getNamespace(), compensateReplicas);
-        compensateReplicas = xG(groupSpec.getG2(), resources, param.getTicketId(), param.getDetail()
+        compensateReplicas = compute(groupSpec.getG2(), resources, param.getTicketId(), param.getDetail()
                 .getNamespace(), compensateReplicas);
-        xG(groupSpec.getG1(), resources, param.getTicketId(), param.getDetail()
+        compute(groupSpec.getG1(), resources, param.getTicketId(), param.getDetail()
                 .getNamespace(), compensateReplicas);
     }
 
-
-    private int xG(AppGroupSpec.Group group, List<ApplicationResource> resources, int ticketId, String namespace,
-                   int compensateReplicas) {
+    private int compute(AppGroupSpec.Group group, List<ApplicationResource> resources, int ticketId, String namespace,
+                        int compensateReplicas) {
         if (StringUtils.hasText(group.getName())) {
             Optional<ApplicationResource> optionalApplicationResource = resources.stream()
                     .filter(resource -> resource.getName()
@@ -167,12 +188,10 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
             } else {
                 return compensateReplicas + group.getExpectedReplicas();
             }
-
         } else {
             return compensateReplicas + group.getExpectedReplicas();
         }
     }
-
 
     private EdsAsset getDeploymentAsset(ApplicationResource resource) {
         return edsAssetService.getById(resource.getBusinessId());
