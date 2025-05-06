@@ -266,6 +266,20 @@ public class WorkOrderTicketParam {
         private ApplicationDeploymentModel.DeploymentScale detail;
     }
 
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddAliyunDataWorksInstanceTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeploymentScale>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 8210926100811483441L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private ApplicationDeploymentModel.DeploymentScale detail;
+    }
+
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor

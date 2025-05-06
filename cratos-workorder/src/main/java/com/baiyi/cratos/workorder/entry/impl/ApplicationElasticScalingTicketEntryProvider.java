@@ -23,6 +23,7 @@ import com.baiyi.cratos.workorder.builder.entry.ApplicationElasticScalingTicketE
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.ElasticScalingTypes;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -121,8 +122,20 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
         applicationConfigurationChange.getConfig()
                 .setCurrentReplicas(currentReplicas);
         workOrderTicketEntry.setContent(YamlUtils.dump(applicationConfigurationChange));
+        int expectedReplicas = applicationConfigurationChange.getConfig()
+                .getExpectedReplicas();
+        ElasticScalingTypes elasticScalingType = getElasticScalingType(currentReplicas, expectedReplicas);
+        applicationConfigurationChange.getConfig()
+                .setElasticScalingType(elasticScalingType.name());
         workOrderTicketEntryService.save(workOrderTicketEntry);
         return workOrderTicketEntry;
+    }
+
+    private ElasticScalingTypes getElasticScalingType(int currentReplicas, int expectedReplicas) {
+        if (currentReplicas == expectedReplicas) {
+            return ElasticScalingTypes.REBALANCING;
+        }
+        return expectedReplicas > currentReplicas ? ElasticScalingTypes.EXPANSION : ElasticScalingTypes.REDUCTION;
     }
 
     private void addApplicationDeploymentAssets(WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry param) {

@@ -40,6 +40,7 @@ public class ApplicationReplicasModel {
         private static final long serialVersionUID = -4336675028983546304L;
         private Integer currentReplicas;
         private Integer expectedReplicas;
+        private String elasticScalingType;
     }
 
 }

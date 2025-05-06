@@ -67,10 +67,10 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         update(kubernetes, deployment);
     }
 
-    public void scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
+    public Deployment scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
                       int replicas) throws KubernetesDeploymentException {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
-            client.apps()
+           return client.apps()
                     .deployments()
                     .inNamespace(namespace)
                     .withName(name)
