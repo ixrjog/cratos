@@ -7,6 +7,11 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -28,10 +33,17 @@ import org.springframework.stereotype.Component;
 @WorkOrderKey(key = WorkOrderKeys.APPLICATION_ELASTIC_SCALING)
 public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> {
 
+    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+
     public ApplicationDeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                          WorkOrderTicketService workOrderTicketService,
-                                                         WorkOrderService workOrderService) {
+                                                         WorkOrderService workOrderService,
+                                                         EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                         KubernetesDeploymentRepo kubernetesDeploymentRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
+        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
     }
 
     @Override
@@ -64,10 +76,18 @@ public class ApplicationDeploymentScaleTicketEntryProvider extends BaseTicketEnt
                 .build();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationDeploymentModel.DeploymentScale applicationConfigurationChange) throws WorkOrderTicketException {
-        // TODO: Implement the logic to process the entry
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
+                .getEdsConfigModel();
+        ApplicationDeploymentModel.DeploymentScale deploymentScale = loadAs(entry);
+        // name 是否需要优化 ？
+        kubernetesDeploymentRepo.scale(kubernetes, deploymentScale.getNamespace(), entry.getName(),
+                deploymentScale.getExpectedReplicas());
     }
 
     @Override

@@ -228,7 +228,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationReplicasModel.ApplicationConfigurationChange applicationConfigurationChange) throws WorkOrderTicketException {
-        // TODO: Implement the logic to process the entry
+        // 只读条目无需处理
     }
 
     @Override
