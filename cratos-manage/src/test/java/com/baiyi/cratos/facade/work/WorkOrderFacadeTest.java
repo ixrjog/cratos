@@ -195,4 +195,11 @@ public class WorkOrderFacadeTest extends BaseUnit {
         workOrderTicketEntryFacade.addApplicationElasticScalingTicketEntry(addTicketEntry);
     }
 
+    @Test
+    void test10() {
+        workOrderTicketFacade.adminDeleteTicketById(207);
+        workOrderTicketFacade.adminDeleteTicketById(208);
+        workOrderTicketFacade.adminDeleteTicketById(209);
+    }
+
 }

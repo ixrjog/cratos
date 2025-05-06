@@ -35,7 +35,7 @@ public class ApplicationDeploymentScaleTicketEntryBuilder {
                 .ticketId(param.getTicketId())
                 .name(deployment.getName())
                 .displayName(deployment.getName())
-                .instanceId(0)
+                .instanceId(deployment.getInstanceId())
                 .businessType(param.getBusinessType())
                 .businessId(deployment.getId())
                 .namespace(param.getDetail().getNamespace())
