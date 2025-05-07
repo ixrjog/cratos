@@ -9,9 +9,14 @@ import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
+import com.baiyi.cratos.service.ApplicationResourceService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -48,6 +53,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     private final TicketWorkflowFacade workflowFacade;
     private final TagService tagService;
     private final EdsFacade edsFacade;
+    private final ApplicationResourceService applicationResourceService;
+    private final EdsAssetService edsAssetService;
 
     @Override
     public void addApplicationPermissionTicketEntry(
@@ -209,6 +216,24 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                 .build();
         DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
         return dataTable.getData();
+    }
+
+    @Override
+    public List<EdsAssetVO.Asset> queryApplicationResourceDeploymentTicketEntry(
+            WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
+        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
+                queryApplicationResourceDeploymentTicketEntry.getApplicationName(),
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
+                queryApplicationResourceDeploymentTicketEntry.getNamespace());
+        if (CollectionUtils.isEmpty(resources)) {
+            return List.of();
+        }
+        return resources.stream()
+                .map(e -> {
+                    EdsAsset asset = edsAssetService.getById(e.getBusinessId());
+                    return BeanCopierUtil.copyProperties(asset, EdsAssetVO.Asset.class);
+                })
+                .toList();
     }
 
 }

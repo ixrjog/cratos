@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 
 import java.util.List;
@@ -14,12 +15,16 @@ public interface WorkOrderTicketEntryFacade {
 
     List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry();
 
+    List<EdsAssetVO.Asset> queryApplicationResourceDeploymentTicketEntry(
+            WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry);
+
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
     void addApplicationElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry);
 
-    void addApplicationDeploymentElasticScalingTicketEntry(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry);
+    void addApplicationDeploymentElasticScalingTicketEntry(
+            WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry);
 
     void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
 
@@ -30,7 +35,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addGitLabGroupPermissionTicketEntry(WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry);
 
-    void addAliyunDataWorksInstanceTicketEntry(WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry);
+    void addAliyunDataWorksInstanceTicketEntry(
+            WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry);
 
     void deleteById(int id);
 

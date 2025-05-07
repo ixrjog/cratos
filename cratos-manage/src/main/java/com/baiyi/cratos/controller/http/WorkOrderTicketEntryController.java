@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,13 @@ public class WorkOrderTicketEntryController {
     @PostMapping(value = "/aliyun/dataworks/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDataWorksInstanceTicketEntry() {
         return HttpResult.of(ticketEntryFacade.queryDataWorksInstanceTicketEntry());
+    }
+
+    @Operation(summary = "Query application resource deployment")
+    @PostMapping(value = "/application/resource/deployment/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsAssetVO.Asset>> queryApplicationResourceDeploymentTicketEntry(
+            WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
+        return HttpResult.of(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(queryApplicationResourceDeploymentTicketEntry));
     }
 
     // add entry

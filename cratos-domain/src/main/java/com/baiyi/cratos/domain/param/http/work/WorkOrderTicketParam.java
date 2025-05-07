@@ -150,6 +150,20 @@ public class WorkOrderTicketParam {
         private String approvalType;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryApplicationResourceDeploymentTicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 7790611109888431617L;
+        @NotBlank
+        private String applicationName;
+        @NotBlank
+        private String namespace;
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
