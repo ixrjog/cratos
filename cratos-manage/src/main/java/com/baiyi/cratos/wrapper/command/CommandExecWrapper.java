@@ -1,6 +1,7 @@
 package com.baiyi.cratos.wrapper.command;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
+import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.CommandExec;
@@ -37,7 +38,9 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
         String sessionUsername = SessionUtils.getUsername();
         boolean isMask = CommandExecUtils.isMask(sessionUsername, vo);
         vo.setMask(isMask);
-        vo.setCommandMask(CommandExecUtils.getCommandMask(vo, isMask));
+        // 命令脱敏
+        // vo.setCommandMask(CommandExecUtils.getCommandMask(vo, isMask));
+        vo.setCommandMask(isMask ? RegexSensitiveDataMasker.maskSensitiveData(vo.getCommand()) : vo.getCommand());
         vo.setCommand("");
         CommandExecUtils.maskOutputMessages(vo, isMask);
         vo.setApplicantInfo(getApplicantInfo(vo.getId(), vo.getUsername(), vo.getCompleted()));

@@ -1,11 +1,16 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
 import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
 import com.baiyi.cratos.facade.command.CommandExecFacade;
+import com.baiyi.cratos.service.CommandExecService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -16,6 +21,9 @@ public class CommandExecTest extends BaseUnit {
 
     @Resource
     private CommandExecFacade commandExecFacade;
+
+    @Resource
+    private CommandExecService commandExecService;
 
     @Test
     void test1() {
@@ -29,9 +37,17 @@ public class CommandExecTest extends BaseUnit {
                 .applyRemark("测试一下")
                 .command("curl -I https://www.baidu.com")
                 .approvedBy("baiyi")
-                .execTarget(execTarget )
+                .execTarget(execTarget)
                 .build();
         commandExecFacade.addCommandExec(addCommandExec);
+    }
+
+    @Test
+    void test2() {
+        List<CommandExec> commandExecList = commandExecService.selectAll();
+        for (CommandExec commandExec : commandExecList) {
+            System.out.println(RegexSensitiveDataMasker.maskSensitiveData(commandExec.getCommand()));
+        }
     }
 
 }
