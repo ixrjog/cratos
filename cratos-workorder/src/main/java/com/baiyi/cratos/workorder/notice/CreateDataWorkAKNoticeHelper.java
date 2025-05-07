@@ -1,27 +1,21 @@
 package com.baiyi.cratos.workorder.notice;
 
+import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
-import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
-import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +27,6 @@ import java.util.Map;
 @Component
 public class CreateDataWorkAKNoticeHelper extends BaseWorkOrderNoticeHelper {
 
-
     public CreateDataWorkAKNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
                                         UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                         EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
@@ -42,40 +35,23 @@ public class CreateDataWorkAKNoticeHelper extends BaseWorkOrderNoticeHelper {
                 notificationTemplateService);
     }
 
-    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
-        List<User> approvers = queryApprovers(workOrder, ticket, ticketNode);
-        List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
-                .stream()
-                .map(entry -> {
-                    TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getProvider(
-                            workOrder.getWorkOrderKey(), entry.getBusinessType());
-                    return ticketEntryProvider.getEntryDesc(entry);
-                })
-                .toList();
+    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String ramUsername,
+                        CreateAccessKeyResponse.AccessKey accessKey, User applicantUser) {
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
                 .put("workOrderName", workOrder.getName())
                 .put("applicant", ticket.getUsername())
-                .put("ticketEntities", ticketEntities)
+                .put("dataWorksRAMUsername", ramUsername)
+                .put("accessKeyId", accessKey.getAccessKeyId())
+                .put("accessKeySecret", accessKey.getAccessKeySecret())
                 .build();
-        sendMsgToApprover(approvers, dict);
+        sendMsgToUser(applicantUser, dict);
     }
 
-    private List<User> queryApprovers(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
-        if (StringUtils.hasText(ticketNode.getUsername())) {
-            return List.of(userService.getByUsername(ticketNode.getUsername()));
-        }
-        return ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
-    }
-
-    private void sendMsgToApprover(List<User> approvers, Map<String, Object> dict) {
-        if (CollectionUtils.isEmpty(approvers)) {
-            return;
-        }
-        approvers.forEach(
-                approver -> sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(),
-                        dict));
+    private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.CREATE_ALIYUN_DATAWORKS_RAM_AK_NOTICE.name(), dict);
     }
 
 }
+
 

@@ -18,7 +18,6 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -54,9 +53,9 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
-    private final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
     private final UserService userService;
     private final CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper;
+    private final WorkOrderService workOrderService;
 
     public AliyunDataWorksApplicationTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                          WorkOrderTicketService workOrderTicketService,
@@ -66,7 +65,6 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
                                                          AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
-                                                         EdsDingtalkMessageFacade edsDingtalkMessageFacade,
                                                          UserService userService,
                                                          CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
@@ -76,9 +74,9 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
-        this.edsDingtalkMessageFacade = edsDingtalkMessageFacade;
         this.userService = userService;
         this.createDataWorkAKNoticeHelper = createDataWorkAKNoticeHelper;
+        this.workOrderService = workOrderService;
     }
 
     private static final String ROW_TPL = "| {} | {} |";
@@ -96,8 +94,8 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         String username = aliyunAccount.getUsername();
         CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername);
         CreateAccessKeyResponse.AccessKey accessKey = createAccessKey(aliyun, ramUsername);
-        // TODO 发送通知
-
+        // 发送通知
+        sendMsg(workOrderTicket, username, ramUsername, accessKey);
         // 导入资产
         GetUserResponse.User getUser = getRamUser(aliyun, ramUsername);
         EdsAsset asset = holder.importAsset(getUser);
@@ -105,12 +103,22 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         addUsernameTag(asset, username);
     }
 
-    private void sendDingtalkMessage(String username) {
-
-        //  void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText);
-        User user = userService.getByUsername(username);
-        // createDataWorkAKNoticeHelper.sendMsg();
-
+    /**
+     * 发送通知
+     * @param workOrderTicket
+     * @param username
+     * @param ramUsername
+     * @param accessKey
+     */
+    private void sendMsg(WorkOrderTicket workOrderTicket, String username, String ramUsername,
+                         CreateAccessKeyResponse.AccessKey accessKey) {
+        try {
+            WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
+            User applicantUser = userService.getByUsername(username);
+            createDataWorkAKNoticeHelper.sendMsg(workOrder, workOrderTicket, ramUsername, accessKey, applicantUser);
+        } catch (Exception e) {
+            throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
+        }
     }
 
     private GetUserResponse.User getRamUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
