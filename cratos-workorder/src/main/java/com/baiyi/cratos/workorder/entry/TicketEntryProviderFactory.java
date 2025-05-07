@@ -40,6 +40,9 @@ public class TicketEntryProviderFactory {
     }
 
     public static TicketEntryProvider<?, ?> getProvider(String key, String businessType) {
+        if (!CONTEXT.containsKey(key)) {
+            return null;
+        }
         return CONTEXT.get(key)
                 .get(businessType);
     }

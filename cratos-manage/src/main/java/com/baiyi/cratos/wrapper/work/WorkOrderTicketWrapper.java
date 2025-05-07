@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -109,6 +110,9 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
                     List<WorkOrderTicketEntry> entries = entry.getValue();
                     TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(workOrderKey,
                             businessType);
+                    if (Objects.isNull(provider)) {
+                        return "";
+                    }
                     String rows = entries.stream()
                             .map(provider::getEntryTableRow)
                             .collect(Collectors.joining("\n"));
