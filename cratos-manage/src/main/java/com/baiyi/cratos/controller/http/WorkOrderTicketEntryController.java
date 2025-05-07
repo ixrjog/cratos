@@ -58,6 +58,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add application deployment elastic scaling ticket entry")
+    @PostMapping(value = "/application/deployment/elastic/scaling/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addElasticScalingOfApplicationDeploymentReplicasTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry) {
+        ticketEntryFacade.addApplicationDeploymentElasticScalingTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add computer permission ticket entry")
     @PostMapping(value = "/computer/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addComputerPermissionTicketEntry(

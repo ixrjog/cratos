@@ -18,10 +18,12 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -31,6 +33,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import com.baiyi.cratos.workorder.notice.CreateDataWorkAKNoticeHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -51,6 +54,9 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
+    private final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
+    private final UserService userService;
+    private final CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper;
 
     public AliyunDataWorksApplicationTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                          WorkOrderTicketService workOrderTicketService,
@@ -59,7 +65,10 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          AliyunRamUserRepo aliyunRamUserRepo,
                                                          EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
-                                                         AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo) {
+                                                         AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
+                                                         EdsDingtalkMessageFacade edsDingtalkMessageFacade,
+                                                         UserService userService,
+                                                         CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -67,6 +76,9 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         this.businessTagFacade = businessTagFacade;
         this.tagService = tagService;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
+        this.edsDingtalkMessageFacade = edsDingtalkMessageFacade;
+        this.userService = userService;
+        this.createDataWorkAKNoticeHelper = createDataWorkAKNoticeHelper;
     }
 
     private static final String ROW_TPL = "| {} | {} |";
@@ -80,18 +92,50 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        try {
-            CreateUserResponse.User createUser = aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun,
-                    aliyunAccount.getAccount());
+        String ramUsername = aliyunAccount.getAccount();
+        String username = aliyunAccount.getUsername();
+        CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername);
+        CreateAccessKeyResponse.AccessKey accessKey = createAccessKey(aliyun, ramUsername);
+        // TODO 发送通知
 
-            CreateAccessKeyResponse.AccessKey accessKey = aliyunRamAccessKeyRepo.createAccessKey(aliyun,
-                    aliyunAccount.getAccount());
-            GetUserResponse.User getUser = aliyunRamUserRepo.getUser(aliyun, aliyunAccount.getAccount());
-            EdsAsset asset = holder.importAsset(getUser);
-            // 标签
-            addUsernameTag(asset, aliyunAccount.getUsername());
+        // 导入资产
+        GetUserResponse.User getUser = getRamUser(aliyun, ramUsername);
+        EdsAsset asset = holder.importAsset(getUser);
+        // 关联用户
+        addUsernameTag(asset, username);
+    }
+
+    private void sendDingtalkMessage(String username) {
+
+        //  void sendToDingtalkUser(User sendToUser, NotificationTemplate notificationTemplate, String msgText);
+        User user = userService.getByUsername(username);
+        // createDataWorkAKNoticeHelper.sendMsg();
+
+    }
+
+    private GetUserResponse.User getRamUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+        try {
+            return aliyunRamUserRepo.getUser(aliyun, ramUsername);
         } catch (ClientException clientException) {
-            WorkOrderTicketException.runtime("Failed to create Aliyun RAM user err: {}", clientException.getMessage());
+            throw new WorkOrderTicketException("Failed to get Aliyun RAM user err: {}", clientException.getMessage());
+        }
+    }
+
+    private CreateUserResponse.User createRAMUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+        try {
+            return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, ramUsername);
+        } catch (ClientException clientException) {
+            throw new WorkOrderTicketException("Failed to create Aliyun RAM user err: {}",
+                    clientException.getMessage());
+        }
+    }
+
+    private CreateAccessKeyResponse.AccessKey createAccessKey(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+        try {
+            return aliyunRamAccessKeyRepo.createAccessKey(aliyun, ramUsername);
+        } catch (ClientException clientException) {
+            throw new WorkOrderTicketException("Failed to create Aliyun RAM user accessKey err: {}",
+                    clientException.getMessage());
         }
     }
 
@@ -121,7 +165,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Aliyun Instance | AK Account |
+                | Aliyun Instance | AK RAM User |
                 | --- | --- |
                 """;
     }
@@ -138,7 +182,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("AK Account")
+                .desc("AK RAM User")
                 .build();
     }
 

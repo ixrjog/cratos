@@ -66,6 +66,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addApplicationDeploymentElasticScalingTicketEntry(
+            WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.COMPUTER_PERMISSION.name(), addTicketEntry.getBusinessType());
