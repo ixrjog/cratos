@@ -62,6 +62,17 @@ public class AliyunRamUserRepo {
         return createUser;
     }
 
+    public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+                                              String username) throws ClientException {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUserName(username);
+        request.setDisplayName(username);
+        request.setComments(CREATED_BY);
+        return aliyunClient.getAcsResponse(regionId, aliyun, request)
+                .getUser();
+    }
+
+
     /**
      * 开通控制台登录
      *

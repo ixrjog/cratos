@@ -109,6 +109,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addAliyunDataWorksInstanceTicketEntry(
+            WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIYUN_DATAWORKS_AK.name(), addTicketEntry.getBusinessType());
+        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {
@@ -163,6 +171,18 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         workOrderTicketEntryService.deleteById(id);
     }
 
+    @Override
+    public void deleteAllByTicketId(int ticketId) {
+        WorkOrderTicket workOrderTicket = workOrderTicketService.getById(ticketId);
+        if (!workOrderTicket.getUsername()
+                .equals(SessionUtils.getUsername())) {
+            WorkOrderTicketException.runtime("Only the applicant can delete the entry.");
+        }
+        if (!TicketState.NEW.equals(TicketState.valueOf(workOrderTicket.getTicketState()))) {
+            WorkOrderTicketException.runtime("Only in the new state can it be deleted.");
+        }
+        deleteByTicketId(ticketId);
+    }
 
     @Override
     public List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry() {

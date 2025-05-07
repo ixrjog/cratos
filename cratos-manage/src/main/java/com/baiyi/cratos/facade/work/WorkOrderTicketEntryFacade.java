@@ -28,7 +28,11 @@ public interface WorkOrderTicketEntryFacade {
 
     void addGitLabGroupPermissionTicketEntry(WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry);
 
+    void addAliyunDataWorksInstanceTicketEntry(WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry);
+
     void deleteById(int id);
+
+    void deleteAllByTicketId(int ticketId);
 
     void setValidById(int id);
 

@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.model.AliyunDataWorksModel;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
@@ -266,18 +267,17 @@ public class WorkOrderTicketParam {
         private ApplicationDeploymentModel.DeploymentScale detail;
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddAliyunDataWorksInstanceTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeploymentScale>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddAliyunDataWorksInstanceTicketEntry extends TicketEntry implements HasEntryDetail<AliyunDataWorksModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
-        private static final long serialVersionUID = 8210926100811483441L;
+        private static final long serialVersionUID = -4472407041713180447L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
-        private ApplicationDeploymentModel.DeploymentScale detail;
+        private AliyunDataWorksModel.AliyunAccount detail;
     }
 
     @Data

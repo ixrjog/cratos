@@ -28,14 +28,20 @@ public class WorkOrderTicketEntryController {
 
     // query entry
     @Operation(summary = "Query aliyun dataWorks instance")
-    @PostMapping(value = "/aliyun/dataworks/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/aliyun/dataworks/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDataWorksInstanceTicketEntry() {
-      //   ticketEntryFacade.addApplicationPermissionTicketEntry(addTicketEntry);
-      //   return HttpResult.SUCCESS;
-        return null;
+        return HttpResult.of(ticketEntryFacade.queryDataWorksInstanceTicketEntry());
     }
 
     // add entry
+    @Operation(summary = "Add aliyun dataWorks instance ticket entry")
+    @PostMapping(value = "/aliyun/dataworks/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addDataWorksInstanceTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry) {
+        ticketEntryFacade.addAliyunDataWorksInstanceTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add application permission ticket entry")
     @PostMapping(value = "/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationPermissionTicketEntry(
@@ -98,6 +104,13 @@ public class WorkOrderTicketEntryController {
     @DeleteMapping(value = "/del/by/id", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteTicketEntryById(@RequestParam int id) {
         ticketEntryFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete all ticket entry by ticketId")
+    @DeleteMapping(value = "/del/all/by/ticketId", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteAllTicketEntryByTicketId(@RequestParam int ticketId) {
+        ticketEntryFacade.deleteAllByTicketId(ticketId);
         return HttpResult.SUCCESS;
     }
 

@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.ram.model.v20150501.CreateAccessKeyRequest;
+import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysRequest;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysResponse;
 import com.baiyi.cratos.eds.aliyun.client.AliyunClient;
@@ -23,8 +25,7 @@ public class AliyunRamAccessKeyRepo {
 
     private final AliyunClient aliyunClient;
 
-    public List<ListAccessKeysResponse.AccessKey> listAccessKeys(EdsAliyunConfigModel.Aliyun aliyun,
-                                                                 String username) {
+    public List<ListAccessKeysResponse.AccessKey> listAccessKeys(EdsAliyunConfigModel.Aliyun aliyun, String username) {
         try {
             ListAccessKeysRequest request = new ListAccessKeysRequest();
             request.setUserName(username);
@@ -34,6 +35,14 @@ public class AliyunRamAccessKeyRepo {
             log.debug(e.getMessage());
         }
         return List.of();
+    }
+
+    public CreateAccessKeyResponse.AccessKey createAccessKey(EdsAliyunConfigModel.Aliyun aliyun,
+                                                             String username) throws ClientException {
+        CreateAccessKeyRequest request = new CreateAccessKeyRequest();
+        request.setUserName(username);
+        CreateAccessKeyResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
+        return response.getAccessKey();
     }
 
 }

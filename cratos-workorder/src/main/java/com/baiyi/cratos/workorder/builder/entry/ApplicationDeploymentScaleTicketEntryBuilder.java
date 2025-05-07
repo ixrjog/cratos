@@ -45,4 +45,5 @@ public class ApplicationDeploymentScaleTicketEntryBuilder {
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();
     }
+
 }

@@ -86,12 +86,11 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                ApplicationDeploymentModel.DeploymentScale applicationConfigurationChange) throws WorkOrderTicketException {
+                                ApplicationDeploymentModel.DeploymentScale deploymentScale) throws WorkOrderTicketException {
         EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
                 .getEdsConfigModel();
-        ApplicationDeploymentModel.DeploymentScale deploymentScale = loadAs(entry);
         // name 是否需要优化 ？
         Deployment deployment = kubernetesDeploymentRepo.scale(kubernetes, deploymentScale.getNamespace(),
                 entry.getName(), deploymentScale.getExpectedReplicas());

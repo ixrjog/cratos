@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.model;
 
-import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,11 +22,12 @@ public class AliyunDataWorksModel {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AliyunInstance implements Serializable {
+    public static class AliyunAccount implements Serializable {
         @Serial
         private static final long serialVersionUID = -5846538132637578197L;
-        private EdsInstance edsInstance;
-        // DataWorks
+        private EdsInstanceVO.EdsInstance edsInstance;
+        private String username;
+        // Aliyun DataWorks RAM Username
         private String account;
     }
 

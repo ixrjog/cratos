@@ -124,12 +124,12 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
                 workOrderTicketEntry);
         applicationConfigurationChange.getConfig()
                 .setCurrentReplicas(currentReplicas);
-        workOrderTicketEntry.setContent(YamlUtils.dump(applicationConfigurationChange));
         int expectedReplicas = applicationConfigurationChange.getConfig()
                 .getExpectedReplicas();
         ElasticScalingTypes elasticScalingType = getElasticScalingType(currentReplicas, expectedReplicas);
         applicationConfigurationChange.getConfig()
                 .setElasticScalingType(elasticScalingType.name());
+        workOrderTicketEntry.setContent(YamlUtils.dump(applicationConfigurationChange));
         workOrderTicketEntryService.save(workOrderTicketEntry);
         return workOrderTicketEntry;
     }
