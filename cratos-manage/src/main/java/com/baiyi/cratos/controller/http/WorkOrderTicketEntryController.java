@@ -37,8 +37,9 @@ public class WorkOrderTicketEntryController {
     @Operation(summary = "Query application resource deployment")
     @PostMapping(value = "/application/resource/deployment/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsAssetVO.Asset>> queryApplicationResourceDeploymentTicketEntry(
-            WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
-        return HttpResult.of(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(queryApplicationResourceDeploymentTicketEntry));
+            @RequestBody @Valid WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
+        return HttpResult.of(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(
+                queryApplicationResourceDeploymentTicketEntry));
     }
 
     // add entry
@@ -105,7 +106,6 @@ public class WorkOrderTicketEntryController {
         ticketEntryFacade.addRevokeUserPermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
-
 
     // other
 
