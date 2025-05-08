@@ -3,16 +3,19 @@ package com.baiyi.cratos.workorder.entry.impl;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -25,6 +28,11 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
 /**
  * &#064;Author  baiyi
@@ -39,17 +47,20 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final EdsInstanceService edsInstanceService;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public DeploymentScaleTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                               WorkOrderTicketService workOrderTicketService,
                                               WorkOrderService workOrderService,
                                               EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                               KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                              EdsInstanceService edsInstanceService) {
+                                              EdsInstanceService edsInstanceService,
+                                              EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.edsInstanceService = edsInstanceService;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     @Override
@@ -100,9 +111,28 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {
+        Integer currentReplicas = Optional.of(param)
+                .map(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry::getDetail)
+                .map(ApplicationDeploymentModel.DeploymentScale::getCurrentReplicas)
+                .orElse(getDeploymentReplicas(Optional.of(param)
+                        .map(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry::getDetail)
+                        .map(ApplicationDeploymentModel.DeploymentScale::getDeployment)
+                        .orElse(null)));
+        param.getDetail().setCurrentReplicas(currentReplicas);
         return ApplicationDeploymentScaleTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .buildEntry();
+    }
+
+    private Integer getDeploymentReplicas(EdsAssetVO.Asset deployment) {
+        if (Objects.isNull(deployment)) {
+            return 0;
+        }
+        EdsAssetIndex replicasIndex = edsAssetIndexService.getByAssetIdAndName(deployment.getId(), KUBERNETES_REPLICAS);
+        if (Objects.isNull(replicasIndex)) {
+            return 0;
+        }
+        return Integer.valueOf(replicasIndex.getValue());
     }
 
 }

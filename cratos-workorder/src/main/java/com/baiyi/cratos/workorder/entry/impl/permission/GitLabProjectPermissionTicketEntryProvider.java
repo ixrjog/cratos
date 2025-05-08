@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry.impl;
+package com.baiyi.cratos.workorder.entry.impl.permission;
 
 
 import com.baiyi.cratos.common.util.StringFormatter;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry.impl.revoke;
+package com.baiyi.cratos.workorder.entry.impl.permission.revoke;
 
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;

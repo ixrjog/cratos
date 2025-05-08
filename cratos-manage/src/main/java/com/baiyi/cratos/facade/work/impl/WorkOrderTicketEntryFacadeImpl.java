@@ -61,7 +61,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_PERMISSION.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -69,7 +71,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -77,14 +81,18 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.COMPUTER_PERMISSION.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -92,7 +100,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.REVOKE_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -106,7 +116,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         Optional.of(addTicketEntry.getDetail())
                 .map(GitLabPermissionModel.Permission::getTarget)
                 .orElseThrow(() -> new WorkOrderTicketException("GitLab project permission target cannot be empty."));
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -120,7 +132,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         Optional.of(addTicketEntry.getDetail())
                 .map(GitLabPermissionModel.Permission::getTarget)
                 .orElseThrow(() -> new WorkOrderTicketException("GitLab group permission target cannot be empty."));
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override
@@ -128,7 +142,9 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.ALIYUN_DATAWORKS_AK.name(), addTicketEntry.getBusinessType());
-        WorkOrderTicketEntry entry = ticketEntryProvider.addEntry(addTicketEntry);
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
     }
 
     @Override

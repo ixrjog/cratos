@@ -3,8 +3,11 @@ package com.baiyi.cratos.workorder.entry;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.aop.support.AopUtils;
+
+import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -35,8 +38,8 @@ public interface TicketEntryProvider<Detail, EntryParam extends WorkOrderTicketP
      * @return
      */
     default String getKey() {
-        return AopUtils.getTargetClass(this)
-                .getAnnotation(com.baiyi.cratos.workorder.annotation.WorkOrderKey.class)
+        return Objects.requireNonNull(AopUtils.getTargetClass(this)
+                        .getAnnotation(WorkOrderKey.class))
                 .key()
                 .name();
     }

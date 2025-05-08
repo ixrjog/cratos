@@ -133,7 +133,7 @@ public class WorkOrderTicketEntryController {
     @Operation(summary = "Delete ticket entry")
     @DeleteMapping(value = "/del", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteTicketEntry(
-            @RequestBody WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry) {
+            @RequestBody @Valid WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry) {
         ticketEntryFacade.deleteTicketEntry(deleteTicketEntry);
         return HttpResult.SUCCESS;
     }

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry.impl;
+package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
