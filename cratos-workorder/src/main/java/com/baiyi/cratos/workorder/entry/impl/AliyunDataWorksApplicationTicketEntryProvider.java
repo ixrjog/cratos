@@ -43,7 +43,7 @@ import java.util.Objects;
  * &#064;Version 1.0
  */
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_DATAWORKS_AK)
 public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEntryProvider<AliyunDataWorksModel.AliyunAccount, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> {
 
