@@ -43,7 +43,7 @@ import java.util.Objects;
  * &#064;Version 1.0
  */
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
+@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_DATAWORKS_AK)
 public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEntryProvider<AliyunDataWorksModel.AliyunAccount, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> {
 
@@ -155,7 +155,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         }
         BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
                 .tagId(usernameTag.getId())
-                .businessType(getBusinessType())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(asset.getId())
                 .tagValue(username)
                 .build();
