@@ -313,9 +313,18 @@ public class EdsFacadeImpl implements EdsFacade {
 
     @Override
     public void deleteEdsAssetById(Integer id) {
-        if (edsAssetService.getById(id) == null) {
+        if (!IdentityUtil.hasIdentity(id)) {
             return;
         }
+        EdsAsset asset = edsAssetService.getById(id);
+        if (Objects.isNull(asset)) {
+            return;
+        }
+        if (asset.getName()
+                .equals("ak-dataworks-xiuyuan")) {
+            log.info("debug ak-dataworks-xiuyuan delete");
+        }
+        log.info("Delete eds asset type={}, name={}, id={}", asset.getAssetType(), asset.getName(), asset.getId());
         // 删除索引
         edsAssetIndexFacade.deleteIndicesOfAsset(id);
         // 删除应用资源

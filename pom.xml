@@ -35,6 +35,7 @@
         <module>cratos-eds-jenkins</module>
         <module>cratos-ssh-kubernetes</module>
         <module>cratos-workorder</module>
+        <module>cratos-eds-cratos</module>
     </modules>
 
     <properties>

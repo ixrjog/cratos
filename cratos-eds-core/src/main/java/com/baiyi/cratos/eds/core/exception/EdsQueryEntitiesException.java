@@ -33,4 +33,8 @@ public class EdsQueryEntitiesException extends BaseException {
         this.code = 70000;
     }
 
+    public static void runtime(String message, Object... var2) {
+       throw new EdsQueryEntitiesException(message, var2);
+    }
+
 }

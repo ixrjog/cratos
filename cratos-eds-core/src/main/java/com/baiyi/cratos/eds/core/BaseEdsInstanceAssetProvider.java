@@ -27,9 +27,11 @@ import com.baiyi.cratos.eds.core.util.ConfigUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.base.Joiner;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
@@ -92,12 +94,18 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private void enterEntities(ExternalDataSourceInstance<C> instance, List<A> entities) {
         Set<Integer> idSet = listAssetsIdSet(instance);
         entities.forEach(e -> enterEntity(instance, idSet, e));
-        idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
+        if (!CollectionUtils.isEmpty(idSet)) {
+            log.info("Delete eds instance asset: instance={}, assetIds={}", instance.getEdsInstance()
+                    .getInstanceName(), Joiner.on("|")
+                    .join(idSet));
+            idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
+        }
         // post processing
         postEnterEntities(instance);
     }
 
-    protected void postEnterEntities(ExternalDataSourceInstance<C> instance) {}
+    protected void postEnterEntities(ExternalDataSourceInstance<C> instance) {
+    }
 
     protected void enterEntity(ExternalDataSourceInstance<C> instance, Set<Integer> idSet, A entity) {
         EdsAsset asset = enterEntity(instance, entity);

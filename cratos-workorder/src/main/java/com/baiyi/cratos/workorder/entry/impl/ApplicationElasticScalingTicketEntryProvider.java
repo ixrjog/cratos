@@ -216,7 +216,9 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {
         TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> applicationDeploymentScaleTicketEntryProvider = (TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
                 getKey(), BusinessTypeEnum.EDS_ASSET.name());
-        applicationDeploymentScaleTicketEntryProvider.addEntry(param);
+        if (applicationDeploymentScaleTicketEntryProvider != null) {
+            applicationDeploymentScaleTicketEntryProvider.addEntry(param);
+        }
     }
 
     private void allocateReplicas(int total, AppGroupSpec.GroupSpec groupingSpecifications) {

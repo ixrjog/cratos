@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
+import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -292,6 +293,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = -4472407041713180447L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
         private AliyunDataWorksModel.AliyunAccount detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationDeletePodTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationVO.Application>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 3563509820230350553L;
+        private final String businessType = BusinessTypeEnum.APPLICATION.name();
+        private ApplicationVO.Application detail;
     }
 
     @Data
