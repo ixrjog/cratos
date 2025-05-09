@@ -24,7 +24,7 @@ import lombok.Singular;
 import java.util.List;
 
 /**
- * Key binding bean
+ * KmsKey binding bean
  */
 @Builder
 @Getter

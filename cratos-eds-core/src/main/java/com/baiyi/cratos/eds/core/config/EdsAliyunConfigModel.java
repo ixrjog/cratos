@@ -41,6 +41,7 @@ public class EdsAliyunConfigModel {
         private ONS ons;
         private ACR acr;
         private RAM ram;
+        private KMS kms;
     }
 
     @Data
@@ -65,6 +66,13 @@ public class EdsAliyunConfigModel {
     @NoArgsConstructor
     @Schema
     public static class OSS {
+        private List<String> endpoints;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class KMS {
         private List<String> endpoints;
     }
 

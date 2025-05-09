@@ -78,7 +78,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final BusinessAssetBindService businessAssetBindService;
-    private final EdsAssetIndexFacade  edsAssetIndexFacade;
+    private final EdsAssetIndexFacade edsAssetIndexFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_INSTANCE)
@@ -288,8 +288,7 @@ public class EdsFacadeImpl implements EdsFacade {
                     importInstanceAsset.getAssetType());
             providerHolder.importAssets();
         } catch (Exception e) {
-            e.printStackTrace();
-            log.warn(e.getMessage());
+            log.warn(e.getMessage(), e);
         }
     }
 

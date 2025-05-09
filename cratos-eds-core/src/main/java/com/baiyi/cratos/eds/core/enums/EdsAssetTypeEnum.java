@@ -32,6 +32,9 @@ public enum EdsAssetTypeEnum {
     ALIYUN_RDS_DATABASE("RDS DB", 42),
     ALIYUN_VPC("VPC", 43),
     ALIYUN_VIRTUAL_SWITCH("vSwitch", 44),
+    ALIYUN_KMS_INSTANCE("KMS Instance", 45),
+    ALIYUN_KMS_SECRET("KMS Secret",46),
+    ALIYUN_KMS_KEY("KMS Key", 47),
 
     ALIMAIL_DEPARTMENT("Department", 0),
     ALIMAIL_USER("User", 1),

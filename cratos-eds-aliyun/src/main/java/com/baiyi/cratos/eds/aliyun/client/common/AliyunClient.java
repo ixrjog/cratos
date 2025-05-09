@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aliyun.client;
+package com.baiyi.cratos.eds.aliyun.client.common;
 
 import com.aliyuncs.AcsRequest;
 import com.aliyuncs.AcsResponse;

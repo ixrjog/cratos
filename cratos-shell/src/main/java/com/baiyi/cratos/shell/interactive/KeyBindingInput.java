@@ -17,7 +17,7 @@
 package com.baiyi.cratos.shell.interactive;
 
 /**
- * Key binding input interface
+ * KmsKey binding input interface
  */
 @FunctionalInterface
 public interface KeyBindingInput {

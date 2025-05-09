@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyuncs.cr.model.v20181201.*;
 import com.aliyuncs.exceptions.ClientException;
-import com.baiyi.cratos.eds.aliyun.client.AliyunClient;
+import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;

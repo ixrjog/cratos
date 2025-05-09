@@ -42,7 +42,7 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListComm
  */
 @Slf4j
 @SshShellComponent
-@ShellCommandGroup("SSH Key Commands")
+@ShellCommandGroup("SSH KmsKey Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class SshKeyCommand extends AbstractCommand {
 

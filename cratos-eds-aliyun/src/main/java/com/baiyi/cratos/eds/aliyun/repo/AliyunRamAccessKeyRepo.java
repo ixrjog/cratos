@@ -5,7 +5,7 @@ import com.aliyuncs.ram.model.v20150501.CreateAccessKeyRequest;
 import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysRequest;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysResponse;
-import com.baiyi.cratos.eds.aliyun.client.AliyunClient;
+import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

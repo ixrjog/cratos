@@ -171,7 +171,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 }
                 createResourceByTemplate.setTemplateId(template.getId());
             } else {
-                KubernetesResourceTemplateException.runtime("Template ID or Key must be specified.");
+                KubernetesResourceTemplateException.runtime("Template ID or KmsKey must be specified.");
             }
         }
         KubernetesResourceTemplateCustom.Custom templateCustom = getCustomFromUserMergeTemplate(
