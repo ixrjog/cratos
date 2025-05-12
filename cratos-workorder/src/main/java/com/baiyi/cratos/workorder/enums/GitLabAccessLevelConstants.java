@@ -13,7 +13,7 @@ public enum GitLabAccessLevelConstants {
 //    GUEST("Guest", 10),
     REPORTER("Reporter", 20),
     DEVELOPER("Developer", 30),
-    MASTER("Master", 40),
+    MAINTAINER("Maintainer", 40),
     OWNER("Owner", 50);
 
     private final String role;
