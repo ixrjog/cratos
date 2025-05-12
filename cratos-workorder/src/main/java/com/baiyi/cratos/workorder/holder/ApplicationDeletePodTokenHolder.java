@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.holder;
 import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,11 +34,12 @@ public class ApplicationDeletePodTokenHolder {
         return ApplicationDeletePodToken.Token.NO_TOKEN;
     }
 
-    public void setToken(String username, String applicationName, Integer ticketId) {
+    public void setToken(String username, String applicationName, WorkOrderTicket ticket) {
         ApplicationDeletePodToken.Token.builder()
                 .username(username)
                 .applicationName(applicationName)
-                .ticketId(ticketId)
+                .ticketId(ticket.getId())
+                .ticketNo(ticket.getTicketNo())
                 // 2 hours
                 .expires(ExpiredUtil.generateExpirationTime(DEFAULT_EXPIRE, TimeUnit.HOURS))
                 .build();

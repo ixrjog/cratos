@@ -80,7 +80,7 @@ public class ApplicationDeploymentPodDeleteTicketEntryProvider extends BaseTicke
                                 ApplicationVO.Application application) throws WorkOrderTicketException {
         // 审批完成后2h内可以删除应用容器
         applicationDeletePodTokenHolder.setToken(workOrderTicket.getUsername(), application.getApplicationName(),
-                workOrderTicket.getId());
+                workOrderTicket);
     }
 
     @Override

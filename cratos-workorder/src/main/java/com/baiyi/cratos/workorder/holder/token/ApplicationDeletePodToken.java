@@ -1,5 +1,7 @@
 package com.baiyi.cratos.workorder.holder.token;
 
+import com.baiyi.cratos.domain.constant.Global;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,9 +32,13 @@ public class ApplicationDeletePodToken {
         private String username;
         private String applicationName;
         private Integer ticketId;
+        private String ticketNo;
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expires;
         @Builder.Default
         private Boolean valid = true;
+        @Builder.Default
+        private String desc = "Temporary authorization on workOrder";
     }
 
 }
