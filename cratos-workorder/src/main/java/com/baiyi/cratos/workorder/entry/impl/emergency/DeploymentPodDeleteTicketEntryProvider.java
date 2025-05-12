@@ -60,7 +60,8 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
         return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(),
-                deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
+                deleteDeploymentPod.getAsset()
+                        .getName(), deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.baiyi.cratos.my;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Application;
-import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
@@ -17,6 +17,7 @@ import com.baiyi.cratos.facade.application.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
@@ -25,10 +26,15 @@ import io.fabric8.kubernetes.api.model.Probe;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
 /**
  * &#064;Author  baiyi
@@ -60,6 +66,8 @@ public class ApplicationTest extends BaseUnit {
     private BusinessTagFacade businessTagFacade;
 
     private static final String RESOURCE_TPL = "resource: instanceName={}, name={}, displayName={}, businessType={}";
+    @Autowired
+    private EdsAssetIndexService edsAssetIndexService;
 
     @Test
     void test() {
@@ -71,8 +79,8 @@ public class ApplicationTest extends BaseUnit {
                     .endsWith("-h5")) {
                 continue;
             }
-            List<ApplicationResource> resources = applicationResourceService.queryByParam(app.getName(), "ACK-CHANNEL-PROD",
-                    "KUBERNETES_DEPLOYMENT", "prod");
+            List<ApplicationResource> resources = applicationResourceService.queryByParam(app.getName(),
+                    "ACK-CHANNEL-PROD", "KUBERNETES_DEPLOYMENT", "prod");
             if (!resources.isEmpty()) {
                 ApplicationResource resource = resources.getFirst();
                 EdsAsset edsAsset = edsAssetService.getById(resource.getBusinessId());
@@ -137,7 +145,44 @@ public class ApplicationTest extends BaseUnit {
 
     @Test
     void test1() {
+        List<Application> apps = applicationService.selectAll();
+        Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
+        for (Application app : apps) {
+            // applicationName instanceName resource_type namespace
+            if (app.getName()
+                    .endsWith("-h5")) {
+                continue;
+            }
 
+            SimpleBusiness hasBusiness = SimpleBusiness.builder()
+                    .businessType(BusinessTypeEnum.APPLICATION.name())
+                    .businessId(app.getId())
+                    .build();
+
+            BusinessTag businessTag = businessTagFacade.getBusinessTag(hasBusiness, SysTagKeys.LEVEL.getKey());
+
+            int total = 0;
+
+            if (Objects.nonNull(businessTag) && "A1".equals(businessTag.getTagValue())) {
+                // A1应用
+                System.out.println(app.getName());
+
+                List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(app.getName(),
+                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), "prod");
+                int replicas = 0;
+                if (!CollectionUtils.isEmpty(resources)) {
+                    for (ApplicationResource resource : resources) {
+                        EdsAssetIndex replicasIndex = edsAssetIndexService.getByAssetIdAndName(resource.getBusinessId(),
+                                KUBERNETES_REPLICAS);
+                        replicas = replicas + Integer.parseInt(replicasIndex.getValue());
+                    }
+
+
+                }
+
+
+            }
+        }
     }
 
 }
