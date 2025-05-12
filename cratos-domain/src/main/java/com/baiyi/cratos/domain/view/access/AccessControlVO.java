@@ -9,19 +9,25 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/1/13 16:01
  * &#064;Version 1.0
  */
+@SuppressWarnings("rawtypes")
 public class AccessControlVO {
 
+    public enum OperationPermission {
+        DEPLOYMENT_POD_DELETE
+    }
 
     public interface HasAccessControl extends BaseBusiness.IBusinessAnnotate {
-        void setAccessControl(AccessControl accessControl);
 
+        void setAccessControl(AccessControl accessControl);
         String getNamespace();
+
     }
 
     @Data
@@ -29,11 +35,13 @@ public class AccessControlVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AccessControl implements Serializable {
+    public static class AccessControl<T> implements Serializable {
         @Serial
         private static final long serialVersionUID = -117053221590362418L;
         private Boolean permission;
         private String businessType;
+        // 操作权限
+        private Map<String, T> operationPermissions = Map.of();
 
         public static AccessControl unauthorized(String businessType) {
             return AccessControl.builder()

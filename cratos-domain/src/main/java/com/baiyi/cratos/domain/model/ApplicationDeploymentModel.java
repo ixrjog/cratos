@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * &#064;Author  baiyi
@@ -29,6 +30,24 @@ public class ApplicationDeploymentModel {
         private String namespace;
         private Integer currentReplicas;
         private Integer expectedReplicas;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DeleteDeploymentPod implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 3183391109623141815L;
+        private String namespace;
+        @Schema(description = "Kubernetes deployment asset")
+        private EdsAssetVO.Asset asset;
+        private String podName;
+        private String ticketId;
+        private String ticketNo;
+        @Builder.Default
+        private Date deleteOperationTime = new Date();
     }
 
 }

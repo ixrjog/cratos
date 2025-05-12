@@ -308,6 +308,19 @@ public class WorkOrderTicketParam {
         private ApplicationVO.Application detail;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddDeploymentPodDeleteTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeleteDeploymentPod>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 3563509820230350553L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private ApplicationDeploymentModel.DeleteDeploymentPod detail;
+    }
+
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor

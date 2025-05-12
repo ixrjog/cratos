@@ -1,13 +1,19 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.facade.RbacRoleFacade;
-import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.facade.AccessControlFacade;
+import com.baiyi.cratos.facade.RbacRoleFacade;
+import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.UserPermissionService;
+import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
+import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -16,13 +22,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.baiyi.cratos.domain.view.access.AccessControlVO.OperationPermission.DEPLOYMENT_POD_DELETE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/1/13 16:09
  * &#064;Version 1.0
  */
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -30,6 +40,8 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
 
     private final UserPermissionService userPermissionService;
     private final RbacRoleFacade rbacRoleFacade;
+    private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
+    private final ApplicationService applicationService;
 
     @Override
     public AccessControlVO.AccessControl generateAccessControl(BaseBusiness.HasBusiness hasBusiness, String namespace) {
@@ -66,12 +78,31 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
 
     @Override
     public AccessControlVO.HasAccessControl invoke(AccessControlVO.HasAccessControl hasAccessControl) {
-        AccessControlVO.AccessControl accessControl = this.generateAccessControl(SimpleBusiness.builder()
+        AccessControlVO.AccessControl accessControl = generateAccessControl(SimpleBusiness.builder()
                 .businessType(hasAccessControl.getBusinessType())
                 .businessId(hasAccessControl.getBusinessId())
                 .build(), hasAccessControl.getNamespace());
+
+        if (BusinessTypeEnum.APPLICATION.name()
+                .equals(hasAccessControl.getBusinessType())) {
+            handleApplicationAccessControl(hasAccessControl, accessControl);
+        }
         hasAccessControl.setAccessControl(accessControl);
         return hasAccessControl;
+    }
+
+    private void handleApplicationAccessControl(AccessControlVO.HasAccessControl hasAccessControl,
+                                                AccessControlVO.AccessControl accessControl) {
+        Application application = applicationService.getById(hasAccessControl.getBusinessId());
+        if (Objects.isNull(application)) {
+            return;
+        }
+        ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
+                SessionUtils.getUsername(), application.getName());
+        if (deleteToken.getValid()) {
+            accessControl.getOperationPermissions()
+                    .put(DEPLOYMENT_POD_DELETE, deleteToken);
+        }
     }
 
 }
