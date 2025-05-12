@@ -205,6 +205,9 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 if(optionalApplicationName.isPresent() && param.getApplicationName().equals(optionalApplicationName.get())) {
                     // 匹配到应用名称
 
+                    kubernetesPodRepo.delete(holder.getInstance()
+                            .getEdsConfigModel(),param.getNamespace(), param.getPodName());
+
 
                 }
             } catch (Exception exception) {

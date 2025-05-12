@@ -100,7 +100,7 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
                 SessionUtils.getUsername(), application.getName());
         if (deleteToken.getValid()) {
             accessControl.getOperationPermissions()
-                    .put(DEPLOYMENT_POD_DELETE, deleteToken);
+                    .put(DEPLOYMENT_POD_DELETE.name(), deleteToken);
         }
     }
 
