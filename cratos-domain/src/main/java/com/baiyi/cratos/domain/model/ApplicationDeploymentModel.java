@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.model;
 
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -42,10 +43,13 @@ public class ApplicationDeploymentModel {
         private static final long serialVersionUID = 3183391109623141815L;
         private String namespace;
         @Schema(description = "Kubernetes deployment asset")
-        private EdsAssetVO.Asset asset;
+        private EdsAsset asset;
         private String podName;
-        private String ticketId;
+        private Integer ticketId;
         private String ticketNo;
+        @Builder.Default
+        private Boolean success = true;
+        private String result;
         @Builder.Default
         private Date deleteOperationTime = new Date();
     }

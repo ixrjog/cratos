@@ -40,6 +40,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
+    void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);
+
     void deleteById(int id);
 
     void deleteAllByTicketId(int ticketId);

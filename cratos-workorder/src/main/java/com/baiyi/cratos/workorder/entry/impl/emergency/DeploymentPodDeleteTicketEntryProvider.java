@@ -8,12 +8,15 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
+import com.baiyi.cratos.workorder.builder.entry.DeploymentPodDeleteTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -56,7 +59,8 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
         ApplicationDeploymentModel.DeleteDeploymentPod deleteDeploymentPod = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(), deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
+        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(),
+                deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
     }
 
     @Override
@@ -69,6 +73,21 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
     }
 
     @Override
+    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry param) {
+        WorkOrderTicketEntry entry = paramToEntry(param);
+        WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
+        if (!TicketState.COMPLETED.equals(TicketState.valueOf(ticket.getTicketState()))) {
+            WorkOrderTicketException.runtime("Only when the work order is completed can the configuration be added.");
+        }
+        try {
+            workOrderTicketEntryService.add(entry);
+            return entry;
+        } catch (DaoServiceException daoServiceException) {
+            throw new WorkOrderTicketException("Repeat adding entries.");
+        }
+    }
+
+    @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationDeploymentModel.DeleteDeploymentPod deleteDeploymentPod) throws WorkOrderTicketException {
         // ReadOnly
@@ -76,8 +95,9 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry param) {
-        // TODO
-        return null;
+        return DeploymentPodDeleteTicketEntryBuilder.newBuilder()
+                .withParam(param)
+                .buildEntry();
     }
 
 }

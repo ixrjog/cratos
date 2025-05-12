@@ -12,6 +12,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.util.InvokeEntryResult;
 import lombok.RequiredArgsConstructor;
@@ -30,13 +31,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> implements TicketEntryProvider<Detail, EntryParam>, InitializingBean {
 
-    private final WorkOrderTicketEntryService workOrderTicketEntryService;
-    private final WorkOrderTicketService workOrderTicketService;
+    protected final WorkOrderTicketEntryService workOrderTicketEntryService;
+    protected final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderService workOrderService;
 
     @Override
     public WorkOrderTicketEntry addEntry(EntryParam param) {
         WorkOrderTicketEntry entry = paramToEntry(param);
+        WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
+        if (!TicketState.NEW.equals(TicketState.valueOf(ticket.getTicketState()))) {
+            WorkOrderTicketException.runtime("New work order status is required to add configuration.");
+        }
         try {
             workOrderTicketEntryService.add(entry);
             return entry;

@@ -10,7 +10,9 @@ import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
+import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
@@ -31,6 +33,7 @@ import com.baiyi.cratos.eds.opscloud.repo.OcLeoRepo;
 import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
+import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -76,6 +79,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesPodRepo kubernetesPodRepo;
+    private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -202,13 +206,29 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                     return;
                 }
                 Optional<String> optionalApplicationName = KubeUtil.findApplicationNameOf(pod);
-                if(optionalApplicationName.isPresent() && param.getApplicationName().equals(optionalApplicationName.get())) {
+                if (optionalApplicationName.isPresent() && param.getApplicationName()
+                        .equals(optionalApplicationName.get())) {
                     // 匹配到应用名称
-
-                    kubernetesPodRepo.delete(holder.getInstance()
-                            .getEdsConfigModel(),param.getNamespace(), param.getPodName());
-
-
+                    ApplicationDeploymentModel.DeleteDeploymentPod detail = ApplicationDeploymentModel.DeleteDeploymentPod.builder()
+                            .namespace(param.getNamespace())
+                            .podName(param.getPodName())
+                            .ticketNo(deleteToken.getTicketNo())
+                            .ticketId(deleteToken.getTicketId())
+                            .asset(deploymentAsset)
+                            .build();
+                    try {
+                        kubernetesPodRepo.delete(holder.getInstance()
+                                .getEdsConfigModel(), param.getNamespace(), param.getPodName());
+                    } catch (Exception e) {
+                        detail.setSuccess(false);
+                        detail.setResult("Operation failed err: " +e.getMessage());
+                    }
+                    // 写入工单
+                    WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry = WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry.builder()
+                            .detail(detail)
+                            .ticketId(deleteToken.getTicketId())
+                            .build();
+                    workOrderTicketEntryFacade.addDeploymentPodTicketEntry(addTicketEntry);
                 }
             } catch (Exception exception) {
                 log.debug(exception.getMessage());

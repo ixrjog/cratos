@@ -27,7 +27,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
-import com.baiyi.cratos.workorder.builder.entry.AddAliyunDataWorksInstanceTicketEntryBuilder;
+import com.baiyi.cratos.workorder.builder.entry.AliyunDataWorksInstanceTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -164,7 +164,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry param) {
-        return AddAliyunDataWorksInstanceTicketEntryBuilder.newBuilder()
+        return AliyunDataWorksInstanceTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .withUsername(SessionUtils.getUsername())
                 .buildEntry();

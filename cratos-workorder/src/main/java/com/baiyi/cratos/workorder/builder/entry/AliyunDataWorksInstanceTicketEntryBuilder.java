@@ -15,22 +15,22 @@ import lombok.NoArgsConstructor;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AddAliyunDataWorksInstanceTicketEntryBuilder {
+public class AliyunDataWorksInstanceTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry param;
     private String username;
 
-    public static AddAliyunDataWorksInstanceTicketEntryBuilder newBuilder() {
-        return new AddAliyunDataWorksInstanceTicketEntryBuilder();
+    public static AliyunDataWorksInstanceTicketEntryBuilder newBuilder() {
+        return new AliyunDataWorksInstanceTicketEntryBuilder();
     }
 
-    public AddAliyunDataWorksInstanceTicketEntryBuilder withParam(
+    public AliyunDataWorksInstanceTicketEntryBuilder withParam(
             WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry param) {
         this.param = param;
         return this;
     }
 
-    public AddAliyunDataWorksInstanceTicketEntryBuilder withUsername(String username) {
+    public AliyunDataWorksInstanceTicketEntryBuilder withUsername(String username) {
         this.username = username;
         return this;
     }
