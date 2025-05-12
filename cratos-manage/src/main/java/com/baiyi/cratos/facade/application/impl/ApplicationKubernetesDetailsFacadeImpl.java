@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesServiceConverter;
 import com.baiyi.cratos.domain.channel.HasTopic;
@@ -26,6 +27,8 @@ import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
+import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +60,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsInstanceService edsInstanceService;
     private final EdsFacade edsFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
+    private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -151,6 +155,13 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                             queryKubernetesDeploymentImageVersion.getImage());
                 })
                 .orElse(KubernetesContainerVO.ImageVersion.notFound(queryKubernetesDeploymentImageVersion.getImage()));
+    }
+
+    @Override
+    public void deleteApplicationResourceKubernetesDeploymentPod(
+            ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod deleteApplicationResourceKubernetesDeploymentPod) {
+        ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
+                SessionUtils.getUsername(), deleteApplicationResourceKubernetesDeploymentPod.getApplicationName());
     }
 
 }

@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * &#064;Author  baiyi
@@ -41,15 +38,24 @@ public class ApplicationResourceController {
     @PostMapping(value = "/kubernetes/deployment/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> queryApplicationResourceKubernetesDeploymentOptions(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
-        return new HttpResult<>(
+        return HttpResult.of(
                 kubernetesDetailsFacade.queryKubernetesDeploymentOptions(queryKubernetesDeploymentOptions));
+    }
+
+    @Operation(summary = "Delete application resource kubernetes deployment pod")
+    @PutMapping(value = "/kubernetes/deployment/pod/del", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteApplicationResourceKubernetesDeploymentPod(
+            @RequestBody @Valid ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod deleteApplicationResourceKubernetesDeploymentPod) {
+        kubernetesDetailsFacade.deleteApplicationResourceKubernetesDeploymentPod(
+                deleteApplicationResourceKubernetesDeploymentPod);
+        return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Query kubernetes deployment pod container image version")
     @PostMapping(value = "/kubernetes/deployment/pod/container/image/version/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesContainerVO.ImageVersion> queryApplicationResourceKubernetesDeploymentImageVersion(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
-        return new HttpResult<>(
+        return HttpResult.of(
                 kubernetesDetailsFacade.queryKubernetesDeploymentImageVersion(queryKubernetesDeploymentImageVersion));
     }
 

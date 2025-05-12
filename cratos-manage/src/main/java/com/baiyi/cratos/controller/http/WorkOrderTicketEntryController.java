@@ -43,6 +43,15 @@ public class WorkOrderTicketEntryController {
     }
 
     // add entry
+
+    @Operation(summary = "Add application delete pod ticket entry")
+    @PostMapping(value = "/application/pod/delete/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addDataWorksInstanceTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
+        ticketEntryFacade.addApplicationDeletePodTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add aliyun dataWorks instance ticket entry")
     @PostMapping(value = "/aliyun/dataworks/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addDataWorksInstanceTicketEntry(

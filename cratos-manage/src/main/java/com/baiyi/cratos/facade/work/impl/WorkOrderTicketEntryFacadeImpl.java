@@ -148,6 +148,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_DELETE_POD.name(), addTicketEntry.getBusinessType());
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {

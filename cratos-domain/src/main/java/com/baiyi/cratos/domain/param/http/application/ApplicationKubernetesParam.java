@@ -43,4 +43,18 @@ public class ApplicationKubernetesParam {
         private String image;
     }
 
+    @Data
+    @Builder
+    @Schema
+    public static class DeleteApplicationResourceKubernetesDeploymentPod {
+        @NotBlank
+        private String applicationName;
+        @NotBlank
+        private String namespace;
+        @NotBlank
+        private String deploymentName;
+        @NotBlank
+        private String podName;
+    }
+
 }
