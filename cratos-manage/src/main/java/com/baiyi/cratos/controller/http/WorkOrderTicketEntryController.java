@@ -46,7 +46,7 @@ public class WorkOrderTicketEntryController {
 
     @Operation(summary = "Add application delete pod ticket entry")
     @PostMapping(value = "/application/pod/delete/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> addDataWorksInstanceTicketEntry(
+    public HttpResult<Boolean> addApplicationDeletePodTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
         ticketEntryFacade.addApplicationDeletePodTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
