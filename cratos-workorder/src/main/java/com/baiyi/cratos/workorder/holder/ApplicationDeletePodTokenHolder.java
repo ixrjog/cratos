@@ -26,8 +26,7 @@ public class ApplicationDeletePodTokenHolder {
     private static final long DEFAULT_EXPIRE = 2; // 2 hours
 
     public ApplicationDeletePodToken.Token getToken(String username, String applicationName) {
-        String key = StringFormatter.arrayFormat(KEY, username, applicationName);
-
+        String key = buildKey(username, applicationName);
         if (redisUtil.hasKey(key)) {
             return (ApplicationDeletePodToken.Token) redisUtil.get(key);
         }
@@ -35,7 +34,7 @@ public class ApplicationDeletePodTokenHolder {
     }
 
     public void setToken(String username, String applicationName, WorkOrderTicket ticket) {
-        ApplicationDeletePodToken.Token.builder()
+        ApplicationDeletePodToken.Token token = ApplicationDeletePodToken.Token.builder()
                 .username(username)
                 .applicationName(applicationName)
                 .ticketId(ticket.getId())
@@ -43,6 +42,11 @@ public class ApplicationDeletePodTokenHolder {
                 // 2 hours
                 .expires(ExpiredUtil.generateExpirationTime(DEFAULT_EXPIRE, TimeUnit.HOURS))
                 .build();
+        redisUtil.set(buildKey(username, applicationName), token, 60 * 60 * 2);
+    }
+
+    private String buildKey(String username, String applicationName) {
+        return StringFormatter.arrayFormat(KEY, username, applicationName);
     }
 
 }

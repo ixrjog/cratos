@@ -82,7 +82,6 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
                 .businessType(hasAccessControl.getBusinessType())
                 .businessId(hasAccessControl.getBusinessId())
                 .build(), hasAccessControl.getNamespace());
-
         if (BusinessTypeEnum.APPLICATION.name()
                 .equals(hasAccessControl.getBusinessType())) {
             handleApplicationAccessControl(hasAccessControl, accessControl);

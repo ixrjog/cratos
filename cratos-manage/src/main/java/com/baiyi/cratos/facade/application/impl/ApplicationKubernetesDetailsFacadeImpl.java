@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.common.exception.KubernetesResourceOperationException;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesServiceConverter;
@@ -8,6 +9,7 @@ import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
@@ -26,6 +28,7 @@ import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
@@ -61,6 +64,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsFacade edsFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
+    private final EdsAssetService edsAssetService;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -162,6 +166,25 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod deleteApplicationResourceKubernetesDeploymentPod) {
         ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
                 SessionUtils.getUsername(), deleteApplicationResourceKubernetesDeploymentPod.getApplicationName());
+        if (!deleteToken.getValid()) {
+            KubernetesResourceOperationException.runtime("Unauthorized access");
+        }
+        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
+                deleteApplicationResourceKubernetesDeploymentPod.getApplicationName(),
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
+                deleteApplicationResourceKubernetesDeploymentPod.getNamespace(),
+                deleteApplicationResourceKubernetesDeploymentPod.getDeploymentName());
+        if (CollectionUtils.isEmpty(resources)) {
+            KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
+                    deleteApplicationResourceKubernetesDeploymentPod.getDeploymentName());
+        }
+        resources.forEach(resource -> {
+            EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
+
+
+        });
+
+
     }
 
 }
