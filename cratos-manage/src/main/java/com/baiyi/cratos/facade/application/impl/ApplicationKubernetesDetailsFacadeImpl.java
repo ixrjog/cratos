@@ -16,10 +16,15 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
 import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
 import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
 import com.baiyi.cratos.eds.opscloud.repo.OcLeoRepo;
@@ -33,6 +38,8 @@ import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -40,6 +47,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.SHORT_TERM;
 import static com.baiyi.cratos.domain.view.base.OptionsVO.NO_OPTIONS_AVAILABLE;
@@ -65,6 +74,8 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
     private final EdsAssetService edsAssetService;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final KubernetesPodRepo kubernetesPodRepo;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -162,29 +173,44 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void deleteApplicationResourceKubernetesDeploymentPod(
-            ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod deleteApplicationResourceKubernetesDeploymentPod) {
+            ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod param) {
         ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
-                SessionUtils.getUsername(), deleteApplicationResourceKubernetesDeploymentPod.getApplicationName());
+                SessionUtils.getUsername(), param.getApplicationName());
         if (!deleteToken.getValid()) {
             KubernetesResourceOperationException.runtime("Unauthorized access");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                deleteApplicationResourceKubernetesDeploymentPod.getApplicationName(),
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
-                deleteApplicationResourceKubernetesDeploymentPod.getNamespace(),
-                deleteApplicationResourceKubernetesDeploymentPod.getDeploymentName());
+                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
+                param.getDeploymentName());
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
-                    deleteApplicationResourceKubernetesDeploymentPod.getDeploymentName());
+                    param.getDeploymentName());
         }
         resources.forEach(resource -> {
             EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
+            if (Objects.isNull(deploymentAsset)) {
+                return;
+            }
+            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
+                    deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+            try {
+                Pod pod = kubernetesPodRepo.get(holder.getInstance()
+                        .getEdsConfigModel(), param.getNamespace(), param.getPodName());
+                if (Objects.isNull(pod)) {
+                    return;
+                }
+                Optional<String> optionalApplicationName = KubeUtil.findApplicationNameOf(pod);
+                if(optionalApplicationName.isPresent() && param.getApplicationName().equals(optionalApplicationName.get())) {
+                    // 匹配到应用名称
 
 
+                }
+            } catch (Exception exception) {
+                log.debug(exception.getMessage());
+            }
         });
-
-
     }
 
 }

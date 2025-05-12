@@ -200,6 +200,30 @@ public class KubernetesPodRepo {
                 .exec("env", "TERM=xterm", "sh");
     }
 
+    public Pod get(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            return kc.pods()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .get();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
+    public void delete(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
+        try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
+            kc.pods()
+                    .inNamespace(namespace)
+                    .withName(name)
+                    .delete();
+        } catch (Exception e) {
+            log.warn(e.getMessage());
+            throw e;
+        }
+    }
+
     public static SimpleListener newListener() {
         return new SimpleListener();
     }

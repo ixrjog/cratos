@@ -1,9 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.util;
 
-import io.fabric8.kubernetes.api.model.Container;
-import io.fabric8.kubernetes.api.model.ObjectMeta;
-import io.fabric8.kubernetes.api.model.PodSpec;
-import io.fabric8.kubernetes.api.model.PodTemplateSpec;
+import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import lombok.NoArgsConstructor;
@@ -129,6 +126,18 @@ public class KubeUtil {
         } else {
             return deploymentName;
         }
+    }
+
+    public static Optional<String> findApplicationNameOf(Pod pod) {
+        if (pod == null) {
+            return Optional.empty();
+        }
+        Map<String, String> labels = Optional.ofNullable(pod.getMetadata())
+                .map(ObjectMeta::getLabels)
+                .orElse(Collections.emptyMap());
+        return Optional.ofNullable(labels.get("app"))
+                .map(app -> org.apache.commons.lang3.StringUtils.removeEnd(app, "-" + pod.getMetadata()
+                        .getNamespace()));
     }
 
 }

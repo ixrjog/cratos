@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.access;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class AccessControlVO {
     public interface HasAccessControl extends BaseBusiness.IBusinessAnnotate {
 
         void setAccessControl(AccessControl accessControl);
+
         String getNamespace();
 
     }
@@ -41,12 +43,13 @@ public class AccessControlVO {
         private Boolean permission;
         private String businessType;
         // 操作权限
-        private Map<String, T> operationPermissions = Map.of();
+        private Map<String, T> operationPermissions;
 
         public static AccessControl unauthorized(String businessType) {
             return AccessControl.builder()
                     .permission(false)
                     .businessType(businessType)
+                    .operationPermissions(Map.of())
                     .build();
         }
 
@@ -54,6 +57,7 @@ public class AccessControlVO {
             return AccessControl.builder()
                     .permission(true)
                     .businessType(businessType)
+                    .operationPermissions(Maps.newHashMap())
                     .build();
         }
     }
