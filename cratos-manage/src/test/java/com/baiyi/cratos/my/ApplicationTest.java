@@ -2,6 +2,7 @@ package com.baiyi.cratos.my;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -143,10 +144,15 @@ public class ApplicationTest extends BaseUnit {
         return holder;
     }
 
+    public final static String[] APP_TABLE_FIELD_NAME = {"Application Name", "Deployment Name", "Replicas"};
+
     @Test
     void test1() {
         List<Application> apps = applicationService.selectAll();
         Map<Integer, EdsInstanceProviderHolder<?, Deployment>> holders = Maps.newHashMap();
+
+        PrettyTable appTable = PrettyTable.fieldNames(APP_TABLE_FIELD_NAME);
+        int total = 0;
         for (Application app : apps) {
             // applicationName instanceName resource_type namespace
             if (app.getName()
@@ -161,7 +167,6 @@ public class ApplicationTest extends BaseUnit {
 
             BusinessTag businessTag = businessTagFacade.getBusinessTag(hasBusiness, SysTagKeys.LEVEL.getKey());
 
-            int total = 0;
 
             if (Objects.nonNull(businessTag) && "A1".equals(businessTag.getTagValue())) {
                 // A1应用
@@ -169,20 +174,29 @@ public class ApplicationTest extends BaseUnit {
 
                 List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(app.getName(),
                         EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), "prod");
-                int replicas = 0;
+
                 if (!CollectionUtils.isEmpty(resources)) {
                     for (ApplicationResource resource : resources) {
+                        EdsAsset edsAsset = edsAssetService.getById(resource.getBusinessId());
+                        if(edsAsset.getInstanceId() != 101) {
+                            continue;
+                        }
+
                         EdsAssetIndex replicasIndex = edsAssetIndexService.getByAssetIdAndName(resource.getBusinessId(),
                                 KUBERNETES_REPLICAS);
-                        replicas = replicas + Integer.parseInt(replicasIndex.getValue());
+                        if (Objects.nonNull(replicasIndex)) {
+                            total = total + Integer.parseInt(replicasIndex.getValue());
+                            appTable.addRow(app.getName(), resource.getName(), replicasIndex.getValue());
+                            System.out.println(resource.getName() + " replicas=" + replicasIndex.getValue());
+                        }
                     }
-
-
                 }
-
-
             }
         }
+
+        System.out.println("replicas total: " + total);
+        System.out.println(appTable.toString());
+
     }
 
 }
