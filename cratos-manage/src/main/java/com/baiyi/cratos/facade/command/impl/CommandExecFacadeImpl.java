@@ -21,6 +21,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
 import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.command.CommandExecFacade;
 import com.baiyi.cratos.facade.command.CommandExecNoticeFacade;
 import com.baiyi.cratos.model.CommandExecModel;
@@ -261,7 +262,11 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         if (CollectionUtils.isEmpty(pods)) {
             CommandExecException.runtime("No available execution pods.");
         }
-        kubernetesPodExec.exec(kubernetes, namespace, pods.getFirst()
+        Pod execPod = pods.stream()
+                .filter(KubeUtils::isReadyOf)
+                .findFirst()
+                .orElseThrow(() -> new CommandExecException("No available execution pods."));
+        kubernetesPodExec.exec(kubernetes, namespace, execPod
                 .getMetadata()
                 .getName(), execContext, new CountDownLatch(1));
         commandExec.setOutMsg(execContext.getOutMsg());

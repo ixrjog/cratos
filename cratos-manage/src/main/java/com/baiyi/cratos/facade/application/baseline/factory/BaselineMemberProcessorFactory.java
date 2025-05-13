@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.application.baseline.factory;
 import com.baiyi.cratos.common.enums.ResourceBaselineTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaseline;
 import com.baiyi.cratos.domain.generator.ApplicationResourceBaselineMember;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.baseline.ContainerBaselineMemberProcessor;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -38,7 +38,7 @@ public class BaselineMemberProcessorFactory {
     public static void mergeToBaseline(ApplicationResourceBaseline baseline,
                                        List<ApplicationResourceBaselineMember> baselineMembers,
                                        final Deployment deployment) {
-        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+        Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
         if (optionalContainer.isEmpty()) {
             return;
         }

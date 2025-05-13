@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class KubeUtil {
+public class KubeUtils {
 
     public static int getReplicas(Deployment deployment) {
         return Optional.of(deployment)
@@ -138,6 +138,17 @@ public class KubeUtil {
         return Optional.ofNullable(labels.get("app"))
                 .map(app -> org.apache.commons.lang3.StringUtils.removeEnd(app, "-" + pod.getMetadata()
                         .getNamespace()));
+    }
+
+    public static boolean isReadyOf(Pod pod) {
+        if (pod == null) {
+            return false;
+        }
+        List<ContainerStatus> containerStatuses = Optional.ofNullable(pod.getStatus())
+                .map(PodStatus::getContainerStatuses)
+                .orElse(Collections.emptyList());
+        return containerStatuses.stream()
+                .allMatch(containerStatus -> containerStatus.getReady() != null && containerStatus.getReady());
     }
 
 }

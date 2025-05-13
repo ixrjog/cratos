@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.application.builder.attribute;
 
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.google.api.client.util.Maps;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -43,7 +43,7 @@ public class KubernetesDeploymentAttributeBuilder {
 
     public KubernetesDeploymentAttributeBuilder withDeployment(Deployment deployment) {
         this.deployment = deployment;
-        KubeUtil.findAppContainerOf(this.deployment)
+        KubeUtils.findAppContainerOf(this.deployment)
                 .ifPresent(container -> this.appContainer = container);
         return this;
     }

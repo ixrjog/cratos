@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.shell.SshShellHelper;
@@ -117,7 +117,7 @@ public class EdsKubernetesDeploymentResourceCommand extends AbstractCommand {
                             .map(Deployment::getMetadata)
                             .map(ObjectMeta::getName)
                             .orElse("");
-                    Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+                    Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
                     if (optionalContainer.isEmpty()) {
                         deploymentTable.addRow(edsInstanceName, namespace, name, "-", "-", "-");
                     } else {

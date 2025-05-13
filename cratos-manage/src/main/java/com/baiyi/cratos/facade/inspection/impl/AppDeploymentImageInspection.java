@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
 import com.baiyi.cratos.facade.inspection.model.DeploymentImageModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -107,7 +107,7 @@ public class AppDeploymentImageInspection extends BaseInspection {
             }
             final String appName = appNameIndex.getValue();
             Deployment deployment = getAssetModel(BeanCopierUtil.copyProperties(e, EdsAssetVO.Asset.class));
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isPresent()) {
                 DeploymentImageModel.DeploymentImage image = DeploymentImageModel.DeploymentImage.builder()
                         .appName(appName)

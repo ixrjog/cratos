@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.shell.SshShellHelper;
@@ -122,7 +122,7 @@ public class EdsKubernetesDeploymentListCommand extends AbstractCommand {
                     .map(Deployment::getSpec)
                     .map(DeploymentSpec::getReplicas)
                     .orElse(0);
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             final String containers = optionalContainer.isEmpty() ? "-" : optionalContainer.get()
                     .getName();
 

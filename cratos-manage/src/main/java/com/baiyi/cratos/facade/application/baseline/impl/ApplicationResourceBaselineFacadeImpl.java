@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.tag.TagFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineFacade;
@@ -144,7 +144,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
                 edsAsset.getInstanceId());
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             optionalContainer.ifPresent(container -> this.scan(baseline, container));
         } catch (NullPointerException nullPointerException) {
             log.error(nullPointerException.getMessage());
@@ -240,7 +240,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
                 edsAsset.getInstanceId(), holders);
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 return;
             }

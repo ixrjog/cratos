@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.application.builder;
 
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -40,7 +40,7 @@ public class KubernetesPodBuilder {
 
     @Schema(type = "pod.containerStatuses")
     private List<KubernetesContainerVO.ContainerStatus> makeContainerStatuses() {
-        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(this.deployment);
         return this.pod.getStatus()
                 .getContainerStatuses()
                 .stream()
@@ -53,7 +53,7 @@ public class KubernetesPodBuilder {
 
     @Schema(type = "pod.status.conditions")
     private Map<String, KubernetesPodVO.PodCondition> makeConditions() {
-        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(this.deployment);
         return this.pod.getStatus()
                 .getConditions()
                 .stream()

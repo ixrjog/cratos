@@ -37,6 +37,7 @@ public class KubernetesPodExec {
                 .writingOutput(execContext.getOut())
                 .writingError(execContext.getError())
                 .usingListener(newListener(execLatch))
+                //.withReadyWaitTimeout(Math.toIntExact(execContext.getMaxWaitingTime()))
                 .exec(execContext.toExec())) {
             boolean latchTerminationStatus = execLatch.await(execContext.getMaxWaitingTime(), TimeUnit.SECONDS);
             if (!latchTerminationStatus) {

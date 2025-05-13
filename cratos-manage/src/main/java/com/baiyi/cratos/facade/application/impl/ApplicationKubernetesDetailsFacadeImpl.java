@@ -26,7 +26,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
 import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
 import com.baiyi.cratos.eds.opscloud.repo.OcLeoRepo;
@@ -205,7 +205,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 if (Objects.isNull(pod)) {
                     return;
                 }
-                Optional<String> optionalApplicationName = KubeUtil.findApplicationNameOf(pod);
+                Optional<String> optionalApplicationName = KubeUtils.findApplicationNameOf(pod);
                 if (optionalApplicationName.isPresent() && param.getApplicationName()
                         .equals(optionalApplicationName.get())) {
                     // 匹配到应用名称

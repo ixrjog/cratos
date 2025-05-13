@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  */
 public enum EdsInstanceTypeEnum {
 
+    CRATOS,
     ALIYUN,
     AWS,
     HUAWEICLOUD,

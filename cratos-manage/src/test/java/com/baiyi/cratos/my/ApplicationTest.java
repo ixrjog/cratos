@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
@@ -95,7 +95,7 @@ public class ApplicationTest extends BaseUnit {
                     EdsInstanceProviderHolder<?, Deployment> holder = getHolder(edsAsset.getInstanceId(), holders);
                     Deployment deployment = holder.getProvider()
                             .assetLoadAs(edsAsset.getOriginalModel());
-                    Optional<Container> containerOptional = KubeUtil.findAppContainerOf(deployment);
+                    Optional<Container> containerOptional = KubeUtils.findAppContainerOf(deployment);
                     if (containerOptional.isPresent()) {
                         String path = containerOptional.map(Container::getLivenessProbe)
                                 .map(Probe::getHttpGet)

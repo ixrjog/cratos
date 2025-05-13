@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesTest;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
@@ -166,7 +166,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
             return;
         }
         for (Deployment deployment : deploymentList) {
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 System.out.println(StringFormatter.format("Deployment {} 没找到应用容器", deployment.getMetadata()
                         .getName()));
@@ -191,7 +191,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
         EdsKubernetesConfigModel.Kubernetes cfg = getConfig(99, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "daily");
         deploymentList.forEach(deployment -> {
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isPresent()) {
                 Container container = optionalContainer.get();
                 if (container.getImage()
@@ -216,7 +216,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
             return;
         }
         for (Deployment deployment : deploymentList) {
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 System.out.println(StringFormatter.format("Deployment {} 没找到应用容器", deployment.getMetadata()
                         .getName()));
@@ -269,7 +269,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
             return;
         }
         for (Deployment deployment : deploymentList) {
-            Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(deployment);
+            Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isEmpty()) {
                 System.out.println(StringFormatter.format("Deployment {} 没找到应用容器", deployment.getMetadata()
                         .getName()));

@@ -49,6 +49,7 @@ public class AmazonEksClientProvider implements IKubernetesClientProvider {
                     .withOauthToken(token)
                     .withTrustCerts(true)
                     .withWatchReconnectInterval(60000)
+                    .withRequestTimeout(60000)
                     .build();
         } catch (URISyntaxException e) {
             throw new KubernetesException(e.getMessage());

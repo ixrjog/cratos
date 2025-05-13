@@ -29,8 +29,6 @@ public class PodExecContext {
     private Long maxWaitingTime = 60L;
 
     public String[] toExec() {
-//        return CommandParser.parseCommand(command)
-//                .toArray(new String[0]);
         return new String[]{"sh", "-c", command};
     }
 

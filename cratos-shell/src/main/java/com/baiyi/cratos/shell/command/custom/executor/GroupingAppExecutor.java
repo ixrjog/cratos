@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -110,7 +110,7 @@ public class GroupingAppExecutor {
             helper.printError("Deployment not found");
             return;
         }
-        int replicas = KubeUtil.getReplicas(deployment);
+        int replicas = KubeUtils.getReplicas(deployment);
         if (replicas == 0) {
             helper.printError("Deployment replicas = 0");
             return;
@@ -119,7 +119,7 @@ public class GroupingAppExecutor {
             helper.printError("Deployment new replicas = 0");
             return;
         }
-        KubeUtil.setReplicas(deployment, newGroupReplicas);
+        KubeUtils.setReplicas(deployment, newGroupReplicas);
         kubernetesDeploymentRepo.update(kubernetes, deployment);
         String msg = StringFormatter.arrayFormat(
                 "Successfully set the number of application {} group replicas: replicas {} -> {}",

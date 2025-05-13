@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -88,7 +88,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
 
-        int replicas = KubeUtil.getReplicas(entity);
+        int replicas = KubeUtils.getReplicas(entity);
         indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
 
         // group标签

@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
-import com.baiyi.cratos.eds.kubernetes.util.KubeUtil;
+import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerLifecycleBuilder;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerProbeBuilder;
 import com.baiyi.cratos.facade.application.builder.attribute.KubernetesDeploymentAttributeBuilder;
@@ -133,7 +133,7 @@ public class KubernetesDeploymentBuilder {
 
     @Schema(type = "deployment.spec.template.spec.containers")
     private List<KubernetesDeploymentVO.TemplateSpecContainer> makeTemplateSpecContainers() {
-        Optional<Container> optionalContainer = KubeUtil.findAppContainerOf(this.deployment);
+        Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(this.deployment);
         return this.deployment.getSpec()
                 .getTemplate()
                 .getSpec()
