@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +49,14 @@ public class KubernetesPodExec {
             Thread.currentThread()
                     .interrupt();
             log.warn("Interrupted while waiting for the exec: {}", ie.getMessage());
-        } catch (ExecutionException ignored) {
+        } catch (ExecutionException executionException) {
+            try {
+                execContext.getError()
+                        .write(executionException.getMessage()
+                                .getBytes());
+            } catch (IOException ignored) {
+            }
+            log.warn("Execution Exception while waiting for the exec: {}", executionException.getMessage());
         }
     }
 
