@@ -10,23 +10,12 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AssetProperty {
-
-    Type typeOf();
+public @interface AssetField {
 
     String desc() default "";
 
-    String indexName() default "";
+    String aliasName();
 
-    enum Type {
-        ASSET_ID,
-        NAME,
-        ASSET_KEY,
-        KIND,
-        ZONE,
-        REGION,
-        DESCRIPTION,
-        INDEX
-    }
+    boolean required() default true;
 
 }
