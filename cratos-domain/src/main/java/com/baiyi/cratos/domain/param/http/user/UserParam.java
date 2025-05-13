@@ -40,6 +40,7 @@ public class UserParam {
         private String queryName;
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
+        private Boolean valid;
 
         public UserPageQueryParam toParam() {
             return UserPageQueryParam.builder()
@@ -47,6 +48,7 @@ public class UserParam {
                     .length(getLength())
                     .queryName(queryName)
                     .idList(idList)
+                    .valid(valid)
                     .build();
         }
     }
@@ -59,6 +61,7 @@ public class UserParam {
     public static class UserPageQueryParam extends PageParam {
         private String queryName;
         private List<Integer> idList;
+        private Boolean valid;
     }
 
     @Data
@@ -171,6 +174,7 @@ public class UserParam {
         private String username;
         @NotBlank
         private String pubKey;
+
         @Override
         public void setSessionUser(String username) {
             this.username = username;
@@ -192,7 +196,7 @@ public class UserParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class CommandExecUserPageQuery extends PageParam  {
+    public static class CommandExecUserPageQuery extends PageParam {
         @Schema(description = "查询名称")
         private String queryName;
     }

@@ -63,6 +63,9 @@
                 #{id}
             </foreach>
         </if>
+        <if test="valid != null">
+            and valid = #{valid}
+        </if>
         <choose>
             <when test="queryName != null and queryName != ''">
                 and ( username like "%" #{queryName} "%"

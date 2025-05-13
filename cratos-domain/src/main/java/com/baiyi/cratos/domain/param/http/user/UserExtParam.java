@@ -30,6 +30,7 @@ public class UserExtParam {
         private BusinessTagParam.QueryByTag queryByTag;
         private List<Integer> idList;
         private Integer extUserTagId;
+        private Boolean valid;
 
         public UserExtPageQueryParam toParam() {
             return UserExtPageQueryParam.builder()
@@ -37,6 +38,7 @@ public class UserExtParam {
                     .length(getLength())
                     .queryName(queryName)
                     .idList(idList)
+                    .valid(valid)
                     .extUserTagId(extUserTagId)
                     .build();
         }
@@ -51,6 +53,7 @@ public class UserExtParam {
         private String queryName;
         private List<Integer> idList;
         private Integer extUserTagId;
+        private Boolean valid;
     }
 
     @Data
