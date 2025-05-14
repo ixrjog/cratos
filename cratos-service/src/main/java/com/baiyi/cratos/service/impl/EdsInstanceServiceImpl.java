@@ -73,6 +73,14 @@ public class EdsInstanceServiceImpl implements EdsInstanceService {
     }
 
     @Override
+    public List<EdsInstance> queryEdsInstanceByType(String edsType) {
+        Example example = new Example(EdsInstance.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("edsType", edsType);
+        return edsInstanceMapper.selectByExample(example);
+    }
+
+    @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:EDSINSTANCE:ID:' + #id")
     public void clearCacheById(int id) {
     }

@@ -3,6 +3,7 @@ package com.baiyi.cratos.domain.view.eds;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.model.cratos.CratosCommonModel;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
@@ -85,6 +86,7 @@ public class EdsAssetVO {
         private ToBusiness toBusiness;
         private Map<String, Integer> resourceCount;
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+
         @Override
         public Integer getBusinessId() {
             return id;
@@ -109,6 +111,30 @@ public class EdsAssetVO {
         private String name;
         private String value;
         private String comment;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class SupportManual<Mapper extends CratosCommonModel.HasFieldMapper> implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 7039075012658888723L;
+
+        public static SupportManual UNSUPPORTED = SupportManual.builder()
+                .build();
+
+        public static <Mapper extends CratosCommonModel.HasFieldMapper> SupportManual<?> of(Mapper mapper) {
+            return SupportManual.builder()
+                    .valid(true)
+                    .mapper(mapper)
+                    .build();
+        }
+
+        @Builder.Default
+        private boolean valid = false;
+        private Mapper mapper;
     }
 
 }

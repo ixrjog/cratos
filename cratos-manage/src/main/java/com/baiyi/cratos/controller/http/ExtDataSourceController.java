@@ -142,6 +142,13 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Query eds instance asset support manual")
+    @GetMapping(value = "/instance/asset/support/manual/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsAssetVO.SupportManual<?>> getEdsInstanceAssetSupportManual(@RequestParam String instanceType,
+                                                                                    String assetType) {
+        return HttpResult.of(edsFacade.getEdsInstanceAssetSupportManual(instanceType, assetType));
+    }
+
     @Operation(summary = "Delete eds asset by id")
     @DeleteMapping(value = "/asset/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteEdsAssetById(@RequestParam int id) {

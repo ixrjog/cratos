@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.model.cratos.CratosComputerModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
@@ -20,6 +21,7 @@ import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceRegisterException;
@@ -144,6 +146,11 @@ public class EdsFacadeImpl implements EdsFacade {
         }
         EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
                 .orElseThrow(() -> new EdsInstanceRegisterException("The edsConfig does not exist."));
+        // 判断是否唯一实例
+        if (!CollectionUtils.isEmpty(edsInstanceService.queryEdsInstanceByType(EdsInstanceTypeEnum.CRATOS.name()))) {
+            EdsInstanceRegisterException.runtime(
+                    "The eds instance type is CRATOS, only one instance can be registered.");
+        }
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(Global.VALID);
         edsInstanceService.add(edsInstance);
@@ -320,10 +327,6 @@ public class EdsFacadeImpl implements EdsFacade {
         if (Objects.isNull(asset)) {
             return;
         }
-        if (asset.getName()
-                .equals("ak-dataworks-xiuyuan")) {
-            log.info("debug ak-dataworks-xiuyuan delete");
-        }
         log.info("Delete eds asset type={}, name={}, id={}", asset.getAssetType(), asset.getName(), asset.getId());
         // 删除索引
         edsAssetIndexFacade.deleteIndicesOfAsset(id);
@@ -387,6 +390,19 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public BaseValidService<?, ?> getValidService() {
         return edsConfigService;
+    }
+
+    @Override
+    public EdsAssetVO.SupportManual<?> getEdsInstanceAssetSupportManual(String instanceType, String assetType) {
+        if (!EdsInstanceTypeEnum.CRATOS.name()
+                .equals(instanceType)) {
+            return EdsAssetVO.SupportManual.UNSUPPORTED;
+        }
+        if (EdsAssetTypeEnum.CRATOS_COMPUTER.name()
+                .equals(assetType)) {
+            return EdsAssetVO.SupportManual.of(CratosComputerModel.ComputerFieldMapper.DATA);
+        }
+        return EdsAssetVO.SupportManual.UNSUPPORTED;
     }
 
 }

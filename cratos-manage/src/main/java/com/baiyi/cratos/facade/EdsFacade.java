@@ -61,4 +61,6 @@ public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
 
     EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey);
 
+    EdsAssetVO.SupportManual<?> getEdsInstanceAssetSupportManual(String instanceType, String assetType);
+
 }
