@@ -417,7 +417,7 @@ public class EdsFacadeImpl implements EdsFacade {
                 .equals(instance.getEdsType())) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
-        if (EdsAssetTypeEnum.CRATOS_COMPUTER.name()
+        if (!EdsAssetTypeEnum.CRATOS_COMPUTER.name()
                 .equals(addCratosAsset.getAssetType())) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
