@@ -32,4 +32,12 @@ public class EdsAssetException extends BaseException {
         this.code = 70000;
     }
 
+    public static void runtime(String message) {
+        throw new EdsAssetException(message);
+    }
+
+    public static void runtime(String message, Object... var2) {
+        throw new EdsAssetException(StringFormatter.arrayFormat(message, var2));
+    }
+
 }

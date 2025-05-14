@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
@@ -167,6 +168,14 @@ public class ExtDataSourceController {
     public HttpResult<EdsAssetVO.Asset> queryAssetByUniqueKey(
             @RequestBody @Valid EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
         return HttpResult.of(edsFacade.queryAssetByUniqueKey(queryAssetByUniqueKey));
+    }
+
+    @Operation(summary = "Add eds cratos asset")
+    @PostMapping(value = "/instance/cratos/asset/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addInstanceCratosAsset(
+            @RequestBody @Valid CratosAssetParam.AddCratosAsset addCratosAsset) {
+        edsFacade.addInstanceCratosAsset(addCratosAsset);
+        return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Get to business target")

@@ -122,7 +122,7 @@ public class EdsAssetVO {
         @Serial
         private static final long serialVersionUID = 7039075012658888723L;
 
-        public static SupportManual UNSUPPORTED = SupportManual.builder()
+        public static SupportManual<CratosCommonModel.HasFieldMapper> UNSUPPORTED = SupportManual.builder()
                 .build();
 
         public static <Mapper extends CratosCommonModel.HasFieldMapper> SupportManual<?> of(Mapper mapper) {

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.cratos.param;
+package com.baiyi.cratos.domain.param.http.eds.cratos;
 
 import com.baiyi.cratos.domain.model.cratos.CratosCommonModel;
 import io.swagger.v3.oas.annotations.media.Schema;

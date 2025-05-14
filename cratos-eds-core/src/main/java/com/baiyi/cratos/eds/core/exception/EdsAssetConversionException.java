@@ -33,4 +33,12 @@ public class EdsAssetConversionException extends BaseException {
         this.code = 70000;
     }
 
+    public static void runtime(String message) {
+        throw new EdsAssetConversionException(message);
+    }
+
+    public static void runtime(String message, Object... var2) {
+        throw new EdsAssetConversionException(message, var2);
+    }
+
 }

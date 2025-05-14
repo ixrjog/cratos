@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -62,5 +63,7 @@ public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
     EdsAssetVO.Asset queryAssetByUniqueKey(EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey);
 
     EdsAssetVO.SupportManual<?> getEdsInstanceAssetSupportManual(String instanceType, String assetType);
+
+    void addInstanceCratosAsset(CratosAssetParam.AddCratosAsset addCratosAsset);
 
 }

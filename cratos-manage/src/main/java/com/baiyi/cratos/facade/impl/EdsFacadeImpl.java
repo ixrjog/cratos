@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.cratos.CratosComputerModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
@@ -403,6 +404,29 @@ public class EdsFacadeImpl implements EdsFacade {
             return EdsAssetVO.SupportManual.of(CratosComputerModel.ComputerFieldMapper.DATA);
         }
         return EdsAssetVO.SupportManual.UNSUPPORTED;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void addInstanceCratosAsset(CratosAssetParam.AddCratosAsset addCratosAsset) {
+        EdsInstance instance = edsInstanceService.getById(addCratosAsset.getInstanceId());
+        if (Objects.isNull(instance)) {
+            EdsAssetException.runtime("Instance does not exist");
+        }
+        if (!EdsInstanceTypeEnum.CRATOS.name()
+                .equals(instance.getEdsType())) {
+            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        }
+        if (EdsAssetTypeEnum.CRATOS_COMPUTER.name()
+                .equals(addCratosAsset.getAssetType())) {
+            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        }
+        EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset>) buildHolder(
+                addCratosAsset.getInstanceId(), addCratosAsset.getAssetType());
+        if (Objects.isNull(holder)) {
+            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        }
+        holder.importAsset(addCratosAsset);
     }
 
 }
