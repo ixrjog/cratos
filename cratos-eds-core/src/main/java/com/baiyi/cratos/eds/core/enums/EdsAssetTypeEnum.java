@@ -12,7 +12,6 @@ public enum EdsAssetTypeEnum {
 
     CRATOS_COMPUTER("Computer", 0),
 
-
     ALIYUN_CERT("Certificate", 0),
     ALIYUN_ALB("ALB", 0),
     ALIYUN_ECS("ECS", 0),

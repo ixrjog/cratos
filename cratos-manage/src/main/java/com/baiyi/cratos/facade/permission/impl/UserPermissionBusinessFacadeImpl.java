@@ -48,7 +48,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     private final BusinessTagService businessTagService;
     private final ServerAccountService serverAccountService;
     private static final List<EdsAssetTypeEnum> EFFECTIVE_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
-            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS);
+            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
     private final Tag edsTagUniqueKey = Tag.builder()
             .tagKey("EDS")
             .build();
