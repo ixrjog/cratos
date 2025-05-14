@@ -127,7 +127,7 @@ public class AliyunKms {
         private String lastRotationDate;
         private String nextRotationDate;
         private String plannedDeleteTime;
-        private String requestId;
+        // private String requestId;
         private String rotationInterval;
         private String secretName;
         private String secretType;
