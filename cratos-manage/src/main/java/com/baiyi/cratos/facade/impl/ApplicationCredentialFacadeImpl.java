@@ -30,7 +30,7 @@ public class ApplicationCredentialFacadeImpl implements ApplicationCredentialFac
     public DataTable<ApplicationCredentialVO.Credential> queryApplicationCredentialPage(
             ApplicationCredentialParam.ApplicationCredentialPageQuery pageQuery) {
         EdsInstanceParam.AssetPageQuery assetPageQuery = pageQuery.toAssetPageQuery();
-        assetPageQuery.setAssetType(EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        assetPageQuery.setAssetType(EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         //assetPageQuery.setQueryByTag(buildQueryByTag());
         DataTable<EdsAssetVO.Asset> table = edsFacade.queryEdsInstanceAssetPage(assetPageQuery);
         return new DataTable<>(table.getData()
