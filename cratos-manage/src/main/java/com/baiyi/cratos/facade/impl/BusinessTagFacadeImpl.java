@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -55,6 +54,7 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
         return businessTagService.queryByValue(queryByValue)
                 .stream()
                 .filter(StringUtils::hasText)
+                .sorted()
                 .collect(Collectors.toList());
     }
 

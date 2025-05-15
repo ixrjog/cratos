@@ -98,6 +98,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                         .getArn())
                 .kindOf(entity.getMetadata().getSecretType())
                 .createdTimeOf(toUtcDate(entity.getSecret().getCreateTime()))
+                .descriptionOf(entity.getMetadata().getDescription())
                 .build();
     }
 
