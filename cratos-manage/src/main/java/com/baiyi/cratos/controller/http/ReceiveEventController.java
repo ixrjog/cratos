@@ -42,10 +42,10 @@ public class ReceiveEventController {
         return HttpResult.SUCCESS;
     }
 
-    @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public static class InvalidTokenException extends RuntimeException {
         @Serial
-        private static final long serialVersionUID = -7714152822790396676L;
+        private static final long serialVersionUID = 8790736073780463758L;
     }
 
 }
