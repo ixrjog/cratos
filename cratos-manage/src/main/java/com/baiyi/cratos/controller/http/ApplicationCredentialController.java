@@ -2,9 +2,9 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.param.http.credential.CredentialParam;
-import com.baiyi.cratos.domain.view.credential.CredentialVO;
-import com.baiyi.cratos.facade.CredentialFacade;
+import com.baiyi.cratos.domain.param.http.credential.ApplicationCredentialParam;
+import com.baiyi.cratos.domain.view.credential.ApplicationCredentialVO;
+import com.baiyi.cratos.facade.ApplicationCredentialFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,12 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ApplicationCredentialController {
 
-    private final CredentialFacade credentialFacade;
+    private final ApplicationCredentialFacade applicationCredentialFacade;
 
     @Operation(summary = "Pagination query application credential")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<CredentialVO.Credential>> queryCredentialPage(@RequestBody @Valid CredentialParam.CredentialPageQuery pageQuery) {
-        return HttpResult.of(credentialFacade.queryCredentialPage(pageQuery));
+    public HttpResult<DataTable<ApplicationCredentialVO.Credential>> queryCredentialPage(@RequestBody @Valid  ApplicationCredentialParam.ApplicationCredentialPageQuery pageQuery) {
+        return HttpResult.of(applicationCredentialFacade.queryApplicationCredentialPage(pageQuery));
     }
     
 }
