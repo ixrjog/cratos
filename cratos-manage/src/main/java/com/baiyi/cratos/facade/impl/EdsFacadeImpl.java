@@ -148,9 +148,12 @@ public class EdsFacadeImpl implements EdsFacade {
         EdsConfig edsConfig = Optional.ofNullable(edsConfigService.getById(edsInstance.getConfigId()))
                 .orElseThrow(() -> new EdsInstanceRegisterException("The edsConfig does not exist."));
         // 判断是否唯一实例
-        if (!CollectionUtils.isEmpty(edsInstanceService.queryEdsInstanceByType(EdsInstanceTypeEnum.CRATOS.name()))) {
-            EdsInstanceRegisterException.runtime(
-                    "The eds instance type is CRATOS, only one instance can be registered.");
+        if (EdsInstanceTypeEnum.CRATOS.equals(EdsInstanceTypeEnum.valueOf(edsConfig.getEdsType()))) {
+            if (!CollectionUtils.isEmpty(
+                    edsInstanceService.queryEdsInstanceByType(EdsInstanceTypeEnum.CRATOS.name()))) {
+                EdsInstanceRegisterException.runtime(
+                        "The eds instance type is CRATOS, only one instance can be registered.");
+            }
         }
         edsInstance.setEdsType(edsConfig.getEdsType());
         edsInstance.setValid(Global.VALID);

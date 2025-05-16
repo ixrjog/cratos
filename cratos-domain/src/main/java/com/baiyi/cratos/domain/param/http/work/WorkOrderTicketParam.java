@@ -321,6 +321,19 @@ public class WorkOrderTicketParam {
         private ApplicationDeploymentModel.DeleteDeploymentPod detail;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddAliyunRamPolicyPermissionTicketEntry extends TicketEntry implements HasEntryDetail<EdsAssetVO.Asset>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 7964374299365455065L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private EdsAssetVO.Asset detail;
+    }
+
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor

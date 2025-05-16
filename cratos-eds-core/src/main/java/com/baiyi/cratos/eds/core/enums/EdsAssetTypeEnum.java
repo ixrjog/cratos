@@ -101,6 +101,8 @@ public enum EdsAssetTypeEnum {
     GCP_CERTIFICATE("Certificate", 0),
     GCP_MEMBER("Member", 0),
 
+    JENKINS_COMPUTER("Computer Node", 0),
+
     DEF("Default", 0);
 
     private final String displayName;

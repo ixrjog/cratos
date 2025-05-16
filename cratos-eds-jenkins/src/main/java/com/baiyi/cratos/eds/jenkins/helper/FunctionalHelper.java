@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.jenkins.helper;
 
-import com.baiyi.cratos.eds.jenkins.client.JenkinsHttpConnection;
-import com.baiyi.cratos.eds.jenkins.model.BaseModel;
+import com.baiyi.cratos.eds.jenkins.sdk.client.JenkinsHttpConnection;
+import com.baiyi.cratos.eds.jenkins.sdk.model.BaseModel;
 
 import java.util.function.Function;
 

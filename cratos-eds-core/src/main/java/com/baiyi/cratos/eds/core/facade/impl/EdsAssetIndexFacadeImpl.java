@@ -2,11 +2,9 @@ package com.baiyi.cratos.eds.core.facade.impl;
 
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
-import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -55,9 +53,9 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
             try {
                 edsAssetIndexService.add(e);
                 log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
-            } catch (DuplicateKeyException | DaoServiceException sqlException) {
-                log.debug("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
-                        e.getName(), e.getValue());
+            } catch (Exception exception) {
+                log.error("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
+                        e.getName(), e.getValue(), exception);
             }
         }
     }
