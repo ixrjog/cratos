@@ -16,7 +16,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- https://github.com/fabric8io/kubernetes-client  6.9.2 -->
-        <fabric8-sdk.version>6.9.2</fabric8-sdk.version>
+        <fabric8-sdk.version>7.3.0</fabric8-sdk.version>
     </properties>
 
     <dependencies>
