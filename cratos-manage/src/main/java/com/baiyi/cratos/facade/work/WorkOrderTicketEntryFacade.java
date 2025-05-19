@@ -38,6 +38,8 @@ public interface WorkOrderTicketEntryFacade {
     void addAliyunDataWorksInstanceTicketEntry(
             WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry);
 
+    void addCreateAliyunRamUserTicketEntry(WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry addTicketEntry);
+
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);

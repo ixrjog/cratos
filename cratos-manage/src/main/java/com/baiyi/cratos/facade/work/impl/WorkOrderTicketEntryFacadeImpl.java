@@ -148,6 +148,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public  void addCreateAliyunRamUserTicketEntry(WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry addTicketEntry){
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIYUN_RAM_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
+    }
+
+    @Override
     public void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_DELETE_POD.name(), addTicketEntry.getBusinessType());

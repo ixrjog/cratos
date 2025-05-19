@@ -340,7 +340,7 @@ public class WorkOrderTicketParam {
     public static class AddCreateAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6363796292175321725L;
-        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
         private AliyunModel.AliyunAccount detail;
     }
 
