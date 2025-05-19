@@ -33,6 +33,7 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.CreateAliyunRamUserNoticeHelper;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +46,7 @@ import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.ENABLE_MFA;
  * &#064;Date  2025/5/19 10:42
  * &#064;Version 1.0
  */
+@Component
 @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_RAM_USER_PERMISSION)
 public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<AliyunModel.AliyunAccount, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry> {
