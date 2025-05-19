@@ -16,6 +16,8 @@ public class RegexSensitiveDataMasker {
     private static final String BANK_CARD_PATTERN = "\\b\\d{16,19}\\b";
     private static final String EMAIL_PATTERN = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b";
     private static final String PASSWORD_PATTERN = "(?i)\\b(password|pwd|密码)\\s*[:=]\\s*[^\\s,;]{6,}\\b";
+    private static final String LONG_NUMBER_PATTERN = "\\b\\d{11,}\\b";
+    private static final String LONG_ALPHANUMERIC_PATTERN = "\\b[A-Za-z0-9]{16,}\\b";
 
     // 密钥相关的正则表达式
     private static final String AWS_ACCESS_KEY_PATTERN = "\\b(AKIA|ASIA)[0-9A-Z]{16}\\b";
@@ -77,6 +79,23 @@ public class RegexSensitiveDataMasker {
                 return prefix + domain;
             }
             return prefix.charAt(0) + "****" + prefix.charAt(prefix.length() - 1) + domain;
+        });
+
+        // 脱敏长数字（超过10位的纯数字）
+        result = maskWithRegex(result, LONG_NUMBER_PATTERN, number -> {
+            if (number.length() <= 10) {
+                return number;
+            }
+            return number.substring(0, 2) + "*".repeat(number.length() - 4) + number.substring(number.length() - 2);
+        });
+
+        // 脱敏长度超过16位的字母数字混合字符串
+        result = maskWithRegex(result, LONG_ALPHANUMERIC_PATTERN, text -> {
+            // 避免与其他已定义的模式重复处理
+            if (text.matches("\\d+")) {
+                return text; // 纯数字已由LONG_NUMBER_PATTERN处理
+            }
+            return text.substring(0, 2) + "*".repeat(text.length() - 4) + text.substring(text.length() - 2);
         });
 
         // 脱敏密码

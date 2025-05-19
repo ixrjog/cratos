@@ -54,8 +54,8 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
                 edsAssetIndexService.add(e);
                 log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
             } catch (Exception exception) {
-                log.error("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
-                        e.getName(), e.getValue(), exception);
+                log.warn("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
+                        e.getName(), e.getValue());
             }
         }
     }

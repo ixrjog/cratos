@@ -31,6 +31,9 @@ public class AliyunRamUserRepo {
     public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
     private final AliyunClient aliyunClient;
 
+    public static final boolean CREATE_LOGIN_PROFILE = true;
+    public static final boolean ENABLE_MFA = true;
+
     public List<ListUsersResponse.User> listUsers(EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
         List<ListUsersResponse.User> userList = Lists.newArrayList();
         String marker;
@@ -62,6 +65,16 @@ public class AliyunRamUserRepo {
         return createUser;
     }
 
+    public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,
+                                              String password, boolean createLoginProfile,
+                                              boolean enableMFA) throws ClientException {
+        CreateUserResponse.User createUser = createUser(regionId, aliyun, ramUsername);
+        if (createLoginProfile) {
+            createLoginProfile(regionId, aliyun, ramUsername, password, NO_PASSWORD_RESET_REQUIRED, enableMFA);
+        }
+        return createUser;
+    }
+
     public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
                                               String username) throws ClientException {
         CreateUserRequest request = new CreateUserRequest();
@@ -89,6 +102,20 @@ public class AliyunRamUserRepo {
                                                                        boolean mFABindRequired) throws ClientException {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(user.getUsername());
+        request.setPassword(password);
+        request.setPasswordResetRequired(passwordResetRequired);
+        request.setMFABindRequired(mFABindRequired);
+        return aliyunClient.getAcsResponse(regionId, aliyun, request)
+                .getLoginProfile();
+    }
+
+    private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
+                                                                       EdsAliyunConfigModel.Aliyun aliyun,
+                                                                       String ramUsername, String password,
+                                                                       boolean passwordResetRequired,
+                                                                       boolean mFABindRequired) throws ClientException {
+        CreateLoginProfileRequest request = new CreateLoginProfileRequest();
+        request.setUserName(ramUsername);
         request.setPassword(password);
         request.setPasswordResetRequired(passwordResetRequired);
         request.setMFABindRequired(mFABindRequired);

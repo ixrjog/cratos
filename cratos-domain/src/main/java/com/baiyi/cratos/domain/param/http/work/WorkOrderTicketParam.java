@@ -4,10 +4,7 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
-import com.baiyi.cratos.domain.model.AliyunDataWorksModel;
-import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
-import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
-import com.baiyi.cratos.domain.model.GitLabPermissionModel;
+import com.baiyi.cratos.domain.model.*;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
@@ -332,6 +329,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = 7964374299365455065L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private EdsAssetVO.Asset detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddCreateAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 6363796292175321725L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private AliyunModel.AliyunAccount detail;
     }
 
     @Data
