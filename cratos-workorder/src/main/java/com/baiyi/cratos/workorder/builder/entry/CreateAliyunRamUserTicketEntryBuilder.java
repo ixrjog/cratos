@@ -39,7 +39,13 @@ public class CreateAliyunRamUserTicketEntryBuilder {
         return this;
     }
 
-    private String toAliyunAccount() {
+    private String toRamLoginUsername() {
+        return this.aliyun.getRam()
+                .toUsername(username.replace(".", "")
+                        .toLowerCase());
+    }
+
+    private String toRamUsername() {
         return username.replace(".", "")
                 .toLowerCase();
     }
@@ -48,19 +54,25 @@ public class CreateAliyunRamUserTicketEntryBuilder {
         EdsInstanceVO.EdsInstance instance = param.getDetail()
                 .getEdsInstance();
         AliyunModel.AliyunAccount aliyunAccount = param.getDetail();
-        String account = toAliyunAccount();
+        String account = toRamLoginUsername();
+        String ramUsername = toRamUsername();
+        String ramLoginUsername = toRamLoginUsername();
         aliyunAccount.setAccount(account);
         aliyunAccount.setUsername(username);
-        aliyunAccount.setLoginLink(aliyun.getRam().toLoginUrl());
+        aliyunAccount.setRamUsername(ramUsername);
+        aliyunAccount.setRamLoginUsername(ramLoginUsername);
+        aliyunAccount.setLoginLink(aliyun.getRam()
+                .toLoginUrl());
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
-                .name(account)
-                .displayName(account)
+                .name(ramLoginUsername)
+                .displayName(ramLoginUsername)
                 .instanceId(instance.getId())
                 .businessType(param.getBusinessType())
                 .businessId(instance.getId())
                 .completed(false)
-                .entryKey(StringFormatter.arrayFormat("instanceId:{}:username:{}", instance.getId(), username))
+                .entryKey(StringFormatter.arrayFormat("instanceId:{}:ramLoginUsername:{}", instance.getId(),
+                        ramLoginUsername))
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();

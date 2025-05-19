@@ -35,13 +35,13 @@ public class CreateAliyunRamUserNoticeHelper extends BaseWorkOrderNoticeHelper {
                 notificationTemplateService);
     }
 
-    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String ramUsername, String password,
+    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String ramLoginUsername, String password,
                         String loginLink, User applicantUser) {
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
                 .put("workOrderName", workOrder.getName())
                 .put("applicant", ticket.getUsername())
-                .put("aliyunRAMUsername", ramUsername)
+                .put("aliyunRAMUsername", ramLoginUsername)
                 .put("password", password)
                 .put("loginLink", loginLink)
                 .build();

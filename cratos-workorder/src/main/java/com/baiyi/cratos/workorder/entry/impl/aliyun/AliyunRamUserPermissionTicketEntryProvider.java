@@ -82,7 +82,6 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         this.createAliyunRamUserNoticeHelper = createAliyunRamUserNoticeHelper;
     }
 
-
     @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
@@ -92,12 +91,13 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        String ramUsername = aliyunAccount.getAccount();
+        String ramUsername = aliyunAccount.getRamUsername();
+        String ramLoginUsername = aliyunAccount.getRamLoginUsername();
         String username = aliyunAccount.getUsername();
         final String password = PasswordGenerator.generatePassword();
         CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername, password);
         // 发送通知
-        sendMsg(workOrderTicket, username, ramUsername, password, aliyun.getRam()
+        sendMsg(workOrderTicket, username, ramLoginUsername, password, aliyun.getRam()
                 .toLoginUrl());
         // 导入资产
         GetUserResponse.User getUser = getRamUser(aliyun, ramUsername);
@@ -111,14 +111,14 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
      *
      * @param workOrderTicket
      * @param username
-     * @param ramUsername
+     * @param ramLoginUsername
      */
-    private void sendMsg(WorkOrderTicket workOrderTicket, String username, String ramUsername, String password,
+    private void sendMsg(WorkOrderTicket workOrderTicket, String username, String ramLoginUsername, String password,
                          String loginLink) {
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            createAliyunRamUserNoticeHelper.sendMsg(workOrder, workOrderTicket, ramUsername, password, loginLink,
+            createAliyunRamUserNoticeHelper.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
                     applicantUser);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());

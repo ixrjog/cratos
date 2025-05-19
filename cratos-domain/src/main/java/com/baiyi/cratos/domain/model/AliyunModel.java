@@ -29,6 +29,9 @@ public class AliyunModel {
         private String username;
         // Aliyun RAM Username
         private String account;
+        // 不包含 @domain
+        private String ramUsername;
+        private String ramLoginUsername;
         private String loginLink;
     }
 
