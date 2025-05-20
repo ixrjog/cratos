@@ -96,6 +96,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
             if (!alreadyAttached) {
                 aliyunRamPolicyRepo.attachPolicyToUser(aliyun.getRegionId(), aliyun, aliyunPolicy.getRamUsername(),
                         policyName, policyType);
+                // TODO 同步资产
             }
         } catch (ClientException e) {
             if (e.getMessage() != null && e.getMessage()
