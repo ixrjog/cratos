@@ -68,6 +68,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add aliyun ram policy permission ticket entry")
+    @PostMapping(value = "/aliyun/ram/policy/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addAliyunRamPolicyPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addAliyunRamPolicyPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add application permission ticket entry")
     @PostMapping(value = "/application/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationPermissionTicketEntry(
