@@ -49,7 +49,7 @@ public class AccessControlVO {
             return AccessControl.builder()
                     .permission(false)
                     .businessType(businessType)
-                    .operationPermissions(Map.of())
+                    .operationPermissions(Maps.newHashMap())
                     .build();
         }
 

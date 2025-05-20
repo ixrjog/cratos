@@ -60,8 +60,6 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     private final WorkOrderService workOrderService;
     private final CreateAliyunRamUserNoticeHelper createAliyunRamUserNoticeHelper;
 
-    private static final String ROW_TPL = "| {} | {} | {} |";
-
     public AliyunRamUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                       WorkOrderTicketService workOrderTicketService,
                                                       WorkOrderService workOrderService,
@@ -80,6 +78,16 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         this.userService = userService;
         this.workOrderService = workOrderService;
         this.createAliyunRamUserNoticeHelper = createAliyunRamUserNoticeHelper;
+    }
+
+    private static final String ROW_TPL = "| {} | {} | {} |";
+
+    @Override
+    public String getTableTitle(WorkOrderTicketEntry entry) {
+        return """
+                | Aliyun Instance | RAM Login Username | Login Link |
+                | --- | --- | --- |
+                """;
     }
 
     @SuppressWarnings("unchecked")
@@ -176,14 +184,6 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                 .withUsername(SessionUtils.getUsername())
                 .withAliyun(aliyun)
                 .buildEntry();
-    }
-
-    @Override
-    public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | RAM Username | Login Link |
-                | --- | --- | --- |
-                """;
     }
 
     @Override

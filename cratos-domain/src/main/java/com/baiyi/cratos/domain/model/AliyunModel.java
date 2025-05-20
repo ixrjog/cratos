@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.model;
 
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,22 @@ public class AliyunModel {
         // Aliyun RAM Username
         private String account;
         // 不包含 @domain
+        private String ramUsername;
+        private String ramLoginUsername;
+        private String loginLink;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AliyunPolicy implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -8707920768026453756L;
+        // Aliyun RAM policy
+        private EdsAssetVO.Asset asset;
+        private String username;
         private String ramUsername;
         private String ramLoginUsername;
         private String loginLink;

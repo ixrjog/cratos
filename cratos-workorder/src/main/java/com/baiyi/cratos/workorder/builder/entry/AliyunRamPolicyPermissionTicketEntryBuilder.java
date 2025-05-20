@@ -5,36 +5,35 @@ import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/5/19 11:12
+ * &#064;Date  2025/5/20 14:29
  * &#064;Version 1.0
  */
-public class CreateAliyunRamUserTicketEntryBuilder {
+public class AliyunRamPolicyPermissionTicketEntryBuilder {
 
-    private WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry param;
+    private WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry param;
     private String username;
     private EdsAliyunConfigModel.Aliyun aliyun;
 
-    public static CreateAliyunRamUserTicketEntryBuilder newBuilder() {
-        return new CreateAliyunRamUserTicketEntryBuilder();
+    public static AliyunRamPolicyPermissionTicketEntryBuilder newBuilder() {
+        return new AliyunRamPolicyPermissionTicketEntryBuilder();
     }
 
-    public CreateAliyunRamUserTicketEntryBuilder withParam(
-            WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry param) {
+    public AliyunRamPolicyPermissionTicketEntryBuilder withParam(
+            WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry param) {
         this.param = param;
         return this;
     }
 
-    public CreateAliyunRamUserTicketEntryBuilder withUsername(String username) {
+    public AliyunRamPolicyPermissionTicketEntryBuilder withUsername(String username) {
         this.username = username;
         return this;
     }
 
-    public CreateAliyunRamUserTicketEntryBuilder withAliyun(EdsAliyunConfigModel.Aliyun aliyun) {
+    public AliyunRamPolicyPermissionTicketEntryBuilder withAliyun(EdsAliyunConfigModel.Aliyun aliyun) {
         this.aliyun = aliyun;
         return this;
     }
@@ -51,28 +50,28 @@ public class CreateAliyunRamUserTicketEntryBuilder {
     }
 
     public WorkOrderTicketEntry buildEntry() {
-        EdsInstanceVO.EdsInstance instance = param.getDetail()
-                .getEdsInstance();
-        AliyunModel.AliyunAccount aliyunAccount = param.getDetail();
-        String account = toRamLoginUsername();
+        AliyunModel.AliyunPolicy aliyunPolicy = param.getDetail();
         String ramUsername = toRamUsername();
         String ramLoginUsername = toRamLoginUsername();
-        aliyunAccount.setAccount(account);
-        aliyunAccount.setUsername(username);
-        aliyunAccount.setRamUsername(ramUsername);
-        aliyunAccount.setRamLoginUsername(ramLoginUsername);
-        aliyunAccount.setLoginLink(aliyun.getRam()
+        aliyunPolicy.setUsername(username);
+        aliyunPolicy.setRamUsername(ramUsername);
+        aliyunPolicy.setRamLoginUsername(ramLoginUsername);
+        aliyunPolicy.setLoginLink(aliyun.getRam()
                 .toLoginUrl());
+        int instanceId = aliyunPolicy.getAsset()
+                .getInstanceId();
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(ramLoginUsername)
                 .displayName(ramLoginUsername)
-                .instanceId(instance.getId())
+                .instanceId(instanceId)
                 .businessType(param.getBusinessType())
-                .businessId(instance.getId())
+                .businessId(aliyunPolicy.getAsset()
+                        .getId())
                 .completed(false)
-                .entryKey(StringFormatter.arrayFormat("instanceId:{}:ramLoginUsername:{}", instance.getId(),
-                        ramLoginUsername))
+                .entryKey(StringFormatter.arrayFormat("instanceId:{}:ramLoginUsername:{}:policyName:{}", instanceId,
+                        ramLoginUsername, aliyunPolicy.getAsset()
+                                .getAssetKey()))
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();
