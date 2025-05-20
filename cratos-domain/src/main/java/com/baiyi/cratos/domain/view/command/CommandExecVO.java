@@ -125,6 +125,7 @@ public class CommandExecVO {
         private String approvalType;
         private String username;
         private String approvalStatus;
+        @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date approvalAt;
         private Boolean approvalCompleted;
         private String approveRemark;
