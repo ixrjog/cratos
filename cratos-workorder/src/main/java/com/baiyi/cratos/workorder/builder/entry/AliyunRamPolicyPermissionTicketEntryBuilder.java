@@ -63,8 +63,8 @@ public class AliyunRamPolicyPermissionTicketEntryBuilder {
                 .getInstanceId();
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
-                .name(ramLoginUsername)
-                .displayName(ramLoginUsername)
+                .name(aliyunPolicy.getAsset().getAssetKey())
+                .displayName(aliyunPolicy.getAsset().getAssetKey())
                 .instanceId(instanceId)
                 .businessType(param.getBusinessType())
                 .businessId(aliyunPolicy.getAsset()
