@@ -7,6 +7,7 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
@@ -19,6 +20,7 @@ import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -30,9 +32,13 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
 
 /**
  * &#064;Author  baiyi
@@ -48,6 +54,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
     private final AliyunRamUserRepo aliyunRamUserRepo;
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public AliyunRamPolicyPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
@@ -55,12 +62,14 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
                                                         EdsInstanceService edsInstanceService,
                                                         AliyunRamUserRepo aliyunRamUserRepo,
                                                         AliyunRamPolicyRepo aliyunRamPolicyRepo,
-                                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                        EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
         this.aliyunRamPolicyRepo = aliyunRamPolicyRepo;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
@@ -124,6 +133,19 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
                 .withUsername(SessionUtils.getUsername())
                 .withAliyun(aliyun)
                 .buildEntry();
+    }
+
+    @Override
+    protected void verifyEntryParam(WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry param,
+                                    WorkOrderTicketEntry entry) {
+        // 查询用户账户是否存在
+        List<EdsAssetIndex> accountIndices = edsAssetIndexService.queryInstanceIndexByNameAndValue(
+                entry.getInstanceId(), CLOUD_ACCOUNT_USERNAME, param.getDetail()
+                        .getRamUsername());
+        if (CollectionUtils.isEmpty(accountIndices)) {
+            WorkOrderTicketException.runtime(
+                    "Your Aliyun RAM account does not exist, please apply for an account first.");
+        }
     }
 
     @Override

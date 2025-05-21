@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 
 /**
  * &#064;Author  baiyi
@@ -69,6 +70,7 @@ public class CreateAliyunRamUserTicketEntryBuilder {
                 .displayName(ramLoginUsername)
                 .instanceId(instance.getId())
                 .businessType(param.getBusinessType())
+                .subType(EdsAssetTypeEnum.ALIYUN_RAM_USER.name())
                 .businessId(instance.getId())
                 .completed(false)
                 .entryKey(StringFormatter.arrayFormat("instanceId:{}:ramLoginUsername:{}", instance.getId(),

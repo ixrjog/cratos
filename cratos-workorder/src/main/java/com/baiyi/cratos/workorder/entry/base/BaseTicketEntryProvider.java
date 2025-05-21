@@ -38,6 +38,7 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
     @Override
     public WorkOrderTicketEntry addEntry(EntryParam param) {
         WorkOrderTicketEntry entry = paramToEntry(param);
+        verifyEntryParam(param, entry);
         WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
         if (!TicketState.NEW.equals(TicketState.valueOf(ticket.getTicketState()))) {
             WorkOrderTicketException.runtime("New work order status is required to add configuration.");
@@ -48,6 +49,9 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
         } catch (DaoServiceException daoServiceException) {
             throw new WorkOrderTicketException("Repeat adding entries.");
         }
+    }
+
+    protected void verifyEntryParam(EntryParam param, WorkOrderTicketEntry entry) {
     }
 
     @Override
