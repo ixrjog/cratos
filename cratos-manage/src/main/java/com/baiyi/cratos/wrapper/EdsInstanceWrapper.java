@@ -59,7 +59,7 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
         }
     }
 
-    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'EDS:INSTANCE:VERSION:ID:' + #instanceId", unless = "#result == null")
+    @Cacheable(cacheNames = CachingConfiguration.RepositoryName.VERY_SHORT, key = "'EDS:INSTANCE:VERSION:ID:' + #instanceId", unless = "#result == null")
     public String queryVersion(int instanceId) {
         try {
             EdsInstanceVersionProviderHolder<?> holder = versionHolderBuilder.newHolder(instanceId);
