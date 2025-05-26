@@ -9,7 +9,7 @@ logging:
 spring:
   application:
     name: cratos
-    version: 1.0.3
+    version: 1.0.4
   threads:
     virtual:
       enabled: on
