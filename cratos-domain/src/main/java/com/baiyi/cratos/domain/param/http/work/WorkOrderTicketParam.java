@@ -350,9 +350,9 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.ResetAliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
-        private static final long serialVersionUID = 6363796292175321725L;
+        private static final long serialVersionUID = -5319582937582510299L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private AliyunModel.ResetAliyunAccount detail;
     }
