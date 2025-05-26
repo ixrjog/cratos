@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetUserMFAInfoResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.aliyuncs.ram.model.v20150501.UnbindMFADeviceResponse;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
@@ -30,6 +31,7 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.ResetAliyunRamUserNoticeHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -42,6 +44,7 @@ import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.NO_PASSWORD_RES
  * &#064;Date  2025/5/21 16:21
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_RAM_USER_RESET)
@@ -121,21 +124,26 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     }
 
     private void unbindMFA(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
-        GetUserMFAInfoResponse.MFADevice mfaDevice = null;
         try {
-            mfaDevice = aliyunRamUserRepo.getUserMFAInfo(aliyun, ramUsername);
-        } catch (ClientException clientException) {
-            WorkOrderTicketException.runtime("Get RAM user MFA err: {}", clientException.getMessage());
-        }
-        String serialNumber = Optional.ofNullable(mfaDevice)
-                .map(GetUserMFAInfoResponse.MFADevice::getSerialNumber)
-                .orElse(null);
-        if (StringUtils.hasText(serialNumber)) {
-            try {
-                aliyunRamUserRepo.deleteVirtualMFADevice(aliyun, serialNumber);
-            } catch (ClientException clientException) {
-                WorkOrderTicketException.runtime("Delete RAM user MFA err: {}", clientException.getMessage());
+            GetUserMFAInfoResponse.MFADevice mfaDevice = aliyunRamUserRepo.getUserMFAInfo(aliyun, ramUsername);
+            String serialNumber = Optional.ofNullable(mfaDevice)
+                    .map(GetUserMFAInfoResponse.MFADevice::getSerialNumber)
+                    .orElse(null);
+            if (StringUtils.hasText(serialNumber)) {
+                UnbindMFADeviceResponse.MFADevice unbindMfaDevice = aliyunRamUserRepo.unbindVirtualMFADevice(aliyun,
+                        ramUsername);
+                Optional.ofNullable(unbindMfaDevice)
+                        .map(UnbindMFADeviceResponse.MFADevice::getSerialNumber)
+                        .ifPresent(sn -> {
+                            try {
+                                aliyunRamUserRepo.deleteVirtualMFADevice(aliyun, sn);
+                            } catch (ClientException e) {
+                                log.debug(e.getMessage());
+                            }
+                        });
             }
+        } catch (ClientException clientException) {
+            WorkOrderTicketException.runtime("Unbind RAM user MFA err: {}", clientException.getMessage());
         }
     }
 

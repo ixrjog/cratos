@@ -1,6 +1,8 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -43,7 +45,8 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WE
  */
 @Slf4j
 //@Component
-@WorkOrderKey(key = WorkOrderKeys.GITLAB_GROUP_PERMISSION)
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
+@WorkOrderKey(key = WorkOrderKeys.LDAP_ROLE_PERMISSION)
 public class LdapRolePermissionTicketEntryProvider extends BaseGitLabPermissionTicketEntryProvider<WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> {
 
     private static final String TABLE_TITLE = """
@@ -153,12 +156,10 @@ public class LdapRolePermissionTicketEntryProvider extends BaseGitLabPermissionT
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        GitLabPermissionModel.Permission projectPermission = loadAs(entry);
-        EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
-                .namespaces(projectPermission.getRole())
-                .desc("Group permission")
+                .namespaces(entry.getNamespace())
+                .desc("LDAP role permission")
                 .build();
     }
 

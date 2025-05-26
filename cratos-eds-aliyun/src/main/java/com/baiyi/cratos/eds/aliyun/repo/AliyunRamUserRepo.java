@@ -189,6 +189,14 @@ public class AliyunRamUserRepo {
         return response.getMFADevice();
     }
 
+    public UnbindMFADeviceResponse.MFADevice unbindVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun,
+                                                                    String ramUsername) throws ClientException {
+        UnbindMFADeviceRequest request = new UnbindMFADeviceRequest();
+        request.setUserName(ramUsername);
+        UnbindMFADeviceResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
+        return response.getMFADevice();
+    }
+
     public void deleteVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun, String serialNumber) throws ClientException {
         DeleteVirtualMFADeviceRequest request = new DeleteVirtualMFADeviceRequest();
         request.setSerialNumber(serialNumber);
