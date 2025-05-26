@@ -4,18 +4,21 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -55,6 +58,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     private final EdsFacade edsFacade;
     private final ApplicationResourceService applicationResourceService;
     private final EdsAssetService edsAssetService;
+    private final BusinessTagFacade businessTagFacade;
+    private final BusinessTagService businessTagService;
 
     @Override
     public void addApplicationPermissionTicketEntry(
@@ -286,6 +291,26 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                     return BeanCopierUtil.copyProperties(asset, EdsAssetVO.Asset.class);
                 })
                 .toList();
+    }
+
+    @Override
+    public OptionsVO.Options getLdapGroupOptions() {
+        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
+        if (Objects.isNull(groupTag)) {
+            return OptionsVO.NO_OPTIONS_AVAILABLE;
+        }
+
+        List<Integer> ldapGroupAssetIds = edsAssetService.queryAssetIdsByAssetType(EdsAssetTypeEnum.LDAP_GROUP.name());
+        if (CollectionUtils.isEmpty(ldapGroupAssetIds)) {
+            return OptionsVO.NO_OPTIONS_AVAILABLE;
+        }
+        BusinessTagParam.QueryBusinessTagValues queryBusinessTagValues = BusinessTagParam.QueryBusinessTagValues.builder()
+                .tagId(groupTag.getId())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessIds(ldapGroupAssetIds)
+                .build();
+        List<String> values = businessTagService.queryBusinessTagValues(queryBusinessTagValues);
+        return OptionsVO.toOptions(values);
     }
 
 }

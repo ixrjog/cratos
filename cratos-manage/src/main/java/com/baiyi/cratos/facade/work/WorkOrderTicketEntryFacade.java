@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 
@@ -58,5 +59,7 @@ public interface WorkOrderTicketEntryFacade {
     void deleteTicketEntry(WorkOrderTicketParam.DeleteTicketEntry deleteTicketEntry);
 
     void deleteByTicketId(int ticketId);
+
+    OptionsVO.Options getLdapGroupOptions();
 
 }

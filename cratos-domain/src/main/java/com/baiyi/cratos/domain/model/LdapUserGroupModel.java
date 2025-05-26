@@ -1,11 +1,13 @@
 package com.baiyi.cratos.domain.model;
 
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -41,23 +43,20 @@ public class LdapUserGroupModel {
                 .build();
 
         @Builder.Default
-        private Map<String, List<String>> groupMembers = Map.of(
-                Group.NEXUS.name(),
-                List.of("nexus-admin", "nexus-developer", "nexus-viewer"), Group.VPN.name(),
-                List.of("vpn-admin", "vpn-user"), Group.APOLLO.name(),
-                List.of("apollo-admin", "apollo-developer", "apollo-viewer"), Group.NACOS.name(),
-                List.of("nacos-admin", "nacos-developer", "nacos-viewer"), Group.GRAFANA.name(),
-                List.of("grafana-admin", "grafana-editor", "grafana-viewer"));
+        private Map<String, List<LdapUserGroup>> groupMembers = Map.of(Group.NEXUS.name(),
+                List.of(LdapUserGroup.NEXUS_USERS, LdapUserGroup.NEXUS_DEVELOPER, LdapUserGroup.NEXUS_ADMIN),
+                Group.VPN.name(), List.of(), Group.CONFLUENCE.name(), List.of(LdapUserGroup.CONFLUENCE_USERS));
     }
 
     @Getter
     public enum Group {
 
         NEXUS("Nexus", "Nexus Repository Manager"),
-        VPN("VPN", "VPN"),
+        VPN("VPN", "VPN User Group"),
         APOLLO("Apollo", "Apollo Config Service"),
         NACOS("Nacos", "Nacos Config Service"),
-        GRAFANA("Grafana", "Grafana Monitoring Service");
+        GRAFANA("Grafana", "Grafana Monitoring Service"),
+        CONFLUENCE("Confluence", "Confluence Documentation Service");
 
         private final String displayName;
 
@@ -78,6 +77,18 @@ public class LdapUserGroupModel {
             return null;
         }
 
+        public static OptionsVO.Options toOptions() {
+            List<OptionsVO.Option> optionList = Arrays.stream(values())
+                    .map(e -> OptionsVO.Option.builder()
+                            .label(e.displayName)
+                            .value(e.name())
+                            .comment(e.desc)
+                            .build())
+                    .toList();
+            return OptionsVO.Options.builder()
+                    .options(optionList)
+                    .build();
+        }
     }
 
     @Data
@@ -99,7 +110,21 @@ public class LdapUserGroupModel {
         public static final LdapUserGroup NEXUS_USERS = LdapUserGroup.builder()
                 .name("nexus-users")
                 .displayName("Nexus Users")
-                .desc("Nexus Repository Manager Users")
+                .desc("Nexus Repository Manager Users ( Only Download artifacts )")
+                .docs("--")
+                .build();
+
+        public static final LdapUserGroup NEXUS_DEVELOPER = LdapUserGroup.builder()
+                .name("nexus-developer")
+                .displayName("Nexus Developer")
+                .desc("Nexus Repository Manager Developer ( Download and Deploy artifacts )")
+                .docs("--")
+                .build();
+
+        public static final LdapUserGroup CONFLUENCE_USERS = LdapUserGroup.builder()
+                .name("confluence-users")
+                .displayName("Confluence Users")
+                .desc("Confluence Users")
                 .docs("--")
                 .build();
 

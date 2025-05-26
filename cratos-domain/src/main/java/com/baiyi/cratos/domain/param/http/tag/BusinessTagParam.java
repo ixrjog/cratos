@@ -49,6 +49,15 @@ public class BusinessTagParam {
 
     @Data
     @Builder
+    @Schema
+    public static class QueryBusinessTagValues {
+        private Integer tagId;
+        private String businessType;
+        private List<Integer> businessIds;
+    }
+
+    @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema

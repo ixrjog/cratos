@@ -2,6 +2,7 @@ package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
@@ -41,6 +42,18 @@ public class WorkOrderTicketEntryController {
         return HttpResult.of(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(
                 queryApplicationResourceDeploymentTicketEntry));
     }
+
+    @Operation(summary = "Query LDAP group options")
+    @GetMapping(value = "/ldap/group/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getLdapGroupOptions() {
+        return HttpResult.of(ticketEntryFacade.getLdapGroupOptions());
+    }
+
+//    @Operation(summary = "Query LDAP role options")
+//    @GetMapping(value = "/ldap/role/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public HttpResult<LdapUserGroupModel.LdapRoleOptions> getLdapRoleOptions() {
+//        return HttpResult.of(LdapUserGroupModel.LdapRoleOptions.DATA);
+//    }
 
     // add entry
 

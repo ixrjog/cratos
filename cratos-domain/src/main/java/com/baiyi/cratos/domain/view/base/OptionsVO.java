@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.view.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +21,9 @@ public class OptionsVO {
             .build();
 
     public static OptionsVO.Options toOptions(List<String> strings) {
+        if (CollectionUtils.isEmpty(strings)) {
+            return NO_OPTIONS_AVAILABLE;
+        }
         List<OptionsVO.Option> optionList = strings.stream()
                 .map(e -> OptionsVO.Option.builder()
                         .label(e)

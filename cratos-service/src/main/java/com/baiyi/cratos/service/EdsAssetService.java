@@ -20,6 +20,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     List<EdsAsset> queryInstanceAssets(Integer instanceId);
 
+    List<Integer> queryAssetIdsByAssetType(String assetType);
+
     List<EdsAsset> queryInstanceAssets(Integer instanceId, String assetType);
 
     List<EdsAsset> queryInstanceAssetsById(Integer instanceId, String assetType, String assetId);

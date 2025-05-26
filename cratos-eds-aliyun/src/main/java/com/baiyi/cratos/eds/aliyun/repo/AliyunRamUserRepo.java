@@ -189,6 +189,13 @@ public class AliyunRamUserRepo {
         return response.getMFADevice();
     }
 
+    /**
+     * MFA 设备需要先解除绑定才能删除
+     * @param aliyun
+     * @param ramUsername
+     * @return
+     * @throws ClientException
+     */
     public UnbindMFADeviceResponse.MFADevice unbindVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun,
                                                                     String ramUsername) throws ClientException {
         UnbindMFADeviceRequest request = new UnbindMFADeviceRequest();

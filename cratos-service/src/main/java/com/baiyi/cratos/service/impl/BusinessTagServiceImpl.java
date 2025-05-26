@@ -50,6 +50,11 @@ public class BusinessTagServiceImpl implements BusinessTagService {
     }
 
     @Override
+    public List<String> queryBusinessTagValues(BusinessTagParam.QueryBusinessTagValues queryBusinessTagValues) {
+        return businessTagMapper.queryBusinessTagValues(queryBusinessTagValues);
+    }
+
+    @Override
     public List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType) {
         return businessTagMapper.queryTagIdByBusinessType(getByBusinessType);
     }

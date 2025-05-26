@@ -28,6 +28,8 @@ public interface BusinessTagService extends BaseBusinessService<BusinessTag>, Ha
 
     List<String> queryByValue(BusinessTagParam.QueryByTag queryByValue);
 
+    List<String> queryBusinessTagValues(BusinessTagParam.QueryBusinessTagValues queryBusinessTagValues);
+
     List<Integer> queryTagIdByBusinessType(BusinessParam.QueryByBusinessType getByBusinessType);
 
     List<Integer> queryBusinessIdByTag(BusinessTagParam.QueryByTag queryByTag);

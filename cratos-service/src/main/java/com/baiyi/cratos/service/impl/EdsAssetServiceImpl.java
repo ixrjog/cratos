@@ -101,6 +101,18 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public List<Integer> queryAssetIdsByAssetType(String assetType) {
+        Example example = new Example(EdsAsset.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("assetType", assetType);
+        example.selectProperties("id");
+        return edsAssetMapper.selectByExample(example)
+                .stream()
+                .map(EdsAsset::getId)
+                .toList();
+    }
+
+    @Override
     public List<EdsAsset> queryAssetByParam(String assetKey, String assetType) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();

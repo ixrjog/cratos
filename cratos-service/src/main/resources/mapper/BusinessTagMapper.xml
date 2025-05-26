@@ -17,11 +17,10 @@
     <select id="queryByTagIds" resultType="int">
         select business_id from business_tag where
         business_type = #{businessType}
-        and tag_id in (
+        and tag_id in
         <foreach open="(" item="tagId" separator="," close=")" collection="tagIds">
             #{tagId}
         </foreach>
-        )
     </select>
 
     <select id="queryByValue" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryByTag"
@@ -36,6 +35,18 @@
             and tag_value like "%" #{queryTagValue} "%"
             order by replace( tag_value, #{queryTagValue}, '' )
         </if>
+    </select>
+
+    <select id="queryBusinessTagValues" parameterType="com.baiyi.cratos.domain.param.http.tag.BusinessTagParam$QueryBusinessTagValues"
+            resultType="java.lang.String">
+        select distinct tag_value
+        from business_tag
+        where tag_id = #{tagId}
+        and business_type = #{businessType}
+        and business_id in
+        <foreach open="(" item="businessId" separator="," close=")" collection="businessIds">
+            #{businessId}
+        </foreach>
     </select>
 
     <select id="queryTagIdByBusinessType"
