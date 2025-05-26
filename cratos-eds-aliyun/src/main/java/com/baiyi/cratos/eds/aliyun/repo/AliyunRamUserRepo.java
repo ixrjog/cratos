@@ -123,6 +123,16 @@ public class AliyunRamUserRepo {
                 .getLoginProfile();
     }
 
+    public String updateLoginProfile(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String password,
+                                     boolean passwordResetRequired) throws ClientException {
+        UpdateLoginProfileRequest request = new UpdateLoginProfileRequest();
+        request.setUserName(ramUsername);
+        request.setPassword(password);
+        request.setPasswordResetRequired(passwordResetRequired);
+        UpdateLoginProfileResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
+        return response.getRequestId();
+    }
+
     private CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
                                                User user) throws ClientException {
         CreateUserRequest request = new CreateUserRequest();
@@ -169,6 +179,20 @@ public class AliyunRamUserRepo {
             log.error(e.getMessage());
         }
         return false;
+    }
+
+    public GetUserMFAInfoResponse.MFADevice getUserMFAInfo(EdsAliyunConfigModel.Aliyun aliyun,
+                                                           String ramUsername) throws ClientException {
+        GetUserMFAInfoRequest request = new GetUserMFAInfoRequest();
+        request.setUserName(ramUsername);
+        GetUserMFAInfoResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
+        return response.getMFADevice();
+    }
+
+    public void deleteVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun, String serialNumber) throws ClientException {
+        DeleteVirtualMFADeviceRequest request = new DeleteVirtualMFADeviceRequest();
+        request.setSerialNumber(serialNumber);
+        aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
     }
 
 }

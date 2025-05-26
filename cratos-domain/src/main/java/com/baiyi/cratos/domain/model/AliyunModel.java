@@ -52,4 +52,27 @@ public class AliyunModel {
         private String loginLink;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class ResetAliyunAccount implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -8707920768026453756L;
+        // RAM User
+        private EdsAssetVO.Asset asset;
+        private String username;
+        // Aliyun RAM Username
+        private String account;
+        // 不包含 @domain
+        private String ramUsername;
+        private String ramLoginUsername;
+        private String loginLink;
+
+        private Boolean resetPassword;
+        private Boolean unbindMFA;
+
+    }
+
 }
