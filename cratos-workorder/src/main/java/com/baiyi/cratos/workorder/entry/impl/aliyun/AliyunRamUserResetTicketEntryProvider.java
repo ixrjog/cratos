@@ -43,7 +43,7 @@ import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.NO_PASSWORD_RES
  * &#064;Version 1.0
  */
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_RAM_USER_RESET)
 public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvider<AliyunModel.ResetAliyunAccount, WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry> {
 
