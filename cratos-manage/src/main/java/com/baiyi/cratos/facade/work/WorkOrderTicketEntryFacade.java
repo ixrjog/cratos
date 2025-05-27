@@ -35,6 +35,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry);
 
+    void addLdapRolePermissionTicketEntry(WorkOrderTicketParam.AddLdapRolePermissionTicketEntry addTicketEntry);
+
     void addGitLabProjectPermissionTicketEntry(
             WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry);
 

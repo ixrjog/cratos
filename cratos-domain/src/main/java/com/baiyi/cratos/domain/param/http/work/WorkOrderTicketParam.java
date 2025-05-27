@@ -375,11 +375,11 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddLdapRolePermissionTicketEntry extends TicketEntry implements HasEntryDetail<GitLabPermissionModel.Permission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddLdapRolePermissionTicketEntry extends TicketEntry implements HasEntryDetail<LdapUserGroupModel.Role>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
-        private static final long serialVersionUID = 3955830707586605830L;
+        private static final long serialVersionUID = 160908446714673016L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
-        private GitLabPermissionModel.Permission detail;
+        private LdapUserGroupModel.Role detail;
     }
 
     @Data

@@ -54,8 +54,7 @@ public class WorkOrderTicketEntryController {
     @PostMapping(value = "/ldap/role/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<LdapUserGroupModel.Role>> queryLdapRolePermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry queryLdapRolePermissionTicketEntry) {
-        return HttpResult.of(ticketEntryFacade.queryLdapRolePermissionTicketEntry(
-                queryLdapRolePermissionTicketEntry));
+        return HttpResult.of(ticketEntryFacade.queryLdapRolePermissionTicketEntry(queryLdapRolePermissionTicketEntry));
     }
 
     // add entry
@@ -153,6 +152,14 @@ public class WorkOrderTicketEntryController {
     public HttpResult<Boolean> addRevokeUserPermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
         ticketEntryFacade.addRevokeUserPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add LDAP role permission ticket entry")
+    @PostMapping(value = "/ldap/role/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addLdapRolePermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddLdapRolePermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addLdapRolePermissionTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
 
