@@ -162,6 +162,18 @@ public class WorkOrderTicketParam {
         private String namespace;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryLdapRolePermissionTicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2103292539529876560L;
+        @NotBlank
+        private String group;
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)

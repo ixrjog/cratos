@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.work;
 
+import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
@@ -18,6 +19,9 @@ public interface WorkOrderTicketEntryFacade {
 
     List<EdsAssetVO.Asset> queryApplicationResourceDeploymentTicketEntry(
             WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry);
+
+    List<LdapUserGroupModel.Role> queryLdapRolePermissionTicketEntry(
+            WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry queryLdapRolePermissionTicketEntry);
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 

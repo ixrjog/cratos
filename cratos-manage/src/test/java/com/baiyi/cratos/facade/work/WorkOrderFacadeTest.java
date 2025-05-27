@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.facade.application.ApplicationFacade;
@@ -198,6 +199,12 @@ public class WorkOrderFacadeTest extends BaseUnit {
     void test10() {
         workOrderTicketFacade.adminDeleteTicketById(210);
         workOrderTicketFacade.adminDeleteTicketById(211);
+    }
+
+    @Test
+    void test11() {
+        OptionsVO.Options options = workOrderTicketEntryFacade.getLdapGroupOptions();
+        System.out.println(options);
     }
 
 }

@@ -1,12 +1,15 @@
 package com.baiyi.cratos.facade.work.impl;
 
+import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
+import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -32,6 +35,7 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -311,6 +315,50 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                 .build();
         List<String> values = businessTagService.queryBusinessTagValues(queryBusinessTagValues);
         return OptionsVO.toOptions(values);
+    }
+
+    @Override
+    public List<LdapUserGroupModel.Role> queryLdapRolePermissionTicketEntry(
+            WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry queryLdapRolePermissionTicketEntry) {
+        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
+        if (groupTag == null) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(groupTag.getId())
+                .queryTagValue(queryLdapRolePermissionTicketEntry.getGroup())
+                .build();
+        EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()
+                .assetType(EdsAssetTypeEnum.LDAP_GROUP.name())
+                .queryByTag(queryByTag)
+                .page(1)
+                .length(100)
+                .build();
+        ((WorkOrderTicketEntryFacadeImpl) AopContext.currentProxy()).invokeQueryParam(pageQuery);
+        DataTable<EdsAsset> dataTable = edsAssetService.queryEdsInstanceAssetPage(pageQuery.toParam());
+        if (dataTable == null || CollectionUtils.isEmpty(dataTable.getData())) {
+            return List.of();
+        }
+        return dataTable.getData()
+                .stream()
+                .map(e -> {
+                    SimpleBusiness hasBusiness = SimpleBusiness.builder()
+                            .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                            .businessId(e.getId())
+                            .build();
+                    BusinessTag descriptionTag = businessTagFacade.getBusinessTag(hasBusiness,
+                            SysTagKeys.DESCRIPTION.getKey());
+                    return LdapUserGroupModel.Role.builder()
+                            .asset(e)
+                            .group(e.getName())
+                            .description(descriptionTag != null ? descriptionTag.getTagValue() : "--")
+                            .build();
+                })
+                .toList();
+    }
+
+    @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_ASSET)
+    private void invokeQueryParam(EdsInstanceParam.AssetPageQuery pageQuery) {
     }
 
 }
