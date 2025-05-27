@@ -366,7 +366,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @PageQueryByTag(typeOf = BusinessTypeEnum.EDS_ASSET)
-    private void invokeQueryParam(EdsInstanceParam.AssetPageQuery pageQuery) {
+    public void invokeQueryParam(EdsInstanceParam.AssetPageQuery pageQuery) {
     }
 
 }
