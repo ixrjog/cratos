@@ -10,6 +10,11 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.ldap.repo.LdapGroupRepo;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -36,10 +41,16 @@ import java.util.concurrent.TimeUnit;
 @WorkOrderKey(key = WorkOrderKeys.LDAP_ROLE_PERMISSION)
 public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvider<LdapUserGroupModel.Role, WorkOrderTicketParam.AddLdapRolePermissionTicketEntry> {
 
+    private final LdapGroupRepo ldapGroupRepo;
+    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+
     public LdapRolePermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                  WorkOrderTicketService workOrderTicketService,
-                                                 WorkOrderService workOrderService) {
+                                                 WorkOrderService workOrderService, LdapGroupRepo ldapGroupRepo,
+                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
+        this.ldapGroupRepo = ldapGroupRepo;
+        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
     }
 
     private static final String TABLE_TITLE = """
@@ -64,10 +75,15 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
         return StringFormatter.arrayFormat(ROW_TPL, role.getGroup(), role.getDescription());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 LdapUserGroupModel.Role role) throws WorkOrderTicketException {
-
+        EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
+        EdsLdapConfigModel.Ldap ldap = holder.getInstance()
+                .getEdsConfigModel();
+        ldapGroupRepo.addGroupMember(ldap, role.getGroup(), workOrderTicket.getUsername());
     }
 
     @Override
