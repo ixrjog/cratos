@@ -334,7 +334,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         }
         BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
                 .tagId(groupTag.getId())
-                .queryTagValue(queryLdapRolePermissionTicketEntry.getGroup())
+                .tagValue(queryLdapRolePermissionTicketEntry.getGroup())
                 .build();
         EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()
                 .assetType(EdsAssetTypeEnum.LDAP_GROUP.name())

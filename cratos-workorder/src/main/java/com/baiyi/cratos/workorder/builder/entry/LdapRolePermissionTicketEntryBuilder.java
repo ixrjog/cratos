@@ -1,6 +1,7 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
 import com.baiyi.cratos.domain.YamlUtils;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -35,7 +36,8 @@ public class LdapRolePermissionTicketEntryBuilder {
                 .displayName(role.getGroup())
                 .instanceId(role.getAsset()
                         .getInstanceId())
-                .businessType(EdsAssetTypeEnum.LDAP_GROUP.name())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .subType(EdsAssetTypeEnum.LDAP_GROUP.name())
                 .businessId(role.getAsset()
                         .getId())
                 .completed(false)

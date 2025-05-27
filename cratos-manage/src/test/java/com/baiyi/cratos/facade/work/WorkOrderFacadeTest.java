@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
+import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -205,6 +206,15 @@ public class WorkOrderFacadeTest extends BaseUnit {
     void test11() {
         OptionsVO.Options options = workOrderTicketEntryFacade.getLdapGroupOptions();
         System.out.println(options);
+    }
+
+    @Test
+    void test12() {
+        WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry query = WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry.builder()
+                .group("nexus")
+                .build();
+        List<LdapUserGroupModel.Role> list = workOrderTicketEntryFacade.queryLdapRolePermissionTicketEntry(query);
+        System.out.println(list);
     }
 
 }
