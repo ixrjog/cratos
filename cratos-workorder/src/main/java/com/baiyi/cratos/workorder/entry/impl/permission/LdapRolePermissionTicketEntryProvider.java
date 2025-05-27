@@ -54,7 +54,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     }
 
     private static final String TABLE_TITLE = """
-            | LDAP Group | Description |
+            | LDAP Role | Description |
             | --- | --- |
             """;
 
@@ -80,7 +80,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 LdapUserGroupModel.Role role) throws WorkOrderTicketException {
         EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?>) edsInstanceProviderHolderBuilder.newHolder(
-                entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
+                entry.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
         EdsLdapConfigModel.Ldap ldap = holder.getInstance()
                 .getEdsConfigModel();
         ldapGroupRepo.addGroupMember(ldap, role.getGroup(), workOrderTicket.getUsername());
