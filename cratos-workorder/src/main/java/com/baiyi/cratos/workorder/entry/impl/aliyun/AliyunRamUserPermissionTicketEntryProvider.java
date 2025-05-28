@@ -32,7 +32,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.CreateAliyunRamUserNoticeHelper;
+import com.baiyi.cratos.workorder.notice.CreateAliyunRamUserNoticeSender;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -58,7 +58,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     private final TagService tagService;
     private final UserService userService;
     private final WorkOrderService workOrderService;
-    private final CreateAliyunRamUserNoticeHelper createAliyunRamUserNoticeHelper;
+    private final CreateAliyunRamUserNoticeSender createAliyunRamUserNoticeSender;
 
     public AliyunRamUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                       WorkOrderTicketService workOrderTicketService,
@@ -68,7 +68,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                                                       EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                       BusinessTagFacade businessTagFacade, TagService tagService,
                                                       UserService userService,
-                                                      CreateAliyunRamUserNoticeHelper createAliyunRamUserNoticeHelper) {
+                                                      CreateAliyunRamUserNoticeSender createAliyunRamUserNoticeHelper) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -77,7 +77,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         this.tagService = tagService;
         this.userService = userService;
         this.workOrderService = workOrderService;
-        this.createAliyunRamUserNoticeHelper = createAliyunRamUserNoticeHelper;
+        this.createAliyunRamUserNoticeSender = createAliyunRamUserNoticeHelper;
     }
 
     private static final String ROW_TPL = "| {} | {} | {} |";
@@ -126,7 +126,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            createAliyunRamUserNoticeHelper.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
+            createAliyunRamUserNoticeSender.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
                     applicantUser);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());

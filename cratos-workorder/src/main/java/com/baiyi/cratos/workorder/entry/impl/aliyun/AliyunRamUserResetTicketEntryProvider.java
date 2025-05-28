@@ -30,7 +30,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.ResetAliyunRamUserNoticeHelper;
+import com.baiyi.cratos.workorder.notice.ResetAliyunRamUserNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -56,7 +56,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     private final UserService userService;
     private final WorkOrderService workOrderService;
-    private final ResetAliyunRamUserNoticeHelper resetAliyunRamUserNoticeHelper;
+    private final ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender;
     private final EdsAssetService edsAssetService;
 
     public AliyunRamUserResetTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
@@ -66,7 +66,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  AliyunRamUserRepo aliyunRamUserRepo,
                                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                  UserService userService,
-                                                 ResetAliyunRamUserNoticeHelper createAliyunRamUserNoticeHelper,
+                                                 ResetAliyunRamUserNoticeSender createAliyunRamUserNoticeHelper,
                                                  EdsAssetService edsAssetService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
@@ -75,7 +75,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
         this.userService = userService;
         this.workOrderService = workOrderService;
-        this.resetAliyunRamUserNoticeHelper = createAliyunRamUserNoticeHelper;
+        this.resetAliyunRamUserNoticeSender = createAliyunRamUserNoticeHelper;
         this.edsAssetService = edsAssetService;
     }
 
@@ -159,7 +159,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            resetAliyunRamUserNoticeHelper.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
+            resetAliyunRamUserNoticeSender.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
                     applicantUser);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());

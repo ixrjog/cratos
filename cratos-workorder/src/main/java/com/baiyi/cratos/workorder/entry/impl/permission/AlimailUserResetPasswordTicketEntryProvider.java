@@ -1,24 +1,25 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
+import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -28,6 +29,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import com.baiyi.cratos.workorder.notice.ResetAlimailUserNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -48,26 +50,36 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsInstanceService edsInstanceService;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final AlimailUserRepo alimailUserRepo;
+    private final WorkOrderService workOrderService;
+    private final UserService userService;
+    private final ResetAlimailUserNoticeSender resetAlimailUserNoticeSender;
 
     public AlimailUserResetPasswordTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                        WorkOrderTicketService workOrderTicketService,
                                                        WorkOrderService workOrderService,
                                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                        EdsInstanceService edsInstanceService,
-                                                       EdsIdentityFacade edsIdentityFacade) {
+                                                       EdsIdentityFacade edsIdentityFacade,
+                                                       AlimailUserRepo alimailUserRepo, UserService userService,
+                                                       ResetAlimailUserNoticeSender resetAlimailUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsInstanceService = edsInstanceService;
         this.edsIdentityFacade = edsIdentityFacade;
+        this.alimailUserRepo = alimailUserRepo;
+        this.workOrderService = workOrderService;
+        this.userService = userService;
+        this.resetAlimailUserNoticeSender = resetAlimailUserNoticeSender;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} |";
+    private static final String ROW_TPL = "| {} | {} | {} | {} |";
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Alimail Instance | User ID | Mail |
-                | --- | --- | --- |
+                | Alimail Instance | User ID | Mail | Login URL |
+                | --- | --- | --- | --- |
                 """;
     }
 
@@ -79,7 +91,17 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIMAIL_USER.name());
         EdsAlimailConfigModel.Alimail alimail = holder.getInstance()
                 .getEdsConfigModel();
-
+        String newPassword = PasswordGenerator.generateMailPassword();
+        try {
+            final String mailUserId = mailAccount.getAccount()
+                    .getAssetId();
+            alimailUserRepo.resetPassword(alimail, mailUserId, newPassword);
+        } catch (Exception e) {
+            WorkOrderTicketException.runtime(e.getMessage());
+        }
+        sendMsg(workOrderTicket, mailAccount.getAccountLogin()
+                .getLoginUsername(), newPassword, mailAccount.getAccountLogin()
+                .getLoginUrl());
     }
 
     /**
@@ -89,12 +111,11 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
      * @param mail
      * @param password
      */
-    private void sendMsg(WorkOrderTicket workOrderTicket, String mail, String password) {
+    private void sendMsg(WorkOrderTicket workOrderTicket, String mail, String password, String loginURL) {
         try {
-//            WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
-//            User applicantUser = userService.getByUsername(username);
-//            resetAliyunRamUserNoticeHelper.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
-//                    applicantUser);
+            WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
+            User applicantUser = userService.getByUsername(workOrderTicket.getUsername());
+            resetAlimailUserNoticeSender.sendMsg(workOrder, workOrderTicket, mail, password, loginURL, applicantUser);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
         }
@@ -143,7 +164,8 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), mailAccount.getAccount()
                 .getAssetId(), mailAccount.getAccountLogin()
-                .getLoginUsername());
+                .getLoginUsername(), mailAccount.getAccountLogin()
+                .getLoginUrl());
     }
 
     @Override

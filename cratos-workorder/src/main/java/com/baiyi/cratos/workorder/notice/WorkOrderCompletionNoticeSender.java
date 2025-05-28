@@ -27,9 +27,9 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.WORK_ORDER_
  */
 @Slf4j
 @Component
-public class WorkOrderCompletionNoticeHelper extends BaseWorkOrderNoticeHelper {
+public class WorkOrderCompletionNoticeSender extends BaseWorkOrderNoticeHelper {
 
-    public WorkOrderCompletionNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public WorkOrderCompletionNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                            UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                            EdsDingtalkMessageFacade edsDingtalkMessageFacade,
                                            LanguageUtils languageUtils,

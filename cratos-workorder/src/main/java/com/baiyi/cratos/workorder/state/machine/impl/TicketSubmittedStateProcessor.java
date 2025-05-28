@@ -15,7 +15,7 @@ import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeHelper;
+import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeSender;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 @TicketStates(state = TicketState.SUBMITTED, target = TicketState.IN_APPROVAL)
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderApprovalNoticeHelper workOrderApprovalNoticeHelper;
+    private final WorkOrderApprovalNoticeSender workOrderApprovalNoticeHelper;
 
     public TicketSubmittedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                          WorkOrderTicketService workOrderTicketService,
@@ -38,7 +38,7 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
                                          WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                          WorkOrderTicketEntryService workOrderTicketEntryService,
                                          TicketWorkflowFacade ticketWorkflowFacade,
-                                         WorkOrderApprovalNoticeHelper approvalNotificationHelper) {
+                                         WorkOrderApprovalNoticeSender approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);

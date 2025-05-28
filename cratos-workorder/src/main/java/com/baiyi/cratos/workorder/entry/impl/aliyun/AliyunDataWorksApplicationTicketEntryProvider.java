@@ -32,7 +32,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.CreateDataWorkAKNoticeHelper;
+import com.baiyi.cratos.workorder.notice.CreateDataWorkAKNoticeSender;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -54,7 +54,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     private final TagService tagService;
     private final AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo;
     private final UserService userService;
-    private final CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper;
+    private final CreateDataWorkAKNoticeSender createDataWorkAKNoticeSender;
     private final WorkOrderService workOrderService;
 
     public AliyunDataWorksApplicationTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
@@ -66,7 +66,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
                                                          AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
                                                          UserService userService,
-                                                         CreateDataWorkAKNoticeHelper createDataWorkAKNoticeHelper) {
+                                                         CreateDataWorkAKNoticeSender createDataWorkAKNoticeHelper) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -75,7 +75,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         this.tagService = tagService;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
         this.userService = userService;
-        this.createDataWorkAKNoticeHelper = createDataWorkAKNoticeHelper;
+        this.createDataWorkAKNoticeSender = createDataWorkAKNoticeHelper;
         this.workOrderService = workOrderService;
     }
 
@@ -115,7 +115,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            createDataWorkAKNoticeHelper.sendMsg(workOrder, workOrderTicket, ramUsername, accessKey, applicantUser);
+            createDataWorkAKNoticeSender.sendMsg(workOrder, workOrderTicket, ramUsername, accessKey, applicantUser);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
         }

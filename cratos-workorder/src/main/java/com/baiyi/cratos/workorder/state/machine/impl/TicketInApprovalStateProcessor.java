@@ -21,7 +21,7 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeHelper;
+import com.baiyi.cratos.workorder.notice.WorkOrderApprovalNoticeSender;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ import java.util.Objects;
 @TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
 public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderApprovalNoticeHelper approvalNotificationHelper;
+    private final WorkOrderApprovalNoticeSender approvalNotificationHelper;
 
     public TicketInApprovalStateProcessor(UserService userService, WorkOrderService workOrderService,
                                           WorkOrderTicketService workOrderTicketService,
@@ -50,7 +50,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                           WorkOrderTicketEntryService workOrderTicketEntryService,
                                           TicketWorkflowFacade ticketWorkflowFacade,
-                                          WorkOrderApprovalNoticeHelper approvalNotificationHelper) {
+                                          WorkOrderApprovalNoticeSender approvalNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);

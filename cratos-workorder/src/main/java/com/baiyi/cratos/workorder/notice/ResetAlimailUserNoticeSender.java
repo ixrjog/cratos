@@ -19,37 +19,36 @@ import java.util.Map;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/5/26 10:39
+ * &#064;Date  2025/5/28 16:38
  * &#064;Version 1.0
  */
 @Slf4j
 @Component
-public class ResetAliyunRamUserNoticeHelper extends BaseWorkOrderNoticeHelper {
+public class ResetAlimailUserNoticeSender extends BaseWorkOrderNoticeHelper {
 
-    public ResetAliyunRamUserNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
-                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
-                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade,
-                                          LanguageUtils languageUtils,
-                                          NotificationTemplateService notificationTemplateService) {
+    public ResetAlimailUserNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
+                                        UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
+                                        EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
+                                        NotificationTemplateService notificationTemplateService) {
         super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
                 notificationTemplateService);
     }
 
-    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String ramLoginUsername, String password,
-                        String loginLink, User applicantUser) {
+    public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String mailLoginUsername, String password,
+                        String loginURL, User applicantUser) {
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
                 .put("workOrderName", workOrder.getName())
                 .put("applicant", ticket.getUsername())
-                .put("aliyunRAMUsername", ramLoginUsername)
+                .put("mail", mailLoginUsername)
                 .put("password", password)
-                .put("loginLink", loginLink)
+                .put("loginURL", loginURL)
                 .build();
         sendMsgToUser(applicantUser, dict);
     }
 
     private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
-        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_ALIYUN_RAM_USER_NOTICE.name(), dict);
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_ALIMAIL_USER_NOTICE.name(), dict);
     }
 
 }

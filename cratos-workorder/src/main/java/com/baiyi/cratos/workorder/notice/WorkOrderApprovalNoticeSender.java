@@ -31,9 +31,9 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class WorkOrderApprovalNoticeHelper extends BaseWorkOrderNoticeHelper {
+public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeHelper {
 
-    public WorkOrderApprovalNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public WorkOrderApprovalNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
                                          NotificationTemplateService notificationTemplateService) {

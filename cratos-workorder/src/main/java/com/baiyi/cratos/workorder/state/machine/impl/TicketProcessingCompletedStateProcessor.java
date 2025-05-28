@@ -15,7 +15,7 @@ import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.notice.WorkOrderCompletionNoticeHelper;
+import com.baiyi.cratos.workorder.notice.WorkOrderCompletionNoticeSender;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ import java.util.List;
 @TicketStates(state = TicketState.PROCESSING_COMPLETED, target = TicketState.COMPLETED)
 public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderCompletionNoticeHelper workOrderCompletionNoticeHelper;
+    private final WorkOrderCompletionNoticeSender workOrderCompletionNoticeHelper;
 
     public TicketProcessingCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                                    WorkOrderTicketService workOrderTicketService,
@@ -40,7 +40,7 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
                                                    WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                                    WorkOrderTicketEntryService workOrderTicketEntryService,
                                                    TicketWorkflowFacade ticketWorkflowFacade,
-                                                   WorkOrderCompletionNoticeHelper applicantNotificationHelper) {
+                                                   WorkOrderCompletionNoticeSender applicantNotificationHelper) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);

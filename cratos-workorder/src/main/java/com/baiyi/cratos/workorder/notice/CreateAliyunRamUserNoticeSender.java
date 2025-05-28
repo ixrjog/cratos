@@ -24,9 +24,9 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class CreateAliyunRamUserNoticeHelper extends BaseWorkOrderNoticeHelper {
+public class CreateAliyunRamUserNoticeSender extends BaseWorkOrderNoticeHelper {
 
-    public CreateAliyunRamUserNoticeHelper(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public CreateAliyunRamUserNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                            UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                            EdsDingtalkMessageFacade edsDingtalkMessageFacade,
                                            LanguageUtils languageUtils,
