@@ -30,6 +30,10 @@ public class PasswordGenerator {
         return generatePassword(8, true, false, true, false);
     }
 
+    public static String generateMailPassword() {
+        return generatePassword(8, true, true, true, true);
+    }
+
     public static String generatePassword(int length, boolean includeLowercase, boolean includeUppercase,
                                           boolean includeDigits, boolean includeSpecialChars) {
         if (length <= 0) {

@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -367,6 +368,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = -5319582937582510299L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private AliyunModel.ResetAliyunAccount detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddResetAlimailUserTicketEntry extends TicketEntry implements HasEntryDetail<EdsIdentityVO.MailAccount>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 847616175727551949L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private EdsIdentityVO.MailAccount detail;
     }
 
     @EqualsAndHashCode(callSuper = true)

@@ -163,6 +163,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add reset alimail user ticket entry")
+    @PostMapping(value = "/alimail/user/reset/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addResetAlimailUserTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddResetAlimailUserTicketEntry addTicketEntry) {
+        ticketEntryFacade.addResetAlimailUserTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     // other
 
     @Operation(summary = "Update ticket entry valid")

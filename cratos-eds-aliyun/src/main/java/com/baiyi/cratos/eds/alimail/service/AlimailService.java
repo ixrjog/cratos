@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PatchExchange;
+import org.springframework.web.service.annotation.PostExchange;
 
 /**
  * &#064;Author  baiyi
@@ -58,5 +59,9 @@ public interface AlimailService {
     @PatchExchange("/v2/users/{id}")
     void freezeUser(@RequestHeader("Authorization") String authorization, @PathVariable String id,
                     @RequestBody AlimailUserParam.UpdateUser freezeUser);
+
+    @PostExchange("/v2/users/{id}/resetPassword")
+    void resetPassword(@RequestHeader("Authorization") String authorization, @PathVariable String id,
+                       @RequestBody AlimailUserParam.ResetPassword resetPassword);
 
 }

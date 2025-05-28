@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableUtils {
 
+    @SuppressWarnings("DataFlowIssue")
     public static String getBusinessPermissionEntryTableRow(String workOrderKey, WorkOrderTicketEntry entry) {
         TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(workOrderKey,
                 entry.getBusinessType());
@@ -25,7 +26,7 @@ public class TableUtils {
         StringBuilder row = new StringBuilder("| ").append(entry.getName())
                 .append(" |");
         businessPermission.getRoleMembers()
-                .forEach(e -> row.append(e.getChecked() ? TimeUtils.parse(e.getExpiredTime(), Global.ISO8601) : " -")
+                .forEach(e -> row.append(e.getChecked() ? TimeUtils.parse(e.getExpiredTime(), Global.ISO8601) : " --")
                         .append(" |"));
         return row.toString();
     }

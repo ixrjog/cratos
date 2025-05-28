@@ -201,6 +201,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addResetAlimailUserTicketEntry(WorkOrderTicketParam.AddResetAlimailUserTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddResetAlimailUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAlimailUserTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIMAIL_USER_RESET.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {

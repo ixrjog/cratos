@@ -31,4 +31,18 @@ public class AlimailUserParam {
         private String status;
     }
 
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class ResetPassword implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 5935420105363553808L;
+        private String password;
+        @Builder.Default
+        private boolean forceChangePasswordNextSignIn = false;
+    }
+
 }

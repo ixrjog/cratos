@@ -97,7 +97,7 @@ public class WorkOrderTicketWrapper extends BaseDataTableConverter<WorkOrderTick
         }
         WorkOrderTicketVO.TicketAbstract ticketAbstract = WorkOrderTicketVO.TicketAbstract.builder()
                 .entryCnt(workOrderTicketEntryService.countByTicketId(vo.getId()))
-                .markdown(String.join("\n\n", toTables(workOrder.getWorkOrderKey(), entriesMap)))
+                .markdown(String.join("\n\n---\n\n", toTables(workOrder.getWorkOrderKey(), entriesMap)))
                 .build();
         vo.setTicketAbstract(ticketAbstract);
     }
