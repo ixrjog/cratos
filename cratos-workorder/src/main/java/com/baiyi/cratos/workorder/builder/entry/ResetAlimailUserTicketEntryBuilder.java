@@ -32,7 +32,6 @@ public class ResetAlimailUserTicketEntryBuilder {
     }
 
     public WorkOrderTicketEntry buildEntry() {
-
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(mailAccount.getAccountLogin()

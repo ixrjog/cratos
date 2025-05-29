@@ -11,7 +11,6 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -121,7 +120,6 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddResetAlimailUserTicketEntry param) {
         int assetId = Optional.of(param)
@@ -130,11 +128,6 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Alimail user assetId is null"));
         EdsIdentityVO.MailAccount mailAccount = getAndVerifyMailAccount(assetId);
-        EdsInstanceProviderHolder<EdsAlimailConfigModel.Alimail, AlimailUser.User> holder = (EdsInstanceProviderHolder<EdsAlimailConfigModel.Alimail, AlimailUser.User>) edsInstanceProviderHolderBuilder.newHolder(
-                mailAccount.getAccount()
-                        .getInstanceId(), EdsAssetTypeEnum.ALIMAIL_USER.name());
-        EdsAlimailConfigModel.Alimail alimail = holder.getInstance()
-                .getEdsConfigModel();
         return ResetAlimailUserTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .withMailAccount(mailAccount)

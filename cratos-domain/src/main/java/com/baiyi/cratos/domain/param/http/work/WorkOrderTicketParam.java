@@ -376,6 +376,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddResetAwsIamUserTicketEntry extends TicketEntry implements HasEntryDetail<EdsIdentityVO.CloudAccount>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 6852356802450976743L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private EdsIdentityVO.CloudAccount detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddResetAlimailUserTicketEntry extends TicketEntry implements HasEntryDetail<EdsIdentityVO.MailAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 847616175727551949L;

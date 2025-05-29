@@ -94,4 +94,22 @@ public class AwsIamUserRepo {
                 .deleteLoginProfile(request);
     }
 
+    /**
+     * 更新用户登录配置文件 https://docs.aws.amazon.com/zh_cn/IAM/latest/APIReference/API_UpdateLoginProfile.html
+     *
+     * @param config
+     * @param iamUsername
+     * @param password
+     * @param passwordResetRequired
+     */
+    public void updateLoginProfile(EdsAwsConfigModel.Aws aws, String iamUsername, String password,
+                                   boolean passwordResetRequired) {
+        UpdateLoginProfileRequest request = new UpdateLoginProfileRequest();
+        request.setUserName(iamUsername);
+        request.setPassword(password);
+        request.setPasswordResetRequired(passwordResetRequired);
+        UpdateLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .updateLoginProfile(request);
+    }
+
 }
