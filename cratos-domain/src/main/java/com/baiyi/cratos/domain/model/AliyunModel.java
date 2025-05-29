@@ -1,12 +1,11 @@
 package com.baiyi.cratos.domain.model;
 
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -52,27 +51,17 @@ public class AliyunModel {
         private String loginLink;
     }
 
+    @EqualsAndHashCode(callSuper = true)
     @Data
-    @Builder
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class ResetAliyunAccount implements Serializable {
+    public static class ResetAliyunAccount extends EdsIdentityVO.CloudAccount implements Serializable {
         @Serial
         private static final long serialVersionUID = -8707920768026453756L;
-        // RAM User
-        private EdsAssetVO.Asset asset;
-        private String username;
-        // Aliyun RAM Username
-        private String account;
-        // 不包含 @domain
-        private String ramUsername;
-        private String ramLoginUsername;
-        private String loginLink;
-
         private Boolean resetPassword;
         private Boolean unbindMFA;
-
     }
 
 }

@@ -11,11 +11,16 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunModel;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -35,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo.NO_PASSWORD_RESET_REQUIRED;
@@ -58,6 +64,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     private final WorkOrderService workOrderService;
     private final ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender;
     private final EdsAssetService edsAssetService;
+    private final EdsIdentityFacade edsIdentityFacade;
 
     public AliyunRamUserResetTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                  WorkOrderTicketService workOrderTicketService,
@@ -67,7 +74,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                  UserService userService,
                                                  ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender,
-                                                 EdsAssetService edsAssetService) {
+                                                 EdsAssetService edsAssetService, EdsIdentityFacade edsIdentityFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -77,6 +84,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         this.workOrderService = workOrderService;
         this.resetAliyunRamUserNoticeSender = resetAliyunRamUserNoticeSender;
         this.edsAssetService = edsAssetService;
+        this.edsIdentityFacade = edsIdentityFacade;
     }
 
     private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
@@ -98,8 +106,8 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        String ramUsername = resetAliyunAccount.getRamUsername();
-        String ramLoginUsername = resetAliyunAccount.getRamLoginUsername();
+        String ramUsername = resetAliyunAccount.getAccountLogin().getUsername();
+        String ramLoginUsername = resetAliyunAccount.getAccountLogin().getLoginUsername();
         String username = resetAliyunAccount.getUsername();
         if (Boolean.TRUE.equals(resetAliyunAccount.getResetPassword())) {
             final String newPassword = PasswordGenerator.generatePassword();
@@ -166,34 +174,44 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry param) {
-        int instanceId = Optional.ofNullable(param)
+        int assetId = Optional.ofNullable(param)
                 .map(WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry::getDetail)
-                .map(AliyunModel.ResetAliyunAccount::getAsset)
-                .map(EdsAssetVO.Asset::getInstanceId)
-                .orElseThrow(() -> new WorkOrderTicketException("Aliyun RAM user asset is null"));
-        AliyunModel.ResetAliyunAccount resetAliyunAccount = param.getDetail();
-        EdsAsset edsAsset = edsAssetService.getById(resetAliyunAccount.getAsset()
-                .getId());
-        // 校验账户
-        if (!edsAsset.getAssetKey()
-                .equals(resetAliyunAccount.getAsset()
-                        .getAssetKey()) || !edsAsset.getInstanceId()
-                .equals(instanceId)) {
-            WorkOrderTicketException.runtime("Aliyun RAM user asset is null.");
-        }
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
-                instanceId, EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+                .map(EdsIdentityVO.CloudAccount::getAccount)
+                .map(EdsAssetVO.Asset::getId)
+                .orElseThrow(() -> new WorkOrderTicketException("AWS IAM user asset is null"));
+        EdsIdentityVO.CloudAccount cloudAccount = getAndVerifyCloudAccount(assetId);
+        AliyunModel.ResetAliyunAccount resetAliyunAccount = BeanCopierUtil.copyProperties(cloudAccount,
+                AliyunModel.ResetAliyunAccount.class);
+        resetAliyunAccount.setResetPassword(param.getDetail()
+                .getResetPassword());
+        resetAliyunAccount.setUnbindMFA(param.getDetail()
+                .getUnbindMFA());
         return ResetAliyunRamUserTicketEntryBuilder.newBuilder()
                 .withParam(param)
-                .withUsername(SessionUtils.getUsername())
-                .withAliyun(aliyun)
+                .withResetAliyunAccount(resetAliyunAccount)
                 .buildEntry();
     }
+
+    private EdsIdentityVO.CloudAccount getAndVerifyCloudAccount(int assetId) {
+        EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails = EdsIdentityParam.QueryCloudIdentityDetails.builder()
+                .username(SessionUtils.getUsername())
+                .instanceType(EdsInstanceTypeEnum.ALIYUN.name())
+                .build();
+        EdsIdentityVO.CloudIdentityDetails cloudIdentityDetails = edsIdentityFacade.queryCloudIdentityDetails(
+                queryCloudIdentityDetails);
+        return cloudIdentityDetails.getAccounts()
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .filter(account -> account.getAccount()
+                        .getId()
+                        .equals(assetId))
+                .findFirst()
+                .orElseThrow(() -> new WorkOrderTicketException("The Aliyun RAM account is not yours."));
+    }
+
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
@@ -202,7 +220,8 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         String resetPassword = Boolean.TRUE.equals(resetAliyunAccount.getResetPassword()) ? "Yes" : "No";
         String unbindMFA = Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA()) ? "Yes" : "No";
         return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), resetAliyunAccount.getAccount(),
-                resetPassword, unbindMFA, resetAliyunAccount.getLoginLink());
+                resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
+                        .getLoginUrl());
     }
 
     @Override
