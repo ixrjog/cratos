@@ -11,7 +11,7 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
+import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.WORK_ORDER_
  */
 @Slf4j
 @Component
-public class WorkOrderCompletionNoticeSender extends BaseWorkOrderNoticeHelper {
+public class WorkOrderCompletionNoticeSender extends BaseWorkOrderNoticeSender {
 
     public WorkOrderCompletionNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                            UserService userService, TicketWorkflowFacade ticketWorkflowFacade,

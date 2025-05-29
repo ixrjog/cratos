@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Slf4j
 @RequiredArgsConstructor
-public abstract class BaseWorkOrderNoticeHelper {
+public abstract class BaseWorkOrderNoticeSender {
 
     protected final WorkOrderTicketEntryService workOrderTicketEntryService;
     protected final UserService userService;

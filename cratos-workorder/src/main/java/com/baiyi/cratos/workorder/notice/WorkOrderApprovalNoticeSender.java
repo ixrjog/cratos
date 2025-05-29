@@ -15,7 +15,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
+import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeHelper {
+public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
 
     public WorkOrderApprovalNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
@@ -46,10 +46,11 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeHelper {
         List<TicketEntryModel.EntryDesc> ticketEntities = workOrderTicketEntryService.queryTicketEntries(ticket.getId())
                 .stream()
                 .map(entry -> {
-                    TicketEntryProvider<?, ?> ticketEntryProvider = TicketEntryProviderFactory.getProvider(
+                    TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(
                             workOrder.getWorkOrderKey(), entry.getBusinessType());
-                    return ticketEntryProvider.getEntryDesc(entry);
+                    return provider != null ? provider.getEntryDesc(entry) : null;
                 })
+                .filter(java.util.Objects::nonNull)
                 .toList();
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())

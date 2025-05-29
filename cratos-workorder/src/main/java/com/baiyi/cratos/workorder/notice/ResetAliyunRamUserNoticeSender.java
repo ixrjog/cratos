@@ -11,7 +11,7 @@ import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeHelper;
+import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class ResetAliyunRamUserNoticeSender extends BaseWorkOrderNoticeHelper {
+public class ResetAliyunRamUserNoticeSender extends BaseWorkOrderNoticeSender {
 
     public ResetAliyunRamUserNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                           UserService userService, TicketWorkflowFacade ticketWorkflowFacade,

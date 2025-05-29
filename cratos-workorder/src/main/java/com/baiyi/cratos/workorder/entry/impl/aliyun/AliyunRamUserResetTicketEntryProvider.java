@@ -66,7 +66,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                                                  AliyunRamUserRepo aliyunRamUserRepo,
                                                  EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                  UserService userService,
-                                                 ResetAliyunRamUserNoticeSender createAliyunRamUserNoticeHelper,
+                                                 ResetAliyunRamUserNoticeSender resetAliyunRamUserNoticeSender,
                                                  EdsAssetService edsAssetService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
@@ -75,7 +75,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
         this.userService = userService;
         this.workOrderService = workOrderService;
-        this.resetAliyunRamUserNoticeSender = createAliyunRamUserNoticeHelper;
+        this.resetAliyunRamUserNoticeSender = resetAliyunRamUserNoticeSender;
         this.edsAssetService = edsAssetService;
     }
 

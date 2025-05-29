@@ -68,7 +68,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
                                                       EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                       BusinessTagFacade businessTagFacade, TagService tagService,
                                                       UserService userService,
-                                                      CreateAliyunRamUserNoticeSender createAliyunRamUserNoticeHelper) {
+                                                      CreateAliyunRamUserNoticeSender createAliyunRamUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -77,7 +77,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         this.tagService = tagService;
         this.userService = userService;
         this.workOrderService = workOrderService;
-        this.createAliyunRamUserNoticeSender = createAliyunRamUserNoticeHelper;
+        this.createAliyunRamUserNoticeSender = createAliyunRamUserNoticeSender;
     }
 
     private static final String ROW_TPL = "| {} | {} | {} |";

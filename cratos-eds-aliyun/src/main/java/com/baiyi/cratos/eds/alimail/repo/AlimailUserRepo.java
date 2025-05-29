@@ -59,13 +59,14 @@ public class AlimailUserRepo {
         }
     }
 
-    public void resetPassword(EdsAlimailConfigModel.Alimail alimail, String userId, String newPassword) {
+    public AlimailUser.ResetPasswordResult resetPassword(EdsAlimailConfigModel.Alimail alimail, String userId,
+                                                         String newPassword) {
         AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
         AlimailToken.Token token = alimailTokenClient.getToken(alimail);
         AlimailUserParam.ResetPassword resetPassword = AlimailUserParam.ResetPassword.builder()
                 .password(newPassword)
                 .build();
-        alimailService.resetPassword(token.toBearer(), userId, resetPassword);
+        return alimailService.resetPassword(token.toBearer(), userId, resetPassword);
     }
 
 }

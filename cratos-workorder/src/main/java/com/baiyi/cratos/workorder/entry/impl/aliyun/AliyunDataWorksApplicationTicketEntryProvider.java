@@ -66,7 +66,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                                                          BusinessTagFacade businessTagFacade, TagService tagService,
                                                          AliyunRamAccessKeyRepo aliyunRamAccessKeyRepo,
                                                          UserService userService,
-                                                         CreateDataWorkAKNoticeSender createDataWorkAKNoticeHelper) {
+                                                         CreateDataWorkAKNoticeSender createDataWorkAKNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.aliyunRamUserRepo = aliyunRamUserRepo;
@@ -75,7 +75,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         this.tagService = tagService;
         this.aliyunRamAccessKeyRepo = aliyunRamAccessKeyRepo;
         this.userService = userService;
-        this.createDataWorkAKNoticeSender = createDataWorkAKNoticeHelper;
+        this.createDataWorkAKNoticeSender = createDataWorkAKNoticeSender;
         this.workOrderService = workOrderService;
     }
 

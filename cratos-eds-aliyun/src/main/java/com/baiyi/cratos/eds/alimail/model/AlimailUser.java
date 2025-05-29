@@ -17,6 +17,12 @@ public class AlimailUser {
     }
 
     @Data
+    public static class ResetPasswordResult {
+        private String detailErrorCode;
+        private String message;
+    }
+
+    @Data
     public static class User {
         private String id;
         private String email;

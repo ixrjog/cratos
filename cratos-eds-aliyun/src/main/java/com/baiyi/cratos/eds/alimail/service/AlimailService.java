@@ -61,7 +61,7 @@ public interface AlimailService {
                     @RequestBody AlimailUserParam.UpdateUser freezeUser);
 
     @PostExchange("/v2/users/{id}/resetPassword")
-    void resetPassword(@RequestHeader("Authorization") String authorization, @PathVariable String id,
-                       @RequestBody AlimailUserParam.ResetPassword resetPassword);
+    AlimailUser.ResetPasswordResult resetPassword(@RequestHeader("Authorization") String authorization, @PathVariable String id,
+                                                  @RequestBody AlimailUserParam.ResetPassword resetPassword);
 
 }
