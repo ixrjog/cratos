@@ -1,11 +1,12 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.BusinessDocFacade;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.ServerAccount;
-import com.baiyi.cratos.domain.generator.SshSessionInstance;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.shell.*;
@@ -39,9 +40,11 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +67,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final SshAuditProperties sshAuditProperties;
     private final ServerCommandAuditor serverCommandAuditor;
     private final BusinessDocFacade businessDocFacade;
+    private final BusinessTagFacade businessTagFacade;
 
     public static final String GROUP = "computer";
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
@@ -71,7 +75,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     public EdsComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
                                    SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
                                    SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
-                                   BusinessDocFacade businessDocFacade) {
+                                   BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
         this.simpleSshSessionFacade = simpleSshSessionFacade;
@@ -79,6 +83,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.sshAuditProperties = sshAuditProperties;
         this.serverCommandAuditor = serverCommandAuditor;
         this.businessDocFacade = businessDocFacade;
+        this.businessTagFacade = businessTagFacade;
     }
 
     @ClearScreen
@@ -99,6 +104,9 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             return;
         }
         final String sshSessionInstanceId = generateInstanceId(asset);
+        if (!StringUtils.hasText(account)) {
+            account = getServerAccount(asset);
+        }
         if (!ComputerAssetContext.getAccountContext()
                 .containsKey(account)) {
             helper.print("Account does not exist.", PromptColor.RED);
@@ -177,7 +185,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     helper.print("Document: " + doc.getName(), PromptColor.CYAN);
                     helper.print(
                             "--------------------------------------------------------------------------------------");
-                    helper.print(doc.getText(),PromptColor.BRIGHT);
+                    helper.print(doc.getText(), PromptColor.BRIGHT);
                     helper.print(
                             "--------------------------------------------------------------------------------------");
                 });
@@ -208,6 +216,22 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         char ch = (char) input;
         jSchSession.getCommander()
                 .print(ch);
+    }
+
+    private String getServerAccount(EdsAsset edsAsset) {
+        BusinessTag serverAccountBusinessTag = getBusinessTag(edsAsset);
+        return Objects.nonNull(serverAccountBusinessTag) ? serverAccountBusinessTag.getTagValue() : "";
+    }
+
+    private BusinessTag getBusinessTag(EdsAsset edsAsset) {
+        return businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), SysTagKeys.SERVER_ACCOUNT.getKey());
+    }
+
+    private BaseBusiness.HasBusiness toHasBusiness(EdsAsset edsAsset) {
+        return SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(edsAsset.getId())
+                .build();
     }
 
 }

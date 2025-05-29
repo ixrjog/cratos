@@ -116,6 +116,7 @@ public class EdsComputerListCommand extends AbstractCommand {
             }
             final String env = getTagValue(asset, SysTagKeys.ENV);
             final String group = getTagValue(asset, SysTagKeys.GROUP);
+            BusinessTag serverAccountBusinessTag = getBusinessTag(asset, SysTagKeys.SERVER_ACCOUNT);
             ComputerTableWriter.newBuilder()
                     .withTable(computerTable)
                     .withId(id)
@@ -123,7 +124,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), "-"))
                     .withGroup(group)
                     .withEnv(renderEnv(envMap, env))
-                    .withServerAccounts(toServerAccounts(serverAccounts))
+                    .withServerAccounts(toServerAccounts(serverAccountBusinessTag, serverAccounts))
                     .withPermission(toPermission(user, group, env))
                     .withServerName(getServerName(asset))
                     .addRow();
@@ -163,8 +164,12 @@ public class EdsComputerListCommand extends AbstractCommand {
     }
 
     private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
-        BusinessTag businessTag = businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
+        BusinessTag businessTag = getBusinessTag(edsAsset, sysTagKey);
         return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "-";
+    }
+
+    private BusinessTag getBusinessTag(EdsAsset edsAsset, SysTagKeys sysTagKey) {
+        return businessTagFacade.getBusinessTag(toHasBusiness(edsAsset), sysTagKey.getKey());
     }
 
     private String getServerName(EdsAsset edsAsset) {
@@ -180,9 +185,18 @@ public class EdsComputerListCommand extends AbstractCommand {
                 .build();
     }
 
-    private String toServerAccounts(List<ServerAccount> serverAccounts) {
+    private String toServerAccounts(BusinessTag serverAccountBusinessTag, List<ServerAccount> serverAccounts) {
         if (CollectionUtils.isEmpty(serverAccounts)) {
             return "-";
+        }
+        if (Objects.nonNull(serverAccountBusinessTag)) {
+            Optional<ServerAccount> optionalServerAccount = serverAccounts.stream()
+                    .filter(e -> e.getUsername()
+                            .equals(serverAccountBusinessTag.getTagValue()))
+                    .findFirst();
+            if (optionalServerAccount.isPresent()) {
+                return toServerAccount(optionalServerAccount.get());
+            }
         }
         return Joiner.on(" ")
                 .join(serverAccounts.stream()
