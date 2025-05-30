@@ -114,7 +114,7 @@ public final class IOUtils {
      * 追加文件内容：使用FileWriter
      */
     public static void appendFile(String body, String path) {
-        if (org.springframework.util.StringUtils.hasText(path)) {
+        if (!org.springframework.util.StringUtils.hasText(path)) {
             log.error("Append file path is null!");
             return;
         }
