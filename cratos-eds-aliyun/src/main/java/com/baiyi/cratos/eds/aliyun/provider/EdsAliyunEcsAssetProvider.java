@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 import com.aliyuncs.ecs.model.v20140526.DescribeDisksResponse;
 import com.aliyuncs.ecs.model.v20140526.DescribeInstancesResponse;
 import com.aliyuncs.ecs.model.v20140526.ListTagResourcesResponse;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -52,7 +53,9 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     private static final String VPC = "vpc";
     private static final String PRE_PAID = "PrePaid";
 
-    private static final String[] TAGS = {"Group", "Env", "Name"};
+    //private static final String[] TAGS = {"Group", "Env", "Name", "ServerAccount"};
+
+    private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
 
     public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -156,8 +159,8 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
                         instance.getEdsConfigModel(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
                                 .getInstanceId())
                 .stream()
-                .filter(tagResource -> List.of(TAGS)
-                        .contains(tagResource.getTagKey()))
+                .filter(tagResource -> Arrays.stream(COMPUTER_TAGS)
+                        .anyMatch(tagKey -> tagKey.name().equals(tagResource.getTagKey())))
                 .toList();
         if (CollectionUtils.isEmpty(tagResources)) {
             return asset;
