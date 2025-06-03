@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -32,5 +33,7 @@ public interface BusinessTagFacade {
     void copyBusinessTag(BusinessTagParam.CopyBusinessTag copyBusinessTag);
 
     List<Integer> queryByBusinessTypeAndTagKey(String businessType, String tagKey);
+
+    Map<String, String> getConfigMapData(BaseBusiness.HasBusiness hasBusiness);
 
 }

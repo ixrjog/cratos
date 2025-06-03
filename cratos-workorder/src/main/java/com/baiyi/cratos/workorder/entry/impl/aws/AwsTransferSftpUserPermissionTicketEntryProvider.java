@@ -1,17 +1,27 @@
 package com.baiyi.cratos.workorder.entry.impl.aws;
 
+import com.amazonaws.services.transfer.model.HomeDirectoryMapEntry;
+import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AwsTransferModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.eds.aws.model.AwsTransferServer;
+import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
+import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -28,9 +38,12 @@ import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+
+import static com.baiyi.cratos.workorder.entry.impl.aws.AwsTransferSftpUserPermissionTicketEntryProvider.ConfigMap.ROLE;
+import static com.baiyi.cratos.workorder.entry.impl.aws.AwsTransferSftpUserPermissionTicketEntryProvider.ConfigMap.TARGET;
 
 /**
  * &#064;Author  baiyi
@@ -48,35 +61,93 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
     private final BusinessTagService businessTagService;
     private final TagService tagService;
     private final EdsAssetService edsAssetService;
+    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final BusinessTagFacade businessTagFacade;
+
+    interface ConfigMap {
+        String ROLE = "role";
+        String TARGET = "target";
+    }
 
     public AwsTransferSftpUserPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                             WorkOrderTicketService workOrderTicketService,
                                                             WorkOrderService workOrderService,
                                                             EdsInstanceService edsInstanceService,
                                                             BusinessTagService businessTagService,
-                                                            TagService tagService, EdsAssetService edsAssetService) {
+                                                            TagService tagService, EdsAssetService edsAssetService,
+                                                            EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                            BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.businessTagService = businessTagService;
         this.tagService = tagService;
         this.edsAssetService = edsAssetService;
+        this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.businessTagFacade = businessTagFacade;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsTransferModel.SFTPUser sftpUser) throws WorkOrderTicketException {
-        // TODO
+        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
+        EdsAwsConfigModel.Aws aws = holder.getInstance()
+                .getEdsConfigModel();
+        BaseBusiness.HasBusiness hasBusiness = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(sftpUser.getAsset()
+                        .getId())
+                .build();
+        Map<String, String> configMapData = businessTagFacade.getConfigMapData(hasBusiness);
+        final String target = StringFormatter.format(configMapData.get(TARGET), sftpUser.getUsername());
+        Collection<HomeDirectoryMapEntry> homeDirectoryMappings = AwsTransferRepo.generateHomeDirectoryMappings(target);
+        // createUser(String regionId, EdsAwsConfigModel.Aws aws, Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName, String role, String serverId, String sshPublicKey)
+        String regionId = sftpUser.getAsset()
+                .getRegion();
+        AwsTransferRepo.createUser(regionId, aws, homeDirectoryMappings, sftpUser.getUsername(),
+                configMapData.get(ROLE), sftpUser.getAsset()
+                        .getAssetId(), sftpUser.getPublicKey());
+        // import transfer server
+        try {
+            AwsTransferServer.TransferServer transferServer = holder.getProvider()
+                    .assetLoadAs(sftpUser.getAsset()
+                            .getOriginalModel());
+            List<ListedUser> sftpUsers = AwsTransferRepo.listUsers(regionId, aws, sftpUser.getAsset()
+                    .getAssetId());
+            transferServer.setUsers(sftpUsers);
+            holder.importAsset(transferServer);
+        } catch (Exception e) {
+            log.warn("Failed to import AWS Transfer Server: {}", e.getMessage());
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void verifyEntryParam(WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry param,
                                     WorkOrderTicketEntry entry) {
+        // 校验用户名是否合规
         String username = Optional.ofNullable(param)
                 .map(WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry::getDetail)
                 .map(AwsTransferModel.SFTPUser::getUsername)
                 .orElseThrow(() -> new WorkOrderTicketException("AWS Transfer Server username is null"));
         if (!ValidationUtils.isTransferServerUsername(username)) {
-            WorkOrderTicketException.runtime("Invalid AWS Transfer Server username: " + username);
+            throw new WorkOrderTicketException("Invalid AWS Transfer Server username: " + username);
+        }
+        // 校验用户名是否冲突
+        AwsTransferModel.SFTPUser sftpUser = Optional.of(param)
+                .map(WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry::getDetail)
+                .orElseThrow(() -> new WorkOrderTicketException("SFTP user detail is null"));
+        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
+        EdsAwsConfigModel.Aws aws = holder.getInstance()
+                .getEdsConfigModel();
+        List<ListedUser> transferUsers = AwsTransferRepo.listUsers(sftpUser.getAsset()
+                .getRegion(), aws, sftpUser.getAsset()
+                .getAssetId());
+        if (!CollectionUtils.isEmpty(transferUsers) && transferUsers.stream()
+                .anyMatch(u -> username.equals(u.getUserName()))) {
+            throw new WorkOrderTicketException("AWS Transfer Server username already exists: " + username);
         }
     }
 

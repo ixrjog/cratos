@@ -1,10 +1,13 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.model.ConfigMapModel;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
@@ -20,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -167,6 +171,26 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
                 .stream()
                 .map(BusinessTag::getBusinessId)
                 .toList();
+    }
+
+    @Override
+    public Map<String, String> getConfigMapData(BaseBusiness.HasBusiness hasBusiness) {
+        Tag configMapTag = tagService.getByTagKey(SysTagKeys.CONFIG_MAP);
+        if (Objects.isNull(configMapTag)) {
+            return Map.of();
+        }
+        BusinessTag uniqueKey = BusinessTag.builder()
+                .businessType(hasBusiness.getBusinessType())
+                .businessId(hasBusiness.getBusinessId())
+                .tagId(configMapTag.getId())
+                .build();
+        BusinessTag configMapBusinessTag = businessTagService.getByUniqueKey(uniqueKey);
+        if (Objects.isNull(configMapBusinessTag)) {
+            return Map.of();
+        }
+        ConfigMapModel.ConfigMap configMap = YamlUtils.loadAs(configMapBusinessTag.getTagValue(),
+                ConfigMapModel.ConfigMap.class);
+        return configMap.getData();
     }
 
 }

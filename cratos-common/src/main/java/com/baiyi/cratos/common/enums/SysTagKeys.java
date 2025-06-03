@@ -28,7 +28,8 @@ public enum SysTagKeys {
     INGRESS_ORDER("IngressOrder"),
     DATAWORKS("DataWorks"),
     DESCRIPTION("Description"),
-    ENDPOINT("Endpoint")
+    ENDPOINT("Endpoint"),
+    CONFIG_MAP("ConfigMap")
     ;
 
     private final String key;
