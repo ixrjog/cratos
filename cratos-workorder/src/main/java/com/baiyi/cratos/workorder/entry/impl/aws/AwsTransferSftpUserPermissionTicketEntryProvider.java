@@ -94,12 +94,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
         EdsAwsConfigModel.Aws aws = holder.getInstance()
                 .getEdsConfigModel();
-        BaseBusiness.HasBusiness hasBusiness = SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(sftpUser.getAsset()
-                        .getId())
-                .build();
-        Map<String, String> configMapData = businessTagFacade.getConfigMapData(hasBusiness);
+        Map<String, String> configMapData = getConfigMapData(sftpUser);
         final String target = StringFormatter.format(configMapData.get(TARGET), sftpUser.getUsername());
         Collection<HomeDirectoryMapEntry> homeDirectoryMappings = AwsTransferRepo.generateHomeDirectoryMappings(target);
         // createUser(String regionId, EdsAwsConfigModel.Aws aws, Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName, String role, String serverId, String sshPublicKey)
@@ -120,6 +115,19 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         } catch (Exception e) {
             log.warn("Failed to import AWS Transfer Server: {}", e.getMessage());
         }
+    }
+
+    private Map<String, String> getConfigMapData(AwsTransferModel.SFTPUser sftpUser) {
+        BaseBusiness.HasBusiness hasBusiness = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(sftpUser.getAsset()
+                        .getId())
+                .build();
+        Map<String, String> configMapData = businessTagFacade.getConfigMapData(hasBusiness);
+        if (CollectionUtils.isEmpty(configMapData)) {
+            return Map.of();
+        }
+        return configMapData;
     }
 
     @SuppressWarnings("unchecked")

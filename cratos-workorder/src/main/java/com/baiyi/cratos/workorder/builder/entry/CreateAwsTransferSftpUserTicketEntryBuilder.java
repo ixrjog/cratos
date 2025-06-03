@@ -42,6 +42,7 @@ public class CreateAwsTransferSftpUserTicketEntryBuilder {
 
     public WorkOrderTicketEntry buildEntry() {
         String fingerprint = SshKeyUtils.calcFingerprint(sftpUser.getPublicKey());
+        sftpUser.setTransferServerEndpoint(transferServerEndpoint);
         sftpUser.setKeyFingerprint(fingerprint);
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
