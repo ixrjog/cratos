@@ -27,5 +27,6 @@ public enum WorkOrderKeys {
     ALIMAIL_USER_RESET,
 
     AWS_IAM_USER_RESET,
+    AWS_TRANSFER_SFTP_USER_PERMISSION
 
 }

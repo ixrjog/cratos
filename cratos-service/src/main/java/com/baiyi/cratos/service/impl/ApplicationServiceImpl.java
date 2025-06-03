@@ -40,7 +40,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public DataTable<Application> queryApplicationPage(ApplicationParam.ApplicationPageQueryParam param) {
         Page<Application> page = PageHelper.startPage(param.getPage(), param.getLength());
         List<Application> data = applicationMapper.queryPageByParam(param);
-        return new DataTable<>(data, page.getTotal());
+        return new DataTable<>(data, page.getTotal(), param);
     }
 
     @Override

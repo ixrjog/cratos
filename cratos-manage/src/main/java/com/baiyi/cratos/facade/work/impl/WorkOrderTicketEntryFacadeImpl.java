@@ -175,9 +175,18 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
-    public  void addResetAwsIamUserTicketEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry addTicketEntry){
+    public void addResetAwsIamUserTicketEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.AWS_IAM_USER_RESET.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
+    public void addCreateAwsTransferSftpUserTicketEntry(
+            WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.AWS_TRANSFER_SFTP_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }

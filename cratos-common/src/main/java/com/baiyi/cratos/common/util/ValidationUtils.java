@@ -23,6 +23,8 @@ public class ValidationUtils {
         String JOB_KEY = "[a-z0-9-_]{3,64}";
 
         String URL_REGEX = "^https://[^\\s/$.?#].[^\\s]*$";
+
+        String TRANSFER_SERVER_USERNAME_REGEX = "^\\w[\\w@.-]{2,99}$"; // AWS Transfer Server Name
     }
 
     /**
@@ -57,6 +59,13 @@ public class ValidationUtils {
         }
         // 检查是否存在数字-数字的模式
         return phoneNumber.matches(".*\\d-\\d.*");
+    }
+
+    public static boolean isTransferServerUsername(String username) {
+        if (!StringUtils.hasText(username)) {
+            return false;
+        }
+        return username.matches(RegexMatches.TRANSFER_SERVER_USERNAME_REGEX);
     }
 
 }

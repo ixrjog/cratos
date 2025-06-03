@@ -99,6 +99,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add aws transfer sftp user ticket entry")
+    @PostMapping(value = "/aws/transfer/sftp/user/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateAwsTransferSftpUserTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateAwsTransferSftpUserTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add aliyun ram policy permission ticket entry")
     @PostMapping(value = "/aliyun/ram/policy/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addAliyunRamPolicyPermissionTicketEntry(

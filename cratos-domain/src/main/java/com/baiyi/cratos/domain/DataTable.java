@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain;
 
+import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.util.CollectionUtils;
@@ -23,6 +24,18 @@ public class DataTable<T> {
     public DataTable(List<T> data, long totalNum) {
         this.data = CollectionUtils.isEmpty(data) ? List.of() : data;
         this.totalNum = totalNum;
+    }
+
+    public DataTable(List<T> data, long totalNum, int nowPage) {
+        this.data = CollectionUtils.isEmpty(data) ? List.of() : data;
+        this.totalNum = totalNum;
+        this.nowPage = nowPage;
+    }
+
+    public DataTable(List<T> data, long totalNum, PageParam param) {
+        this.data = CollectionUtils.isEmpty(data) ? List.of() : data;
+        this.totalNum = totalNum;
+        this.nowPage = param.getPage();
     }
 
     public DataTable() {
