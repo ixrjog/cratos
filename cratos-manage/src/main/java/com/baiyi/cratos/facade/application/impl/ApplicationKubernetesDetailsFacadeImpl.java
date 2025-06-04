@@ -33,11 +33,9 @@ import com.baiyi.cratos.eds.opscloud.repo.OcLeoRepo;
 import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
+import com.baiyi.cratos.facade.application.EdsArmsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
-import com.baiyi.cratos.service.ApplicationResourceService;
-import com.baiyi.cratos.service.ApplicationService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
@@ -80,6 +78,8 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesPodRepo kubernetesPodRepo;
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
+    private final EdsAssetIndexService edsAssetIndexService;
+    private final EdsArmsFacade edsArmsFacade;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -144,8 +144,15 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .namespace(param.getNamespace())
                 .workloads(makeWorkloads(param))
                 .network(makeNetwork(param))
+                .banner(makeBanner(param))
                 .build();
         return (KubernetesVO.KubernetesDetails) accessControlFacade.invoke(kubernetesDetails);
+    }
+
+    private KubernetesVO.Banner makeBanner(ApplicationKubernetesParam.QueryKubernetesDetails param) {
+        return KubernetesVO.Banner.builder()
+                .arms(edsArmsFacade.makeArms(param.getApplicationName(),param.getNamespace()))
+                .build();
     }
 
     @Override
@@ -221,7 +228,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                                 .getEdsConfigModel(), param.getNamespace(), param.getPodName());
                     } catch (Exception e) {
                         detail.setSuccess(false);
-                        detail.setResult("Operation failed err: " +e.getMessage());
+                        detail.setResult("Operation failed err: " + e.getMessage());
                     }
                     // 写入工单
                     WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry = WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry.builder()

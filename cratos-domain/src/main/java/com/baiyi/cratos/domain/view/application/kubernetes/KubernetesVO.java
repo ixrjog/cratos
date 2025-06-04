@@ -49,13 +49,32 @@ public class KubernetesVO {
         private Workloads workloads;
         private Network network;
 
+        @SuppressWarnings("rawtypes")
         @Schema(description = "访问控制")
         private AccessControlVO.AccessControl accessControl;
 
         @Override
         public Integer getBusinessId() {
-            return Optional.ofNullable(this.application).map(ApplicationVO.Application::getId).orElse(0);
+            return Optional.ofNullable(this.application)
+                    .map(ApplicationVO.Application::getId)
+                    .orElse(0);
         }
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class ARMS implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -9205718648723604327L;
+        public static final ARMS NO_DATA = ARMS.builder()
+                .valid(false)
+                .build();
+        @Builder.Default
+        private Boolean valid = true;
+        private String home;
     }
 
     @Data
@@ -91,6 +110,7 @@ public class KubernetesVO {
         @Serial
         private static final long serialVersionUID = 7690223104294560669L;
         private String name;
+        private ARMS arms;
     }
 
 }
