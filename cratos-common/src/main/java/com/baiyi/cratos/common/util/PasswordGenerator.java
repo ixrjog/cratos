@@ -1,7 +1,8 @@
 package com.baiyi.cratos.common.util;
 
 import java.security.SecureRandom;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 /**
@@ -14,7 +15,7 @@ public class PasswordGenerator {
 
     private static final String LOWERCASE = "abcdefghijklmnpqrstuvwxyz";
     private static final String UPPERCASE = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
-    private static final String DIGITS = "23456789";
+    private static final String DIGITS = "0123456789";
     // "!@#$%^&*()-_=+[]{}|;:'\",.<>/?";
     private static final String SPECIAL_CHARS = "!@#$%^&*()_+-=";
 
@@ -24,6 +25,7 @@ public class PasswordGenerator {
 
     /**
      * 只包含小写字符和数字,长度为8
+     *
      * @return
      */
     public static String generateTicketNo() {
@@ -39,22 +41,58 @@ public class PasswordGenerator {
         if (length <= 0) {
             throw new IllegalArgumentException("Password length must be greater than 0");
         }
-        // 构建有效字符集
-        StringBuilder validChars = new StringBuilder();
-        if (includeLowercase) validChars.append(LOWERCASE);
-        if (includeUppercase) validChars.append(UPPERCASE);
-        if (includeDigits) validChars.append(DIGITS);
-        if (includeSpecialChars) validChars.append(SPECIAL_CHARS);
-
-        if (validChars.isEmpty()) {
+        if (!(includeLowercase || includeUppercase || includeDigits || includeSpecialChars)) {
             throw new IllegalArgumentException("At least one character type must be selected");
         }
-        // 使用 SecureRandom 生成随机密码
+
+        StringBuilder validChars = new StringBuilder();
+        List<Character> requiredChars = new ArrayList<>(4);
+
         SecureRandom random = new SecureRandom();
-        return IntStream.range(0, length)
-                .map(i -> random.nextInt(validChars.length()))
-                .mapToObj(randomIndex -> String.valueOf(validChars.charAt(randomIndex)))
-                .collect(Collectors.joining());
+
+        if (includeLowercase) {
+            validChars.append(LOWERCASE);
+            requiredChars.add(LOWERCASE.charAt(random.nextInt(LOWERCASE.length())));
+        }
+        if (includeUppercase) {
+            validChars.append(UPPERCASE);
+            requiredChars.add(UPPERCASE.charAt(random.nextInt(UPPERCASE.length())));
+        }
+        if (includeDigits) {
+            validChars.append(DIGITS);
+            requiredChars.add(DIGITS.charAt(random.nextInt(DIGITS.length())));
+        }
+        if (includeSpecialChars) {
+            validChars.append(SPECIAL_CHARS);
+            requiredChars.add(SPECIAL_CHARS.charAt(random.nextInt(SPECIAL_CHARS.length())));
+        }
+
+        if (length < requiredChars.size()) {
+            throw new IllegalArgumentException(
+                    "Password length must be at least " + requiredChars.size() + " to include all required character types");
+        }
+
+        List<Character> passwordChars = new ArrayList<>(length);
+        passwordChars.addAll(requiredChars);
+
+        IntStream.range(requiredChars.size(), length)
+                .mapToObj(i -> validChars.charAt(random.nextInt(validChars.length())))
+                .forEach(passwordChars::add);
+
+        // 洗牌算法打乱顺序
+        IntStream.iterate(passwordChars.size() - 1, i -> i > 0, i -> i - 1)
+                .forEach(i -> {
+                    int j = random.nextInt(i + 1);
+                    char tmp = passwordChars.get(i);
+                    passwordChars.set(i, passwordChars.get(j));
+                    passwordChars.set(j, tmp);
+                });
+
+        StringBuilder password = new StringBuilder(length);
+        for (char c : passwordChars) {
+            password.append(c);
+        }
+        return password.toString();
     }
 
     public static boolean isPasswordStrong(String password) {
