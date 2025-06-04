@@ -34,6 +34,8 @@ public interface EdsAssetIndexConstants {
     String ALIMAIL_USER_DEPARTMENT_IDS = "alimail.user.department.ids";
     String ALIYUN_KMS_ENDPOINT = "aliyun.kms.endpoint";
 
+    String ALIYUN_ARMS_APP_HOME = "aliyun.arms.app.home";
+
     /**
      * 用户邮箱
      */

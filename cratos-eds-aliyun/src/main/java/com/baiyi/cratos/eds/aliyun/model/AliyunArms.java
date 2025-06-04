@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class AliyunArms {
 
     @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TraceApps {
@@ -33,6 +35,7 @@ public class AliyunArms {
     }
 
     @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Tags {
