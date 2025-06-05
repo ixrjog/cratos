@@ -79,6 +79,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   GetPolicyResponse.Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyName())
+                .nameOf(entity.getPolicyName())
                 .kindOf(entity.getPolicyType())
                 .descriptionOf(entity.getDescription())
                 .createdTimeOf(TimeUtils.toDate(entity.getCreateDate(), TimeZoneEnum.UTC))
