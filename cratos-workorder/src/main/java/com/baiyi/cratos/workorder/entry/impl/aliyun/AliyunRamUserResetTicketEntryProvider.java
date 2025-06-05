@@ -118,6 +118,12 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
             } else {
                 // 创建RAM用户登录配置
                 createRAMUserLoginProfile(aliyun, ramUsername, newPassword, ENABLE_MFA);
+                // 重写资产
+                try {
+                    holder.importAsset(aliyunRamUserRepo.getUser(aliyun, ramUsername));
+                } catch (ClientException clientException) {
+                    log.warn(clientException.getMessage(), clientException);
+                }
             }
             // 发送通知
             sendMsg(workOrderTicket, username, ramLoginUsername, newPassword, aliyun.getRam()
