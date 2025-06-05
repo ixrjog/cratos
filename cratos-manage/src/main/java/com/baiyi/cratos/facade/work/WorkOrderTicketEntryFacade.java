@@ -54,6 +54,8 @@ public interface WorkOrderTicketEntryFacade {
     void addCreateAwsTransferSftpUserTicketEntry(
             WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry addTicketEntry);
 
+    void addAwsIamPolicyPermissionTicketEntry(WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry addTicketEntry);
+
     void addAliyunRamPolicyPermissionTicketEntry(
             WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry addTicketEntry);
 

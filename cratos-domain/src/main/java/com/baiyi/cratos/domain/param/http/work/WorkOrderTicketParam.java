@@ -350,6 +350,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddAwsIamPolicyPermissionTicketEntry extends TicketEntry implements HasEntryDetail<AwsModel.AwsPolicy>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -810336663173609420L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private AwsModel.AwsPolicy detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddCreateAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6363796292175321725L;

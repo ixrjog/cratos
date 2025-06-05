@@ -192,6 +192,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addAwsIamPolicyPermissionTicketEntry(WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry addTicketEntry){
+        TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.AWS_IAM_POLICY_PERMISSION.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void addAliyunRamPolicyPermissionTicketEntry(
             WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
