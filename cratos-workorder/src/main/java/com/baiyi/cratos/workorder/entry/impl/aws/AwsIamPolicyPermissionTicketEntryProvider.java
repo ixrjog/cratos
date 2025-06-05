@@ -88,10 +88,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
                     .getAssetKey();
             boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getCloudAccount().getUsername())
                     .stream()
-                    .anyMatch(e -> awsPolicy.getAsset()
-                            .getAssetKey()
-                            .equals(policyARN));
-
+                    .anyMatch(e -> e.getPolicyArn().equals(policyARN));
             if (!alreadyAttached) {
                 awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getCloudAccount().getUsername(), policyARN);
                 // TODO 同步资产
