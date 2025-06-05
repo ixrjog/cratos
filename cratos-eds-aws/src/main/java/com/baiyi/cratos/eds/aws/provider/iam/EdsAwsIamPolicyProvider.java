@@ -61,6 +61,7 @@ public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsAws
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyId())
                 .nameOf(entity.getPolicyName())
                 .assetKeyOf(entity.getArn())
+                .descriptionOf(entity.getDescription())
                 .createdTimeOf(entity.getCreateDate())
                 .build();
     }
