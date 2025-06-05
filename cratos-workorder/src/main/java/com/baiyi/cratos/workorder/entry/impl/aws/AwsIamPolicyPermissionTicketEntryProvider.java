@@ -86,14 +86,14 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         try {
             String policyARN = awsPolicy.getAsset()
                     .getAssetKey();
-            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getIamUsername())
+            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getCloudAccount().getUsername())
                     .stream()
                     .anyMatch(e -> awsPolicy.getAsset()
                             .getAssetKey()
                             .equals(policyARN));
 
             if (!alreadyAttached) {
-                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getIamUsername(), policyARN);
+                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getCloudAccount().getUsername(), policyARN);
                 // TODO 同步资产
             }
         } catch (Exception e) {
