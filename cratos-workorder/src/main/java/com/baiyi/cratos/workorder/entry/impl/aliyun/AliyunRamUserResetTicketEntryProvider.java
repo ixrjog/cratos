@@ -125,7 +125,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
         if (Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA())) {
             // 解绑MFA
-            if(existLoginProfile){
+            if (existLoginProfile) {
                 unbindMFA(aliyun, ramUsername);
             }
         }
@@ -238,7 +238,6 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 .findFirst()
                 .orElseThrow(() -> new WorkOrderTicketException("The Aliyun RAM account is not yours."));
     }
-
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
