@@ -109,7 +109,7 @@ public class AliyunRamUserRepo {
                 .getLoginProfile();
     }
 
-    private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
+    public CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
                                                                        EdsAliyunConfigModel.Aliyun aliyun,
                                                                        String ramUsername, String password,
                                                                        boolean passwordResetRequired,

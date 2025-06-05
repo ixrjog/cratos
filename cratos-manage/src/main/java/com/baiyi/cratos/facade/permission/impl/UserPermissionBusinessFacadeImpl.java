@@ -107,7 +107,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                 roleMember.getRole(), envLifecycleMap);
         if (userPermissionMap.containsKey(roleMember.getRole())) {
             UserPermission userPermission = userPermissionMap.get(roleMember.getRole());
-            userPermission.setValid(true);
+            userPermission.setValid(Boolean.TRUE);
             userPermission.setExpiredTime(expiredTime);
             userPermissionService.updateByPrimaryKey(userPermission);
         } else {
@@ -116,7 +116,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                     .name(permissionBusiness.getName())
                     .displayName(permissionBusiness.getDisplayName())
                     .username(username)
-                    .valid(true)
+                    .valid(Boolean.TRUE)
                     .expiredTime(expiredTime)
                     .businessType(businessType)
                     .businessId(Objects.isNull(businessPermission.getBusinessId()) ? businessPermission.getName()
