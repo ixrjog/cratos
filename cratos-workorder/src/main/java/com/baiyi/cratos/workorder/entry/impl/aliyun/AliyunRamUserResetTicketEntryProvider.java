@@ -109,8 +109,8 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         String ramLoginUsername = resetAliyunAccount.getAccountLogin()
                 .getLoginUsername();
         String username = resetAliyunAccount.getUsername();
+        boolean existLoginProfile = existLoginProfile(aliyun, ramUsername);
         if (Boolean.TRUE.equals(resetAliyunAccount.getResetPassword())) {
-            boolean existLoginProfile = existLoginProfile(aliyun, ramUsername);
             final String newPassword = PasswordGenerator.generatePassword();
             if (existLoginProfile) {
                 // 重置密码
@@ -125,7 +125,9 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
         if (Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA())) {
             // 解绑MFA
-            unbindMFA(aliyun, ramUsername);
+            if(existLoginProfile){
+                unbindMFA(aliyun, ramUsername);
+            }
         }
     }
 
