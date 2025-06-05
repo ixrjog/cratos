@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.aws;
 
+import com.amazonaws.auth.policy.Policy;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -12,8 +13,12 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
+import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
+import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -45,6 +50,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final AwsIamPolicyRepo awsIamPolicyRepo;
 
     public AwsIamPolicyPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                      WorkOrderTicketService workOrderTicketService,
@@ -52,11 +58,13 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
                                                      EdsInstanceService edsInstanceService,
                                                      EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                                     EdsIdentityFacade edsIdentityFacade) {
+                                                     EdsIdentityFacade edsIdentityFacade,
+                                                     AwsIamPolicyRepo awsIamPolicyRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsIdentityFacade = edsIdentityFacade;
+        this.awsIamPolicyRepo = awsIamPolicyRepo;
     }
 
     @Override
@@ -71,7 +79,26 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.AwsPolicy awsPolicy) throws WorkOrderTicketException {
-        // TODO
+        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, Policy> policyHolder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, Policy>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_POLICY.name());
+        EdsAwsConfigModel.Aws aws = policyHolder.getInstance()
+                .getEdsConfigModel();
+        try {
+            String policyARN = awsPolicy.getAsset()
+                    .getAssetKey();
+            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getIamUsername())
+                    .stream()
+                    .anyMatch(e -> awsPolicy.getAsset()
+                            .getAssetKey()
+                            .equals(policyARN));
+
+            if (!alreadyAttached) {
+                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getIamUsername(), policyARN);
+                // TODO 同步资产
+            }
+        } catch (Exception e) {
+            WorkOrderTicketException.runtime(e.getMessage());
+        }
     }
 
     @Override
@@ -112,7 +139,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         AwsModel.AwsPolicy awsPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = awsPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), awsPolicy.getIamUsername(),
+        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), awsPolicy.getCloudAccount().getAccountLogin().getLoginUsername(),
                 policy.getName(), policy.getAssetKey());
     }
 

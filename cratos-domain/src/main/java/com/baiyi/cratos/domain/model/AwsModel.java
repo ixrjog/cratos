@@ -29,10 +29,6 @@ public class AwsModel {
         // Aws IAM policy
         private EdsAssetVO.Asset asset;
         private EdsIdentityVO.CloudAccount cloudAccount;
-        private String username;
-        private String iamUsername;
-        private String iamLoginUsername;
-        private String loginLink;
     }
 
 }

@@ -180,7 +180,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())
-                .desc("RAM User")
+                .desc("IAM User")
                 .build();
     }
 
