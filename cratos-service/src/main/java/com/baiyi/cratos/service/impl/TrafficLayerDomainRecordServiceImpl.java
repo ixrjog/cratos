@@ -45,6 +45,15 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
         if (pageQuery.getDomainId() != null) {
             criteria.andEqualTo("domainId", pageQuery.getDomainId());
         }
+        if (pageQuery.getHasRouteTrafficTo() != null) {
+            if (pageQuery.getHasRouteTrafficTo()) {
+                criteria.andIsNotNull("routeTrafficTo")
+                        .andNotEqualTo("routeTrafficTo", "");
+            } else {
+                criteria.andIsNull("routeTrafficTo")
+                        .andEqualTo("routeTrafficTo", "");
+            }
+        }
         List<TrafficLayerDomainRecord> data = trafficLayerDomainRecordMapper.selectByExample(example);
         return new DataTable<>(data, page.getTotal());
     }

@@ -39,6 +39,7 @@ public class TrafficLayerRecordParam {
         @Schema(description = "Query by name")
         private String queryName;
         private Integer domainId;
+        private Boolean hasRouteTrafficTo;
     }
 
     @Data
