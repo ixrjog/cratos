@@ -41,6 +41,7 @@ public class EdsAssetQuery {
         private List<Integer> userPermissionIds;
         private List<String> effectiveAssetTypes;
         private String queryName;
+        private String queryGroupName;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
     }
 

@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -168,26 +169,36 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     @Override
     public DataTable<EdsAsset> queryUserPermissionAssets(EdsAssetQuery.UserPermissionPageQueryParam param) {
         // 查询用户所有的授权组
-        // TODO 管理员可以设置groups为空
         List<String> groups = userPermissionService.queryUserPermissionGroups(param.getUsername());
         if (CollectionUtils.isEmpty(groups)) {
             return DataTable.NO_DATA;
         }
-        // 查询用户所有授权的资产
+
+        String queryGroupName = param.getQueryGroupName();
+        if (StringUtils.hasText(queryGroupName)) {
+            groups = groups.stream()
+                    .filter(group -> group.contains(queryGroupName))
+                    .toList();
+            if (groups.isEmpty()) {
+                return DataTable.NO_DATA;
+            }
+        }
+
         Tag tagGroup = tagGroupService.getTagGroup();
-        if (Objects.isNull(tagGroup)) {
+        if (tagGroup == null) {
             return DataTable.NO_DATA;
         }
-        EdsAssetQuery.QueryUserPermissionBusinessIdParam query = EdsAssetQuery.QueryUserPermissionBusinessIdParam.builder()
-                .username(param.getUsername())
-                .tagGroupId(tagGroup.getId())
-                .groups(groups)
-                .build();
-        // 用户授权的业务对象
-        List<Integer> businessIds = edsAssetService.queryUserPermissionBusinessIds(query);
-        if (CollectionUtils.isEmpty(businessIds)) {
+
+        List<Integer> businessIds = edsAssetService.queryUserPermissionBusinessIds(
+                EdsAssetQuery.QueryUserPermissionBusinessIdParam.builder()
+                        .username(param.getUsername())
+                        .tagGroupId(tagGroup.getId())
+                        .groups(groups)
+                        .build());
+        if (businessIds.isEmpty()) {
             return DataTable.NO_DATA;
         }
+
         param.setEffectiveAssetTypes(EFFECTIVE_ASSET_TYPES.stream()
                 .map(Enum::name)
                 .toList());
