@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.command.AbstractCommand;
@@ -34,7 +33,6 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
     private static final String COMMAND_GROUP_LIST = GROUP + "-group-list";
-    private final String UNAUTHORIZED;
 
     private final UserPermissionService userPermissionService;
     private final UserService userService;
@@ -47,7 +45,6 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
                 .getComputer());
         this.userPermissionService = userPermissionService;
         this.userService = userService;
-        this.UNAUTHORIZED = helper.getColored("Unauthorized", PromptColor.RED);
     }
 
     @ShellMethod(key = COMMAND_GROUP_LIST, value = "List computer group")
@@ -55,16 +52,13 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
         PrettyTable computerTable = PrettyTable.fieldNames(ASSET_TABLE_FIELD_NAME);
         User user = userService.getByUsername(helper.getSshSession().getUsername());
         List<String> groups = userPermissionService.queryUserPermissionGroups(user.getUsername());
-
         if (CollectionUtils.isEmpty(groups)) {
-            helper.printInfo("No available assets found.");
+         helper.printInfo("No authorized groups");
         }
-
         int id = 1;
         for (String group : groups) {
             computerTable.addRow(id++, group);
         }
-
         // 打印表格
         helper.print(computerTable.toString());
     }
