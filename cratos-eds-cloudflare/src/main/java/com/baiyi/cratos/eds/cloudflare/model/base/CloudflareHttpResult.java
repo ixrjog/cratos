@@ -35,27 +35,21 @@ public class CloudflareHttpResult<T> {
 
     @Data
     public static class Message {
-
         private int code;
         private String message;
         private String type;
-
     }
 
     @Data
     public static class ResultInfo {
-
         private Integer page;
         @JsonProperty("per_page")
         private Integer perPage;
         @JsonProperty("total_pages")
         private Integer totalPages;
-
         private Integer count;
-
         @JsonProperty("total_count")
         private Integer totalCount;
-
     }
 
 }

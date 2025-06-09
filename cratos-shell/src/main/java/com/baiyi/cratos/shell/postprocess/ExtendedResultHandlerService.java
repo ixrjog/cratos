@@ -34,7 +34,7 @@ import java.util.Map;
 
 
 /**
- * Result handler service which save stacktrace in context (for stacktrace command)
+ * Zone handler service which save stacktrace in context (for stacktrace command)
  * and optionally apply post processors if requested in command line
  */
 @Slf4j

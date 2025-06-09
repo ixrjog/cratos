@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.cloudflare.service;
 
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
+import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,9 @@ public interface CloudflareService {
     CloudflareHttpResult<List<CloudflareCert.Result>> listCertificatePacks(@RequestHeader("Authorization") String bearerToken, @PathVariable String zoneId, @RequestParam Map<String, String> param);
 
     @GetExchange("/zones")
-    CloudflareHttpResult<List<CloudflareZone.Result>> listZones(@RequestHeader("Authorization") String bearerToken, @RequestParam Map<String, String> param);
+    CloudflareHttpResult<List<CloudflareZone.Zone>> listZones(@RequestHeader("Authorization") String bearerToken, @RequestParam Map<String, String> param);
+
+    @GetExchange("/zones/{zoneId}/dns_records")
+    CloudflareHttpResult<List<CloudflareDns.DnsRecord>> listDnsRecords(@RequestHeader("Authorization") String bearerToken, @PathVariable String zoneId, @RequestParam Map<String, String> param);
 
 }

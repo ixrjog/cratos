@@ -26,7 +26,7 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsCloudflareConfigModel.Clou
     @Test
     void zoneTest() {
         EdsCloudflareConfigModel.Cloudflare cf = getConfig(5);
-        List<CloudflareZone.Result> rt = cloudflareZoneRepo.listZones(cf);
+        List<CloudflareZone.Zone> rt = cloudflareZoneRepo.listZones(cf);
         System.out.println(rt);
     }
 

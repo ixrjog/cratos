@@ -65,7 +65,9 @@ public enum EdsAssetTypeEnum {
     HUAWEICLOUD_VPC("VPC", 0),
     HUAWEICLOUD_SUBNET("Subnet", 0),
 
-    CLOUDFLARE_CERT("Certificate", 0),
+    CLOUDFLARE_ZONE("Zone", 0),
+    CLOUDFLARE_CERT("Certificate", 1),
+    CLOUDFLARE_DNS_RECORD("DNS Record", 2),
 
     KUBERNETES_NAMESPACE("Namespace", 0),
     KUBERNETES_DEPLOYMENT("Deployment", 0),

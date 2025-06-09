@@ -105,4 +105,8 @@ public interface EdsAssetIndexConstants {
     String GITLAB_PROJECT_ID = "gitlab.project.id";
     String GITLAB_GROUP_ID = "gitlab.group.id";
 
+    String CLOUDFLARE_ZONE_CNAME_SUFFIX = "cloudflare.zone.cname.suffix";
+    String CLOUDFLARE_ZONE_DNS_RECORD_PROXIED = "cloudflare.zone.dns.record.proxied";
+    String CLOUDFLARE_ZONE_DNS_RECORD_CONTENT = "cloudflare.zone.dns.record.content";
+
 }

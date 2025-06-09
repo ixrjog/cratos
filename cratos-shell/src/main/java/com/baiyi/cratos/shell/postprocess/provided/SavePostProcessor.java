@@ -65,7 +65,7 @@ public class SavePostProcessor
             try {
                 String toWrite = string(result).replaceAll(REPLACE_REGEX, "") + "\n";
                 Files.writeString(file.toPath(), toWrite, CREATE, APPEND);
-                return "Result saved to file: " + file.getAbsolutePath();
+                return "Zone saved to file: " + file.getAbsolutePath();
             } catch (IOException e) {
                 log.debug("Unable to write to file: " + file.getAbsolutePath(), e);
                 throw new PostProcessorException("Unable to write to file: " + file.getAbsolutePath() + ". " + e.getMessage(), e);

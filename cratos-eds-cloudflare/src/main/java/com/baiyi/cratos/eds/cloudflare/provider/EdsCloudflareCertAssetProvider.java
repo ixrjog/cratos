@@ -57,7 +57,7 @@ public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProv
             ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
         return cloudflareZoneRepo.listZones(instance.getEdsConfigModel())
                 .stream()
-                .map(CloudflareZone.Result::getId)
+                .map(CloudflareZone.Zone::getId)
                 .collect(Collectors.toSet());
     }
 
