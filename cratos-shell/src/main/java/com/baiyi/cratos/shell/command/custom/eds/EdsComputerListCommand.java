@@ -65,7 +65,7 @@ public class EdsComputerListCommand extends AbstractCommand {
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
-    public final static String[] ASSET_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Login Account", "Permission"};
+    public static final String[] ASSET_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Login Account", "Permission"};
     protected static final int PAGE_FOOTER_SIZE = 6;
 
     public EdsComputerListCommand(SshShellHelper helper, SshShellProperties properties,
@@ -86,6 +86,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     @ShellMethod(key = COMMAND_LIST, value = "List computer asset")
     public void listComputer(@ShellOption(help = "Name", defaultValue = "") String name,
+                             @ShellOption(help = "Group", defaultValue = "") String group,
                              @ShellOption(help = "Page", defaultValue = "1") int page) {
         PrettyTable computerTable = PrettyTable.fieldNames(ASSET_TABLE_FIELD_NAME);
         int rows = helper.terminalSize()
@@ -93,13 +94,14 @@ public class EdsComputerListCommand extends AbstractCommand {
         int pageLength = rows - PAGE_FOOTER_SIZE;
         User user = userService.getByUsername(helper.getSshSession()
                 .getUsername());
-        EdsAssetQuery.UserPermissionPageQueryParam param = EdsAssetQuery.UserPermissionPageQueryParam.builder()
+        EdsAssetQuery.UserPermissionPageQueryParam queryParam = EdsAssetQuery.UserPermissionPageQueryParam.builder()
                 .username(user.getUsername())
                 .page(page)
                 .length(pageLength)
                 .queryName(name)
+                .queryGroupName(group)
                 .build();
-        DataTable<EdsAsset> dataTable = userPermissionBusinessFacade.queryUserPermissionAssets(param);
+        DataTable<EdsAsset> dataTable = userPermissionBusinessFacade.queryUserPermissionAssets(queryParam);
         if (CollectionUtils.isEmpty(dataTable.getData())) {
             helper.printInfo("No available assets found.");
         }
@@ -115,17 +117,17 @@ public class EdsComputerListCommand extends AbstractCommand {
                 edsInstanceMap.put(edsInstance.getId(), edsInstance.getInstanceName());
             }
             final String env = getTagValue(asset, SysTagKeys.ENV);
-            final String group = getTagValue(asset, SysTagKeys.GROUP);
+            final String tagGroup = getTagValue(asset, SysTagKeys.GROUP);
             BusinessTag serverAccountBusinessTag = getBusinessTag(asset, SysTagKeys.SERVER_ACCOUNT);
             ComputerTableWriter.newBuilder()
                     .withTable(computerTable)
                     .withId(id)
                     .withAsset(asset)
                     .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), "-"))
-                    .withGroup(group)
+                    .withGroup(tagGroup)
                     .withEnv(renderEnv(envMap, env))
                     .withServerAccounts(toServerAccounts(serverAccountBusinessTag, serverAccounts))
-                    .withPermission(toPermission(user, group, env))
+                    .withPermission(toPermission(user, tagGroup, env))
                     .withServerName(getServerName(asset))
                     .addRow();
             computerMapper.put(id, asset);
