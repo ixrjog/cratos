@@ -33,7 +33,7 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerGroupListComm
 public class EdsComputerGroupListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
-    private static final String COMMAND_LIST = GROUP + "-group-list";
+    private static final String COMMAND_GROUP_LIST = GROUP + "-group-list";
     private final String UNAUTHORIZED;
 
     private final UserPermissionService userPermissionService;
@@ -50,8 +50,7 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
         this.UNAUTHORIZED = helper.getColored("Unauthorized", PromptColor.RED);
     }
 
-    @ShellMethod(key = COMMAND_LIST, value = "List computer group")
-
+    @ShellMethod(key = COMMAND_GROUP_LIST, value = "List computer group")
     public void listComputerGroup() {
         PrettyTable computerTable = PrettyTable.fieldNames(ASSET_TABLE_FIELD_NAME);
         User user = userService.getByUsername(helper.getSshSession().getUsername());
