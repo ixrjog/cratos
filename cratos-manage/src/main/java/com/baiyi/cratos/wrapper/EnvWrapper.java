@@ -1,5 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
+import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
@@ -26,6 +27,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
     private final EnvService envService;
 
     @Override
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(EnvVO.Env vo) {
     }
 

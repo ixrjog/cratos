@@ -8,6 +8,7 @@ package com.baiyi.cratos.workorder.enums;
 public enum WorkOrderKeys {
 
     APPLICATION_PERMISSION,
+    APPLICATION_PROD_PERMISSION,
     COMPUTER_PERMISSION,
     SERVER_ACCOUNT_PERMISSION,
     APPLICATION_ELASTIC_SCALING,
