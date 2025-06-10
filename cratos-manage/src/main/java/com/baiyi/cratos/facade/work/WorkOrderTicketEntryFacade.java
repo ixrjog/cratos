@@ -25,6 +25,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
+    void addApplicationProdPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
+
     void addApplicationElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry);
 

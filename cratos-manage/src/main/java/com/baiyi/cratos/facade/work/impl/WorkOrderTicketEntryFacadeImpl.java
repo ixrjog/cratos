@@ -76,6 +76,16 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addApplicationProdPermissionTicketEntry(
+            WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_PROD_PERMISSION.name(), addTicketEntry.getBusinessType());
+        if (Objects.nonNull(ticketEntryProvider)) {
+            ticketEntryProvider.addEntry(addTicketEntry);
+        }
+    }
+
+    @Override
     public void addApplicationElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry>) TicketEntryProviderFactory.getProvider(
@@ -192,7 +202,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
-    public void addAwsIamPolicyPermissionTicketEntry(WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry addTicketEntry){
+    public void addAwsIamPolicyPermissionTicketEntry(
+            WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.AWS_IAM_POLICY_PERMISSION.name(), addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
