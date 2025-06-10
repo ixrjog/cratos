@@ -22,6 +22,8 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class EdsAliyunConfigModel {
 
+    public static final String DMS_ENDPOINT = "dms-enterprise.aliyuncs.com";
+
     @Data
     @NoArgsConstructor
     @Schema
@@ -42,6 +44,7 @@ public class EdsAliyunConfigModel {
         private ACR acr;
         private RAM ram;
         private KMS kms;
+        private DMS dms;
     }
 
     @Data
@@ -119,6 +122,14 @@ public class EdsAliyunConfigModel {
     @Schema
     public static class RocketMQ {
         private List<String> endpoints;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class DMS {
+        private String endpoint;
+        private Long tid;
     }
 
     @Data

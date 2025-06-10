@@ -37,6 +37,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_KMS_INSTANCE("KMS Instance", 45),
     ALIYUN_KMS_SECRET("KMS Secret",46),
     ALIYUN_KMS_KEY("KMS Key", 47),
+    ALIYUN_DMS_USER("DMS User", 50),
 
     ALIMAIL_DEPARTMENT("Department", 0),
     ALIMAIL_USER("User", 1),
