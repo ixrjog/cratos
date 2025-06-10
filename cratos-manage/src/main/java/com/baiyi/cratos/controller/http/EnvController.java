@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/3/19 14:15
@@ -31,6 +33,12 @@ public class EnvController {
         return HttpResult.of(envFacade.queryEnvPage(pageQuery));
     }
 
+    @Operation(summary = "Query env by group value")
+    @PostMapping(value = "/query/by/group/value", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EnvVO.Env>> queryEnvByGroupValue(@RequestBody @Valid EnvParam.QueryEnvByGroupValue queryEnvByGroupValue) {
+        return HttpResult.of(envFacade.queryEnvByGroupValue(queryEnvByGroupValue));
+    }
+    
     @Operation(summary = "Update env valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> setEnvValidById(@RequestParam int id) {

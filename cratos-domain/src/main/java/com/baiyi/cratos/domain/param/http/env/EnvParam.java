@@ -34,6 +34,14 @@ public class EnvParam {
     }
 
     @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class QueryEnvByGroupValue {
+        private String groupValue;
+    }
+
+    @Data
     @Schema
     public static class AddEnv implements IToTarget<Env> {
         @NotBlank

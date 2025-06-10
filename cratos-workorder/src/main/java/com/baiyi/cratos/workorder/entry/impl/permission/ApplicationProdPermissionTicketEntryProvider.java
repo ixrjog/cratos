@@ -1,15 +1,15 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
-import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.generator.WorkOrder;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.service.BusinessTagService;
-import com.baiyi.cratos.service.EnvService;
-import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -22,11 +22,8 @@ import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * &#064;Author  baiyi
@@ -39,21 +36,17 @@ import java.util.Objects;
 public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
-    private final BusinessTagService businessTagService;
-    private final TagService tagService;
-    private final EnvService envService;
+    private final EnvFacade envFacade;
 
     public ApplicationProdPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
                                                         WorkOrderService workOrderService,
                                                         UserPermissionBusinessFacade userPermissionBusinessFacade,
-                                                        BusinessTagService businessTagService, TagService tagService,
-                                                        EnvService envService) {
+
+                                                        EnvFacade envFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
-        this.businessTagService = businessTagService;
-        this.tagService = tagService;
-        this.envService = envService;
+        this.envFacade = envFacade;
     }
 
     @Override
@@ -72,23 +65,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
 
     @SuppressWarnings("SameParameterValue")
     private List<Env> queryEnv(String groupValue) {
-        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
-        if (Objects.isNull(groupTag)) {
-            return List.of();
-        }
-        List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(BusinessTypeEnum.ENV.name(),
-                        groupTag.getId())
-                .stream()
-                .filter(e -> e.getTagValue()
-                        .equalsIgnoreCase(groupValue))
-                .toList();
-        if (CollectionUtils.isEmpty(businessTags)) {
-            return List.of();
-        }
-        return businessTags.stream()
-                .map(businessTag -> envService.getById(businessTag.getBusinessId()))
-                .sorted(Comparator.comparing(Env::getSeq))
-                .toList();
+        return envFacade.queryEnv(groupValue);
     }
 
     /**

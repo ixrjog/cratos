@@ -26,4 +26,8 @@ public interface EnvFacade extends HasSetValid {
 
     List<Env> querySorted();
 
+    List<Env> queryEnv(String groupValue);
+
+    List<EnvVO.Env> queryEnvByGroupValue(EnvParam.QueryEnvByGroupValue queryEnvByGroupValue);
+
 }
