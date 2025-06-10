@@ -46,6 +46,7 @@ public class TagGroupServiceImpl implements TagGroupService {
         BusinessTagParam.BusinessTagPageQuery param = BusinessTagParam.BusinessTagPageQuery.builder()
                 .tagGroupId(tagGroup.getId())
                 .queryName(pageQuery.getQueryName())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .page(pageQuery.getPage())
                 .length(pageQuery.getLength())
                 .build();

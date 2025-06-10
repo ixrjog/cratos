@@ -97,6 +97,7 @@ public class BusinessTagParam {
     public static class BusinessTagPageQuery extends PageParam {
         private String queryName;
         private Integer tagGroupId;
+        private String businessType;
     }
 
     @Data
