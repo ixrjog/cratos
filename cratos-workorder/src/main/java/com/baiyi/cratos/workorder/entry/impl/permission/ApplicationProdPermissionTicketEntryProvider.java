@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
+import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
@@ -24,6 +25,7 @@ import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
@@ -110,6 +112,12 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
                         .filter(roleMember -> envs.stream()
                                 .anyMatch(env -> env.getEnvName()
                                         .equalsIgnoreCase(roleMember.getRole())))
+                        .map(roleMember -> UserPermissionBusinessParam.RoleMember.builder()
+                                .checked(roleMember.getChecked())
+                                .role(roleMember.getRole())
+                                .role(roleMember.getRole())
+                                .expiredTime(ExpiredUtil.generateExpirationTime(15L, TimeUnit.MINUTES))
+                                .build())
                         .toList())
                 .build();
         UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()
