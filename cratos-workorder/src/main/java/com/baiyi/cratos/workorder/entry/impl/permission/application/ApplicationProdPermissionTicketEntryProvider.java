@@ -24,6 +24,7 @@ import com.baiyi.cratos.workorder.util.TableUtils;
 import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -106,6 +107,8 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
         List<Env> envs = queryEnv(GROUP_VALUE);
+        // 临时授权15分钟
+        Date expiredTime = ExpiredUtil.generateExpirationTime(15L, TimeUnit.MINUTES);
         UserPermissionBusinessParam.BusinessPermission prodBusinessPermission = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(businessPermission.getBusinessId())
                 .name(businessPermission.getName())
@@ -118,7 +121,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
                                 .checked(roleMember.getChecked())
                                 .role(roleMember.getRole())
                                 .role(roleMember.getRole())
-                                .expiredTime(ExpiredUtil.generateExpirationTime(15L, TimeUnit.MINUTES))
+                                .expiredTime(expiredTime)
                                 .build())
                         .toList())
                 .build();
