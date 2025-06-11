@@ -50,8 +50,7 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
                 criteria.andIsNotNull("routeTrafficTo")
                         .andNotEqualTo("routeTrafficTo", "");
             } else {
-                criteria.andIsNull("routeTrafficTo")
-                        .andEqualTo("routeTrafficTo", "");
+                criteria.andCondition("(route_traffic_to is null or route_traffic_to = '')");
             }
         }
         List<TrafficLayerDomainRecord> data = trafficLayerDomainRecordMapper.selectByExample(example);
