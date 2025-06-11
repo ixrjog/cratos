@@ -361,7 +361,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
 
     @Override
     public OptionsVO.Options getLdapGroupOptions() {
-        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
+        Tag groupTag = tagService.getByTagKey(SysTagKeys.USER_GROUP);
         if (Objects.isNull(groupTag)) {
             return OptionsVO.NO_OPTIONS_AVAILABLE;
         }
@@ -382,7 +382,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public List<LdapUserGroupModel.Role> queryLdapRolePermissionTicketEntry(
             WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry queryLdapRolePermissionTicketEntry) {
-        Tag groupTag = tagService.getByTagKey(SysTagKeys.GROUP);
+        Tag groupTag = tagService.getByTagKey(SysTagKeys.USER_GROUP);
         if (groupTag == null) {
             return List.of();
         }

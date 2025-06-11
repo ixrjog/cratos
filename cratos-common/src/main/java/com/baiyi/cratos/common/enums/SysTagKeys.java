@@ -19,6 +19,7 @@ public enum SysTagKeys {
     USERNAME("Username"),
     SERVER_ACCOUNT("ServerAccount"),
     GROUP("Group"),
+    USER_GROUP("UserGroup"),
     ENV("Env"),
     NAME("Name"),
     // 标识用户类型为非人员

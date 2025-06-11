@@ -60,6 +60,8 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
             List<WorkOrderVO.WorkOrder> workOrderList = workOrderService.queryByGroupId(hasWorkOrderList.getGroupId())
                     .stream()
                     .map(this::wrapToTarget)
+                    // 过滤无效的工单
+                    .filter(WorkOrderVO.WorkOrder::getValid)
                     .sorted(Comparator.comparing(WorkOrderVO.WorkOrder::getSeq))
                     .toList();
             hasWorkOrderList.setWorkOrderList(workOrderList);
