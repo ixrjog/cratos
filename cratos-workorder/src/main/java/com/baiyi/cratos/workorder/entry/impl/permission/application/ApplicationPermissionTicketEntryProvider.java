@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry.impl.permission;
+package com.baiyi.cratos.workorder.entry.impl.permission.application;
 
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.service.work.WorkOrderService;

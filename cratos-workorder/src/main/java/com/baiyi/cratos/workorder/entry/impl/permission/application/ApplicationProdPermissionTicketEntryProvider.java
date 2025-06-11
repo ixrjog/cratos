@@ -1,4 +1,4 @@
-package com.baiyi.cratos.workorder.entry.impl.permission;
+package com.baiyi.cratos.workorder.entry.impl.permission.application;
 
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
