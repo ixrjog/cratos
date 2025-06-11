@@ -1,6 +1,5 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
-import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
@@ -25,24 +24,23 @@ import com.google.common.base.Joiner;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/6/10 15:11
+ * &#064;Date  2025/6/11 09:46
  * &#064;Version 1.0
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.APPLICATION)
-@WorkOrderKey(key = WorkOrderKeys.APPLICATION_PROD_PERMISSION)
-public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
+@WorkOrderKey(key = WorkOrderKeys.APPLICATION_TEST_PERMISSION)
+public class ApplicationTestPermissionTicketEntryProvider extends BaseTicketEntryProvider<UserPermissionBusinessParam.BusinessPermission, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> {
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final EnvFacade envFacade;
 
-    private static final String GROUP_VALUE = "prod";
+    private static final String GROUP_VALUE = "test";
 
-    public ApplicationProdPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public ApplicationTestPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
                                                         WorkOrderService workOrderService,
                                                         UserPermissionBusinessFacade userPermissionBusinessFacade,
@@ -114,12 +112,6 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
                         .filter(roleMember -> envs.stream()
                                 .anyMatch(env -> env.getEnvName()
                                         .equalsIgnoreCase(roleMember.getRole())))
-                        .map(roleMember -> UserPermissionBusinessParam.RoleMember.builder()
-                                .checked(roleMember.getChecked())
-                                .role(roleMember.getRole())
-                                .role(roleMember.getRole())
-                                .expiredTime(ExpiredUtil.generateExpirationTime(15L, TimeUnit.MINUTES))
-                                .build())
                         .toList())
                 .build();
         UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness = UserPermissionBusinessParam.UpdateUserPermissionBusiness.builder()

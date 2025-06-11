@@ -139,6 +139,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add application test permission ticket entry")
+    @PostMapping(value = "/application/test/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addApplicationTestPermissionTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
+        ticketEntryFacade.addApplicationTestPermissionTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add application elastic scaling ticket entry")
     @PostMapping(value = "/application/elastic/scaling/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addElasticScalingOfApplicationReplicasTicketEntry(
