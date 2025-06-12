@@ -28,6 +28,7 @@ public class TrafficLayerDomainVO {
 
     public interface HasDomain {
         Integer getDomainId();
+
         void setDomain(Domain domain);
     }
 
@@ -44,13 +45,17 @@ public class TrafficLayerDomainVO {
         private Integer id;
         private String name;
         private String domain;
+        private String registeredDomain;
+        private List<DomainNameServiceProvider> dnsProviders;
         private Boolean valid;
         private String comment;
         private Map<String, Integer> resourceCount;
+
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
@@ -69,6 +74,19 @@ public class TrafficLayerDomainVO {
         private String envName;
         private Boolean valid;
         private Integer seq;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class DomainNameServiceProvider implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -3458222164485918824L;
+        private String providerType;
+        private String providerName;
+        private String consoleUrl;
     }
 
 }

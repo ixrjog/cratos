@@ -32,6 +32,9 @@ public class TrafficLayerDomain implements HasValid, HasIntegerPrimaryKey, Seria
      */
     private String domain;
 
+    @Column(name = "registered_domain")
+    private String registeredDomain;
+
     private Boolean valid;
 
     /**

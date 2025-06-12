@@ -28,6 +28,7 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -116,7 +117,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
         try {
             EdsAsset edsAsset = enterAsset(toEdsAsset(instance, entity));
-            List<EdsAssetIndex> indices = toEdsAssetIndexList(instance, edsAsset, entity);
+            List<EdsAssetIndex> indices = ofEdsAssetIndices(instance, edsAsset, entity);
             edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), indices);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
@@ -125,9 +126,30 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         }
     }
 
+    private List<EdsAssetIndex> ofEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+        List<EdsAssetIndex> indices = toEdsAssetIndexList(instance, edsAsset, entity);
+        EdsAssetIndex index = toEdsAssetIndex(instance, edsAsset, entity);
+        if (index == null) {
+            return indices;
+        }
+        if (CollectionUtils.isEmpty(indices)) {
+            return List.of(index);
+        }
+        if (!indices.contains(index)) {
+            List<EdsAssetIndex> result = Lists.newArrayList(indices);
+            result.add(index);
+            return result;
+        }
+        return indices;
+    }
+
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
                                                       A entity) {
         return Collections.emptyList();
+    }
+
+    protected EdsAssetIndex toEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+        return null;
     }
 
     protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Long value) {

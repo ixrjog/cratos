@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.aws.provider;
+package com.baiyi.cratos.eds.aws.provider.route53;
 
 import com.amazonaws.services.route53domains.model.DomainSummary;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -29,13 +29,13 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_DOMAIN)
-public class EdsAwsDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, DomainSummary> {
+public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, DomainSummary> {
 
-    public EdsAwsDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
-                                     CredentialService credentialService, ConfigCredTemplate configCredTemplate,
-                                     EdsAssetIndexFacade edsAssetIndexFacade,
-                                     UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                     EdsInstanceProviderHolderBuilder holderBuilder) {
+    public EdsAwsRoute53DomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
+                                            EdsAssetIndexFacade edsAssetIndexFacade,
+                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                            EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
     }
@@ -66,5 +66,11 @@ public class EdsAwsDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     protected boolean equals(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
+
+//    @Override
+//    protected EdsAssetIndex toEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+//                                            EdsAsset edsAsset, DomainSummary entity) {
+//        return toEdsAssetIndex(edsAsset, DOMAIN_NAME, entity.getDomainName());
+//    }
 
 }

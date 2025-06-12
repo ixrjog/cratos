@@ -4,11 +4,13 @@ import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.util.DomainUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -59,8 +61,17 @@ public class TrafficLayerDomainParam {
     public static class AddDomain implements IToTarget<TrafficLayerDomain> {
         private String name;
         private String domain;
+        private String registeredDomain;
         private Boolean valid;
         private String comment;
+
+        @Override
+        public TrafficLayerDomain toTarget() {
+            if (!StringUtils.hasText(registeredDomain)) {
+                registeredDomain = DomainUtils.extractRegisteredDomain(domain);
+            }
+         return IToTarget.super.toTarget();
+        }
     }
 
     @Data
@@ -70,6 +81,7 @@ public class TrafficLayerDomainParam {
         private Integer id;
         private String name;
         private String domain;
+        private String registeredDomain;
         private Boolean valid;
         private String comment;
     }
