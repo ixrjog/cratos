@@ -360,6 +360,25 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public List<EdsInstanceVO.EdsInstance> queryRocketMqInstanceTicketEntry() {
+        Tag rocketMqTag = tagService.getByTagKey(SysTagKeys.ROCKET_MQ);
+        if (Objects.isNull(rocketMqTag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(rocketMqTag.getId())
+                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                .build();
+        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
+                .page(1)
+                .length(5)
+                .queryByTag(queryByTag)
+                .build();
+        DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
+        return dataTable.getData();
+    }
+
+    @Override
     public List<EdsAssetVO.Asset> queryApplicationResourceDeploymentTicketEntry(
             WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(

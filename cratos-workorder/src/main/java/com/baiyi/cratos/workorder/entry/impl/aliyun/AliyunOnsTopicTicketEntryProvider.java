@@ -68,18 +68,18 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     }
 
     @Override
-    protected void verifyEntryParam(
-            WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry param,
-            WorkOrderTicketEntry entry) {
-        String topicName = param.getDetail().getTopicName();
+    protected void verifyEntryParam(WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry param,
+                                    WorkOrderTicketEntry entry) {
+        String topicName = param.getDetail()
+                .getTopicName();
         if (StringUtils.isBlank(topicName)) {
-            WorkOrderTicketException.runtime("verifyEntryParam failed: topic name can not be blank！");
+            WorkOrderTicketException.runtime("Topic name can not be blank！");
         }
         if (!topicName.startsWith("TOPIC_")) {
-            WorkOrderTicketException.runtime("verifyEntryParam failed: topic name must be start with TOPIC_ ！");
+            WorkOrderTicketException.runtime("Topic name must be start with TOPIC_ ！");
         }
         if (!ValidationUtils.isAliyunOnsTopic(topicName)) {
-            WorkOrderTicketException.runtime("verifyEntryParam failed: invalid topic name！");
+            WorkOrderTicketException.runtime("Invalid topic name！");
         }
     }
 
@@ -89,20 +89,20 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
                                 AliyunOnsV5Model.Topic topic) throws WorkOrderTicketException {
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance().getEdsConfigModel();
+        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
+                .getEdsConfigModel();
         createTopic(aliyun, topic);
         // 导入资产
         GetTopicResponseBody.GetTopicResponseBodyData newTopic = getTopic(aliyun, topic);
-        ListTopicsResponseBody.ListTopicsResponseBodyDataList data =
-                new ListTopicsResponseBody.ListTopicsResponseBodyDataList()
-                        .setInstanceId(topic.getOnsInstanceId())
-                        .setTopicName(newTopic.getTopicName())
-                        .setMessageType(newTopic.getMessageType())
-                        .setRemark(newTopic.getRemark())
-                        .setRegionId(newTopic.getRegionId())
-                        .setStatus(newTopic.getStatus())
-                        .setUpdateTime(newTopic.getUpdateTime())
-                        .setCreateTime(newTopic.getCreateTime());
+        ListTopicsResponseBody.ListTopicsResponseBodyDataList data = new ListTopicsResponseBody.ListTopicsResponseBodyDataList().setInstanceId(
+                        topic.getOnsInstanceId())
+                .setTopicName(newTopic.getTopicName())
+                .setMessageType(newTopic.getMessageType())
+                .setRemark(newTopic.getRemark())
+                .setRegionId(newTopic.getRegionId())
+                .setStatus(newTopic.getStatus())
+                .setUpdateTime(newTopic.getUpdateTime())
+                .setCreateTime(newTopic.getCreateTime());
         EdsAsset asset = holder.importAsset(data);
     }
 
@@ -118,9 +118,11 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
 
     private void createTopic(EdsAliyunConfigModel.Aliyun aliyun, AliyunOnsV5Model.Topic topic) {
         try {
-
-            AliyunOnsV5.CreateTopic createTopic = AliyunOnsV5.CreateTopic.builder().topicName(
-                    topic.getTopicName()).messageType(topic.getMessageType()).remark(topic.getRemark()).build();
+            AliyunOnsV5.CreateTopic createTopic = AliyunOnsV5.CreateTopic.builder()
+                    .topicName(topic.getTopicName())
+                    .messageType(topic.getMessageType())
+                    .remark(topic.getRemark())
+                    .build();
             AliyunOnsV5Repo.createTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(), createTopic);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Failed to create Aliyun ONS topic err: {}", e.getMessage());
@@ -129,10 +131,14 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
 
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry param) {
-        Optional.of(param).map(WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry::getDetail).map(
-                AliyunOnsV5Model.Topic::getEdsInstance).map(EdsInstanceVO.EdsInstance::getId).orElseThrow(
-                () -> new WorkOrderTicketException("Eds instanceId is null"));
-        return CreateAliyunOnsTopicTicketEntryBuilder.newBuilder().withParam(param).buildEntry();
+        Optional.of(param)
+                .map(WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry::getDetail)
+                .map(AliyunOnsV5Model.Topic::getEdsInstance)
+                .map(EdsInstanceVO.EdsInstance::getId)
+                .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
+        return CreateAliyunOnsTopicTicketEntryBuilder.newBuilder()
+                .withParam(param)
+                .buildEntry();
     }
 
     @Override
@@ -145,8 +151,11 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        return TicketEntryModel.EntryDesc.builder().name(entry.getName()).namespaces(entry.getNamespace()).desc(
-                "Aliyun ONS Topic").build();
+        return TicketEntryModel.EntryDesc.builder()
+                .name(entry.getName())
+                .namespaces(entry.getNamespace())
+                .desc("Aliyun ONS Topic")
+                .build();
     }
 
 }

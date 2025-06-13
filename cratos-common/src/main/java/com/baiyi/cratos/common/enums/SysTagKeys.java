@@ -30,7 +30,8 @@ public enum SysTagKeys {
     DATAWORKS("DataWorks"),
     DESCRIPTION("Description"),
     ENDPOINT("Endpoint"),
-    CONFIG_MAP("ConfigMap")
+    CONFIG_MAP("ConfigMap"),
+    ROCKET_MQ("RocketMQ"),
     ;
 
     private final String key;

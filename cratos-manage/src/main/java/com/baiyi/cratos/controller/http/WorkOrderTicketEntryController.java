@@ -36,6 +36,12 @@ public class WorkOrderTicketEntryController {
         return HttpResult.of(ticketEntryFacade.queryDataWorksInstanceTicketEntry());
     }
 
+    @Operation(summary = "Query aliyun rocketMQ instance")
+    @PostMapping(value = "/aliyun/rocketmq/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsInstanceVO.EdsInstance>> queryRocketMqInstanceTicketEntry() {
+        return HttpResult.of(ticketEntryFacade.queryRocketMqInstanceTicketEntry());
+    }
+
     @Operation(summary = "Query application resource deployment")
     @PostMapping(value = "/application/resource/deployment/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsAssetVO.Asset>> queryApplicationResourceDeploymentTicketEntry(

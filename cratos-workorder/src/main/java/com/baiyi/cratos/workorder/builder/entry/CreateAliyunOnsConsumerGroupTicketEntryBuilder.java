@@ -6,12 +6,15 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author 修远
  * @Date 2025/6/12 15:15
  * @Since 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateAliyunOnsConsumerGroupTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry param;
@@ -46,4 +49,5 @@ public class CreateAliyunOnsConsumerGroupTicketEntryBuilder {
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();
     }
+
 }

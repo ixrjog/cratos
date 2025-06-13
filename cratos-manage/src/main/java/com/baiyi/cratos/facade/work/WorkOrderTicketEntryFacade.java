@@ -17,6 +17,8 @@ public interface WorkOrderTicketEntryFacade {
 
     List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry();
 
+    List<EdsInstanceVO.EdsInstance> queryRocketMqInstanceTicketEntry();
+
     List<EdsAssetVO.Asset> queryApplicationResourceDeploymentTicketEntry(
             WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry);
 
