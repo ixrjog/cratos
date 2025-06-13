@@ -435,6 +435,34 @@ public class WorkOrderTicketParam {
         private LdapUserGroupModel.Role detail;
     }
 
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddCreateAliyunOnsTopicTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.Topic>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -432180644493765199L;
+        private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
+        private AliyunOnsV5Model.Topic detail;
+    }
+
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddCreateAliyunOnsConsumerGroupTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.ConsumerGroup>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -1565391443339985819L;
+        private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
+        private AliyunOnsV5Model.ConsumerGroup detail;
+    }
+
     @Data
     @SuperBuilder(toBuilder = true)
     @AllArgsConstructor

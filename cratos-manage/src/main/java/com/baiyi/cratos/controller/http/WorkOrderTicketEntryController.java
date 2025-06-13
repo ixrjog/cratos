@@ -211,6 +211,21 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add create aliyun ons topic ticket entry")
+    @PostMapping(value = "/aliyun/ons/topic/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateAliyunOnsTopicTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateAliyunOnsTopicTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Add create aliyun ons consumerGroup instance ticket entry")
+    @PostMapping(value = "/aliyun/ons/consumerGroup/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateAliyunOnsConsumerGroupTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateAliyunOnsConsumerGroupTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
     // other
 
     @Operation(summary = "Update ticket entry valid")

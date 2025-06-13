@@ -25,6 +25,11 @@ public class ValidationUtils {
         String URL_REGEX = "^https://[^\\s/$.?#].[^\\s]*$";
 
         String TRANSFER_SERVER_USERNAME_REGEX = "^\\w[\\w@.-]{2,99}$"; // AWS Transfer Server Name
+
+
+        String ALIYUN_ONS_TOPIC_NAME = "[0-9A-Z_]{9,60}";
+        String ALIYUN_ONS_CONSUMER_GROUP = "[0-9A-Z_]{7,60}";
+
     }
 
     /**
@@ -66,6 +71,20 @@ public class ValidationUtils {
             return false;
         }
         return username.matches(RegexMatches.TRANSFER_SERVER_USERNAME_REGEX);
+    }
+
+    public static boolean isAliyunOnsTopic(String topicName) {
+        if (!StringUtils.hasText(topicName)) {
+            return false;
+        }
+        return topicName.matches(RegexMatches.ALIYUN_ONS_TOPIC_NAME);
+    }
+
+    public static boolean isAliyunOnsConsumerGroup(String consumerGroupId) {
+        if (!StringUtils.hasText(consumerGroupId)) {
+            return false;
+        }
+        return consumerGroupId.matches(RegexMatches.ALIYUN_ONS_CONSUMER_GROUP);
     }
 
 }

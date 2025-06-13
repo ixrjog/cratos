@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyun.rocketmq20220801.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOnsClient;
+import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
@@ -124,6 +125,59 @@ public class AliyunOnsV5Repo {
                 .map(ListConsumerGroupSubscriptionsResponse::getBody)
                 .map(ListConsumerGroupSubscriptionsResponseBody::getData)
                 .orElse(Collections.emptyList());
+    }
+
+
+    public static GetConsumerGroupResponseBody.GetConsumerGroupResponseBodyData getConsumerGroup(String regionId,
+                                                                                                 EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                                 String instanceId,
+                                                                                                 String consumerGroupId) throws Exception {
+        String endpoint = getEndpoint(regionId);
+        com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
+        GetConsumerGroupResponse response = client.getConsumerGroup(instanceId, consumerGroupId);
+        return response.getBody().getData();
+
+    }
+
+    public static void createConsumerGroup(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+                                           AliyunOnsV5.CreateConsumerGroup createConsumerGroup) throws Exception {
+        CreateConsumerGroupRequest.CreateConsumerGroupRequestConsumeRetryPolicy policy = new CreateConsumerGroupRequest.CreateConsumerGroupRequestConsumeRetryPolicy()
+                .setRetryPolicy(createConsumerGroup.getConsumeRetryPolicy().getRetryPolicy())
+                .setMaxRetryTimes(createConsumerGroup.getConsumeRetryPolicy().getMaxRetryTimes())
+                .setDeadLetterTargetTopic(createConsumerGroup.getConsumeRetryPolicy().getDeadLetterTargetTopic());
+        CreateConsumerGroupRequest request = new CreateConsumerGroupRequest()
+                .setRemark(createConsumerGroup.getRemark())
+                .setDeliveryOrderType(createConsumerGroup.getDeliveryOrderType())
+                .setConsumeRetryPolicy(policy);
+        String endpoint = getEndpoint(regionId);
+        com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
+        client.createConsumerGroup(instanceId, createConsumerGroup.getConsumerGroupId(), request);
+
+    }
+
+    public static GetTopicResponseBody.GetTopicResponseBodyData getTopic(String regionId,
+                                                                         EdsAliyunConfigModel.Aliyun aliyun,
+                                                                         String instanceId,
+                                                                         String topicName) throws Exception {
+        String endpoint = getEndpoint(regionId);
+        com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
+        GetTopicResponse response = client.getTopic(instanceId, topicName);
+        return response.getBody().getData();
+
+    }
+
+    public static void createTopic(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+                                   AliyunOnsV5.CreateTopic createTopic) throws Exception {
+        CreateTopicRequest request = new CreateTopicRequest()
+                .setMessageType(createTopic.getMessageType())
+                .setRemark(createTopic.getRemark());
+        String endpoint = getEndpoint(regionId);
+        com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
+        client.createTopic(instanceId, createTopic.getTopicName(), request);
+    }
+
+    private static String getEndpoint(String regionId) {
+        return "rocketmq." + regionId + ".aliyuncs.com";
     }
 
 }

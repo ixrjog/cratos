@@ -25,9 +25,11 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
-    void addApplicationProdPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
+    void addApplicationProdPermissionTicketEntry(
+            WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
-    void addApplicationTestPermissionTicketEntry(WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
+    void addApplicationTestPermissionTicketEntry(
+            WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry);
 
     void addApplicationElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry);
@@ -68,6 +70,12 @@ public interface WorkOrderTicketEntryFacade {
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);
 
     void addResetAlimailUserTicketEntry(WorkOrderTicketParam.AddResetAlimailUserTicketEntry addTicketEntry);
+
+    void addCreateAliyunOnsTopicTicketEntry(WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry addTicketEntry);
+
+    void addCreateAliyunOnsConsumerGroupTicketEntry(
+            WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry);
+
 
     void deleteById(int id);
 

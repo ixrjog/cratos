@@ -26,4 +26,36 @@ public class AliyunOnsV5 {
         private ListConsumerGroupSubscriptionsResponseBody.ListConsumerGroupSubscriptionsResponseBodyData consumerGroupSubscription;
     }
 
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CreateTopic {
+        private String topicName;
+        private String messageType;
+        private String remark;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CreateConsumerGroup {
+        private String consumerGroupId;
+        private String deliveryOrderType;
+        private String remark;
+        private ConsumeRetryPolicy consumeRetryPolicy;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ConsumeRetryPolicy {
+
+        private String deadLetterTargetTopic;
+        private Integer maxRetryTimes;
+        private String retryPolicy;
+    }
 }

@@ -255,6 +255,24 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addCreateAliyunOnsTopicTicketEntry(
+            WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIYUN_ONS_TOPIC.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
+    public void addCreateAliyunOnsConsumerGroupTicketEntry(
+            WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIYUN_ONS_CONSUMER_GROUP.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {
