@@ -52,8 +52,9 @@
         <aws-java-sdk.version>1.12.786</aws-java-sdk.version>
         <aws-java-sdk2.version>2.29.21</aws-java-sdk2.version>
         <!--  net.javacrumbs.shedlock-->
-        <shedlock-spring.version>5.13.0</shedlock-spring.version>
-        <!--        https://mvnrepository.com/artifact/com.webauthn4j/webauthn4j-core-->
+        <shedlock-spring.version>6.9.0</shedlock-spring.version>
+        <!--  https://mvnrepository.com/artifact/com.webauthn4j/webauthn4j-core
+        -->
         <webauthn4j.version>0.28.6.RELEASE</webauthn4j.version>
     </properties>
 
@@ -106,14 +107,14 @@
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>9.1.0</version>
+            <version>9.3.0</version>
             <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.24</version>
+            <version>1.2.25</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -176,11 +177,12 @@
             <version>6.4.0</version>
         </dependency>
         <!--
-        https://mvnrepository.com/artifact/com.google.guava/guava-->
+        https://mvnrepository.com/artifact/com.google.guava/guava
+        -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.4.0-jre</version>
+            <version>33.4.8-jre</version>
         </dependency>
         <!--
         生物识别
