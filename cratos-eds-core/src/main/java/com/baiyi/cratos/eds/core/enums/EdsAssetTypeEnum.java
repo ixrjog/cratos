@@ -35,7 +35,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_VPC("VPC", 43),
     ALIYUN_VIRTUAL_SWITCH("vSwitch", 44),
     ALIYUN_KMS_INSTANCE("KMS Instance", 45),
-    ALIYUN_KMS_SECRET("KMS Secret",46),
+    ALIYUN_KMS_SECRET("KMS Secret", 46),
     ALIYUN_KMS_KEY("KMS Key", 47),
     ALIYUN_DMS_USER("DMS User", 50),
 
@@ -48,6 +48,7 @@ public enum EdsAssetTypeEnum {
     AWS_EC2("EC2", 10),
     AWS_EBS("EBS", 11),
     AWS_DOMAIN("Domain", 0),
+    AWS_HOSTED_ZONE("Hosted Zone", 1),
     AWS_SQS_QUEUE("SQS Queue", 20),
     AWS_SNS_TOPIC("SNS Topic", 21),
     AWS_SNS_SUBSCRIPTION("SNS Subscription", 22),
@@ -58,7 +59,7 @@ public enum EdsAssetTypeEnum {
     AWS_VPC("VPC", 43),
     AWS_SUBNET("Subnet", 44),
     AWS_IAM_USER("IAM User", 45),
-    AWS_IAM_POLICY("IAM Policy",46),
+    AWS_IAM_POLICY("IAM Policy", 46),
 
     HUAWEICLOUD_ECS("ECS", 0),
     HUAWEICLOUD_IAM_USER("IAM User", 0),

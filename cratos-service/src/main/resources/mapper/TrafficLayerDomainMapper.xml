@@ -8,6 +8,7 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="registered_domain" jdbcType="VARCHAR" property="registeredDomain"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
