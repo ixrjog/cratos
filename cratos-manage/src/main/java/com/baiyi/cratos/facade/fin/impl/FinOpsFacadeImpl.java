@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.fin.impl;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
+import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
@@ -54,8 +55,9 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
             List<String> fieldNames = new ArrayList<>(Arrays.asList(COST_TABLE_FIELD_NAME));
             queryAppCost.getAllocationCategories()
                     .forEach(category -> {
-                        String name = StringUtils.hasText(
-                                category.getCurrencyCode()) ? category.getName() + " (" + category.getCurrencyCode() + " " + category.getAmount() + ")" : category.getName();
+                        String name = StringUtils.hasText(category.getCurrencyCode()) ? StringFormatter.arrayFormat(
+                                "{} ({} {})", category.getName(), category.getCurrencyCode(),
+                                category.getAmount()) : category.getName();
                         fieldNames.add(name);
                     });
             return calculateCost(queryAppCost.getAllocationCategories(), fieldNames.toArray(new String[0]));
@@ -103,7 +105,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                 .costDetailsTable(getCostDetailsTable(finAppCostMap))
                 .build();
     }
-    
+
     @Cacheable(cacheNames = SHORT_TERM, key = "'FINOPS:APP:COST:MAP'", unless = "#result == null")
     public Map<String, List<AppFinOpsModel.AppCost>> calculateFinAppCostMap() {
         Tag finTag = tagService.getByTagKey(SysTagKeys.BUSINESS);
