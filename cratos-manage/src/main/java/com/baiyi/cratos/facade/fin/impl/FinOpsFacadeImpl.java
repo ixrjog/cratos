@@ -70,24 +70,31 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
         int totalReplicas = finAppCostMap.values()
                 .stream()
                 .flatMap(List::stream)
-                .mapToInt(appCost -> appCost.getAppResources()
-                        .stream()
-                        .mapToInt(AppFinOpsModel.AppResource::getReplicas)
-                        .sum())
+                .flatMap(appCost -> appCost.getAppResources()
+                        .stream())
+                .mapToInt(AppFinOpsModel.AppResource::getReplicas)
                 .sum();
+        if (totalReplicas == 0) {
+            return FinOpsVO.AppCost.builder()
+                    .costTable(costTable.toString())
+                    .costDetailsTable(getCostDetailsTable(finAppCostMap))
+                    .build();
+        }
         finAppCostMap.forEach((business, appCosts) -> {
             int replicas = appCosts.stream()
                     .mapToInt(AppFinOpsModel.AppCost::getTotalReplicas)
                     .sum();
-            String ratio = String.format("%.2f", replicas * 100.0 / totalReplicas);
-            //  costTable.addRow(business, replicas + "/" + totalReplicas, ratio);
+            double ratioValue = replicas * 100.0 / totalReplicas;
+            String ratio = String.format("%.2f", ratioValue);
+
             Object[] rowData = new Object[fieldNames.length];
             rowData[0] = business;
             rowData[1] = replicas + "/" + totalReplicas;
             rowData[2] = ratio;
             for (int i = 0; i < allocationCategories.size(); i++) {
-                rowData[3 + i] = String.format("%,.2f", allocationCategories.get(i)
-                        .getAmount() / Double.parseDouble(ratio));
+                double amount = allocationCategories.get(i)
+                        .getAmount();
+                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount / ratioValue);
             }
             costTable.addRow(rowData);
         });
@@ -96,7 +103,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                 .costDetailsTable(getCostDetailsTable(finAppCostMap))
                 .build();
     }
-
+    
     @Cacheable(cacheNames = SHORT_TERM, key = "'FINOPS:APP:COST:MAP'", unless = "#result == null")
     public Map<String, List<AppFinOpsModel.AppCost>> calculateFinAppCostMap() {
         Tag finTag = tagService.getByTagKey(SysTagKeys.BUSINESS);
@@ -146,7 +153,6 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
         });
         return finAppCostMap;
     }
-
 
     private String getCostDetailsTable(Map<String, List<AppFinOpsModel.AppCost>> finAppCostMap) {
         PrettyTable costTable = PrettyTable.fieldNames(COST_DETAILS_TABLE_FIELD_NAME);
