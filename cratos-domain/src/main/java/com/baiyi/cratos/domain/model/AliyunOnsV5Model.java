@@ -17,7 +17,6 @@ import java.io.Serializable;
  */
 public class AliyunOnsV5Model {
 
-
     @Data
     @Builder
     @AllArgsConstructor
@@ -67,4 +66,5 @@ public class AliyunOnsV5Model {
         private Integer maxRetryTimes;
         private String retryPolicy;
     }
+
 }

@@ -220,6 +220,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddCreateFrontEndApplicationTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationModel.CreateFrontEndApplication>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -2362593723504211246L;
+        private final String businessType = BusinessTypeEnum.APPLICATION.name();
+        private ApplicationModel.CreateFrontEndApplication detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddRevokeUserPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -7031252644626013496L;

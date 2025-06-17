@@ -36,6 +36,7 @@
         <module>cratos-ssh-kubernetes</module>
         <module>cratos-workorder</module>
         <module>cratos-eds-cratos</module>
+        <module>cratos-eds-remote-gateway</module>
     </modules>
 
     <properties>
