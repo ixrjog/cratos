@@ -83,29 +83,10 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                     .build();
         }
         finAppCostMap.forEach((business, appCosts) -> {
-            int replicas = appCosts.stream()
-                    .mapToInt(AppFinOpsModel.AppCost::getTotalReplicas)
-                    .sum();
-            double ratioValue = replicas * 100.0 / totalReplicas;
-            String ratio = String.format("%.2f", ratioValue);
-
-            Object[] rowData = new Object[fieldNames.length];
-            rowData[0] = business;
-            rowData[1] = replicas + "/" + totalReplicas;
-            rowData[2] = ratio;
-            for (int i = 0; i < allocationCategories.size(); i++) {
-                double amount = allocationCategories.get(i)
-                        .getAmount();
-                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount / ratioValue);
-            }
-            costTable.sortTable("%");
-            costTable.addRow(rowData);
-        });
-
-        finAppCostMap.forEach((business, appCosts) -> {
             // 按 totalReplicas 降序排序
             List<AppFinOpsModel.AppCost> sortedAppCosts = appCosts.stream()
-                    .sorted(Comparator.comparingInt(AppFinOpsModel.AppCost::getTotalReplicas).reversed())
+                    .sorted(Comparator.comparingInt(AppFinOpsModel.AppCost::getTotalReplicas)
+                            .reversed())
                     .toList();
             int replicas = sortedAppCosts.stream()
                     .mapToInt(AppFinOpsModel.AppCost::getTotalReplicas)
@@ -123,7 +104,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
             }
             costTable.addRow(rowData);
         });
-
+        costTable.sortTable("%");
         return FinOpsVO.AppCost.builder()
                 .costTable(costTable.toString())
                 .costDetailsTable(getCostDetailsTable(finAppCostMap))

@@ -100,17 +100,74 @@ public class PrettyTable {
         return sortTable(fieldName, false);
     }
 
-    @SuppressWarnings("unchecked")
     public PrettyTable sortTable(final String fieldName, final boolean reverse) {
-        int idx = Collections.binarySearch(fieldNames, fieldName);
+        int idx = fieldNames.indexOf(fieldName);
+
+        if (idx == -1) {
+            throw new IllegalArgumentException("Field name '" + fieldName + "' not found");
+        }
+
         rows.sort((o1, o2) -> {
-            if (o1[idx] instanceof Comparable && o2[idx] instanceof Comparable) {
-                int c = ((Comparable) o1[idx]).compareTo(o2[idx]);
-                return c * (reverse ? -1 : 1);
+            Object v1 = o1[idx];
+            Object v2 = o2[idx];
+
+            // 处理 null
+            if (v1 == null && v2 == null) {
+                return 0;
+            } else if (v1 == null) {
+                return reverse ? 1 : -1;
+            } else if (v2 == null) {
+                return reverse ? -1 : 1;
             }
-            return 0;
+
+            // 优先按数字比较，确保浮点数精度
+            Double n1 = tryParseDouble(v1);
+            Double n2 = tryParseDouble(v2);
+
+            if (n1 != null && n2 != null) {
+                int cmp = Double.compare(n1, n2);
+                return reverse ? -cmp : cmp;
+            } else {
+                // 至少有一个不是数字，按字符串比较
+                String s1 = String.valueOf(v1);
+                String s2 = String.valueOf(v2);
+                int cmp = s1.compareTo(s2);
+                return reverse ? -cmp : cmp;
+            }
         });
+
         return this;
+    }
+
+    /**
+     * Try to parse an object to Double
+     *
+     * @param obj Object to parse
+     * @return Double value if parsing succeeds, null otherwise
+     */
+    private Double tryParseDouble(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).doubleValue();
+        } else if (obj instanceof String) {
+            String str = ((String) obj).trim();
+
+            // Handle percentage
+            boolean isPercentage = str.endsWith("%");
+            if (isPercentage) {
+                str = str.substring(0, str.length() - 1);
+            }
+
+            // Remove thousand separators and ensure decimal point
+            str = str.replace(",", "");
+
+            try {
+                double value = Double.parseDouble(str);
+                return isPercentage ? value / 100.0 : value;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     public PrettyTable clearTable() {
