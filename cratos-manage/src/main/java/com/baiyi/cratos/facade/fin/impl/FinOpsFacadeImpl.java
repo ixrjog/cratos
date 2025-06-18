@@ -100,7 +100,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
             for (int i = 0; i < allocationCategories.size(); i++) {
                 double amount = allocationCategories.get(i)
                         .getAmount();
-                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount / ratioValue);
+                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount * (ratioValue / 100.0));
             }
             costTable.addRow(rowData);
         });
