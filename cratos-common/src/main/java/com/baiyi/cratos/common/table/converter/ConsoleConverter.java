@@ -60,20 +60,35 @@ public abstract class ConsoleConverter implements Converter, Bordered {
             for (int c = 0; c < r.length; c++) {
                 String nc;
                 if (r[c] instanceof Number) {
+                    // 数字类型，使用左填充（右对齐）
                     String n = pt.comma ? NumberFormat.getNumberInstance(Locale.US)
                             .format(r[c]) : r[c].toString();
                     nc = StringUtils.leftPad(n, maxWidth[c]);
                 } else {
                     String colStr = String.valueOf(r[c]);
+                    // 检查字符串是否可以解析为数字
+                    boolean isNumeric = isNumericString(colStr);
                     int colorAnisSize = colorAnisSize(colStr);
                     // 修正中文补偿
                     int width = maxWidth[c] - fixLength(colStr);
                     int rLength = colStr.length();
-                    if (colorAnisSize == 0) {
-                        nc = StringUtils.rightPad(colStr, width);
+                    
+                    if (isNumeric) {
+                        // 如果是数字字符串，使用左填充（右对齐）
+                        if (colorAnisSize == 0) {
+                            nc = StringUtils.leftPad(colStr, width);
+                        } else {
+                            int colL = colLength(colStr);
+                            nc = StringUtils.leftPad(colStr, rLength + (width - colL) + colorAnisSize);
+                        }
                     } else {
-                        int colL = colLength(colStr);
-                        nc = StringUtils.rightPad(colStr, rLength + (width - colL) + colorAnisSize);
+                        // 非数字字符串，使用右填充（左对齐）
+                        if (colorAnisSize == 0) {
+                            nc = StringUtils.rightPad(colStr, width);
+                        } else {
+                            int colL = colLength(colStr);
+                            nc = StringUtils.rightPad(colStr, rLength + (width - colL) + colorAnisSize);
+                        }
                     }
                 }
                 af(nc);
@@ -139,6 +154,36 @@ public abstract class ConsoleConverter implements Converter, Bordered {
         int length1 = colStr.length();
         int length2 = getChineseLength(colStr);
         return length2 - length1;
+    }
+
+    /**
+     * 判断字符串是否为数字（包括整数和浮点数）
+     * 支持带千分位分隔符的数字和百分比
+     *
+     * @param str 要检查的字符串
+     * @return 如果是数字返回true，否则返回false
+     */
+    private boolean isNumericString(String str) {
+        if (str == null || str.trim().isEmpty()) {
+            return false;
+        }
+        
+        String trimmed = str.trim();
+        
+        // 处理百分比
+        if (trimmed.endsWith("%")) {
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
+        }
+        
+        // 移除千分位分隔符
+        trimmed = trimmed.replace(",", "");
+        
+        try {
+            Double.parseDouble(trimmed);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     private int colorAnisSize(String str) {
