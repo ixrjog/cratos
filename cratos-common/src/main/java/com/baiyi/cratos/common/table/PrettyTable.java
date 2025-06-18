@@ -3,6 +3,8 @@ package com.baiyi.cratos.common.table;
 
 import com.baiyi.cratos.common.table.converter.PlainConsoleConverter;
 import com.baiyi.cratos.common.table.parser.JsonParser;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,24 +12,17 @@ import java.util.*;
 /**
  * PrettyTable class.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PrettyTable {
 
     public List<String> fieldNames = new ArrayList<>();
-
     public List<Object[]> rows = new ArrayList<>();
-
     public boolean comma = false;
-
     public boolean border = true;
-
     public boolean color = false;
-
     public String fontColor = "DEFAULT";
-
     public String borderColor = "DEFAULT";
-
     private Parser parser = new JsonParser();
-
     private Converter converter = new PlainConsoleConverter();
 
     /**
@@ -105,6 +100,7 @@ public class PrettyTable {
         return sortTable(fieldName, false);
     }
 
+    @SuppressWarnings("unchecked")
     public PrettyTable sortTable(final String fieldName, final boolean reverse) {
         int idx = Collections.binarySearch(fieldNames, fieldName);
         rows.sort((o1, o2) -> {
@@ -114,7 +110,6 @@ public class PrettyTable {
             }
             return 0;
         });
-
         return this;
     }
 
@@ -135,8 +130,7 @@ public class PrettyTable {
             ((Bordered) converter).border(border);
         }
         if (converter instanceof Colored) {
-            ((Colored) converter)
-                    .fontColor(fontColor)
+            ((Colored) converter).fontColor(fontColor)
                     .borderColor(borderColor);
         }
         return converter.convert(this);

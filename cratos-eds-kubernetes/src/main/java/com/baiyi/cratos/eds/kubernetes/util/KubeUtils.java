@@ -68,14 +68,14 @@ public class KubeUtils {
             }
             return containers.stream()
                     .filter(e -> e.getName()
-                            .equals(getAppNameOf(deployment)))
+                            .equals(appNameOf(deployment)))
                     .findFirst();
         } catch (NoSuchElementException ex) {
             return Optional.empty();
         }
     }
 
-    private static String getAppNameOf(Deployment deployment) {
+    private static String appNameOf(Deployment deployment) {
         String deploymentName = deployment.getMetadata()
                 .getName();
         Optional<Map<String, String>> optionalLabels = Optional.of(deployment)

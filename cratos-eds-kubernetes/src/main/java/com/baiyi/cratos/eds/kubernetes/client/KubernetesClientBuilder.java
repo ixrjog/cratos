@@ -27,7 +27,7 @@ public class KubernetesClientBuilder {
         if (StringUtils.isNotBlank(kubernetes.getProvider())) {
             IKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
             if (kubernetesClientProvider == null) {
-                throw new KubernetesException("Invalid provider {}", kubernetes.getProvider());
+                 KubernetesException.runtime("Invalid provider {}", kubernetes.getProvider());
             }
             return kubernetesClientProvider.buildClient(kubernetes);
         }

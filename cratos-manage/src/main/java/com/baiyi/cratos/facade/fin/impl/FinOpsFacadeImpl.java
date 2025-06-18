@@ -57,7 +57,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                     .forEach(category -> {
                         String name = StringUtils.hasText(category.getCurrencyCode()) ? StringFormatter.arrayFormat(
                                 "{} ({} {})", category.getName(), category.getCurrencyCode(),
-                                category.getAmount()) : category.getName();
+                                String.format("%,d", category.getAmount())) : category.getName();
                         fieldNames.add(name);
                     });
             return calculateCost(queryAppCost.getAllocationCategories(), fieldNames.toArray(new String[0]));
@@ -98,8 +98,32 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                         .getAmount();
                 rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount / ratioValue);
             }
+            costTable.sortTable("%");
             costTable.addRow(rowData);
         });
+
+        finAppCostMap.forEach((business, appCosts) -> {
+            // 按 totalReplicas 降序排序
+            List<AppFinOpsModel.AppCost> sortedAppCosts = appCosts.stream()
+                    .sorted(Comparator.comparingInt(AppFinOpsModel.AppCost::getTotalReplicas).reversed())
+                    .toList();
+            int replicas = sortedAppCosts.stream()
+                    .mapToInt(AppFinOpsModel.AppCost::getTotalReplicas)
+                    .sum();
+            double ratioValue = replicas * 100.0 / totalReplicas;
+            String ratio = String.format("%.2f", ratioValue);
+            Object[] rowData = new Object[fieldNames.length];
+            rowData[0] = business;
+            rowData[1] = replicas + "/" + totalReplicas;
+            rowData[2] = ratio;
+            for (int i = 0; i < allocationCategories.size(); i++) {
+                double amount = allocationCategories.get(i)
+                        .getAmount();
+                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount / ratioValue);
+            }
+            costTable.addRow(rowData);
+        });
+
         return FinOpsVO.AppCost.builder()
                 .costTable(costTable.toString())
                 .costDetailsTable(getCostDetailsTable(finAppCostMap))
