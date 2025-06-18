@@ -29,48 +29,41 @@ public abstract class ConsoleConverter implements Converter, Bordered {
 
     @Override
     public String convert(PrettyTable pt) {
-
         clear();
-
         // Check empty
         if (pt.fieldNames.isEmpty()) {
             return "";
         }
-
         int[] maxWidth = adjustMaxWidth(pt);
-
         topBorderLine(maxWidth);
-
         leftBorder();
-
         IntStream.range(0, pt.fieldNames.size())
                 .forEach(i -> {
-                    af(StringUtils.rightPad(pt.fieldNames.get(i), maxWidth[i]));
+                    String headerText = pt.fieldNames.get(i);
+                    // 计算中文字符占用的额外宽度
+                    int chineseCompensation = fixLength(headerText);
+                    // 调整填充宽度，考虑中文字符
+                    af(StringUtils.rightPad(headerText, maxWidth[i] - chineseCompensation));
                     if (i < pt.fieldNames.size() - 1) {
                         centerBorder();
                     } else {
                         rightBorder();
                     }
                 });
-
         bottomBorderLine(maxWidth);
-
         // Convert rows to table
         for (Object[] r : pt.rows) {
             ab("\n");
             leftBorder();
-
             int rL = colLength(Arrays.toString(r));
             // for (int c = 0; c < r.length; c++) {
             for (int c = 0; c < r.length; c++) {
-
                 String nc;
                 if (r[c] instanceof Number) {
                     String n = pt.comma ? NumberFormat.getNumberInstance(Locale.US)
                             .format(r[c]) : r[c].toString();
                     nc = StringUtils.leftPad(n, maxWidth[c]);
                 } else {
-
                     String colStr = String.valueOf(r[c]);
                     int colorAnisSize = colorAnisSize(colStr);
                     // 修正中文补偿
@@ -83,9 +76,7 @@ public abstract class ConsoleConverter implements Converter, Bordered {
                         nc = StringUtils.rightPad(colStr, rLength + (width - colL) + colorAnisSize);
                     }
                 }
-
                 af(nc);
-
                 if (c < rL - 1) {
                     centerBorder();
                 } else {
@@ -93,9 +84,7 @@ public abstract class ConsoleConverter implements Converter, Bordered {
                 }
             }
         }
-
         bottomBorderLine(maxWidth);
-
         return toString();
     }
 
@@ -106,7 +95,6 @@ public abstract class ConsoleConverter implements Converter, Bordered {
      * @return
      */
     public int[] adjustMaxWidth(PrettyTable pt) {
-
         // Adjust comma
         List<List<String>> converted = new ArrayList<>();
         for (Object[] r : pt.rows) {
@@ -132,23 +120,19 @@ public abstract class ConsoleConverter implements Converter, Bordered {
                             .map(f -> colLength(f.get(i)))
                             .max(Comparator.naturalOrder())
                             .orElse(0);
-                    return Math.max(pt.fieldNames.get(i)
-                            .length(), n);
+                    // 使用colLength计算表头字段名的长度，而不是直接使用length()
+                    return Math.max(colLength(pt.fieldNames.get(i)), n);
                 })
                 .toArray();
     }
 
     private int colLength(String colStr) {
-        final String searchChar = "[0m";
-        int originalLength = colStr.length();
-        // "\u001B[0m"
-        colStr = colStr.replace(searchChar, "");
-        int newLength = colStr.length();
-        // int newLength = getChineseLength(colStr);
-        int count = (originalLength - newLength) / 3;
-        int length = originalLength - 8 * count;
+        // 去除 ANSI 颜色码（如 \u001B[0m），假设格式为 \u001B[xxm
+        String ansiRegex = "\\u001B\\[[;\\d]*m";
+        String cleanedStr = colStr.replaceAll(ansiRegex, "");
+        int length = cleanedStr.length();
         // 补偿中文
-        return length + fixLength(colStr);
+        return length + fixLength(cleanedStr);
     }
 
     private int fixLength(String colStr) {
@@ -158,13 +142,12 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     }
 
     private int colorAnisSize(String str) {
-        String searchChar = "[0m";
+        // 匹配 ANSI 颜色码（如 \u001B[0m）
+        String ansiRegex = "\\u001B\\[[;\\d]*m";
         int originalLength = str.length();
-        // "\u001B[0m"
-        str = str.replace(searchChar, "");
-        int newLength = str.length();
-
-        return (originalLength - newLength) / 3;
+        String cleanedStr = str.replaceAll(ansiRegex, "");
+        int newLength = cleanedStr.length();
+        return originalLength - newLength;
     }
 
     /**
@@ -175,7 +158,7 @@ public abstract class ConsoleConverter implements Converter, Bordered {
      */
     public static int getChineseLength(String validateStr) {
         int valueLength = 0;
-        String chinese = "[\u0391-\uFFE5]";
+        String chinese = "[Α-￥]";
         /* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
         for (int i = 0; i < validateStr.length(); i++) {
             /* 获取一个字符 */
@@ -218,9 +201,7 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     }
 
     private static String line(final int[] maxWidth) {
-
         final StringBuilder sb = new StringBuilder();
-
         sb.append("+");
         int i = 0;
         while (i < maxWidth.length) {

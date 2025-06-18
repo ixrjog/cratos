@@ -22,7 +22,7 @@ public class FinOpsFacadeTest extends BaseUnit {
         // finOpsFacade.calculateCost();
         FinOpsParam.QueryAppCost queryAppCost = FinOpsParam.QueryAppCost.builder()
                 .allocationCategories(java.util.List.of(FinOpsParam.AllocationCategory.builder()
-                        .name("Test Category1")
+                        .name("杭州杭州啊啊啊啊啊aaaa")
                         .currencyCode("USD")
                         .amount(100000L)
                         .build(), FinOpsParam.AllocationCategory.builder()
@@ -32,7 +32,8 @@ public class FinOpsFacadeTest extends BaseUnit {
                         .build()))
                 .build();
         FinOpsVO.AppCost appCost = finOpsFacade.queryAppCost(queryAppCost);
-        System.out.println(appCost.toString());
+        System.out.println("\n\n" + appCost.getCostTable());
+        System.out.println("\n\n" + appCost.getCostDetailsTable());
     }
 
 }
