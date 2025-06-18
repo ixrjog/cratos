@@ -7,9 +7,9 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public abstract class ConsoleConverter implements Converter, Bordered {
@@ -30,69 +30,51 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     @Override
     public String convert(PrettyTable pt) {
         clear();
-        // Check empty
         if (pt.fieldNames.isEmpty()) {
             return "";
         }
         int[] maxWidth = adjustMaxWidth(pt);
         topBorderLine(maxWidth);
         leftBorder();
-        IntStream.range(0, pt.fieldNames.size())
-                .forEach(i -> {
-                    String headerText = pt.fieldNames.get(i);
-                    // 计算中文字符占用的额外宽度
-                    int chineseCompensation = fixLength(headerText);
-                    // 调整填充宽度，考虑中文字符
-                    af(StringUtils.rightPad(headerText, maxWidth[i] - chineseCompensation));
-                    if (i < pt.fieldNames.size() - 1) {
-                        centerBorder();
-                    } else {
-                        rightBorder();
-                    }
-                });
+        // 渲染表头
+        for (int i = 0; i < pt.fieldNames.size(); i++) {
+            String headerText = pt.fieldNames.get(i);
+            int chineseCompensation = fixLength(headerText);
+            af(StringUtils.rightPad(headerText, maxWidth[i] - chineseCompensation));
+            if (i < pt.fieldNames.size() - 1) {
+                centerBorder();
+            } else {
+                rightBorder();
+            }
+        }
         bottomBorderLine(maxWidth);
-        // Convert rows to table
+        // 渲染数据行
         for (Object[] r : pt.rows) {
             ab("\n");
             leftBorder();
-            int rL = colLength(Arrays.toString(r));
-            // for (int c = 0; c < r.length; c++) {
             for (int c = 0; c < r.length; c++) {
                 String nc;
-                if (r[c] instanceof Number) {
-                    // 数字类型，使用左填充（右对齐）
+                Object cell = r[c];
+                if (cell instanceof Number) {
                     String n = pt.comma ? NumberFormat.getNumberInstance(Locale.US)
-                            .format(r[c]) : r[c].toString();
+                            .format(cell) : cell.toString();
                     nc = StringUtils.leftPad(n, maxWidth[c]);
                 } else {
-                    String colStr = String.valueOf(r[c]);
-                    // 检查字符串是否可以解析为数字
+                    String colStr = String.valueOf(cell);
                     boolean isNumeric = isNumericString(colStr);
                     int colorAnisSize = colorAnisSize(colStr);
-                    // 修正中文补偿
                     int width = maxWidth[c] - fixLength(colStr);
                     int rLength = colStr.length();
-                    
+                    int colL = colorAnisSize == 0 ? rLength : colLength(colStr);
+                    int padLength = rLength + (width - colL) + colorAnisSize;
                     if (isNumeric) {
-                        // 如果是数字字符串，使用左填充（右对齐）
-                        if (colorAnisSize == 0) {
-                            nc = StringUtils.leftPad(colStr, width);
-                        } else {
-                            int colL = colLength(colStr);
-                            nc = StringUtils.leftPad(colStr, rLength + (width - colL) + colorAnisSize);
-                        }
+                        nc = StringUtils.leftPad(colStr, padLength);
                     } else {
-                        // 非数字字符串，使用右填充（左对齐）
-                        if (colorAnisSize == 0) {
-                            nc = StringUtils.rightPad(colStr, width);
-                        } else {
-                            int colL = colLength(colStr);
-                            nc = StringUtils.rightPad(colStr, rLength + (width - colL) + colorAnisSize);
-                        }
+                        nc = StringUtils.rightPad(colStr, padLength);
                     }
                 }
                 af(nc);
-                if (c < rL - 1) {
+                if (c < r.length - 1) {
                     centerBorder();
                 } else {
                     rightBorder();
@@ -110,35 +92,31 @@ public abstract class ConsoleConverter implements Converter, Bordered {
      * @return
      */
     public int[] adjustMaxWidth(PrettyTable pt) {
-        // Adjust comma
-        List<List<String>> converted = new ArrayList<>();
-        for (Object[] r : pt.rows) {
-            List<String> collect = Stream.of(r)
-                    .map(o -> {
-                        if (pt.comma && o instanceof Number) {
-                            return NumberFormat.getNumberInstance(Locale.US)
-                                    .format(o);
-                        } else {
-                            try {
-                                return o.toString();
-                            } catch (NullPointerException e) {
-                                return "";
+        // 预处理所有行，转换为字符串并格式化千分位
+        List<List<String>> converted = pt.rows.stream()
+                .map(r -> Stream.of(r)
+                        .map(o -> {
+                            if (pt.comma && o instanceof Number) {
+                                return NumberFormat.getNumberInstance(Locale.US)
+                                        .format(o);
                             }
-                        }
-                    })
-                    .collect(Collectors.toList());
-            converted.add(collect);
+                            return o == null ? "" : o.toString();
+                        })
+                        .collect(Collectors.toList()))
+                .toList();
+        int fieldCount = pt.fieldNames.size();
+        int[] maxWidths = new int[fieldCount];
+
+        for (int i = 0; i < fieldCount; i++) {
+            int headerWidth = colLength(pt.fieldNames.get(i));
+            int finalI = i;
+            int maxDataWidth = converted.stream()
+                    .mapToInt(row -> colLength(row.get(finalI)))
+                    .max()
+                    .orElse(0);
+            maxWidths[i] = Math.max(headerWidth, maxDataWidth);
         }
-        return IntStream.range(0, pt.fieldNames.size())
-                .map(i -> {
-                    int n = converted.stream()
-                            .map(f -> colLength(f.get(i)))
-                            .max(Comparator.naturalOrder())
-                            .orElse(0);
-                    // 使用colLength计算表头字段名的长度，而不是直接使用length()
-                    return Math.max(colLength(pt.fieldNames.get(i)), n);
-                })
-                .toArray();
+        return maxWidths;
     }
 
     private int colLength(String colStr) {
@@ -164,20 +142,18 @@ public abstract class ConsoleConverter implements Converter, Bordered {
      * @return 如果是数字返回true，否则返回false
      */
     private boolean isNumericString(String str) {
-        if (str == null || str.trim().isEmpty()) {
+        if (str == null || str.trim()
+                .isEmpty()) {
             return false;
         }
-        
         String trimmed = str.trim();
-        
         // 处理百分比
         if (trimmed.endsWith("%")) {
             trimmed = trimmed.substring(0, trimmed.length() - 1);
         }
-        
         // 移除千分位分隔符
         trimmed = trimmed.replace(",", "");
-        
+
         try {
             Double.parseDouble(trimmed);
             return true;
