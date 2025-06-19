@@ -76,7 +76,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
                 .map(WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry::getDetail)
                 .map(ApplicationModel.CreateFrontEndApplication::getApplicationName)
                 .orElseThrow(() -> new WorkOrderTicketException("Application name cannot be empty."));
-        if (ValidationUtils.isApplicationName(applicationName)) {
+        if (!ValidationUtils.isApplicationName(applicationName)) {
             WorkOrderTicketException.runtime(
                     "Application name is not valid, it must start with a letter and can only contain lowercase letters, numbers, and hyphens.");
         }
@@ -105,6 +105,16 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         if (!EdsAssetTypeEnum.GITLAB_PROJECT.name()
                 .equals(asset.getAssetType())) {
             WorkOrderTicketException.runtime("Repository asset type must be GitLab project.");
+        }
+        // 校验映射路径
+        String mappingsPath = Optional.of(param)
+                .map(WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry::getDetail)
+                .map(ApplicationModel.CreateFrontEndApplication::getMappingsPath)
+                .filter(path -> !"/".equals(path))
+                .orElse(null);
+        if (mappingsPath != null && !ValidationUtils.isMappingsPath(mappingsPath)) {
+            WorkOrderTicketException.runtime(
+                    "Mappings path is not valid, it must start with a slash and can only contain lowercase letters, numbers, hyphens, underscores, and periods.");
         }
     }
 

@@ -21,15 +21,18 @@ public class ValidationUtils {
         String APPLICATION_NAME = "[a-z][\\d0-9a-z-]{3,32}";
         String EMAIL = "[A-z0-9-_.]+@(\\w+[\\w-]*)(\\.\\w+[-\\w]*)+";
         String JOB_KEY = "[a-z0-9-_]{3,64}";
-
         String URL_REGEX = "^https://[^\\s/$.?#].[^\\s]*$";
-
         String TRANSFER_SERVER_USERNAME_REGEX = "^\\w[\\w@.-]{2,99}$"; // AWS Transfer Server Name
-
-
         String ALIYUN_ONS_TOPIC_NAME = "[0-9A-Z_]{9,60}";
         String ALIYUN_ONS_CONSUMER_GROUP = "[0-9A-Z_]{7,60}";
+        String APPLICATION_FRONTEND_MAPPINGS_PATH = "^/?[a-zA-Z0-9-_.]+(?:/[a-zA-Z0-9-_.]+)?/?$";
+    }
 
+    public static boolean isMappingsPath(String mappingsPath) {
+        if (!StringUtils.hasText(mappingsPath)) {
+            return false;
+        }
+        return mappingsPath.matches(RegexMatches.APPLICATION_FRONTEND_MAPPINGS_PATH);
     }
 
     public static boolean isApplicationName(String applicationName) {
