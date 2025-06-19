@@ -37,7 +37,7 @@ public class TagServiceImpl implements TagService {
         Example example = new Example(Tag.class);
         if (StringUtils.isNotBlank(pageQuery.getTagKey())) {
             Example.Criteria criteria = example.createCriteria();
-            criteria.andLike("tagKey", SqlHelper.toLike(pageQuery.getTagKey()));
+            criteria.andLike("tagKey", SqlHelper.likeOf(pageQuery.getTagKey()));
         }
         example.setOrderByClause("seq");
         List<Tag> data = tagMapper.selectByExample(example);

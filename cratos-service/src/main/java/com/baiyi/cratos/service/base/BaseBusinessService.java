@@ -22,16 +22,19 @@ public interface BaseBusinessService<T extends HasIntegerPrimaryKey> extends Bas
     List<T> selectByBusiness(BaseBusiness.HasBusiness business);
 
     default void delete(T record) {
+        if (record == null) return;
         Class<?> targetClass = AopUtils.getTargetClass(record);
-        Field[] declaredFields = targetClass.getDeclaredFields();
-        for (Field declaredField : declaredFields) {
-            // 找出@Id注解的字段
-            if (AnnotationUtils.findAnnotation(declaredField, Id.class) != null) {
+        for (Field field : targetClass.getDeclaredFields()) {
+            if (AnnotationUtils.findAnnotation(field, Id.class) != null) {
                 try {
-                    declaredField.setAccessible(true);
-                    deleteById((Integer) declaredField.get(record));
-                    declaredField.setAccessible(false);
+                    field.setAccessible(true);
+                    Object idValue = field.get(record);
+                    if (idValue instanceof Integer) {
+                        deleteById((Integer) idValue);
+                    }
                 } catch (IllegalAccessException ignored) {
+                } finally {
+                    field.setAccessible(false);
                 }
                 break;
             }

@@ -32,6 +32,13 @@ public class ValidationUtils {
 
     }
 
+    public static boolean isApplicationName(String applicationName) {
+        if (!StringUtils.hasText(applicationName)) {
+            return false;
+        }
+        return applicationName.matches(RegexMatches.APPLICATION_NAME);
+    }
+
     /**
      * 校验字符串是否为手机号
      *

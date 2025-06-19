@@ -67,6 +67,9 @@ public interface WorkOrderTicketEntryFacade {
     void addAliyunRamPolicyPermissionTicketEntry(
             WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry addTicketEntry);
 
+    void addCreateFrontEndApplicationTicketEntry(
+            WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry addTicketEntry);
+
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);

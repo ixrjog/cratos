@@ -65,6 +65,14 @@ public class WorkOrderTicketEntryController {
 
     // add entry
 
+    @Operation(summary = "Add front-end application ticket entry")
+    @PostMapping(value = "/application/front-end/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateFrontEndApplicationTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateFrontEndApplicationTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add application delete pod ticket entry")
     @PostMapping(value = "/application/pod/delete/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addApplicationDeletePodTicketEntry(

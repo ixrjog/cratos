@@ -115,7 +115,9 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
                         BusinessTypeEnum.EDS_ASSET.name())
                 .stream()
                 .map(e -> {
-                    ApplicationDeploymentModel.DeploymentScale deploymentScale = ticketEntryProvider.loadAs(e);
+                    ApplicationDeploymentModel.DeploymentScale deploymentScale = Objects.requireNonNull(
+                                    ticketEntryProvider)
+                            .loadAs(e);
                     return deploymentScale.getCurrentReplicas();
                 })
                 .mapToInt(Integer::intValue)

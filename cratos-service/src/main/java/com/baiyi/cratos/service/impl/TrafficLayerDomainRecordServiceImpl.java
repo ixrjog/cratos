@@ -40,7 +40,7 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
-            criteria.andLike("recordName", SqlHelper.toLike(pageQuery.getQueryName()));
+            criteria.andLike("recordName", SqlHelper.likeOf(pageQuery.getQueryName()));
         }
         if (pageQuery.getDomainId() != null) {
             criteria.andEqualTo("domainId", pageQuery.getDomainId());

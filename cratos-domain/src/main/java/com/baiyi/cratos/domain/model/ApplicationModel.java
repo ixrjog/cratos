@@ -30,11 +30,12 @@ public class ApplicationModel {
         private Map<String, String> components;
         private GitLabRepository repository;
         private String domain;
-        private String mountPath;
+        private String mappingsPath;
         // ApplicationName
         private String copyFromApplication;
         // LevelTag BusinessTag
         private Map<String, String> tags;
+        private String comment;
     }
 
     @Data
