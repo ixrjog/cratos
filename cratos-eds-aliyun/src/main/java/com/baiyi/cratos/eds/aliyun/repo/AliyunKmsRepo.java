@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,14 +39,17 @@ public class AliyunKmsRepo {
         }
     }
 
+    // Key
     public static List<ListKeysResponseBody.Key> listKeys(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
         List<ListKeysResponseBody.Key> result = Lists.newArrayList();
         int pageNumber = 1;
+        int pageSize = 100;
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
-            while (true) {
+            int totalCount;
+            do {
                 ListKeysRequest listKeysRequest = ListKeysRequest.builder()
                         .pageNumber(pageNumber)
-                        .pageSize(100)
+                        .pageSize(pageSize)
                         .build();
                 ListKeysResponse resp = client.listKeys(listKeysRequest)
                         .get();
@@ -57,19 +59,26 @@ public class AliyunKmsRepo {
                         .map(ListKeysResponseBody.Keys::getKey)
                         .orElse(List.of());
                 result.addAll(keys);
-                if (result.size() >= Objects.requireNonNull(resp)
-                        .getBody()
-                        .getTotalCount()) {
-                    break;
-                }
+                totalCount = Optional.ofNullable(resp)
+                        .map(ListKeysResponse::getBody)
+                        .map(ListKeysResponseBody::getTotalCount)
+                        .orElse(0);
                 pageNumber++;
-            }
+            } while (result.size() < totalCount);
         } catch (Exception e) {
             log.error("Failed to list keys from Aliyun KMS: {}", e.getMessage(), e);
         }
         return result;
     }
 
+    /**
+     * https://help.aliyun.com/zh/kms/key-management-service/developer-reference/api-describekey?spm=a2c4g.11186623.help-menu-28933.d_5_0_0_7_5.6952229f1KWGLP&scm=20140722.H_28952._.OR_help-T_cn~zh-V_1
+     *
+     * @param endpoint
+     * @param aliyun
+     * @param keyId
+     * @return
+     */
     public static Optional<DescribeKeyResponseBody.KeyMetadata> describeKey(String endpoint,
                                                                             EdsAliyunConfigModel.Aliyun aliyun,
                                                                             String keyId) {
@@ -92,11 +101,13 @@ public class AliyunKmsRepo {
                                                                    EdsAliyunConfigModel.Aliyun aliyun) {
         List<ListSecretsResponseBody.Secret> result = Lists.newArrayList();
         int pageNumber = 1;
+        int pageSize = 100;
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
-            while (true) {
+            int totalCount;
+            do {
                 ListSecretsRequest request = ListSecretsRequest.builder()
                         .pageNumber(pageNumber)
-                        .pageSize(100)
+                        .pageSize(pageSize)
                         .build();
                 ListSecretsResponse resp = client.listSecrets(request)
                         .get();
@@ -106,13 +117,12 @@ public class AliyunKmsRepo {
                         .map(ListSecretsResponseBody.SecretList::getSecret)
                         .orElse(List.of());
                 result.addAll(secrets);
-                if (result.size() >= Objects.requireNonNull(resp)
-                        .getBody()
-                        .getTotalCount()) {
-                    break;
-                }
+                totalCount = Optional.ofNullable(resp)
+                        .map(ListSecretsResponse::getBody)
+                        .map(ListSecretsResponseBody::getTotalCount)
+                        .orElse(0);
                 pageNumber++;
-            }
+            } while (result.size() < totalCount);
         } catch (Exception e) {
             log.error("Failed to list secrets from Aliyun KMS: {}", e.getMessage(), e);
         }
@@ -135,5 +145,41 @@ public class AliyunKmsRepo {
             return Optional.empty();
         }
     }
+
+    /**
+     * https://help.aliyun.com/zh/kms/key-management-service/developer-reference/api-createsecret?spm=a2c4g.11186623.help-menu-28933.d_5_0_0_9_0.75c817c3mDAvZ5&scm=20140722.H_154490._.OR_help-T_cn~zh-V_1
+     * @param endpoint
+     * @param aliyun
+     * @param secretName
+     * @param versionId
+     * @param encryptionKeyId
+     * @param secretData
+     * @param description
+     * @return
+     */
+    public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
+                                                                  String secretName, String versionId,
+                                                                  String encryptionKeyId, String secretData,
+                                                                  String description) {
+        try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
+            CreateSecretRequest request = CreateSecretRequest.builder()
+                    .secretName(secretName)
+                    .versionId(versionId)
+                    .encryptionKeyId(encryptionKeyId)
+                    .secretData(secretData)
+                    .secretDataType("text")
+                    .description(description)
+                    // SecretType
+                    .build();
+            CreateSecretResponse resp = client.createSecret(request)
+                    .get();
+            return Optional.ofNullable(resp)
+                    .map(CreateSecretResponse::getBody);
+        } catch (Exception e) {
+            log.error("Failed to create secret from Aliyun KMS: {}", e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
 
 }

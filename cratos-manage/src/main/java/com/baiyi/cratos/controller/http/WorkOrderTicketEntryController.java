@@ -65,6 +65,14 @@ public class WorkOrderTicketEntryController {
 
     // add entry
 
+    @Operation(summary = "Add aliyun kms secret ticket entry")
+    @PostMapping(value = "/aliyun/kms/secret/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateAliyunKmsSecretTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateAliyunKmsSecretTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add front-end application ticket entry")
     @PostMapping(value = "/application/front-end/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addCreateFrontEndApplicationTicketEntry(

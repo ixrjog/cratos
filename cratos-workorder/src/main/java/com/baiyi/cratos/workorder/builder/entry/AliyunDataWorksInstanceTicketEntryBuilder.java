@@ -51,7 +51,6 @@ public class AliyunDataWorksInstanceTicketEntryBuilder {
                 .ticketId(param.getTicketId())
                 .name(akAccount)
                 .displayName(akAccount)
-                .instanceId(instance.getId())
                 .businessType(param.getBusinessType())
                 .businessId(instance.getId())
                 .completed(false)

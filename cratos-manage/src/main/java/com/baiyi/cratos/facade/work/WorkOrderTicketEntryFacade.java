@@ -70,6 +70,8 @@ public interface WorkOrderTicketEntryFacade {
     void addCreateFrontEndApplicationTicketEntry(
             WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry addTicketEntry);
 
+    void addCreateAliyunKmsSecretTicketEntry(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addTicketEntry);
+
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);
@@ -80,7 +82,6 @@ public interface WorkOrderTicketEntryFacade {
 
     void addCreateAliyunOnsConsumerGroupTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry);
-
 
     void deleteById(int id);
 

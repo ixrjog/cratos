@@ -239,6 +239,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addCreateAliyunKmsSecretTicketEntry(
+            WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.ALIYUN_KMS_SECRET_CREATE.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void addApplicationDeletePodTicketEntry(
             WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry>) TicketEntryProviderFactory.getProvider(
