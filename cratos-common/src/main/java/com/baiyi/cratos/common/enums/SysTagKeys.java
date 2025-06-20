@@ -27,6 +27,7 @@ public enum SysTagKeys {
     EVENT("Event"),
     FRAMEWORK("Framework"),
     INGRESS_ORDER("IngressOrder"),
+    KMS("KMS"),
     DATAWORKS("DataWorks"),
     DESCRIPTION("Description"),
     ENDPOINT("Endpoint"),

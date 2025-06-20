@@ -20,10 +20,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
-import com.baiyi.cratos.service.ApplicationResourceService;
-import com.baiyi.cratos.service.BusinessTagService;
-import com.baiyi.cratos.service.EdsAssetService;
-import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
@@ -42,6 +39,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_KMS_INSTANCE_ID;
 
 /**
  * &#064;Author  baiyi
@@ -64,6 +63,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     private final EdsAssetService edsAssetService;
     private final BusinessTagFacade businessTagFacade;
     private final BusinessTagService businessTagService;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     @Override
     public void addApplicationPermissionTicketEntry(
@@ -359,22 +359,61 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public List<EdsAssetVO.Asset> queryAliyunKmsInstanceTicketEntry(
+            WorkOrderTicketParam.QueryAliyunKmsInstanceTicketEntry queryAliyunKmsInstanceTicketEntry) {
+        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(queryAliyunKmsInstanceTicketEntry.getInstanceId(),
+                EdsAssetTypeEnum.ALIYUN_KMS_INSTANCE.name());
+        if (CollectionUtils.isEmpty(assets)) {
+            return List.of();
+        }
+        return BeanCopierUtil.copyListProperties(assets, EdsAssetVO.Asset.class);
+    }
+
+    @Override
+    public List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
+            WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(ALIYUN_KMS_INSTANCE_ID,
+                queryAliyunKmsKeyTicketEntry.getKmsInstanceId());
+        if (CollectionUtils.isEmpty(indices)) {
+            return List.of();
+        }
+        return indices.stream()
+                .map(index -> edsAssetService.getById(index.getAssetId()))
+                .filter(Objects::nonNull)
+                .map(asset -> BeanCopierUtil.copyProperties(asset, EdsAssetVO.Asset.class))
+                .toList();
+    }
+
+    @Override
+    public List<EdsInstanceVO.EdsInstance> queryAliyunKmsTicketEntry() {
+        Tag kmsTag = tagService.getByTagKey(SysTagKeys.KMS);
+        if (Objects.isNull(kmsTag)) {
+            return List.of();
+        }
+        return queryInstanceByTag(kmsTag);
+    }
+
+    private List<EdsInstanceVO.EdsInstance> queryInstanceByTag(Tag instanceTag) {
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(instanceTag.getId())
+                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                .build();
+        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
+                .page(1)
+                .length(10)
+                .queryByTag(queryByTag)
+                .build();
+        DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
+        return dataTable.getData();
+    }
+
+    @Override
     public List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry() {
         Tag dataWorksTag = tagService.getByTagKey(SysTagKeys.DATAWORKS);
         if (Objects.isNull(dataWorksTag)) {
             return List.of();
         }
-        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
-                .tagId(dataWorksTag.getId())
-                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
-                .build();
-        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
-                .page(1)
-                .length(5)
-                .queryByTag(queryByTag)
-                .build();
-        DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
-        return dataTable.getData();
+        return queryInstanceByTag(dataWorksTag);
     }
 
     @Override
@@ -383,17 +422,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         if (Objects.isNull(rocketMqTag)) {
             return List.of();
         }
-        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
-                .tagId(rocketMqTag.getId())
-                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
-                .build();
-        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
-                .page(1)
-                .length(5)
-                .queryByTag(queryByTag)
-                .build();
-        DataTable<EdsInstanceVO.EdsInstance> dataTable = edsFacade.queryEdsInstancePage(pageQuery);
-        return dataTable.getData();
+        return queryInstanceByTag(rocketMqTag);
     }
 
     @Override

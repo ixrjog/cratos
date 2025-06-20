@@ -30,6 +30,27 @@ public class WorkOrderTicketEntryController {
     private final WorkOrderTicketEntryFacade ticketEntryFacade;
 
     // query entry
+
+    @Operation(summary = "Query aliyun kms")
+    @PostMapping(value = "/aliyun/kms/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsInstanceVO.EdsInstance>> queryAliyunKmsTicketEntry() {
+        return HttpResult.of(ticketEntryFacade.queryAliyunKmsTicketEntry());
+    }
+
+    @Operation(summary = "Query aliyun kms instance")
+    @PostMapping(value = "/aliyun/kms/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsAssetVO.Asset>> queryAliyunKmsInstanceTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.QueryAliyunKmsInstanceTicketEntry queryAliyunKmsInstanceTicketEntry) {
+        return HttpResult.of(ticketEntryFacade.queryAliyunKmsInstanceTicketEntry(queryAliyunKmsInstanceTicketEntry));
+    }
+
+    @Operation(summary = "Query aliyun kms key")
+    @PostMapping(value = "/aliyun/kms/key/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsAssetVO.Asset>> queryAliyunKmsKeyTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {
+        return HttpResult.of(ticketEntryFacade.queryAliyunKmsKeyTicketEntry(queryAliyunKmsKeyTicketEntry));
+    }
+
     @Operation(summary = "Query aliyun dataWorks instance")
     @PostMapping(value = "/aliyun/dataworks/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDataWorksInstanceTicketEntry() {

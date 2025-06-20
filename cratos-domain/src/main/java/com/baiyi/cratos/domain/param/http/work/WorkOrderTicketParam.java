@@ -168,6 +168,30 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class QueryAliyunKmsInstanceTicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 9077732649157987094L;
+        @NotNull
+        private Integer instanceId;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class QueryAliyunKmsKeyTicketEntry implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -5889469691234285633L;
+        @NotBlank
+        private String kmsInstanceId;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class QueryLdapRolePermissionTicketEntry implements Serializable {
         @Serial
         private static final long serialVersionUID = 2103292539529876560L;

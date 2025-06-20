@@ -15,6 +15,14 @@ import java.util.List;
  */
 public interface WorkOrderTicketEntryFacade {
 
+    List<EdsInstanceVO.EdsInstance> queryAliyunKmsTicketEntry();
+
+    List<EdsAssetVO.Asset> queryAliyunKmsInstanceTicketEntry(
+            WorkOrderTicketParam.QueryAliyunKmsInstanceTicketEntry queryAliyunKmsInstanceTicketEntry);
+
+    List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
+            WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry);
+
     List<EdsInstanceVO.EdsInstance> queryDataWorksInstanceTicketEntry();
 
     List<EdsInstanceVO.EdsInstance> queryRocketMqInstanceTicketEntry();
