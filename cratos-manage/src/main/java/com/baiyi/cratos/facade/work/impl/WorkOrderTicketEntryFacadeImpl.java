@@ -357,18 +357,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         }
         deleteByTicketId(ticketId);
     }
-
-    @Override
-    public List<EdsAssetVO.Asset> queryAliyunKmsInstanceTicketEntry(
-            WorkOrderTicketParam.QueryAliyunKmsInstanceTicketEntry queryAliyunKmsInstanceTicketEntry) {
-        List<EdsAsset> assets = edsAssetService.queryInstanceAssets(queryAliyunKmsInstanceTicketEntry.getInstanceId(),
-                EdsAssetTypeEnum.ALIYUN_KMS_INSTANCE.name());
-        if (CollectionUtils.isEmpty(assets)) {
-            return List.of();
-        }
-        return BeanCopierUtil.copyListProperties(assets, EdsAssetVO.Asset.class);
-    }
-
+    
     @Override
     public List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
             WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {

@@ -17,9 +17,6 @@ public interface WorkOrderTicketEntryFacade {
 
     List<EdsInstanceVO.EdsInstance> queryAliyunKmsTicketEntry();
 
-    List<EdsAssetVO.Asset> queryAliyunKmsInstanceTicketEntry(
-            WorkOrderTicketParam.QueryAliyunKmsInstanceTicketEntry queryAliyunKmsInstanceTicketEntry);
-
     List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
             WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry);
 
