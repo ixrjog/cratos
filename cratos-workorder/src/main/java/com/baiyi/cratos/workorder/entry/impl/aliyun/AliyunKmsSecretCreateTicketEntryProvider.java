@@ -94,7 +94,19 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
             WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
         }
         // 写入资产
-        importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get());
+        EdsAsset asset = importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get());
+        // 写入标签 CreatedBy
+        if (Objects.nonNull(asset)) {
+            Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
+            if (Objects.nonNull(createdByTag)) {
+                saveBusinessTag(asset, createdByTag.getId(), SessionUtils.getUsername());
+            }
+            // 写入标签 Env
+            Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
+            if (Objects.nonNull(envTag)) {
+                saveBusinessTag(asset, envTag.getId(), entry.getNamespace());
+            }
+        }
     }
 
     /**
@@ -104,9 +116,9 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
      * @param createSecret
      * @param describeSecretResponseBody
      */
-    private void importAsset(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder,
-                             AliyunKmsModel.CreateSecret createSecret,
-                             DescribeSecretResponseBody describeSecretResponseBody) {
+    private EdsAsset importAsset(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder,
+                                 AliyunKmsModel.CreateSecret createSecret,
+                                 DescribeSecretResponseBody describeSecretResponseBody) {
         try {
             AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(describeSecretResponseBody,
                     AliyunKms.SecretMetadata.class);
@@ -121,21 +133,20 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                     .metadata(metadata)
                     .secret(secret)
                     .build();
-            EdsAsset asset = holder.importAsset(kmsSecret);
-            // 写入标签 CreatedBy
-            Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
-            if (Objects.isNull(createdByTag)) {
-                return;
-            }
-            BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
-                    .businessId(asset.getId())
-                    .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                    .tagId(createdByTag.getId())
-                    .tagValue(SessionUtils.getUsername())
-                    .build();
-            businessTagFacade.saveBusinessTag(saveBusinessTag);
+            return holder.importAsset(kmsSecret);
         } catch (Exception ignored) {
+            return null;
         }
+    }
+
+    private void saveBusinessTag(EdsAsset asset, int tagId, String value) {
+        BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+                .businessId(asset.getId())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .tagId(tagId)
+                .tagValue(SessionUtils.getUsername())
+                .build();
+        businessTagFacade.saveBusinessTag(saveBusinessTag);
     }
 
     @Override
