@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.exception.EdsAliyunKmsException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
@@ -29,6 +30,7 @@ import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -85,18 +87,25 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
                         .getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         List<AliyunKmsVO.Secret> secrets = Lists.newArrayList();
         Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
+        Map<String, EdsAssetVO.Asset> kmsInstanceMap = Maps.newHashMap();
+
+
         Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
         Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
         assets.forEach(asset -> {
+            // Eds Instance
             EdsInstanceVO.EdsInstance instance = instanceMap.computeIfAbsent(asset.getInstanceId(),
                     a -> getInstance(asset));
             instanceMap.put(asset.getInstanceId(), instance);
+            // KMS Instance
+            EdsAssetVO.Asset kmsInstance = kmsInstanceMap.computeIfAbsent(asset.getAssetId(),
+                    a -> getKmsInstance(asset.getInstanceId(), asset.getAssetId()));
             AliyunKms.KmsSecret kmsSecret = holder.getProvider()
                     .assetLoadAs(asset.getOriginalModel());
             AliyunKms.SecretMetadata metadata = kmsSecret.getMetadata();
             AliyunKmsVO.Secret secret = AliyunKmsVO.Secret.builder()
                     .edsInstance(instance)
-                    .kmsInstance(null)
+                    .kmsInstance(kmsInstance)
                     .kmsInstanceId(metadata.getDKMSInstanceId())
                     .arn(metadata.getArn())
                     .secretType(metadata.getSecretType())
@@ -124,6 +133,16 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
             EdsAliyunKmsException.runtime("Eds instance not found for asset: {}", asset.getId());
         }
         return BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class);
+    }
+
+    private EdsAssetVO.Asset getKmsInstance(Integer instanceId, String kmsInstanceId) {
+        List<EdsAsset> assets = edsAssetService.queryInstanceAssetsById(instanceId,
+                EdsAssetTypeEnum.ALIYUN_KMS_INSTANCE.name(), kmsInstanceId);
+
+        if (CollectionUtils.isEmpty(assets)) {
+            return null;
+        }
+        return BeanCopierUtil.copyProperties(assets.getFirst(), EdsAssetVO.Asset.class);
     }
 
 }
