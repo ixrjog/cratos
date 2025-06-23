@@ -59,6 +59,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
                 .completed(false)
                 .entryKey(StringFormatter.arrayFormat("instanceId:{}:secretName:{}:versionId:{}", edsInstance.getId(),
                         detail.getSecretName(), detail.getVersionId()))
+                .namespace(param.getNamespace())
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();

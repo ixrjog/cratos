@@ -2,14 +2,16 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 
 import com.aliyun.sdk.service.kms20160120.models.CreateSecretResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -20,6 +22,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -31,6 +34,7 @@ import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -46,15 +50,20 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     private static final String ROW_TPL = "| {} | {} | {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    private final BusinessTagFacade businessTagFacade;
+    private final TagService tagService;
 
     public AliyunKmsSecretCreateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
-                                                    EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+                                                    EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                                    BusinessTagFacade businessTagFacade, TagService tagService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
+        this.businessTagFacade = businessTagFacade;
+        this.tagService = tagService;
     }
 
     @Override
@@ -85,8 +94,21 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
             WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
         }
         // 写入资产
+        importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get());
+    }
+
+    /**
+     * 写入资产
+     *
+     * @param holder
+     * @param createSecret
+     * @param describeSecretResponseBody
+     */
+    private void importAsset(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder,
+                             AliyunKmsModel.CreateSecret createSecret,
+                             DescribeSecretResponseBody describeSecretResponseBody) {
         try {
-            AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(optionalDescribeSecretResponseBody.get(),
+            AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(describeSecretResponseBody,
                     AliyunKms.SecretMetadata.class);
             AliyunKms.Secret secret = AliyunKms.Secret.builder()
                     .secretName(createSecret.getSecretName())
@@ -99,7 +121,19 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                     .metadata(metadata)
                     .secret(secret)
                     .build();
-            holder.importAsset(kmsSecret);
+            EdsAsset asset = holder.importAsset(kmsSecret);
+            // 写入标签 CreatedBy
+            Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
+            if (Objects.isNull(createdByTag)) {
+                return;
+            }
+            BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+                    .businessId(asset.getId())
+                    .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                    .tagId(createdByTag.getId())
+                    .tagValue(SessionUtils.getUsername())
+                    .build();
+            businessTagFacade.saveBusinessTag(saveBusinessTag);
         } catch (Exception ignored) {
         }
     }
@@ -117,9 +151,11 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         if (instance == null) {
             WorkOrderTicketException.runtime("Instance not found: " + instanceId);
         }
+        String username = SessionUtils.getUsername();
         return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
                 .withParam(addCreateAliyunKmsSecretTicketEntry)
                 .withEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
+                .withUsername(username)
                 .buildEntry();
     }
 

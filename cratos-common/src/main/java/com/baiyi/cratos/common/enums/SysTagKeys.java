@@ -17,6 +17,7 @@ public enum SysTagKeys {
     COMMAND_EXEC_APPROVER("CommandExecApprover"),
     COMMAND_EXEC("CommandExec"),
     USERNAME("Username"),
+    CREATED_BY("CreatedBy"),
     SERVER_ACCOUNT("ServerAccount"),
     GROUP("Group"),
     USER_GROUP("UserGroup"),

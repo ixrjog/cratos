@@ -553,6 +553,7 @@ public class WorkOrderTicketParam {
         private String subType;
         private Integer businessId;
         private String entryKey;
+        private String namespace;
     }
 
 }

@@ -65,4 +65,6 @@ public interface ErrorCodeConstants {
 
     int KUBERNETES_RESOURCE_OPERATION_ERROR = 59000;
 
+    int EDS_ALIYUN_KMS_ERROR = 60000;
+
 }
