@@ -150,6 +150,41 @@ public class AliyunKmsRepo {
         }
     }
 
+
+    public static List<ListSecretVersionIdsResponseBody.VersionId> listSecretVersionIds(String endpoint,
+                                                                                        EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                        String secretName) {
+        List<ListSecretVersionIdsResponseBody.VersionId> result = Lists.newArrayList();
+        int pageNumber = 1;
+        int pageSize = 100;
+        try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
+            int totalCount;
+            do {
+                ListSecretVersionIdsRequest request = ListSecretVersionIdsRequest.builder()
+                        .secretName(secretName)
+                        .pageNumber(pageNumber)
+                        .pageSize(pageSize)
+                        .build();
+                ListSecretVersionIdsResponse resp = client.listSecretVersionIds(request)
+                        .get();
+                List<ListSecretVersionIdsResponseBody.VersionId> versionIds = Optional.ofNullable(resp)
+                        .map(ListSecretVersionIdsResponse::getBody)
+                        .map(ListSecretVersionIdsResponseBody::getVersionIds)
+                        .map(ListSecretVersionIdsResponseBody.VersionIds::getVersionId)
+                        .orElse(List.of());
+                result.addAll(versionIds);
+                totalCount = Optional.ofNullable(resp)
+                        .map(ListSecretVersionIdsResponse::getBody)
+                        .map(ListSecretVersionIdsResponseBody::getTotalCount)
+                        .orElse(0);
+                pageNumber++;
+            } while (result.size() < totalCount);
+        } catch (Exception e) {
+            log.error("Failed to list secret version ids from Aliyun KMS: {}", e.getMessage(), e);
+        }
+        return result;
+    }
+
     /**
      * https://help.aliyun.com/zh/kms/key-management-service/developer-reference/api-createsecret?spm=a2c4g.11186623.help-menu-28933.d_5_0_0_9_0.75c817c3mDAvZ5&scm=20140722.H_154490._.OR_help-T_cn~zh-V_1
      *
@@ -164,10 +199,11 @@ public class AliyunKmsRepo {
      * @param description
      * @return
      */
-    public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsAliyunConfigModel.Aliyun aliyun, String kmsInstanceId,
-                                                                  String secretName, String versionId,
-                                                                  String encryptionKeyId, String secretData,
-                                                                  Map<String, String> tags, String description) {
+    public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
+                                                                  String kmsInstanceId, String secretName,
+                                                                  String versionId, String encryptionKeyId,
+                                                                  String secretData, Map<String, String> tags,
+                                                                  String description) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             CreateSecretRequest request = CreateSecretRequest.builder()
                     .DKMSInstanceId(kmsInstanceId)

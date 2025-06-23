@@ -66,11 +66,30 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void verifyEntryParam(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param,
                                     WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = param.getDetail();
-        // 我要偷懒了
+        // 校验Secret是否存在
+        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+                entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
+        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
+                .getEdsConfigModel();
+        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
+                createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
+        if (optionalDescribeSecretResponseBody.isPresent()) {
+            // 如果存在则查询 versionId 是否冲突
+            boolean versionConflict = AliyunKmsRepo.listSecretVersionIds(createSecret.getEndpoint(), aliyun,
+                            createSecret.getSecretName())
+                    .stream()
+                    .anyMatch(e -> createSecret.getVersionId()
+                            .equals(e.getVersionId()));
+            if (versionConflict) {
+                WorkOrderTicketException.runtime("The KMS secret {} already exists and the versionId {} conflicts.",
+                        createSecret.getSecretName(), createSecret.getVersionId());
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
