@@ -22,6 +22,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
     private EdsInstanceVO.EdsInstance edsInstance;
     private String username;
     private String endpoint;
+    private String encryptedSecretData;
 
     public static AliyunKmsSecretCreateTicketEntryBuilder newBuilder() {
         return new AliyunKmsSecretCreateTicketEntryBuilder();
@@ -45,6 +46,11 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
 
     public AliyunKmsSecretCreateTicketEntryBuilder withEndpoint(String endpoint) {
         this.endpoint = endpoint;
+        return this;
+    }
+
+    public AliyunKmsSecretCreateTicketEntryBuilder withEncryptedSecretData(String encryptedSecretData) {
+        this.encryptedSecretData = encryptedSecretData;
         return this;
     }
 

@@ -31,6 +31,7 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.google.common.collect.Maps;
+import org.jasypt.encryption.StringEncryptor;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -52,18 +53,20 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsAssetIndexService edsAssetIndexService;
-
+    private final StringEncryptor stringEncryptor;
 
     public AliyunKmsSecretCreateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                                    EdsAssetIndexService edsAssetIndexService) {
+                                                    EdsAssetIndexService edsAssetIndexService,
+                                                    StringEncryptor stringEncryptor) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsAssetIndexService = edsAssetIndexService;
+        this.stringEncryptor = stringEncryptor;
     }
 
     @SuppressWarnings("unchecked")
@@ -96,15 +99,21 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunKmsModel.CreateSecret createSecret) throws WorkOrderTicketException {
+        WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param = WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry.builder()
+                .detail(createSecret)
+                .build();
+        this.verifyEntryParam(param, entry);
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
         Map<String, String> tags = buildTags(entry);
+        // 解密 Secret 数据
+        String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
         Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
                         .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
-                createSecret.getEncryptionKeyId(), createSecret.getSecretData(), tags, createSecret.getDescription());
+                createSecret.getEncryptionKeyId(), secretData, tags, createSecret.getDescription());
         if (optionalCreateSecretResponseBody.isEmpty()) {
             WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
         }
@@ -172,11 +181,17 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 addCreateAliyunKmsSecretTicketEntry.getDetail()
                         .getKmsInstance()
                         .getId(), ALIYUN_KMS_ENDPOINT);
+        // 加密 Secret 数据
+        String encryptedSecretData = stringEncryptor.encrypt(Optional.of(addCreateAliyunKmsSecretTicketEntry)
+                .map(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry::getDetail)
+                .map(AliyunKmsModel.CreateSecret::getSecretData)
+                .orElseThrow(() -> new WorkOrderTicketException("Secret data is required")));
         return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
                 .withParam(addCreateAliyunKmsSecretTicketEntry)
                 .withEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
                 .withUsername(username)
                 .withEndpoint(endpointIndex.getValue())
+                .withEncryptedSecretData(encryptedSecretData)
                 .buildEntry();
     }
 
