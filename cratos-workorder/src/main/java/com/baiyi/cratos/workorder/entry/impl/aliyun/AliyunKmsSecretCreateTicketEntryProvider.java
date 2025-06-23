@@ -9,7 +9,10 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -32,9 +35,10 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -71,7 +75,6 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                     WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = param.getDetail();
         // 我要偷懒了
-
     }
 
     @SuppressWarnings("unchecked")
@@ -82,9 +85,10 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
+        Map<String, String> tags = buildTags(entry);
         Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getSecretName(), createSecret.getVersionId(),
-                createSecret.getEncryptionKeyId(), createSecret.getSecretData(), createSecret.getDescription());
+                createSecret.getEncryptionKeyId(), createSecret.getSecretData(), tags, createSecret.getDescription());
         if (optionalCreateSecretResponseBody.isEmpty()) {
             WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
         }
@@ -94,19 +98,14 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
             WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
         }
         // 写入资产
-        EdsAsset asset = importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get());
-        // 写入标签 CreatedBy
-        if (Objects.nonNull(asset)) {
-            Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
-            if (Objects.nonNull(createdByTag)) {
-                saveBusinessTag(asset, createdByTag.getId(), SessionUtils.getUsername());
-            }
-            // 写入标签 Env
-            Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
-            if (Objects.nonNull(envTag)) {
-                saveBusinessTag(asset, envTag.getId(), entry.getNamespace());
-            }
-        }
+        importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get());
+    }
+
+    private Map<String, String> buildTags(WorkOrderTicketEntry entry) {
+        Map<String, String> tags = Maps.newHashMap();
+        tags.put(SysTagKeys.CREATED_BY.getKey(), SessionUtils.getUsername());
+        tags.put(SysTagKeys.ENV.getKey(), entry.getNamespace());
+        return tags;
     }
 
     /**

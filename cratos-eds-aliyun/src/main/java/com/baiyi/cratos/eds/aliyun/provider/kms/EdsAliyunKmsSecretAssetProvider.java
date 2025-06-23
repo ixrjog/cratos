@@ -1,10 +1,15 @@
 package com.baiyi.cratos.eds.aliyun.provider.kms;
 
 import com.aliyun.sdk.service.kms20160120.models.ListSecretsResponseBody;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -22,6 +27,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -39,14 +45,22 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_KMS_SECRET)
 public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> {
 
+    private final TagService tagService;
+    private final BusinessTagFacade businessTagFacade;
+
     public EdsAliyunKmsSecretAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                            EdsAssetIndexFacade edsAssetIndexFacade,
                                            UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                           EdsInstanceProviderHolderBuilder holderBuilder) {
+                                           EdsInstanceProviderHolderBuilder holderBuilder, TagService tagService,
+                                           BusinessTagFacade businessTagFacade) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
+        this.tagService = tagService;
+        this.businessTagFacade = businessTagFacade;
     }
+
+    private static final SysTagKeys[] SECRET_TAGS = {SysTagKeys.ENV, SysTagKeys.CREATED_BY};
 
     @Override
     protected Set<String> listEndpoints(
@@ -73,11 +87,16 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                                                   List<ListSecretsResponseBody.Secret> secrets) {
         return secrets.stream()
                 .map(e -> AliyunKmsRepo.describeSecret(endpoint, configModel, e.getSecretName())
-                        .map(response -> AliyunKms.KmsSecret.builder()
-                                .endpoint(endpoint)
-                                .secret(BeanCopierUtil.copyProperties(e, AliyunKms.Secret.class))
-                                .metadata(BeanCopierUtil.copyProperties(response, AliyunKms.SecretMetadata.class))
-                                .build())
+                        .map(response -> {
+                            AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(response,
+                                    AliyunKms.SecretMetadata.class);
+                            metadata.setTags(AliyunKms.Tags.of(response.getTags()));
+                            return AliyunKms.KmsSecret.builder()
+                                    .endpoint(endpoint)
+                                    .secret(BeanCopierUtil.copyProperties(e, AliyunKms.Secret.class))
+                                    .metadata(metadata)
+                                    .build();
+                        })
                         .orElseGet(() -> AliyunKms.KmsSecret.builder()
                                 .endpoint(endpoint)
                                 .secret(BeanCopierUtil.copyProperties(e, AliyunKms.Secret.class))
@@ -96,9 +115,12 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                         .getSecretName())
                 .assetKeyOf(entity.getMetadata()
                         .getArn())
-                .kindOf(entity.getMetadata().getSecretType())
-                .createdTimeOf(toUtcDate(entity.getSecret().getCreateTime()))
-                .descriptionOf(entity.getMetadata().getDescription())
+                .kindOf(entity.getMetadata()
+                        .getSecretType())
+                .createdTimeOf(toUtcDate(entity.getSecret()
+                        .getCreateTime()))
+                .descriptionOf(entity.getMetadata()
+                        .getDescription())
                 .build();
     }
 
@@ -110,6 +132,43 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunKms.KmsSecret entity) {
         return List.of(toEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
+    }
+
+    @Override
+    protected EdsAsset enterEntity(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                   AliyunKms.KmsSecret entity) {
+        EdsAsset asset = super.enterEntity(instance, entity);
+        // 获取符合条件的标签资源
+        List<AliyunKms.Tag> tags = Optional.of(entity)
+                .map(AliyunKms.KmsSecret::getMetadata)
+                .map(AliyunKms.SecretMetadata::getTags)
+                .map(AliyunKms.Tags::getTag)
+                .orElse(List.of())
+                .stream()
+                .filter(tag -> Arrays.stream(SECRET_TAGS)
+                        .anyMatch(tagKey -> tagKey.getKey()
+                                .equals(tag.getTagKey())))
+                .toList();
+        if (CollectionUtils.isEmpty(tags)) {
+            return asset;
+        }
+        // 保存业务标签
+        tags.stream()
+                .map(tagResource -> {
+                    Tag tag = tagService.getByTagKey(tagResource.getTagKey());
+                    if (Objects.isNull(tag)) {
+                        return null;
+                    }
+                    return BusinessTagParam.SaveBusinessTag.builder()
+                            .businessId(asset.getId())
+                            .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                            .tagId(tag.getId())
+                            .tagValue(tagResource.getTagValue())
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .forEach(businessTagFacade::saveBusinessTag);
+        return asset;
     }
 
 }

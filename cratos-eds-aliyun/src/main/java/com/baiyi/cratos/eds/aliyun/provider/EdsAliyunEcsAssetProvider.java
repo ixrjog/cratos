@@ -55,7 +55,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     //private static final String[] TAGS = {"Group", "Env", "Name", "ServerAccount"};
 
-    private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
+    private static final SysTagKeys[] COMPUTER_TAGS = {SysTagKeys.GROUP, SysTagKeys.NAME, SysTagKeys.SERVER_ACCOUNT};
 
     public EdsAliyunEcsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,

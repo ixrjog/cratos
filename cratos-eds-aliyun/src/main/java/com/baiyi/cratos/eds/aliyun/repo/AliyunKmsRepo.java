@@ -3,13 +3,16 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyun.sdk.service.kms20160120.AsyncClient;
 import com.aliyun.sdk.service.kms20160120.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunKmsClient;
+import com.baiyi.cratos.eds.aliyun.util.AliyunTagUtils;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -135,6 +138,7 @@ public class AliyunKmsRepo {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             DescribeSecretRequest request = DescribeSecretRequest.builder()
                     .secretName(secretName)
+                    .fetchTags("true")
                     .build();
             DescribeSecretResponse resp = client.describeSecret(request)
                     .get();
@@ -148,19 +152,21 @@ public class AliyunKmsRepo {
 
     /**
      * https://help.aliyun.com/zh/kms/key-management-service/developer-reference/api-createsecret?spm=a2c4g.11186623.help-menu-28933.d_5_0_0_9_0.75c817c3mDAvZ5&scm=20140722.H_154490._.OR_help-T_cn~zh-V_1
+     *
      * @param endpoint
      * @param aliyun
      * @param secretName
      * @param versionId
      * @param encryptionKeyId
      * @param secretData
+     * @param tags
      * @param description
      * @return
      */
     public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
                                                                   String secretName, String versionId,
                                                                   String encryptionKeyId, String secretData,
-                                                                  String description) {
+                                                                  Map<String, String> tags, String description) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             CreateSecretRequest request = CreateSecretRequest.builder()
                     .secretName(secretName)
@@ -169,6 +175,7 @@ public class AliyunKmsRepo {
                     .secretData(secretData)
                     .secretDataType("text")
                     .description(description)
+                    .tags(CollectionUtils.isEmpty(tags) ? null : AliyunTagUtils.convertMapToTagsJsonStream(tags))
                     // SecretType
                     .build();
             CreateSecretResponse resp = client.createSecret(request)

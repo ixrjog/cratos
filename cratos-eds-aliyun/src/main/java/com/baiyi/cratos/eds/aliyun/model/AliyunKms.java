@@ -1,12 +1,16 @@
 package com.baiyi.cratos.eds.aliyun.model;
 
+import com.aliyun.core.annotation.NameInMap;
+import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -132,6 +136,52 @@ public class AliyunKms {
         private String secretName;
         private String secretType;
         private String updateTime;
+        private Tags tags;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Tags implements Serializable {
+
+        public static final Tags NO_DATA = Tags.builder()
+                .build();
+
+        public static Tags of(DescribeSecretResponseBody.Tags tags) {
+            if (tags == null || CollectionUtils.isEmpty(tags.getTag())) {
+                return NO_DATA;
+            }
+
+            List<Tag> tag = tags.getTag()
+                    .stream()
+                    .map(e -> Tag.builder()
+                            .tagKey(e.getTagKey())
+                            .tagValue(e.getTagValue())
+                            .build())
+                    .toList();
+            return Tags.builder()
+                    .tag(tag)
+                    .build();
+        }
+
+        @Serial
+        private static final long serialVersionUID = 2608857658669957121L;
+        @Builder.Default
+        private List<Tag> tag = List.of();
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Tag implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1592427126819695533L;
+        @NameInMap("TagKey")
+        private String tagKey;
+        @NameInMap("TagValue")
+        private String tagValue;
     }
 
 }

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.model.AliyunAlb;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunLoadBalancersRepo;
-import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtil;
+import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
@@ -82,7 +82,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     private AliyunAlb.Alb toAlb(String endpoint,
                                 ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers loadBalancers) {
         return AliyunAlb.Alb.builder()
-                .regionId(AliyunRegionUtil.toRegionId(endpoint))
+                .regionId(AliyunRegionUtils.toRegionId(endpoint))
                 .loadBalancers(loadBalancers)
                 .build();
     }
