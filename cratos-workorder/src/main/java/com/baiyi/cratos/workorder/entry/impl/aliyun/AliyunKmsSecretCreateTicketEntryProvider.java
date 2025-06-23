@@ -83,7 +83,8 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 .getEdsConfigModel();
         Map<String, String> tags = buildTags(entry);
         Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getSecretName(), createSecret.getVersionId(),
+                createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
+                        .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
                 createSecret.getEncryptionKeyId(), createSecret.getSecretData(), tags, createSecret.getDescription());
         if (optionalCreateSecretResponseBody.isEmpty()) {
             WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
