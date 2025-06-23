@@ -21,6 +21,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
     private WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param;
     private EdsInstanceVO.EdsInstance edsInstance;
     private String username;
+    private String endpoint;
 
     public static AliyunKmsSecretCreateTicketEntryBuilder newBuilder() {
         return new AliyunKmsSecretCreateTicketEntryBuilder();
@@ -42,6 +43,11 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
         return this;
     }
 
+    public AliyunKmsSecretCreateTicketEntryBuilder withEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+        return this;
+    }
+
     public WorkOrderTicketEntry buildEntry() {
         AliyunKmsModel.CreateSecret detail = param.getDetail();
         detail.setEdsInstance(edsInstance);
@@ -50,6 +56,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
         if (!StringUtils.hasText(detail.getVersionId())) {
             detail.setVersionId("v1");
         }
+        detail.setEndpoint(endpoint);
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(detail.getSecretName())

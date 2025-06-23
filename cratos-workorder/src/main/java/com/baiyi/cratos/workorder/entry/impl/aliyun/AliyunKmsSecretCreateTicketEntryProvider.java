@@ -8,13 +8,8 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
-import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtil;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -24,8 +19,8 @@ import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -41,6 +36,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_KMS_ENDPOINT;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/20 10:45
@@ -54,20 +51,19 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     private static final String ROW_TPL = "| {} | {} | {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-    private final BusinessTagFacade businessTagFacade;
-    private final TagService tagService;
+    private final EdsAssetIndexService edsAssetIndexService;
+
 
     public AliyunKmsSecretCreateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                                    BusinessTagFacade businessTagFacade, TagService tagService) {
+                                                    EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
-        this.businessTagFacade = businessTagFacade;
-        this.tagService = tagService;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     @Override
@@ -138,16 +134,6 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         }
     }
 
-    private void saveBusinessTag(EdsAsset asset, int tagId, String value) {
-        BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
-                .businessId(asset.getId())
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .tagId(tagId)
-                .tagValue(SessionUtils.getUsername())
-                .build();
-        businessTagFacade.saveBusinessTag(saveBusinessTag);
-    }
-
     @Override
     protected WorkOrderTicketEntry paramToEntry(
             WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addCreateAliyunKmsSecretTicketEntry) {
@@ -162,10 +148,15 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
             WorkOrderTicketException.runtime("Instance not found: " + instanceId);
         }
         String username = SessionUtils.getUsername();
+        EdsAssetIndex endpointIndex = edsAssetIndexService.getByAssetIdAndName(
+                addCreateAliyunKmsSecretTicketEntry.getDetail()
+                        .getKmsInstance()
+                        .getId(), ALIYUN_KMS_ENDPOINT);
         return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
                 .withParam(addCreateAliyunKmsSecretTicketEntry)
                 .withEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
                 .withUsername(username)
+                .withEndpoint(endpointIndex.getValue())
                 .buildEntry();
     }
 
