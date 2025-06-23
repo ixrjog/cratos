@@ -95,10 +95,14 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
                     .assetLoadAs(asset.getOriginalModel());
             AliyunKms.SecretMetadata metadata = kmsSecret.getMetadata();
             AliyunKmsVO.Secret secret = AliyunKmsVO.Secret.builder()
+                    .edsInstance(instance)
+                    .kmsInstance(null)
+                    .kmsInstanceId(metadata.getDKMSInstanceId())
                     .arn(metadata.getArn())
                     .secretType(metadata.getSecretType())
                     .secretName(metadata.getSecretName())
                     .description(metadata.getDescription())
+                    .encryptionKeyId(metadata.getEncryptionKeyId())
                     .businessTags(getBusinessTags(asset))
                     .build();
             secrets.add(secret);
