@@ -176,7 +176,8 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         if (instance == null) {
             WorkOrderTicketException.runtime("Instance not found: " + instanceId);
         }
-        String username = SessionUtils.getUsername();
+        WorkOrderTicket ticket = workOrderTicketService.getById(addCreateAliyunKmsSecretTicketEntry.getTicketId());
+        String username = ticket.getUsername();
         EdsAssetIndex endpointIndex = edsAssetIndexService.getByAssetIdAndName(
                 addCreateAliyunKmsSecretTicketEntry.getDetail()
                         .getKmsInstance()
