@@ -63,6 +63,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
             detail.setVersionId("v1");
         }
         detail.setEndpoint(endpoint);
+        detail.setSecretData(encryptedSecretData);
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(detail.getSecretName())
