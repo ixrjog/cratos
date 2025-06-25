@@ -1,5 +1,8 @@
 package com.baiyi.cratos.common.table.converter;
 
+/**
+ * Plain console converter for PrettyTable
+ */
 public class PlainConsoleConverter extends ConsoleConverter {
 
     private final StringBuilder sb = new StringBuilder();
@@ -20,7 +23,7 @@ public class PlainConsoleConverter extends ConsoleConverter {
     @Override
     ConsoleConverter ab(String text) {
         sb.append(text);
-        return null;
+        return this; // 修复：返回this而不是null
     }
 
     @Override

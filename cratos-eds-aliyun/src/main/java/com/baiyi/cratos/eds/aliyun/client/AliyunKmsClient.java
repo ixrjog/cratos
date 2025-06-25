@@ -30,18 +30,13 @@ public class AliyunKmsClient {
 
     public static AsyncClient buildKmsClient(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
-                // Please ensure that the environment variables ALIBABA_CLOUD_ACCESS_KEY_ID and ALIBABA_CLOUD_ACCESS_KEY_SECRET are set.
                 .accessKeyId(aliyun.getCred()
                         .getAccessKeyId())
                 .accessKeySecret(aliyun.getCred()
                         .getAccessKeySecret())
                 .build());
         return AsyncClient.builder()
-                //.region(regionId) // Region ID
-                //.httpClient(httpClient) // Use the configured HttpClient, otherwise use the default HttpClient (Apache HttpClient)
                 .credentialsProvider(provider)
-                //.serviceConfiguration(Configuration.create()) // Service-level configuration
-                // Client-level configuration rewrite, can set Endpoint, Http request parameters, etc.
                 .overrideConfiguration(ClientOverrideConfiguration.create()
                                 // Endpoint 请参考 https://api.aliyun.com/product/Kms
                                 .setEndpointOverride(endpoint)

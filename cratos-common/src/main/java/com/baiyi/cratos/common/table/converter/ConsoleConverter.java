@@ -30,18 +30,19 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     @Override
     public String convert(PrettyTable pt) {
         clear();
-        if (pt.fieldNames.isEmpty()) {
+        if (pt.getFieldNames().isEmpty()) {
             return "";
         }
         int[] maxWidth = adjustMaxWidth(pt);
         topBorderLine(maxWidth);
         leftBorder();
         // 渲染表头
-        for (int i = 0; i < pt.fieldNames.size(); i++) {
-            String headerText = pt.fieldNames.get(i);
+        List<String> fieldNames = pt.getFieldNames();
+        for (int i = 0; i < fieldNames.size(); i++) {
+            String headerText = fieldNames.get(i);
             int chineseCompensation = fixLength(headerText);
             af(StringUtils.rightPad(headerText, maxWidth[i] - chineseCompensation));
-            if (i < pt.fieldNames.size() - 1) {
+            if (i < fieldNames.size() - 1) {
                 centerBorder();
             } else {
                 rightBorder();
@@ -49,32 +50,37 @@ public abstract class ConsoleConverter implements Converter, Bordered {
         }
         bottomBorderLine(maxWidth);
         // 渲染数据行
-        for (Object[] r : pt.rows) {
+        for (Object[] r : pt.getRows()) {
             ab("\n");
             leftBorder();
-            for (int c = 0; c < r.length; c++) {
+            for (int c = 0; c < r.length && c < fieldNames.size(); c++) { // 添加边界检查
                 String nc;
                 Object cell = r[c];
                 if (cell instanceof Number) {
-                    String n = pt.comma ? NumberFormat.getNumberInstance(Locale.US)
+                    String n = pt.isComma() ? NumberFormat.getNumberInstance(Locale.US)
                             .format(cell) : cell.toString();
                     nc = StringUtils.leftPad(n, maxWidth[c]);
                 } else {
                     String colStr = String.valueOf(cell);
                     boolean isNumeric = isNumericString(colStr);
-                    int colorAnisSize = colorAnisSize(colStr);
-                    int width = maxWidth[c] - fixLength(colStr);
-                    int rLength = colStr.length();
-                    int colL = colorAnisSize == 0 ? rLength : colLength(colStr);
-                    int padLength = rLength + (width - colL) + colorAnisSize;
+                    int ansiSize = colorAnisSize(colStr);
+                    
+                    // 计算实际显示宽度（去除ANSI码和中文补偿）
+                    int displayWidth = colLength(colStr);
+                    int targetWidth = maxWidth[c];
+                    int paddingNeeded = targetWidth - displayWidth;
+                    
+                    // 计算最终字符串长度（原始长度 + 填充长度）
+                    int finalLength = colStr.length() + paddingNeeded;
+                    
                     if (isNumeric) {
-                        nc = StringUtils.leftPad(colStr, padLength);
+                        nc = StringUtils.leftPad(colStr, finalLength);
                     } else {
-                        nc = StringUtils.rightPad(colStr, padLength);
+                        nc = StringUtils.rightPad(colStr, finalLength);
                     }
                 }
                 af(nc);
-                if (c < r.length - 1) {
+                if (c < r.length - 1 && c < fieldNames.size() - 1) { // 添加边界检查
                     centerBorder();
                 } else {
                     rightBorder();
@@ -88,15 +94,15 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     /**
      * Adjust for max width of the column
      *
-     * @param pt
-     * @return
+     * @param pt PrettyTable instance
+     * @return array of max widths for each column
      */
     public int[] adjustMaxWidth(PrettyTable pt) {
         // 预处理所有行，转换为字符串并格式化千分位
-        List<List<String>> converted = pt.rows.stream()
+        List<List<String>> converted = pt.getRows().stream()
                 .map(r -> Stream.of(r)
                         .map(o -> {
-                            if (pt.comma && o instanceof Number) {
+                            if (pt.isComma() && o instanceof Number) {
                                 return NumberFormat.getNumberInstance(Locale.US)
                                         .format(o);
                             }
@@ -104,13 +110,15 @@ public abstract class ConsoleConverter implements Converter, Bordered {
                         })
                         .collect(Collectors.toList()))
                 .toList();
-        int fieldCount = pt.fieldNames.size();
+        
+        int fieldCount = pt.getFieldNames().size();
         int[] maxWidths = new int[fieldCount];
 
         for (int i = 0; i < fieldCount; i++) {
-            int headerWidth = colLength(pt.fieldNames.get(i));
+            int headerWidth = colLength(pt.getFieldNames().get(i));
             int finalI = i;
             int maxDataWidth = converted.stream()
+                    .filter(row -> row.size() > finalI) // 添加边界检查
                     .mapToInt(row -> colLength(row.get(finalI)))
                     .max()
                     .orElse(0);
@@ -120,11 +128,14 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     }
 
     private int colLength(String colStr) {
-        // 去除 ANSI 颜色码（如 \u001B[0m），假设格式为 \u001B[xxm
-        String ansiRegex = "\\u001B\\[[;\\d]*m";
+        if (colStr == null) {
+            return 0;
+        }
+        // 去除 ANSI 颜色码，支持更完整的ANSI转义序列
+        String ansiRegex = "\\u001B\\[[0-9;]*[a-zA-Z]";
         String cleanedStr = colStr.replaceAll(ansiRegex, "");
         int length = cleanedStr.length();
-        // 补偿中文
+        // 补偿中文字符
         return length + fixLength(cleanedStr);
     }
 
@@ -163,8 +174,12 @@ public abstract class ConsoleConverter implements Converter, Bordered {
     }
 
     private int colorAnisSize(String str) {
-        // 匹配 ANSI 颜色码（如 \u001B[0m）
-        String ansiRegex = "\\u001B\\[[;\\d]*m";
+        if (str == null) {
+            return 0;
+        }
+        // 匹配更完整的 ANSI 转义序列
+        // 包括颜色码、光标控制、清屏等
+        String ansiRegex = "\\u001B\\[[0-9;]*[a-zA-Z]";
         int originalLength = str.length();
         String cleanedStr = str.replaceAll(ansiRegex, "");
         int newLength = cleanedStr.length();
@@ -178,8 +193,14 @@ public abstract class ConsoleConverter implements Converter, Bordered {
      * @return 字符串的长度
      */
     public static int getChineseLength(String validateStr) {
+        if (validateStr == null || validateStr.isEmpty()) {
+            return 0;
+        }
+        
         int valueLength = 0;
-        String chinese = "[Α-￥]";
+        // 修复：使用正确的中文Unicode范围
+        String chinese = "[\u4e00-\u9fa5]";
+        
         /* 获取字段值的长度，如果含中文字符，则每个中文字符长度为2，否则为1 */
         for (int i = 0; i < validateStr.length(); i++) {
             /* 获取一个字符 */

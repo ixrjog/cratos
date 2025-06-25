@@ -167,7 +167,7 @@ public class ApplicationCommand extends AbstractCommand {
                     sum.set(sum.get() + e.countTotalReplicas());
                 });
         helper.print(table.toString());
-        helper.print(StringFormatter.arrayFormat("{} Results, Total number of replicas {}", table.rows.size(), sum),
+        helper.print(StringFormatter.arrayFormat("{} Results, Total number of replicas {}", table.getRows().size(), sum),
                 PromptColor.GREEN);
     }
 

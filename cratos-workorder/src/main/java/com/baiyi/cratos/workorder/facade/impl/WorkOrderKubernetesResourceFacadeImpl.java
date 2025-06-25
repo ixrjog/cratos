@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateP
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateService;
-import com.baiyi.cratos.workorder.facade.KubernetesResourceFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderKubernetesResourceFacade;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  */
 @Component
 @RequiredArgsConstructor
-public class KubernetesResourceFacadeImpl implements KubernetesResourceFacade {
+public class WorkOrderKubernetesResourceFacadeImpl implements WorkOrderKubernetesResourceFacade {
 
     private final KubernetesResourceTemplateFacade templateFacade;
     private final KubernetesResourceTemplateService templateService;

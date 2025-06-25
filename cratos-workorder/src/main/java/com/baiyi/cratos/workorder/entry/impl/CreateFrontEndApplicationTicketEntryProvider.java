@@ -24,7 +24,7 @@ import com.baiyi.cratos.workorder.builder.entry.CreateFrontEndApplicationTicketE
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
-import com.baiyi.cratos.workorder.facade.KubernetesResourceFacade;
+import com.baiyi.cratos.workorder.facade.WorkOrderKubernetesResourceFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.util.WebSiteUtils;
 import com.google.common.collect.Maps;
@@ -52,7 +52,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
     private final ApplicationService applicationService;
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
-    private final KubernetesResourceFacade kubernetesResourceFacade;
+    private final WorkOrderKubernetesResourceFacade kubernetesResourceFacade;
     private final ApplicationFacade applicationFacade;
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
@@ -63,7 +63,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
                                                         ApplicationService applicationService,
                                                         EdsAssetService edsAssetService,
                                                         EdsAssetIndexService edsAssetIndexService,
-                                                        KubernetesResourceFacade kubernetesResourceFacade,
+                                                        WorkOrderKubernetesResourceFacade kubernetesResourceFacade,
                                                         ApplicationFacade applicationFacade, TagService tagService,
                                                         BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
