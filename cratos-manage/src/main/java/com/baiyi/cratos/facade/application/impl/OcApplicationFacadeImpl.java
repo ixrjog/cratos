@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.facade.application.ApplicationFacade;
+import com.baiyi.cratos.facade.ApplicationFacade;
 import com.baiyi.cratos.facade.application.OcApplicationFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;

@@ -17,4 +17,10 @@ public class StringTest extends BaseUnit {
        System.out.println(t);
     }
 
+    @Test
+    void test2() {
+        String webSite = StringFormatter.arrayFormat("https://{}/{}", "www.google.com","");
+        System.out.println(webSite);
+    }
+
 }

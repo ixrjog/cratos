@@ -48,6 +48,14 @@ public class KubernetesResourceTemplateServiceImpl implements KubernetesResource
         return getMapper().selectOneByExample(example);
     }
 
+    @Override
+    public KubernetesResourceTemplate getByTemplateKey(@NonNull String templateKey) {
+        KubernetesResourceTemplate record = KubernetesResourceTemplate.builder()
+                .templateKey(templateKey)
+                .build();
+        return getByUniqueKey(record);
+    }
+
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {
         KubernetesResourceTemplateService.super.deleteById(id);

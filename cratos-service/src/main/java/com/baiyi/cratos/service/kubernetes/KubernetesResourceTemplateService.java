@@ -7,6 +7,7 @@ import com.baiyi.cratos.mapper.KubernetesResourceTemplateMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
+import lombok.NonNull;
 
 /**
  * &#064;Author  baiyi
@@ -17,5 +18,7 @@ public interface KubernetesResourceTemplateService extends BaseUniqueKeyService<
 
     DataTable<KubernetesResourceTemplate> queryTemplatePage(
             KubernetesResourceTemplateParam.TemplatePageQueryParam pageQuery);
+
+    KubernetesResourceTemplate getByTemplateKey(@NonNull String templateKey);
 
 }

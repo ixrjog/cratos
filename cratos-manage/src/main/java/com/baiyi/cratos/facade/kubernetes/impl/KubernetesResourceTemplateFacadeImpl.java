@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
 import com.baiyi.cratos.domain.param.http.kubernetes.KubernetesResourceTemplateParam;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
-import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
+import com.baiyi.cratos.facade.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import com.baiyi.cratos.facade.kubernetes.provider.KubernetesResourceProvider;
 import com.baiyi.cratos.facade.kubernetes.provider.factory.KubernetesResourceProviderFactory;

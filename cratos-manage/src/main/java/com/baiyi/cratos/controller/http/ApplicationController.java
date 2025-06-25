@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
-import com.baiyi.cratos.facade.application.ApplicationFacade;
+import com.baiyi.cratos.facade.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

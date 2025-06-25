@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceVO;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceFacade;
-import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateFacade;
+import com.baiyi.cratos.facade.KubernetesResourceTemplateFacade;
 import com.baiyi.cratos.facade.kubernetes.KubernetesResourceTemplateMemberFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

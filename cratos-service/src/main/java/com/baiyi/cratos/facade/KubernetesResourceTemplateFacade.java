@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.kubernetes;
+package com.baiyi.cratos.facade;
 
 
 import com.baiyi.cratos.domain.DataTable;

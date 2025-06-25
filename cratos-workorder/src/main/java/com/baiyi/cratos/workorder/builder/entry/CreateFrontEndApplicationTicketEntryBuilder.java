@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 
+import java.util.Map;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/19 10:11
@@ -17,6 +19,7 @@ public class CreateFrontEndApplicationTicketEntryBuilder {
     private WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry param;
     private EdsAsset gitLabProjectAsset;
     private String sshUrl;
+    private Map<String, String> tags;
 
     public static CreateFrontEndApplicationTicketEntryBuilder newBuilder() {
         return new CreateFrontEndApplicationTicketEntryBuilder();
@@ -38,12 +41,19 @@ public class CreateFrontEndApplicationTicketEntryBuilder {
         return this;
     }
 
+    public CreateFrontEndApplicationTicketEntryBuilder withTags(Map<String, String> tags) {
+        this.tags = tags;
+        return this;
+    }
+
     public WorkOrderTicketEntry buildEntry() {
         ApplicationModel.CreateFrontEndApplication detail = param.getDetail();
         detail.getRepository()
                 .setInstanceId(gitLabProjectAsset.getInstanceId());
         detail.getRepository()
                 .setSshUrl(sshUrl);
+        this.tags.putAll(detail.getTags());
+        detail.setTags(this.tags);
         return WorkOrderTicketEntry.builder()
                 .ticketId(param.getTicketId())
                 .name(detail.getApplicationName())

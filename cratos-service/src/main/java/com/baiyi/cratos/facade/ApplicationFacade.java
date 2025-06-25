@@ -1,7 +1,9 @@
-package com.baiyi.cratos.facade.application;
+package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 
@@ -19,6 +21,8 @@ public interface ApplicationFacade extends HasSetValid {
     void addApplication(ApplicationParam.AddApplication addApplication);
 
     void updateApplication(ApplicationParam.UpdateApplication updateApplication);
+
+    Application createApplication(ApplicationModel.CreateFrontEndApplication createFrontEndApplication);
 
     void deleteById(int id);
 

@@ -5,16 +5,17 @@ import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.ApplicationModel;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.facade.ApplicationFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -23,11 +24,15 @@ import com.baiyi.cratos.workorder.builder.entry.CreateFrontEndApplicationTicketE
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
+import com.baiyi.cratos.workorder.facade.KubernetesResourceFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
+import com.baiyi.cratos.workorder.util.WebSiteUtils;
+import com.google.common.collect.Maps;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.common.enums.SysTagKeys.FRONT_END;
@@ -47,25 +52,60 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
     private final ApplicationService applicationService;
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
+    private final KubernetesResourceFacade kubernetesResourceFacade;
+    private final ApplicationFacade applicationFacade;
+    private final TagService tagService;
+    private final BusinessTagFacade businessTagFacade;
 
     public CreateFrontEndApplicationTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
                                                         WorkOrderService workOrderService,
                                                         ApplicationService applicationService,
                                                         EdsAssetService edsAssetService,
-                                                        EdsAssetIndexService edsAssetIndexService) {
+                                                        EdsAssetIndexService edsAssetIndexService,
+                                                        KubernetesResourceFacade kubernetesResourceFacade,
+                                                        ApplicationFacade applicationFacade, TagService tagService,
+                                                        BusinessTagFacade businessTagFacade) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.applicationService = applicationService;
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
+        this.kubernetesResourceFacade = kubernetesResourceFacade;
+        this.applicationFacade = applicationFacade;
+        this.tagService = tagService;
+        this.businessTagFacade = businessTagFacade;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
+    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationModel.CreateFrontEndApplication createFrontEndApplication) throws WorkOrderTicketException {
-        // TODO
+        // 创建应用
+        Application application = applicationFacade.createApplication(createFrontEndApplication);
+        addApplicationTags(application, createFrontEndApplication.getTags());
+        // 使用模板创建Kubernetes资源
+        kubernetesResourceFacade.createKubernetesResource(createFrontEndApplication);
+    }
+
+    private void addApplicationTags(Application application, Map<String, String> tags) {
+        if (CollectionUtils.isEmpty(tags)) {
+            return;
+        }
+        tags.keySet()
+                .stream()
+                .map(tagService::getByTagKey)
+                .filter(Objects::nonNull)
+                .forEach(tag -> {
+                    String value = tags.get(tag.getTagKey());
+                    BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+                            .businessType(BusinessTypeEnum.APPLICATION.name())
+                            .businessId(application.getId())
+                            .tagId(tag.getId())
+                            .tagValue(value)
+                            .build();
+                    businessTagFacade.saveBusinessTag(saveBusinessTag);
+                });
     }
 
     @Override
@@ -131,18 +171,23 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         String sshUrl = Optional.ofNullable(sshUrlIndex)
                 .map(EdsAssetIndex::getValue)
                 .orElseThrow(() -> new WorkOrderTicketException("Repository SSH URL cannot be empty."));
+        Map<String, String> tags = Maps.newHashMap();
+        WorkOrderTicket ticket = workOrderTicketService.getById(addCreateFrontEndApplicationTicketEntry.getTicketId());
+        tags.put(SysTagKeys.CREATED_BY.getKey(), ticket.getUsername());
+        tags.put(FRONT_END.getKey(), "");
         return CreateFrontEndApplicationTicketEntryBuilder.newBuilder()
                 .withParam(addCreateFrontEndApplicationTicketEntry)
                 .withGitLabProjectAsset(gitLabProjectAsset)
                 .withSshUrl(sshUrl)
+                .withTags(tags)
                 .buildEntry();
     }
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Application Name | Type | Level | Repository SSH URL |
-                | --- | --- | --- | --- |
+                | Application Name | Type | Level | Repository SSH URL | Web Site |
+                | --- | --- | --- | --- | --- |
                 """;
     }
 
@@ -164,8 +209,12 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
                 .map(ApplicationModel.CreateFrontEndApplication::getRepository)
                 .map(ApplicationModel.GitLabRepository::getSshUrl)
                 .orElse("--");
+        String mappingsPath = Optional.of(createFrontEndApplication)
+                .map(ApplicationModel.CreateFrontEndApplication::getMappingsPath)
+                .orElse("/");
+        String webSite = WebSiteUtils.generateWebSite(createFrontEndApplication.getDomain(), mappingsPath);
         return StringFormatter.arrayFormat(ROW_TPL, createFrontEndApplication.getApplicationName(), FRONT_END.getKey(),
-                level, sshUrl);
+                level, sshUrl, webSite);
     }
 
     @Override

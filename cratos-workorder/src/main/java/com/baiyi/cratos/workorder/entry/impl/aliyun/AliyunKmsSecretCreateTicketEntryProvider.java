@@ -199,7 +199,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Aliyun Instance | Secret Name | Version ID | Encryption Key Id | Config Center Value | Description |
+                | Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Description |
                 | --- | --- | --- | --- | --- | --- |
                 """;
     }

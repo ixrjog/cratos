@@ -4,10 +4,12 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
+import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
-import com.baiyi.cratos.facade.application.ApplicationFacade;
+import com.baiyi.cratos.facade.ApplicationFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
+import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.application.ApplicationResourceWrapper;
@@ -68,6 +70,26 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
             application.setComment(updateApplication.getComment());
             applicationService.updateByPrimaryKey(application);
         }
+    }
+
+    @Override
+    public Application createApplication(ApplicationModel.CreateFrontEndApplication createFrontEndApplication) {
+        ApplicationConfigModel.Repository repository = ApplicationConfigModel.Repository.builder()
+                .type("gitLab")
+                .sshUrl(createFrontEndApplication.getRepository()
+                        .getSshUrl())
+                .build();
+        ApplicationConfigModel.Config config = ApplicationConfigModel.Config.builder()
+                .repository(repository)
+                .build();
+        Application application = Application.builder()
+                .name(createFrontEndApplication.getApplicationName())
+                .valid(true)
+                .config(config.dump())
+                .comment(createFrontEndApplication.getComment())
+                .build();
+        applicationService.add(application);
+        return application;
     }
 
     @Async
