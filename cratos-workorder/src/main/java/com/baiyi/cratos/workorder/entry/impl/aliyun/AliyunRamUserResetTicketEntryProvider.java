@@ -251,9 +251,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String resetPassword = Boolean.TRUE.equals(resetAliyunAccount.getResetPassword()) ? "Yes" : "No";
         String unbindMFA = Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA()) ? "Yes" : "No";
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), resetAliyunAccount.getAccount(),
-                resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
-                        .getLoginUrl());
+        // | Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |
+        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
+                .getLoginUsername(), resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
+                .getLoginUrl());
     }
 
     @Override
