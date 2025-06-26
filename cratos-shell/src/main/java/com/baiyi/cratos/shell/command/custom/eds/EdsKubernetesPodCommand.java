@@ -18,7 +18,7 @@ import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.PodAssetContext;
-import com.baiyi.cratos.shell.util.TerminalUtil;
+import com.baiyi.cratos.shell.util.TerminalUtils;
 import com.baiyi.cratos.ssh.core.auditor.PodCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -236,7 +236,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                 Thread.ofVirtual()
                         .start(run);
                 // 行模式
-                TerminalUtil.enterRawMode(terminal);
+                TerminalUtils.enterRawMode(terminal);
                 while (!listener.isClosed() && !serverSession.isClosed()) {
                     int input = terminal.reader()
                             .read(5L);
@@ -316,7 +316,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     .tailingLines(lines)
                     .watchLog(baos)) {
                 // 行模式
-                TerminalUtil.enterRawMode(terminal);
+                TerminalUtils.enterRawMode(terminal);
                 ChannelOutputStream out = (ChannelOutputStream) sshContext.getSshShellRunnable()
                         .getOs();
                 out.setNoDelay(true);

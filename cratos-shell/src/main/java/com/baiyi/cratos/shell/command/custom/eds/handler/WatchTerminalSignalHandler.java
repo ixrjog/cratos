@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.command.custom.eds.handler;
 
-import com.baiyi.cratos.shell.util.TerminalUtil;
+import com.baiyi.cratos.shell.util.TerminalUtils;
 import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 
@@ -30,7 +30,7 @@ public class WatchTerminalSignalHandler implements Terminal.SignalHandler {
         if (!terminal.getSize()
                 .equals(size)) {
             size.copy(terminal.getSize());
-            TerminalUtil.resize(sessionId, instanceId, size);
+            TerminalUtils.resize(sessionId, instanceId, size);
         }
     }
 

@@ -20,6 +20,7 @@ import com.baiyi.cratos.shell.auth.SshAuthentication;
 import com.baiyi.cratos.shell.interactive.*;
 
 import lombok.Data;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.session.ServerSession;
@@ -61,10 +62,12 @@ public class SshShellHelper {
 
     private final List<String> confirmWords;
 
+    @Setter
     @Autowired
     @Lazy
     private Terminal defaultTerminal;
 
+    @Setter
     @Autowired
     @Lazy
     private LineReader defaultLineReader;
@@ -724,17 +727,8 @@ public class SshShellHelper {
      */
     @Data
     public static class DisplayResult {
-
         private int lines;
-
         private boolean stop;
     }
 
-    public void setDefaultTerminal(Terminal defaultTerminal) {
-        this.defaultTerminal = defaultTerminal;
-    }
-
-    public void setDefaultLineReader(LineReader defaultLineReader) {
-        this.defaultLineReader = defaultLineReader;
-    }
 }

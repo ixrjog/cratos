@@ -11,7 +11,7 @@ import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.custom.eds.handler.WatchTerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
-import com.baiyi.cratos.shell.util.TerminalUtil;
+import com.baiyi.cratos.shell.util.TerminalUtils;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
@@ -116,7 +116,7 @@ public class EdsCloudComputerLoginCommand extends AbstractCommand {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 // open ssh
                 RemoteInvokeHandler.openSSHServer(sessionId, hostSystem, out);
-                TerminalUtil.enterRawMode(terminal);
+                TerminalUtils.enterRawMode(terminal);
                 // 无延迟
                 out.setNoDelay(true);
 
