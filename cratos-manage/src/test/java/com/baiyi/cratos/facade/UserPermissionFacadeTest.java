@@ -8,7 +8,6 @@ import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
-import com.baiyi.cratos.facade.permission.UserPermissionFacade;
 import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.service.ApplicationService;
 import jakarta.annotation.Resource;

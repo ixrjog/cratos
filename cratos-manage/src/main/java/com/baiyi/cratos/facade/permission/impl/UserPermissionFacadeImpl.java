@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.view.LifeCycleVO;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.EnvFacade;
-import com.baiyi.cratos.facade.permission.UserPermissionFacade;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EnvWrapper;

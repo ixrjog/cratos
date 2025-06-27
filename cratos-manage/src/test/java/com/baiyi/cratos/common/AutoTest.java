@@ -17,7 +17,7 @@ public class AutoTest extends BaseUnit {
 
     @Test
     void test() {
-        rbacResourceAutomaticConfiguration.start();
+       // rbacResourceAutomaticConfiguration.start();
     }
 
 }

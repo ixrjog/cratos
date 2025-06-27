@@ -14,7 +14,7 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.RbacFacade;
-import com.baiyi.cratos.facade.permission.UserPermissionFacade;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;

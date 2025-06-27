@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.ApplicationModel;
+import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -86,6 +87,11 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         addApplicationTags(application, createFrontEndApplication.getTags());
         // 使用模板创建Kubernetes资源
         kubernetesResourceFacade.createKubernetesResource(createFrontEndApplication);
+        // 扫描应用资源
+        ApplicationParam.ScanResource scanResource = ApplicationParam.ScanResource.builder()
+                .name(createFrontEndApplication.getApplicationName())
+                .build();
+        applicationFacade.scanApplicationResource(scanResource);
     }
 
     private void addApplicationTags(Application application, Map<String, String> tags) {

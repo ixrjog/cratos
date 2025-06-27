@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.permission;
+package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;

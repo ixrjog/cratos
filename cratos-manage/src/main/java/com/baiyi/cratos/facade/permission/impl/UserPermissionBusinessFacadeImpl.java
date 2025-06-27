@@ -16,7 +16,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.SimpleEdsAccountFacade;
-import com.baiyi.cratos.facade.permission.UserPermissionFacade;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.query.ServerAccountQuery;
 import com.baiyi.cratos.service.*;

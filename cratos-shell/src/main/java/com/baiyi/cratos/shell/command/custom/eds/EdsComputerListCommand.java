@@ -57,7 +57,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
     private static final String COMMAND_LIST = GROUP + "-list";
-    private final String UNAUTHORIZED;
+    public final String UNAUTHORIZED;
 
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionService userPermissionService;
