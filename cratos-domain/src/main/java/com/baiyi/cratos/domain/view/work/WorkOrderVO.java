@@ -88,6 +88,7 @@ public class WorkOrderVO {
         private String icon;
         private String comment;
         private String workflow;
+        private String tenant;
 
         private Group workOrderGroup;
 

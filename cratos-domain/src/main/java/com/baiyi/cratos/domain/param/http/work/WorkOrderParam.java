@@ -86,6 +86,7 @@ public class WorkOrderParam {
         private String workflow;
         @NotBlank
         private String version;
+        private String tenant;
     }
 
 }

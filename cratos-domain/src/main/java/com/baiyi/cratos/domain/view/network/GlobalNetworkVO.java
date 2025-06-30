@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -85,8 +87,11 @@ public class GlobalNetworkVO {
         @Serial
         private static final long serialVersionUID = -8446398754921903111L;
         private Integer id;
+        @NotNull
         private Integer networkId;
+        @NotBlank
         private String name;
+        @NotBlank
         private String cidrBlock;
         private Integer resourceTotal;
         private Boolean valid;
