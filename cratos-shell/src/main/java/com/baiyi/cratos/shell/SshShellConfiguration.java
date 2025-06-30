@@ -47,11 +47,8 @@ import java.nio.file.Files;
 public class SshShellConfiguration {
 
     private final SshShellProperties properties;
-
     private final SshShellCommandFactory shellCommandFactory;
-
     private final PasswordAuthenticator passwordAuthenticator;
-
     private final PublickeyAuthenticator publickeyAuthenticator;
 
     /**
@@ -118,7 +115,6 @@ public class SshShellConfiguration {
     public static class SshServerLifecycle {
 
         private final SshServer sshServer;
-
         private final SshShellProperties properties;
 
         /**
@@ -142,4 +138,5 @@ public class SshShellConfiguration {
             sshServer.stop();
         }
     }
+
 }

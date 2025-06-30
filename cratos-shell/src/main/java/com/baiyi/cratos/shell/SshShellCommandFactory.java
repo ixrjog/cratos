@@ -52,8 +52,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SshShellCommandFactory implements Command {
 
-    public static final ThreadLocal<SshContext> SSH_THREAD_CONTEXT = ThreadLocal.withInitial(() -> null);
-
     @NonNull
     private final SshShellProperties properties;
     @NonNull
@@ -72,8 +70,8 @@ public class SshShellCommandFactory implements Command {
     private Completer completer;
 
     public static final ThreadLocal<SshIO> SSH_IO_CONTEXT = ThreadLocal.withInitial(SshIO::new);
-
     private final Map<ChannelSession, Thread> threads = new ConcurrentHashMap<>();
+    public static final ThreadLocal<SshContext> SSH_THREAD_CONTEXT = ThreadLocal.withInitial(() -> null);
 
     /**
      * Start ssh session

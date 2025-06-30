@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class CratosConfiguration {
     private CratosModel.Auth auth;
     private CratosModel.Rbac rbac;
     private CratosModel.Credential credential;
+    private String tenant;
 
     public boolean isWhitelistResource(String resourceName) {
         List<String> resources = Optional.of(auth)
@@ -30,6 +32,10 @@ public class CratosConfiguration {
                 .orElse(Lists.newArrayList());
         return resources.stream()
                 .anyMatch(resource -> resourceName.indexOf(resource) == 0);
+    }
+
+    public String getTenant() {
+        return StringUtils.hasText(tenant) ? tenant : "*";
     }
 
 }

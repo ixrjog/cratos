@@ -2,6 +2,7 @@ package com.baiyi.cratos.domain.param.http.work;
 
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderGroup;
+import com.baiyi.cratos.domain.generator.base.HasTenant;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,9 +34,10 @@ public class WorkOrderParam {
     @SuperBuilder(toBuilder = true)
     @NoArgsConstructor
     @Schema
-    public static class WorkOrderPageQuery extends PageParam {
+    public static class WorkOrderPageQuery extends PageParam implements HasTenant {
         private String queryName;
         private Integer groupId;
+        private String tenant;
     }
 
     @Data

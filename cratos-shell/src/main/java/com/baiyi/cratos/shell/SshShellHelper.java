@@ -44,6 +44,7 @@ import java.util.*;
 /**
  * Ssh shell helper for user interactions and authorities check
  */
+@SuppressWarnings("resource")
 @Slf4j
 public class SshShellHelper {
 

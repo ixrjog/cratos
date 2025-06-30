@@ -21,6 +21,7 @@
         <result column="i18n" jdbcType="LONGVARCHAR" property="i18n"/>
         <result column="workflow" jdbcType="LONGVARCHAR" property="workflow"/>
         <result column="version" jdbcType="VARCHAR" property="version"/>
+        <result column="tenant" jdbcType="VARCHAR" property="tenant"/>
     </resultMap>
 
     <select id="queryPageByParam"

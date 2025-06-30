@@ -20,6 +20,7 @@ cratos:
   rbac:
     auto-configuration:
       enabled: off
+  tenant: PP
 
 springdoc:
   swagger-ui:

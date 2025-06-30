@@ -24,6 +24,7 @@ cratos:
     # 高安全性密钥
     high-security: on
   notification: LOCAL
+  tenant: *
 
 springdoc:
   swagger-ui:
