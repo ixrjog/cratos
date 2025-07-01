@@ -41,7 +41,12 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
         return businessIds.stream()
                 .map(applicationService::getById)
                 .filter(Objects::nonNull)
-                .map(app -> BeanCopierUtil.copyProperties(app, ApplicationVO.Application.class))
+                .map(app -> {
+                    ApplicationVO.Application application = BeanCopierUtil.copyProperties(app,
+                            ApplicationVO.Application.class);
+                    application.setFavorited(Boolean.TRUE);
+                    return application;
+                })
                 .toList();
     }
 
