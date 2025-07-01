@@ -44,8 +44,8 @@ public class UserFavoriteController {
     @Operation(summary = "Remove application from my favorites")
     @DeleteMapping(value = "/application/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> removeApplicationFavorite(
-            @RequestBody @Valid UserFavoriteParam.AddUserFavorite addUserFavorite) {
-        userFavoriteFacade.unfavorite(BusinessTypeEnum.APPLICATION.name(), addUserFavorite.getBusinessId());
+            @RequestBody @Valid UserFavoriteParam.RemoveUserFavorite removeUserFavorite) {
+        userFavoriteFacade.unfavorite(BusinessTypeEnum.APPLICATION.name(), removeUserFavorite.getBusinessId());
         return HttpResult.SUCCESS;
     }
 
