@@ -40,7 +40,7 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     }
 
     @Override
-    public List<Integer> queryUserFavoriteBusinessIds(String username, String businessType) {
+    public List<Integer> queryUserFavoriteBusinessIds(@NonNull String username, @NonNull String businessType) {
         Example example = new Example(UserFavorite.class);
         example.createCriteria()
                 .andEqualTo("username", username)
