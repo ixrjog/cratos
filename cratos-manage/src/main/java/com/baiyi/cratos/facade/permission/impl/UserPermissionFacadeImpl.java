@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade.permission.impl;
 
 import com.baiyi.cratos.business.PermissionBusinessService;
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
-import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -28,7 +27,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -148,10 +146,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                 .map(e -> {
                     UserPermissionVO.Permission permission = BeanCopierUtil.copyProperties(e,
                             UserPermissionVO.Permission.class);
-                    // 过期则无效
-                    boolean valid = Objects.isNull(permission.getExpiredTime()) || ExpiredUtil.isExpired(
-                            permission.getExpiredTime());
-                    permission.setValid(valid);
                     LifeCycleVO.invoke(permission);
                     envWrapper.businessWrap(permission);
                     return permission;
