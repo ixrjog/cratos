@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.view.application;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasFavorited;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
@@ -26,7 +27,7 @@ public class ApplicationVO {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.APPLICATION)
-    public static class Application extends BaseVO implements ApplicationResourceVO.HasApplicationResources, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, Serializable {
+    public static class Application extends BaseVO implements ApplicationResourceVO.HasApplicationResources, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasFavorited, Serializable {
         @Serial
         private static final long serialVersionUID = -4004546579910711280L;
         private Integer id;
@@ -35,6 +36,8 @@ public class ApplicationVO {
         private String config;
         private String comment;
         private Map<String, List<ApplicationResourceVO.Resource>> resources;
+
+        private Boolean favorited;
 
         @Override
         public Integer getBusinessId() {

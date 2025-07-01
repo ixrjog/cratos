@@ -99,7 +99,7 @@
         <!--            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--            <domainObjectRenamingRule searchString="^Sys" replaceString=""/>-->
         <!--        </table>-->
-        <table tableName="cratos_instance">
+        <table tableName="user_favorite">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
     </context>

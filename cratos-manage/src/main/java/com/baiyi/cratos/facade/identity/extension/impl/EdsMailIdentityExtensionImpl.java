@@ -7,9 +7,9 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.eds.core.facade.EdsMailIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.mail.MailIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.mail.MailIdentityProvider;
@@ -25,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MAIL;
@@ -96,6 +97,7 @@ public class EdsMailIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(USER_MAIL, user.getEmail())
                     .stream()
                     .map(e -> edsAssetService.getById(e.getAssetId()))
+                    .filter(Objects::nonNull)
                     .filter(e -> EdsAssetTypeEnum.ALIMAIL_USER.name()
                             .equals(e.getAssetType()))
                     .toList();
