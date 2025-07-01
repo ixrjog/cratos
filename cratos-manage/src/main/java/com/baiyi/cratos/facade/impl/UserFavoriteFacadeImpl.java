@@ -9,8 +9,9 @@ import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserFavoriteService;
-import com.baiyi.cratos.service.base.BaseBusinessService;
-import com.baiyi.cratos.service.factory.BusinessServiceFactory;
+import com.baiyi.cratos.service.base.BaseService;
+import com.baiyi.cratos.service.base.SupportBusinessService;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -69,13 +70,16 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                     .businessId(businessId)
                     .seq(0)
                     .build();
-            BaseBusinessService<?> baseBusinessService = BusinessServiceFactory.getService(businessType);
-            if (baseBusinessService == null) {
+            SupportBusinessService supportBusinessService = SupportBusinessServiceFactory.getService(businessType);
+            if (supportBusinessService == null) {
                 throw new IllegalArgumentException("Unsupported business type: " + businessType);
             } else {
-                Object businessObject = baseBusinessService.getById(businessId);
-                if (businessObject instanceof Application application) {
-                    userFavorite.setName(application.getName());
+                //noinspection rawtypes
+                if (supportBusinessService instanceof BaseService baseService) {
+                    Object businessObject = baseService.getById(businessId);
+                    if (businessObject instanceof Application application) {
+                        userFavorite.setName(application.getName());
+                    }
                 }
             }
             userFavoriteService.add(userFavorite);
