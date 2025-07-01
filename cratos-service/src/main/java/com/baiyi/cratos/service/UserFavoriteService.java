@@ -3,6 +3,7 @@ package com.baiyi.cratos.service;
 import com.baiyi.cratos.domain.generator.UserFavorite;
 import com.baiyi.cratos.mapper.UserFavoriteMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ import java.util.List;
  */
 public interface UserFavoriteService extends BaseUniqueKeyService<UserFavorite, UserFavoriteMapper> {
 
-    List<Integer> queryUserFavoriteBusinessIds(String username, String businessType);
+    List<Integer> queryUserFavoriteBusinessIds(@NonNull String username, @NonNull String businessType);
 
 }
