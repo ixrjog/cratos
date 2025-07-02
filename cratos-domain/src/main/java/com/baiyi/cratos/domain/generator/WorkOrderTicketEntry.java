@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * 表名：work_order_ticket_entry
  * 表注释：工单票据条目
-*/
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -96,10 +96,10 @@ public class WorkOrderTicketEntry implements HasValid, HasIntegerPrimaryKey {
      */
     private String comment;
 
-    @Column(name = "create_time")
+    @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable = false, updatable = false)
     private Date updateTime;
 
     /**
