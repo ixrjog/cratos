@@ -184,7 +184,8 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
                 .toList());
         List<KubernetesResourceTemplateMember> members = queryMembers(createResourceByTemplate);
         if (!CollectionUtils.isEmpty(members)) {
-            String createdBy = createResourceByTemplate.getCreatedBy();
+            String createdBy = StringUtils.hasText(
+                    createResourceByTemplate.getCreatedBy()) ? createResourceByTemplate.getCreatedBy() : "API";
             for (KubernetesResourceTemplateMember member : members) {
                 createResourceByTemplateMember(member, templateCustom, createdBy);
             }

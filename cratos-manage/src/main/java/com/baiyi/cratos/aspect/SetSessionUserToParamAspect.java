@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @Author baiyi
@@ -37,7 +38,9 @@ public class SetSessionUserToParamAspect {
                 .forEach(author -> {
                     Authentication authentication = SecurityContextHolder.getContext()
                             .getAuthentication();
-                    author.setSessionUser(authentication.getName());
+                    if (Objects.nonNull(authentication)) {
+                        author.setSessionUser(authentication.getName());
+                    }
                 });
     }
 

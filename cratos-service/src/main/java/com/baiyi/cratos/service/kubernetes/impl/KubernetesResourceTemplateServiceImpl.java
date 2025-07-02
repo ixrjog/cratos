@@ -44,7 +44,7 @@ public class KubernetesResourceTemplateServiceImpl implements KubernetesResource
     public KubernetesResourceTemplate getByUniqueKey(@NonNull KubernetesResourceTemplate record) {
         Example example = new Example(KubernetesResourceTemplate.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("templateKey", record.getName());
+        criteria.andEqualTo("templateKey", record.getTemplateKey());
         return getMapper().selectOneByExample(example);
     }
 
