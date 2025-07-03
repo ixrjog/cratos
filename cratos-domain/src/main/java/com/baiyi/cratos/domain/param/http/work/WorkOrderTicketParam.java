@@ -485,7 +485,6 @@ public class WorkOrderTicketParam {
         private LdapUserGroupModel.Role detail;
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
@@ -499,7 +498,6 @@ public class WorkOrderTicketParam {
         private AliyunOnsV5Model.Topic detail;
     }
 
-
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
@@ -511,6 +509,19 @@ public class WorkOrderTicketParam {
         private static final long serialVersionUID = -1565391443339985819L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
         private AliyunOnsV5Model.ConsumerGroup detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddRiskChangeTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.ConsumerGroup>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 9071773360612294130L;
+        private final String businessType = BusinessTypeEnum.USER.name();
+        private RiskChangeModel.RiskChangeApplication detail;
     }
 
     @Data

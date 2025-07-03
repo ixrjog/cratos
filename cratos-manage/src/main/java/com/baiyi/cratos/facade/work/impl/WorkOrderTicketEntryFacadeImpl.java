@@ -291,6 +291,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addRiskChangeTicketEntry(WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.RISK_CHANGE.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void setValidById(int id) {
         WorkOrderTicketEntry workOrderTicketEntry = workOrderTicketEntryService.getById(id);
         if (Objects.isNull(workOrderTicketEntry)) {
@@ -357,7 +365,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         }
         deleteByTicketId(ticketId);
     }
-    
+
     @Override
     public List<EdsAssetVO.Asset> queryAliyunKmsKeyTicketEntry(
             WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {

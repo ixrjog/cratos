@@ -88,6 +88,8 @@ public interface WorkOrderTicketEntryFacade {
     void addCreateAliyunOnsConsumerGroupTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry);
 
+    void addRiskChangeTicketEntry(WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry);
+
     void deleteById(int id);
 
     void deleteAllByTicketId(int ticketId);

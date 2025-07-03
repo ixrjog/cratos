@@ -262,6 +262,15 @@ public class WorkOrderTicketEntryController {
         ticketEntryFacade.addCreateAliyunOnsConsumerGroupTicketEntry(addTicketEntry);
         return HttpResult.SUCCESS;
     }
+
+    @Operation(summary = "Add risk change ticket entry")
+    @PostMapping(value = "/risk/change/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addRiskChangeTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry) {
+        ticketEntryFacade.addRiskChangeTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     // other
 
     @Operation(summary = "Update ticket entry valid")
