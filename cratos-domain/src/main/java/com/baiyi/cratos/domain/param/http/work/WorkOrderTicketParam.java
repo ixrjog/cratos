@@ -517,7 +517,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRiskChangeTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.ConsumerGroup>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRiskChangeTicketEntry extends TicketEntry implements HasEntryDetail<RiskChangeModel.RiskChangeApplication>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 9071773360612294130L;
         private final String businessType = BusinessTypeEnum.USER.name();
