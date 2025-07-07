@@ -2,7 +2,7 @@ package com.baiyi.cratos.mytest;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.google.common.base.Splitter;
 import lombok.Builder;
@@ -28,7 +28,7 @@ public class MyTest extends BaseUnit {
                 .assetKey("test")
                 .build();
 
-        EdsAssetVO.Asset asset = BeanCopierUtil.copyProperties(edsAsset, EdsAssetVO.Asset.class);
+        EdsAssetVO.Asset asset = BeanCopierUtils.copyProperties(edsAsset, EdsAssetVO.Asset.class);
 
         System.out.println(asset);
     }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.application.resource.scanner;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import lombok.extern.slf4j.Slf4j;

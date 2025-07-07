@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.view.kubernetes;
 
-import com.baiyi.cratos.domain.util.JSONUtil;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +20,6 @@ public class KubernetesDeploymentResponse<T> {
     private String messageType;
     @Override
     public String toString() {
-        return JSONUtil.writeValueAsString(this);
+        return JSONUtils.writeValueAsString(this);
     }
 }

@@ -5,7 +5,7 @@ import com.baiyi.cratos.annotation.DomainEncrypt;
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.util.BeanNameConverter;
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.domain.util.SpringContextUtil;
+import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.google.common.collect.Lists;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.util.CollectionUtils;
@@ -26,7 +26,7 @@ public interface BaseService<T extends HasIntegerPrimaryKey, M extends Mapper<T>
     default M getMapper() {
         final String mapperBeanName = BeanNameConverter.serviceImplNameToMapperName(this.getClass()
                 .getSimpleName());
-        return (M) SpringContextUtil.getBean(mapperBeanName);
+        return (M) SpringContextUtils.getBean(mapperBeanName);
     }
 
     // 方法映射

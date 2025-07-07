@@ -5,7 +5,7 @@ import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.SshKeyUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;

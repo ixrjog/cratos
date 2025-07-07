@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl.aws;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.common.util;
+package com.baiyi.cratos.domain.util;
 
 import com.google.common.base.Joiner;
 import lombok.NoArgsConstructor;

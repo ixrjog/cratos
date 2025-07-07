@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.config;
 
-import com.baiyi.cratos.domain.util.SpringContextUtil;
+import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
@@ -30,7 +30,7 @@ public class StateProcessorAssemblyWorkers {
      */
     public void config(TicketState startState, TicketState endState) throws NullPointerException {
         log.info("Start the automatic assembly work order state processor.");
-        Map<String, Object> annotatedBeans = SpringContextUtil.getContext()
+        Map<String, Object> annotatedBeans = SpringContextUtils.getContext()
                 .getBeansWithAnnotation(TicketStates.class);
         Map<TicketState, BaseTicketStateProcessor<?>> processorMap = Maps.newHashMap();
         annotatedBeans.values()

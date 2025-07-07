@@ -1,7 +1,7 @@
 package com.baiyi.cratos.secutity;
 
 import com.baiyi.cratos.common.util.ExpiredUtil;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.facade.CredentialFacade;

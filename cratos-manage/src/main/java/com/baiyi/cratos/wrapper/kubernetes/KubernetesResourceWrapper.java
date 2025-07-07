@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.KubernetesResource;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceVO;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -40,7 +40,7 @@ public class KubernetesResourceWrapper extends BaseDataTableConverter<Kubernetes
         }
         EdsInstance instance = edsInstanceService.getById(vo.getEdsInstanceId());
         if (instance != null) {
-            vo.setEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class));
+            vo.setEdsInstance(BeanCopierUtils.copyProperties(instance, EdsInstanceVO.EdsInstance.class));
         }
     }
 

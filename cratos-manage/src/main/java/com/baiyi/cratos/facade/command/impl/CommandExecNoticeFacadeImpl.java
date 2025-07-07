@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.generator.CommandExecApproval;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.util.LanguageUtils;
+import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.facade.command.CommandExecNoticeFacade;
 import com.baiyi.cratos.facade.message.EdsDingtalkMessageFacadeImpl;
 import com.baiyi.cratos.service.CommandExecService;

@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.CommandExec;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
 import com.baiyi.cratos.model.CommandExecModel;
 import com.baiyi.cratos.service.CommandExecApprovalService;
@@ -53,7 +53,7 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
     private Map<String, CommandExecVO.Approval> getApprovals(int commandExecId) {
         return approvalService.queryApprovals(commandExecId)
                 .stream()
-                .map(e -> BeanCopierUtil.copyProperties(e, CommandExecVO.Approval.class))
+                .map(e -> BeanCopierUtils.copyProperties(e, CommandExecVO.Approval.class))
                 .collect(Collectors.toMap(CommandExecVO.Approval::getApprovalType, approval -> approval));
     }
 

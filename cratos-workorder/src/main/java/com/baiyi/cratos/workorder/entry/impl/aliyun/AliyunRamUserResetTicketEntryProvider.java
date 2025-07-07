@@ -6,14 +6,14 @@ import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.aliyuncs.ram.model.v20150501.UnbindMFADeviceResponse;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
@@ -215,7 +215,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("AWS IAM user asset is null"));
         EdsIdentityVO.CloudAccount cloudAccount = getAndVerifyCloudAccount(assetId);
-        AliyunModel.ResetAliyunAccount resetAliyunAccount = BeanCopierUtil.copyProperties(cloudAccount,
+        AliyunModel.ResetAliyunAccount resetAliyunAccount = BeanCopierUtils.copyProperties(cloudAccount,
                 AliyunModel.ResetAliyunAccount.class);
         resetAliyunAccount.setResetPassword(param.getDetail()
                 .getResetPassword());

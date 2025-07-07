@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
 import com.baiyi.cratos.common.util.SshKeyUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AwsTransferModel;

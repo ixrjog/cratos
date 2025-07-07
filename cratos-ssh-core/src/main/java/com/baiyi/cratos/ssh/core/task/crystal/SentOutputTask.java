@@ -1,6 +1,6 @@
 package com.baiyi.cratos.ssh.core.task.crystal;
 
-import com.baiyi.cratos.domain.util.JSONUtil;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
 import jakarta.websocket.Session;
@@ -37,7 +37,7 @@ public class SentOutputTask implements Runnable {
             while (session.isOpen()) {
                 List<SessionOutput> outputList = SessionOutputUtils.getOutput(sessionId);
                 if (!CollectionUtils.isEmpty(outputList)) {
-                    String jsonStr = JSONUtil.writeValueAsString(outputList);
+                    String jsonStr = JSONUtils.writeValueAsString(outputList);
                     session.getBasicRemote()
                             .sendText(jsonStr);
                 }

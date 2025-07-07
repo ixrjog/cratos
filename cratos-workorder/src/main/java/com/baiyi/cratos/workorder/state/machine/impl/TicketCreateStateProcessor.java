@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -37,6 +38,7 @@ import java.util.Objects;
 public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.CreateTicket> {
 
     private final RbacRoleFacade rbacRoleFacade;
+    private final LanguageUtils languageUtils;
 
     public TicketCreateStateProcessor(UserService userService, WorkOrderService workOrderService,
                                       WorkOrderTicketService workOrderTicketService,
@@ -44,11 +46,13 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
                                       WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade,
                                       WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                       WorkOrderTicketEntryService workOrderTicketEntryService,
-                                      TicketWorkflowFacade ticketWorkflowFacade, RbacRoleFacade rbacRoleFacade) {
+                                      TicketWorkflowFacade ticketWorkflowFacade, RbacRoleFacade rbacRoleFacade,
+                                      LanguageUtils languageUtils) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
         this.rbacRoleFacade = rbacRoleFacade;
+        this.languageUtils = languageUtils;
     }
 
     @Override
@@ -62,13 +66,14 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody()
                 .getWorkOrderKey());
         if (Objects.isNull(workOrder)) {
-            WorkOrderTicketException.runtime("The work order does not exist.");
+            WorkOrderTicketException.runtime(languageUtils.getMessage("workorder.not-exist"));
         }
         if (workOrderTicketService.countUserWorkOrderTicketByState(SessionUtils.getUsername(), workOrder.getId(),
                 TicketState.NEW.name()) >= 3) {
-            WorkOrderTicketException.runtime(
-                    "The type of work order you created={} exceeds 3 and has not been submitted", event.getBody()
+            String i18nMessage = languageUtils.getFormattedMessage("workorder.create.ticket.limit.exception.message",
+                    event.getBody()
                             .getWorkOrderKey());
+            WorkOrderTicketException.runtime(i18nMessage);
         }
     }
 
@@ -105,7 +110,7 @@ public class TicketCreateStateProcessor extends BaseTicketStateProcessor<WorkOrd
         WorkOrder workOrder = workOrderService.getByWorkOrderKey(event.getBody()
                 .getWorkOrderKey());
         if (Objects.isNull(workOrder)) {
-            WorkOrderTicketException.runtime("The work order does not exist.");
+            WorkOrderTicketException.runtime(languageUtils.getMessage("workorder.not-exist"));
         }
         WorkOrderTicket createTicket = TicketBuilder.newBuilder()
                 .withWorkOrder(workOrder)

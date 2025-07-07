@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.UserPermission;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.LifeCycleVO;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
@@ -144,7 +144,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     private List<UserPermissionVO.Permission> to(List<UserPermission> userPermissions) {
         return userPermissions.stream()
                 .map(e -> {
-                    UserPermissionVO.Permission permission = BeanCopierUtil.copyProperties(e,
+                    UserPermissionVO.Permission permission = BeanCopierUtils.copyProperties(e,
                             UserPermissionVO.Permission.class);
                     LifeCycleVO.invoke(permission);
                     envWrapper.businessWrap(permission);

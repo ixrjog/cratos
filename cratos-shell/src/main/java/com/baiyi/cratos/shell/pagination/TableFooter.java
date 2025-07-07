@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.pagination;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

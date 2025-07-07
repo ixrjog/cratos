@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.factory;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper.application;
 
 import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceVO;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -38,7 +38,7 @@ public class ApplicationResourceWrapper extends BaseDataTableConverter<Applicati
             List<ApplicationResource> applicationResources = resourceService.queryByApplicationName(
                     hasApplicationResources.getApplicationName());
             if (!CollectionUtils.isEmpty(applicationResources)) {
-                Map<String, List<ApplicationResourceVO.Resource>> resources = BeanCopierUtil.copyListProperties(
+                Map<String, List<ApplicationResourceVO.Resource>> resources = BeanCopierUtils.copyListProperties(
                                 applicationResources, ApplicationResourceVO.Resource.class)
                         .stream()
                         .collect(Collectors.groupingBy(ApplicationResourceVO.Resource::getResourceType));

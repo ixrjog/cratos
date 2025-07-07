@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.config;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;

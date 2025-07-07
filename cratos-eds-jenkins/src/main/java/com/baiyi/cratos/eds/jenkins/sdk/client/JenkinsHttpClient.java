@@ -6,7 +6,7 @@
 package com.baiyi.cratos.eds.jenkins.sdk.client;
 
 
-import com.baiyi.cratos.domain.util.JSONUtil;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.EncodingUtils;
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.RequestReleasingInputStream;
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.ResponseUtils;
@@ -302,7 +302,7 @@ public class JenkinsHttpClient implements JenkinsHttpConnection {
             }
 
             // queryParams.add("json=" + EncodingUtils.formParameter(JSONObject.fromObject(data).toString()));
-            queryParams.add("json=" + EncodingUtils.formParameter(JSONUtil.writeValueAsString(data)));
+            queryParams.add("json=" + EncodingUtils.formParameter(JSONUtils.writeValueAsString(data)));
             String value = mapper.writeValueAsString(data);
             StringEntity stringEntity = new StringEntity(value, ContentType.APPLICATION_FORM_URLENCODED);
             //request = new HttpPost(UrlUtils.toNoApiUri(uri, context, path) + StringUtils.join(queryParams, "&"));

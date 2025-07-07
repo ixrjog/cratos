@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.kubernetes.builder;
 
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
 import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
 import com.google.common.base.Joiner;
@@ -73,7 +73,7 @@ public class KubernetesNodeBuilder {
     private KubernetesNodeVO.NodeStatus makeStatus() {
         return KubernetesNodeVO.NodeStatus.builder()
                 .addresses(makeStatusAddresses())
-                .nodeInfo(BeanCopierUtil.copyProperties(this.node.getStatus()
+                .nodeInfo(BeanCopierUtils.copyProperties(this.node.getStatus()
                         .getNodeInfo(), KubernetesNodeVO.NodeSystemInfo.class))
                 .conditions(makeStatusConditions())
                 .build();

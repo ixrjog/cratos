@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
@@ -106,7 +106,7 @@ public class AppDeploymentImageInspection extends BaseInspection {
                 return;
             }
             final String appName = appNameIndex.getValue();
-            Deployment deployment = getAssetModel(BeanCopierUtil.copyProperties(e, EdsAssetVO.Asset.class));
+            Deployment deployment = getAssetModel(BeanCopierUtils.copyProperties(e, EdsAssetVO.Asset.class));
             Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
             if (optionalContainer.isPresent()) {
                 DeploymentImageModel.DeploymentImage image = DeploymentImageModel.DeploymentImage.builder()

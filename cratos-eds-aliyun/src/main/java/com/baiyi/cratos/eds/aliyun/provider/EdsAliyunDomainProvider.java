@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunDomain;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDomainRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -49,7 +49,7 @@ public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAli
         try {
             List<QueryDomainListResponseBody.Domain> entities = AliyunDomainRepo.listDomain(
                     instance.getEdsConfigModel());
-            return BeanCopierUtil.copyListProperties(entities, AliyunDomain.class);
+            return BeanCopierUtils.copyListProperties(entities, AliyunDomain.class);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

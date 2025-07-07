@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.validator.credential;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

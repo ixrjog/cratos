@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.channel;
 
-import com.baiyi.cratos.domain.util.JSONUtil;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,7 +48,7 @@ public class MessageResponse<T> implements HasTopic {
 
     @Override
     public String toString() {
-        return JSONUtil.writeValueAsString(this);
+        return JSONUtils.writeValueAsString(this);
     }
 
 }

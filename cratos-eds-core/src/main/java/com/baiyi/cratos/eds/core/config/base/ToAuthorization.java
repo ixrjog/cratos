@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.config.base;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.google.common.io.BaseEncoding;
 import org.springframework.util.StringUtils;
 

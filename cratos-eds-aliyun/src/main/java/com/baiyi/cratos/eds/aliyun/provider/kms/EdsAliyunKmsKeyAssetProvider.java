@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider.kms;
 import com.aliyun.sdk.service.kms20160120.models.ListKeysResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
@@ -76,7 +76,7 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
         return keys.stream()
                 .map(e -> AliyunKmsRepo.describeKey(endpoint, configModel, e.getKeyId())
                         .map(keyMetadata -> {
-                            AliyunKms.KeyMetadata metadata = BeanCopierUtil.copyProperties(keyMetadata,
+                            AliyunKms.KeyMetadata metadata = BeanCopierUtils.copyProperties(keyMetadata,
                                     AliyunKms.KeyMetadata.class);
                             return AliyunKms.KmsKey.builder()
                                     .endpoint(endpoint)

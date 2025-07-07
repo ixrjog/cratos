@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.kms.AliyunKmsParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.aliyun.AliyunKmsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -132,7 +132,7 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
         if (Objects.isNull(instance)) {
             EdsAliyunKmsException.runtime("Eds instance not found for asset: {}", asset.getId());
         }
-        return BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class);
+        return BeanCopierUtils.copyProperties(instance, EdsInstanceVO.EdsInstance.class);
     }
 
     private EdsAssetVO.Asset getKmsInstance(Integer instanceId, String kmsInstanceId) {
@@ -142,7 +142,7 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
         if (CollectionUtils.isEmpty(assets)) {
             return null;
         }
-        return BeanCopierUtil.copyProperties(assets.getFirst(), EdsAssetVO.Asset.class);
+        return BeanCopierUtils.copyProperties(assets.getFirst(), EdsAssetVO.Asset.class);
     }
 
 }

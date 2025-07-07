@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class BeanCopierUtil {
+public final class BeanCopierUtils {
 
     private static final Map<String, BeanCopier> BEAN_COPIER_MAP = new MapMaker().initialCapacity(32).concurrencyLevel(32).makeMap();
 

@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -377,7 +377,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         return indices.stream()
                 .map(index -> edsAssetService.getById(index.getAssetId()))
                 .filter(Objects::nonNull)
-                .map(asset -> BeanCopierUtil.copyProperties(asset, EdsAssetVO.Asset.class))
+                .map(asset -> BeanCopierUtils.copyProperties(asset, EdsAssetVO.Asset.class))
                 .toList();
     }
 
@@ -435,7 +435,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         return resources.stream()
                 .map(e -> {
                     EdsAsset asset = edsAssetService.getById(e.getBusinessId());
-                    return BeanCopierUtil.copyProperties(asset, EdsAssetVO.Asset.class);
+                    return BeanCopierUtils.copyProperties(asset, EdsAssetVO.Asset.class);
                 })
                 .toList();
     }

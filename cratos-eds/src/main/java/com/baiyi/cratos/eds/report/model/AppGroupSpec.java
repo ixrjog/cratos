@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.report.model;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;

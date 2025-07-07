@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.model;
 
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.google.common.collect.Maps;
 import com.huaweicloud.sdk.ecs.v2.model.ServerDetail;
 import com.huaweicloud.sdk.ecs.v2.model.ServerSchedulerHints;
@@ -44,23 +44,23 @@ public class HwcEcs {
                     addresses.put(key, serverAddresses);
                 });
         // image
-        ServerImage image = BeanCopierUtil.copyProperties(serverDetail.getImage(), ServerImage.class);
+        ServerImage image = BeanCopierUtils.copyProperties(serverDetail.getImage(), ServerImage.class);
         // flavor
-        ServerFlavor flavor = BeanCopierUtil.copyProperties(serverDetail.getFlavor(), ServerFlavor.class);
+        ServerFlavor flavor = BeanCopierUtils.copyProperties(serverDetail.getFlavor(), ServerFlavor.class);
         // securityGroups
-        List<ServerSecurityGroup> securityGroups = BeanCopierUtil.copyListProperties(serverDetail.getSecurityGroups(),
+        List<ServerSecurityGroup> securityGroups = BeanCopierUtils.copyListProperties(serverDetail.getSecurityGroups(),
                 ServerSecurityGroup.class);
         // fault;
-        ServerFault fault = serverDetail.getFault() != null ? BeanCopierUtil.copyProperties(serverDetail.getFault(),
+        ServerFault fault = serverDetail.getFault() != null ? BeanCopierUtils.copyProperties(serverDetail.getFault(),
                 ServerFault.class) : null;
         // osExtendedVolumesVolumesAttached
-        List<ServerExtendVolumeAttachment> osExtendedVolumesVolumesAttached = BeanCopierUtil.copyListProperties(
+        List<ServerExtendVolumeAttachment> osExtendedVolumesVolumesAttached = BeanCopierUtils.copyListProperties(
                 serverDetail.getOsExtendedVolumesVolumesAttached(), ServerExtendVolumeAttachment.class);
         // osSchedulerHints
-        ServerSchedulerHints osSchedulerHints = BeanCopierUtil.copyProperties(serverDetail.getOsSchedulerHints(),
+        ServerSchedulerHints osSchedulerHints = BeanCopierUtils.copyProperties(serverDetail.getOsSchedulerHints(),
                 ServerSchedulerHints.class);
         // sysTags
-        List<ServerSystemTag> sysTags = BeanCopierUtil.copyListProperties(serverDetail.getSysTags(),
+        List<ServerSystemTag> sysTags = BeanCopierUtils.copyListProperties(serverDetail.getSysTags(),
                 ServerSystemTag.class);
 
         Server server = Server.builder()

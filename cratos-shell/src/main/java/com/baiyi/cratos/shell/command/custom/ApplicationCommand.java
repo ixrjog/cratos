@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.command.custom;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.GroupingUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
 import com.baiyi.cratos.shell.PromptColor;

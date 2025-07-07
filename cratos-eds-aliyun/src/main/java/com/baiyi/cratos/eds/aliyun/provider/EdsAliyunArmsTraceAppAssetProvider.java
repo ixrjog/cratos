@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.baiyi.cratos.common.util.EnvUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Env;

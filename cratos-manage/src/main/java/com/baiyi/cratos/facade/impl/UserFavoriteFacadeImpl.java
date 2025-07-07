@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.UserFavorite;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.service.ApplicationService;
@@ -42,7 +42,7 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                 .map(applicationService::getById)
                 .filter(Objects::nonNull)
                 .map(app -> {
-                    ApplicationVO.Application application = BeanCopierUtil.copyProperties(app,
+                    ApplicationVO.Application application = BeanCopierUtils.copyProperties(app,
                             ApplicationVO.Application.class);
                     application.setFavorited(Boolean.TRUE);
                     return application;

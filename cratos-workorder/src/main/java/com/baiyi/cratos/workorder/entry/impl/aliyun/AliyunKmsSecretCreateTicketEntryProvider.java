@@ -5,13 +5,13 @@ import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -144,7 +144,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                  AliyunKmsModel.CreateSecret createSecret,
                                  DescribeSecretResponseBody describeSecretResponseBody) {
         try {
-            AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(describeSecretResponseBody,
+            AliyunKms.SecretMetadata metadata = BeanCopierUtils.copyProperties(describeSecretResponseBody,
                     AliyunKms.SecretMetadata.class);
             AliyunKms.Secret secret = AliyunKms.Secret.builder()
                     .secretName(createSecret.getSecretName())
@@ -189,7 +189,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 .orElseThrow(() -> new WorkOrderTicketException("Secret data is required")));
         return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
                 .withParam(addCreateAliyunKmsSecretTicketEntry)
-                .withEdsInstance(BeanCopierUtil.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
+                .withEdsInstance(BeanCopierUtils.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
                 .withUsername(username)
                 .withEndpoint(endpointIndex.getValue())
                 .withEncryptedSecretData(encryptedSecretData)

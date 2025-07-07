@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.baseline.impl;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployingFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

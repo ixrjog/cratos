@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
@@ -88,18 +88,18 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
         return secrets.stream()
                 .map(e -> AliyunKmsRepo.describeSecret(endpoint, configModel, e.getSecretName())
                         .map(response -> {
-                            AliyunKms.SecretMetadata metadata = BeanCopierUtil.copyProperties(response,
+                            AliyunKms.SecretMetadata metadata = BeanCopierUtils.copyProperties(response,
                                     AliyunKms.SecretMetadata.class);
                             metadata.setTags(AliyunKms.Tags.of(response.getTags()));
                             return AliyunKms.KmsSecret.builder()
                                     .endpoint(endpoint)
-                                    .secret(BeanCopierUtil.copyProperties(e, AliyunKms.Secret.class))
+                                    .secret(BeanCopierUtils.copyProperties(e, AliyunKms.Secret.class))
                                     .metadata(metadata)
                                     .build();
                         })
                         .orElseGet(() -> AliyunKms.KmsSecret.builder()
                                 .endpoint(endpoint)
-                                .secret(BeanCopierUtil.copyProperties(e, AliyunKms.Secret.class))
+                                .secret(BeanCopierUtils.copyProperties(e, AliyunKms.Secret.class))
                                 .metadata(AliyunKms.SecretMetadata.NO_DATA)
                                 .build()))
                 .filter(Objects::nonNull)

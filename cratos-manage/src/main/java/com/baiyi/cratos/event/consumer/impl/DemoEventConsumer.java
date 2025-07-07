@@ -1,7 +1,7 @@
 package com.baiyi.cratos.event.consumer.impl;
 
 import com.baiyi.cratos.common.constants.EventTopicConstants;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.Topic;
 import com.baiyi.cratos.domain.message.TestMessage;
 import com.baiyi.cratos.event.Event;

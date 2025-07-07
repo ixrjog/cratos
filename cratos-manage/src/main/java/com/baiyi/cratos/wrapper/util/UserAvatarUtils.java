@@ -2,7 +2,7 @@ package com.baiyi.cratos.wrapper.util;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
-import com.baiyi.cratos.domain.util.SpringContextUtil;
+import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.identity.extension.impl.EdsDingtalkIdentityExtensionImpl;
@@ -28,7 +28,7 @@ public class UserAvatarUtils {
         EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
                 .username(username)
                 .build();
-           EdsIdentityVO.DingtalkIdentityDetails details = SpringContextUtil.getBean(
+           EdsIdentityVO.DingtalkIdentityDetails details = SpringContextUtils.getBean(
                         EdsDingtalkIdentityExtensionImpl.class)
                 .queryDingtalkIdentityDetails(query);
 

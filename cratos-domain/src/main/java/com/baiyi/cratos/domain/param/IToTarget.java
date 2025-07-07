@@ -1,6 +1,6 @@
 package com.baiyi.cratos.domain.param;
 
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.util.Generics;
 
 /**
@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.util.Generics;
 public interface IToTarget<T> {
 
     default T toTarget() {
-        return BeanCopierUtil.copyProperties(this, getTargetClazz());
+        return BeanCopierUtils.copyProperties(this, getTargetClazz());
     }
 
     @SuppressWarnings("unchecked")

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.util.GroupingUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.report.ListAppGroup;
@@ -212,7 +212,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     }
 
     private EdsAssetVO.Asset getDeploymentAsset(ApplicationResource resource) {
-        return BeanCopierUtil.copyProperties(edsAssetService.getById(resource.getBusinessId()), EdsAssetVO.Asset.class);
+        return BeanCopierUtils.copyProperties(edsAssetService.getById(resource.getBusinessId()), EdsAssetVO.Asset.class);
     }
 
     private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {

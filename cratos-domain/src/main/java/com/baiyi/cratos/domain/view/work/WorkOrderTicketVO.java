@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.WorkflowModel;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
@@ -164,7 +164,7 @@ public class WorkOrderTicketVO {
         private EdsInstanceVO.EdsInstance instance;
 
         public WorkOrderTicketEntry toTicketEntry() {
-            return BeanCopierUtil.copyProperties(this, WorkOrderTicketEntry.class);
+            return BeanCopierUtils.copyProperties(this, WorkOrderTicketEntry.class);
         }
     }
 

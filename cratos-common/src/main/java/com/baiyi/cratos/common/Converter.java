@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common;
 
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 
 /**
  * @Author baiyi
@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtil;
 public interface Converter<S, T> {
 
     default T convert(S s) {
-        return BeanCopierUtil.copyProperties(s, getTargetClazz());
+        return BeanCopierUtils.copyProperties(s, getTargetClazz());
     }
 
     @SuppressWarnings("unchecked")

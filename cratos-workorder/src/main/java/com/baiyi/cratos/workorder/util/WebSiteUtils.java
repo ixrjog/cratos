@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.util;
 
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

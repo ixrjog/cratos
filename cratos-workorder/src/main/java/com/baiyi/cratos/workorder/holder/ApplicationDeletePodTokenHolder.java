@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.holder;
 
 import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.common.util.ExpiredUtil;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
 import lombok.RequiredArgsConstructor;

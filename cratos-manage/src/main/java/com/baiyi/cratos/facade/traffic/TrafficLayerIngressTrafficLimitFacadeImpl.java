@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.common.exception.TrafficLayerException;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.annotation.Committing;

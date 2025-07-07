@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyun.dms_enterprise20181101.models.*;
-import com.baiyi.cratos.domain.util.BeanCopierUtil;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDmsClient;
 import com.baiyi.cratos.eds.aliyun.client.MyDmsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunDms;
@@ -29,7 +29,7 @@ public class AliyunDmsRepo {
         GetUserActiveTenantRequest request = new GetUserActiveTenantRequest();
         GetUserActiveTenantResponse response = client.getUserActiveTenant(request);
         // response.getBody().getTenant();
-        return BeanCopierUtil.copyProperties(Optional.ofNullable(response)
+        return BeanCopierUtils.copyProperties(Optional.ofNullable(response)
                 .map(GetUserActiveTenantResponse::getBody)
                 .orElseThrow(() -> new EdsRepoException("DMS tenant does not exist")), AliyunDms.Tenant.class);
     }
@@ -62,7 +62,7 @@ public class AliyunDmsRepo {
             }
             List<ListUsersResponseBody.ListUsersResponseBodyUserListUser> list = body.getUserList()
                     .getUser();
-            users.addAll(BeanCopierUtil.copyListProperties(list, AliyunDms.User.class));
+            users.addAll(BeanCopierUtils.copyListProperties(list, AliyunDms.User.class));
             totalCount = body.getTotalCount() != null ? body.getTotalCount() : users.size();
             if (list.isEmpty()) {
                 break;

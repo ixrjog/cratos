@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 
 import com.aliyun.rocketmq20220801.models.GetConsumerGroupResponseBody;
 import com.aliyun.rocketmq20220801.models.ListConsumerGroupsResponseBody;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;

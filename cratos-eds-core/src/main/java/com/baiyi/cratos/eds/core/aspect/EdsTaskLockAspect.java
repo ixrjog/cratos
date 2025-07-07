@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.aspect;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ReadableDurationUtil;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;

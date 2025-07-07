@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.jenkins.sdk.model;
 
 
-import com.baiyi.cratos.domain.util.JSONUtil;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class JenkinsConsoleLog {
 
         @Override
         public String toString() {
-            return JSONUtil.writeValueAsString(this);
+            return JSONUtils.writeValueAsString(this);
         }
     }
 

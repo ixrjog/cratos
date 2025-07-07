@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class JSONUtil {
+public final class JSONUtils {
 
     public static String writeValueAsString(Object object) {
         try {

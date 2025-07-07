@@ -4,7 +4,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetPolicyResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;

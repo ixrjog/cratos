@@ -1,7 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;

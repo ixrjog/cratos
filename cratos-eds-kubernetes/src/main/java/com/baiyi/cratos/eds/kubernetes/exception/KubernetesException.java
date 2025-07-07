@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes.exception;
 
 
 import com.baiyi.cratos.common.exception.BaseException;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.ErrorEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

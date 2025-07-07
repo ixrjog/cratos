@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.common.util.StringFormatter;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;

@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.configuration.CratosConfiguration;
 import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.baiyi.cratos.domain.generator.RbacGroup;
 import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.util.SpringContextUtil;
+import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.baiyi.cratos.service.RbacGroupService;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.google.common.base.Joiner;
@@ -139,7 +139,7 @@ public class RbacAutoConfigInitializer implements CommandLineRunner {
      * 构建控制器方法映射
      */
     private ControllerMethodMapping buildControllerMethodMapping(HandlerMethod handlerMethod) {
-        Object controller = SpringContextUtil.getBean(handlerMethod.getBean()
+        Object controller = SpringContextUtils.getBean(handlerMethod.getBean()
                 .toString());
         Class<?> targetClass = AopUtils.getTargetClass(controller);
 
