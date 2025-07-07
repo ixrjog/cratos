@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Component
-public class SessionOutputUtil {
+public class SessionOutputUtils {
 
     private static RedisUtil redisUtil;
 
@@ -32,12 +32,12 @@ public class SessionOutputUtil {
     }
 
     private static void setRedis(RedisUtil redisUtil) {
-        SessionOutputUtil.redisUtil = redisUtil;
+        SessionOutputUtils.redisUtil = redisUtil;
     }
 
     private static final Map<String, UserSessionsOutput> USER_SESSIONS_OUTPUT_MAP = new ConcurrentHashMap<>();
 
-    private SessionOutputUtil() {
+    private SessionOutputUtils() {
     }
 
     /**

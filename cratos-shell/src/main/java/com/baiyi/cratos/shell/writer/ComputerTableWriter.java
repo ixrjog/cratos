@@ -18,6 +18,8 @@ public class ComputerTableWriter {
     private String serverAccounts;
     private String permission;
     private String serverName;
+    private String proxyIP;
+    private boolean isShort;
 
     private PrettyTable table;
 
@@ -70,13 +72,30 @@ public class ComputerTableWriter {
         return this;
     }
 
+    public ComputerTableWriter withProxyIP(String proxyIP) {
+        this.proxyIP = proxyIP;
+        return this;
+    }
+
+    public ComputerTableWriter withShort(boolean isShort) {
+        this.isShort = isShort;
+        return this;
+    }
+
     public void addRow() {
         final String instanceId = this.asset.getAssetId();
         final String region = asset.getRegion();
         final String type = asset.getAssetType();
         final String ip = asset.getAssetKey();
-        this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, this.serverName, ip,
-                this.serverAccounts, this.permission);
+        if (isShort) {
+            // {"ID", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+            this.table.addRow(this.id, this.group, this.env, this.serverName, ip, proxyIP, this.serverAccounts,
+                    this.permission);
+        } else {
+            // {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+            this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, this.serverName, ip,
+                    proxyIP, this.serverAccounts, this.permission);
+        }
     }
 
 }

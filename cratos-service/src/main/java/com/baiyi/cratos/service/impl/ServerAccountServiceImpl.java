@@ -48,6 +48,13 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     }
 
     @Override
+    public ServerAccount getByName(String name) {
+        return getByUniqueKey(ServerAccount.builder()
+                .name(name)
+                .build());
+    }
+
+    @Override
     public DataTable<ServerAccount> queryServerAccountPage(ServerAccountParam.ServerAccountPageQuery pageQuery) {
         Page<ServerAccount> page = PageHelper.startPage(pageQuery.getPage(), pageQuery.getLength());
         List<ServerAccount> data = serverAccountMapper.queryPageByParam(pageQuery);
@@ -75,7 +82,8 @@ public class ServerAccountServiceImpl implements ServerAccountService {
     }
 
     @Override
-    public List<ServerAccount> queryUserPermissionServerAccounts(ServerAccountQuery.QueryUserPermissionServerAccountParam param) {
+    public List<ServerAccount> queryUserPermissionServerAccounts(
+            ServerAccountQuery.QueryUserPermissionServerAccountParam param) {
         return serverAccountMapper.queryUserPermissionServerAccounts(param);
     }
 

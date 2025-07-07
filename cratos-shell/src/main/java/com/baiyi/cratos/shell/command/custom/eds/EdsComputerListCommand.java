@@ -3,6 +3,7 @@ package com.baiyi.cratos.shell.command.custom.eds;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
@@ -58,14 +59,14 @@ public class EdsComputerListCommand extends AbstractCommand {
     public static final String GROUP = "computer";
     private static final String COMMAND_LIST = GROUP + "-list";
     public final String UNAUTHORIZED;
-
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionService userPermissionService;
     private final EdsInstanceService edsInstanceService;
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
-    public static final String[] ASSET_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Login Account", "Permission"};
+    public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+    public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
     protected static final int PAGE_FOOTER_SIZE = 6;
 
     public EdsComputerListCommand(SshShellHelper helper, SshShellProperties properties,
@@ -88,9 +89,13 @@ public class EdsComputerListCommand extends AbstractCommand {
     public void listComputer(@ShellOption(help = "Name", defaultValue = "") String name,
                              @ShellOption(help = "Group", defaultValue = "") String group,
                              @ShellOption(help = "Page", defaultValue = "1") int page) {
-        PrettyTable computerTable = PrettyTable.fieldNames(ASSET_TABLE_FIELD_NAME);
         int rows = helper.terminalSize()
                 .getRows();
+        int columns = helper.terminalSize()
+                .getColumns();
+        boolean isShort = columns < 250;
+        PrettyTable computerTable = isShort ? PrettyTable.fieldNames(
+                SHORT_COMPUTER_TABLE_FIELD_NAME) : PrettyTable.fieldNames(COMPUTER_TABLE_FIELD_NAME);
         int pageLength = rows - PAGE_FOOTER_SIZE;
         User user = userService.getByUsername(helper.getSshSession()
                 .getUsername());
@@ -123,12 +128,14 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withTable(computerTable)
                     .withId(id)
                     .withAsset(asset)
-                    .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), "-"))
+                    .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), "--"))
                     .withGroup(tagGroup)
                     .withEnv(renderEnv(envMap, env))
                     .withServerAccounts(toServerAccounts(serverAccountBusinessTag, serverAccounts))
                     .withPermission(toPermission(user, tagGroup, env))
                     .withServerName(getServerName(asset))
+                    .withProxyIP(getProxyIP(asset))
+                    .withShort(isShort)
                     .addRow();
             computerMapper.put(id, asset);
             id++;
@@ -146,6 +153,22 @@ public class EdsComputerListCommand extends AbstractCommand {
                 .build();
         // 打印页脚/分页
         helper.print(pagination.toStr(), PromptColor.GREEN);
+    }
+
+    private String getProxyIP(EdsAsset targetComputer) {
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(targetComputer.getId())
+                .build(), SysTagKeys.SSH_PROXY.getKey());
+        if (Objects.isNull(sshProxyBusinessTag)) {
+            return "";
+        }
+        // 搜索资产
+        String proxyIP = sshProxyBusinessTag.getTagValue();
+        if (!IpUtils.isIP(proxyIP)) {
+            return "";
+        }
+        return helper.getColored(proxyIP, PromptColor.GREEN);
     }
 
     private String toPermission(User user, String group, String env) {
@@ -167,7 +190,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
         BusinessTag businessTag = getBusinessTag(edsAsset, sysTagKey);
-        return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "-";
+        return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "--";
     }
 
     private BusinessTag getBusinessTag(EdsAsset edsAsset, SysTagKeys sysTagKey) {
@@ -189,7 +212,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     private String toServerAccounts(BusinessTag serverAccountBusinessTag, List<ServerAccount> serverAccounts) {
         if (CollectionUtils.isEmpty(serverAccounts)) {
-            return "-";
+            return "--";
         }
         if (Objects.nonNull(serverAccountBusinessTag)) {
             Optional<ServerAccount> optionalServerAccount = serverAccounts.stream()

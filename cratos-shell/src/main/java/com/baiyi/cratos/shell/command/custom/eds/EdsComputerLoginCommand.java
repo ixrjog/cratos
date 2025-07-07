@@ -1,6 +1,7 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.BusinessDocFacade;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -8,7 +9,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
-import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
@@ -43,6 +44,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -72,10 +74,14 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     public static final String GROUP = "computer";
     private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
+    private final EdsAssetService edsAssetService;
+    private final ServerAccountService serverAccountService;
+
     public EdsComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
                                    SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
                                    SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
-                                   BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade) {
+                                   BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade,
+                                   EdsAssetService edsAssetService, ServerAccountService serverAccountService) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
         this.simpleSshSessionFacade = simpleSshSessionFacade;
@@ -84,6 +90,8 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.serverCommandAuditor = serverCommandAuditor;
         this.businessDocFacade = businessDocFacade;
         this.businessTagFacade = businessTagFacade;
+        this.edsAssetService = edsAssetService;
+        this.serverAccountService = serverAccountService;
     }
 
     @ClearScreen
@@ -91,6 +99,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     @ShellAuthentication(resource = "/computer/login")
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account,
+                              @ShellOption(help = "Preview Docs", defaultValue = "false") boolean proxy,
                               @ShellOption(help = "Preview Docs", defaultValue = "false") boolean docs) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         if (CollectionUtils.isEmpty(computerMapper) || !computerMapper.containsKey(id)) {
@@ -128,11 +137,12 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
-            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(asset, serverAccount, credential);
-            hostSystem.setInstanceId(sshSessionInstanceId);
-            hostSystem.setTerminalSize(helper.terminalSize());
-            hostSystem.setAuditPath(auditPath);
-            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, hostSystem,
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(asset, serverAccount, credential);
+            targetSystem.setInstanceId(sshSessionInstanceId);
+            targetSystem.setTerminalSize(helper.terminalSize());
+            targetSystem.setAuditPath(auditPath);
+
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, targetSystem,
                     SshSessionInstanceTypeEnum.COMPUTER, auditPath);
             // Watch signal
             WatchTerminalSignalHandler watchTerminalSignalHandler = new WatchTerminalSignalHandler(sessionId,
@@ -141,7 +151,17 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 // open ssh
-                RemoteInvokeHandler.openSSHServer(sessionId, hostSystem, out);
+                if (proxy) {
+                    HostSystem proxySystem = getProxyHost(asset);
+                    if (Objects.isNull(proxySystem)) {
+                        RemoteInvokeHandler.openSSHServer(sessionId, targetSystem, out);
+                    } else {
+                        // 代理访问
+                        RemoteInvokeHandler.openSSHServer(sessionId, proxySystem, targetSystem, out);
+                    }
+                } else {
+                    RemoteInvokeHandler.openSSHServer(sessionId, targetSystem, out);
+                }
                 TerminalUtils.enterRawMode(terminal);
                 // 无延迟
                 out.setNoDelay(true);
@@ -173,6 +193,37 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         } finally {
             JSchSessionHolder.closeSession(sessionId, sshSessionInstanceId);
         }
+    }
+
+    private HostSystem getProxyHost(EdsAsset targetComputer) throws SshException {
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(targetComputer.getId())
+                .build(), SysTagKeys.SSH_PROXY.getKey());
+        if (Objects.isNull(sshProxyBusinessTag)) {
+            return HostSystem.NO_HOST;
+        }
+        // 搜索资产
+        String proxyIP = sshProxyBusinessTag.getTagValue();
+        if (!IpUtils.isIP(proxyIP)) {
+            return HostSystem.NO_HOST;
+        }
+        List<EdsAsset> proxyComputers = edsAssetService.queryInstanceAssetByTypeAndKey(targetComputer.getInstanceId(),
+                targetComputer.getAssetType(), proxyIP);
+        if (CollectionUtils.isEmpty(proxyComputers)) {
+            return HostSystem.NO_HOST;
+        }
+        EdsAsset proxyComputer = proxyComputers.getFirst();
+        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(proxyComputer.getId())
+                .build(), SysTagKeys.SERVER_ACCOUNT.getKey());
+        if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
+            return HostSystem.NO_HOST;
+        }
+        ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
+        Credential credential = credentialService.getById(serverAccount.getCredentialId());
+        return HostSystemBuilder.buildHostSystem(proxyComputer, serverAccount, credential);
     }
 
     private void previewDocs(EdsAsset asset) {

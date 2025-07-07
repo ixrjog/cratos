@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.core.watch.kubernetes;
 
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
-import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
+import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
 import com.baiyi.cratos.ssh.core.watch.base.AbstractSshChannelOutputTask;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -26,7 +26,7 @@ public class WatchKubernetesTerminalOutputTask extends AbstractSshChannelOutputT
 
     @Override
     public void write(char[] buf, int off, int len) {
-        SessionOutputUtil.addToOutput(getSessionOutput().getSessionId(), getSessionOutput().getInstanceId(), buf, off,
+        SessionOutputUtils.addToOutput(getSessionOutput().getSessionId(), getSessionOutput().getInstanceId(), buf, off,
                 len);
     }
 

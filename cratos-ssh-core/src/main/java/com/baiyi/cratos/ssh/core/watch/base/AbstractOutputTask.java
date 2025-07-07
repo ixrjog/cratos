@@ -2,7 +2,7 @@ package com.baiyi.cratos.ssh.core.watch.base;
 
 import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
-import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
+import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -40,7 +40,7 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
         InputStreamReader isr = new InputStreamReader(outFromChannel, StandardCharsets.UTF_8);
         BufferedReader br = new BufferedReader(isr, BUFF_SIZE);
         try {
-            SessionOutputUtil.addOutput(sessionOutput);
+            SessionOutputUtils.addOutput(sessionOutput);
             char[] buff = new char[BUFF_SIZE];
             int read;
             while ((read = br.read(buff)) != -1) {
@@ -56,7 +56,7 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
         } finally {
             log.debug("Watch server output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());
-            SessionOutputUtil.removeOutput(sessionOutput.getSessionId(), sessionOutput.getInstanceId());
+            SessionOutputUtils.removeOutput(sessionOutput.getSessionId(), sessionOutput.getInstanceId());
         }
     }
 

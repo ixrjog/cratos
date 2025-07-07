@@ -59,7 +59,6 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
                                        UserPermissionFacade permissionFacade, EnvFacade envFacade) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
-
         this.userService = userService;
         this.permissionFacade = permissionFacade;
         this.envFacade = envFacade;

@@ -3,7 +3,7 @@ package com.baiyi.cratos.ssh.core.watch.base;
 
 import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
-import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
+import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.input.ClosedInputStream;
@@ -40,7 +40,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
 
     @Override
     public void run() {
-        SessionOutputUtil.addOutput(this.sessionOutput);
+        SessionOutputUtils.addOutput(this.sessionOutput);
         try {
             while (!isClosed) {
                 TimeUnit.MILLISECONDS.sleep(25L);
@@ -65,7 +65,7 @@ public abstract class AbstractSshChannelOutputTask implements IRecordOutputTask 
         } finally {
             log.debug("Ssh channel output task ended: sessionId={}, instanceId={}", sessionOutput.getSessionId(),
                     sessionOutput.getInstanceId());
-            SessionOutputUtil.removeOutput(sessionOutput.getSessionId(), sessionOutput.getInstanceId());
+            SessionOutputUtils.removeOutput(sessionOutput.getSessionId(), sessionOutput.getInstanceId());
         }
     }
 

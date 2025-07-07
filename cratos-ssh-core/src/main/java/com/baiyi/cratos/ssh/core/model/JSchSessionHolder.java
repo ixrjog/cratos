@@ -53,7 +53,7 @@ public class JSchSessionHolder {
     public static void closeSession(String sessionId, String instanceId) {
         JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         if (jSchSession != null) {
-            jSchSession.preDestruction();
+            jSchSession.destroy();
             jSchSession = null;
         }
         removeSession(sessionId, instanceId);

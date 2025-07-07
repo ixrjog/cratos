@@ -2,7 +2,10 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -14,6 +17,9 @@ import java.util.Date;
  * 表注释：服务器账户
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "server_account")
 public class ServerAccount implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial

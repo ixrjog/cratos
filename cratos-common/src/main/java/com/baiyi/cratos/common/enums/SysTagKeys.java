@@ -34,7 +34,8 @@ public enum SysTagKeys {
     ENDPOINT("Endpoint"),
     CONFIG_MAP("ConfigMap"),
     ROCKET_MQ("RocketMQ"),
-    FRONT_END("FrontEnd")
+    FRONT_END("FrontEnd"),
+    SSH_PROXY("SSHProxy")
     ;
 
     private final String key;

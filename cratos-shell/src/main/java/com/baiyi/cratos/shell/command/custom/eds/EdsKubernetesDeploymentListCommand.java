@@ -48,17 +48,11 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListComm
 public class EdsKubernetesDeploymentListCommand extends AbstractCommand {
 
     public static final String GROUP = "kubernetes-deployment";
-
     private static final String COMMAND_DEPLOYMENT_LIST = GROUP + "-list";
-
     private final EdsAssetService edsAssetService;
-
     private final EdsInstanceService edsInstanceService;
-
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-
     protected static final int PAGE_FOOTER_SIZE = 6;
-
     public final static String[] TABLE_FIELD_NAME = {"ID", "Eds Instance", "Namespace", "Deployment", "Replicas", "Containers"};
 
     public EdsKubernetesDeploymentListCommand(SshShellHelper helper, SshShellProperties properties,

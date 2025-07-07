@@ -1,5 +1,6 @@
 package com.baiyi.cratos.common.util;
 
+import com.baiyi.cratos.common.session.UserSessionContext;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +33,19 @@ public class SessionUtils {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 获取当前会话语言
+     *
+     * @return
+     */
+    public static String getSessionLanguage() {
+        return UserSessionContext.getLanguage();
+    }
+
+    public static void setSessionLanguage(String language) {
+        UserSessionContext.setLanguage(language);
     }
 
 }

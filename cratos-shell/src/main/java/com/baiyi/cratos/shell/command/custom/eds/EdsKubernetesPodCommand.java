@@ -58,7 +58,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
-import static com.baiyi.cratos.ssh.core.util.ChannelShellUtil.DEF_UNICODE;
+import static com.baiyi.cratos.ssh.core.util.ChannelShellUtils.DEF_UNICODE;
 
 /**
  * &#064;Author  baiyi

@@ -2,7 +2,7 @@ package com.baiyi.cratos.ssh.core.task.crystal;
 
 import com.baiyi.cratos.domain.util.JSONUtil;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
-import com.baiyi.cratos.ssh.core.util.SessionOutputUtil;
+import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -35,7 +35,7 @@ public class SentOutputTask implements Runnable {
     public void run() {
         try {
             while (session.isOpen()) {
-                List<SessionOutput> outputList = SessionOutputUtil.getOutput(sessionId);
+                List<SessionOutput> outputList = SessionOutputUtils.getOutput(sessionId);
                 if (!CollectionUtils.isEmpty(outputList)) {
                     String jsonStr = JSONUtil.writeValueAsString(outputList);
                     session.getBasicRemote()

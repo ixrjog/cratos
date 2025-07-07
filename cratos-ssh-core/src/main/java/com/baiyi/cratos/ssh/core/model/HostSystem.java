@@ -45,11 +45,14 @@ import org.springframework.util.StringUtils;
 @AllArgsConstructor
 public class HostSystem {
 
+    private static final int SSH_PORT = 22;
+    public static final HostSystem NO_HOST = null;
+
     private Long id;
     private String displayNm;
     private String host;
     @Builder.Default
-    private Integer port = 22;
+    private Integer port = SSH_PORT;
     private String displayLabel;
     @Builder.Default
     private String authorizedKeys = "~/.ssh/authorized_keys";
@@ -60,9 +63,7 @@ public class HostSystem {
     private String errorMsg;
 
     private String instanceId;
-
     private org.jline.terminal.Size terminalSize;
-
     private String auditPath;
 
     public String getLoginUsername() {
@@ -72,6 +73,10 @@ public class HostSystem {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public Integer getSshPortOrDefault() {
+        return this.port == null ? SSH_PORT : this.port;
     }
 
     /**

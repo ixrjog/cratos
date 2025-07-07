@@ -23,4 +23,6 @@ public interface ServerAccountService extends BaseUniqueKeyService<ServerAccount
 
     List<ServerAccount> queryUserPermissionServerAccounts(ServerAccountQuery.QueryUserPermissionServerAccountParam param);
 
+    ServerAccount getByName(String name);
+
 }

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.core.model;
 
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.Session;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,17 +26,22 @@ public class JSchSession {
     private String instanceId;
 
     private PrintStream commander;
-
-
     private OutputStream inputToChannel;
     private Channel channel;
     private HostSystem hostSystem;
     private SessionOutput sessionOutput;
 
-    public void preDestruction() {
+    private Session proxySession;
+
+
+    public void destroy() {
         if (this.channel != null) {
             channel.disconnect();
             channel = null;
+        }
+        if (proxySession != null) {
+            proxySession.disconnect();
+            proxySession = null;
         }
         this.commander = null;
         this.inputToChannel = null;

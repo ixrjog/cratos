@@ -49,17 +49,11 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListComm
 public class EdsKubernetesDeploymentResourceCommand extends AbstractCommand {
 
     public static final String GROUP = "kubernetes-deployment";
-
     private static final String COMMAND_DEPLOYMENT_RES_LIST = GROUP + "-resource-list";
-
     private final EdsAssetService edsAssetService;
-
     private final EdsInstanceService edsInstanceService;
-
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-
     public static final String SIDECAR_ISTIO_IO_INJECT = "sidecar.istio.io/inject";
-
     public final static String[] TABLE_FIELD_NAME = {"Eds Instance", "Namespace", "Deployment", "Container", "Res Limits", "Res Requests"};
 
     public EdsKubernetesDeploymentResourceCommand(SshShellHelper helper, SshShellProperties properties,
