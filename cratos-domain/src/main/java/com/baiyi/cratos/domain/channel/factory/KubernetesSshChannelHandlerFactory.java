@@ -31,11 +31,15 @@ public class KubernetesSshChannelHandlerFactory {
         CONTEXT.put(bean.getTopic(), bean);
     }
 
-    public static <T extends HasSocketRequest> void handleRequest(String sessionId, String username, Session session, T message) {
+    public static <T extends HasSocketRequest> void handleRequest(String sessionId, String username, Session session,
+                                                                  T message) {
         try {
+            log.info("handleRequest topic={}, sessionId={}, username={}", message.getTopic(), sessionId, username);
             if (CONTEXT.containsKey(message.getTopic())) {
+                log.info("Found handler for topic: {}", message.getTopic());
                 BaseChannelHandler<HasSocketRequest> handler = (BaseChannelHandler<HasSocketRequest>) CONTEXT.get(
                         message.getTopic());
+                log.info("handler={}", handler);
                 handler.handleRequest(sessionId, username, session, message);
             }
         } catch (IllegalStateException | ClassCastException | IOException ex) {

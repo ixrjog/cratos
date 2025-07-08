@@ -98,6 +98,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     @Override
     public void handleRequest(String sessionId, String username, Session session,
                               KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) throws IllegalStateException, IOException {
+        log.info("handleRequest topic={}, sessionId={}, username={}", message.getTopic(), sessionId, username);
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {
             case SocketActionRequestEnum.EXEC -> {
