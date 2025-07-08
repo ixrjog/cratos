@@ -101,6 +101,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {
             case SocketActionRequestEnum.EXEC -> {
+                log.error("0001111000000000000");
                 boolean pass = accessInterception(username, message);
                 log.info("accessInterception pass={}.", pass);
                 if (!pass) {
@@ -139,30 +140,42 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         if (edsInstance == null) {
             return;
         }
+        log.error("11111111111111111111111");
         EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
+        log.error("222222222222222");
         deployment.getPods()
                 .forEach(pod -> {
                     final String instanceId = pod.getInstanceId();
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
+                    log.error("333333333333333");
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
-                    // 记录
-                    simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+                    log.error("444444444444444");
                     try {
                         EnvParam.QueryEnvByGroupValue queryEnvByGroupValue = EnvParam.QueryEnvByGroupValue.builder()
                                 .groupValue("prod")
                                 .build();
                         List<EnvVO.Env> prodEnvs = envFacade.queryEnvByGroupValue(queryEnvByGroupValue);
+                        log.error("5555555555555555");
                         if (!CollectionUtils.isEmpty(prodEnvs) && prodEnvs.stream()
                                 .anyMatch(env -> env.getEnvName()
                                         .equals(pod.getNamespace()))) {
+                            log.error("66666666666666666");
                             DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(SessionUtils.getUsername()),
                                     deployment, pod);
+                            log.error("77777777777777777");
                             sendUserLoginServerNotice(msg);
+                            log.error("88888888888888888");
                         }
-                    } catch (IOException ignored) {
+                    } catch (Exception ex) {
+                        log.error(ex.getMessage(), ex);
                     }
+                    // 记录
+                    log.error("xxxxxxxxx");
+                    simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+                    log.error("yyyyyyyy");
                     kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
+                    log.error("zzzzzzzzz");
                 });
     }
 
@@ -249,15 +262,19 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             log.warn("No available robots to send inspection notifications.");
             return;
         }
+        log.error("aaaaaaaaaaaaaaaaaaaaa");
         List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                     .getEdsInstance()
                     .getConfigId());
+            log.error("bbbbbbbbbbbbbbbbbbb");
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
+            log.error("ccccccccccccccccccc");
             dingtalkService.send(robot.getToken(), message);
+            log.error("dddddddddddddddddddd");
             providerHolder.importAsset(message);
         });
     }
