@@ -1,7 +1,6 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -102,9 +101,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {
             case SocketActionRequestEnum.EXEC -> {
-                log.error("0001111000000000000");
                 boolean pass = accessInterception(username, message);
-                log.info("accessInterception pass={}.", pass);
                 if (!pass) {
                     if (session.isOpen()) {
                         session.getBasicRemote()
@@ -117,7 +114,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 Optional.of(message)
                         .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                         .ifPresent(deployments -> deployments.forEach(
-                                deployment -> run(sessionId, deployment, kubernetesMap)));
+                                deployment -> run(sessionId, username, deployment, kubernetesMap)));
             }
             case SocketActionRequestEnum.INPUT -> Optional.of(message)
                     .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
@@ -135,48 +132,37 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         }
     }
 
-    private void run(String sessionId, ApplicationKubernetesParam.DeploymentRequest deployment,
+    private void run(String sessionId, String username,ApplicationKubernetesParam.DeploymentRequest deployment,
                      Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap) {
         EdsInstance edsInstance = edsInstanceService.getByName(deployment.getKubernetesClusterName());
         if (edsInstance == null) {
             return;
         }
-        log.error("11111111111111111111111");
         EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
-        log.error("222222222222222");
         deployment.getPods()
                 .forEach(pod -> {
                     final String instanceId = pod.getInstanceId();
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
-                    log.error("333333333333333");
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
-                    log.error("444444444444444");
                     try {
                         EnvParam.QueryEnvByGroupValue queryEnvByGroupValue = EnvParam.QueryEnvByGroupValue.builder()
                                 .groupValue("prod")
                                 .build();
                         List<EnvVO.Env> prodEnvs = envFacade.queryEnvByGroupValue(queryEnvByGroupValue);
-                        log.error("5555555555555555");
                         if (!CollectionUtils.isEmpty(prodEnvs) && prodEnvs.stream()
                                 .anyMatch(env -> env.getEnvName()
                                         .equals(pod.getNamespace()))) {
-                            log.error("66666666666666666");
-                            DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(SessionUtils.getUsername()),
+                            DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(username),
                                     deployment, pod);
-                            log.error("77777777777777777");
                             sendUserLoginServerNotice(msg);
-                            log.error("88888888888888888");
                         }
                     } catch (Exception ex) {
                         log.error(ex.getMessage(), ex);
                     }
                     // 记录
-                    log.error("xxxxxxxxx");
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-                    log.error("yyyyyyyy");
                     kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
-                    log.error("zzzzzzzzz");
                 });
     }
 
@@ -263,19 +249,15 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        log.error("aaaaaaaaaaaaaaaaaaaaa");
         List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                     .getEdsInstance()
                     .getConfigId());
-            log.error("bbbbbbbbbbbbbbbbbbb");
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
-            log.error("ccccccccccccccccccc");
             dingtalkService.send(robot.getToken(), message);
-            log.error("dddddddddddddddddddd");
             providerHolder.importAsset(message);
         });
     }

@@ -72,11 +72,9 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
     @OnMessage(maxMessageSize = 10 * 1024)
     public void onMessage(Session session, String message) {
         if (StringUtils.hasText(message)) {
-            log.info("Kubernetes ssh message received: {}", message);
             try {
                 KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest request = KubernetesContainerTerminalParam.loadAs(
                         message);
-                log.info("Kubernetes ssh request message: {}", request);
                 KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, this.username, session, request);
             } catch (JsonSyntaxException ex) {
                 log.error(ex.getMessage(), ex);
