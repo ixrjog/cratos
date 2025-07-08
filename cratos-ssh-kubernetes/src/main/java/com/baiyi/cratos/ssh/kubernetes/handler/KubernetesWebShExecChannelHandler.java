@@ -1,18 +1,32 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
+import com.baiyi.cratos.common.builder.SimpleMapBuilder;
+import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.common.util.UserDisplayUtils;
+import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.annotation.TopicName;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.SshSessionInstance;
+import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
+import com.baiyi.cratos.domain.view.env.EnvVO;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.service.ApplicationService;
-import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.AccessControlFacade;
+import com.baiyi.cratos.facade.EnvFacade;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.auditor.PodCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -25,6 +39,7 @@ import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -32,8 +47,12 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.KUBERNETES_WSH_EXEC_NOTICE;
 
 /**
  * &#064;Author  baiyi
@@ -46,6 +65,14 @@ import java.util.Optional;
 public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     private final PodCommandAuditor podCommandAuditor;
+    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsConfigService edsConfigService;
+    private final DingtalkService dingtalkService;
+    private final NotificationTemplateService notificationTemplateService;
+    private final UserService userService;
+    private final EnvFacade envFacade;
+    @Value("${cratos.language:en-us}")
+    protected String language;
 
     public KubernetesWebShExecChannelHandler(SimpleSshSessionFacade simpleSshSessionFacade,
                                              KubernetesRemoteInvoker kubernetesRemoteInvokeHandler,
@@ -53,10 +80,19 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              EdsInstanceService edsInstanceService,
                                              SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
                                              AccessControlFacade accessControlFacade,
-                                             ApplicationService applicationService) {
+                                             ApplicationService applicationService, EdsInstanceHelper edsInstanceHelper,
+                                             EdsConfigService edsConfigService, DingtalkService dingtalkService,
+                                             NotificationTemplateService notificationTemplateService,
+                                             UserService userService, EnvFacade envFacade) {
         super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
                 edsInstanceService, sshAuditProperties, accessControlFacade, applicationService);
         this.podCommandAuditor = podCommandAuditor;
+        this.edsInstanceHelper = edsInstanceHelper;
+        this.edsConfigService = edsConfigService;
+        this.dingtalkService = dingtalkService;
+        this.notificationTemplateService = notificationTemplateService;
+        this.userService = userService;
+        this.envFacade = envFacade;
     }
 
     @Override
@@ -112,6 +148,20 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+                    try {
+                        EnvParam.QueryEnvByGroupValue queryEnvByGroupValue = EnvParam.QueryEnvByGroupValue.builder()
+                                .groupValue("prod")
+                                .build();
+                        List<EnvVO.Env> prodEnvs = envFacade.queryEnvByGroupValue(queryEnvByGroupValue);
+                        if (!CollectionUtils.isEmpty(prodEnvs) && prodEnvs.stream()
+                                .anyMatch(env -> env.getEnvName()
+                                        .equals(pod.getNamespace()))) {
+                            DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(SessionUtils.getUsername()),
+                                    deployment, pod);
+                            sendUserLoginServerNotice(msg);
+                        }
+                    } catch (IOException ignored) {
+                    }
                     kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
                 });
     }
@@ -172,6 +222,52 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         Optional.of(deploymentRequest)
                 .map(ApplicationKubernetesParam.DeploymentRequest::getPods)
                 .ifPresent(pods -> pods.forEach(pod -> doExit(sessionId, pod.getInstanceId())));
+    }
+
+    /// ///////////////////
+
+    protected DingtalkRobotModel.Msg getMsg(User loginUser, ApplicationKubernetesParam.DeploymentRequest deployment,
+                                            ApplicationKubernetesParam.PodRequest pod) throws IOException {
+        NotificationTemplate notificationTemplate = getNotificationTemplate();
+        String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
+                .put("kubernetesClusterName", deployment.getKubernetesClusterName())
+                .put("podName", pod.getName())
+                .put("containerName", pod.getContainer()
+                        .getName())
+                .put("namespace", pod.getNamespace())
+                .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
+                .build());
+        return DingtalkRobotModel.loadAs(msg);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
+        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
+                "InspectionNotification");
+        if (CollectionUtils.isEmpty(edsInstanceList)) {
+            log.warn("No available robots to send inspection notifications.");
+            return;
+        }
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+                edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
+        holders.forEach(providerHolder -> {
+            EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
+                    .getEdsInstance()
+                    .getConfigId());
+            EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
+                    .produceConfig(edsConfig);
+            dingtalkService.send(robot.getToken(), message);
+            providerHolder.importAsset(message);
+        });
+    }
+
+    private NotificationTemplate getNotificationTemplate() {
+        NotificationTemplate query = NotificationTemplate.builder()
+                .notificationTemplateKey(KUBERNETES_WSH_EXEC_NOTICE.name())
+                .lang(language)
+                .build();
+        return notificationTemplateService.getByUniqueKey(query);
     }
 
 }

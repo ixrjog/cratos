@@ -53,6 +53,7 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
                 .getEdsConfigModel();
     }
 
+    @SuppressWarnings("rawtypes")
     protected boolean accessInterception(String username,
                                          KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest message) {
         try {
