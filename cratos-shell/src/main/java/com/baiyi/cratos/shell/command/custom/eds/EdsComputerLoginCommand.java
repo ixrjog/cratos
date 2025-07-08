@@ -1,14 +1,26 @@
 package com.baiyi.cratos.shell.command.custom.eds;
 
+import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IpUtils;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.common.util.UserDisplayUtils;
+import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.BusinessDocFacade;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
+import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
@@ -35,6 +47,7 @@ import org.apache.sshd.common.SshException;
 import org.apache.sshd.common.channel.ChannelOutputStream;
 import org.apache.sshd.server.session.ServerSession;
 import org.jline.terminal.Terminal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
@@ -44,12 +57,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.SSHSERVER_USER_LOGIN_SERVER_NOTICE;
 import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
 
 /**
@@ -76,12 +87,25 @@ public class EdsComputerLoginCommand extends AbstractCommand {
 
     private final EdsAssetService edsAssetService;
     private final ServerAccountService serverAccountService;
+    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsConfigService edsConfigService;
+    private final DingtalkService dingtalkService;
+    private final NotificationTemplateService notificationTemplateService;
+    private final UserService userService;
+
+    @Value("${cratos.notification:NORMAL}")
+    private String notification;
+    @Value("${cratos.language:en-us}")
+    protected String language;
 
     public EdsComputerLoginCommand(SshShellHelper helper, SshShellProperties properties,
                                    SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
                                    SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
                                    BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade,
-                                   EdsAssetService edsAssetService, ServerAccountService serverAccountService) {
+                                   EdsAssetService edsAssetService, ServerAccountService serverAccountService,
+                                   EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                   DingtalkService dingtalkService,
+                                   NotificationTemplateService notificationTemplateService, UserService userService) {
         super(helper, properties, properties.getCommands()
                 .getComputer());
         this.simpleSshSessionFacade = simpleSshSessionFacade;
@@ -92,6 +116,11 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.businessTagFacade = businessTagFacade;
         this.edsAssetService = edsAssetService;
         this.serverAccountService = serverAccountService;
+        this.edsInstanceHelper = edsInstanceHelper;
+        this.edsConfigService = edsConfigService;
+        this.dingtalkService = dingtalkService;
+        this.notificationTemplateService = notificationTemplateService;
+        this.userService = userService;
     }
 
     @ClearScreen
@@ -150,6 +179,14 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+                try {
+                    User user = userService.getByUsername(helper.getSshSession()
+                            .getUsername());
+                    DingtalkRobotModel.Msg msg = getMsg(user, serverAccount.getUsername(), asset.getAssetKey(),
+                            asset.getName());
+                    sendUserLoginServerNotice(msg);
+                } catch (IOException ignored) {
+                }
                 // open ssh
                 if (proxy) {
                     HostSystem proxySystem = getProxyHost(asset);
@@ -283,6 +320,48 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(edsAsset.getId())
                 .build();
+    }
+
+    protected DingtalkRobotModel.Msg getMsg(User loginUser, String serverAccount, String serverIP,
+                                            String serverName) throws IOException {
+        NotificationTemplate notificationTemplate = getNotificationTemplate();
+        String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
+                .put("targetServer", Joiner.on("@")
+                        .join(serverAccount, serverIP))
+                .put("serverName", serverName)
+                .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
+                .build());
+        return DingtalkRobotModel.loadAs(msg);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
+        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
+                "InspectionNotification");
+        if (CollectionUtils.isEmpty(edsInstanceList)) {
+            log.warn("No available robots to send inspection notifications.");
+            return;
+        }
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+                edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
+        holders.forEach(providerHolder -> {
+            EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
+                    .getEdsInstance()
+                    .getConfigId());
+            EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
+                    .produceConfig(edsConfig);
+            dingtalkService.send(robot.getToken(), message);
+            providerHolder.importAsset(message);
+        });
+    }
+
+    private NotificationTemplate getNotificationTemplate() {
+        NotificationTemplate query = NotificationTemplate.builder()
+                .notificationTemplateKey(SSHSERVER_USER_LOGIN_SERVER_NOTICE.name())
+                .lang(language)
+                .build();
+        return notificationTemplateService.getByUniqueKey(query);
     }
 
 }
