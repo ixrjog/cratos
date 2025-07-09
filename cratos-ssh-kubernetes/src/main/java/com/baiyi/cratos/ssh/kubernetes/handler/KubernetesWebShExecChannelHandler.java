@@ -38,7 +38,9 @@ import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -132,7 +134,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         }
     }
 
-    private void run(String sessionId, String username,ApplicationKubernetesParam.DeploymentRequest deployment,
+    private void run(String sessionId, String username, ApplicationKubernetesParam.DeploymentRequest deployment,
                      Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap) {
         EdsInstance edsInstance = edsInstanceService.getByName(deployment.getKubernetesClusterName());
         if (edsInstance == null) {
@@ -145,25 +147,32 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
-                    try {
-                        EnvParam.QueryEnvByGroupValue queryEnvByGroupValue = EnvParam.QueryEnvByGroupValue.builder()
-                                .groupValue("prod")
-                                .build();
-                        List<EnvVO.Env> prodEnvs = envFacade.queryEnvByGroupValue(queryEnvByGroupValue);
-                        if (!CollectionUtils.isEmpty(prodEnvs) && prodEnvs.stream()
-                                .anyMatch(env -> env.getEnvName()
-                                        .equals(pod.getNamespace()))) {
-                            DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(username),
-                                    deployment, pod);
-                            sendUserLoginServerNotice(msg);
-                        }
-                    } catch (Exception ex) {
-                        log.error(ex.getMessage(), ex);
-                    }
+                     // 异步处理
+                    ((KubernetesWebShExecChannelHandler) AopContext.currentProxy()).sendUserLoginContainerNotice(
+                            username, deployment, pod);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                     kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
                 });
+    }
+
+    @Async
+    public void sendUserLoginContainerNotice(String username, ApplicationKubernetesParam.DeploymentRequest deployment,
+                                             ApplicationKubernetesParam.PodRequest pod) {
+        try {
+            EnvParam.QueryEnvByGroupValue queryEnvByGroupValue = EnvParam.QueryEnvByGroupValue.builder()
+                    .groupValue("prod")
+                    .build();
+            List<EnvVO.Env> prodEnvs = envFacade.queryEnvByGroupValue(queryEnvByGroupValue);
+            if (!CollectionUtils.isEmpty(prodEnvs) && prodEnvs.stream()
+                    .anyMatch(env -> env.getEnvName()
+                            .equals(pod.getNamespace()))) {
+                DingtalkRobotModel.Msg msg = getMsg(userService.getByUsername(username), deployment, pod);
+                sendUserLoginContainerNotice(msg);
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
     }
 
     private void doInput(String sessionId, ApplicationKubernetesParam.DeploymentRequest deploymentRequest) {
@@ -242,7 +251,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     }
 
     @SuppressWarnings("unchecked")
-    private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
+    private void sendUserLoginContainerNotice(DingtalkRobotModel.Msg message) {
         List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
                 "InspectionNotification");
         if (CollectionUtils.isEmpty(edsInstanceList)) {
