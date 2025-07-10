@@ -40,7 +40,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Network>> queryGlobalNetworkPage(
             @RequestBody @Valid GlobalNetworkParam.GlobalNetworkPageQuery pageQuery) {
-        return HttpResult.of(globalNetworkFacade.queryGlobalNetworkPage(pageQuery));
+        return HttpResult.ofBaseException(globalNetworkFacade.queryGlobalNetworkPage(pageQuery));
     }
 
     @Operation(summary = "Add global network")
@@ -70,13 +70,13 @@ public class GlobalNetworkController {
     @PostMapping(value = "/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<GlobalNetworkVO.NetworkDetails> queryGlobalNetworkDetails(
             @RequestBody @Valid GlobalNetworkParam.QueryGlobalNetworkDetails queryGlobalNetworkDetails) {
-        return HttpResult.of(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
+        return HttpResult.ofBaseException(globalNetworkFacade.queryGlobalNetworkDetails(queryGlobalNetworkDetails));
     }
 
     @Operation(summary = "Query global network all details")
     @GetMapping(value = "/all/details/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.NetworkDetails>> getGlobalNetworkAllDetails() {
-        return HttpResult.of(globalNetworkFacade.getGlobalNetworkAllDetails());
+        return HttpResult.ofBaseException(globalNetworkFacade.getGlobalNetworkAllDetails());
     }
 
     @Operation(summary = "Update global network valid")
@@ -89,14 +89,14 @@ public class GlobalNetworkController {
     @Operation(summary = "Check global network by id")
     @GetMapping(value = "/id/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkById(@RequestParam int id) {
-        return HttpResult.of(globalNetworkFacade.checkGlobalNetworkById(id));
+        return HttpResult.ofBaseException(globalNetworkFacade.checkGlobalNetworkById(id));
     }
 
     @Operation(summary = "Check global network by cidr-block")
     @GetMapping(value = "/cidr-block/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkByCidrBlock(
             @RequestParam @Valid @NotBlank String cidrBlock) {
-        return HttpResult.of(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
+        return HttpResult.ofBaseException(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
     }
 
     // ---------- Planning
@@ -105,7 +105,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/planning/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Planning>> queryGlobalNetworkPlanningPage(
             @RequestBody @Valid GlobalNetworkPlanningParam.GlobalNetworkPlanningPageQuery pageQuery) {
-        return HttpResult.of(globalNetworkPlanningFacade.queryGlobalNetworkPlanningPage(pageQuery));
+        return HttpResult.ofBaseException(globalNetworkPlanningFacade.queryGlobalNetworkPlanningPage(pageQuery));
     }
 
     @Operation(summary = "Add global network planning")
@@ -167,7 +167,7 @@ public class GlobalNetworkController {
     @PostMapping(value = "/subnet/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<GlobalNetworkVO.Subnet>> queryGlobalNetworkSubnetPage(
             @RequestBody @Valid GlobalNetworkSubnetParam.GlobalNetworkSubnetPageQuery pageQuery) {
-        return HttpResult.of(globalNetworkSubnetFacade.queryGlobalNetworkSubnetPage(pageQuery));
+        return HttpResult.ofBaseException(globalNetworkSubnetFacade.queryGlobalNetworkSubnetPage(pageQuery));
     }
 
     @Operation(summary = "Delete global network subnet by id")

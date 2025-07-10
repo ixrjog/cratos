@@ -1,7 +1,10 @@
 package com.baiyi.cratos.facade.work.impl;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.UserTokenAuth;
+import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.WorkOrder;
@@ -113,6 +116,18 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     public void approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket) {
         TicketEvent<WorkOrderTicketParam.ApprovalTicket> event = TicketEvent.of(approvalTicket);
         TicketInStateProcessorFactory.change(TicketState.IN_APPROVAL, TicketStateChangeAction.APPROVAL, event);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    @UserTokenAuth(ofTicketNo = "#callbackApprovalTicket.ticketNo", ofUsername = "#callbackApprovalTicket.username", ofToken = "#callbackApprovalTicket.token")
+    public HttpResult approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket) {
+        try {
+            this.approvalTicket(callbackApprovalTicket.toApprovalTicket());
+            return HttpResult.SUCCESS;
+        } catch (BaseException ex) {
+            return HttpResult.ofBaseException(ex);
+        }
     }
 
     @Override

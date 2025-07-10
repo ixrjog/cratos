@@ -34,14 +34,14 @@ public class SshSessionController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<SshSessionVO.Session>> querySshSessionPage(
             @RequestBody @Valid SshSessionParam.SshSessionPageQuery pageQuery) {
-        return HttpResult.of(sshSessionFacade.querySshSessionPage(pageQuery));
+        return HttpResult.ofBaseException(sshSessionFacade.querySshSessionPage(pageQuery));
     }
 
     @Operation(summary = "Pagination query command")
     @PostMapping(value = "/instance/command/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<SshCommandVO.Command>> querySshCommandPage(
             @RequestBody @Valid SshCommandParam.SshCommandPageQuery pageQuery) {
-        return HttpResult.of(sshSessionFacade.querySshCommandPage(pageQuery));
+        return HttpResult.ofBaseException(sshSessionFacade.querySshCommandPage(pageQuery));
     }
 
 }

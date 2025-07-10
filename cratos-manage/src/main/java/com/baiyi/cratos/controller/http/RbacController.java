@@ -41,7 +41,7 @@ public class RbacController {
     @PostMapping(value = "/role/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacRoleVO.Role>> queryRolePage(
             @RequestBody @Valid RbacRoleParam.RolePageQuery pageQuery) {
-        return HttpResult.of(rbacRoleFacade.queryRolePage(pageQuery));
+        return HttpResult.ofBaseException(rbacRoleFacade.queryRolePage(pageQuery));
     }
 
     @Operation(summary = "Update role")
@@ -69,7 +69,7 @@ public class RbacController {
     @PostMapping(value = "/group/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacGroupVO.Group>> queryGroupPage(
             @RequestBody @Valid RbacGroupParam.GroupPageQuery pageQuery) {
-        return HttpResult.of(rbacGroupFacade.queryGroupPage(pageQuery));
+        return HttpResult.ofBaseException(rbacGroupFacade.queryGroupPage(pageQuery));
     }
 
     @Operation(summary = "Update group")
@@ -83,7 +83,7 @@ public class RbacController {
     @PostMapping(value = "/role/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacResourceVO.Resource>> queryRoleResourcePage(
             @RequestBody @Valid RbacRoleResourceParam.RoleResourcePageQuery pageQuery) {
-        return HttpResult.of(rbacResourceFacade.queryRoleResourcePage(pageQuery));
+        return HttpResult.ofBaseException(rbacResourceFacade.queryRoleResourcePage(pageQuery));
     }
 
     @Operation(summary = "Add role resource")
@@ -114,7 +114,7 @@ public class RbacController {
     @PostMapping(value = "/resource/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RbacResourceVO.Resource>> queryResourcePage(
             @RequestBody @Valid RbacResourceParam.ResourcePageQuery pageQuery) {
-        return HttpResult.of(rbacResourceFacade.queryResourcePage(pageQuery));
+        return HttpResult.ofBaseException(rbacResourceFacade.queryResourcePage(pageQuery));
     }
 
     @Operation(summary = "Add resource")
@@ -163,7 +163,7 @@ public class RbacController {
     @PostMapping(value = "/user/role/resource/permission/verify", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<RbacRoleVO.Role>> verifyUserPermissions(
             @RequestBody @Valid RbacUserRoleParam.VerifyUserRoleResourcePermission verifyUserRoleResourcePermission) {
-        return HttpResult.of(rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
+        return HttpResult.ofBaseException(rbacFacade.checkUserRoleResourcePermission(verifyUserRoleResourcePermission));
     }
 
     @Operation(summary = "Add role menu")

@@ -31,25 +31,25 @@ public class RobotController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RobotVO.Robot>> queryRobotPage(
             @RequestBody @Valid RobotParam.RobotPageQuery pageQuery) {
-        return HttpResult.of(robotFacade.queryRobotPage(pageQuery));
+        return HttpResult.ofBaseException(robotFacade.queryRobotPage(pageQuery));
     }
 
     @Operation(summary = "Query robot by username")
     @GetMapping(value = "/username/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<RobotVO.Robot>> queryRobotByUsername(@RequestParam @Valid String username) {
-        return HttpResult.of(robotFacade.queryRobotByUsername(username));
+        return HttpResult.ofBaseException(robotFacade.queryRobotByUsername(username));
     }
 
     @Operation(summary = "Add robot(Admin)")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RobotVO.RobotToken> addRobot(@RequestBody @Valid RobotParam.AddRobot addRobot) {
-        return HttpResult.of(robotFacade.addRobot(addRobot));
+        return HttpResult.ofBaseException(robotFacade.addRobot(addRobot));
     }
 
     @Operation(summary = "Apply for robot")
     @PostMapping(value = "/apply", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RobotVO.RobotToken> applyRobot(@RequestBody @Valid RobotParam.ApplyRobot applyRobot) {
-        return HttpResult.of(robotFacade.applyRobot(applyRobot));
+        return HttpResult.ofBaseException(robotFacade.applyRobot(applyRobot));
     }
 
     @Operation(summary = "Revoke robot")

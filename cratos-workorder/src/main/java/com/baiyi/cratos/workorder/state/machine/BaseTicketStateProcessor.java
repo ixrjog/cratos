@@ -97,18 +97,15 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     @Override
-    public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
-        try {
-            preChangeInspection(action, event);
-            processing(action, event);
-            if (!isTransition(event.getBody())) {
-                return;
-            }
-            transitionToNextState(event.getBody());
-            if (nextState(action, event)) {
-                changeToTarget(event);
-            }
-        } catch (WorkOrderTicketDoNextException ignored) {
+    public void change(TicketStateChangeAction action, TicketEvent<Event> event) throws WorkOrderTicketDoNextException {
+        preChangeInspection(action, event);
+        processing(action, event);
+        if (!isTransition(event.getBody())) {
+            return;
+        }
+        transitionToNextState(event.getBody());
+        if (nextState(action, event)) {
+            changeToTarget(event);
         }
     }
 

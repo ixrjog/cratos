@@ -34,47 +34,47 @@ public class WorkOrderTicketEntryController {
     @Operation(summary = "Query aliyun kms instance")
     @PostMapping(value = "/aliyun/kms/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryAliyunKmsTicketEntry() {
-        return HttpResult.of(ticketEntryFacade.queryAliyunKmsTicketEntry());
+        return HttpResult.ofBaseException(ticketEntryFacade.queryAliyunKmsTicketEntry());
     }
 
     @Operation(summary = "Query aliyun kms key")
     @PostMapping(value = "/aliyun/kms/key/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsAssetVO.Asset>> queryAliyunKmsKeyTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.QueryAliyunKmsKeyTicketEntry queryAliyunKmsKeyTicketEntry) {
-        return HttpResult.of(ticketEntryFacade.queryAliyunKmsKeyTicketEntry(queryAliyunKmsKeyTicketEntry));
+        return HttpResult.ofBaseException(ticketEntryFacade.queryAliyunKmsKeyTicketEntry(queryAliyunKmsKeyTicketEntry));
     }
 
     @Operation(summary = "Query aliyun dataWorks instance")
     @PostMapping(value = "/aliyun/dataworks/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDataWorksInstanceTicketEntry() {
-        return HttpResult.of(ticketEntryFacade.queryDataWorksInstanceTicketEntry());
+        return HttpResult.ofBaseException(ticketEntryFacade.queryDataWorksInstanceTicketEntry());
     }
 
     @Operation(summary = "Query aliyun rocketMQ instance")
     @PostMapping(value = "/aliyun/rocketmq/instance/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsInstanceVO.EdsInstance>> queryRocketMqInstanceTicketEntry() {
-        return HttpResult.of(ticketEntryFacade.queryRocketMqInstanceTicketEntry());
+        return HttpResult.ofBaseException(ticketEntryFacade.queryRocketMqInstanceTicketEntry());
     }
 
     @Operation(summary = "Query application resource deployment")
     @PostMapping(value = "/application/resource/deployment/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsAssetVO.Asset>> queryApplicationResourceDeploymentTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.QueryApplicationResourceDeploymentTicketEntry queryApplicationResourceDeploymentTicketEntry) {
-        return HttpResult.of(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(
+        return HttpResult.ofBaseException(ticketEntryFacade.queryApplicationResourceDeploymentTicketEntry(
                 queryApplicationResourceDeploymentTicketEntry));
     }
 
     @Operation(summary = "Query LDAP group options")
     @GetMapping(value = "/ldap/group/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getLdapGroupOptions() {
-        return HttpResult.of(ticketEntryFacade.getLdapGroupOptions());
+        return HttpResult.ofBaseException(ticketEntryFacade.getLdapGroupOptions());
     }
 
     @Operation(summary = "Query LDAP role permission ticket entry")
     @PostMapping(value = "/ldap/role/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<LdapUserGroupModel.Role>> queryLdapRolePermissionTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.QueryLdapRolePermissionTicketEntry queryLdapRolePermissionTicketEntry) {
-        return HttpResult.of(ticketEntryFacade.queryLdapRolePermissionTicketEntry(queryLdapRolePermissionTicketEntry));
+        return HttpResult.ofBaseException(ticketEntryFacade.queryLdapRolePermissionTicketEntry(queryLdapRolePermissionTicketEntry));
     }
 
     // add entry

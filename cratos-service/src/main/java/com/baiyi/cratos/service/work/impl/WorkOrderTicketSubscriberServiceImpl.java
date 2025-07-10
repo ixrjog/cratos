@@ -43,6 +43,14 @@ public class WorkOrderTicketSubscriberServiceImpl implements WorkOrderTicketSubs
     }
 
     @Override
+    public WorkOrderTicketSubscriber getByToken(@NonNull String token) {
+        Example example = new Example(WorkOrderTicketSubscriber.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("token", token);
+        return workOrderTicketSubscriberMapper.selectOneByExample(example);
+    }
+
+    @Override
     public List<WorkOrderTicketSubscriber> queryByTicketId(int ticketId) {
         Example example = new Example(WorkOrderTicketSubscriber.class);
         Example.Criteria criteria = example.createCriteria();

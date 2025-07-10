@@ -49,6 +49,8 @@ public class AliyunKmsSecretUpdateTicketEntryBuilder {
 
     public WorkOrderTicketEntry buildEntry() {
         AliyunKmsModel.UpdateSecret detail = param.getDetail();
+        detail.setSecretName(detail.getSecret()
+                .getName());
         detail.setEdsInstance(edsInstance);
         detail.setEndpoint(endpoint);
         detail.setSecretData(encryptedSecretData);

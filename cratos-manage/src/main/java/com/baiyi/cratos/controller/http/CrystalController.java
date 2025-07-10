@@ -32,20 +32,20 @@ public class CrystalController {
     @Operation(summary = "Query eds asset type options")
     @GetMapping(value = "/instance/asset/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getInstanceAssetTypeOptions(@RequestParam @Valid String instanceType) {
-        return HttpResult.of(crystalFacade.getInstanceAssetTypeOptions(instanceType));
+        return HttpResult.ofBaseException(crystalFacade.getInstanceAssetTypeOptions(instanceType));
     }
 
     @Operation(summary = "Get server account options")
     @GetMapping(value = "/server/account/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<ServerAccountVO.ServerAccount>> getServerAccountOptions(@RequestParam int size) {
-        return HttpResult.of(crystalFacade.getServerAccountOptions(size));
+        return HttpResult.ofBaseException(crystalFacade.getServerAccountOptions(size));
     }
 
     @Operation(summary = "Pagination query eds instance asset（server）")
     @PostMapping(value = "/instance/asset/server/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CrystalServerVO.AssetServer>> queryEdsInstanceAssetPage(
             @RequestBody @Valid EdsInstanceParam.AssetPageQuery assetPageQuery) {
-        return HttpResult.of(crystalFacade.queryEdsInstanceAssetPage(assetPageQuery));
+        return HttpResult.ofBaseException(crystalFacade.queryEdsInstanceAssetPage(assetPageQuery));
     }
 
 }

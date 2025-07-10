@@ -29,7 +29,6 @@ import java.util.Arrays;
 public class BindAssetsAfterImportAspect {
 
     private final EdsAssetService edsAssetService;
-
     private final BusinessAssetBindService businessAssetBindService;
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.BindAssetsAfterImport)")

@@ -30,7 +30,7 @@ public class UserFavoriteController {
     @Operation(summary = "Query favorite applications")
     @GetMapping(value = "/my/application/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<ApplicationVO.Application>> getMyFavoriteApplication() {
-        return HttpResult.of(userFavoriteFacade.getMyFavoriteApplication());
+        return HttpResult.ofBaseException(userFavoriteFacade.getMyFavoriteApplication());
     }
 
     @Operation(summary = "Add application to my favorites")

@@ -58,14 +58,14 @@ public class ApplicationResourceBaselineController {
     @Operation(summary = "Query application resource baseline type options")
     @GetMapping(value = "/type/options", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getBaselineTypeOptions() {
-        return HttpResult.of(ResourceBaselineTypeEnum.toOptions());
+        return HttpResult.ofBaseException(ResourceBaselineTypeEnum.toOptions());
     }
 
     @Operation(summary = "Pagination query application resource baseline")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ApplicationResourceBaselineVO.ResourceBaseline>> queryApplicationResourceBaselinePage(
             @RequestBody @Valid ApplicationResourceBaselineParam.ApplicationResourceBaselinePageQuery pageQuery) {
-        return HttpResult.of(applicationResourceBaselineFacade.queryApplicationResourceBaselinePage(pageQuery));
+        return HttpResult.ofBaseException(applicationResourceBaselineFacade.queryApplicationResourceBaselinePage(pageQuery));
     }
 
 }

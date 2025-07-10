@@ -36,20 +36,20 @@ public class KubernetesResourceController {
     @Operation(summary = "Query kubernetes resource options")
     @GetMapping(value = "/kind/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getResourceKindOptions() {
-        return HttpResult.of(KubernetesResourceKindEnum.toOptions());
+        return HttpResult.ofBaseException(KubernetesResourceKindEnum.toOptions());
     }
 
     @Operation(summary = "Pagination query kubernetes resource template")
     @PostMapping(value = "/template/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<KubernetesResourceTemplateVO.Template>> queryTemplatePage(
             @RequestBody @Valid KubernetesResourceTemplateParam.TemplatePageQuery pageQuery) {
-        return HttpResult.of(templateFacade.queryTemplatePage(pageQuery));
+        return HttpResult.ofBaseException(templateFacade.queryTemplatePage(pageQuery));
     }
 
     @Operation(summary = "Get kubernetes resource template")
     @GetMapping(value = "/template/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesResourceTemplateVO.Template> getTemplateById(int id) {
-        return HttpResult.of(templateFacade.getTemplateById(id));
+        return HttpResult.ofBaseException(templateFacade.getTemplateById(id));
     }
 
     @Operation(summary = "Lock kubernetes resource template")
@@ -64,7 +64,7 @@ public class KubernetesResourceController {
     @PostMapping(value = "/template/copy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesResourceTemplateVO.Template> copyTemplate(
             @RequestBody @Valid KubernetesResourceTemplateParam.CopyTemplate copyTemplate) {
-        return HttpResult.of(templateFacade.copyTemplate(copyTemplate));
+        return HttpResult.ofBaseException(templateFacade.copyTemplate(copyTemplate));
     }
 
     @Operation(summary = "Create kubernetes resource by template")
@@ -110,7 +110,7 @@ public class KubernetesResourceController {
     @PostMapping(value = "/member/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<KubernetesResourceTemplateVO.Member>> queryMemberPage(
             @RequestBody @Valid KubernetesResourceTemplateParam.MemberPageQuery pageQuery) {
-        return HttpResult.of(templateMemberFacade.queryMemberPage(pageQuery));
+        return HttpResult.ofBaseException(templateMemberFacade.queryMemberPage(pageQuery));
     }
 
     @Operation(summary = "Add kubernetes resource template member")
@@ -147,7 +147,7 @@ public class KubernetesResourceController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<KubernetesResourceVO.Resource>> queryResourcePage(
             @RequestBody @Valid KubernetesResourceParam.ResourcePageQuery pageQuery) {
-        return HttpResult.of(resourceFacade.queryResourcePage(pageQuery));
+        return HttpResult.ofBaseException(resourceFacade.queryResourcePage(pageQuery));
     }
 
     @Operation(summary = "Delete kubernetes resource by id")

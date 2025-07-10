@@ -36,7 +36,7 @@ public class ExtDataSourceBusinessController {
     @GetMapping(value = "/kubernetes/resource/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsBusinessVO.KubernetesInstanceResource> queryKubernetesInstanceResource(
             @RequestBody @Valid EdsBusinessParam.KubernetesInstanceResourceQuery kubernetesInstanceResourceQuery) {
-        return HttpResult.of(edsBusinessFacade.queryKubernetesInstanceResource(kubernetesInstanceResourceQuery));
+        return HttpResult.ofBaseException(edsBusinessFacade.queryKubernetesInstanceResource(kubernetesInstanceResourceQuery));
     }
 
 }

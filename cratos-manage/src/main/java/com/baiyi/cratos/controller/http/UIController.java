@@ -27,7 +27,7 @@ public class UIController {
     @Operation(summary = "Get UI point")
     @GetMapping(value = "/point/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<FrontVO.UIPoint> getUIPoint() {
-        return HttpResult.of(uiFacade.getUIPoint());
+        return HttpResult.ofBaseException(uiFacade.getUIPoint());
     }
 
 }

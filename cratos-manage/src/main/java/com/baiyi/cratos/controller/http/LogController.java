@@ -26,7 +26,7 @@ public class LogController {
     @Operation(summary = "Login")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<LoginVO.Login> login(@RequestBody LoginParam.Login loginParam) {
-        return HttpResult.of(authFacade.login(loginParam));
+        return HttpResult.ofBaseException(authFacade.login(loginParam));
     }
 
     @Operation(summary = "Logout")

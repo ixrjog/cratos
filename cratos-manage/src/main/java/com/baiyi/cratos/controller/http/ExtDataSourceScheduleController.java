@@ -29,7 +29,7 @@ public class ExtDataSourceScheduleController {
     @Operation(summary = "查询指定ID的数据源实例任务")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<ScheduleVO.Job>> queryScheduleById(@RequestParam int id) {
-        return HttpResult.of(scheduleFacade.queryJob(id));
+        return HttpResult.ofBaseException(scheduleFacade.queryJob(id));
     }
 
     @Operation(summary = "新增数据源实例任务")
@@ -63,7 +63,7 @@ public class ExtDataSourceScheduleController {
     @Operation(summary = "检查Cron表达式")
     @PostMapping(value = "/cron/check", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<String>> checkCron(@RequestBody @Valid EdsScheduleParam.CheckCron checkCron) {
-        return HttpResult.of(scheduleFacade.checkCron(checkCron));
+        return HttpResult.ofBaseException(scheduleFacade.checkCron(checkCron));
     }
 
 }

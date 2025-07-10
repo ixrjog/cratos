@@ -149,6 +149,26 @@ public class WorkOrderTicketParam {
         private String approvalType;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Schema
+    public static class CallbackApprovalTicket extends SimpleTicketNo {
+        private String username;
+        private String token;
+        private String approvalType;
+
+        public ApprovalTicket toApprovalTicket() {
+            return ApprovalTicket.builder()
+                    .approvalType(approvalType)
+                    .approveRemark(approvalType.toUpperCase())
+                    .ticketNo(getTicketNo())
+                    .build();
+        }
+    }
+
     @Data
     @Builder
     @AllArgsConstructor

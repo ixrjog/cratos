@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.work;
 
+import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
@@ -22,6 +23,9 @@ public interface WorkOrderTicketFacade {
     WorkOrderTicketVO.TicketDetails submitTicket(WorkOrderTicketParam.SubmitTicket submitTicket);
 
     void approvalTicket(WorkOrderTicketParam.ApprovalTicket approvalTicket);
+
+    @SuppressWarnings("rawtypes")
+    HttpResult approvalTicket(WorkOrderTicketParam.CallbackApprovalTicket callbackApprovalTicket);
 
     WorkOrderTicketVO.TicketDetails doNextStateOfTicket(WorkOrderTicketParam.SimpleTicketNo simpleTicketNo);
 

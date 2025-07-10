@@ -23,8 +23,12 @@ public class HttpResult<T> {
     private String msg;
     private int code;
 
-    public static <T> HttpResult<T> of(T body) {
+    public static <T> HttpResult<T> ofBaseException(T body) {
         return new HttpResult<>(body);
+    }
+
+    public static <T> HttpResult<T> ofBaseException(BaseException ex) {
+        return new HttpResult<>(ex);
     }
 
     public HttpResult(T body) {

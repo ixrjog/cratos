@@ -34,14 +34,14 @@ public class UserPermissionController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserPermissionVO.Permission>> queryUserPermissionPage(
             @RequestBody @Valid UserPermissionParam.UserPermissionPageQuery pageQuery) {
-        return HttpResult.of(permissionFacade.queryUserPermissionPage(pageQuery));
+        return HttpResult.ofBaseException(permissionFacade.queryUserPermissionPage(pageQuery));
     }
 
     @Operation(summary = "Pagination query user business permission")
     @PostMapping(value = "/business/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<PermissionBusinessVO.PermissionBusiness>> queryUserBusinessPermissionPage(
             @RequestBody @Valid UserPermissionBusinessParam.UserPermissionBusinessPageQuery pageQuery) {
-        return HttpResult.of(permissionBusinessFacade.queryUserPermissionBusinessPage(pageQuery));
+        return HttpResult.ofBaseException(permissionBusinessFacade.queryUserPermissionBusinessPage(pageQuery));
     }
 
     @Operation(summary = "Grant user permission")
@@ -74,25 +74,25 @@ public class UserPermissionController {
     @GetMapping(value = "/details/by/username", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.BusinessUserPermissionDetails> getUserBusinessUserPermissionDetails(
             @RequestParam @Valid @NotBlank String username) {
-        return HttpResult.of(permissionFacade.getUserBusinessUserPermissionDetails(username));
+        return HttpResult.ofBaseException(permissionFacade.getUserBusinessUserPermissionDetails(username));
     }
 
     @PostMapping(value = "/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.UserPermissionDetails> queryBusinessUserPermissionDetails(
             @RequestBody @Valid UserPermissionParam.QueryBusinessUserPermissionDetails queryBusinessUserPermissionDetails) {
-        return HttpResult.of(permissionFacade.queryUserPermissionDetails(queryBusinessUserPermissionDetails));
+        return HttpResult.ofBaseException(permissionFacade.queryUserPermissionDetails(queryBusinessUserPermissionDetails));
     }
 
     @PostMapping(value = "/all/business/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserPermissionVO.UserPermissionDetails> queryAllBusinessUserPermissionDetails(
             @RequestBody @Valid UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails) {
-        return HttpResult.of(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
+        return HttpResult.ofBaseException(permissionFacade.queryUserPermissionDetails(queryAllBusinessUserPermissionDetails));
     }
 
     @PostMapping(value = "/business/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<PermissionBusinessVO.UserPermissionByBusiness> queryUserPermissionByBusiness(
             @RequestBody @Valid UserPermissionParam.QueryUserPermissionByBusiness queryUserPermissionByBusiness) {
-        return HttpResult.of(permissionBusinessFacade.queryUserPermissionByBusiness(queryUserPermissionByBusiness));
+        return HttpResult.ofBaseException(permissionBusinessFacade.queryUserPermissionByBusiness(queryUserPermissionByBusiness));
     }
 
     @PostMapping(value = "/business/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
