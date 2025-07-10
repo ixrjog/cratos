@@ -24,7 +24,6 @@ import java.util.Set;
  */
 public abstract class BaseMultipleSourcesEdsAssetProvider<C extends IEdsConfigModel, A> extends BaseEdsInstanceAssetProvider<C, A> {
 
-
     public BaseMultipleSourcesEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,

@@ -62,9 +62,9 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         RiskChangeModel.RiskChangeApplication riskChangeApplication = loadAs(entry);
-        String applicantName = StringFormatter.arrayFormat("<{}|{}>", StringUtils.hasText(
-                riskChangeApplication.getApplicant()
-                        .getDisplayName()) ? riskChangeApplication.getApplicant()
+        String applicantName = StringFormatter.arrayFormat("{}<{}｜{}>", riskChangeApplication.getApplicant()
+                .getUsername(), StringUtils.hasText(riskChangeApplication.getApplicant()
+                .getDisplayName()) ? riskChangeApplication.getApplicant()
                 .getDisplayName() : riskChangeApplication.getApplicant()
                 .getName(), riskChangeApplication.getApplicant()
                 .getEmail());

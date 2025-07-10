@@ -37,4 +37,23 @@ public class AliyunKmsModel {
         private String description;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateSecret implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -1984769793803302578L;
+        private EdsInstanceVO.EdsInstance edsInstance;
+        // KMS instance
+        private EdsAssetVO.Asset secret;
+        private String endpoint;
+        private String secretName;
+        private String secretData;
+        private String versionId;
+        // 确认变更风险
+        private boolean confirmTheRiskOfChange;
+    }
+
 }

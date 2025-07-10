@@ -1,17 +1,18 @@
 package com.baiyi.cratos.workorder.entry.impl.aliyun;
 
-import com.aliyun.sdk.service.kms20160120.models.CreateSecretResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
-import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.aliyun.sdk.service.kms20160120.models.PutSecretValueResponseBody;
 import com.baiyi.cratos.common.util.IdentityUtil;
-import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -26,31 +27,29 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
-import com.baiyi.cratos.workorder.builder.entry.AliyunKmsSecretCreateTicketEntryBuilder;
+import com.baiyi.cratos.workorder.builder.entry.AliyunKmsSecretUpdateTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_KMS_ENDPOINT;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/6/20 10:45
+ * &#064;Date  2025/7/9 13:48
  * &#064;Version 1.0
  */
 @Slf4j
 @Component
-@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
-@WorkOrderKey(key = WorkOrderKeys.ALIYUN_KMS_SECRET_CREATE)
-public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.CreateSecret, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry> {
+@BusinessType(type = BusinessTypeEnum.EDS_ASSET)
+@WorkOrderKey(key = WorkOrderKeys.ALIYUN_KMS_SECRET_UPDATE)
+public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.UpdateSecret, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry> {
 
     private static final String ROW_TPL = "| {} | {} | {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
@@ -59,7 +58,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     private final StringEncryptor stringEncryptor;
     private final LanguageUtils languageUtils;
 
-    public AliyunKmsSecretCreateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
+    public AliyunKmsSecretUpdateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
                                                     EdsInstanceService edsInstanceService,
@@ -76,97 +75,58 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void verifyEntryParam(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param,
+    protected void verifyEntryParam(WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry param,
                                     WorkOrderTicketEntry entry) {
-        AliyunKmsModel.CreateSecret createSecret = param.getDetail();
+        AliyunKmsModel.UpdateSecret updateSecret = param.getDetail();
         // 校验Secret是否存在
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
         Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
+                updateSecret.getEndpoint(), aliyun, updateSecret.getSecretName());
         if (optionalDescribeSecretResponseBody.isPresent()) {
-            WorkOrderTicketException.runtime(
-                    languageUtils.getFormattedMessage("workorder.ticket.aliyun.kms.secret.create.verify",
-                            createSecret.getSecretName(), createSecret.getVersionId()));
+            // 如果存在则查询 versionId 是否冲突
+            boolean versionConflict = AliyunKmsRepo.listSecretVersionIds(updateSecret.getEndpoint(), aliyun,
+                            updateSecret.getSecretName())
+                    .stream()
+                    .anyMatch(e -> updateSecret.getVersionId()
+                            .equals(e.getVersionId()));
+            if (versionConflict) {
+                WorkOrderTicketException.runtime(
+                        languageUtils.getFormattedMessage("workorder.ticket.aliyun.kms.secret.update.verify",
+                                updateSecret.getSecretName(), updateSecret.getVersionId()));
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                AliyunKmsModel.CreateSecret createSecret) throws WorkOrderTicketException {
-        WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param = WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry.builder()
-                .detail(createSecret)
+                                AliyunKmsModel.UpdateSecret updateSecret) throws WorkOrderTicketException {
+        WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry param = WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry.builder()
+                .detail(updateSecret)
                 .build();
-        // 再次验证，避免重复申请
+        // 再次验证，避免重复申请versionId冲突
         this.verifyEntryParam(param, entry);
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        Map<String, String> tags = buildTags(entry);
         // 解密 Secret 数据
-        String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
-        Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
-                        .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
-                createSecret.getEncryptionKeyId(), secretData, tags, createSecret.getDescription());
-        if (optionalCreateSecretResponseBody.isEmpty()) {
-            WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
-        }
-        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
-        if (optionalDescribeSecretResponseBody.isEmpty()) {
-            WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
-        }
-        // 写入资产
-        importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get(), tags);
-    }
-
-    private Map<String, String> buildTags(WorkOrderTicketEntry entry) {
-        Map<String, String> tags = Maps.newHashMap();
-        tags.put(SysTagKeys.CREATED_BY.getKey(), SessionUtils.getUsername());
-        tags.put(SysTagKeys.ENV.getKey(), entry.getNamespace());
-        return tags;
-    }
-
-    /**
-     * 写入资产
-     *
-     * @param holder
-     * @param createSecret
-     * @param describeSecretResponseBody
-     */
-    private void importAsset(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder,
-                             AliyunKmsModel.CreateSecret createSecret,
-                             DescribeSecretResponseBody describeSecretResponseBody, Map<String, String> tags) {
-        try {
-            AliyunKms.SecretMetadata metadata = BeanCopierUtils.copyProperties(describeSecretResponseBody,
-                    AliyunKms.SecretMetadata.class);
-            metadata.setTags(AliyunKms.Tags.of(tags));
-            AliyunKms.Secret secret = AliyunKms.Secret.builder()
-                    .secretName(createSecret.getSecretName())
-                    .secretType(metadata.getSecretType())
-                    .createTime(metadata.getCreateTime())
-                    .updateTime(metadata.getUpdateTime())
-                    .build();
-            AliyunKms.KmsSecret kmsSecret = AliyunKms.KmsSecret.builder()
-                    .endpoint(createSecret.getEndpoint())
-                    .metadata(metadata)
-                    .secret(secret)
-                    .build();
-            holder.importAsset(kmsSecret);
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+        String secretData = stringEncryptor.decrypt(updateSecret.getSecretData());
+        Optional<PutSecretValueResponseBody> optionalPutSecretValueResponseBody = AliyunKmsRepo.putSecretValue(
+                updateSecret.getEndpoint(), aliyun, updateSecret.getSecretName(), updateSecret.getVersionId(),
+                secretData);
+        if (optionalPutSecretValueResponseBody.isEmpty()) {
+            WorkOrderTicketException.runtime("Failed to update KMS secret value: " + updateSecret.getSecretName());
         }
     }
 
     @Override
     protected WorkOrderTicketEntry paramToEntry(
-            WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addCreateAliyunKmsSecretTicketEntry) {
-        int instanceId = Optional.ofNullable(addCreateAliyunKmsSecretTicketEntry)
+            WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry addUpdateAliyunKmsSecretTicketEntry) {
+        int instanceId = Optional.ofNullable(addUpdateAliyunKmsSecretTicketEntry)
                 .map(WorkOrderTicketParam.TicketEntry::getInstanceId)
                 .orElseThrow(() -> new WorkOrderTicketException("Instance ID is required"));
         if (!IdentityUtil.hasIdentity(instanceId)) {
@@ -176,21 +136,20 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         if (instance == null) {
             WorkOrderTicketException.runtime("Instance not found: " + instanceId);
         }
-        WorkOrderTicket ticket = workOrderTicketService.getById(addCreateAliyunKmsSecretTicketEntry.getTicketId());
+        WorkOrderTicket ticket = workOrderTicketService.getById(addUpdateAliyunKmsSecretTicketEntry.getTicketId());
         String username = ticket.getUsername();
         EdsAssetIndex endpointIndex = edsAssetIndexService.getByAssetIdAndName(
-                addCreateAliyunKmsSecretTicketEntry.getDetail()
-                        .getKmsInstance()
+                addUpdateAliyunKmsSecretTicketEntry.getDetail()
+                        .getSecret()
                         .getId(), ALIYUN_KMS_ENDPOINT);
         // 加密 Secret 数据
-        String encryptedSecretData = stringEncryptor.encrypt(Optional.of(addCreateAliyunKmsSecretTicketEntry)
-                .map(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry::getDetail)
-                .map(AliyunKmsModel.CreateSecret::getSecretData)
+        String encryptedSecretData = stringEncryptor.encrypt(Optional.of(addUpdateAliyunKmsSecretTicketEntry)
+                .map(WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry::getDetail)
+                .map(AliyunKmsModel.UpdateSecret::getSecretData)
                 .orElseThrow(() -> new WorkOrderTicketException("Secret data is required")));
-        return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
-                .withParam(addCreateAliyunKmsSecretTicketEntry)
+        return AliyunKmsSecretUpdateTicketEntryBuilder.newBuilder()
+                .withParam(addUpdateAliyunKmsSecretTicketEntry)
                 .withEdsInstance(BeanCopierUtils.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
-                .withUsername(username)
                 .withEndpoint(endpointIndex.getValue())
                 .withEncryptedSecretData(encryptedSecretData)
                 .buildEntry();
@@ -199,18 +158,17 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Description |
-                | --- | --- | --- | --- | --- | --- |
+                | Aliyun Instance | Secret Name | Version ID | Config Center Value |
+                | --- | --- | --- | --- |
                 """;
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
-        AliyunKmsModel.CreateSecret createSecret = loadAs(entry);
+        AliyunKmsModel.UpdateSecret updateSecret = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), createSecret.getSecretName(),
-                createSecret.getVersionId(), createSecret.getEncryptionKeyId(), "KMS#" + createSecret.getSecretName(),
-                createSecret.getDescription());
+        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), updateSecret.getSecretName(),
+                updateSecret.getVersionId(), "KMS#" + updateSecret.getSecretName());
     }
 
     @Override

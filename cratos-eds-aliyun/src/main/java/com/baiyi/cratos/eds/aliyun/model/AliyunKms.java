@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -144,6 +145,8 @@ public class AliyunKms {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Tags implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2608857658669957121L;
 
         public static final Tags NO_DATA = Tags.builder()
                 .build();
@@ -152,7 +155,6 @@ public class AliyunKms {
             if (tags == null || CollectionUtils.isEmpty(tags.getTag())) {
                 return NO_DATA;
             }
-
             List<Tag> tag = tags.getTag()
                     .stream()
                     .map(e -> Tag.builder()
@@ -165,8 +167,22 @@ public class AliyunKms {
                     .build();
         }
 
-        @Serial
-        private static final long serialVersionUID = 2608857658669957121L;
+        public static Tags of(Map<String, String> tags) {
+            if (tags == null || tags.isEmpty()) {
+                return NO_DATA;
+            }
+            List<Tag> tag = tags.entrySet()
+                    .stream()
+                    .map(e -> Tag.builder()
+                            .tagKey(e.getKey())
+                            .tagValue(e.getValue())
+                            .build())
+                    .toList();
+            return Tags.builder()
+                    .tag(tag)
+                    .build();
+        }
+
         @Builder.Default
         private List<Tag> tag = List.of();
     }

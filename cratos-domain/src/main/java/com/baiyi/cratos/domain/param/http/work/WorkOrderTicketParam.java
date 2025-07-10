@@ -361,6 +361,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddUpdateAliyunKmsSecretTicketEntry extends TicketEntry implements HasEntryDetail<AliyunKmsModel.UpdateSecret>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 1871415662334517238L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private AliyunKmsModel.UpdateSecret detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddApplicationDeletePodTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationVO.Application>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 3563509820230350553L;

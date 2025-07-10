@@ -27,9 +27,8 @@ import java.io.Serial;
 @Slf4j
 public class ReceiveEventController {
 
-    public static final String GITLAB_TOKEN = "X-Gitlab-Token";
-
     private final GitLabFacade gitLabFacade;
+    public static final String GITLAB_TOKEN = "X-Gitlab-Token";
 
     @Operation(summary = "GitLab API v4 hooks")
     @PostMapping(value = "/gitlab/v4/system/hooks", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -233,8 +233,6 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 .ifPresent(pods -> pods.forEach(pod -> doExit(sessionId, pod.getInstanceId())));
     }
 
-    /// ///////////////////
-
     protected DingtalkRobotModel.Msg getMsg(User loginUser, ApplicationKubernetesParam.DeploymentRequest deployment,
                                             ApplicationKubernetesParam.PodRequest pod) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();

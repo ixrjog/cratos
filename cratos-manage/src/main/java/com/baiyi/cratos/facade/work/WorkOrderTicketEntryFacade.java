@@ -77,6 +77,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addCreateAliyunKmsSecretTicketEntry(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addTicketEntry);
 
+    void addUpdateAliyunKmsSecretTicketEntry(WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry addTicketEntry);
+
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);

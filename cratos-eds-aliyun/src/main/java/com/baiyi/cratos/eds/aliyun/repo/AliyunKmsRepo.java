@@ -226,4 +226,24 @@ public class AliyunKmsRepo {
         }
     }
 
+    public static Optional<PutSecretValueResponseBody> putSecretValue(String endpoint,
+                                                                      EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      String secretName, String versionId,
+                                                                      String secretData) {
+        try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
+            PutSecretValueRequest request = PutSecretValueRequest.builder()
+                    .secretName(secretName)
+                    .versionId(versionId)
+                    .secretData(secretData)
+                    .build();
+            PutSecretValueResponse resp = client.putSecretValue(request)
+                    .get();
+            return Optional.ofNullable(resp)
+                    .map(PutSecretValueResponse::getBody);
+        } catch (Exception e) {
+            log.error("Failed to update secret value from Aliyun KMS: {}", e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
 }
