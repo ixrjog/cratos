@@ -73,6 +73,8 @@ cratos:
         - /actuator
         # Hooks
         - /api/receive/event/gitlab/v4/system/hooks
+        # Callback
+        - /api/callback/
 
 mapper:
   mappers:

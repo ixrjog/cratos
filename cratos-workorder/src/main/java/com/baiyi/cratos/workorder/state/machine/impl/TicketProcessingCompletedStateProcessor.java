@@ -31,7 +31,7 @@ import java.util.List;
 @TicketStates(state = TicketState.PROCESSING_COMPLETED, target = TicketState.COMPLETED)
 public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderCompletionNoticeSender workOrderCompletionNoticeHelper;
+    private final WorkOrderCompletionNoticeSender workOrderCompletionNoticeSender;
 
     public TicketProcessingCompletedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                                    WorkOrderTicketService workOrderTicketService,
@@ -44,7 +44,7 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
-        this.workOrderCompletionNoticeHelper = applicantNotificationHelper;
+        this.workOrderCompletionNoticeSender = applicantNotificationHelper;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class TicketProcessingCompletedStateProcessor extends BaseTicketStateProc
         workOrderTicketService.updateByPrimaryKey(ticket);
         // 工单处理完成通知
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        workOrderCompletionNoticeHelper.sendMsg(workOrder, ticket);
+        workOrderCompletionNoticeSender.sendMsg(workOrder, ticket);
     }
 
 }

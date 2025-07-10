@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 @TicketStates(state = TicketState.SUBMITTED, target = TicketState.IN_APPROVAL)
 public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderApprovalNoticeSender workOrderApprovalNoticeHelper;
+    private final WorkOrderApprovalNoticeSender workOrderApprovalNoticeSender;
 
     public TicketSubmittedStateProcessor(UserService userService, WorkOrderService workOrderService,
                                          WorkOrderTicketService workOrderTicketService,
@@ -42,7 +42,7 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
-        this.workOrderApprovalNoticeHelper = approvalNotificationHelper;
+        this.workOrderApprovalNoticeSender = approvalNotificationHelper;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TicketSubmittedStateProcessor extends BaseTicketStateProcessor<Work
         }
         WorkOrderTicketNode ticketNode = workOrderTicketNodeService.getById(ticket.getNodeId());
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        workOrderApprovalNoticeHelper.sendMsg(workOrder, ticket, ticketNode);
+        workOrderApprovalNoticeSender.sendMsg(workOrder, ticket, ticketNode);
     }
 
 }
