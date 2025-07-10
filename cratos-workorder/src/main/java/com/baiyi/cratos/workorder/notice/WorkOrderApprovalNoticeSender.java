@@ -2,17 +2,16 @@ package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
-import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.generator.WorkOrder;
-import com.baiyi.cratos.domain.generator.WorkOrderTicket;
-import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
-import com.baiyi.cratos.util.LanguageUtils;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.service.work.WorkOrderTicketSubscriberService;
+import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.enums.SubscribeStatus;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
@@ -33,12 +32,16 @@ import java.util.Map;
 @Component
 public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
 
+    private final WorkOrderTicketSubscriberService workOrderTicketSubscriberService;
+
     public WorkOrderApprovalNoticeSender(WorkOrderTicketEntryService workOrderTicketEntryService,
                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
-                                         NotificationTemplateService notificationTemplateService) {
+                                         NotificationTemplateService notificationTemplateService,
+                                         WorkOrderTicketSubscriberService workOrderTicketSubscriberService) {
         super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
                 notificationTemplateService);
+        this.workOrderTicketSubscriberService = workOrderTicketSubscriberService;
     }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
@@ -52,13 +55,15 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
                 })
                 .filter(java.util.Objects::nonNull)
                 .toList();
+        // /workorder/ticket/approval?ticketNo=${ticketNo}&username=${approver}&approvalType=AGREE&token=${token}
+        // /workorder/ticket/approval?ticketNo=${ticketNo}&username=${approver}&approvalType=REJECT&token=${token}
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("ticketNo", ticket.getTicketNo())
                 .put("workOrderName", workOrder.getName())
                 .put("applicant", ticket.getUsername())
                 .put("ticketEntities", ticketEntities)
                 .build();
-        sendMsgToApprover(approvers, dict);
+        sendMsgToApprover(ticket, approvers, dict);
     }
 
     private List<User> queryApprovers(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
@@ -68,13 +73,22 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
         return ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
     }
 
-    private void sendMsgToApprover(List<User> approvers, Map<String, Object> dict) {
+    private void sendMsgToApprover(WorkOrderTicket ticket, List<User> approvers, Map<String, Object> dict) {
         if (CollectionUtils.isEmpty(approvers)) {
             return;
         }
-        approvers.forEach(
-                approver -> sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(),
-                        dict));
+        approvers.forEach(approver -> {
+            WorkOrderTicketSubscriber uk = WorkOrderTicketSubscriber.builder()
+                    .ticketId(ticket.getId())
+                    .username(approver.getUsername())
+                    .subscribeStatus(SubscribeStatus.APPROVED_BY.name())
+                    .build();
+            WorkOrderTicketSubscriber workOrderTicketSubscriber = workOrderTicketSubscriberService.getByUniqueKey(uk);
+            Map<String, Object> approverDict = new java.util.HashMap<>(dict);
+            approverDict.put("approver", approver.getUsername());
+            approverDict.put("token", workOrderTicketSubscriber.getToken());
+            sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(), approverDict);
+        });
     }
 
 }

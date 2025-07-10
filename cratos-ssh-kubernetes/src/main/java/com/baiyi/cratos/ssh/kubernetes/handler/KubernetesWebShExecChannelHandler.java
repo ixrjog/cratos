@@ -38,8 +38,9 @@ import com.baiyi.cratos.ssh.kubernetes.invoker.KubernetesRemoteInvoker;
 import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.framework.AopContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -72,6 +73,11 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     private final NotificationTemplateService notificationTemplateService;
     private final UserService userService;
     private final EnvFacade envFacade;
+    
+    @Autowired
+    @Lazy
+    private KubernetesWebShExecChannelHandler self;
+    
     @Value("${cratos.language:en-us}")
     protected String language;
 
@@ -147,9 +153,8 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
                     SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
-                     // 异步处理
-                    ((KubernetesWebShExecChannelHandler) AopContext.currentProxy()).sendUserLoginContainerNotice(
-                            username, deployment, pod);
+                    // 异步处理
+                    self.sendUserLoginContainerNotice(username, deployment, pod);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                     kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);

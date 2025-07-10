@@ -8,13 +8,13 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketDoNextException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,15 +97,18 @@ public abstract class BaseTicketStateProcessor<Event extends WorkOrderTicketPara
     }
 
     @Override
-    public void change(TicketStateChangeAction action, TicketEvent<Event> event) throws WorkOrderTicketDoNextException {
-        preChangeInspection(action, event);
-        processing(action, event);
-        if (!isTransition(event.getBody())) {
-            return;
-        }
-        transitionToNextState(event.getBody());
-        if (nextState(action, event)) {
-            changeToTarget(event);
+    public void change(TicketStateChangeAction action, TicketEvent<Event> event) {
+        try {
+            preChangeInspection(action, event);
+            processing(action, event);
+            if (!isTransition(event.getBody())) {
+                return;
+            }
+            transitionToNextState(event.getBody());
+            if (nextState(action, event)) {
+                changeToTarget(event);
+            }
+        } catch (WorkOrderTicketDoNextException ignored) {
         }
     }
 
