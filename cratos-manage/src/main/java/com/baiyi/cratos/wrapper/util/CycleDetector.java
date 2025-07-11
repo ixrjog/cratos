@@ -1,5 +1,7 @@
 package com.baiyi.cratos.wrapper.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -8,6 +10,7 @@ import java.util.Map;
  * &#064;Date  2025/4/10 16:18
  * &#064;Version 1.0
  */
+@Slf4j
 public class CycleDetector {
     // 使用ThreadLocal存储当前线程的处理状态
     private static final ThreadLocal<Map<Object, String>> PROCESSING_OBJECTS = ThreadLocal.withInitial(
@@ -29,8 +32,7 @@ public class CycleDetector {
         if (processing.containsKey(object)) {
             // 记录循环引用信息
             String previousContext = processing.get(object);
-            System.out.println(
-                    "Cycle detected: " + context + " -> Object already being processed in: " + previousContext);
+            log.warn("Cycle detected: " + context + " -> Object already being processed in: " + previousContext);
             return true;
         }
         return false;
