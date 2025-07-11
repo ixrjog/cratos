@@ -71,14 +71,14 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @param edsAssetTypeEnum
      * @return
      */
-    protected List<EdsAsset> queryByInstanceAssets(ExternalDataSourceInstance<C> instance,
-                                                   EdsAssetTypeEnum edsAssetTypeEnum) {
+    protected List<EdsAsset> queryAssetsByInstanceAndType(ExternalDataSourceInstance<C> instance,
+                                                          EdsAssetTypeEnum edsAssetTypeEnum) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), edsAssetTypeEnum.name());
     }
 
-    protected List<EdsAsset> queryByInstanceAssets(ExternalDataSourceInstance<C> instance,
-                                                   EdsAssetTypeEnum edsAssetTypeEnum, String region) {
+    protected List<EdsAsset> queryAssetsByInstanceTypeAndRegion(ExternalDataSourceInstance<C> instance,
+                                                                EdsAssetTypeEnum edsAssetTypeEnum, String region) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), edsAssetTypeEnum.name(), region);
     }
@@ -89,12 +89,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     @EdsTaskLock(instanceId = "#instance.edsInstance.id")
     public void importAssets(ExternalDataSourceInstance<C> instance) {
         List<A> entities = listEntities(instance);
-        enterEntities(instance, entities);
+        processAndRecordEntities(instance, entities);
     }
 
-    private void enterEntities(ExternalDataSourceInstance<C> instance, List<A> entities) {
-        Set<Integer> idSet = listAssetsIdSet(instance);
-        entities.forEach(e -> enterEntity(instance, idSet, e));
+    private void processAndRecordEntities(ExternalDataSourceInstance<C> instance, List<A> entities) {
+        Set<Integer> idSet = getExistingAssetIds(instance);
+        entities.forEach(e -> processAndRecordEntity(instance, idSet, e));
         if (!CollectionUtils.isEmpty(idSet)) {
             log.info("Delete eds instance asset: instance={}, assetIds={}", instance.getEdsInstance()
                     .getInstanceName(), Joiner.on("|")
@@ -102,22 +102,22 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
             idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
         }
         // post processing
-        postEnterEntities(instance);
+        postProcessEntities(instance);
     }
 
-    protected void postEnterEntities(ExternalDataSourceInstance<C> instance) {
+    protected void postProcessEntities(ExternalDataSourceInstance<C> instance) {
     }
 
-    protected void enterEntity(ExternalDataSourceInstance<C> instance, Set<Integer> idSet, A entity) {
-        EdsAsset asset = enterEntity(instance, entity);
+    protected void processAndRecordEntity(ExternalDataSourceInstance<C> instance, Set<Integer> idSet, A entity) {
+        EdsAsset asset = saveEntityAsAsset(instance, entity);
         // do filter
         idSet.remove(asset.getId());
     }
 
-    protected EdsAsset enterEntity(ExternalDataSourceInstance<C> instance, A entity) {
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<C> instance, A entity) {
         try {
-            EdsAsset edsAsset = enterAsset(toEdsAsset(instance, entity));
-            List<EdsAssetIndex> indices = ofEdsAssetIndices(instance, edsAsset, entity);
+            EdsAsset edsAsset = saveAsset(convertToEdsAsset(instance, entity));
+            List<EdsAssetIndex> indices = createEdsAssetIndices(instance, edsAsset, entity);
             edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), indices);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
@@ -126,9 +126,9 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         }
     }
 
-    private List<EdsAssetIndex> ofEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
-        List<EdsAssetIndex> indices = toEdsAssetIndexList(instance, edsAsset, entity);
-        EdsAssetIndex index = toEdsAssetIndex(instance, edsAsset, entity);
+    private List<EdsAssetIndex> createEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+        List<EdsAssetIndex> indices = convertToEdsAssetIndexList(instance, edsAsset, entity);
+        EdsAssetIndex index = convertToEdsAssetIndex(instance, edsAsset, entity);
         if (index == null) {
             return indices;
         }
@@ -143,31 +143,31 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return indices;
     }
 
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
-                                                      A entity) {
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
+                                                             A entity) {
         return Collections.emptyList();
     }
 
-    protected EdsAssetIndex toEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
         return null;
     }
 
-    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Long value) {
-        return value == null ? null : toEdsAssetIndex(edsAsset, name, String.valueOf(value));
+    protected EdsAssetIndex createEdsAssetIndex(EdsAsset edsAsset, String name, Long value) {
+        return value == null ? null : createEdsAssetIndex(edsAsset, name, String.valueOf(value));
     }
 
-    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Integer value) {
+    protected EdsAssetIndex createEdsAssetIndex(EdsAsset edsAsset, String name, Integer value) {
         if (value == null) {
             return null;
         }
-        return toEdsAssetIndex(edsAsset, name, String.valueOf(value));
+        return createEdsAssetIndex(edsAsset, name, String.valueOf(value));
     }
 
-    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, Boolean value) {
-        return value == null ? null : toEdsAssetIndex(edsAsset, name, value.toString());
+    protected EdsAssetIndex createEdsAssetIndex(EdsAsset edsAsset, String name, Boolean value) {
+        return value == null ? null : createEdsAssetIndex(edsAsset, name, value.toString());
     }
 
-    protected EdsAssetIndex toEdsAssetIndex(EdsAsset edsAsset, String name, String value) {
+    protected EdsAssetIndex createEdsAssetIndex(EdsAsset edsAsset, String name, String value) {
         return !StringUtils.hasText(value) ? null : EdsAssetIndex.builder()
                 .instanceId(edsAsset.getInstanceId())
                 .assetId(edsAsset.getId())
@@ -176,10 +176,10 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                 .build();
     }
 
-    protected EdsAsset enterAsset(EdsAsset newEdsAsset) {
-        EdsAsset edsAsset = attemptToEnterAsset(newEdsAsset);
+    protected EdsAsset saveAsset(EdsAsset newEdsAsset) {
+        EdsAsset edsAsset = saveOrUpdateAsset(newEdsAsset);
         // 是否需要有资产属性表 ？
-        postEnterAsset(edsAsset);
+        postProcessAsset(edsAsset);
         return edsAsset;
     }
 
@@ -188,10 +188,10 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      *
      * @param edsAsset
      */
-    protected void postEnterAsset(EdsAsset edsAsset) {
+    protected void postProcessAsset(EdsAsset edsAsset) {
     }
 
-    private EdsAsset attemptToEnterAsset(EdsAsset newEdsAsset) {
+    private EdsAsset saveOrUpdateAsset(EdsAsset newEdsAsset) {
         EdsAsset edsAsset = edsAssetService.getByUniqueKey(newEdsAsset);
         if (edsAsset == null) {
             try {
@@ -221,11 +221,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
-    abstract protected EdsAsset toEdsAsset(ExternalDataSourceInstance<C> instance,
-                                           A entity) throws EdsAssetConversionException;
+    abstract protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<C> instance,
+                                                  A entity) throws EdsAssetConversionException;
 
-    private Set<Integer> listAssetsIdSet(ExternalDataSourceInstance<C> instance) {
-        return queryFromDatabaseAssets(instance).stream()
+    private Set<Integer> getExistingAssetIds(ExternalDataSourceInstance<C> instance) {
+        return queryExistingAssets(instance).stream()
                 .map(EdsAsset::getId)
                 .collect(Collectors.toSet());
     }
@@ -236,7 +236,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @param instance
      * @return
      */
-    private List<EdsAsset> queryFromDatabaseAssets(ExternalDataSourceInstance<C> instance) {
+    private List<EdsAsset> queryExistingAssets(ExternalDataSourceInstance<C> instance) {
         return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
                 .getId(), getAssetType());
     }
@@ -270,7 +270,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     @Override
     public EdsAsset importAsset(ExternalDataSourceInstance<C> instance, A asset) {
-        return enterEntity(instance, asset);
+        return saveEntityAsAsset(instance, asset);
     }
 
     protected EdsAssetBuilder<C, A> newEdsAssetBuilder(ExternalDataSourceInstance<C> instance, A entity) {

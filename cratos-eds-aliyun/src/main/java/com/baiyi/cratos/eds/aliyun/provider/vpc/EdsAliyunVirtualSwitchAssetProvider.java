@@ -78,7 +78,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunVirtualSwitch.Switch entity) {
         final String key = Joiner.on(":")
                 .join(entity.getVirtualSwitch()
@@ -99,14 +99,14 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunVirtualSwitch.Switch entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()
+        indices.add(createEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()
                 .getCidrBlock()));
-        indices.add(toEdsAssetIndex(edsAsset, VPC_ID, entity.getVirtualSwitch()
+        indices.add(createEdsAssetIndex(edsAsset, VPC_ID, entity.getVirtualSwitch()
                 .getVpcId()));
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch()
+        indices.add(createEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch()
                 .getAvailableIpAddressCount()));
         return indices;
     }

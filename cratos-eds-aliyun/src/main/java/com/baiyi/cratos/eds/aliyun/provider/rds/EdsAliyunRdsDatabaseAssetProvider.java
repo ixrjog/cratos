@@ -50,7 +50,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvi
     protected List<DescribeDatabasesResponse.Database> listEntities(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> assets = queryByInstanceAssets(instance, EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE);
+            List<EdsAsset> assets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE);
             if (CollectionUtils.isEmpty(assets)) {
                 return List.of();
             }
@@ -69,7 +69,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvi
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   DescribeDatabasesResponse.Database entity) {
         final String key = Joiner.on(":")
                 .join(entity.getDBInstanceId(), entity.getDBName());

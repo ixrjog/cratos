@@ -58,7 +58,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   DescribeDBInstanceAttributeResponse.DBInstanceAttribute entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                 .nameOf(entity.getDBInstanceDescription())

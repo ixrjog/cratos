@@ -107,7 +107,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunKms.KmsSecret entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
                         .getSecretName())
@@ -129,15 +129,15 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunKms.KmsSecret entity) {
-        return List.of(toEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
+        return List.of(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
     }
 
     @Override
-    protected EdsAsset enterEntity(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                   AliyunKms.KmsSecret entity) {
-        EdsAsset asset = super.enterEntity(instance, entity);
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                         AliyunKms.KmsSecret entity) {
+        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<AliyunKms.Tag> tags = Optional.of(entity)
                 .map(AliyunKms.KmsSecret::getMetadata)

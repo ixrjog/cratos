@@ -54,7 +54,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     protected List<AlimailUser.User> listEntities(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> departments = queryByInstanceAssets(instance, EdsAssetTypeEnum.ALIMAIL_DEPARTMENT);
+            List<EdsAsset> departments = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIMAIL_DEPARTMENT);
             if (CollectionUtils.isEmpty(departments)) {
                 return List.of();
             }
@@ -75,7 +75,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
                                   AlimailUser.User entity) {
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
@@ -85,17 +85,17 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
             AlimailUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(entity.getDepartmentIds())) {
-            indices.add(toEdsAssetIndex(edsAsset, ALIMAIL_USER_DEPARTMENT_IDS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+            indices.add(createEdsAssetIndex(edsAsset, ALIMAIL_USER_DEPARTMENT_IDS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
                     .join(entity.getDepartmentIds())));
         }
-        indices.add(toEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
+        indices.add(createEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
         if (!CollectionUtils.isEmpty(entity.getEmailAliases())) {
-            indices.add(toEdsAssetIndex(edsAsset, USER_MAIL_ALIAS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
+            indices.add(createEdsAssetIndex(edsAsset, USER_MAIL_ALIAS, Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
                     .join(entity.getEmailAliases())));
         }
         return indices;

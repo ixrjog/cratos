@@ -87,40 +87,40 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
      * @return
      */
     private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) {
-        List<EdsAsset> deptAssets = queryByInstanceAssets(instance, EdsAssetTypeEnum.DINGTALK_DEPARTMENT);
+        List<EdsAsset> deptAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.DINGTALK_DEPARTMENT);
         return deptAssets.stream()
                 .map(e -> Long.valueOf(e.getAssetId()))
                 .collect(Collectors.toSet());
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
         String mobilePhone = Joiner.on("-").skipNulls()
                 .join(entity.getStateCode(), entity.getMobile());
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, mobilePhone));
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, mobilePhone));
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
                 .toString()));
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_AVATAR, entity.getAvatar()));
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_BOSS, entity.getBoss()
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_AVATAR, entity.getAvatar()));
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_BOSS, entity.getBoss()
                 .toString()));
-        indices.add(toEdsAssetIndex(edsAsset, DINGTALK_USER_JOB_NUMBER, entity.getJobNumber()));
+        indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_JOB_NUMBER, entity.getJobNumber()));
         // 头像
         if (ValidationUtils.isURL(entity.getAvatar())) {
-            indices.add(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatar()));
+            indices.add(createEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatar()));
         }
         // Email
         if (StringUtils.hasText(entity.getEmail())) {
-            indices.add(toEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
+            indices.add(createEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
         }
         return indices;
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
                                   DingtalkUserModel.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserid())
                 .assetKeyOf(entity.getUnionid())

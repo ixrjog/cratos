@@ -58,7 +58,7 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   ListNamespaceResponse.NamespacesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getNamespaceName());
@@ -73,7 +73,7 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     protected List<ListNamespaceResponse.NamespacesItem> listEntities(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> assets = queryByInstanceAssets(instance, EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE);
+            List<EdsAsset> assets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE);
             List<ListNamespaceResponse.NamespacesItem> entities = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(assets)) {
                 for (EdsAsset asset : assets) {
@@ -88,11 +88,11 @@ public class EdsAliyunAcrNamespaceAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, ListNamespaceResponse.NamespacesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
         } catch (Exception ignored) {
         }
         return indices;

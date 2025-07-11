@@ -72,7 +72,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, User entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getUserName())
                 .assetKeyOf(entity.getArn())
@@ -81,7 +81,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                                       EdsAsset edsAsset, User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
@@ -91,7 +91,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
                 String policyName = policies.stream()
                         .map(AttachedPolicy::getPolicyName)
                         .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
-                indices.add(toEdsAssetIndex(edsAsset, AWS_IAM_POLICIES, policyName));
+                indices.add(createEdsAssetIndex(edsAsset, AWS_IAM_POLICIES, policyName));
             }
         } catch (Exception e) {
             log.error("Failed to list policies for user: {}", entity.getUserName(), e);
@@ -104,7 +104,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
                 final String accessKeyIds = accessKeys.stream()
                         .map(AccessKeyMetadata::getAccessKeyId)
                         .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
-                indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+                indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
             }
         } catch (Exception ignored) {
         }
@@ -113,11 +113,11 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
             LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getEdsConfigModel(),
                     entity.getUserName());
             if (Objects.nonNull(loginProfile)) {
-                indices.add(toEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
+                indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }
         } catch (Exception ignored) {
         }
-        indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
+        indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;
     }
 

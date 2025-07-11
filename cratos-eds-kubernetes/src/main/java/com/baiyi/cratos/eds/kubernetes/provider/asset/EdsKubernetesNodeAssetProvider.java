@@ -69,9 +69,9 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
                                   Node entity) {
-        EdsAsset edsAsset = super.toEdsAsset(instance, entity);
+        EdsAsset edsAsset = super.convertToEdsAsset(instance, entity);
         Map<String, String> labels = Optional.of(entity)
                 .map(Node::getMetadata)
                 .map(ObjectMeta::getLabels)
@@ -90,7 +90,7 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
      * @return
      */
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset, Node entity) {
         Optional<Map<String, Quantity>> optionalMap = Optional.of(entity)
                 .map(Node::getStatus)
@@ -101,14 +101,14 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Map<String, Quantity> quantityMap = optionalMap.get();
         if (quantityMap.containsKey("cpu")) {
-            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CPU, formatQuantity(quantityMap.get("cpu"))));
+            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NODE_CPU, formatQuantity(quantityMap.get("cpu"))));
         }
         if (quantityMap.containsKey("ephemeral-storage")) {
-            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE,
+            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_EPHEMERAL_STORAGE,
                     formatQuantity(quantityMap.get("ephemeral-storage"))));
         }
         if (quantityMap.containsKey("memory")) {
-            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_MEMORY,
+            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NODE_CAPACITY_MEMORY,
                     formatQuantity(quantityMap.get("memory"))));
         }
         return indices;

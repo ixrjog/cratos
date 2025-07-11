@@ -65,14 +65,14 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Service entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
+        indices.add(createEdsAssetIndex(edsAsset, "namespace", getNamespace(entity)));
         String env = getMetadataLabel(entity, ENV);
         if (StringUtils.hasText(env)) {
-            indices.add(toEdsAssetIndex(edsAsset, ENV, env));
+            indices.add(createEdsAssetIndex(edsAsset, ENV, env));
         }
         // 选择器
         Map<String, String> selector = Optional.of(entity)
@@ -87,9 +87,9 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
                     appName = StringFormatter.eraseLastStr(appName, "-" + env);
                 }
             }
-            indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
+            indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
-        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_SERVICE_SELECTOR, AbstractUtil.mapToString(selector)));
+        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_SERVICE_SELECTOR, AbstractUtil.mapToString(selector)));
         return indices;
     }
 

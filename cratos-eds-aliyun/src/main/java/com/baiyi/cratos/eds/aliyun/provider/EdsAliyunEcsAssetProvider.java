@@ -103,7 +103,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunEcs.Ecs entity) {
         final String privateIp = entity.getInstance()
                 .getInstanceNetworkType()
@@ -151,9 +151,9 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset enterEntity(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                   AliyunEcs.Ecs entity) {
-        EdsAsset asset = super.enterEntity(instance, entity);
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                         AliyunEcs.Ecs entity) {
+        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(entity.getRegionId(),
                         instance.getEdsConfigModel(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()

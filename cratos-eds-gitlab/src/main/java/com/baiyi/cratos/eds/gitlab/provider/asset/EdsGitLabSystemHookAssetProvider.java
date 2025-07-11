@@ -51,7 +51,7 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                   GitLabEventParam.SystemHook entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.hashCode())
                 .nameOf(entity.getEventName())
@@ -60,18 +60,18 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                                       EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Optional.ofNullable(entity.getUserId())
                 .filter(IdentityUtil::hasIdentity)
-                .ifPresent(userId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_USER_ID, userId)));
+                .ifPresent(userId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_USER_ID, userId)));
         Optional.ofNullable(entity.getProjectId())
                 .filter(IdentityUtil::hasIdentity)
-                .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
+                .ifPresent(projectId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
         Optional.ofNullable(entity.getGroupId())
                 .filter(IdentityUtil::hasIdentity)
-                .ifPresent(projectId -> indices.add(toEdsAssetIndex(edsAsset, GITLAB_GROUP_ID, projectId)));
+                .ifPresent(projectId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_GROUP_ID, projectId)));
         return indices;
     }
 

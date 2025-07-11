@@ -51,7 +51,7 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
                                   CratosAssetParam.AddCratosAsset entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtil.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {

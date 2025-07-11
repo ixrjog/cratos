@@ -66,7 +66,7 @@ public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
                                   HwcVpc.Vpc entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpc()
                         .getId())
@@ -83,11 +83,11 @@ public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
             HwcVpc.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
+        indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
                 .getCidr()));
         return indices;
     }

@@ -58,7 +58,7 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, HostedZone entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, HostedZone entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -75,12 +75,12 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
     }
 
     @Override
-    protected EdsAssetIndex toEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                             EdsAsset edsAsset, HostedZone entity) {
         String name = edsAsset.getName();
         String domainName = name != null && name.endsWith(".") ? org.apache.commons.lang3.StringUtils.removeEnd(name,
                 ".") : name;
-        return toEdsAssetIndex(edsAsset, DOMAIN_NAME, domainName);
+        return createEdsAssetIndex(edsAsset, DOMAIN_NAME, domainName);
     }
 
 }

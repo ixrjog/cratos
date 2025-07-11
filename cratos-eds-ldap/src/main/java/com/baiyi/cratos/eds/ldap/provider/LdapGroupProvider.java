@@ -56,7 +56,7 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
                                   LdapGroup.Group entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getGroupName())
                 .nameOf(entity.getGroupName())
@@ -64,17 +64,17 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
                                                       EdsAsset edsAsset, LdapGroup.Group entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, LDAP_GROUP_DN, Joiner.on(",")
+        indices.add(createEdsAssetIndex(edsAsset, LDAP_GROUP_DN, Joiner.on(",")
                 .skipNulls()
                 .join(instance.getEdsConfigModel()
                         .getGroup()
                         .getDn(), instance.getEdsConfigModel()
                         .getBase())));
         List<String> members = ldapGroupRepo.queryGroupMember(instance.getEdsConfigModel(), entity.getGroupName());
-        indices.add(toEdsAssetIndex(edsAsset, LDAP_GROUP_MEMBERS, Joiner.on(";")
+        indices.add(createEdsAssetIndex(edsAsset, LDAP_GROUP_MEMBERS, Joiner.on(";")
                 .join(members.stream()
                         .map(e -> StringFormatter.arrayFormat(USER_DN_TPL, instance.getEdsConfigModel()
                                 .getUser()

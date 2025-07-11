@@ -68,7 +68,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
                                   HwcSubnet.Subnet entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
                         .getId())
@@ -86,12 +86,12 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
                                                       EdsAsset edsAsset, HwcSubnet.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK , entity.getSubnet().getCidr()));
-        indices.add(toEdsAssetIndex(edsAsset, VPC_ID , entity.getSubnet().getVpcId()));
-        // indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch().getAvailableIpAddressCount()));
+        indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK , entity.getSubnet().getCidr()));
+        indices.add(createEdsAssetIndex(edsAsset, VPC_ID , entity.getSubnet().getVpcId()));
+        // indices.add(createEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getVirtualSwitch().getAvailableIpAddressCount()));
         return indices;
     }
 

@@ -65,7 +65,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                 .nameOf(entity.getInstanceName())
@@ -79,14 +79,14 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset,
                                                       com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_REDIS_PRIVATE_IP, entity.getPrivateIp()));
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_REDIS_INSTANCE_CLASS, entity.getInstanceClass()));
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_REDIS_CONNECTION_DOMAIN, entity.getConnectionDomain()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_REDIS_PRIVATE_IP, entity.getPrivateIp()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_REDIS_INSTANCE_CLASS, entity.getInstanceClass()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_REDIS_CONNECTION_DOMAIN, entity.getConnectionDomain()));
         } catch (Exception ignored) {
         }
         return indices;

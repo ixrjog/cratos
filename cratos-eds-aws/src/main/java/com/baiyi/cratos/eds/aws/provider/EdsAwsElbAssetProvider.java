@@ -45,7 +45,7 @@ public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, LoadBalancer entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, LoadBalancer entity) {
         // https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html
         return newEdsAssetBuilder(instance, entity)
                 // ARN

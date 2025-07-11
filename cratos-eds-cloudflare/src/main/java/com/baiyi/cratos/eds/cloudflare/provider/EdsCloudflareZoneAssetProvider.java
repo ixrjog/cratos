@@ -55,7 +55,7 @@ public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
                                   CloudflareZone.Zone entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -66,11 +66,11 @@ public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, EdsAsset edsAsset,
             CloudflareZone.Zone entity) {
         if (StringUtils.hasText(entity.getCnameSuffix())) {
-            return List.of(toEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_CNAME_SUFFIX, entity.getCnameSuffix()));
+            return List.of(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_CNAME_SUFFIX, entity.getCnameSuffix()));
         }
         return List.of();
     }

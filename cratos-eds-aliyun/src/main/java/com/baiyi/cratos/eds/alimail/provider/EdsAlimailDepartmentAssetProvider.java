@@ -65,7 +65,7 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvi
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
                                   AlimailDepartment.Department entity) {
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
@@ -75,10 +75,10 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvi
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
             AlimailDepartment.Department entity) {
-        return List.of(toEdsAssetIndex(edsAsset, ALIMAIL_DEPARTMENT_PARENT_ID, entity.getParentId()));
+        return List.of(createEdsAssetIndex(edsAsset, ALIMAIL_DEPARTMENT_PARENT_ID, entity.getParentId()));
     }
 
 }

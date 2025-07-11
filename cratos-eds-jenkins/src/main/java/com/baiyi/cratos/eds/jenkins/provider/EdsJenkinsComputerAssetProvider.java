@@ -96,7 +96,7 @@ public class EdsJenkinsComputerAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsJenkinsConfigModel.Jenkins> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsJenkinsConfigModel.Jenkins> instance,
                                   JenkinsComputerModel.Computer entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity)
                 // ARN

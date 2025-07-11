@@ -51,7 +51,7 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Volume entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Volume entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
                 .nameOf(AmazonEc2Util.getName(entity.getTags()))
                 .kindOf(entity.getVolumeType())
@@ -62,12 +62,12 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                                       EdsAsset edsAsset, Volume entity) {
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))
-                .map(attachment -> toEdsAssetIndex(edsAsset, attachment.getVolumeId(), attachment.getInstanceId()))
+                .map(attachment -> createEdsAssetIndex(edsAsset, attachment.getVolumeId(), attachment.getInstanceId()))
                 .collect(Collectors.toList());
     }
 

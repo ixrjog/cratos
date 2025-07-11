@@ -55,7 +55,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsG
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance,
                                   GoogleMemberModel.Member entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .assetKeyOf(entity.getName())
@@ -80,7 +80,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsG
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance, EdsAsset edsAsset,
             GoogleMemberModel.Member entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
@@ -91,8 +91,8 @@ public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsG
                         .map(role -> StringUtils.substring(role, 6))
                         .sorted()
                         .collect(Collectors.toList()));
-        indices.add(toEdsAssetIndex(edsAsset, GCP_MEMBER_ROLES, roles));
-        indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
+        indices.add(createEdsAssetIndex(edsAsset, GCP_MEMBER_ROLES, roles));
+        indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
         return indices;
     }
 

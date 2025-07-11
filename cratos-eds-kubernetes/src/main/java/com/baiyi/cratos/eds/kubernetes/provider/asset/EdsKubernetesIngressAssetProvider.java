@@ -84,7 +84,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
@@ -97,7 +97,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
         // loadBalancer
         indices.add(getEdsAssetIndexOfLoadBalancer(edsAsset, entity));
         // namespace
-        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
+        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         // 注解
         indices.add(getEdsAssetIndexSourceIP(instance, edsAsset, entity));
         // alb.ingress.kubernetes.io/traffic-limit-qps
@@ -126,7 +126,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                         entry.getValue()) : AckIngressConditionsModel.getSourceIP(entry.getValue()))
                 .filter(StringUtils::hasText)
                 .findFirst()
-                .map(sourceIP -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_SOURCE_IP, sourceIP))
+                .map(sourceIP -> createEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_SOURCE_IP, sourceIP))
                 .orElse(null);
     }
 
@@ -141,7 +141,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(Map.Entry::getValue)
                 .filter(StringUtils::hasText)
                 .findFirst()
-                .map(order -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_ORDER, order))
+                .map(order -> createEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_ORDER, order))
                 .orElse(null);
     }
 
@@ -153,7 +153,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(ObjectMeta::getAnnotations)
                 .map(annotations -> annotations.get("alb.ingress.kubernetes.io/traffic-limit-qps"))
                 .filter(StringUtils::hasText)
-                .map(qps -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_TRAFFIC_LIMIT_QPS, qps))
+                .map(qps -> createEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_TRAFFIC_LIMIT_QPS, qps))
                 .orElse(null);
     }
 
@@ -164,7 +164,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                 .map(IngressLoadBalancerStatus::getIngress)
                 .filter(ingresses -> !CollectionUtils.isEmpty(ingresses))
                 .map(List::getFirst)
-                .map(ingressLoadBalancerIngress -> toEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME,
+                .map(ingressLoadBalancerIngress -> createEdsAssetIndex(edsAsset, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME,
                         ingressLoadBalancerIngress.getHostname()))
                 .orElse(null);
     }
@@ -182,15 +182,15 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                                     .orElse(UNDEFINED_SERVICE);
                             String formattedKey = StringFormatter.arrayFormat("{} -> {}", ingressRule.getHost(),
                                     path.getPath());
-                            return toEdsAssetIndex(edsAsset, formattedKey, service);
+                            return createEdsAssetIndex(edsAsset, formattedKey, service);
                         }))
                 .collect(Collectors.toList());
     }
 
     @Override
-    protected EdsAsset enterEntity(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
-                                   Ingress entity) {
-        EdsAsset asset = super.enterEntity(instance, entity);
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                         Ingress entity) {
+        EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         Optional.ofNullable(edsAssetIndexService.getByAssetIdAndName(asset.getId(), KUBERNETES_INGRESS_ORDER))
                 .map(EdsAssetIndex::getValue)
                 .ifPresent(orderValue -> {

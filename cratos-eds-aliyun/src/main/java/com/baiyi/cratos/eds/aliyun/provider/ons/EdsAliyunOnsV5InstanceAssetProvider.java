@@ -68,7 +68,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         try {
             return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())

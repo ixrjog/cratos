@@ -88,7 +88,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunAlb.Alb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
@@ -104,13 +104,13 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunAlb.Alb entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             final String url = StringFormatter.arrayFormat(ALB_URL, entity.getRegionId(), entity.getLoadBalancers()
                     .getLoadBalancerId());
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ALB_INSTANCE_URL, url));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ALB_INSTANCE_URL, url));
         } catch (Exception ignored) {
         }
         return indices;

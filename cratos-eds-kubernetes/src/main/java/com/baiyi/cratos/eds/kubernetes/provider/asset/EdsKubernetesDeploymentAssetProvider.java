@@ -68,14 +68,14 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
+        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
         String env = getMetadataLabel(entity, ENV);
         if (StringUtils.hasText(env)) {
-            indices.add(toEdsAssetIndex(edsAsset, ENV, env));
+            indices.add(createEdsAssetIndex(edsAsset, ENV, env));
         }
         String appName = getMetadataLabel(entity, "app");
         if (StringUtils.hasText(appName)) {
@@ -85,11 +85,11 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                     appName = StringFormatter.eraseLastStr(appName, "-" + env);
                 }
             }
-            indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
+            indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
 
         int replicas = KubeUtils.getReplicas(entity);
-        indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
+        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
 
         // group标签
         Map<String, String> labels = Optional.of(entity)
@@ -99,7 +99,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                 .map(ObjectMeta::getLabels)
                 .orElse(Maps.newHashMap());
         if (labels.containsKey("group")) {
-            indices.add(toEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
+            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
         }
         return indices;
     }

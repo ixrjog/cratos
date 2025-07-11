@@ -76,7 +76,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   GetPolicyResponse.Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyName())
                 .nameOf(entity.getPolicyName())
@@ -87,7 +87,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
@@ -98,7 +98,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
                         .join(users.stream()
                                 .map(ListEntitiesForPolicyResponse.User::getUserName)
                                 .toList());
-                indices.add(toEdsAssetIndex(edsAsset, ALIYUN_RAM_USERS, policyName));
+                indices.add(createEdsAssetIndex(edsAsset, ALIYUN_RAM_USERS, policyName));
             }
         } catch (Exception ignored) {
         }

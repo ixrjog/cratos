@@ -54,7 +54,7 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, User entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getUsername())
@@ -65,10 +65,10 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                                       EdsAsset edsAsset, User entity) {
         if (ValidationUtils.isURL(entity.getAvatarUrl())) {
-            return List.of(toEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatarUrl()));
+            return List.of(createEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatarUrl()));
         }
         return List.of();
     }

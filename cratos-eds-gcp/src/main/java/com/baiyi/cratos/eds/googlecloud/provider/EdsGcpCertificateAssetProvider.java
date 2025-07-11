@@ -48,7 +48,7 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance,
                                   GoogleCertificateModel.Certificate entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getKey())
                 .assetKeyOf(entity.getKey())

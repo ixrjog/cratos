@@ -67,7 +67,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsEc2.Subnet entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsEc2.Subnet entity) {
         final String tagName = AmazonEc2Util.getName(entity.getSubnet()
                 .getTags());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
@@ -83,12 +83,12 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                                       EdsAsset edsAsset, AwsEc2.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
+        indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
                 .getCidrBlock()));
-        indices.add(toEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getSubnet()
+        indices.add(createEdsAssetIndex(edsAsset, SUBNET_AVAILABLE_IP_ADDRESS_COUNT, entity.getSubnet()
                 .getAvailableIpAddressCount()));
         return indices;
     }

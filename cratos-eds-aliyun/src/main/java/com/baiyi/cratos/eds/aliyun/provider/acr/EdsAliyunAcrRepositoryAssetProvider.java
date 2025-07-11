@@ -82,7 +82,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   ListRepositoryResponse.RepositoriesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getRepoId());
@@ -96,13 +96,13 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset,
                                                       ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ACR_REPO_NAMESPACE, entity.getRepoNamespaceName()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_REPO_NAMESPACE, entity.getRepoNamespaceName()));
         } catch (Exception ignored) {
         }
         return indices;

@@ -52,7 +52,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     protected List<SshKeyData> listEntities(
             ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
         try {
-            List<EdsAsset> edsUserAssets = queryByInstanceAssets(instance, EdsAssetTypeEnum.GITLAB_USER);
+            List<EdsAsset> edsUserAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
                 return listSshKeyWithEdsUserAssets(instance, edsUserAssets);
             }
@@ -106,7 +106,8 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, SshKeyData entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                         SshKeyData entity) {
         SshKey sshKey = entity.getSshKey();
         return newEdsAssetBuilder(instance, entity).assetIdOf(sshKey.getId())
                 .nameOf(entity.getUsername())

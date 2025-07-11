@@ -54,7 +54,7 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Project entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Project entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .createdTimeOf(entity.getCreatedAt())
@@ -63,12 +63,12 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                                       EdsAsset edsAsset, Project entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, REPO_SSH_URL, entity.getSshUrlToRepo()));
-        indices.add(toEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));
-        indices.add(toEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
+        indices.add(createEdsAssetIndex(edsAsset, REPO_SSH_URL, entity.getSshUrlToRepo()));
+        indices.add(createEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));
+        indices.add(createEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
         return indices;
     }
 

@@ -57,7 +57,7 @@ public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsAws
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Policy entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyId())
                 .nameOf(entity.getPolicyName())
                 .assetKeyOf(entity.getArn())

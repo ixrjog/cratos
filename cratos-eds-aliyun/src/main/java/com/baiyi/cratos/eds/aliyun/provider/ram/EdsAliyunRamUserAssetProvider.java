@@ -84,7 +84,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   GetUserResponse.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getDisplayName())
@@ -95,7 +95,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, GetUserResponse.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
@@ -105,7 +105,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                 String policyName = policies.stream()
                         .map(ListPoliciesForUserResponse.Policy::getPolicyName)
                         .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
-                indices.add(toEdsAssetIndex(edsAsset, ALIYUN_RAM_POLICIES, policyName));
+                indices.add(createEdsAssetIndex(edsAsset, ALIYUN_RAM_POLICIES, policyName));
             }
         } catch (Exception e) {
             log.error("Failed to list policies for user: {}", entity.getUserName(), e);
@@ -118,7 +118,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                 final String accessKeyIds = accessKeys.stream()
                         .map(ListAccessKeysResponse.AccessKey::getAccessKeyId)
                         .collect(Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
-                indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
+                indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCESS_KEY_IDS, accessKeyIds));
             }
         } catch (Exception ignored) {
         }
@@ -128,11 +128,11 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
                     instance.getEdsConfigModel()
                             .getRegionId(), instance.getEdsConfigModel(), entity.getUserName());
             if (Objects.nonNull(loginProfile)) {
-                indices.add(toEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
+                indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }
         } catch (ClientException ignored) {
         }
-        indices.add(toEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
+        indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getUserName()));
         return indices;
     }
 

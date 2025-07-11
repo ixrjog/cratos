@@ -59,7 +59,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
                                   CloudflareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
@@ -90,12 +90,12 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, EdsAsset edsAsset,
             CloudflareDns.DnsRecord entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_PROXIED, entity.getProxied()));
-        indices.add(toEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_CONTENT, entity.getContent()));
+        indices.add(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_PROXIED, entity.getProxied()));
+        indices.add(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_CONTENT, entity.getContent()));
         return indices;
     }
 

@@ -98,7 +98,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunArms.TraceApps entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
                 .nameOf(entity.getAppName())
@@ -109,16 +109,16 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
         String env = EnvUtils.getEnvSuffix(envMap, name);
         if (StringUtils.hasText(env)) {
             List<EdsAssetIndex> indices = Lists.newArrayList();
-            indices.add(toEdsAssetIndex(edsAsset, ENV, env));
+            indices.add(createEdsAssetIndex(edsAsset, ENV, env));
             String appName = StringFormatter.eraseLastStr(name, "-" + env);
-            indices.add(toEdsAssetIndex(edsAsset, APP_NAME, appName));
+            indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
             Optional.of(instance)
                     .map(ExternalDataSourceInstance::getEdsConfigModel)
                     .map(EdsAliyunConfigModel.Aliyun::getArms)
@@ -126,7 +126,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                     .ifPresent(home -> {
                         String appHome = StringFormatter.arrayFormat(home, entity.getPid(), entity.getRegionId(),
                                 entity.getPid());
-                        indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ARMS_APP_HOME, appHome));
+                        indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ARMS_APP_HOME, appHome));
                     });
             return indices;
         }

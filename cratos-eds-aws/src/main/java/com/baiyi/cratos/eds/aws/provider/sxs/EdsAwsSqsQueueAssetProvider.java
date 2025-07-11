@@ -69,7 +69,7 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsSqs.Queue entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsSqs.Queue entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getAttributes()

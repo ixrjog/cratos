@@ -88,7 +88,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
                                   HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
                 .getAddresses());
@@ -115,14 +115,14 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
             ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
             HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()
                 .getAddresses());
         List<EdsAssetIndex> indices = Lists.newArrayList();
         if (addressTypeMap.containsKey(ServerAddress.OsEXTIPSTypeEnum.FLOATING.getValue())) {
-            indices.add(toEdsAssetIndex(edsAsset, EIP,
+            indices.add(createEdsAssetIndex(edsAsset, EIP,
                     addressTypeMap.get(ServerAddress.OsEXTIPSTypeEnum.FLOATING.getValue())
                             .getFirst()
                             .getAddr()));

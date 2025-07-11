@@ -73,7 +73,7 @@ public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAs
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                   AwsCloudFrontDistribution.Distribution entity) {
         // https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDistribution()

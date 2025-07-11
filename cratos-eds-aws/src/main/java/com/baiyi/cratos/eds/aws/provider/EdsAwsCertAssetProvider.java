@@ -45,7 +45,7 @@ public class EdsAwsCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                   CertificateSummary entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
         return newEdsAssetBuilder(instance, entity)

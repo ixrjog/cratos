@@ -52,7 +52,7 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, DomainSummary entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, DomainSummary entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
         return newEdsAssetBuilder(instance, entity)
                 // ARN
@@ -68,9 +68,9 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
 //    @Override
-//    protected EdsAssetIndex toEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+//    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
 //                                            EdsAsset edsAsset, DomainSummary entity) {
-//        return toEdsAssetIndex(edsAsset, DOMAIN_NAME, entity.getDomainName());
+//        return createEdsAssetIndex(edsAsset, DOMAIN_NAME, entity.getDomainName());
 //    }
 
 }

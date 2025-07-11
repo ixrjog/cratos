@@ -67,7 +67,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                   AwsTransferServer.TransferServer entity) {
         return newEdsAssetBuilder(instance, entity)
                 .assetIdOf(entity.getServer()

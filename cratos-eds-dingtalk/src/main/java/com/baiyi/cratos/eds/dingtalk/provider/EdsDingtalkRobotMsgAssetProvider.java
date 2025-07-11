@@ -46,7 +46,7 @@ public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance,
                                   DingtalkRobotModel.Msg entity) {
         return newEdsAssetBuilder(instance, entity).build();
     }

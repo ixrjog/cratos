@@ -75,7 +75,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
                                                                        ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         List<AliyunOnsV5.ConsumerGroupSubscription> results = Lists.newArrayList();
         try {
-            List<EdsAsset> edsAssetsOnsConsumerGroups = queryByInstanceAssets(instance,
+            List<EdsAsset> edsAssetsOnsConsumerGroups = queryAssetsByInstanceAndType(instance,
                     EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP);
             if (CollectionUtils.isEmpty(edsAssetsOnsConsumerGroups)) {
                 return Collections.emptyList();
@@ -117,7 +117,7 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   AliyunOnsV5.ConsumerGroupSubscription entity) {
         try {
             // instanceId:consumerGroupId:topicName
@@ -139,14 +139,14 @@ public class EdsAliyunOnsV5ConsumerGroupSubscriptionAssetProvider extends BaseHa
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset, AliyunOnsV5.ConsumerGroupSubscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_CONSUMER_GROUP_ID, entity.getConsumerGroupSubscription()
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_CONSUMER_GROUP_ID, entity.getConsumerGroupSubscription()
                     .getConsumerGroupId()));
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_TOPIC_NAME, entity.getConsumerGroupSubscription()
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_TOPIC_NAME, entity.getConsumerGroupSubscription()
                     .getTopicName()));
         } catch (Exception ignored) {
         }

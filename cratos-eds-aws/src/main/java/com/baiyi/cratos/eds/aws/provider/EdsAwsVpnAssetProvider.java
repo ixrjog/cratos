@@ -46,7 +46,7 @@ public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, VpnConnection entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, VpnConnection entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
         Optional<Tag> optionalTag = entity.getTags()
                 .stream()

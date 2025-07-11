@@ -76,7 +76,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                   AwsSns.Subscription entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ID
@@ -91,14 +91,14 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
                                                       EdsAsset edsAsset, AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
-        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
+        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
                 .getEndpoint()));
-        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
+        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_TOPIC_ARN, entity.getSubscription()
                 .getTopicArn()));
-        indices.add(toEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription()
+        indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_PROTOCOL, entity.getSubscription()
                 .getProtocol()));
         return indices;
     }

@@ -53,7 +53,7 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Group entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Group entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFullName())
                 .assetKeyOf(entity.getFullPath())
@@ -63,9 +63,9 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
                                                       EdsAsset edsAsset, Group entity) {
-        return List.of(toEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
+        return List.of(createEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
     }
 
 }

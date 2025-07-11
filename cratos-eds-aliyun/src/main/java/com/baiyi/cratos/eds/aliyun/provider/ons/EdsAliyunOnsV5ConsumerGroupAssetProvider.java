@@ -68,7 +68,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
                                                                                                        ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> results = Lists.newArrayList();
         try {
-            List<EdsAsset> edsAssetsOnsInstances = queryByInstanceAssets(instance,
+            List<EdsAsset> edsAssetsOnsInstances = queryAssetsByInstanceAndType(instance,
                     EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE);
             if (CollectionUtils.isEmpty(edsAssetsOnsInstances)) {
                 return Collections.emptyList();
@@ -88,7 +88,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected EdsAsset toEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                   ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
@@ -107,12 +107,12 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected List<EdsAssetIndex> toEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
                                                       EdsAsset edsAsset,
                                                       ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            indices.add(toEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
+            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));
         } catch (Exception ignored) {
         }
         return indices;
