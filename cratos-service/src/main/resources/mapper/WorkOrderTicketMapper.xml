@@ -57,8 +57,7 @@
                 and username = #{myUsername}
             </when>
             <otherwise>
-                and id in ( select ticket_id from work_order_ticket_subscriber where username = #{myUsername}
-                and valid = true )
+                and id in ( select ticket_id from work_order_ticket_subscriber where username = #{myUsername} )
             </otherwise>
         </choose>
         order by id desc
