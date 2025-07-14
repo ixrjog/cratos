@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -105,6 +106,16 @@ public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrd
     @Override
     public void afterPropertiesSet() {
         TicketEntryProviderFactory.register(this);
+    }
+
+    protected boolean isLastEntry(WorkOrderTicketEntry entry) {
+        List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(entry.getTicketId(),
+                entry.getBusinessType());
+        return entries.stream()
+                .max(Comparator.comparingInt(WorkOrderTicketEntry::getId))
+                .map(e -> e.getId()
+                        .equals(entry.getId()))
+                .orElse(false);
     }
 
 }

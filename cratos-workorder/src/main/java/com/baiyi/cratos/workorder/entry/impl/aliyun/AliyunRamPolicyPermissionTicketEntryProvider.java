@@ -105,7 +105,12 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
             if (!alreadyAttached) {
                 aliyunRamPolicyRepo.attachPolicyToUser(aliyun.getRegionId(), aliyun, aliyunPolicy.getRamUsername(),
                         policyName, policyType);
-                // TODO 同步资产
+            }
+            // 在最后一条entry执行
+            if (isLastEntry(entry)) {
+                EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> ramUserHolder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+                        entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
+                ramUserHolder.importAsset(user);
             }
         } catch (ClientException e) {
             if (e.getMessage() != null && e.getMessage()
