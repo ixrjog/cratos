@@ -81,11 +81,11 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
         if (CollectionUtils.isEmpty(approvers)) {
             return;
         }
+        WorkflowModel.Workflow workflow = WorkflowUtils.loadAs(ticket);
+        Optional<WorkflowModel.Node> optionalNode = WorkflowUtils.getNodeByName(workflow, ticketNode);
         approvers.forEach(approver -> {
             // 审批节点名称
             String approvalNode = "--";
-            WorkflowModel.Workflow workflow = WorkflowUtils.loadAs(ticket);
-            Optional<WorkflowModel.Node> optionalNode = WorkflowUtils.getNodeByName(workflow, ticketNode);
             if (optionalNode.isPresent()) {
                 WorkflowModel.Node node = optionalNode.get();
                 String lang = languageUtils.getLanguageOf(approver);
