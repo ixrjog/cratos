@@ -51,7 +51,8 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
                 ApplicationKubernetesParam.KubernetesDetailsRequest request = ApplicationKubernetesParam.loadAs(
                         message);
                 KubernetesDetailsRequestSession.putRequestMessage(this.sessionId, request);
-            } catch (JsonSyntaxException ignored) {
+            } catch (JsonSyntaxException ex) {
+                log.warn("Invalid JSON message received: {}", message, ex);
             }
         }
     }

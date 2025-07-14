@@ -4,9 +4,9 @@ import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.map.HashedMap;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * &#064;Author  baiyi
@@ -17,37 +17,37 @@ import java.util.Map;
 @Slf4j
 public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
 
-    private static Map<String, Map<String, ? extends HasSocketRequest>> sessionRequestMap = new HashedMap<>();
+    private static final Map<String, Map<String, ? extends HasSocketRequest>> SESSION_REQUEST_MAP = new ConcurrentHashMap<>();
 
     public static <T extends HasSocketRequest> void putRequestMessage(String sessionId, T message) {
         if (SocketActionRequestEnum.UNSUBSCRIBE.name()
                 .equalsIgnoreCase(message.getAction())) {
             if (containsBySessionId(sessionId)) {
-                KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId)
+                KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.get(sessionId)
                         .remove(message.getTopic());
             }
             return;
         }
         if (containsBySessionId(sessionId)) {
-            ((Map<String, T>) KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId)).put(message.getTopic(),
+            ((Map<String, T>) KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.get(sessionId)).put(message.getTopic(),
                     message);
         } else {
             Map<String, T> queryMap = Maps.newHashMap();
             queryMap.put(message.getTopic(), message);
-            KubernetesDetailsRequestSession.sessionRequestMap.put(sessionId, queryMap);
+            KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.put(sessionId, queryMap);
         }
     }
 
     public static boolean containsBySessionId(String sessionId) {
-        return KubernetesDetailsRequestSession.sessionRequestMap.containsKey(sessionId);
+        return KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.containsKey(sessionId);
     }
 
     public static <T extends HasSocketRequest> Map<String, T> getRequestMessageBySessionId(String sessionId) {
-        return (Map<String, T>) KubernetesDetailsRequestSession.sessionRequestMap.get(sessionId);
+        return (Map<String, T>) KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.get(sessionId);
     }
 
     public static void remove(String sessionId) {
-        KubernetesDetailsRequestSession.sessionRequestMap.remove(sessionId);
+        KubernetesDetailsRequestSession.SESSION_REQUEST_MAP.remove(sessionId);
     }
 
 }
