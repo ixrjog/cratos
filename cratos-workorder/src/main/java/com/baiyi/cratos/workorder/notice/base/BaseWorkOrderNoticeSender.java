@@ -28,7 +28,7 @@ public abstract class BaseWorkOrderNoticeSender {
     protected final UserService userService;
     protected final TicketWorkflowFacade ticketWorkflowFacade;
     protected final EdsDingtalkMessageFacade edsDingtalkMessageFacade;
-    private final LanguageUtils languageUtils;
+    protected final LanguageUtils languageUtils;
     private final NotificationTemplateService notificationTemplateService;
 
     private NotificationTemplate getNotificationTemplate(String notificationTemplateKey, User user) {

@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.util;
 
 import com.baiyi.cratos.domain.TicketWorkflow;
 import com.baiyi.cratos.domain.YamlUtils;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.google.gson.JsonSyntaxException;
 import lombok.AccessLevel;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,18 @@ public class WorkflowUtils {
                 .stream()
                 .collect(Collectors.toMap(WorkflowModel.Node::getName, node -> node,
                         (existing, replacement) -> existing));
+    }
+
+    public static Optional<WorkflowModel.Node> getNodeByName(WorkflowModel.Workflow workflow,
+                                                             WorkOrderTicketNode ticketNode) {
+        if (CollectionUtils.isEmpty(workflow.getNodes()) || ticketNode == null) {
+            return Optional.empty();
+        }
+        return workflow.getNodes()
+                .stream()
+                .filter(node -> node.getName()
+                        .equals(ticketNode.getNodeName()))
+                .findFirst();
     }
 
 }

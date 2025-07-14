@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.notice;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
@@ -15,6 +16,7 @@ import com.baiyi.cratos.workorder.enums.SubscribeStatus;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import com.baiyi.cratos.workorder.notice.base.BaseWorkOrderNoticeSender;
+import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -22,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -63,7 +66,7 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
                 .put("applicant", ticket.getUsername())
                 .put("ticketEntities", ticketEntities)
                 .build();
-        sendMsgToApprover(ticket, approvers, dict);
+        sendMsgToApprover(ticket, ticketNode, approvers, dict);
     }
 
     private List<User> queryApprovers(WorkOrder workOrder, WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
@@ -73,11 +76,25 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
         return ticketWorkflowFacade.queryNodeApprovalUsers(ticket, ticketNode.getNodeName());
     }
 
-    private void sendMsgToApprover(WorkOrderTicket ticket, List<User> approvers, Map<String, Object> dict) {
+    private void sendMsgToApprover(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode, List<User> approvers,
+                                   Map<String, Object> dict) {
         if (CollectionUtils.isEmpty(approvers)) {
             return;
         }
         approvers.forEach(approver -> {
+            // 审批节点名称
+            String approvalNode = "--";
+            WorkflowModel.Workflow workflow = WorkflowUtils.loadAs(ticket);
+            Optional<WorkflowModel.Node> optionalNode = WorkflowUtils.getNodeByName(workflow, ticketNode);
+            if (optionalNode.isPresent()) {
+                WorkflowModel.Node node = optionalNode.get();
+                String lang = languageUtils.getLanguageOf(approver);
+                approvalNode = node.getLangMap()
+                        .getOrDefault(lang, null) != null ? node.getLangMap()
+                        .get(lang)
+                        .getDisplayName() : "--";
+            }
+            // 手机审批按钮
             WorkOrderTicketSubscriber uk = WorkOrderTicketSubscriber.builder()
                     .ticketId(ticket.getId())
                     .username(approver.getUsername())
@@ -87,6 +104,7 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
             Map<String, Object> approverDict = new java.util.HashMap<>(dict);
             approverDict.put("approver", approver.getUsername());
             approverDict.put("token", workOrderTicketSubscriber.getToken());
+            approverDict.put("approvalNode", approvalNode);
             sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(), approverDict);
         });
     }
