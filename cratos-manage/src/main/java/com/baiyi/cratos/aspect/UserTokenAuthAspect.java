@@ -127,9 +127,9 @@ public class UserTokenAuthAspect {
         }
         
         // 5. 使token失效（一次性使用机制）
-        subscriber.setValid(false);
-        workOrderTicketSubscriberService.updateByPrimaryKey(subscriber);
-        log.debug("Token已失效，确保一次性使用");
+//        subscriber.setValid(false);
+//        workOrderTicketSubscriberService.updateByPrimaryKey(subscriber);
+//        log.debug("Token已失效，确保一次性使用");
         
         // 6. 将审批者用户名写入session
         SessionUtils.setUsername(approver.getUsername());

@@ -41,7 +41,7 @@ import java.util.Objects;
 @TicketStates(state = TicketState.IN_APPROVAL, target = TicketState.APPROVAL_COMPLETED)
 public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<WorkOrderTicketParam.SimpleTicketNo> {
 
-    private final WorkOrderApprovalNoticeSender approvalNotificationHelper;
+    private final WorkOrderApprovalNoticeSender workOrderApprovalNoticeSender;
 
     public TicketInApprovalStateProcessor(UserService userService, WorkOrderService workOrderService,
                                           WorkOrderTicketService workOrderTicketService,
@@ -50,11 +50,11 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
                                           WorkOrderTicketNodeFacade workOrderTicketNodeFacade,
                                           WorkOrderTicketEntryService workOrderTicketEntryService,
                                           TicketWorkflowFacade ticketWorkflowFacade,
-                                          WorkOrderApprovalNoticeSender approvalNotificationHelper) {
+                                          WorkOrderApprovalNoticeSender workOrderApprovalNoticeSender) {
         super(userService, workOrderService, workOrderTicketService, workOrderTicketNodeService,
                 workOrderTicketSubscriberFacade, workOrderTicketNodeFacade, workOrderTicketEntryService,
                 ticketWorkflowFacade);
-        this.approvalNotificationHelper = approvalNotificationHelper;
+        this.workOrderApprovalNoticeSender = workOrderApprovalNoticeSender;
     }
 
     @Override
@@ -142,7 +142,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
 
     protected void sendMsg(WorkOrderTicket ticket, WorkOrderTicketNode nextNode) {
         WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
-        approvalNotificationHelper.sendMsg(workOrder, ticket, nextNode);
+        workOrderApprovalNoticeSender.sendMsg(workOrder, ticket, nextNode);
     }
 
     private void approveAgree(WorkOrderTicket ticket, WorkOrderTicketNode ticketNode) {
