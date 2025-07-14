@@ -19,16 +19,19 @@ public class CredentialHolderFactory {
     @Getter
     private static final Map<String, ICredentialHolder> CONTEXT = new ConcurrentHashMap<>();
 
-    public static ICredentialHolder getName(String name) {
+    public static ICredentialHolder getByName(String name) {
         return CONTEXT.get(name);
     }
 
     public static void register(ICredentialHolder bean) {
-        CONTEXT.put(bean.getName(),bean);
+        CONTEXT.put(bean.getName(), bean);
     }
 
     public static int countByCredentialId(int credentialId) {
-        return CONTEXT.keySet().stream().mapToInt(k -> CONTEXT.get(k).countByCredentialId(credentialId)).sum();
+        return CONTEXT.values()
+                .stream()
+                .mapToInt(holder -> holder.countByCredentialId(credentialId))
+                .sum();
     }
 
 }

@@ -22,16 +22,10 @@ public class SupportBusinessServiceFactory {
 
     public static void register(SupportBusinessService bean) {
         CONTEXT.put(bean.getBusinessType(), bean);
-        log.debug("=============================== SupportBusinessServiceFactory ===============================");
-        log.debug("SupportBusinessServiceFactory Registered: serviceName={}, businessType={}", bean.getClass()
-                .getSimpleName(), bean.getBusinessType());
     }
 
     public static SupportBusinessService getService(String businessType) {
-        if (CONTEXT.containsKey(businessType)) {
-            return CONTEXT.get(businessType);
-        }
-        return null;
+        return CONTEXT.get(businessType);
     }
 
 }
