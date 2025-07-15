@@ -102,17 +102,19 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
         if (Objects.isNull(application)) {
             return;
         }
+        // delete pod
         ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
                 SessionUtils.getUsername(), application.getName());
         if (deleteToken.getValid()) {
             accessControl.getOperationPermissions()
                     .put(DEPLOYMENT_POD_DELETE.name(), deleteToken);
         }
+        // redeploy kubernetes
         ApplicationRedeployToken.Token redeployToken = applicationRedeployTokenHolder.getToken(
                 SessionUtils.getUsername(), application.getName());
         if (redeployToken.getValid()) {
             accessControl.getOperationPermissions()
-                    .put(DEPLOYMENT_REDEPLOY.name(), deleteToken);
+                    .put(DEPLOYMENT_REDEPLOY.name(), redeployToken);
         }
     }
 
