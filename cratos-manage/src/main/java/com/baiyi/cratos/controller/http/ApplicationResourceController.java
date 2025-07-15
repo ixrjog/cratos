@@ -52,7 +52,7 @@ public class ApplicationResourceController {
     }
 
     @Operation(summary = "Redeploy application resource kubernetes deployment")
-    @PutMapping(value = "/kubernetes/deployment/pod/del", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/kubernetes/deployment/redeploy", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> redeployApplicationResourceKubernetesDeployment(
             @RequestBody @Valid ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment redeployApplicationResourceKubernetesDeployment) {
         kubernetesDetailsFacade.redeployApplicationResourceKubernetesDeployment(
