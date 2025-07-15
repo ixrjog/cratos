@@ -248,7 +248,8 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
-    public void addUpdateAliyunKmsSecretTicketEntry(WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry addTicketEntry){
+    public void addUpdateAliyunKmsSecretTicketEntry(
+            WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.ALIYUN_KMS_SECRET_UPDATE.name(), addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
@@ -260,6 +261,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
             WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_DELETE_POD.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
+    public void addApplicationRedeployTicketEntry(
+            WorkOrderTicketParam.AddApplicationRedeployTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationRedeployTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationRedeployTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_REDEPLOY.name(), addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }

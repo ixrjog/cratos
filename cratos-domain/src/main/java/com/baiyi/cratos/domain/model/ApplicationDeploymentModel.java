@@ -54,4 +54,24 @@ public class ApplicationDeploymentModel {
         private Date deleteOperationTime = new Date();
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class RedeployDeployment implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -1509979803332251572L;
+        private String namespace;
+        @Schema(description = "Kubernetes deployment asset")
+        private EdsAsset asset;
+        private Integer ticketId;
+        private String ticketNo;
+        @Builder.Default
+        private Boolean success = true;
+        private String result;
+        @Builder.Default
+        private Date redeployOperationTime = new Date();
+    }
+
 }

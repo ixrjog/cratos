@@ -12,18 +12,18 @@
     <artifactId>cratos-eds-remote-gateway</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.guacamole/guacamole-client -->
-        <dependency>
-            <groupId>org.apache.guacamole</groupId>
-            <artifactId>guacamole-common</artifactId>
-            <version>1.5.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.guacamole</groupId>-->
+<!--            <artifactId>guacamole-common</artifactId>-->
+<!--            <version>1.5.5</version>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

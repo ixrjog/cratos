@@ -81,6 +81,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addApplicationDeletePodTicketEntry(WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry);
 
+    void addApplicationRedeployTicketEntry(WorkOrderTicketParam.AddApplicationRedeployTicketEntry addTicketEntry);
+
     void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry);
 
     void addResetAlimailUserTicketEntry(WorkOrderTicketParam.AddResetAlimailUserTicketEntry addTicketEntry);

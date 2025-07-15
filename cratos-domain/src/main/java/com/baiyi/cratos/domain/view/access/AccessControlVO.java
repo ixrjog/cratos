@@ -21,7 +21,8 @@ import java.util.Map;
 public class AccessControlVO {
 
     public enum OperationPermission {
-        DEPLOYMENT_POD_DELETE
+        DEPLOYMENT_POD_DELETE,
+        DEPLOYMENT_REDEPLOY
     }
 
     public interface HasAccessControl extends BaseBusiness.IBusinessAnnotate {

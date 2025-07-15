@@ -111,6 +111,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add application redeploy ticket entry")
+    @PostMapping(value = "/application/redeploy/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addApplicationRedeployTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddApplicationRedeployTicketEntry addTicketEntry) {
+        ticketEntryFacade.addApplicationRedeployTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add aliyun dataWorks instance ticket entry")
     @PostMapping(value = "/aliyun/dataworks/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addDataWorksInstanceTicketEntry(

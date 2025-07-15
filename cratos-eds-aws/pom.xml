@@ -82,17 +82,29 @@
             <artifactId>aws-java-sdk-ecr</artifactId>
             <version>${aws-java-sdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-iam</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
         <!--sdk2.x-->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>ecr</artifactId>
             <version>${aws-java-sdk2.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-iam</artifactId>
-            <version>${aws-java-sdk.version}</version>
-        </dependency>
+        <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/eks -->
+<!--        <dependency>-->
+<!--            <groupId>software.amazon.awssdk</groupId>-->
+<!--            <artifactId>eks</artifactId>-->
+<!--            <version>2.31.78</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>software.amazon.awssdk</groupId>-->
+<!--            <artifactId>sts</artifactId>-->
+<!--            <version>2.31.78</version>-->
+<!--        </dependency>-->
+
     </dependencies>
 
 </project>

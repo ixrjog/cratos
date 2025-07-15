@@ -14,7 +14,9 @@ import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserPermissionService;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
+import com.baiyi.cratos.workorder.holder.ApplicationRedeployTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
+import com.baiyi.cratos.workorder.holder.token.ApplicationRedeployToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.view.access.AccessControlVO.OperationPermission.DEPLOYMENT_POD_DELETE;
+import static com.baiyi.cratos.domain.view.access.AccessControlVO.OperationPermission.DEPLOYMENT_REDEPLOY;
 
 /**
  * &#064;Author  baiyi
@@ -42,6 +45,7 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
     private final UserPermissionService userPermissionService;
     private final RbacRoleFacade rbacRoleFacade;
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
+    private final ApplicationRedeployTokenHolder applicationRedeployTokenHolder;
     private final ApplicationService applicationService;
 
     @Override
@@ -103,6 +107,12 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
         if (deleteToken.getValid()) {
             accessControl.getOperationPermissions()
                     .put(DEPLOYMENT_POD_DELETE.name(), deleteToken);
+        }
+        ApplicationRedeployToken.Token redeployToken = applicationRedeployTokenHolder.getToken(
+                SessionUtils.getUsername(), application.getName());
+        if (redeployToken.getValid()) {
+            accessControl.getOperationPermissions()
+                    .put(DEPLOYMENT_REDEPLOY.name(), deleteToken);
         }
     }
 

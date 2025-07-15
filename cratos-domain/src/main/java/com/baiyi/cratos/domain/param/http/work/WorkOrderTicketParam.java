@@ -409,9 +409,35 @@ public class WorkOrderTicketParam {
     @Schema
     public static class AddDeploymentPodDeleteTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeleteDeploymentPod>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
-        private static final long serialVersionUID = 3563509820230350553L;
+        private static final long serialVersionUID = -1244962359720286901L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
         private ApplicationDeploymentModel.DeleteDeploymentPod detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddApplicationRedeployTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationVO.Application>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -8342340561313113489L;
+        private final String businessType = BusinessTypeEnum.APPLICATION.name();
+        private ApplicationVO.Application detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddDeploymentRedeployTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.RedeployDeployment>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 8121444050004308889L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private ApplicationDeploymentModel.RedeployDeployment detail;
     }
 
     @EqualsAndHashCode(callSuper = true)

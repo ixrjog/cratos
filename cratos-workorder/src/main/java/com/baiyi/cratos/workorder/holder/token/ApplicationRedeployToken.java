@@ -13,10 +13,10 @@ import java.util.Date;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/5/9 17:22
+ * &#064;Date  2025/7/15 11:09
  * &#064;Version 1.0
  */
-public class ApplicationDeletePodToken {
+public class ApplicationRedeployToken {
 
     @Data
     @Builder
@@ -24,7 +24,7 @@ public class ApplicationDeletePodToken {
     @AllArgsConstructor
     public static class Token implements Serializable {
         @Serial
-        private static final long serialVersionUID = 6665885925992588311L;
+        private static final long serialVersionUID = -6475529578396407509L;
         public static final Token NO_TOKEN = Token.builder()
                 .valid(false)
                 .build();
