@@ -57,4 +57,16 @@ public class ApplicationKubernetesParam {
         private String podName;
     }
 
+    @Data
+    @Builder
+    @Schema
+    public static class RedeployApplicationResourceKubernetesDeployment {
+        @NotBlank
+        private String applicationName;
+        @NotBlank
+        private String namespace;
+        @NotBlank
+        private String deploymentName;
+    }
+
 }

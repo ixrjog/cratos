@@ -26,6 +26,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
 import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
@@ -37,7 +38,9 @@ import com.baiyi.cratos.facade.application.EdsArmsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
+import com.baiyi.cratos.workorder.holder.ApplicationRedeployTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
+import com.baiyi.cratos.workorder.holder.token.ApplicationRedeployToken;
 import com.baiyi.cratos.wrapper.application.ApplicationWrapper;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -74,12 +77,14 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsFacade edsFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
+    private final ApplicationRedeployTokenHolder applicationRedeployTokenHolder;
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesPodRepo kubernetesPodRepo;
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
     private final EdsAssetIndexService edsAssetIndexService;
     private final EdsArmsFacade edsArmsFacade;
+    private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -151,7 +156,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
 
     private KubernetesVO.Banner makeBanner(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         return KubernetesVO.Banner.builder()
-                .arms(edsArmsFacade.makeArms(param.getApplicationName(),param.getNamespace()))
+                .arms(edsArmsFacade.makeArms(param.getApplicationName(), param.getNamespace()))
                 .build();
     }
 
@@ -241,6 +246,60 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 log.debug(exception.getMessage());
             }
         });
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void redeployApplicationResourceKubernetesDeployment(
+            ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param) {
+        ApplicationRedeployToken.Token deleteToken = applicationRedeployTokenHolder.getToken(SessionUtils.getUsername(),
+                param.getApplicationName());
+        if (!deleteToken.getValid()) {
+            KubernetesResourceOperationException.runtime("Unauthorized access");
+        }
+        List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
+                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
+                param.getDeploymentName());
+        if (CollectionUtils.isEmpty(resources)) {
+            KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
+                    param.getDeploymentName());
+        }
+        resources.forEach(resource -> {
+            EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
+            if (Objects.isNull(deploymentAsset)) {
+                return;
+            }
+            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
+                    deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+
+            ApplicationDeploymentModel.RedeployDeployment detail = ApplicationDeploymentModel.RedeployDeployment.builder()
+                    .namespace(param.getNamespace())
+                    .ticketNo(deleteToken.getTicketNo())
+                    .ticketId(deleteToken.getTicketId())
+                    .asset(deploymentAsset)
+                    .build();
+            try {
+                Deployment deployment = kubernetesDeploymentRepo.get(holder.getInstance()
+                        .getEdsConfigModel(), param.getNamespace(), resource.getName());
+                if (Objects.nonNull(deployment)) {
+                    kubernetesDeploymentRepo.redeploy(holder.getInstance()
+                            .getEdsConfigModel(), deployment);
+                } else {
+                    detail.setSuccess(false);
+                    detail.setResult("Deployment does not exist");
+                }
+            } catch (Exception e) {
+                detail.setSuccess(false);
+                detail.setResult("Operation failed err: " + e.getMessage());
+            }
+            // 写入工单
+            WorkOrderTicketParam.AddDeploymentRedeployTicketEntry addTicketEntry = WorkOrderTicketParam.AddDeploymentRedeployTicketEntry.builder()
+                    .detail(detail)
+                    .ticketId(deleteToken.getTicketId())
+                    .build();
+            workOrderTicketEntryFacade.addDeploymentRedeployTicketEntry(addTicketEntry);
+        });
+
     }
 
 }

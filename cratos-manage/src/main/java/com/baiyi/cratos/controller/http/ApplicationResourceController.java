@@ -51,6 +51,15 @@ public class ApplicationResourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Redeploy application resource kubernetes deployment")
+    @PutMapping(value = "/kubernetes/deployment/pod/del", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> redeployApplicationResourceKubernetesDeployment(
+            @RequestBody @Valid ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment redeployApplicationResourceKubernetesDeployment) {
+        kubernetesDetailsFacade.redeployApplicationResourceKubernetesDeployment(
+                redeployApplicationResourceKubernetesDeployment);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Query kubernetes deployment pod container image version")
     @PostMapping(value = "/kubernetes/deployment/pod/container/image/version/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesContainerVO.ImageVersion> queryApplicationResourceKubernetesDeploymentImageVersion(

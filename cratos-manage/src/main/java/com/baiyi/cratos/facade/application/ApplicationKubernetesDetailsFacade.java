@@ -23,6 +23,9 @@ public interface ApplicationKubernetesDetailsFacade {
             ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion);
 
     void deleteApplicationResourceKubernetesDeploymentPod(
-            ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod deleteApplicationResourceKubernetesDeploymentPod);
+            ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod parm);
+
+    void redeployApplicationResourceKubernetesDeployment(
+            ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param);
 
 }
