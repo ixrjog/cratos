@@ -30,6 +30,7 @@ import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -106,22 +107,20 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry param) {
         WorkOrderTicketEntry workOrderTicketEntry = super.addEntry(param);
         addApplicationDeploymentAssets(param);
         TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> ticketEntryProvider = (TicketEntryProvider<ApplicationDeploymentModel.DeploymentScale, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), BusinessTypeEnum.EDS_ASSET.name());
-        int currentReplicas = workOrderTicketEntryService.queryTicketEntries(workOrderTicketEntry.getTicketId(),
-                        BusinessTypeEnum.EDS_ASSET.name())
-                .stream()
-                .map(e -> {
-                    ApplicationDeploymentModel.DeploymentScale deploymentScale = Objects.requireNonNull(
-                                    ticketEntryProvider)
-                            .loadAs(e);
-                    return deploymentScale.getCurrentReplicas();
-                })
-                .mapToInt(Integer::intValue)
-                .sum();
+        int currentReplicas = 0;
+        List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(
+                workOrderTicketEntry.getTicketId(), BusinessTypeEnum.EDS_ASSET.name());
+        for (WorkOrderTicketEntry e : entries) {
+            ApplicationDeploymentModel.DeploymentScale deploymentScale = Objects.requireNonNull(ticketEntryProvider)
+                    .loadAs(e);
+            currentReplicas += deploymentScale.getCurrentReplicas();
+        }
         ApplicationReplicasModel.ApplicationConfigurationChange applicationConfigurationChange = loadAs(
                 workOrderTicketEntry);
         applicationConfigurationChange.getConfig()
@@ -212,7 +211,8 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     }
 
     private EdsAssetVO.Asset getDeploymentAsset(ApplicationResource resource) {
-        return BeanCopierUtils.copyProperties(edsAssetService.getById(resource.getBusinessId()), EdsAssetVO.Asset.class);
+        return BeanCopierUtils.copyProperties(edsAssetService.getById(resource.getBusinessId()),
+                EdsAssetVO.Asset.class);
     }
 
     private void addDeploymentParam(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry param) {
