@@ -139,7 +139,7 @@ public class EdsAssetServiceImpl implements EdsAssetService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("assetType", assetType);
         if (isPrefix) {
-            criteria.andLike("name", "%" + name);
+            criteria.andLike("name", name + "%");
         } else {
             criteria.andEqualTo("name", name);
         }
