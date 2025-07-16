@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
-import com.baiyi.cratos.util.SqlHelper;
+import com.baiyi.cratos.util.SqlUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -40,7 +40,7 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(pageQuery.getQueryName())) {
-            criteria.andLike("recordName", SqlHelper.likeOf(pageQuery.getQueryName()));
+            criteria.andLike("recordName", SqlUtils.ofLike(pageQuery.getQueryName()));
         }
         if (pageQuery.getDomainId() != null) {
             criteria.andEqualTo("domainId", pageQuery.getDomainId());

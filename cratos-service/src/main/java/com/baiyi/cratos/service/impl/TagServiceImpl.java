@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.TagParam;
 import com.baiyi.cratos.mapper.TagMapper;
 import com.baiyi.cratos.service.TagService;
-import com.baiyi.cratos.util.SqlHelper;
+import com.baiyi.cratos.util.SqlUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
@@ -37,7 +37,7 @@ public class TagServiceImpl implements TagService {
         Example example = new Example(Tag.class);
         if (StringUtils.isNotBlank(pageQuery.getTagKey())) {
             Example.Criteria criteria = example.createCriteria();
-            criteria.andLike("tagKey", SqlHelper.likeOf(pageQuery.getTagKey()));
+            criteria.andLike("tagKey", SqlUtils.ofLike(pageQuery.getTagKey()));
         }
         example.setOrderByClause("seq");
         List<Tag> data = tagMapper.selectByExample(example);

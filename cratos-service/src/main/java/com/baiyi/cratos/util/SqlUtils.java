@@ -11,9 +11,9 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class SqlHelper {
+public final class SqlUtils {
 
-    public static String likeOf(String queryName) {
+    public static String ofLike(String queryName) {
         return Joiner.on("")
                 .join("%", queryName, "%");
     }
