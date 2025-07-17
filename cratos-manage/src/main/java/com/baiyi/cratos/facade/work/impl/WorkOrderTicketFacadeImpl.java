@@ -126,7 +126,7 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
             this.approvalTicket(callbackApprovalTicket.toApprovalTicket());
             return HttpResult.SUCCESS;
         } catch (BaseException ex) {
-            return HttpResult.ofBody(ex);
+            return HttpResult.ofBaseException(ex);
         }
     }
 
