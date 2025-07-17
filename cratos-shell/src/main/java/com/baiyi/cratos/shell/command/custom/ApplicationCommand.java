@@ -28,7 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.ApplicationCommand.GROUP;
+
 
 /**
  * @Author baiyi

@@ -2,7 +2,6 @@ package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -52,8 +51,8 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
     private final UserService userService;
     public final static String[] GROUP_TABLE_FIELD_NAME = {"ID", "GROUP NAME"};
     private final EnvFacade envFacade;
-    public final String UNAUTHORIZED;
-    public final String AUTHORIZATION_EXPIRES;
+    public static final String UNAUTHORIZED = "--";
+    public final String AUTHORIZATION_EXPIRED;
 
     public EdsComputerGroupListCommand(SshShellHelper helper, SshShellProperties properties, UserService userService,
                                        UserPermissionFacade permissionFacade, EnvFacade envFacade) {
@@ -62,8 +61,7 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
         this.userService = userService;
         this.permissionFacade = permissionFacade;
         this.envFacade = envFacade;
-        this.UNAUTHORIZED = helper.getColored("Unauthorized", PromptColor.RED);
-        this.AUTHORIZATION_EXPIRES = helper.getColored("Authorization expires", PromptColor.YELLOW);
+        this.AUTHORIZATION_EXPIRED = helper.getColored("Expired", PromptColor.YELLOW);
     }
 
     @ShellMethod(key = COMMAND_GROUP_LIST, value = "List computer group")
@@ -104,10 +102,9 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
             return UNAUTHORIZED;
         }
         if (ExpiredUtil.isExpired(permission.getExpiredTime())) {
-            return AUTHORIZATION_EXPIRES;
+            return AUTHORIZATION_EXPIRED;
         }
-        return helper.getColored(StringFormatter.arrayFormat("Authorized `expires {}`",
-                TimeUtils.parse(permission.getExpiredTime(), Global.ISO8601)), PromptColor.GREEN);
+        return helper.getColored(TimeUtils.parse(permission.getExpiredTime(), Global.ISO8601), PromptColor.GREEN);
     }
 
 }

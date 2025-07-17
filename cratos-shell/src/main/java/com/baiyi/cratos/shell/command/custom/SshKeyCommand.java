@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.SshKeyCommand.GROUP;
 
 /**
  * @Author baiyi
@@ -97,7 +97,8 @@ public class SshKeyCommand extends AbstractCommand {
             }
 
             PrettyTable table = PrettyTable.fieldNames(SSH_KEY_TABLE_FIELD_NAME);
-            credentials.forEach(e -> table.addRow(e.getUsername(), e.getTitle(), e.getFingerprint(), getExpiredTime(e.getExpiredTime())));
+            credentials.forEach(e -> table.addRow(e.getUsername(), e.getTitle(), e.getFingerprint(),
+                    getExpiredTime(e.getExpiredTime())));
             helper.print(table.toString());
             return;
         }
@@ -106,7 +107,8 @@ public class SshKeyCommand extends AbstractCommand {
 
     @ShellMethod(key = COMMAND_SSHKEY_ADD, value = "Add my sshkey")
     @ShellMethodAvailability("sshKeyAddAvailability")
-    public void addSshKey(@ShellOption(help = "Specify the public key and wrap it in single quotes (ex: 'ssh-rsa AAAAB3NzaC1yc...')", defaultValue = "") String pubKey) {
+    public void addSshKey(
+            @ShellOption(help = "Specify the public key and wrap it in single quotes (ex: 'ssh-rsa AAAAB3NzaC1yc...')", defaultValue = "") String pubKey) {
         final String username = helper.getSshSession()
                 .getUsername();
         User user = userService.getByUsername(username);

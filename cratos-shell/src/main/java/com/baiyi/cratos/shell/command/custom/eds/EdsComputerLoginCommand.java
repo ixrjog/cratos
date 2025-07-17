@@ -61,7 +61,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.SSHSERVER_USER_LOGIN_SERVER_NOTICE;
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerLoginCommand.GROUP;
+
 
 /**
  * &#064;Author  baiyi

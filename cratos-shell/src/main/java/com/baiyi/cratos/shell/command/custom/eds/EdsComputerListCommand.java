@@ -4,7 +4,6 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.common.util.IpUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
@@ -42,7 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi
@@ -58,7 +57,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
     private static final String COMMAND_LIST = GROUP + "-list";
-    public final String UNAUTHORIZED;
+    public static final String UNAUTHORIZED = "--";
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionService userPermissionService;
     private final EdsInstanceService edsInstanceService;
@@ -82,7 +81,6 @@ public class EdsComputerListCommand extends AbstractCommand {
         this.businessTagFacade = businessTagFacade;
         this.envFacade = envFacade;
         this.userService = userService;
-        this.UNAUTHORIZED = helper.getColored("Unauthorized", PromptColor.RED);
     }
 
     @ShellMethod(key = COMMAND_LIST, value = "List computer asset")
@@ -179,8 +177,8 @@ public class EdsComputerListCommand extends AbstractCommand {
         if (ExpiredUtil.isExpired(userPermission.getExpiredTime())) {
             return UNAUTHORIZED;
         }
-        return helper.getColored(StringFormatter.arrayFormat("Authorized `expires {}`",
-                TimeUtils.parse(userPermission.getExpiredTime(), Global.ISO8601)), PromptColor.GREEN);
+        return helper.getColored(
+                TimeUtils.parse(userPermission.getExpiredTime(), Global.ISO8601), PromptColor.GREEN);
     }
 
     private String renderEnv(Map<String, Env> envMap, String env) {

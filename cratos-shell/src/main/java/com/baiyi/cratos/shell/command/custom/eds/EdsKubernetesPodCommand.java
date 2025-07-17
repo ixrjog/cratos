@@ -57,7 +57,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsCloudComputerListCommand.GROUP;
+
+import static com.baiyi.cratos.shell.command.custom.eds.EdsKubernetesPodCommand.GROUP;
 import static com.baiyi.cratos.ssh.core.util.ChannelShellUtils.DEF_UNICODE;
 
 /**
@@ -74,25 +75,16 @@ import static com.baiyi.cratos.ssh.core.util.ChannelShellUtils.DEF_UNICODE;
 public class EdsKubernetesPodCommand extends AbstractCommand {
 
     public static final String GROUP = "kubernetes-pod";
-
     private static final String COMMAND_POD_LIST = GROUP + "-list";
-
     private static final String COMMAND_POD_LOGIN = GROUP + "-login";
-
     private static final String COMMAND_POD_VIEW_LOG = GROUP + "-view-log";
 
     private final EdsInstanceService edsInstanceService;
-
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
-
     private final KubernetesPodRepo kubernetesPodRepo;
-
     private final KubernetesClientBuilder kubernetesClientBuilder;
-
     private final SimpleSshSessionFacade simpleSshSessionFacade;
-
     private final SshAuditProperties sshAuditProperties;
-
     private final PodCommandAuditor podCommandAuditor;
 
     public final static String[] TABLE_FIELD_NAME = {"ID", "Eds Instance", "Namespace", "Deployment", "Containers"};
