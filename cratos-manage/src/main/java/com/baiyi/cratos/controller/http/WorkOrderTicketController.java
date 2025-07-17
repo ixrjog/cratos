@@ -29,34 +29,34 @@ public class WorkOrderTicketController {
     @PostMapping(value = "/my/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<WorkOrderTicketVO.Ticket>> queryMyTicketPage(
             @RequestBody @Valid WorkOrderTicketParam.MyTicketPageQuery pageQuery) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.queryMyTicketPage(pageQuery));
+        return HttpResult.ofBody(workOrderTicketFacade.queryMyTicketPage(pageQuery));
     }
 
     @Operation(summary = "Pagination query workOrder ticket")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<WorkOrderTicketVO.Ticket>> queryTicketPage(
             @RequestBody @Valid WorkOrderTicketParam.TicketPageQuery pageQuery) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.queryTicketPage(pageQuery));
+        return HttpResult.ofBody(workOrderTicketFacade.queryTicketPage(pageQuery));
     }
 
     @Operation(summary = "Create workOrder ticket")
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> createTicket(
             @RequestBody @Valid WorkOrderTicketParam.CreateTicket createTicket) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.createTicket(createTicket));
+        return HttpResult.ofBody(workOrderTicketFacade.createTicket(createTicket));
     }
 
     @Operation(summary = "Get workOrder ticket")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> getTicket(@RequestParam @Valid String ticketNo) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.makeTicketDetails(ticketNo));
+        return HttpResult.ofBody(workOrderTicketFacade.makeTicketDetails(ticketNo));
     }
 
     @Operation(summary = "Submit application ticket")
     @PostMapping(value = "/submit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> submitTicket(
             @RequestBody @Valid WorkOrderTicketParam.SubmitTicket submitTicket) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.submitTicket(submitTicket));
+        return HttpResult.ofBody(workOrderTicketFacade.submitTicket(submitTicket));
     }
 
     @Operation(summary = "Approval ticket")
@@ -70,7 +70,7 @@ public class WorkOrderTicketController {
     @PostMapping(value = "/next", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderTicketVO.TicketDetails> doNextStateOfTicket(
             @RequestBody @Valid WorkOrderTicketParam.DoNextStateOfTicket doNextStateOfTicket) {
-        return HttpResult.ofBaseException(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
+        return HttpResult.ofBody(workOrderTicketFacade.doNextStateOfTicket(doNextStateOfTicket));
     }
 
     @Operation(summary = "Delete ticket by id")

@@ -32,7 +32,7 @@ public class UserExtController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserVO.User>> queryExtUserPage(
             @RequestBody @Valid UserExtParam.UserExtPageQuery pageQuery) {
-        return HttpResult.ofBaseException(userExtFacade.queryExtUserPage(pageQuery));
+        return HttpResult.ofBody(userExtFacade.queryExtUserPage(pageQuery));
     }
 
     @Operation(summary = "Renewal of external user")

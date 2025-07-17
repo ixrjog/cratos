@@ -33,14 +33,14 @@ public class TagGroupController {
     @PostMapping(value = "/options/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getGroupOptions(
             @RequestBody @Valid TagGroupParam.GetGroupOptions getGroupOptions) {
-        return HttpResult.ofBaseException(tagGroupFacade.getGroupOptions(getGroupOptions));
+        return HttpResult.ofBody(tagGroupFacade.getGroupOptions(getGroupOptions));
     }
 
     @Operation(summary = "Pagination query tag group asset")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsAssetVO.Asset>> queryGroupAssetPage(
             @RequestBody @Valid TagGroupParam.GroupAssetPageQuery pageQuery) {
-        return HttpResult.ofBaseException(tagGroupFacade.queryGroupAssetPage(pageQuery));
+        return HttpResult.ofBody(tagGroupFacade.queryGroupAssetPage(pageQuery));
     }
 
 }

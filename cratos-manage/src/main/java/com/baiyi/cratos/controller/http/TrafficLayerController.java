@@ -40,7 +40,7 @@ public class TrafficLayerController {
     @PostMapping(value = "/domain/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerDomainVO.Domain>> queryTrafficLayerDomainPage(
             @RequestBody @Valid TrafficLayerDomainParam.DomainPageQuery pageQuery) {
-        return HttpResult.ofBaseException(domainFacade.queryDomainPage(pageQuery));
+        return HttpResult.ofBody(domainFacade.queryDomainPage(pageQuery));
     }
 
     @Operation(summary = "Add traffic layer domain")
@@ -69,14 +69,14 @@ public class TrafficLayerController {
     @PostMapping(value = "/domain/env/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<TrafficLayerDomainVO.DomainEnv>> queryTrafficLayerDomainEnv(
             @RequestBody @Valid TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
-        return HttpResult.ofBaseException(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
+        return HttpResult.ofBody(domainFacade.queryTrafficLayerDomainEnv(queryDomainEnv));
     }
 
     @Operation(summary = "Pagination query traffic layer record")
     @PostMapping(value = "/record/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerRecordVO.Record>> queryTrafficLayerRecordPage(
             @RequestBody @Valid TrafficLayerRecordParam.RecordPageQuery pageQuery) {
-        return HttpResult.ofBaseException(recordFacade.queryRecordPage(pageQuery));
+        return HttpResult.ofBody(recordFacade.queryRecordPage(pageQuery));
     }
 
     @Operation(summary = "Add traffic layer record")
@@ -105,28 +105,28 @@ public class TrafficLayerController {
     @PostMapping(value = "/record/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerRecordVO.RecordDetails> queryRecordDetails(
             @RequestBody @Valid TrafficLayerRecordParam.QueryRecordDetails queryRecordDetails) {
-        return HttpResult.ofBaseException(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
+        return HttpResult.ofBody(trafficLayerFacade.queryRecordDetails(queryRecordDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress host details")
     @PostMapping(value = "/ingress/host/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
-        return HttpResult.ofBaseException(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
+        return HttpResult.ofBody(trafficLayerIngressFacade.queryIngressHostDetails(queryIngressHostDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress details")
     @PostMapping(value = "/ingress/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressDetails queryIngressDetails) {
-        return HttpResult.ofBaseException(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
+        return HttpResult.ofBody(trafficLayerIngressFacade.queryIngressDetails(queryIngressDetails));
     }
 
     @Operation(summary = "Query traffic layer ingress traffic-limit")
     @PostMapping(value = "/ingress/traffic-limit/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficLayerIngressVO.IngressTrafficLimit>> queryIngressTrafficLimitPage(
             @RequestBody @Valid TrafficIngressTrafficLimitParam.IngressTrafficLimitPageQuery pageQuery) {
-        return HttpResult.ofBaseException(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
+        return HttpResult.ofBody(trafficLayerIngressTrafficLimitFacade.queryIngressTrafficLimitPage(pageQuery));
     }
 
     @Operation(summary = "Update traffic layer ingress traffic-limit")

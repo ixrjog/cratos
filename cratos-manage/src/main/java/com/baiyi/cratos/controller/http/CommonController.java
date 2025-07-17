@@ -28,7 +28,7 @@ public class CommonController {
     @Operation(summary = "Resolve DNS(CNAME)")
     @GetMapping(value = "/util/dns/google/resolve", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DnsGoogleModel.DnsResolve> resolveDns(@RequestParam String name) {
-        return HttpResult.ofBaseException(dnsGoogleUtils.resolve(name));
+        return HttpResult.ofBody(dnsGoogleUtils.resolve(name));
     }
 
 }

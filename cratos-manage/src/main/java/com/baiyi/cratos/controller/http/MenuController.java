@@ -35,13 +35,13 @@ public class MenuController {
     @Operation(summary = "Get nav menu")
     @GetMapping(value = "/nav/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MenuVO.NavMenu> getNavMenu() {
-        return HttpResult.ofBaseException(menuFacade.getNavMenu());
+        return HttpResult.ofBody(menuFacade.getNavMenu());
     }
 
     @Operation(summary = "Get menu by id")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MenuVO.Menu> getMenuById(@RequestParam @Valid int menuId) {
-        return HttpResult.ofBaseException(menuFacade.getMenuById(menuId));
+        return HttpResult.ofBody(menuFacade.getMenuById(menuId));
     }
 
     @Operation(summary = "Add menu")
@@ -68,19 +68,19 @@ public class MenuController {
     @Operation(summary = "Query my menu")
     @PostMapping(value = "/my/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryMyMenu(@RequestBody @Valid MenuParam.QueryMyMenu queryMyMenu) {
-        return HttpResult.ofBaseException(myMenuFacade.queryMyMenu(queryMyMenu));
+        return HttpResult.ofBody(myMenuFacade.queryMyMenu(queryMyMenu));
     }
 
     @Operation(summary = "Query user menu (TEST)")
     @PostMapping(value = "/user/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<MyMenuVO.MyMenu>> queryUserMenu(@RequestBody @Valid MenuParam.QueryUserMenu queryUserMenu) {
-        return HttpResult.ofBaseException(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
+        return HttpResult.ofBody(myMenuFacade.queryUserMenu(queryUserMenu.getUsername(), queryUserMenu.getLang()));
     }
 
     @Operation(summary = "Get role menu by id")
     @GetMapping(value = "/role/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RoleMenuVO.RoleMenu> getRoleMenuByRoleId(@RequestParam int roleId, @Valid String lang) {
-        return HttpResult.ofBaseException(roleMenuFacade.getRoleMenu(roleId, lang));
+        return HttpResult.ofBody(roleMenuFacade.getRoleMenu(roleId, lang));
     }
 
 }

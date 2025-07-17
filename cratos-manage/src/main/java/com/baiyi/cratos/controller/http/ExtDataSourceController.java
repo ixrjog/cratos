@@ -38,20 +38,20 @@ public class ExtDataSourceController {
     @Operation(summary = "Query eds instance type options")
     @GetMapping(value = "/instance/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getEdsInstanceTypeOptions() {
-        return HttpResult.ofBaseException(EdsInstanceTypeEnum.toOptions());
+        return HttpResult.ofBody(EdsInstanceTypeEnum.toOptions());
     }
 
     @Operation(summary = "Pagination query eds instance")
     @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryEdsInstancePage(
             @RequestBody @Valid EdsInstanceParam.InstancePageQuery pageQuery) {
-        return HttpResult.ofBaseException(edsFacade.queryEdsInstancePage(pageQuery));
+        return HttpResult.ofBody(edsFacade.queryEdsInstancePage(pageQuery));
     }
 
     @Operation(summary = "Get eds instance")
     @GetMapping(value = "/instance/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsInstanceVO.EdsInstance> getEdsInstanceById(@RequestParam int instanceId) {
-        return HttpResult.ofBaseException(edsFacade.getEdsInstanceById(instanceId));
+        return HttpResult.ofBody(edsFacade.getEdsInstanceById(instanceId));
     }
 
     @Operation(summary = "Register eds instance")
@@ -83,13 +83,13 @@ public class ExtDataSourceController {
     @PostMapping(value = "/config/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsConfigVO.EdsConfig>> queryEdsConfigPage(
             @RequestBody @Valid EdsConfigParam.EdsConfigPageQuery pageQuery) {
-        return HttpResult.ofBaseException(edsFacade.queryEdsConfigPage(pageQuery));
+        return HttpResult.ofBody(edsFacade.queryEdsConfigPage(pageQuery));
     }
 
     @Operation(summary = "Query eds config by id")
     @GetMapping(value = "/config/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsConfigVO.EdsConfig> getEdsConfigById(@RequestParam int configId) {
-        return HttpResult.ofBaseException(edsFacade.getEdsConfigById(configId));
+        return HttpResult.ofBody(edsFacade.getEdsConfigById(configId));
     }
 
     @Operation(summary = "Add eds config")
@@ -132,7 +132,7 @@ public class ExtDataSourceController {
     @PostMapping(value = "/instance/asset/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsAssetVO.Asset>> queryEdsInstanceAssetPage(
             @RequestBody @Valid EdsInstanceParam.AssetPageQuery assetPageQuery) {
-        return HttpResult.ofBaseException(edsFacade.queryEdsInstanceAssetPage(assetPageQuery));
+        return HttpResult.ofBody(edsFacade.queryEdsInstanceAssetPage(assetPageQuery));
     }
 
     @Operation(summary = "Delete eds instance asset")
@@ -147,7 +147,7 @@ public class ExtDataSourceController {
     @GetMapping(value = "/instance/asset/support/manual/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsAssetVO.SupportManual<?>> getEdsInstanceAssetSupportManual(@RequestParam String instanceType,
                                                                                     String assetType) {
-        return HttpResult.ofBaseException(edsFacade.getEdsInstanceAssetSupportManual(instanceType, assetType));
+        return HttpResult.ofBody(edsFacade.getEdsInstanceAssetSupportManual(instanceType, assetType));
     }
 
     @Operation(summary = "Delete eds asset by id")
@@ -160,14 +160,14 @@ public class ExtDataSourceController {
     @Operation(summary = "Query eds asset index by id")
     @GetMapping(value = "/asset/index/query", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EdsAssetVO.Index>> queryAssetIndexByAssetId(@RequestParam int assetId) {
-        return HttpResult.ofBaseException(edsFacade.queryAssetIndexByAssetId(assetId));
+        return HttpResult.ofBody(edsFacade.queryAssetIndexByAssetId(assetId));
     }
 
     @Operation(summary = "Query eds asset by uniqueKey")
     @PostMapping(value = "/asset/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsAssetVO.Asset> queryAssetByUniqueKey(
             @RequestBody @Valid EdsInstanceParam.QueryAssetByUniqueKey queryAssetByUniqueKey) {
-        return HttpResult.ofBaseException(edsFacade.queryAssetByUniqueKey(queryAssetByUniqueKey));
+        return HttpResult.ofBody(edsFacade.queryAssetByUniqueKey(queryAssetByUniqueKey));
     }
 
     @Operation(summary = "Add eds cratos asset")
@@ -181,7 +181,7 @@ public class ExtDataSourceController {
     @Operation(summary = "Get to business target")
     @GetMapping(value = "/asset/to/business/target/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsAssetVO.AssetToBusiness<?>> getToBusinessTarget(@RequestParam int assetId) {
-        return HttpResult.ofBaseException(edsFacade.getToBusinessTarget(assetId));
+        return HttpResult.ofBody(edsFacade.getToBusinessTarget(assetId));
     }
 
 }

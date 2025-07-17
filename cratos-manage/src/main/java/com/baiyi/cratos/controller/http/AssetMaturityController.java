@@ -29,7 +29,7 @@ public class AssetMaturityController {
     @PostMapping(value = "/page/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<AssetMaturityVO.AssetMaturity>> queryAssetMaturityPage(
             @RequestBody @Valid AssetMaturityParam.AssetMaturityPageQuery pageQuery) {
-        return HttpResult.ofBaseException(assetMaturityFacade.queryAssetMaturityPage(pageQuery));
+        return HttpResult.ofBody(assetMaturityFacade.queryAssetMaturityPage(pageQuery));
     }
 
     @Operation(summary = "Add assetMaturity")

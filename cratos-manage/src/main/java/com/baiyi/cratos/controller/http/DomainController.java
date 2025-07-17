@@ -49,7 +49,7 @@ public class DomainController {
     @Operation(summary = "Pagination query domain")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<DomainVO.Domain>> queryDomainPage(@RequestBody @Valid DomainParam.DomainPageQuery pageQuery) {
-        return HttpResult.ofBaseException(domainFacade.queryDomainPage(pageQuery));
+        return HttpResult.ofBody(domainFacade.queryDomainPage(pageQuery));
     }
 
     @Operation(summary = "Delete domain by id")

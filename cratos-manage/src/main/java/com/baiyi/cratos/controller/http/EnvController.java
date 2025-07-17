@@ -30,13 +30,13 @@ public class EnvController {
     @Operation(summary = "Pagination query env")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EnvVO.Env>> queryEnvPage(@RequestBody @Valid EnvParam.EnvPageQuery pageQuery) {
-        return HttpResult.ofBaseException(envFacade.queryEnvPage(pageQuery));
+        return HttpResult.ofBody(envFacade.queryEnvPage(pageQuery));
     }
 
     @Operation(summary = "Query env by group value")
     @PostMapping(value = "/query/by/group/value", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<EnvVO.Env>> queryEnvByGroupValue(@RequestBody @Valid EnvParam.QueryEnvByGroupValue queryEnvByGroupValue) {
-        return HttpResult.ofBaseException(envFacade.queryEnvByGroupValue(queryEnvByGroupValue));
+        return HttpResult.ofBody(envFacade.queryEnvByGroupValue(queryEnvByGroupValue));
     }
 
     @Operation(summary = "Update env valid")

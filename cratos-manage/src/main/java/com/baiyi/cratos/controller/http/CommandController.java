@@ -42,7 +42,7 @@ public class CommandController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CommandExecVO.CommandExec>> queryCommandExecPage(
             @RequestBody @Valid CommandExecParam.CommandExecPageQuery pageQuery) {
-        return HttpResult.ofBaseException(commandExecFacade.queryCommandExecPage(pageQuery));
+        return HttpResult.ofBody(commandExecFacade.queryCommandExecPage(pageQuery));
     }
 
     @Operation(summary = "Add command exec")
@@ -78,21 +78,21 @@ public class CommandController {
     @PostMapping(value = "/instance/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsInstanceVO.EdsInstance>> queryCommandExecEdsInstancePage(
             @RequestBody @Valid EdsInstanceParam.CommandExecInstancePageQuery pageQuery) {
-        return HttpResult.ofBaseException(edsFacade.queryCommandExecEdsInstancePage(pageQuery));
+        return HttpResult.ofBody(edsFacade.queryCommandExecEdsInstancePage(pageQuery));
     }
 
     @Operation(summary = "Pagination query eds instance namespaces")
     @PostMapping(value = "/instance/namespace/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Set<String>> queryCommandExecEdsInstanceNamespace(
             @RequestBody @Valid EdsInstanceParam.QueryCommandExecInstanceNamespace query) {
-        return HttpResult.ofBaseException(edsFacade.queryCommandExecEdsInstanceNamespace(query));
+        return HttpResult.ofBody(edsFacade.queryCommandExecEdsInstanceNamespace(query));
     }
 
     @Operation(summary = "Pagination query user")
     @PostMapping(value = "/user/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserVO.User>> queryCommandExecUserPage(
             @RequestBody @Valid UserParam.CommandExecUserPageQuery pageQuery) {
-        return HttpResult.ofBaseException(userFacade.queryCommandExecUserPage(pageQuery));
+        return HttpResult.ofBody(userFacade.queryCommandExecUserPage(pageQuery));
     }
 
 }

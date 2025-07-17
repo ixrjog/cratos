@@ -30,14 +30,14 @@ public class ExtDataSourceIdentityController {
     @PostMapping(value = "/cloud/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.CloudIdentityDetails> queryCloudIdentityDetails(
             @RequestBody @Valid EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
+        return HttpResult.ofBody(edsIdentityFacade.queryCloudIdentityDetails(queryCloudIdentityDetails));
     }
 
     @Operation(summary = "Create cloud account")
     @PostMapping(value = "/cloud/account/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.CloudAccount> createCloudAccount(
             @RequestBody @Valid EdsIdentityParam.CreateCloudAccount createCloudAccount) {
-        return HttpResult.ofBaseException(edsIdentityFacade.createCloudAccount(createCloudAccount));
+        return HttpResult.ofBody(edsIdentityFacade.createCloudAccount(createCloudAccount));
     }
 
     @Operation(summary = "Grant cloud account permission")
@@ -60,14 +60,14 @@ public class ExtDataSourceIdentityController {
     @PostMapping(value = "/ldap/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.LdapIdentityDetails> queryLdapIdentityDetails(
             @RequestBody @Valid EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
+        return HttpResult.ofBody(edsIdentityFacade.queryLdapIdentityDetails(queryLdapIdentityDetails));
     }
 
     @Operation(summary = "Create eds ldap identity")
     @PostMapping(value = "/ldap/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.LdapIdentity> createLdapIdentity(
             @RequestBody @Valid EdsIdentityParam.CreateLdapIdentity createLdapIdentity) {
-        return HttpResult.ofBaseException(edsIdentityFacade.createLdapIdentity(createLdapIdentity));
+        return HttpResult.ofBody(edsIdentityFacade.createLdapIdentity(createLdapIdentity));
     }
 
     @Operation(summary = "Delete eds ldap identity")
@@ -98,35 +98,35 @@ public class ExtDataSourceIdentityController {
     @PutMapping(value = "/ldap/user/password/reset", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.LdapIdentity> resetLdapUserPassword(
             @RequestBody @Valid EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword) {
-        return HttpResult.ofBaseException(edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword));
+        return HttpResult.ofBody(edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword));
     }
 
     @Operation(summary = "Remove ldap user from group")
     @PostMapping(value = "/ldap/group/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Set<String>> queryLdapGroups(
             @RequestBody @Valid EdsIdentityParam.QueryLdapGroups queryLdapGroups) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryLdapGroups(queryLdapGroups));
+        return HttpResult.ofBody(edsIdentityFacade.queryLdapGroups(queryLdapGroups));
     }
 
     @Operation(summary = "Query eds asset dingtalk identity by username")
     @PostMapping(value = "/dingtalk/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.DingtalkIdentityDetails> queryDingtalkIdentityDetails(
             @RequestBody @Valid EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryDingtalkIdentityDetails(queryDingtalkIdentityDetails));
+        return HttpResult.ofBody(edsIdentityFacade.queryDingtalkIdentityDetails(queryDingtalkIdentityDetails));
     }
 
     @Operation(summary = "Query eds asset gitLab identity by username")
     @PostMapping(value = "/gitlab/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.GitLabIdentityDetails> queryGitLabIdentityDetails(
             @RequestBody @Valid EdsIdentityParam.QueryGitLabIdentityDetails queryGitLabIdentityDetails) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryGitLabIdentityDetails(queryGitLabIdentityDetails));
+        return HttpResult.ofBody(edsIdentityFacade.queryGitLabIdentityDetails(queryGitLabIdentityDetails));
     }
 
     @Operation(summary = "Query eds asset mail identity by username")
     @PostMapping(value = "/mail/details/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsIdentityVO.MailIdentityDetails> queryMailIdentityDetails(
             @RequestBody @Valid EdsIdentityParam.QueryMailIdentityDetails queryMailIdentityDetails) {
-        return HttpResult.ofBaseException(edsIdentityFacade.queryMailIdentityDetails(queryMailIdentityDetails));
+        return HttpResult.ofBody(edsIdentityFacade.queryMailIdentityDetails(queryMailIdentityDetails));
     }
 
 }

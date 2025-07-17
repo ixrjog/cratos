@@ -51,7 +51,7 @@ public class CertificateController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CertificateVO.Certificate>> queryCertificatePage(
             @RequestBody @Valid CertificateParam.CertificatePageQuery pageQuery) {
-        return HttpResult.ofBaseException(certificateFacade.queryCertificatePage(pageQuery));
+        return HttpResult.ofBody(certificateFacade.queryCertificatePage(pageQuery));
     }
 
     @Operation(summary = "Delete certificate by certificateId")

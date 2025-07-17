@@ -30,7 +30,7 @@ public class FinOpsController {
     @Operation(summary = "Query application cost")
     @PostMapping(value = "/app/cost/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<FinOpsVO.AppCost> queryAppCost(@RequestBody @Valid FinOpsParam.QueryAppCost queryAppCost) {
-        return HttpResult.ofBaseException(finOpsFacade.queryAppCost(queryAppCost));
+        return HttpResult.ofBody(finOpsFacade.queryAppCost(queryAppCost));
     }
 
 }

@@ -31,13 +31,13 @@ public class UserController {
     @Operation(summary = "Pagination query user")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<UserVO.User>> queryUserPage(@RequestBody @Valid UserParam.UserPageQuery pageQuery) {
-        return HttpResult.ofBaseException(userFacade.queryUserPage(pageQuery));
+        return HttpResult.ofBody(userFacade.queryUserPage(pageQuery));
     }
 
     @Operation(summary = "Get user by username")
     @GetMapping(value = "/username/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<UserVO.User> getUserByUsername(@RequestParam @Valid String username) {
-        return HttpResult.ofBaseException(userFacade.getUserByUsername(username));
+        return HttpResult.ofBody(userFacade.getUserByUsername(username));
     }
 
     @Operation(summary = "Add user")
@@ -71,7 +71,7 @@ public class UserController {
     @Operation(summary = "Query my sshkey")
     @PostMapping(value = "/my/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<CredentialVO.Credential>> queryMySshKey() {
-        return HttpResult.ofBaseException(userFacade.queryMySshKey());
+        return HttpResult.ofBody(userFacade.queryMySshKey());
     }
 
     @Operation(summary = "Add my sshkey")
@@ -85,7 +85,7 @@ public class UserController {
     @PostMapping(value = "/sshkey/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<CredentialVO.Credential>> querySshKey(
             @RequestBody @Valid UserParam.QuerySshKey querySshKey) {
-        return HttpResult.ofBaseException(userFacade.querySshKey(querySshKey));
+        return HttpResult.ofBody(userFacade.querySshKey(querySshKey));
     }
 
     @Operation(summary = "Add user sshkey")

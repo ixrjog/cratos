@@ -32,7 +32,7 @@ public class CratosInstanceController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CratosInstanceVO.RegisteredInstance>> queryRegisteredInstancePage(
             @RequestBody @Valid CratosInstanceParam.RegisteredInstancePageQuery pageQuery) {
-        return HttpResult.ofBaseException(cratosInstanceFacade.queryRegisteredInstancePage(pageQuery));
+        return HttpResult.ofBody(cratosInstanceFacade.queryRegisteredInstancePage(pageQuery));
     }
 
     @Operation(summary = "Update Cratos instance valid")
@@ -54,7 +54,7 @@ public class CratosInstanceController {
     public HttpResult<CratosInstanceVO.Health> checkHealth() {
         CratosInstanceVO.Health health = cratosInstanceFacade.checkHealth();
         if (health.isHealth()) {
-            return HttpResult.ofBaseException(health);
+            return HttpResult.ofBody(health);
         }
         throw new ResourceInactiveException();
     }

@@ -49,7 +49,7 @@ public class WorkOrderController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<WorkOrderVO.WorkOrder>> queryWorkOrderPage(
             @RequestBody @Valid WorkOrderParam.WorkOrderPageQuery pageQuery) {
-        return HttpResult.ofBaseException(workOrderFacade.queryWorkOrderPage(pageQuery));
+        return HttpResult.ofBody(workOrderFacade.queryWorkOrderPage(pageQuery));
     }
 
     @Operation(summary = "Update workOrder group")
@@ -63,19 +63,19 @@ public class WorkOrderController {
     @PostMapping(value = "/group/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<WorkOrderVO.Group>> queryWorkOrderGroupPage(
             @RequestBody @Valid WorkOrderParam.GroupPageQuery pageQuery) {
-        return HttpResult.ofBaseException(workOrderFacade.queryWorkOrderGroupPage(pageQuery));
+        return HttpResult.ofBody(workOrderFacade.queryWorkOrderGroupPage(pageQuery));
     }
 
     @Operation(summary = "WorkOrder report (summary by name)")
     @GetMapping(value = "/report/name", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<Report.BaseData>> getTicketNameReport() {
-        return HttpResult.ofBaseException(workOrderReporter.getTicketNameReport());
+        return HttpResult.ofBody(workOrderReporter.getTicketNameReport());
     }
 
     @Operation(summary = "WorkOrder report (summary by month)")
     @GetMapping(value = "/report/monthly", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<WorkOrderReportVO.Monthly> getTicketMonthlyReport() {
-        return HttpResult.ofBaseException(workOrderReporter.getTicketMonthlyReport());
+        return HttpResult.ofBody(workOrderReporter.getTicketMonthlyReport());
     }
 
 }
