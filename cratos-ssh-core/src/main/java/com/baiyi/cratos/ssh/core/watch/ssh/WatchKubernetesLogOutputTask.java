@@ -1,6 +1,6 @@
 package com.baiyi.cratos.ssh.core.watch.ssh;
 
-import com.baiyi.cratos.common.util.ArrayUtil;
+import com.baiyi.cratos.common.util.ArrayUtils;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.watch.base.AbstractSshChannelOutputTask;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class WatchKubernetesLogOutputTask extends AbstractSshChannelOutputTask {
 
     @Override
     public void write(char[] buff, int off, int len) throws IOException {
-        char[] outBuff = ArrayUtil.sub(buff, 0, len);
+        char[] outBuff = ArrayUtils.subArray(buff, 0, len);
         this.printWriter.write(outBuff);
     }
 

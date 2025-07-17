@@ -1,5 +1,6 @@
 package com.baiyi.cratos.ssh.core.watch.base;
 
+import com.baiyi.cratos.common.util.ArrayUtils;
 import com.baiyi.cratos.ssh.core.SshRecorder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
@@ -44,7 +45,7 @@ public abstract class AbstractOutputTask implements IRecordOutputTask {
             char[] buff = new char[BUFF_SIZE];
             int read;
             while ((read = br.read(buff)) != -1) {
-                char[] outBuff = com.baiyi.cratos.common.util.ArrayUtil.sub(buff, 0, read);
+                char[] outBuff = ArrayUtils.subArray(buff, 0, read);
                 writeAndRecord(outBuff, 0, outBuff.length);
                 TimeUnit.MILLISECONDS.sleep(10L);
             }
