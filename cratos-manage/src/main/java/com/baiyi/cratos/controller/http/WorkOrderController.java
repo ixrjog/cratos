@@ -68,14 +68,14 @@ public class WorkOrderController {
 
     @Operation(summary = "WorkOrder report (summary by name)")
     @GetMapping(value = "/report/name", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<Report.BaseData>> getTicketNameReport() {
-        return HttpResult.ofBody(workOrderReporter.getTicketNameReport());
+    public HttpResult<List<Report.BaseData>> getWorkOrderNameReport() {
+        return HttpResult.ofBody(workOrderReporter.getWorkOrderNameReport());
     }
 
     @Operation(summary = "WorkOrder report (summary by month)")
     @GetMapping(value = "/report/monthly", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<WorkOrderReportVO.Monthly> getTicketMonthlyReport() {
-        return HttpResult.ofBody(workOrderReporter.getTicketMonthlyReport());
+    public HttpResult<WorkOrderReportVO.Monthly> getWorkOrderMonthlyReport() {
+        return HttpResult.ofBody(workOrderReporter.getWorkOrderMonthlyReport());
     }
 
 }

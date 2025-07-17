@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface WorkOrderReporter {
 
-    List<Report.BaseData> getTicketNameReport();
+    List<Report.BaseData> getWorkOrderNameReport();
 
-    WorkOrderReportVO.Monthly getTicketMonthlyReport();
+    WorkOrderReportVO.Monthly getWorkOrderMonthlyReport();
 
 }

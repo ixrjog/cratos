@@ -26,33 +26,35 @@ public class WorkOrderReporterImpl implements WorkOrderReporter {
     private final WorkOrderTicketService workOrderTicketService;
 
     @Override
-    public List<Report.BaseData> getTicketNameReport() {
+    public List<Report.BaseData> getWorkOrderNameReport() {
         return workOrderTicketService.statByName();
     }
 
     @Override
-    public WorkOrderReportVO.Monthly getTicketMonthlyReport() {
-        List<String> dates = workOrderTicketService.statByMonth(-1)
+    public WorkOrderReportVO.Monthly getWorkOrderMonthlyReport() {
+        List<String> monthlyDates = workOrderTicketService.statByMonth(-1)
                 .stream()
                 .map(Report.BaseData::getCName)
                 .toList();
         return WorkOrderReportVO.Monthly.builder()
-                .dates(dates)
-                .nameCat(queryWorkOrderNameStatistics())
+                .dates(monthlyDates)
+                .nameCat(buildWorkOrderMonthlyStatistics())
                 .build();
     }
 
-    private Map<String, WorkOrderReportVO.MonthlyStatistics> queryWorkOrderNameStatistics() {
-        List<WorkOrder> workOrders = workOrderService.selectAll();
-        return workOrders.stream()
-                .collect(Collectors.toMap(WorkOrder::getName, e -> WorkOrderReportVO.MonthlyStatistics.builder()
-                        .values(workOrderTicketService.statByMonth(e.getId())
+    private Map<String, WorkOrderReportVO.MonthlyStatistics> buildWorkOrderMonthlyStatistics() {
+        List<WorkOrder> allWorkOrders = workOrderService.selectAll();
+        return allWorkOrders.stream()
+                .collect(Collectors.toMap(
+                    WorkOrder::getName, 
+                    workOrder -> WorkOrderReportVO.MonthlyStatistics.builder()
+                        .values(workOrderTicketService.statByMonth(workOrder.getId())
                                 .stream()
                                 .map(Report.BaseData::getValue)
                                 .collect(Collectors.toList()))
-                        .color(workOrderService.getById(e.getId())
-                                .getColor())
-                        .build(), (k1, k2) -> k1));
+                        .color(workOrderService.getById(workOrder.getId()).getColor())
+                        .build(), 
+                    (existing, replacement) -> existing));
     }
 
 }
