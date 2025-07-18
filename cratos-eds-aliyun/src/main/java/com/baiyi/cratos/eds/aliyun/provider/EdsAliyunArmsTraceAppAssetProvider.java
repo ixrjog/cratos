@@ -1,10 +1,10 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.baiyi.cratos.common.util.EnvUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.model.AliyunArms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunArmsRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
@@ -108,9 +108,34 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                 .build();
     }
 
+//    @Override
+//    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+//                                                      EdsAsset edsAsset, AliyunArms.TraceApps entity) {
+//        String name = entity.getAppName();
+//        Map<String, Env> envMap = envFacade.getEnvMap();
+//        String env = EnvUtils.getEnvSuffix(envMap, name);
+//        if (StringUtils.hasText(env)) {
+//            List<EdsAssetIndex> indices = Lists.newArrayList();
+//            indices.add(createEdsAssetIndex(edsAsset, ENV, env));
+//            String appName = StringFormatter.eraseLastStr(name, "-" + env);
+//            indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
+//            Optional.of(instance)
+//                    .map(ExternalDataSourceInstance::getEdsConfigModel)
+//                    .map(EdsAliyunConfigModel.Aliyun::getArms)
+//                    .map(EdsAliyunConfigModel.ARMS::getHome)
+//                    .ifPresent(home -> {
+//                        String appHome = StringFormatter.arrayFormat(home, entity.getPid(), entity.getRegionId(),
+//                                entity.getPid());
+//                        indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ARMS_APP_HOME, appHome));
+//                    });
+//            return indices;
+//        }
+//        return List.of();
+//    }
+
     @Override
     protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, AliyunArms.TraceApps entity) {
+                                                             EdsAsset edsAsset, AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
         String env = EnvUtils.getEnvSuffix(envMap, name);
@@ -122,9 +147,9 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
             Optional.of(instance)
                     .map(ExternalDataSourceInstance::getEdsConfigModel)
                     .map(EdsAliyunConfigModel.Aliyun::getArms)
-                    .map(EdsAliyunConfigModel.ARMS::getHome)
+                    .map(EdsAliyunConfigModel.ARMS::getAppOverview)
                     .ifPresent(home -> {
-                        String appHome = StringFormatter.arrayFormat(home, entity.getPid(), entity.getRegionId(),
+                        String appHome = StringFormatter.arrayFormat(home, entity.getRegionId(),
                                 entity.getPid());
                         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ARMS_APP_HOME, appHome));
                     });

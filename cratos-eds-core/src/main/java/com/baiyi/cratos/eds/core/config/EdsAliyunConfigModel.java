@@ -93,6 +93,7 @@ public class EdsAliyunConfigModel {
         private String regionId;
         private String endpoint;
         private String home;
+        private String appOverview;
     }
 
     @Data
