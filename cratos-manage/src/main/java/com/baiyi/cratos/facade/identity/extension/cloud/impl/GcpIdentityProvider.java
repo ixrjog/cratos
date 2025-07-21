@@ -110,6 +110,11 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsGcpConfigM
     }
 
     @Override
+    public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        // TODO
+    }
+
+    @Override
     protected EdsIdentityVO.LoginProfile getLoginProfile(EdsInstance instance, EdsAsset account) {
         return EdsIdentityVO.LoginProfile.ENABLED;
     }

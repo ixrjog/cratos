@@ -47,4 +47,6 @@ public interface CloudIdentityProvider extends EdsAssetTypeOfAnnotate {
 
     void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount);
 
+    void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount);
+
 }

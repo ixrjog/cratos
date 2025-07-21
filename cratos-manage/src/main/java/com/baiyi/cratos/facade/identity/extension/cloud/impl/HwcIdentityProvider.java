@@ -106,5 +106,10 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
         HwcIamRepo.blockUser(hwc.getRegionId(), hwc, blockCloudAccount.getAccountId());
     }
 
+    @Override
+    public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        // TODO
+    }
+
 }
 

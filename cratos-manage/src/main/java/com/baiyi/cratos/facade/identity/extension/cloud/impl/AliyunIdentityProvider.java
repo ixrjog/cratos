@@ -153,4 +153,17 @@ public class AliyunIdentityProvider extends BaseCloudIdentityProvider<EdsAliyunC
         }
     }
 
+    @Override
+    public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) holderBuilder.newHolder(
+                instance.getId(), getAccountAssetType());
+        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
+                .getEdsConfigModel();
+        try {
+            GetUserResponse.User user = ramUserRepo.getUser(aliyun, blockCloudAccount.getAccount());
+            holder.importAsset(user);
+        } catch (ClientException ignored) {
+        }
+    }
+
 }

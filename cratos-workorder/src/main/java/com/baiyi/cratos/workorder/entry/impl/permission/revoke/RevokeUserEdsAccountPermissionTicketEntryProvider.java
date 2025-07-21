@@ -146,11 +146,14 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .build();
                 edsIdentityFacade.deleteLdapIdentity(deleteLdapIdentity);
             }
-            case EdsAssetTypeEnum.ALIYUN_RAM_USER, EdsAssetTypeEnum.AWS_IAM_USER -> {
+            case EdsAssetTypeEnum.ALIYUN_RAM_USER, EdsAssetTypeEnum.AWS_IAM_USER,
+                 EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER -> {
                 EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
                         .instanceId(entry.getInstanceId())
                         .account(entry.getName())
+                        .accountId(detail.getAssetId())
                         .build();
+                // 增加导入资产逻辑
                 edsIdentityFacade.blockCloudAccount(blockCloudAccount);
             }
             case EdsAssetTypeEnum.GCP_MEMBER -> {
@@ -162,14 +165,6 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .userId(detail.getAssetId())
                         .build();
                 edsIdentityFacade.blockMailAccount(blockMailAccount);
-            }
-            case EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER -> {
-                EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
-                        .instanceId(entry.getInstanceId())
-                        .account(entry.getName())
-                        .accountId(detail.getAssetId())
-                        .build();
-                edsIdentityFacade.blockCloudAccount(blockCloudAccount);
             }
             case EdsAssetTypeEnum.GITLAB_USER -> {
                 EdsIdentityParam.BlockGitLabIdentity blockGitLabIdentity = EdsIdentityParam.BlockGitLabIdentity.builder()

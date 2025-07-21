@@ -155,6 +155,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
         EdsInstance instance = getAndVerifyEdsInstance(blockCloudAccount);
         CloudIdentityProvider cloudIdentityProvider = CloudIdentityFactory.getProvider(instance.getEdsType());
         cloudIdentityProvider.blockCloudAccount(instance, blockCloudAccount);
+        cloudIdentityProvider.importCloudAccount(instance, blockCloudAccount);
     }
 
     private Map<String, Map<Integer, List<EdsAssetVO.Asset>>> makeCloudIdentities(List<EdsAsset> cloudIdentityAssets) {

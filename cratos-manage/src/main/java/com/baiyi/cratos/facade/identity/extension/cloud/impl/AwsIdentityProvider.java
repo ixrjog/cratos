@@ -91,6 +91,17 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
     }
 
     @Override
+    public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
+        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+                instance.getId(), getAccountAssetType());
+        EdsAwsConfigModel.Aws aws = holder.getInstance()
+                .getEdsConfigModel();
+        com.amazonaws.services.identitymanagement.model.User user = iamUserRepo.getUser(aws,
+                blockCloudAccount.getAccount());
+        holder.importAsset(user);
+    }
+
+    @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
         EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
