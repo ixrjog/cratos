@@ -101,7 +101,7 @@ public class GlobalNetworkController {
     }
 
     @Operation(summary = "Calculate network info")
-    @PostMapping(value = "/network/info/calc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/info/calc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<NetworkInfo> calcNetwork(@RequestBody @Valid GlobalNetworkParam.CalcNetwork calcNetwork) {
         return HttpResult.ofBody(globalNetworkFacade.calcNetwork(calcNetwork));
     }
