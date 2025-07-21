@@ -4,6 +4,7 @@ import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
+import com.baiyi.cratos.domain.view.network.NetworkInfo;
 
 import java.util.List;
 
@@ -30,5 +31,7 @@ public interface GlobalNetworkFacade extends HasSetValid {
     List<GlobalNetworkVO.Network> checkGlobalNetworkById(int id);
 
     List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock);
+
+    NetworkInfo calcNetwork(GlobalNetworkParam.CalcNetwork calcNetwork);
 
 }

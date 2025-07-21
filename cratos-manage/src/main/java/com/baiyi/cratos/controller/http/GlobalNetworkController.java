@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.param.http.network.GlobalNetworkPlanningParam;
 import com.baiyi.cratos.domain.param.http.network.GlobalNetworkSubnetParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
+import com.baiyi.cratos.domain.view.network.NetworkInfo;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.facade.GlobalNetworkSubnetFacade;
@@ -97,6 +98,12 @@ public class GlobalNetworkController {
     public HttpResult<List<GlobalNetworkVO.Network>> checkGlobalNetworkByCidrBlock(
             @RequestParam @Valid @NotBlank String cidrBlock) {
         return HttpResult.ofBody(globalNetworkFacade.checkGlobalNetworkByCidrBlock(cidrBlock));
+    }
+
+    @Operation(summary = "Calculate network info")
+    @PostMapping(value = "/network/info/calc", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<NetworkInfo> calcNetwork(@RequestBody @Valid GlobalNetworkParam.CalcNetwork calcNetwork) {
+        return HttpResult.ofBody(globalNetworkFacade.calcNetwork(calcNetwork));
     }
 
     // ---------- Planning

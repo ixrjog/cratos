@@ -97,4 +97,11 @@ public class GlobalNetworkParam {
         private Integer id;
     }
 
+    @Data
+    @Schema
+    public static class CalcNetwork {
+        @NotBlank
+        private String cidr;
+    }
+
 }

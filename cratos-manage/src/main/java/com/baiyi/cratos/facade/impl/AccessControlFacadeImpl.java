@@ -25,7 +25,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.view.access.AccessControlVO.OperationPermission.DEPLOYMENT_POD_DELETE;
@@ -99,20 +98,22 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
     private void handleApplicationAccessControl(AccessControlVO.HasAccessControl hasAccessControl,
                                                 AccessControlVO.AccessControl accessControl) {
         Application application = applicationService.getById(hasAccessControl.getBusinessId());
-        if (Objects.isNull(application)) {
+        if (application == null) {
             return;
         }
+        String username = SessionUtils.getUsername();
+        String appName = application.getName();
+
         // delete pod
-        ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(
-                SessionUtils.getUsername(), application.getName());
-        if (deleteToken.getValid()) {
+        ApplicationDeletePodToken.Token deleteToken = applicationDeletePodTokenHolder.getToken(username, appName);
+        if (Boolean.TRUE.equals(deleteToken.getValid())) {
             accessControl.getOperationPermissions()
                     .put(DEPLOYMENT_POD_DELETE.name(), deleteToken);
         }
+
         // redeploy kubernetes
-        ApplicationRedeployToken.Token redeployToken = applicationRedeployTokenHolder.getToken(
-                SessionUtils.getUsername(), application.getName());
-        if (redeployToken.getValid()) {
+        ApplicationRedeployToken.Token redeployToken = applicationRedeployTokenHolder.getToken(username, appName);
+        if (Boolean.TRUE.equals(redeployToken.getValid())) {
             accessControl.getOperationPermissions()
                     .put(DEPLOYMENT_REDEPLOY.name(), redeployToken);
         }
