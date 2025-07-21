@@ -1,21 +1,24 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
 import com.baiyi.cratos.common.util.IPNetworkCalculator;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.NetworkUtil;
 import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
+import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
 import com.baiyi.cratos.domain.view.network.NetworkInfo;
 import com.baiyi.cratos.facade.GlobalNetworkFacade;
 import com.baiyi.cratos.facade.GlobalNetworkPlanningFacade;
 import com.baiyi.cratos.service.GlobalNetworkService;
+import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.util.LanguageUtils;
@@ -24,11 +27,15 @@ import com.baiyi.cratos.wrapper.GlobalNetworkWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.beetl.core.exception.BeetlException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.List;
+
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.NETWORK_INFO;
 
 /**
  * &#064;Author  baiyi
@@ -46,6 +53,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     private final GlobalNetworkDetailsWrapper globalNetworkDetailsWrapper;
     private final LanguageUtils languageUtils;
     private final UserService userService;
+    private final NotificationTemplateService notificationTemplateService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.GLOBAL_NETWORK)
@@ -140,29 +148,35 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
                 .toList();
     }
 
-    public static final String NETWORK_INFO_ZH_CN = """
-            * • 网络地址: {}
-            * • 子网掩码: {}
-            * • IP 范围: {}
-            * • 广播地址: {}
-            """;
-
-    public static final String NETWORK_INFO_EN_US = """
-            * • Network Address: {}
-            * • Subnet Mask: {}
-            * • IP Range: {}
-            * • Broadcast Address: {}
-            """;
-
     @Override
     public NetworkInfo calcNetwork(GlobalNetworkParam.CalcNetwork calcNetwork) {
         NetworkInfo networkInfo = IPNetworkCalculator.calculateNetworkInfo(calcNetwork.getCidr());
         String lang = languageUtils.getLanguageOf(userService.getByUsername(SessionUtils.getUsername()));
-        String detailsTpl = "zh-cn".equals(lang) ? NETWORK_INFO_ZH_CN : NETWORK_INFO_EN_US;
-        networkInfo.setDetails(
-                StringFormatter.arrayFormat(detailsTpl, networkInfo.getNetworkAddress(), networkInfo.getSubnetMask(),
-                        networkInfo.getIpRange(), networkInfo.getBroadcastAddress()));
+        NotificationTemplate messageTemplate = getMessageTemplate(lang);
+        String details;
+        try {
+            details = BeetlUtil.renderTemplate(messageTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                    .put("cidr", networkInfo.getCidr())
+                    .put("networkAddress", networkInfo.getNetworkAddress())
+                    .put("subnetMask", networkInfo.getSubnetMask())
+                    .put("ipRange", networkInfo.getIpRange())
+                    .put("broadcastAddress", networkInfo.getBroadcastAddress())
+                    .build());
+
+            networkInfo.setDetails(details);
+        } catch (IOException | BeetlException ex) {
+            details = ex.getMessage();
+        }
+        networkInfo.setDetails(details);
         return networkInfo;
+    }
+
+    private NotificationTemplate getMessageTemplate(String lang) {
+        NotificationTemplate query = NotificationTemplate.builder()
+                .notificationTemplateKey(NETWORK_INFO.name())
+                .lang(lang)
+                .build();
+        return notificationTemplateService.getByUniqueKey(query);
     }
 
     @Override

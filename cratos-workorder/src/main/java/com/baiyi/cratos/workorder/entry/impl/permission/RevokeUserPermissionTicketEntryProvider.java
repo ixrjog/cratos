@@ -138,7 +138,9 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .flatMap(List::stream)
                 .toList();
         if (!CollectionUtils.isEmpty(allAccounts)) {
-            allAccounts.forEach(revokeUserEdsAccountPermissionTicketEntryProvider::addEntry);
+            if (revokeUserEdsAccountPermissionTicketEntryProvider != null) {
+                allAccounts.forEach(revokeUserEdsAccountPermissionTicketEntryProvider::addEntry);
+            }
         }
     }
 

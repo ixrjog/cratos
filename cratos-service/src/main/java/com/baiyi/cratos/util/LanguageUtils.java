@@ -24,7 +24,7 @@ public class LanguageUtils {
 
     private final UserService userService;
 
-    private static final String[] LANGUAGES = {"zh-cn", "en-us"};
+    public static final String[] LANGUAGES = {"zh-cn", "en-us"};
 
     public String getLanguageOf(User user) {
         if (user == null || user.getLang() == null) {
