@@ -82,6 +82,9 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
 
     @SuppressWarnings("unchecked")
     private List<AliyunKmsVO.Secret> toKmsSecrets(List<EdsAssetVO.Asset> assets) {
+        if (CollectionUtils.isEmpty(assets)) {
+            return List.of();
+        }
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 assets.getFirst()
                         .getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
