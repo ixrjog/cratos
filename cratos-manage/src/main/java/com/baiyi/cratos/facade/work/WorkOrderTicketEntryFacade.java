@@ -62,6 +62,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addResetAliyunRamUserTicketEntry(WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry addTicketEntry);
 
+    void addResetUserPasswordTicketEntry(WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry);
+
     void addResetAwsIamUserTicketEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry addTicketEntry);
 
     void addCreateAwsTransferSftpUserTicketEntry(

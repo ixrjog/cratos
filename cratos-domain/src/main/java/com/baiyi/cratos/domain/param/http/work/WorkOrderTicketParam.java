@@ -537,6 +537,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddResetUserPasswordTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 542391083392901537L;
+        private final String businessType = BusinessTypeEnum.USER.name();
+        private UserVO.User detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddLdapRolePermissionTicketEntry extends TicketEntry implements HasEntryDetail<LdapUserGroupModel.Role>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 160908446714673016L;

@@ -263,6 +263,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add reset user password ticket entry")
+    @PostMapping(value = "/user/reset/pasword/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addResetUserPasswordTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry) {
+        ticketEntryFacade.addResetUserPasswordTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add create aliyun ons topic ticket entry")
     @PostMapping(value = "/aliyun/ons/topic/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addCreateAliyunOnsTopicTicketEntry(

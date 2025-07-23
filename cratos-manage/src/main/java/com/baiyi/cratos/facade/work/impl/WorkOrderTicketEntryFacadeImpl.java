@@ -195,6 +195,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public void addResetUserPasswordTicketEntry(WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddResetUserPasswordTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetUserPasswordTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.USER_RESET_PASSWORD.name(), addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void addResetAwsIamUserTicketEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.AWS_IAM_USER_RESET.name(), addTicketEntry.getBusinessType());
