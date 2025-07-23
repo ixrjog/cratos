@@ -24,7 +24,6 @@ public interface UserFacade extends HasSetValid {
     DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery);
 
     User addUser(UserParam.AddUser addUser);
-
     UserVO.User getUserByUsername(String username);
 
     void resetUserPassword(UserParam.ResetPassword resetPassword);

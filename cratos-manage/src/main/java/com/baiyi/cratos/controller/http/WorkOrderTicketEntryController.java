@@ -264,7 +264,7 @@ public class WorkOrderTicketEntryController {
     }
 
     @Operation(summary = "Add reset user password ticket entry")
-    @PostMapping(value = "/user/reset/pasword/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/reset/password/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addResetUserPasswordTicketEntry(
             @RequestBody @Valid WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry) {
         ticketEntryFacade.addResetUserPasswordTicketEntry(addTicketEntry);
