@@ -27,7 +27,7 @@ import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
-import com.baiyi.cratos.workorder.notice.ResetAlimailUserNoticeSender;
+import com.baiyi.cratos.workorder.notice.ResetUserPasswordNoticeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -52,7 +52,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
     private final EdsIdentityFacade edsIdentityFacade;
     private final WorkOrderService workOrderService;
     private final UserService userService;
-    private final ResetAlimailUserNoticeSender resetAlimailUserNoticeSender;
+    private final ResetUserPasswordNoticeSender resetUserPasswordNoticeSender;
     private final LdapPersonRepo ldapPersonRepo;
 
     public UserResetPasswordTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
@@ -61,7 +61,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
                                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                 EdsInstanceService edsInstanceService,
                                                 EdsIdentityFacade edsIdentityFacade, UserService userService,
-                                                ResetAlimailUserNoticeSender resetAlimailUserNoticeSender,
+                                                ResetUserPasswordNoticeSender resetUserPasswordNoticeSender,
                                                 LdapPersonRepo ldapPersonRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
@@ -69,7 +69,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
         this.edsIdentityFacade = edsIdentityFacade;
         this.workOrderService = workOrderService;
         this.userService = userService;
-        this.resetAlimailUserNoticeSender = resetAlimailUserNoticeSender;
+        this.resetUserPasswordNoticeSender = resetUserPasswordNoticeSender;
         this.ldapPersonRepo = ldapPersonRepo;
     }
 
@@ -109,20 +109,19 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
                                 .getInstanceName(), e.getMessage());
             }
         }
+        sendMsg(workOrderTicket, user.getUsername(), newPassword);
     }
 
     /**
      * 发送通知
      *
      * @param workOrderTicket
-     * @param mail
      * @param password
      */
-    private void sendMsg(WorkOrderTicket workOrderTicket, String mail, String password, String loginURL) {
+    private void sendMsg(WorkOrderTicket workOrderTicket, String username, String password) {
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
-            User applicantUser = userService.getByUsername(workOrderTicket.getUsername());
-            resetAlimailUserNoticeSender.sendMsg(workOrder, workOrderTicket, mail, password, loginURL, applicantUser);
+            resetUserPasswordNoticeSender.sendMsg(workOrder, workOrderTicket, username, password);
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
         }

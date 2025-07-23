@@ -39,7 +39,15 @@ public abstract class BaseWorkOrderNoticeSender {
         return notificationTemplateService.getByUniqueKey(query);
     }
 
+    protected void sendMsgToUsername(String username, String notificationTemplateKey, Map<String, Object> dict) {
+        User user = userService.getByUsername(username);
+        sendMsgToUser(user, notificationTemplateKey, dict);
+    }
+
     protected void sendMsgToUser(User sendToUser, String notificationTemplateKey, Map<String, Object> dict) {
+        if (sendToUser == null) {
+            return;
+        }
         try {
             NotificationTemplate notificationTemplate = getNotificationTemplate(notificationTemplateKey, sendToUser);
             String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), dict);
