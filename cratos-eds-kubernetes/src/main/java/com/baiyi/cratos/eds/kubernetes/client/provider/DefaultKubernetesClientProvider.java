@@ -44,8 +44,7 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
         }
         if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
             Credential kubeconfigCredential = credentialService.getById(edsConfig.getCredentialId());
-            return  io.fabric8.kubernetes.client.Config.fromKubeconfig(
-                    kubeconfigCredential.getCredential());
+            return io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
         } else {
             throw new EdsConfigException("Kubernetes does not specify credential(kubeconfig).");
         }

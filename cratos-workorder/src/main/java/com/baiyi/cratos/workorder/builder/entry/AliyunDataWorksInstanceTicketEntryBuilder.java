@@ -53,6 +53,7 @@ public class AliyunDataWorksInstanceTicketEntryBuilder {
                 .displayName(akAccount)
                 .businessType(param.getBusinessType())
                 .businessId(instance.getId())
+                .instanceId(instance.getId())
                 .completed(false)
                 .entryKey(StringFormatter.arrayFormat("instanceId:{}:username:{}", instance.getId(), username))
                 .valid(true)
