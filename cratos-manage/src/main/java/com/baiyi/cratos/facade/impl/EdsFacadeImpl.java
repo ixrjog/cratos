@@ -323,6 +323,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteEdsAssetById(Integer id) {
         if (!IdentityUtil.hasIdentity(id)) {
             return;

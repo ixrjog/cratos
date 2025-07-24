@@ -35,4 +35,13 @@
           limit #{limit}
     </select>
 
+    <select id="queryInvalidIndex"
+            resultMap="BaseResultMap">
+        select *
+        from eds_asset_index idx
+        where not exists (select 1
+                          from eds_asset a
+                          where a.id = idx.asset_id)
+    </select>
+
 </mapper>

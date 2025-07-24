@@ -1,8 +1,12 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.param.http.eds.EdsAssetParam;
 import com.baiyi.cratos.mapper.EdsAssetIndexMapper;
 import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
@@ -39,6 +43,23 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
                 .andEqualTo("assetId", record.getAssetId())
                 .andEqualTo("name", record.getName());
         return edsAssetIndexMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public DataTable<EdsAssetIndex> queryIndexPage(EdsAssetParam.AssetIndexPageQueryParam param) {
+        Page<EdsAssetIndex> page = PageHelper.startPage(param.getPage(), param.getLength());
+        Example example = new Example(EdsAssetIndex.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (param.getInstanceId() != null) {
+            criteria.andEqualTo("instanceId", param.getInstanceId());
+        }
+        List<EdsAssetIndex> data = edsAssetIndexMapper.selectByExample(example);
+        return new DataTable<>(data, page.getTotal());
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryInvalidIndex(){
+       return edsAssetIndexMapper.queryInvalidIndex();
     }
 
     @Override

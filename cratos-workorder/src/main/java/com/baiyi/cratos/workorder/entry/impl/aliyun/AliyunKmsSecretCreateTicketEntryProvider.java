@@ -109,20 +109,24 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         Map<String, String> tags = buildTags(entry);
         // 解密 Secret 数据
         String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
-        Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
-                        .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
-                createSecret.getEncryptionKeyId(), secretData, tags, createSecret.getDescription());
-        if (optionalCreateSecretResponseBody.isEmpty()) {
-            WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
+        try {
+            Optional<CreateSecretResponseBody> optionalCreateSecretResponseBody = AliyunKmsRepo.createSecret(
+                    createSecret.getEndpoint(), aliyun, createSecret.getKmsInstance()
+                            .getAssetId(), createSecret.getSecretName(), createSecret.getVersionId(),
+                    createSecret.getEncryptionKeyId(), secretData, tags, createSecret.getDescription());
+            if (optionalCreateSecretResponseBody.isEmpty()) {
+                WorkOrderTicketException.runtime("Failed to create KMS secret: " + createSecret.getSecretName());
+            }
+            Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
+                    createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
+            if (optionalDescribeSecretResponseBody.isEmpty()) {
+                WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
+            }
+            // 写入资产
+            importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get(), tags);
+        } catch (Exception e) {
+            WorkOrderTicketException.runtime("Failed to create KMS secret err: " + e.getMessage());
         }
-        Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
-                createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
-        if (optionalDescribeSecretResponseBody.isEmpty()) {
-            WorkOrderTicketException.runtime("Failed to describe KMS secret: " + createSecret.getSecretName());
-        }
-        // 写入资产
-        importAsset(holder, createSecret, optionalDescribeSecretResponseBody.get(), tags);
     }
 
     private Map<String, String> buildTags(WorkOrderTicketEntry entry) {

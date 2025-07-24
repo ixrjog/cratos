@@ -203,7 +203,7 @@ public class AliyunKmsRepo {
                                                                   String kmsInstanceId, String secretName,
                                                                   String versionId, String encryptionKeyId,
                                                                   String secretData, Map<String, String> tags,
-                                                                  String description) {
+                                                                  String description) throws Exception {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             CreateSecretRequest request = CreateSecretRequest.builder()
                     .DKMSInstanceId(kmsInstanceId)
@@ -220,9 +220,6 @@ public class AliyunKmsRepo {
                     .get();
             return Optional.ofNullable(resp)
                     .map(CreateSecretResponse::getBody);
-        } catch (Exception e) {
-            log.error("Failed to create secret from Aliyun KMS: {}", e.getMessage(), e);
-            return Optional.empty();
         }
     }
 
