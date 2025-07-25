@@ -125,6 +125,34 @@ ssh:
       color: cyan
       text: 'cratos>'
 
+# SOCKS 代理配置
+socks:
+  proxy:
+    # 是否启用 SOCKS 代理服务器
+    enabled: on
+    # 是否自动启动
+    auto-start: on
+    # 代理服务器名称
+    name: default
+    # SOCKS 代理监听端口
+    port: 1081
+    # 绑定地址
+    bind-address: 0.0.0.0
+    # 连接超时时间（毫秒）
+    connection-timeout: 30000
+    # 读取超时时间（毫秒）
+    read-timeout: 30000
+    # 最大线程数
+    max-threads: 200
+    # 缓冲区大小
+    buffer-size: 8192
+    # 是否启用 SOCKS4 支持
+    socks4-enabled: true
+    # 是否启用 SOCKS5 支持
+    socks5-enabled: true
+    # 是否启用访问日志
+    access-log-enabled: true
+
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES

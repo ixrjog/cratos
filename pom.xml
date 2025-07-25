@@ -37,6 +37,7 @@
         <module>cratos-workorder</module>
         <module>cratos-eds-cratos</module>
         <module>cratos-eds-remote-gateway</module>
+        <module>cratos-socks-server</module>
     </modules>
 
     <properties>

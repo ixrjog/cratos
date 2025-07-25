@@ -1,8 +1,10 @@
 package com.baiyi.cratos.eds.aliyun.provider.kms;
 
+import com.aliyun.sdk.service.kms20160120.models.GetSecretValueResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.ListSecretsResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import com.baiyi.cratos.common.util.InfoSummaryUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -28,6 +30,7 @@ import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +38,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_KMS_ENDPOINT;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CONTENT_HASH;
 
 /**
  * &#064;Author  baiyi
@@ -97,18 +101,14 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                                     .metadata(metadata)
                                     .build();
                         })
-                        .orElseGet(() -> AliyunKms.KmsSecret.builder()
-                                .endpoint(endpoint)
-                                .secret(BeanCopierUtils.copyProperties(e, AliyunKms.Secret.class))
-                                .metadata(AliyunKms.SecretMetadata.NO_DATA)
-                                .build()))
+                        .orElse(null))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                  AliyunKms.KmsSecret entity) {
+                                         AliyunKms.KmsSecret entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
                         .getSecretName())
                 .nameOf(entity.getSecret()
@@ -129,9 +129,21 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, AliyunKms.KmsSecret entity) {
-        return List.of(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, EdsAsset edsAsset,
+            AliyunKms.KmsSecret entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
+        Optional<GetSecretValueResponseBody> optionalGetSecretValueResponseBody = AliyunKmsRepo.getSecretValue(
+                entity.getEndpoint(), instance.getEdsConfigModel(), entity.getSecret()
+                        .getSecretName());
+        if (optionalGetSecretValueResponseBody.isPresent()) {
+            String contentHash = "{" + InfoSummaryUtils.SHA256 + "}" + InfoSummaryUtils.toSHA256(
+                    optionalGetSecretValueResponseBody.get()
+                            .getSecretData());
+            indices.add(createEdsAssetIndex(edsAsset, CONTENT_HASH, contentHash));
+        }
+        return indices;
     }
 
     @Override

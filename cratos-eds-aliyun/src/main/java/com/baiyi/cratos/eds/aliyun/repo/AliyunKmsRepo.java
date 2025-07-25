@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * &#064;Author  baiyi
@@ -145,7 +146,7 @@ public class AliyunKmsRepo {
             return Optional.ofNullable(resp)
                     .map(DescribeSecretResponse::getBody);
         } catch (Exception e) {
-            log.error("Failed to describe secret from Aliyun KMS: {}", e.getMessage(), e);
+            log.error("Failed to describe secret {} from Aliyun KMS: {}", secretName, e.getMessage(), e);
             return Optional.empty();
         }
     }
@@ -239,6 +240,26 @@ public class AliyunKmsRepo {
                     .map(PutSecretValueResponse::getBody);
         } catch (Exception e) {
             log.error("Failed to update secret value from Aliyun KMS: {}", e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<GetSecretValueResponseBody> getSecretValue(String endpoint,
+                                                                      EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      String secretName) {
+        try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
+            GetSecretValueRequest request = GetSecretValueRequest.builder()
+                    .secretName(secretName)
+                    .versionStage("ACSCurrent")
+                    .build();
+            // Asynchronously get the return value of the API request
+            CompletableFuture<GetSecretValueResponse> response = client.getSecretValue(request);
+            // Synchronously get the return value of the API request
+            GetSecretValueResponse resp = response.get();
+            return Optional.ofNullable(resp)
+                    .map(GetSecretValueResponse::getBody);
+        } catch (InterruptedException | ExecutionException e) {
+            log.error("Failed to get secret value from Aliyun KMS: {}", e.getMessage(), e);
             return Optional.empty();
         }
     }
