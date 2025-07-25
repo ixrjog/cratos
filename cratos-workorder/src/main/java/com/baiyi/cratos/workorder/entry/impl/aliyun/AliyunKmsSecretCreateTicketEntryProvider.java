@@ -5,14 +5,13 @@ import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.InfoSummaryUtils;
-import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -114,7 +113,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
-        Map<String, String> tags = buildTags(entry);
+        Map<String, String> tags = buildTags(workOrderTicket, entry);
         // 解密 Secret 数据
         String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
         try {
@@ -137,9 +136,9 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         }
     }
 
-    private Map<String, String> buildTags(WorkOrderTicketEntry entry) {
+    private Map<String, String> buildTags(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry) {
         Map<String, String> tags = Maps.newHashMap();
-        tags.put(SysTagKeys.CREATED_BY.getKey(), SessionUtils.getUsername());
+        tags.put(SysTagKeys.CREATED_BY.getKey(), workOrderTicket.getUsername());
         tags.put(SysTagKeys.ENV.getKey(), entry.getNamespace());
         return tags;
     }
