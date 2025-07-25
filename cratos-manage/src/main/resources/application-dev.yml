@@ -1,10 +1,13 @@
 logging:
   level:
-    com.baiyi.cratos : debug
+    com.baiyi.cratos : DEBUG
     # swagger 警告日志忽略
-    io.swagger.models.parameters.AbstractSerializableParameter: error
-    org.springframework: warn
-    HuaweiCloud-SDK-Access: error
+    io.swagger.models.parameters.AbstractSerializableParameter: ERROR
+    org.springframework: WARN
+    HuaweiCloud-SDK-Access: ERROR
+    java.util.concurrent.ExecutionException: OFF
+    com.aliyun.sdk.gateway.pop.exception.PopClientException: OFF
+
 
 # 关闭视图层脱敏
 #cratos:
