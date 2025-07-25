@@ -35,6 +35,8 @@ public class AliyunKmsModel {
         private String versionId;
         private String encryptionKeyId;
         private String description;
+        private Boolean repeated;
+        private String duplicateSecrets;
     }
 
     @Data

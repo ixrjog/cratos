@@ -14,6 +14,10 @@ public class InfoSummaryUtils {
 
     public static final String SHA256 = "SHA-256";
 
+    public static String toContentHash(String algorithm, String hash) {
+        return "{" + algorithm + "}" + hash;
+    }
+
     /**
      * 将字符串转换为 SHA256 哈希值
      *

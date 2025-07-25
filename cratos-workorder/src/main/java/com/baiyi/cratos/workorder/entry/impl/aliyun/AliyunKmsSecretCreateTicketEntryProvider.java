@@ -4,6 +4,7 @@ import com.aliyun.sdk.service.kms20160120.models.CreateSecretResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.InfoSummaryUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -20,6 +21,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
+import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
@@ -36,10 +38,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_KMS_ENDPOINT;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CONTENT_HASH;
 
 /**
  * &#064;Author  baiyi
@@ -58,6 +63,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
     private final EdsAssetIndexService edsAssetIndexService;
     private final StringEncryptor stringEncryptor;
     private final LanguageUtils languageUtils;
+    private final EdsAssetService edsAssetService;
 
     public AliyunKmsSecretCreateTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
@@ -65,13 +71,15 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                                     EdsInstanceService edsInstanceService,
                                                     EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                     EdsAssetIndexService edsAssetIndexService,
-                                                    StringEncryptor stringEncryptor, LanguageUtils languageUtils) {
+                                                    StringEncryptor stringEncryptor, LanguageUtils languageUtils,
+                                                    EdsAssetService edsAssetService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsAssetIndexService = edsAssetIndexService;
         this.stringEncryptor = stringEncryptor;
         this.languageUtils = languageUtils;
+        this.edsAssetService = edsAssetService;
     }
 
     @SuppressWarnings("unchecked")
@@ -186,25 +194,38 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 addCreateAliyunKmsSecretTicketEntry.getDetail()
                         .getKmsInstance()
                         .getId(), ALIYUN_KMS_ENDPOINT);
-        // 加密 Secret 数据
-        String encryptedSecretData = stringEncryptor.encrypt(Optional.of(addCreateAliyunKmsSecretTicketEntry)
+        String secretData = Optional.of(addCreateAliyunKmsSecretTicketEntry)
                 .map(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry::getDetail)
                 .map(AliyunKmsModel.CreateSecret::getSecretData)
-                .orElseThrow(() -> new WorkOrderTicketException("Secret data is required")));
+                .orElseThrow(() -> new WorkOrderTicketException("Secret data is required"));
+        // 信息摘要
+        String contentHash = InfoSummaryUtils.toContentHash(InfoSummaryUtils.SHA256,
+                InfoSummaryUtils.toSHA256(secretData));
+
+        List<EdsAssetIndex> contentHashIndices = edsAssetIndexService.queryInstanceIndexByNameAndValue(instanceId,
+                CONTENT_HASH, contentHash);
+
+        List<EdsAsset> duplicateSecretAssets = contentHashIndices.stream()
+                .map(index -> edsAssetService.getById(index.getAssetId()))
+                .filter(Objects::nonNull)
+                .toList();
+        // 加密 Secret 数据
+        String encryptedSecretData = stringEncryptor.encrypt(secretData);
         return AliyunKmsSecretCreateTicketEntryBuilder.newBuilder()
                 .withParam(addCreateAliyunKmsSecretTicketEntry)
                 .withEdsInstance(BeanCopierUtils.copyProperties(instance, EdsInstanceVO.EdsInstance.class))
                 .withUsername(username)
                 .withEndpoint(endpointIndex.getValue())
                 .withEncryptedSecretData(encryptedSecretData)
+                .withDuplicateSecretAssets(duplicateSecretAssets)
                 .buildEntry();
     }
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
         return """
-                | Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Description |
-                | --- | --- | --- | --- | --- | --- |
+                | Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Duplicate Secret | Description |
+                | --- | --- | --- | --- | --- | --- | --- |
                 """;
     }
 
@@ -214,7 +235,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), createSecret.getSecretName(),
                 createSecret.getVersionId(), createSecret.getEncryptionKeyId(), "KMS#" + createSecret.getSecretName(),
-                createSecret.getDescription());
+                createSecret.getDuplicateSecrets(), createSecret.getDescription());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
+import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
@@ -8,7 +9,10 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -23,6 +27,7 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
     private String username;
     private String endpoint;
     private String encryptedSecretData;
+    private List<EdsAsset> duplicateSecretAssets;
 
     public static AliyunKmsSecretCreateTicketEntryBuilder newBuilder() {
         return new AliyunKmsSecretCreateTicketEntryBuilder();
@@ -54,6 +59,11 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
         return this;
     }
 
+    public AliyunKmsSecretCreateTicketEntryBuilder withDuplicateSecretAssets(List<EdsAsset> duplicateSecretAssets) {
+        this.duplicateSecretAssets = duplicateSecretAssets;
+        return this;
+    }
+
     public WorkOrderTicketEntry buildEntry() {
         AliyunKmsModel.CreateSecret detail = param.getDetail();
         detail.setEdsInstance(edsInstance);
@@ -61,6 +71,15 @@ public class AliyunKmsSecretCreateTicketEntryBuilder {
         detail.setDescription(baseDescription + "Created by " + username);
         if (!StringUtils.hasText(detail.getVersionId())) {
             detail.setVersionId("v1");
+        }
+        boolean repeated = !CollectionUtils.isEmpty(duplicateSecretAssets);
+        detail.setRepeated(repeated);
+        if (repeated) {
+            String duplicateSecrets = duplicateSecretAssets.stream()
+                    .map(EdsAsset::getName)
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("");
+            detail.setDuplicateSecrets(duplicateSecrets);
         }
         detail.setEndpoint(endpoint);
         detail.setSecretData(encryptedSecretData);
