@@ -70,17 +70,25 @@ public class TicketInProgressStateProcessor extends BaseTicketStateProcessor<Wor
         List<WorkOrderTicketEntry> entries = workOrderTicketEntryService.queryTicketEntries(ticket.getId());
         entries.forEach(entry -> {
             if (pass) {
-                TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(
-                        workOrder.getWorkOrderKey(), entry.getBusinessType());
-                provider.processEntry(entry);
+                TicketEntryProvider<?, ?> provider = TicketEntryProviderFactory.getProvider(workOrder.getWorkOrderKey(),
+                        entry.getBusinessType());
+                if (provider == null) {
+                    processFailed(entry, "No provider found for business type: " + entry.getBusinessType());
+                } else {
+                    provider.processEntry(entry);
+                }
             } else {
-                entry.setCompleted(true);
-                entry.setCompletedAt(new Date());
-                entry.setSuccess(false);
-                entry.setResult("Approval rejected");
-                workOrderTicketEntryService.updateByPrimaryKey(entry);
+                processFailed(entry, "Approval rejected");
             }
         });
+    }
+
+    private void processFailed(WorkOrderTicketEntry entry, String message) {
+        entry.setCompleted(true);
+        entry.setCompletedAt(new Date());
+        entry.setSuccess(false);
+        entry.setResult("Approval rejected");
+        workOrderTicketEntryService.updateByPrimaryKey(entry);
     }
 
     private boolean passApproval(WorkOrderTicket ticket) {
