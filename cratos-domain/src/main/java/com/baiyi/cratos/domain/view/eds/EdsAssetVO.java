@@ -86,6 +86,7 @@ public class EdsAssetVO {
         private ToBusiness toBusiness;
         private Map<String, Integer> resourceCount;
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+        private EdsInstanceVO.EdsInstance edsInstance;
 
         @Override
         public Integer getBusinessId() {
