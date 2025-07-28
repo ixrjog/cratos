@@ -31,6 +31,7 @@ import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
+import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Component;
@@ -64,6 +65,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     private final BusinessTagFacade businessTagFacade;
     private final BusinessTagService businessTagService;
     private final EdsAssetIndexService edsAssetIndexService;
+    private final EdsAssetWrapper edsAssetWrapper;
 
     @Override
     public void addApplicationPermissionTicketEntry(
@@ -469,7 +471,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         return resources.stream()
                 .map(e -> {
                     EdsAsset asset = edsAssetService.getById(e.getBusinessId());
-                    return BeanCopierUtils.copyProperties(asset, EdsAssetVO.Asset.class);
+                    return edsAssetWrapper.wrapToTarget(asset);
                 })
                 .toList();
     }

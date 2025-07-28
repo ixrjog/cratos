@@ -1,10 +1,10 @@
 package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.repo.HwcCcmRepo;
-import com.baiyi.cratos.eds.huaweicloud.repo.HwcEcsRepo;
-import com.baiyi.cratos.eds.huaweicloud.repo.HwcIamRepo;
-import com.baiyi.cratos.eds.huaweicloud.repo.HwcScmRepo;
+import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcCcmRepo;
+import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcEcsRepo;
+import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcIamRepo;
+import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcScmRepo;
 import com.huaweicloud.sdk.ccm.v1.model.Certificates;
 import com.huaweicloud.sdk.core.region.Region;
 import com.huaweicloud.sdk.ecs.v2.model.ServerDetail;

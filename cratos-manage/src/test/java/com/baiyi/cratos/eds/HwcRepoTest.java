@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
-import com.baiyi.cratos.eds.huaweicloud.repo.HwcObsRepo;
+import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcObsRepo;
 import com.baiyi.cratos.service.EdsAssetService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

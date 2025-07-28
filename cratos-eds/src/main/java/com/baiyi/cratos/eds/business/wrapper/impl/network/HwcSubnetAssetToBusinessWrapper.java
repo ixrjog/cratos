@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.network.base.BaseGlobalNetwork
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.huaweicloud.model.HwcSubnet;
+import com.baiyi.cratos.eds.huaweicloud.cloud.model.HwcSubnet;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import org.springframework.stereotype.Component;
