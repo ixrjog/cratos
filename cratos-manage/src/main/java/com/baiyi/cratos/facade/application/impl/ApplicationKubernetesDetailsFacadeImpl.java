@@ -13,6 +13,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
@@ -108,11 +109,16 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .options(resources.stream()
                         .map(e -> OptionsVO.Option.builder()
                                 .value(e.getName())
-                                .label(e.getDisplayName())
+                                .label(toKubernetesResourceName(e))
                                 .build())
                         .sorted()
                         .toList())
                 .build();
+    }
+
+    private String toKubernetesResourceName(ApplicationResource resource) {
+        return StringFormatter.arrayFormat("{}:{}:{}", resource.getInstanceName(), resource.getNamespace(),
+                resource.getName());
     }
 
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
