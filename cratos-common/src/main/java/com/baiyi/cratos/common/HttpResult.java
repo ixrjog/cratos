@@ -27,7 +27,7 @@ public class HttpResult<T> {
         return new HttpResult<>(body);
     }
 
-    public static <T> HttpResult<T> ofBaseException(BaseException ex) {
+    public static <T> HttpResult<T> ofFailed(BaseException ex) {
         return new HttpResult<>(ex);
     }
 
