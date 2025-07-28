@@ -138,9 +138,9 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
                 entity.getEndpoint(), instance.getEdsConfigModel(), entity.getSecret()
                         .getSecretName());
         if (optionalGetSecretValueResponseBody.isPresent()) {
-            String contentHash = "{" + InfoSummaryUtils.SHA256 + "}" + InfoSummaryUtils.toSHA256(
+            String contentHash = InfoSummaryUtils.toContentHash(InfoSummaryUtils.SHA256, InfoSummaryUtils.toSHA256(
                     optionalGetSecretValueResponseBody.get()
-                            .getSecretData());
+                            .getSecretData()));
             indices.add(createEdsAssetIndex(edsAsset, CONTENT_HASH, contentHash));
         }
         return indices;
