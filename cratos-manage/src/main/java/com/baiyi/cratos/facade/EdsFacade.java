@@ -66,4 +66,7 @@ public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
 
     void addInstanceCratosAsset(CratosAssetParam.AddCratosAsset addCratosAsset);
 
+    void updateInstanceCratosAsset(CratosAssetParam.UpdateCratosAsset updateCratosAsset);
+
+
 }

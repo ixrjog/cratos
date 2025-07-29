@@ -49,4 +49,35 @@ public class CratosAssetParam {
         private CratosCommonModel.ConfigMap configMap;
     }
 
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    public static class UpdateCratosAsset implements CratosCommonModel.HasTags, CratosCommonModel.HasConfigMap {
+        @NotNull
+        private Integer id;
+        private Integer parentId;
+        @NotNull
+        private Integer instanceId;
+        @NotNull
+        private String name;
+        @NotNull
+        private String assetId;
+        @NotNull
+        private String assetKey;
+        @NotNull
+        private String assetType;
+        private String kind;
+        private String version;
+        private Boolean valid;
+        private String region;
+        private String zone;
+        private String assetStatus;
+        private String originalModel;
+        private String description;
+        private List<String> tags;
+        private CratosCommonModel.ConfigMap configMap;
+    }
+
 }

@@ -178,6 +178,14 @@ public class ExtDataSourceController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update eds cratos asset")
+    @PutMapping(value = "/instance/cratos/asset/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateInstanceCratosAsset(
+            @RequestBody @Valid CratosAssetParam.UpdateCratosAsset updateCratosAsset) {
+        edsFacade.updateInstanceCratosAsset(updateCratosAsset);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Get to business target")
     @GetMapping(value = "/asset/to/business/target/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<EdsAssetVO.AssetToBusiness<?>> getToBusinessTarget(@RequestParam int assetId) {

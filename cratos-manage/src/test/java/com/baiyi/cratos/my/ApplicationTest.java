@@ -172,7 +172,7 @@ public class ApplicationTest extends BaseUnit {
                 // A1应用
                 System.out.println(app.getName());
 
-                List<ApplicationResource> resources = applicationResourceService.queryApplicationInstanceResource(app.getName(),
+                List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(app.getName(),
                         EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), "prod");
 
                 if (!CollectionUtils.isEmpty(resources)) {

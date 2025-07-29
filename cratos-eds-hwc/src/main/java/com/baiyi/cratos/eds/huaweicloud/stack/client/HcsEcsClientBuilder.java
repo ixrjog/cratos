@@ -42,7 +42,7 @@ public class HcsEcsClientBuilder {
                         .getAccessKey())
                 .withSk(hcStack.getCred()
                         .getSecretKey())
-                .withProjectId("");
+                .withProjectId("c03121b299c743be944f3877093f8a37");
 
         return EcsClient.newBuilder()
                 .withHttpConfig(config)

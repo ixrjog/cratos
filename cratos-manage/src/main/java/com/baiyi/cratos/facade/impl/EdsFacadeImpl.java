@@ -15,6 +15,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -430,6 +431,32 @@ public class EdsFacadeImpl implements EdsFacade {
         if (Objects.isNull(holder)) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
+        holder.importAsset(addCratosAsset);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void updateInstanceCratosAsset(CratosAssetParam.UpdateCratosAsset updateCratosAsset) {
+        EdsAsset asset = edsAssetService.getById(updateCratosAsset.getId());
+        if (asset == null) {
+            EdsAssetException.runtime("The asset does not exist.");
+        }
+        EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
+        if (Objects.isNull(instance)) {
+            EdsAssetException.runtime("Instance does not exist");
+        }
+        if (!EdsInstanceTypeEnum.CRATOS.name()
+                .equals(instance.getEdsType())) {
+            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        }
+        EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset>) buildHolder(
+                instance.getId(), updateCratosAsset.getAssetType());
+        if (Objects.isNull(holder)) {
+            EdsAssetException.runtime("The current asset type does not support manually adding assets");
+        }
+        CratosAssetParam.AddCratosAsset addCratosAsset = BeanCopierUtils.copyProperties(updateCratosAsset,
+                CratosAssetParam.AddCratosAsset.class);
+        addCratosAsset.setInstanceId(instance.getId());
         holder.importAsset(addCratosAsset);
     }
 
