@@ -2,6 +2,7 @@ package com.baiyi.cratos.service;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.mapper.ApplicationResourceMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
@@ -20,10 +21,19 @@ public interface ApplicationResourceService extends BaseUniqueKeyService<Applica
 
     void clear(String applicationName);
 
+    List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                       ApplicationKubernetesParam.QueryKubernetesDetails param);
+
+    List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                       ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param);
+
+    List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                       ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod param);
+
     List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType, String namespace);
 
-    List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType, String namespace,
-                                                       String name);
+    List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType, String instanceName,
+                                                       String namespace, String name);
 
     List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType);
 

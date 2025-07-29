@@ -18,6 +18,7 @@ public class ApplicationKubernetesParam {
     public static class QueryKubernetesDetails {
         @NotBlank
         private String applicationName;
+        private String instanceName;
         @NotBlank
         private String namespace;
         @Schema(description = "Resource Name")
@@ -49,6 +50,7 @@ public class ApplicationKubernetesParam {
     public static class DeleteApplicationResourceKubernetesDeploymentPod {
         @NotBlank
         private String applicationName;
+        private String instanceName;
         @NotBlank
         private String namespace;
         @NotBlank
@@ -63,6 +65,7 @@ public class ApplicationKubernetesParam {
     public static class RedeployApplicationResourceKubernetesDeployment {
         @NotBlank
         private String applicationName;
+        private String instanceName;
         @NotBlank
         private String namespace;
         @NotBlank

@@ -123,8 +123,8 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
 
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(param.getApplicationName(),
-                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(), param.getName()));
+                applicationResourceService.queryApplicationResource(EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
+                        param));
         return KubernetesVO.Workloads.builder()
                 .deployments(deployments)
                 .build();
@@ -146,7 +146,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             return KubernetesVO.KubernetesDetails.failed("The application does not exist.");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace());
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesVO.KubernetesDetails.failed("The kubernetes resource bound to the application does not exist.");
         }
@@ -204,8 +204,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             KubernetesResourceOperationException.runtime("Unauthorized access");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
-                param.getDeploymentName());
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
                     param.getDeploymentName());
@@ -264,8 +263,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             KubernetesResourceOperationException.runtime("Unauthorized access");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
-                param.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param.getNamespace(),
-                param.getDeploymentName());
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
             KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
                     param.getDeploymentName());

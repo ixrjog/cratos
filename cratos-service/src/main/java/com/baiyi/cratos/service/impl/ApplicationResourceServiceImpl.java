@@ -3,6 +3,7 @@ package com.baiyi.cratos.service.impl;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.mapper.ApplicationResourceMapper;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import lombok.NonNull;
@@ -41,19 +42,43 @@ public class ApplicationResourceServiceImpl implements ApplicationResourceServic
     }
 
     @Override
-    public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
-                                                              String namespace) {
-        return queryApplicationResource(applicationName, resourceType, namespace, IGNORE);
+    public List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                              ApplicationKubernetesParam.QueryKubernetesDetails param) {
+        return queryApplicationResource(param.getApplicationName(), resourceType, param.getInstanceName(),
+                param.getNamespace(), param.getName());
+    }
+
+    @Override
+    public List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                              ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param) {
+        return queryApplicationResource(param.getApplicationName(), resourceType, param.getInstanceName(),
+                param.getNamespace(), param.getDeploymentName());
+    }
+
+    @Override
+    public List<ApplicationResource> queryApplicationResource(String resourceType,
+                                                       ApplicationKubernetesParam.DeleteApplicationResourceKubernetesDeploymentPod param){
+        return queryApplicationResource(param.getApplicationName(), resourceType, param.getInstanceName(),
+                param.getNamespace(), param.getDeploymentName());
     }
 
     @Override
     public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
-                                                              String namespace, String name) {
+                                                              String namespace) {
+        return queryApplicationResource(applicationName, resourceType, IGNORE, namespace, IGNORE);
+    }
+
+    @Override
+    public List<ApplicationResource> queryApplicationResource(String applicationName, String resourceType,
+                                                              String instanceName, String namespace, String name) {
         Example example = new Example(ApplicationResource.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("applicationName", applicationName)
                 .andEqualTo("resourceType", resourceType)
                 .andEqualTo("namespace", namespace);
+        if (StringUtils.hasText(instanceName)) {
+            criteria.andEqualTo("instanceName", instanceName);
+        }
         if (StringUtils.hasText(name)) {
             criteria.andEqualTo("name", name);
         }
