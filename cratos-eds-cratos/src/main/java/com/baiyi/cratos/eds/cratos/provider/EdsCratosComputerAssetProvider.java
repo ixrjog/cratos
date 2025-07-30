@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsCratosConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -52,7 +53,7 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
-                                  CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
+                                         CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtil.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");
@@ -66,6 +67,11 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
                 .zoneOf(entity.getZone())
                 .validOf(entity.getValid())
                 .build();
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.DIFFERENT;
     }
 
 }
