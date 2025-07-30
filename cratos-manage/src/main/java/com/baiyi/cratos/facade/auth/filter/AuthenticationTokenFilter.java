@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.auth.filter;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.configuration.CratosConfiguration;
 import com.baiyi.cratos.common.configuration.model.CratosModel;
+import com.baiyi.cratos.common.exception.BaseException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.exception.auth.AuthorizationException;
 import com.baiyi.cratos.domain.ErrorEnum;
@@ -65,24 +66,24 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         // Bearer
-        String headerAuthorization = request.getHeader(AUTHORIZATION);
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
         try {
-            if (!StringUtils.hasText(headerAuthorization)) {
+            if (!StringUtils.hasText(authorizationHeader)) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);
             }
-            if (!headerAuthorization.startsWith("Bearer ") && !headerAuthorization.startsWith("Robot ")) {
+            if (!authorizationHeader.startsWith("Bearer ") && !authorizationHeader.startsWith("Robot ")) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
             }
             String username = "";
-            if (headerAuthorization.startsWith("Bearer ")) {
+            if (authorizationHeader.startsWith("Bearer ")) {
                 // 验证令牌是否有效
-                String token = headerAuthorization.substring(7);
+                String token = authorizationHeader.substring(7);
                 UserToken userToken = userTokenFacade.verifyToken(token);
                 rbacFacade.verifyResourceAccessPermissions(userToken, resource);
                 username = userToken.getUsername();
-            } else if (headerAuthorization.startsWith("Robot ")) {
+            } else if (authorizationHeader.startsWith("Robot ")) {
                 // 先验证token是否有效
-                String token = headerAuthorization.substring(6);
+                String token = authorizationHeader.substring(6);
                 Robot robot = robotFacade.verifyToken(token);
                 rbacFacade.verifyResourceAccessPermissions(robot, resource);
                 username = robot.getUsername();
@@ -94,20 +95,19 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException authenticationException) {
             // 认证
-            handleExceptionResult(response, HttpServletResponse.SC_UNAUTHORIZED,
-                    new HttpResult<>(authenticationException));
+            handleExceptionResult(response, HttpServletResponse.SC_UNAUTHORIZED, authenticationException);
         } catch (AuthorizationException authorizationException) {
             // 授权
-            handleExceptionResult(response, HttpServletResponse.SC_FORBIDDEN, new HttpResult<>(authorizationException));
+            handleExceptionResult(response, HttpServletResponse.SC_FORBIDDEN, authorizationException);
         }
     }
 
     private void handleExceptionResult(HttpServletResponse response, int status,
-                                       HttpResult<Exception> httpResult) throws IOException {
+                                       BaseException exception) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(status);
         response.getWriter()
-                .println(objectMapper.writeValueAsString(httpResult));
+                .println(objectMapper.writeValueAsString(HttpResult.failed(exception)));
     }
 
 }
