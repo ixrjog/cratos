@@ -33,7 +33,7 @@ import java.util.List;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CRATOS, assetTypeOf = EdsAssetTypeEnum.CRATOS_COMPUTER)
-public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsCratosConfigModel.Cratos, CratosAssetParam.AddCratosAsset> {
+public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsCratosConfigModel.Cratos, CratosAssetParam.CratosAsset> {
 
     public EdsCratosComputerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -45,14 +45,14 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected List<CratosAssetParam.AddCratosAsset> listEntities(
+    protected List<CratosAssetParam.CratosAsset> listEntities(
             ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported");
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
-                                  CratosAssetParam.AddCratosAsset entity) throws EdsAssetConversionException {
+                                  CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtil.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");

@@ -15,7 +15,6 @@ import com.baiyi.cratos.domain.param.http.eds.EdsConfigParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsConfigVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
@@ -426,12 +425,12 @@ public class EdsFacadeImpl implements EdsFacade {
                 .equals(addCratosAsset.getAssetType())) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
-        EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset>) buildHolder(
+        EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset>) buildHolder(
                 addCratosAsset.getInstanceId(), addCratosAsset.getAssetType());
         if (Objects.isNull(holder)) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
-        holder.importAsset(addCratosAsset);
+        holder.importAsset(addCratosAsset.toTarget());
     }
 
     @SuppressWarnings("unchecked")
@@ -449,15 +448,14 @@ public class EdsFacadeImpl implements EdsFacade {
                 .equals(instance.getEdsType())) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
-        EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.AddCratosAsset>) buildHolder(
+        EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset> holder = (EdsInstanceProviderHolder<?, CratosAssetParam.CratosAsset>) buildHolder(
                 instance.getId(), updateCratosAsset.getAssetType());
         if (Objects.isNull(holder)) {
             EdsAssetException.runtime("The current asset type does not support manually adding assets");
         }
-        CratosAssetParam.AddCratosAsset addCratosAsset = BeanCopierUtils.copyProperties(updateCratosAsset,
-                CratosAssetParam.AddCratosAsset.class);
-        addCratosAsset.setInstanceId(instance.getId());
-        holder.importAsset(addCratosAsset);
+        CratosAssetParam.CratosAsset cratosAsset = updateCratosAsset.toTarget();
+        cratosAsset.setInstanceId(instance.getId());
+        holder.importAsset(cratosAsset);
     }
 
 }
