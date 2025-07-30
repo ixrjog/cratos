@@ -57,7 +57,9 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");
         }
-        return newEdsAssetBuilder(instance, entity).assetIdOf(assetId)
+        return newEdsAssetBuilder(instance, entity)
+                .idOf(entity.getId())
+                .assetIdOf(assetId)
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getAssetKey())
                 .regionOf(entity.getRegion())

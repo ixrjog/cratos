@@ -34,6 +34,11 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
         return new EdsAssetBuilder<>(instance, entity);
     }
 
+    public EdsAssetBuilder<C, A> idOf(Integer id) {
+        edsAsset.setId(id);
+        return this;
+    }
+
     public EdsAssetBuilder<C, A> nameOf(String name) {
         edsAsset.setName(name);
         return this;
