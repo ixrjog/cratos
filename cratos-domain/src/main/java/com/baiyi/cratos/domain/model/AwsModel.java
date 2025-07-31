@@ -3,10 +3,8 @@ package com.baiyi.cratos.domain.model;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -29,6 +27,19 @@ public class AwsModel {
         // Aws IAM policy
         private EdsAssetVO.Asset asset;
         private EdsIdentityVO.CloudAccount cloudAccount;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class ResetAwsAccount extends EdsIdentityVO.CloudAccount implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -3469496619079586291L;
+        private Boolean resetPassword;
+        private Boolean resetMFA;
     }
 
 }
