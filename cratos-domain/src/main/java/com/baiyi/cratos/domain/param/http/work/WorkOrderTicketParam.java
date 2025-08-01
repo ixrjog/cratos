@@ -498,11 +498,11 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetAwsIamUserTicketEntry extends TicketEntry implements HasEntryDetail<EdsIdentityVO.CloudAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetAwsIamUserTicketEntry extends TicketEntry implements HasEntryDetail<AwsModel.ResetAwsAccount>, BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6852356802450976743L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
-        private EdsIdentityVO.CloudAccount detail;
+        private AwsModel.ResetAwsAccount detail;
     }
 
     @EqualsAndHashCode(callSuper = true)

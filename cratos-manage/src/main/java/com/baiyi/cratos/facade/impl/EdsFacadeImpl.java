@@ -323,6 +323,12 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     @Override
+    public EdsAssetVO.Asset getEdsInstanceAsset(int id) {
+        EdsAsset asset = edsAssetService.getById(id);
+        return edsAssetWrapper.wrapToTarget(asset);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteEdsAssetById(Integer id) {
         if (!IdentityUtil.hasIdentity(id)) {

@@ -135,6 +135,12 @@ public class ExtDataSourceController {
         return HttpResult.ofBody(edsFacade.queryEdsInstanceAssetPage(assetPageQuery));
     }
 
+    @Operation(summary = "Get eds instance asset")
+    @GetMapping(value = "/instance/asset/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<EdsAssetVO.Asset> getEdsInstanceAsset(@RequestParam int id) {
+        return HttpResult.ofBody(edsFacade.getEdsInstanceAsset(id));
+    }
+
     @Operation(summary = "Delete eds instance asset")
     @DeleteMapping(value = "/instance/asset/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteEdsInstanceAsset(

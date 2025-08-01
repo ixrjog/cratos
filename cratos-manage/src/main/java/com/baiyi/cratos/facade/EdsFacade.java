@@ -52,6 +52,8 @@ public interface EdsFacade extends SimpleEdsFacade, HasSetValid {
 
     DataTable<EdsAssetVO.Asset> queryEdsInstanceAssetPage(EdsInstanceParam.AssetPageQuery assetPageQuery);
 
+    EdsAssetVO.Asset getEdsInstanceAsset(int id);
+
     List<EdsInstance> queryValidEdsInstanceByType(String edsType);
 
     EdsAssetVO.AssetToBusiness<?> getToBusinessTarget(Integer assetId);

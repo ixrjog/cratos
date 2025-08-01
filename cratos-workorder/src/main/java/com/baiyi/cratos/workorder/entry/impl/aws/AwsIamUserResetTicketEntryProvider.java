@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl.aws;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.domain.model.AwsModel;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -49,7 +50,7 @@ import static com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo.NO_PASSWORD_RESET
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
 @WorkOrderKey(key = WorkOrderKeys.AWS_IAM_USER_RESET)
-public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<EdsIdentityVO.CloudAccount, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> {
+public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<AwsModel.ResetAwsAccount, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> {
 
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final UserService userService;
@@ -87,17 +88,17 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
-                                EdsIdentityVO.CloudAccount cloudAccount) throws WorkOrderTicketException {
+                                AwsModel.ResetAwsAccount resetAwsAccount) throws WorkOrderTicketException {
         EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
         EdsAwsConfigModel.Aws aws = holder.getInstance()
                 .getEdsConfigModel();
         final String newPassword = PasswordGenerator.generatePassword();
-        resetIAMUserPassword(aws, cloudAccount.getAccountLogin()
+        resetIAMUserPassword(aws, resetAwsAccount.getAccountLogin()
                 .getLoginUsername(), newPassword);
-        sendMsg(workOrderTicket, workOrderTicket.getUsername(), cloudAccount.getAccountLogin()
-                .getAccountId(), cloudAccount.getAccountLogin()
-                .getLoginUsername(), newPassword, cloudAccount.getAccountLogin()
+        sendMsg(workOrderTicket, workOrderTicket.getUsername(), resetAwsAccount.getAccountLogin()
+                .getAccountId(), resetAwsAccount.getAccountLogin()
+                .getLoginUsername(), newPassword, resetAwsAccount.getAccountLogin()
                 .getLoginUrl());
     }
 
@@ -109,7 +110,6 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
             throw new WorkOrderTicketException("Reset AWS IAM user password failed err: {}", e.getMessage());
         }
     }
-
 
     private void sendMsg(WorkOrderTicket workOrderTicket, String username, String accountId, String iamLoginUsername,
                          String password, String loginLink) {
@@ -127,7 +127,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry param) {
         int assetId = Optional.ofNullable(param)
                 .map(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry::getDetail)
-                .map(EdsIdentityVO.CloudAccount::getAccount)
+                .map(AwsModel.ResetAwsAccount::getAccount)
                 .map(EdsAssetVO.Asset::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("AWS IAM user asset is null"));
         EdsIdentityVO.CloudAccount cloudAccount = getAndVerifyCloudAccount(assetId);
