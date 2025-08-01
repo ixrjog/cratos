@@ -13,6 +13,7 @@ public enum SysTagKeys {
     EDS("EDS"),
     LEVEL("Level"),
     PRODUCT_LINE("ProductLine"),
+    EXTERNAL_USER("ExternalUser"),
     BUSINESS("Business"),
     COMMAND_EXEC_APPROVER("CommandExecApprover"),
     COMMAND_EXEC("CommandExec"),

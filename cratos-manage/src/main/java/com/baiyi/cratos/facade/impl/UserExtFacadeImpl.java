@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
 import com.baiyi.cratos.common.util.ExpiredUtil;
 import com.baiyi.cratos.domain.util.StringFormatter;
@@ -44,13 +45,12 @@ public class UserExtFacadeImpl implements UserExtFacade {
     private final TagService tagService;
     private final UserService userService;
     private final UserPermissionService userPermissionService;
-    private static final String EXTERNAL_USER_TAG = "ExternalUser";
 
     @SuppressWarnings("unchecked")
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.USER)
     public DataTable<UserVO.User> queryExtUserPage(UserExtParam.UserExtPageQuery pageQuery) {
-        Tag extUserTag = tagService.getByTagKey(EXTERNAL_USER_TAG);
+        Tag extUserTag = tagService.getByTagKey(SysTagKeys.EXTERNAL_USER);
         if (Objects.isNull(extUserTag)) {
             return DataTable.NO_DATA;
         }
