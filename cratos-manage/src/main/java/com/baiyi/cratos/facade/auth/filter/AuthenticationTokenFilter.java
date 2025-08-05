@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.constant.Global.AUTHORIZATION;
+import static com.baiyi.cratos.domain.constant.Global.PLATFORM;
 
 /**
  * @Author baiyi
@@ -67,6 +68,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         }
         // Bearer
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+        String platformHeader = request.getHeader(PLATFORM);
         try {
             if (!StringUtils.hasText(authorizationHeader)) {
                 throw new AuthenticationException(ErrorEnum.AUTHENTICATION_REQUEST_NO_TOKEN);

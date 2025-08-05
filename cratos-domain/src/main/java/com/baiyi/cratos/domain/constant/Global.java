@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public interface Global {
     @Schema(description = "前端认证头")
     String AUTHORIZATION = "Authorization";
+    @Schema(description = "多平台认证头")
+    String PLATFORM = "Platform";
+
     String ENV_PROD = "prod";
     String ROLE_FOUNDER_NAME = "FOUNDER";
     String APP_NAME = "appName";
