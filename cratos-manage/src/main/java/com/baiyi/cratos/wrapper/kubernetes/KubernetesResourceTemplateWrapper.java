@@ -21,6 +21,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/11/1 14:52
@@ -35,7 +37,7 @@ public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<Ku
     private final EnvService envService;
 
     @Override
-    @BusinessWrapper(invokeAt = BusinessWrapper.BEFORE, ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
+    @BusinessWrapper(invokeAt = BEFORE, ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER})
     public void wrap(KubernetesResourceTemplateVO.Template vo) {
         KubernetesResourceTemplateCustom.Custom templateCustom = KubernetesResourceTemplateCustom.loadAs(
                 vo.getCustom());

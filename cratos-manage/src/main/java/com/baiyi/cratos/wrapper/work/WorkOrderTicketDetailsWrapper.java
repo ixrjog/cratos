@@ -25,6 +25,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Objects;
 
+import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/17 17:54
@@ -45,7 +47,7 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BusinessWrapper.BEFORE)
+    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BEFORE)
     public void wrap(WorkOrderTicketVO.TicketDetails vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getTicket()
                 .getWorkOrderId());

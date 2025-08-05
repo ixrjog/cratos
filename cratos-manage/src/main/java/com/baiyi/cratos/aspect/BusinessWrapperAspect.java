@@ -49,14 +49,14 @@ public class BusinessWrapperAspect {
 
     @After(value = "@annotation(businessWrapper)")
     public void afterAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
-        if (!businessWrapper.invokeAt()) {
+        if (BusinessWrapper.InvokeAts.AFTER.equals(businessWrapper.invokeAt())) {
             run(joinPoint, businessWrapper);
         }
     }
 
     @Before(value = "@annotation(businessWrapper)")
     public void beforeAdvice(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
-        if (businessWrapper.invokeAt()) {
+        if (BusinessWrapper.InvokeAts.BEFORE.equals(businessWrapper.invokeAt())) {
             run(joinPoint, businessWrapper);
         }
     }

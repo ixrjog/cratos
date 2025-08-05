@@ -15,10 +15,11 @@ import java.lang.annotation.*;
 @Documented
 public @interface BusinessWrapper {
 
-    boolean BEFORE = true;
-    boolean AFTER = false;
+    enum InvokeAts {
+        BEFORE, AFTER
+    }
 
-    boolean invokeAt() default AFTER;
+    InvokeAts invokeAt() default InvokeAts.AFTER;
 
     /**
      * 不指定，则从类注解@BusinessType中获取类型
