@@ -125,7 +125,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     }
 
     @ClearScreen
-    @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl"}, value = "Login to the computer.")
+    @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl", "login"}, value = "Login to the computer.")
     @ShellAuthentication(resource = "/computer/login")
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account,

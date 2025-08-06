@@ -40,7 +40,6 @@ public class DingtalkUserModel {
     }
 
     @Data
-    @SuppressWarnings("SpellCheckingInspection")
     public static class User implements Serializable {
         @Serial
         private static final long serialVersionUID = -2450600254937294425L;
