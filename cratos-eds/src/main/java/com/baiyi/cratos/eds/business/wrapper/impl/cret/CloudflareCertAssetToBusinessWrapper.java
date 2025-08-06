@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,13 +18,16 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_CERT)
 public class CloudflareCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, CloudflareCert.Certificate> {
 
+    public CloudflareCertAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
+        super(businessAssetBindService);
+    }
+
     @Override
-    protected Certificate getTarget(EdsAssetVO.Asset asset) {
+    protected Certificate toTarget(EdsAssetVO.Asset asset) {
         CloudflareCert.Certificate model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())

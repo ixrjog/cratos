@@ -1,22 +1,22 @@
 package com.baiyi.cratos.eds.business.wrapper.impl;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
-import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.service.BusinessAssetBindService;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @Author baiyi
  * @Date 2024/3/12 10:49
  * @Version 1.0
  */
+@RequiredArgsConstructor
 public abstract class BaseAssetToBusinessWrapper<B extends ToBusinessTarget, T> implements IAssetToBusinessWrapper<B> {
 
-    @Resource
-    protected BusinessAssetBindService businessAssetBindService;
+    protected final BusinessAssetBindService businessAssetBindService;
 
     protected T getAssetModel(EdsAssetVO.Asset asset) {
         return EdsInstanceProviderFactory.produceModel(getInstanceType(), getAssetType(), asset);
@@ -25,12 +25,12 @@ public abstract class BaseAssetToBusinessWrapper<B extends ToBusinessTarget, T> 
     @Override
     public EdsAssetVO.AssetToBusiness<B> getAssetToBusiness(EdsAssetVO.Asset asset) {
         return EdsAssetVO.AssetToBusiness.<B>builder()
-                .target(getTarget(asset))
+                .target(toTarget(asset))
                 .toBusiness(getToBusiness(asset.getId()))
                 .build();
     }
 
-    protected abstract B getTarget(EdsAssetVO.Asset asset);
+    protected abstract B toTarget(EdsAssetVO.Asset asset);
 
     @Override
     public void wrap(EdsAssetVO.Asset asset) {

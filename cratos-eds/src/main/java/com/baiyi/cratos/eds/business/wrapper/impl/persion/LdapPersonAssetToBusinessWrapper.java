@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,13 +18,16 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.USER)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_PERSON)
 public class LdapPersonAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<User, LdapPerson.Person> {
 
+    public LdapPersonAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
+        super(businessAssetBindService);
+    }
+
     @Override
-    protected User getTarget(EdsAssetVO.Asset asset) {
+    protected User toTarget(EdsAssetVO.Asset asset) {
         LdapPerson.Person model = getAssetModel(asset);
         return User.builder()
                 .username(model.getUsername())

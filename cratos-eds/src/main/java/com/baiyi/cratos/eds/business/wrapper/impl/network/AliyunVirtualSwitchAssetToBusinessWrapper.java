@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.network.base.BaseGlobalNetwork
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import org.springframework.stereotype.Component;
@@ -26,9 +27,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VIRTUAL
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VIRTUAL_SWITCH)
 public class AliyunVirtualSwitchAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<AliyunVirtualSwitch.Switch> {
 
-    public AliyunVirtualSwitchAssetToBusinessWrapper(EdsInstanceService edsInstanceService,
+    public AliyunVirtualSwitchAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService,
+                                                     EdsInstanceService edsInstanceService,
                                                      EdsAssetIndexService edsAssetIndexService) {
-        super(edsInstanceService, edsAssetIndexService);
+        super(businessAssetBindService, edsInstanceService, edsAssetIndexService);
     }
 
     @Override

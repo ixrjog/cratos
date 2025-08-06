@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.business.wrapper.impl.domain.base;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 
 /**
  * @Author baiyi
@@ -11,10 +12,14 @@ import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
  */
 public abstract class BaseDomainAssetToBusinessWrapper<B> extends BaseAssetToBusinessWrapper<Domain, B> {
 
+    public BaseDomainAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
+        super(businessAssetBindService);
+    }
+
     abstract protected String getDomainType();
 
     @Override
-    protected Domain getTarget(EdsAssetVO.Asset asset) {
+    protected Domain toTarget(EdsAssetVO.Asset asset) {
         // AliyunDomain model = getAssetModel(asset);
         return Domain.builder()
                 .expiry(asset.getExpiredTime())

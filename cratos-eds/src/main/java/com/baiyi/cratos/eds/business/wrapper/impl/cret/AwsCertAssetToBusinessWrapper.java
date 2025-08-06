@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,13 +18,16 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CERT)
 public class AwsCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, CertificateSummary> {
 
+    public AwsCertAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
+        super(businessAssetBindService);
+    }
+
     @Override
-    protected Certificate getTarget(EdsAssetVO.Asset asset) {
+    protected Certificate toTarget(EdsAssetVO.Asset asset) {
         CertificateSummary model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())

@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.domain.base.BaseDomainAssetToB
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.BusinessAssetBindService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,10 +16,13 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
 public class AliyunDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<AliyunDomain> {
+
+    public AliyunDomainAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
+        super(businessAssetBindService);
+    }
 
     @Override
     protected String getDomainType() {

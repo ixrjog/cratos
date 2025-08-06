@@ -17,11 +17,9 @@ public class MainModel {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Main {
-
         private String name;
         private String type;
         private Integer id;
-
     }
 
 }
