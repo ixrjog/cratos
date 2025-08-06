@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry> implements TicketEntryProvider<Detail, EntryParam>, InitializingBean {
+public abstract class BaseTicketEntryProvider<Detail, EntryParam extends WorkOrderTicketParam.TicketEntry<Detail>> implements TicketEntryProvider<Detail, EntryParam>, InitializingBean {
 
     protected final WorkOrderTicketEntryService workOrderTicketEntryService;
     protected final WorkOrderTicketService workOrderTicketService;

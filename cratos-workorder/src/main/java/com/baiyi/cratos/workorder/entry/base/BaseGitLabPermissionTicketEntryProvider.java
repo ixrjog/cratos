@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends WorkOrderTicketParam.TicketEntry> extends BaseTicketEntryProvider<GitLabPermissionModel.Permission, EntryParam> {
+public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends WorkOrderTicketParam.TicketEntry<GitLabPermissionModel.Permission>> extends BaseTicketEntryProvider<GitLabPermissionModel.Permission, EntryParam> {
 
     protected final EdsInstanceService edsInstanceService;
     protected final EdsAssetIndexService edsAssetIndexService;

@@ -225,7 +225,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddApplicationPermissionTicketEntry extends TicketEntry<UserPermissionBusinessParam.BusinessPermission> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 2888570476091613323L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
@@ -238,7 +238,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddComputerPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddComputerPermissionTicketEntry extends TicketEntry<UserPermissionBusinessParam.BusinessPermission> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 1150566255112707316L;
         private final String businessType = BusinessTypeEnum.TAG_GROUP.name();
@@ -251,7 +251,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddServerAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserPermissionBusinessParam.BusinessPermission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddServerAccountPermissionTicketEntry extends TicketEntry<UserPermissionBusinessParam.BusinessPermission> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 2888570476091613323L;
         private final String businessType = BusinessTypeEnum.SERVER_ACCOUNT.name();
@@ -264,7 +264,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateFrontEndApplicationTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationModel.CreateFrontEndApplication>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateFrontEndApplicationTicketEntry extends TicketEntry<ApplicationModel.CreateFrontEndApplication> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -2362593723504211246L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
@@ -277,7 +277,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRevokeUserPermissionTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRevokeUserPermissionTicketEntry extends TicketEntry<UserVO.User> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -7031252644626013496L;
         private final String businessType = BusinessTypeEnum.USER.name();
@@ -290,7 +290,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRevokeUserEdsAccountPermissionTicketEntry extends TicketEntry implements HasEntryDetail<EdsAssetVO.Asset>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRevokeUserEdsAccountPermissionTicketEntry extends TicketEntry<EdsAssetVO.Asset> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 8822817329834870519L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -303,7 +303,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddGitLabProjectPermissionTicketEntry extends TicketEntry implements HasEntryDetail<GitLabPermissionModel.Permission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddGitLabProjectPermissionTicketEntry extends TicketEntry<GitLabPermissionModel.Permission> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 3955830707586605830L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -316,7 +316,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddGitLabGroupPermissionTicketEntry extends TicketEntry implements HasEntryDetail<GitLabPermissionModel.Permission>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddGitLabGroupPermissionTicketEntry extends TicketEntry<GitLabPermissionModel.Permission> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -5401570571721716981L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -329,7 +329,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationElasticScalingTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationReplicasModel.ApplicationConfigurationChange>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddApplicationElasticScalingTicketEntry extends TicketEntry<ApplicationReplicasModel.ApplicationConfigurationChange> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 3960401331035241929L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
@@ -342,7 +342,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationDeploymentScaleTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeploymentScale>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddApplicationDeploymentScaleTicketEntry extends TicketEntry<ApplicationDeploymentModel.DeploymentScale> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 8210926100811483441L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -355,7 +355,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddAliyunDataWorksInstanceTicketEntry extends TicketEntry implements HasEntryDetail<AliyunDataWorksModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddAliyunDataWorksInstanceTicketEntry extends TicketEntry<AliyunDataWorksModel.AliyunAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -4472407041713180447L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
@@ -368,7 +368,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateAliyunKmsSecretTicketEntry extends TicketEntry implements HasEntryDetail<AliyunKmsModel.CreateSecret>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateAliyunKmsSecretTicketEntry extends TicketEntry<AliyunKmsModel.CreateSecret> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 1871415662334517238L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
@@ -381,7 +381,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddUpdateAliyunKmsSecretTicketEntry extends TicketEntry implements HasEntryDetail<AliyunKmsModel.UpdateSecret>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddUpdateAliyunKmsSecretTicketEntry extends TicketEntry<AliyunKmsModel.UpdateSecret> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 1871415662334517238L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -394,7 +394,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationDeletePodTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationVO.Application>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddApplicationDeletePodTicketEntry extends TicketEntry<ApplicationVO.Application> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 3563509820230350553L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
@@ -407,7 +407,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddDeploymentPodDeleteTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.DeleteDeploymentPod>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddDeploymentPodDeleteTicketEntry extends TicketEntry<ApplicationDeploymentModel.DeleteDeploymentPod> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -1244962359720286901L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -420,7 +420,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddApplicationRedeployTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationVO.Application>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddApplicationRedeployTicketEntry extends TicketEntry<ApplicationVO.Application> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -8342340561313113489L;
         private final String businessType = BusinessTypeEnum.APPLICATION.name();
@@ -433,7 +433,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddDeploymentRedeployTicketEntry extends TicketEntry implements HasEntryDetail<ApplicationDeploymentModel.RedeployDeployment>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddDeploymentRedeployTicketEntry extends TicketEntry<ApplicationDeploymentModel.RedeployDeployment> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 8121444050004308889L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -446,7 +446,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddAliyunRamPolicyPermissionTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunPolicy>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddAliyunRamPolicyPermissionTicketEntry extends TicketEntry<AliyunModel.AliyunPolicy> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 7964374299365455065L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -459,7 +459,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddAwsIamPolicyPermissionTicketEntry extends TicketEntry implements HasEntryDetail<AwsModel.AwsPolicy>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddAwsIamPolicyPermissionTicketEntry extends TicketEntry<AwsModel.AwsPolicy> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -810336663173609420L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -472,7 +472,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.AliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateAliyunRamUserTicketEntry extends TicketEntry<AliyunModel.AliyunAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6363796292175321725L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
@@ -485,7 +485,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetAliyunRamUserTicketEntry extends TicketEntry implements HasEntryDetail<AliyunModel.ResetAliyunAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetAliyunRamUserTicketEntry extends TicketEntry<AliyunModel.ResetAliyunAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -5319582937582510299L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -498,7 +498,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetAwsIamUserTicketEntry extends TicketEntry implements HasEntryDetail<AwsModel.ResetAwsAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetAwsIamUserTicketEntry extends TicketEntry<AwsModel.ResetAwsAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6852356802450976743L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -511,7 +511,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateAwsTransferSftpUserTicketEntry extends TicketEntry implements HasEntryDetail<AwsTransferModel.SFTPUser>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateAwsTransferSftpUserTicketEntry extends TicketEntry<AwsTransferModel.SFTPUser> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 6852356802450976743L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -524,7 +524,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetAlimailUserTicketEntry extends TicketEntry implements HasEntryDetail<EdsIdentityVO.MailAccount>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetAlimailUserTicketEntry extends TicketEntry<EdsIdentityVO.MailAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 847616175727551949L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -537,7 +537,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddResetUserPasswordTicketEntry extends TicketEntry implements HasEntryDetail<UserVO.User>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddResetUserPasswordTicketEntry extends TicketEntry<UserVO.User> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 542391083392901537L;
         private final String businessType = BusinessTypeEnum.USER.name();
@@ -550,7 +550,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddLdapRolePermissionTicketEntry extends TicketEntry implements HasEntryDetail<LdapUserGroupModel.Role>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddLdapRolePermissionTicketEntry extends TicketEntry<LdapUserGroupModel.Role> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 160908446714673016L;
         private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
@@ -563,7 +563,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateAliyunOnsTopicTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.Topic>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateAliyunOnsTopicTicketEntry extends TicketEntry<AliyunOnsV5Model.Topic> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -432180644493765199L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
@@ -576,7 +576,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddCreateAliyunOnsConsumerGroupTicketEntry extends TicketEntry implements HasEntryDetail<AliyunOnsV5Model.ConsumerGroup>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddCreateAliyunOnsConsumerGroupTicketEntry extends TicketEntry<AliyunOnsV5Model.ConsumerGroup> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -1565391443339985819L;
         private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
@@ -589,7 +589,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class AddRiskChangeTicketEntry extends TicketEntry implements HasEntryDetail<RiskChangeModel.RiskChangeApplication>, BaseBusiness.HasBusinessType, Serializable {
+    public static class AddRiskChangeTicketEntry extends TicketEntry<RiskChangeModel.RiskChangeApplication> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = 9071773360612294130L;
         private final String businessType = BusinessTypeEnum.USER.name();
@@ -625,7 +625,7 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class TicketEntry implements Serializable {
+    public static class TicketEntry<T> implements HasEntryDetail<T>, Serializable {
         @Serial
         private static final long serialVersionUID = -6950932321530742135L;
         private Integer ticketId;
@@ -637,6 +637,7 @@ public class WorkOrderTicketParam {
         private Integer businessId;
         private String entryKey;
         private String namespace;
+        private T detail;
     }
 
 }
