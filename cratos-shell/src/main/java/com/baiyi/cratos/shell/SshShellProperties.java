@@ -146,7 +146,7 @@ public class SshShellProperties {
         private CommandProperties application = new CommandProperties();
 
         @NestedConfigurationProperty
-        private CommandProperties sshKey = new CommandProperties();
+        private CommandProperties sshkey = new CommandProperties();
 
         @NestedConfigurationProperty
         private CommandProperties history = new CommandProperties();

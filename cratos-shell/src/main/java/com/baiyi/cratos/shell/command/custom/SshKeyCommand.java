@@ -18,7 +18,6 @@ import com.baiyi.cratos.shell.PromptColor;
 import com.baiyi.cratos.shell.SshShellHelper;
 import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.command.AbstractCommand;
-import com.baiyi.cratos.shell.command.CommandProperties;
 import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,6 @@ import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
@@ -42,7 +40,6 @@ import static com.baiyi.cratos.shell.command.custom.SshKeyCommand.GROUP;
  * @Version 1.0
  */
 @Slf4j
-@Component
 @SshShellComponent
 @ShellCommandGroup("SSH Key Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
@@ -58,10 +55,10 @@ public class SshKeyCommand extends AbstractCommand {
 
     public final static String[] SSH_KEY_TABLE_FIELD_NAME = {"Username", "Title", "Fingerprint", "Expired Time"};
 
-    public SshKeyCommand(SshShellHelper helper, SshShellProperties properties, CommandProperties commandProperties,
+    public SshKeyCommand(SshShellHelper helper, SshShellProperties properties,
                          UserService userService, BusinessCredentialService businessCredentialService,
                          CredentialService credentialService) {
-        super(helper, properties, commandProperties);
+        super(helper, properties, properties.getCommands().getSshkey());
         this.userService = userService;
         this.businessCredentialService = businessCredentialService;
         this.credentialService = credentialService;
