@@ -59,7 +59,7 @@ public class ApplicationCommand extends AbstractCommand {
         this.groupingAppExecutor = groupingAppExecutor;
         this.listAppGroup = deploymentSubGroupReport;
     }
-    
+
     @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping Application")
     @ShellMethodAvailability("appGroupingAvailability")
     @ShellAuthentication(resource = "/application/app-grouping")

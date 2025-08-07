@@ -41,7 +41,7 @@ public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> imple
                 .build();
         vo.setResourceCount(resourceCount);
         // 头像
-        //vo.setAvatar(userAvatarUtils.queryUserAvatar(vo.getUsername()));
+        vo.setAvatar(userAvatarUtils.queryUserAvatar(vo.getUsername()));
     }
 
     private Map<String, Integer> buildRbacUserRoleResourceCount(UserVO.User user) {

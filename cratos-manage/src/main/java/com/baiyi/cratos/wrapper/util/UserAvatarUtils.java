@@ -1,16 +1,29 @@
 package com.baiyi.cratos.wrapper.util;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
-import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
-import com.baiyi.cratos.domain.util.SpringContextUtils;
-import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
+import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.ValidationUtils;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.facade.identity.extension.impl.EdsDingtalkIdentityExtensionImpl;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -22,83 +35,96 @@ import org.springframework.util.CollectionUtils;
 public class UserAvatarUtils {
 
     private final UserService userService;
+    private final TagService tagService;
+    private final BusinessTagService businessTagService;
+    private final EdsAssetService edsAssetService;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'USER:AVATAR:USERNAME:' + #username", unless = "#result == null")
     public UserVO.UserAvatar queryUserAvatar(String username) {
-        EdsIdentityParam.QueryDingtalkIdentityDetails query = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
-                .username(username)
-                .build();
-           EdsIdentityVO.DingtalkIdentityDetails details = SpringContextUtils.getBean(
-                        EdsDingtalkIdentityExtensionImpl.class)
-                .queryDingtalkIdentityDetails(query);
-
-        if (CollectionUtils.isEmpty(details.getDingtalkIdentities())) {
+        User user = userService.getByUsername(username);
+        List<EdsAsset> assets = queryDingtalkAssets(user);
+        if (CollectionUtils.isEmpty(assets)) {
             return UserVO.UserAvatar.NO_DATA;
         }
+        String avatar = getAvatar(assets.getFirst());
         return UserVO.UserAvatar.builder()
-                .url(details.getDingtalkIdentities()
-                        .getFirst()
-                        .getAvatar())
+                .url(avatar)
                 .source("Dingtalk")
                 .build();
     }
 
-//
-//    @Override
-//    public EdsIdentityVO.DingtalkIdentityDetails queryDingtalkIdentityDetails(
-//            EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-//        String username = queryDingtalkIdentityDetails.getUsername();
-//        User user = userService.getByUsername(username);
-//        if (Objects.isNull(user)) {
-//            return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
-//        }
-//        List<EdsAsset> assets = queryDingtalkAssets(user, queryDingtalkIdentityDetails);
-//        if (CollectionUtils.isEmpty(assets)) {
-//            return EdsIdentityVO.DingtalkIdentityDetails.NO_DATA;
-//        }
-//        List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assets.stream()
-//                .map(asset -> EdsIdentityVO.DingtalkIdentity.builder()
-//                        .username(username)
-//                        .user(userWrapper.wrapToTarget(user))
-//                        .instance(edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
-//                        .account(edsAssetWrapper.wrapToTarget(asset))
-//                        .avatar(getAvatar(asset))
-//                        .build())
-//                .toList();
-//        return EdsIdentityVO.DingtalkIdentityDetails.builder()
-//                .username(username)
-//                .dingtalkIdentities(dingtalkIdentities)
-//                .build();
-//    }
-//
-//    private List<EdsAsset> queryDingtalkAssets(User user,
-//                                               EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-//        List<EdsAsset> assets = Lists.newArrayList();
-//        assets.addAll(
-//                onlyInTheInstance(queryDingtalkAssetByMobile(user.getMobilePhone()), queryDingtalkIdentityDetails));
-//        assets.addAll(onlyInTheInstance(queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name()),
-//                queryDingtalkIdentityDetails));
-//        return assets.stream()
-//                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
-//                .values()
-//                .stream()
-//                .toList();
-//    }
-//
-//    private List<EdsAsset> queryDingtalkAssetByMobile(String mobilePhone) {
-//        if (!StringUtils.hasText(mobilePhone)) {
-//            return List.of();
-//        }
-//        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
-//        if (CollectionUtils.isEmpty(indices)) {
-//            return List.of();
-//        }
-//        return indices.stream()
-//                .map(e -> edsAssetService.getById(e.getAssetId()))
-//                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
-//                .values()
-//                .stream()
-//                .toList();
-//    }
+    public List<EdsAsset> queryDingtalkAssets(User user) {
+        return Stream.of(queryDingtalkAssetByMobile(user.getMobilePhone()), queryDingtalkAssetByEmail(user.getEmail()),
+                        queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name()))
+                .flatMap(List::stream)
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
+    }
+
+    protected List<EdsAsset> queryByUsernameTag(String username, String assetType) {
+        Tag tag = tagService.getByTagKey(SysTagKeys.USERNAME.getKey());
+        if (Objects.isNull(tag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .tagValue(username)
+                .build();
+        return businessTagService.queryBusinessIdByTag(queryByTag)
+                .stream()
+                .map(edsAssetService::getById)
+                .filter(byId -> assetType.equals(byId.getAssetType()))
+                .toList();
+    }
+
+    private List<EdsAsset> queryDingtalkAssetByMobile(String mobilePhone) {
+        if (!StringUtils.hasText(mobilePhone)) {
+            return List.of();
+        }
+        if (!ValidationUtils.containsHyphenBetweenDigits(mobilePhone)) {
+            mobilePhone = "86-" + mobilePhone;
+        }
+        List<EdsAssetIndex> indices = edsAssetIndexService.queryIndexByNameAndValue(DINGTALK_USER_MOBILE, mobilePhone);
+        if (CollectionUtils.isEmpty(indices)) {
+            return List.of();
+        }
+        return indices.stream()
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                // 过滤掉 null 值
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
+    }
+
+    private List<EdsAsset> queryDingtalkAssetByEmail(String email) {
+        if (!ValidationUtils.isEmail(email)) {
+            return List.of();
+        }
+        return edsAssetIndexService.queryIndexByNameAndValue(USER_MAIL, email)
+                .stream()
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                // 过滤掉 null 值
+                .filter(Objects::nonNull)
+                .filter(asset -> EdsAssetTypeEnum.DINGTALK_USER.name()
+                        .equals(asset.getAssetType()))
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
+    }
+
+    protected String getAvatar(EdsAsset asset) {
+        EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), USER_AVATAR);
+        if (Objects.nonNull(index)) {
+            return index.getValue();
+        }
+        return null;
+    }
 
 }
