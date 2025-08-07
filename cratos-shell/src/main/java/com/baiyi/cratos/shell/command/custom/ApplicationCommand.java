@@ -45,9 +45,11 @@ public class ApplicationCommand extends AbstractCommand {
     public static final String GROUP = "app";
     private static final String COMMAND_APP_GROUPING = GROUP + "-grouping";
     private static final String COMMAND_APP_GROUP_LIST = GROUP + "-group-list";
+    private static final boolean flag = true;
+    public final static String[] APP_GROUPING_REPORT_TABLE_FIELD_NAME = {"App Name", "Total", "Canary", "G1", "Replicas", "G2", "Replicas", "G3", "Replicas", "G4", "Replicas", "Specifications"};
+    public final static String[] APP_GROUPING_SPECIFICATIONS_TABLE_FIELD_NAME = {"Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4"};
 
     private final ListAppGroup listAppGroup;
-
     private final GroupingAppExecutor groupingAppExecutor;
 
     public ApplicationCommand(SshShellHelper helper, SshShellProperties properties,
@@ -57,13 +59,7 @@ public class ApplicationCommand extends AbstractCommand {
         this.groupingAppExecutor = groupingAppExecutor;
         this.listAppGroup = deploymentSubGroupReport;
     }
-
-    private static final boolean flag = true;
-
-    public final static String[] APP_GROUPING_REPORT_TABLE_FIELD_NAME = {"App Name", "Total", "Canary", "G1", "Replicas", "G2", "Replicas", "G3", "Replicas", "G4", "Replicas", "Specifications"};
-
-    public final static String[] APP_GROUPING_SPECIFICATIONS_TABLE_FIELD_NAME = {"Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4", "---", "Total", "G1", "G2", "G3", "G4"};
-
+    
     @ShellMethod(key = COMMAND_APP_GROUPING, value = "Grouping Application")
     @ShellMethodAvailability("appGroupingAvailability")
     @ShellAuthentication(resource = "/application/app-grouping")
