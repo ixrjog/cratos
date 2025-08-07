@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 public abstract class BaseGoogleCloudSettingsBuilder {
 
     private final EdsConfigService edsConfigService;
-
     private final CredentialService credentialService;
 
     protected String getAdc(EdsGcpConfigModel.Gcp googleCloud) {

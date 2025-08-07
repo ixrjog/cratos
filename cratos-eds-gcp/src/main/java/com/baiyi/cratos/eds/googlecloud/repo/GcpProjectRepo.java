@@ -111,7 +111,7 @@ public class GcpProjectRepo {
 
         // If the role was not found, return the original policy (nothing to change)
         if (!roleFound) {
-            System.out.println("Role not found in policy.");
+            log.debug("Role not found in policy.");
             return policy;
         }
 
