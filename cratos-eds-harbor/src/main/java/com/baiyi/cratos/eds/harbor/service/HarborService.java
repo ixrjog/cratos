@@ -1,10 +1,5 @@
 package com.baiyi.cratos.eds.harbor.service;
 
-/**
- * &#064;Author  baiyi
- * &#064;Date  2024/7/15 下午6:08
- * &#064;Version 1.0
- */
 
 import com.baiyi.cratos.eds.harbor.model.HarborProject;
 import com.baiyi.cratos.eds.harbor.model.HarborRepository;
@@ -17,6 +12,11 @@ import org.springframework.web.service.annotation.HttpExchange;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2024/7/15 下午6:08
+ * &#064;Version 1.0
+ */
 @HttpExchange(accept = "application/json")
 public interface HarborService {
 
@@ -25,7 +25,8 @@ public interface HarborService {
                                              @RequestParam Map<String, String> param);
 
     @GetExchange("/projects/{projectName}/repositories")
-    List<HarborRepository.Repository> listRepositories(@RequestHeader("authorization") String basicToken, @PathVariable String projectName,
+    List<HarborRepository.Repository> listRepositories(@RequestHeader("authorization") String basicToken,
+                                                       @PathVariable String projectName,
                                                        @RequestParam Map<String, String> param);
 
 }
