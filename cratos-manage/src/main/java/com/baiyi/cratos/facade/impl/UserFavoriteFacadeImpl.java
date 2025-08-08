@@ -15,6 +15,7 @@ import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +34,11 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
 
     @Override
     public List<ApplicationVO.Application> getMyFavoriteApplication() {
-        List<Integer> businessIds = userFavoriteService.queryUserFavoriteBusinessIds(SessionUtils.getUsername(),
+        String username = SessionUtils.getUsername();
+        if (!StringUtils.hasText(username)) {
+            return List.of();
+        }
+        List<Integer> businessIds = userFavoriteService.queryUserFavoriteBusinessIds(username,
                 BusinessTypeEnum.APPLICATION.name());
         if (CollectionUtils.isEmpty(businessIds)) {
             return List.of();

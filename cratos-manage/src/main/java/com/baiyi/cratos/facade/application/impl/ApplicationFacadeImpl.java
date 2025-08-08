@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.ApplicationFacade;
+import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
@@ -40,6 +41,7 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
     private final ApplicationResourceFacade applicationResourceFacade;
     private final ApplicationResourceWrapper applicationResourceWrapper;
     private final UserPermissionFacade userPermissionFacade;
+    private final UserFavoriteFacade userFavoriteFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.APPLICATION)
@@ -126,6 +128,8 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
         applicationResourceFacade.deleteByBusiness(byBusiness);
         // 删除授权
         userPermissionFacade.revokeByBusiness(byBusiness);
+        // 取消收藏
+        userFavoriteFacade.unfavorite(BusinessTypeEnum.APPLICATION.name(), id);
         applicationService.deleteById(id);
     }
 
