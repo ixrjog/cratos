@@ -82,6 +82,16 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
     }
 
     @Override
+    public void revokeByBusiness(BaseBusiness.HasBusiness byBusiness) {
+        List<UserPermission> userPermissions = userPermissionService.queryByBusiness(byBusiness);
+        if (!CollectionUtils.isEmpty(userPermissions)) {
+            for (UserPermission userPermission : userPermissions) {
+                userPermissionService.deleteById(userPermission.getId());
+            }
+        }
+    }
+
+    @Override
     public void deleteUserPermissionById(int id) {
         userPermissionService.deleteById(id);
     }

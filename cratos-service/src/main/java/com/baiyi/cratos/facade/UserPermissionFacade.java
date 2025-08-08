@@ -19,6 +19,8 @@ public interface UserPermissionFacade {
 
     void revokeUserPermission(UserPermissionParam.RevokeUserPermission revokeUserPermission);
 
+    void revokeByBusiness(BaseBusiness.HasBusiness byBusiness);
+
     void deleteUserPermissionById(int id);
 
     boolean contains(String username, BaseBusiness.HasBusiness hasBusiness);

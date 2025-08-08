@@ -2,12 +2,14 @@ package com.baiyi.cratos.facade.application.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.ApplicationFacade;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
@@ -19,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -34,8 +37,9 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
 
     private final ApplicationService applicationService;
     private final ApplicationWrapper applicationWrapper;
-    private final ApplicationResourceFacade resourceFacade;
+    private final ApplicationResourceFacade applicationResourceFacade;
     private final ApplicationResourceWrapper applicationResourceWrapper;
+    private final UserPermissionFacade userPermissionFacade;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.APPLICATION)
@@ -102,17 +106,26 @@ public class ApplicationFacadeImpl implements ApplicationFacade {
 
     @Override
     public void scanApplicationResource(ApplicationParam.ScanResource scanResource) {
-        resourceFacade.scan(scanResource.getName());
+        applicationResourceFacade.scan(scanResource.getName());
     }
 
     @Override
     @Async
     public void scanAllApplicationResource() {
-        resourceFacade.scanAll();
+        applicationResourceFacade.scanAll();
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(int id) {
+        // 删除应用绑定的资源
+        SimpleBusiness byBusiness = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.APPLICATION.name())
+                .businessId(id)
+                .build();
+        applicationResourceFacade.deleteByBusiness(byBusiness);
+        // 删除授权
+        userPermissionFacade.revokeByBusiness(byBusiness);
         applicationService.deleteById(id);
     }
 
