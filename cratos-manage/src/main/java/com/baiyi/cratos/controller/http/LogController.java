@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/log")
-@Tag(name = "Login")
+@Tag(name = "Open")
 @RequiredArgsConstructor
 public class LogController {
 
     private final AuthFacade authFacade;
 
-    @Operation(summary = "Login")
+    @Operation(summary = "Open")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<LoginVO.Login> login(@RequestBody LoginParam.Login loginParam) {
         return HttpResult.ofBody(authFacade.login(loginParam));

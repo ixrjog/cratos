@@ -5,6 +5,7 @@ import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.common.util.InfoSummaryUtils;
+import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -93,6 +94,12 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 .getEdsConfigModel();
         Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
+        // 校验secretName是否合规
+        if(!ValidationUtils.isAliyunKMSSecretName(createSecret.getSecretName())) {
+            WorkOrderTicketException.runtime(
+                    languageUtils.getFormattedMessage("workorder.ticket.aliyun.kms.secret.create.name.invalid",
+                            createSecret.getSecretName()));
+        }
         if (optionalDescribeSecretResponseBody.isPresent()) {
             WorkOrderTicketException.runtime(
                     languageUtils.getFormattedMessage("workorder.ticket.aliyun.kms.secret.create.verify",

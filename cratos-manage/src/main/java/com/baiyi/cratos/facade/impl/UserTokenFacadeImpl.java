@@ -30,7 +30,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
 
     @Transactional(rollbackFor = {Exception.class})
     public UserToken revokeAndIssueNewToken(String username) {
-        revokeToken(username, "Login revocation token");
+        revokeToken(username, "Open revocation token");
         return issueToken(username);
     }
 

@@ -64,8 +64,8 @@ public class EdsComputerListCommand extends AbstractCommand {
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
-    public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
-    public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+    public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
+    public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     protected static final int PAGE_FOOTER_SIZE = 6;
 
     public EdsComputerListCommand(SshShellHelper helper, SshShellProperties properties,

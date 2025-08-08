@@ -88,11 +88,11 @@ public class ComputerTableWriter {
         final String type = asset.getAssetType();
         final String ip = asset.getAssetKey();
         if (isShort) {
-            // {"ID", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+            // {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
             this.table.addRow(this.id, this.group, this.env, this.serverName, ip, proxyIP, this.serverAccounts,
                     this.permission);
         } else {
-            // {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Login Account", "Permission"};
+            // {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
             this.table.addRow(this.id, this.cloud, instanceId, type, region, this.group, this.env, this.serverName, ip,
                     proxyIP, this.serverAccounts, this.permission);
         }

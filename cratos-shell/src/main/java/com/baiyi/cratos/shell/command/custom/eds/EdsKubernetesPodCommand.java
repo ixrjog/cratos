@@ -162,7 +162,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
     }
 
     @ClearScreen
-    @ShellMethod(key = {COMMAND_POD_LOGIN, "pl"}, value = "Login to the pod(container).")
+    @ShellMethod(key = {COMMAND_POD_LOGIN, "pl"}, value = "Open to the pod(container).")
     @ShellAuthentication(resource = "/pod/login")
     public void podLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                          @ShellOption(help = "Container", defaultValue = "") String container) {

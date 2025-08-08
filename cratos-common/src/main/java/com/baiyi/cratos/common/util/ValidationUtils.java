@@ -26,6 +26,7 @@ public class ValidationUtils {
         String ALIYUN_ONS_TOPIC_NAME = "[0-9A-Z-_]{9,60}";
         String ALIYUN_ONS_CONSUMER_GROUP = "[0-9A-Z-_]{7,60}";
         String APPLICATION_FRONTEND_MAPPINGS_PATH = "^/?[a-zA-Z0-9-_.]+(?:/[a-zA-Z0-9-_.]+)?/?$";
+        String SECRET_NAME_PATTERN = "^[a-zA-Z0-9_/+=.@-]+$";
     }
 
     public static boolean isMappingsPath(String mappingsPath) {
@@ -95,6 +96,13 @@ public class ValidationUtils {
             return false;
         }
         return consumerGroupId.matches(RegexMatches.ALIYUN_ONS_CONSUMER_GROUP);
+    }
+
+    public static boolean isAliyunKMSSecretName(String secretName) {
+        if (!StringUtils.hasText(secretName)) {
+            return false;
+        }
+        return secretName.matches(RegexMatches.SECRET_NAME_PATTERN);
     }
 
 }

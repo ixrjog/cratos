@@ -1,10 +1,11 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
-import com.baiyi.cratos.ssh.core.message.SshMessage;
+import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
+import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalMessageHandler;
-import com.google.gson.GsonBuilder;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SshCrystalLoginMessageHandler extends BaseSshCrystalMessageHandler<SshMessage.Login> {
+public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<SshCrystalMessage.Open> {
 
 //    @Resource
 //    private SuperAdminInterceptor superAdminInterceptor;
@@ -31,20 +32,23 @@ public class SshCrystalLoginMessageHandler extends BaseSshCrystalMessageHandler<
 
     @Override
     public String getState() {
-        return MessageState.LOGIN.name();
+        return MessageState.OPEN.name();
     }
 
     @Override
     public void handle(String message, Session session, SshSession sshSession) {
         // JDK21 VirtualThreads
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            SshMessage.Login loginMessage = toMessage(message);
+            SshCrystalMessage.Open cryMessage = toMessage(message);
             heartbeat(sshSession.getSessionId());
             String username = getUsername();
+            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(sshSession, username, sshSession);
+
+
 //            for (ServerNode serverNode : loginMessage.getServerNodes()) {
 //                executor.submit(() -> {
 //                    SessionHolder.setUsername(username);
-//                    log.info("Login server: instanceId={}", serverNode.getInstanceId());
+//                    log.info("Open server: instanceId={}", serverNode.getInstanceId());
 //                    superAdminInterceptor.interceptLoginServer(serverNode.getId());
 //                    HostSystem hostSystem = hostSystemHandler.buildHostSystem(serverNode, loginMessage);
 //                    Server server = serverService.getById(serverNode.getId());
@@ -57,14 +61,8 @@ public class SshCrystalLoginMessageHandler extends BaseSshCrystalMessageHandler<
 //                });
 //            }
         } catch (Exception e) {
-            log.error("Login server error: {}", e.getMessage());
+            log.error("Open server error: {}", e.getMessage());
         }
-    }
-
-    @Override
-    protected SshMessage.Login toMessage(String message) {
-        return new GsonBuilder().create()
-                .fromJson(message, SshMessage.Login.class);
     }
 
 }
