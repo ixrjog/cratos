@@ -1,10 +1,8 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.domain.generator.SshSession;
-import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
-import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalMessageHandler;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +40,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             SshCrystalMessage.Open cryMessage = toMessage(message);
             heartbeat(sshSession.getSessionId());
             String username = getUsername();
-            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(sshSession, username, sshSession);
+           // HostSystem hostSystem = HostSystemBuilder.buildHostSystem(sshSession, username, sshSession);
 
 
 //            for (ServerNode serverNode : loginMessage.getServerNodes()) {
