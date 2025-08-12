@@ -68,7 +68,7 @@ public class DingtalkUserModel {
         private String orgEmail;
         private String name;
         @JsonProperty("dept_id_list")
-        private List<Integer> deptIdList;
+        private List<Long> deptIdList;
         @JsonProperty("job_number")
         private String jobNumber;
         @JsonProperty("state_code")
