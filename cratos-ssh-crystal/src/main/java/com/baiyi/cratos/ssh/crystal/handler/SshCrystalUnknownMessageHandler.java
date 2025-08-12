@@ -3,6 +3,7 @@ package com.baiyi.cratos.ssh.crystal.handler;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.message.SshMessage;
+import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalMessageHandler;
 import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,8 @@ import static com.baiyi.cratos.ssh.core.message.SshMessage.UNKNOWN_MESSAGE;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@MessageStates(state = MessageState.UNKNOWN)
 public class SshCrystalUnknownMessageHandler extends BaseSshCrystalMessageHandler<SshMessage.BaseMessage> {
-
-    @Override
-    public String getState() {
-        return MessageState.UNKNOWN.name();
-    }
 
     @Override
     public void handle(String message, Session session, SshSession sshSession) {

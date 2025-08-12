@@ -43,6 +43,7 @@ public class AccessControlVO {
         private static final long serialVersionUID = -117053221590362418L;
         private Boolean permission;
         private String businessType;
+        private String msg;
         // 操作权限
         private Map<String, T> operationPermissions;
 
@@ -50,6 +51,15 @@ public class AccessControlVO {
             return AccessControl.builder()
                     .permission(false)
                     .businessType(businessType)
+                    .operationPermissions(Maps.newHashMap())
+                    .build();
+        }
+
+        public static AccessControl unauthorized(String businessType, String msg) {
+            return AccessControl.builder()
+                    .permission(false)
+                    .businessType(businessType)
+                    .msg(msg)
                     .operationPermissions(Maps.newHashMap())
                     .build();
         }

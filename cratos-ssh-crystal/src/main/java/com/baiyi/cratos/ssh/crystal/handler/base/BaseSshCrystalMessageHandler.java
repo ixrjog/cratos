@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.crystal.handler.base;
 
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.ssh.core.SshCrystalMessageHandler;
+import com.baiyi.cratos.ssh.crystal.SshCrystalMessageHandler;
 import com.baiyi.cratos.ssh.core.message.SshMessage;
 import com.baiyi.cratos.ssh.crystal.factory.SshCrystalMessageHandlerFactory;
 import com.google.gson.GsonBuilder;

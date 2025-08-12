@@ -23,7 +23,7 @@ import org.springframework.util.StringUtils;
 import java.util.UUID;
 
 import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT;
-import static com.baiyi.cratos.ssh.core.SshCrystalMessageHandler.NO_MESSAGE;
+import static com.baiyi.cratos.ssh.crystal.SshCrystalMessageHandler.NO_MESSAGE;
 
 /**
  * &#064;Author  baiyi

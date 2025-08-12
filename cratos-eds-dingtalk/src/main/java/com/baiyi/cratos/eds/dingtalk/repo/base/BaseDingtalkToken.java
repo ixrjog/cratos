@@ -28,8 +28,7 @@ public abstract class BaseDingtalkToken {
     }
 
     protected DingtalkTokenModel.TokenResult getToken(EdsDingtalkConfigModel.Dingtalk dingtalk) {
-        String key = generateCacheKey(dingtalk.getApp()
-                .getName());
+        String key = generateCacheKey(dingtalk.getCompany());
         if (redisUtil.hasKey(key)) {
             return (DingtalkTokenModel.TokenResult) redisUtil.get(key);
         }

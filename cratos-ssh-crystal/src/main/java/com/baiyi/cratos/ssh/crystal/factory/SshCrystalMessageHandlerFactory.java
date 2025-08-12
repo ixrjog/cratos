@@ -1,6 +1,6 @@
 package com.baiyi.cratos.ssh.crystal.factory;
 
-import com.baiyi.cratos.ssh.core.SshCrystalMessageHandler;
+import com.baiyi.cratos.ssh.crystal.SshCrystalMessageHandler;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import lombok.extern.slf4j.Slf4j;
 

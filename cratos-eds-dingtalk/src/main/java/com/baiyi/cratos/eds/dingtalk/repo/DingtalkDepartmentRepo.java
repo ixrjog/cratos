@@ -26,14 +26,14 @@ public class DingtalkDepartmentRepo extends BaseDingtalkToken {
         super(redisUtil, dingtalkService);
     }
 
-    @Cacheable(cacheNames = SHORT_TERM, key = "'DINGTALK:DEPT:LISTSUBID:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #listSubDepartmentId.deptId", unless = "#result == null")
+    @Cacheable(cacheNames = SHORT_TERM, key = "'V3:DINGTALK:DEPT:LISTSUBID:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #listSubDepartmentId.deptId", unless = "#result == null")
     public DingtalkDepartmentModel.DepartmentSubIdResult listSubId(EdsDingtalkConfigModel.Dingtalk dingtalk,
                                                                    DingtalkDepartmentParam.ListSubDepartmentId listSubDepartmentId) {
         DingtalkTokenModel.TokenResult tokenResult = getToken(dingtalk);
         return dingtalkService.listSubId(tokenResult.getAccessToken(), listSubDepartmentId);
     }
 
-    @Cacheable(cacheNames = SHORT_TERM, key = "'DINGTALK:DEPT:GET:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #getDepartment.deptId", unless = "#result == null")
+    @Cacheable(cacheNames = SHORT_TERM, key = "'V3:DINGTALK:DEPT:GET:CORPID:'+ #dingtalk.corpId + ':DEPTID:' + #getDepartment.deptId", unless = "#result == null")
     public DingtalkDepartmentModel.GetDepartmentResult get(EdsDingtalkConfigModel.Dingtalk dingtalk,
                                                            DingtalkDepartmentParam.GetDepartment getDepartment) {
         DingtalkTokenModel.TokenResult tokenResult = getToken(dingtalk);
