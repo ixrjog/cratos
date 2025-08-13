@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.holder;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.workorder.holder.token.ApplicationRedeployToken;
@@ -40,7 +40,7 @@ public class ApplicationRedeployTokenHolder {
                 .ticketId(ticket.getId())
                 .ticketNo(ticket.getTicketNo())
                 // 2 hours
-                .expires(ExpiredUtil.generateExpirationTime(DEFAULT_EXPIRE, TimeUnit.HOURS))
+                .expires(ExpiredUtils.generateExpirationTime(DEFAULT_EXPIRE, TimeUnit.HOURS))
                 .build();
         redisUtil.set(buildKey(username, applicationName), token, 60 * 60 * 2);
     }

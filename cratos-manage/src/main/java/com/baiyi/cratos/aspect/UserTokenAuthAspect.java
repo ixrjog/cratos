@@ -1,7 +1,7 @@
 package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.UserTokenAuth;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -107,7 +107,7 @@ public class UserTokenAuthAspect {
         
         // 2. 获取并验证审批者用户
         User approver = getApprover(joinPoint, userTokenAuth);
-        if (Boolean.FALSE.equals(approver.getValid()) || ExpiredUtil.isExpired(approver.getExpiredTime())) {
+        if (Boolean.FALSE.equals(approver.getValid()) || ExpiredUtils.isExpired(approver.getExpiredTime())) {
             log.warn("审批者无效或已过期，username: {}", approver.getUsername());
             WorkOrderTicketException.runtime("The approver is invalid or expired.");
         }

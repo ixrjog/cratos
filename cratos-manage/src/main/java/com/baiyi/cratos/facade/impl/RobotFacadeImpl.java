@@ -5,7 +5,7 @@ import com.baiyi.cratos.annotation.PreVerifyPermissionsFromParam;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.RobotException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.IdentityUtil;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
@@ -62,7 +62,7 @@ public class RobotFacadeImpl implements RobotFacade {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
         }
 
-        if (ExpiredUtil.isExpired(robot.getExpiredTime())) {
+        if (ExpiredUtils.isExpired(robot.getExpiredTime())) {
             revokeToken(robot);
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_TOKEN_EXPIRED);
         }

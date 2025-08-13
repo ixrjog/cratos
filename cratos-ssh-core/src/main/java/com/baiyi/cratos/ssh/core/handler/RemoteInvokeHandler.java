@@ -8,6 +8,7 @@ import com.baiyi.cratos.ssh.core.model.JSchSessionHolder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.ChannelShellUtils;
 import com.baiyi.cratos.ssh.core.util.SessionConfigUtils;
+import com.baiyi.cratos.ssh.core.watch.WatchServerTerminalOutputTask;
 import com.baiyi.cratos.ssh.core.watch.ssh.WatchSshServerOutputTask;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -26,24 +27,83 @@ import java.util.UUID;
 
 /**
  * 优化后的SSH远程调用处理器
- * 
+ * <p>
  * 重要说明：
  * 1. 代理连接使用独立的JSch实例，避免密钥冲突
  * 2. 代理Session存储在JSchSession中，通过destroy()方法统一清理
  * 3. JSchSession的destroy()方法会自动清理代理资源和目标资源
- * 
- * @Author  baiyi
- * @Date  2024/5/23 下午5:27
+ *
+ * @Author baiyi
+ * @Date 2024/5/23 下午5:27
  * @Version 2.1
  */
 @Slf4j
 @Component
 public class RemoteInvokeHandler {
 
-    // private static final int SSH_PORT = 22;
+    //private static final int SSH_PORT = 22;
     private static final String LOCALHOST = "127.0.0.1";
     private static final String appId = UUID.randomUUID()
             .toString();
+
+    public static void openSshCrystal(String sessionId, HostSystem hostSystem) {
+        JSch jsch = new JSch();
+        hostSystem.setStatusCd(HostSystem.SUCCESS_STATUS);
+        try {
+            if (hostSystem.getCredential() == null) {
+                return;
+            }
+            Session session = jsch.getSession(hostSystem.getLoginUsername(), hostSystem.getHost(),
+                    hostSystem.getSshPortOrDefault());
+            setSshCredential(hostSystem, jsch, session);
+            // 默认设置
+            SessionConfigUtils.defaultConnect(session);
+            ChannelShell channel = (ChannelShell) session.openChannel("shell");
+            ChannelShellUtils.setDefault(channel);
+            setChannelPtySize(channel, hostSystem.getTerminalSize());
+            // new session output
+            SessionOutput sessionOutput = new SessionOutput(sessionId, hostSystem);
+            // 启动线程处理会话
+            Runnable run = new WatchServerTerminalOutputTask(sessionOutput, channel.getInputStream(),
+                    hostSystem.getAuditPath());
+            // JDK21 VirtualThreads
+            Thread.ofVirtual()
+                    .start(run);
+            OutputStream inputToChannel = channel.getOutputStream();
+            JSchSession jSchSession = JSchSession.builder()
+                    .sessionId(sessionId)
+                    .instanceId(hostSystem.getInstanceId())
+                    .commander(new PrintStream(inputToChannel, true))
+                    .inputToChannel(inputToChannel)
+                    .channel(channel)
+                    .hostSystem(hostSystem)
+                    .build();
+            jSchSession.setSessionOutput(sessionOutput);
+            JSchSessionHolder.addSession(jSchSession);
+            channel.connect();
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            if (e.getMessage()
+                    .toLowerCase()
+                    .contains("userauth fail")) {
+                hostSystem.setStatusCd(HostSystem.PUBLIC_KEY_FAIL_STATUS);
+            } else if (e.getMessage()
+                    .toLowerCase()
+                    .contains("auth fail") || e.getMessage()
+                    .toLowerCase()
+                    .contains("auth cancel")) {
+                hostSystem.setStatusCd(HostSystem.AUTH_FAIL_STATUS);
+            } else if (e.getMessage()
+                    .toLowerCase()
+                    .contains("unknownhostexception")) {
+                hostSystem.setErrorMsg("DNS Lookup Failed");
+                hostSystem.setStatusCd(HostSystem.HOST_FAIL_STATUS);
+            } else {
+                hostSystem.setStatusCd(HostSystem.GENERIC_FAIL_STATUS);
+            }
+        }
+    }
+
 
     @SuppressWarnings("SpellCheckingInspection")
     public static void openSSHServer(String sessionId, HostSystem hostSystem, OutputStream out) throws SshException {
@@ -120,7 +180,7 @@ public class RemoteInvokeHandler {
         // 为代理和目标分别创建独立的JSch实例，避免密钥冲突
         JSch proxyJsch = new JSch();
         JSch targetJsch = new JSch();
-        
+
         proxyHost.setStatusCd(HostSystem.SUCCESS_STATUS);
         targetHost.setStatusCd(HostSystem.SUCCESS_STATUS);
         Session proxySession = null;

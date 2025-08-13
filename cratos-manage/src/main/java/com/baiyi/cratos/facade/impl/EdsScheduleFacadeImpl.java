@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.CustomSchedulerException;
-import com.baiyi.cratos.common.util.CronUtil;
+import com.baiyi.cratos.common.util.CronUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsScheduleParam;
@@ -94,7 +94,7 @@ public class EdsScheduleFacadeImpl implements EdsScheduleFacade {
 
     @Override
     public List<String> checkCron(EdsScheduleParam.CheckCron checkCron) {
-        return CronUtil.recentTime(checkCron.getJobTime(), 5);
+        return CronUtils.recentTime(checkCron.getJobTime(), 5);
     }
 
 }

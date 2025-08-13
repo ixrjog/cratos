@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.command.custom.eds;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
@@ -174,7 +174,7 @@ public class EdsComputerListCommand extends AbstractCommand {
         if (Objects.isNull(userPermission)) {
             return UNAUTHORIZED;
         }
-        if (ExpiredUtil.isExpired(userPermission.getExpiredTime())) {
+        if (ExpiredUtils.isExpired(userPermission.getExpiredTime())) {
             return UNAUTHORIZED;
         }
         return helper.getColored(

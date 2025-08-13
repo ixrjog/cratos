@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -87,7 +87,7 @@ public class WorkOrderFacade2Test extends BaseUnit {
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
                 .role("prod")
                 .checked(true)
-                .expiredTime(ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
                 .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(2)

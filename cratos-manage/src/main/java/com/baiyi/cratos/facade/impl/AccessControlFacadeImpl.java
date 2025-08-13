@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -75,7 +75,7 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
                 .build();
         UserPermission userPermission = userPermissionService.getByUniqueKey(uniqueKey);
         // fixed 过期
-        if (userPermission == null || ExpiredUtil.isExpired(userPermission.getExpiredTime())) {
+        if (userPermission == null || ExpiredUtils.isExpired(userPermission.getExpiredTime())) {
             return AccessControlVO.AccessControl.unauthorized(hasBusiness.getBusinessType());
         }
         return AccessControlVO.AccessControl.authorized(hasBusiness.getBusinessType());

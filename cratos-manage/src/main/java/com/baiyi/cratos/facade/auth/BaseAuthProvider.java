@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.auth.IAuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
@@ -49,7 +49,7 @@ public abstract class BaseAuthProvider implements IAuthProvider, InitializingBea
         if (user == null || !user.getValid()) {
             throw new AuthenticationException(AUTHENTICATION_FAILED);
         }
-        if (ExpiredUtil.isExpired(user.getExpiredTime())) {
+        if (ExpiredUtils.isExpired(user.getExpiredTime())) {
             throw new AuthenticationException(AUTHENTICATION_FAILED);
         }
         return getUserPasswordCredential(user);
@@ -66,7 +66,7 @@ public abstract class BaseAuthProvider implements IAuthProvider, InitializingBea
             if (cred != null && cred.getPrivateCredential() && cred.getValid() && CredentialTypeEnum.USERNAME_WITH_PASSWORD.name()
                     .equals(cred.getCredentialType())) {
                 // 判断过期
-                if (ExpiredUtil.isExpired(cred.getExpiredTime())) {
+                if (ExpiredUtils.isExpired(cred.getExpiredTime())) {
                     cred.setValid(false);
                     credentialService.updateByPrimaryKey(cred);
                 } else {

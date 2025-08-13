@@ -1,5 +1,6 @@
-package com.baiyi.cratos.eds;
+package com.baiyi.cratos.eds.dingtalk;
 
+import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkDepartmentParam;

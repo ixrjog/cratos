@@ -23,10 +23,10 @@ public class EnvLifecycleUtils {
                                                            Map<String, Env> envLifecycleMap) {
         if (!envLifecycleMap.containsKey(envName)) {
             return Objects.requireNonNullElseGet(expiredTime,
-                    () -> ExpiredUtil.generateExpirationTime(MAX_LIFECYCLE_DAYS, TimeUnit.DAYS));
+                    () -> ExpiredUtils.generateExpirationTime(MAX_LIFECYCLE_DAYS, TimeUnit.DAYS));
         }
         Env envLifecycle = envLifecycleMap.get(envName);
-        Date maxExpiredTime = ExpiredUtil.generateExpirationTime(envLifecycle.getLifecycle(), TimeUnit.DAYS);
+        Date maxExpiredTime = ExpiredUtils.generateExpirationTime(envLifecycle.getLifecycle(), TimeUnit.DAYS);
         if (expiredTime == null) {
             return maxExpiredTime;
         }

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
@@ -81,7 +81,7 @@ public class WorkOrderFacadeTest extends BaseUnit {
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
                 .role("prod")
                 .checked(false)
-                .expiredTime(ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
                 .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(2)
@@ -117,7 +117,7 @@ public class WorkOrderFacadeTest extends BaseUnit {
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
                 .role("prod")
                 .checked(false)
-                .expiredTime(ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
                 .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
                 .name("tms-newpos")

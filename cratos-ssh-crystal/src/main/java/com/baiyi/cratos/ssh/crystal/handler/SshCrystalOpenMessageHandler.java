@@ -1,10 +1,11 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
-import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.domain.SimpleBusiness;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.Credential;
+import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.ServerAccount;
+import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.facade.AccessControlFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CredentialService;
@@ -12,8 +13,10 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
+import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
+import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalMessageHandler;
 import jakarta.websocket.Session;
@@ -29,6 +32,7 @@ import java.util.concurrent.Executors;
  * &#064;Date  2024/9/25 10:39
  * &#064;Version 1.0
  */
+@SuppressWarnings({"rawtypes"})
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -42,6 +46,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final BusinessTagService businessTagService;
     private final BusinessTagFacade businessTagFacade;
 
+    private final ServerAccessControlFacade serverAccessControlFacade;
+
     @Override
     public void handle(String message, Session session, SshSession sshSession) {
         // JDK21 VirtualThreads
@@ -49,21 +55,18 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             SshCrystalMessage.Open openMessage = toMessage(message);
             heartbeat(sshSession.getSessionId());
             String username = getUsername();
-
-            // 获取服务器资产上的Group标签
-            SimpleBusiness byBusiness = SimpleBusiness.builder()
-                    .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                    .businessId(openMessage.getAssetId())
-                    .build();
-            BusinessTag businessTag = businessTagFacade.getBusinessTag(byBusiness, SysTagKeys.GROUP.getKey());
+            AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
+                    openMessage.getAssetId());
+            if (!accessControl.getPermission()) {
+                // TODO 发送未授权消息
+                return;
+            }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
-            // TODO
             ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
-            // TODO
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            // TODO
             HostSystem hostSystem = HostSystemBuilder.buildHostSystem(server, serverAccount, credential);
 
+            RemoteInvokeHandler.openSSHServer(sshSession.getSessionId(), hostSystem, null);
 
 //            for (ServerNode serverNode : loginMessage.getServerNodes()) {
 //                executor.submit(() -> {

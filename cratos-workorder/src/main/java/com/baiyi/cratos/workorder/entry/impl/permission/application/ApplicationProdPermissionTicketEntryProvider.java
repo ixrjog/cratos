@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.permission.application;
 
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
@@ -108,7 +108,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
                                 UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
         List<Env> envs = queryEnv(GROUP_VALUE);
         // 临时授权15分钟
-        Date expiredTime = ExpiredUtil.generateExpirationTime(15L, TimeUnit.MINUTES);
+        Date expiredTime = ExpiredUtils.generateExpirationTime(15L, TimeUnit.MINUTES);
         UserPermissionBusinessParam.BusinessPermission prodBusinessPermission = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(businessPermission.getBusinessId())
                 .name(businessPermission.getName())

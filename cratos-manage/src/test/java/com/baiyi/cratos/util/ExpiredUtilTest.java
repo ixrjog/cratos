@@ -1,7 +1,7 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -17,7 +17,7 @@ public class ExpiredUtilTest extends BaseUnit {
 
     @Test
     void test() {
-        Date date = ExpiredUtil.generateExpirationTime(1L, TimeUnit.HOURS);
+        Date date = ExpiredUtils.generateExpirationTime(1L, TimeUnit.HOURS);
         System.out.println(date);
     }
 

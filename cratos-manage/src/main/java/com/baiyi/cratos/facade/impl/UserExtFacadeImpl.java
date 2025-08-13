@@ -4,7 +4,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
@@ -62,7 +62,7 @@ public class UserExtFacadeImpl implements UserExtFacade {
     @Transactional(rollbackFor = Exception.class)
     public SimpleCommited renewalOfExtUser(UserExtParam.RenewalExtUser renewalExtUser) {
         RenewalExtUserTypeEnum renewalExtUserTypeEnum = RenewalExtUserTypeEnum.valueOf(renewalExtUser.getRenewalType());
-        Date renewalTime = ExpiredUtil.generateExpirationTime(renewalExtUserTypeEnum.getDays(), TimeUnit.DAYS);
+        Date renewalTime = ExpiredUtils.generateExpirationTime(renewalExtUserTypeEnum.getDays(), TimeUnit.DAYS);
         User user = userService.getByUsername(renewalExtUser.getUsername());
         if (Objects.isNull(user)) {
             UserException.runtime("User does not exist.");

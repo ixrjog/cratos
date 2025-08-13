@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.TokenGenerator;
 import com.baiyi.cratos.domain.ErrorEnum;
 import com.baiyi.cratos.domain.generator.UserToken;
@@ -57,7 +57,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
         UserToken userToken = UserToken.builder()
                 .username(username)
                 .token(TokenGenerator.generateToken())
-                .expiredTime(ExpiredUtil.generateExpirationTime(TOKEN_VALIDITY_TIME, TimeUnit.MILLISECONDS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(TOKEN_VALIDITY_TIME, TimeUnit.MILLISECONDS))
                 .valid(true)
                 .build();
         userTokenService.add(userToken);
@@ -75,7 +75,7 @@ public class UserTokenFacadeImpl implements UserTokenFacade {
         if (userToken == null || !userToken.getValid()) {
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_INVALID_TOKEN);
         }
-        if (ExpiredUtil.isExpired(userToken.getExpiredTime())) {
+        if (ExpiredUtils.isExpired(userToken.getExpiredTime())) {
             revokeToken(userToken);
             throw new AuthenticationException(ErrorEnum.AUTHENTICATION_TOKEN_EXPIRED);
         }

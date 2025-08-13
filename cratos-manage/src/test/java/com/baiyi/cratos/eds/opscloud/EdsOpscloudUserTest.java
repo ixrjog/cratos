@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.opscloud;
 
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
@@ -113,7 +113,7 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
         return UserPermissionBusinessParam.RoleMember.builder()
                 .role(role)
                 .checked(checked)
-                .expiredTime(checked ? ExpiredUtil.generateExpirationTime(90, TimeUnit.DAYS) : null)
+                .expiredTime(checked ? ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS) : null)
                 .build();
     }
 

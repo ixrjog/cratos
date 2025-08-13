@@ -1,7 +1,7 @@
 package com.baiyi.cratos.shell.auth.custom;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessCredential;
@@ -54,7 +54,7 @@ public class CustomPublicKeyConfiguration {
                 return false;
             }
             // 过期的用户
-            if (ExpiredUtil.isExpired(user.getExpiredTime())) {
+            if (ExpiredUtils.isExpired(user.getExpiredTime())) {
                 return false;
             }
             // 锁定的用户
@@ -76,7 +76,7 @@ public class CustomPublicKeyConfiguration {
                 Credential cred = credentialService.getById(businessCredential.getCredentialId());
                 if (cred != null && cred.getPrivateCredential() && cred.getValid() && CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name()
                         .equals(cred.getCredentialType())) {
-                    if (!ExpiredUtil.isExpired(cred.getExpiredTime())) {
+                    if (!ExpiredUtils.isExpired(cred.getExpiredTime())) {
                         credentials.add(cred);
                     }
                 }

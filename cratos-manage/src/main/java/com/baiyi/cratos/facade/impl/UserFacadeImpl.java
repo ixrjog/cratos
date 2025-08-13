@@ -144,7 +144,7 @@ public class UserFacadeImpl implements UserFacade {
                 .credentialType(CredentialTypeEnum.USERNAME_WITH_PASSWORD.name())
                 .credential(resetPassword.getPassword())
                 .privateCredential(true)
-                .expiredTime(ExpiredUtil.generateExpirationTime(NEW_PASSWORD_VALIDITY_PERIOD_DAYS, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(NEW_PASSWORD_VALIDITY_PERIOD_DAYS, TimeUnit.DAYS))
                 .valid(true)
                 .build();
         credentialFacade.createBusinessCredential(credential, business);
@@ -253,7 +253,7 @@ public class UserFacadeImpl implements UserFacade {
                 .fingerprint(SshFingerprintUtil.calcFingerprint(null, pubKey))
                 .privateCredential(true)
                 .valid(true)
-                .expiredTime(ExpiredUtil.generateExpirationTime(366L * 5, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(366L * 5, TimeUnit.DAYS))
                 .build();
         credentialService.add(credential);
         BusinessCredential businessCredential = BusinessCredential.builder()

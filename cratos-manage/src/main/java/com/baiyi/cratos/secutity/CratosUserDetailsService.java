@@ -1,6 +1,6 @@
 package com.baiyi.cratos.secutity;
 
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.User;
@@ -46,7 +46,7 @@ public class CratosUserDetailsService implements UserDetailsService {
                 .password(PasswordEncoderFactories.createDelegatingPasswordEncoder()
                         .encode(credential.getCredential()))
                 .accountLocked(!user.getValid())
-                .accountExpired(ExpiredUtil.isExpired(user.getExpiredTime()))
+                .accountExpired(ExpiredUtils.isExpired(user.getExpiredTime()))
                 .credentialsExpired(false)
                 .authorities(getUserAuthorities(username))
                 .build();

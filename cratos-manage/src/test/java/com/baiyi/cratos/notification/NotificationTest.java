@@ -3,7 +3,7 @@ package com.baiyi.cratos.notification;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.facade.inspection.InspectionFactory;
@@ -33,7 +33,7 @@ public class NotificationTest extends BaseUnit {
     @Test
     void test() throws IOException {
         NotificationTemplate notificationTemplate = notificationTemplateService.getById(1);
-        Date expiry = ExpiredUtil.generateExpirationTime(130, TimeUnit.DAYS);
+        Date expiry = ExpiredUtils.generateExpirationTime(130, TimeUnit.DAYS);
         List<Domain> domainList = domainService.queryByLessThanExpiry(expiry);
         String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                 .put("domains", domainList)

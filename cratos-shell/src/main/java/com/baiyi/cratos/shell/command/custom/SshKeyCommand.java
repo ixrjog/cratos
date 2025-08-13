@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.command.custom;
 
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.table.PrettyTable;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.SshFingerprintUtil;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -121,7 +121,7 @@ public class SshKeyCommand extends AbstractCommand {
                 .fingerprint(SshFingerprintUtil.calcFingerprint(null, pubKey))
                 .privateCredential(true)
                 .valid(true)
-                .expiredTime(ExpiredUtil.generateExpirationTime(366L * 5, TimeUnit.DAYS))
+                .expiredTime(ExpiredUtils.generateExpirationTime(366L * 5, TimeUnit.DAYS))
                 .build();
         credentialService.add(credential);
 
@@ -147,7 +147,7 @@ public class SshKeyCommand extends AbstractCommand {
         }
 
         String time = TimeUtils.parse(expiredTime, Global.ISO8601);
-        return ExpiredUtil.isExpired(expiredTime) ? helper.getError(time) : helper.getSuccess(time);
+        return ExpiredUtils.isExpired(expiredTime) ? helper.getError(time) : helper.getSuccess(time);
     }
 
     private void noAvailableKeys() {

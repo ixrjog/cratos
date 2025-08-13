@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -81,7 +81,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
         credentials.stream()
                 .filter(Credential::getValid)
                 .forEachOrdered(credential -> {
-                    if (ExpiredUtil.isExpired(credential.getExpiredTime())) {
+                    if (ExpiredUtils.isExpired(credential.getExpiredTime())) {
                         credential.setValid(false);
                         credentialService.updateByPrimaryKey(credential);
                         return;
@@ -114,7 +114,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
             if (cred != null && cred.getPrivateCredential() && cred.getValid() && CredentialTypeEnum.USERNAME_WITH_PASSWORD.name()
                     .equals(cred.getCredentialType())) {
                 // 判断过期
-                if (ExpiredUtil.isExpired(cred.getExpiredTime())) {
+                if (ExpiredUtils.isExpired(cred.getExpiredTime())) {
                     cred.setValid(false);
                     credentialService.updateByPrimaryKey(cred);
                 } else {
@@ -151,7 +151,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
                 .build();
         Credential dbCredential = getById(updateCredential.getId());
         if (updateCredential.getValid()) {
-            if (ExpiredUtil.isExpired(dbCredential.getExpiredTime())) {
+            if (ExpiredUtils.isExpired(dbCredential.getExpiredTime())) {
                 throw new InvalidCredentialException("The credential have expired.");
             }
             credential.setValid(updateCredential.getValid());

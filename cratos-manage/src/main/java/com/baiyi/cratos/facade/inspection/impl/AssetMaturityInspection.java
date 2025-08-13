@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
@@ -46,7 +46,7 @@ public class AssetMaturityInspection extends BaseInspection {
     protected String getMsg() throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate(
                 CUSTOM_ASSET_EXPIRATION_INSPECTION_NOTIFICATION);
-        Date expiry = ExpiredUtil.generateExpirationTime(ASSET_MATURITY_EXPIRY_DAYS, TimeUnit.DAYS);
+        Date expiry = ExpiredUtils.generateExpirationTime(ASSET_MATURITY_EXPIRY_DAYS, TimeUnit.DAYS);
         List<AssetMaturity> assetMaturityList = assetMaturityService.queryByLessThanExpiry(expiry);
         return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                 .put(ASSET_MATURITIES_FIELD, assetMaturityList)

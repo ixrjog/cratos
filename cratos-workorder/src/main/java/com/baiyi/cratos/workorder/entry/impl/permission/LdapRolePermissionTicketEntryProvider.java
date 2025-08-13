@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -102,7 +102,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
                 .map(e -> UserPermissionBusinessParam.RoleMember.builder()
                         .role(e.getRole())
                         .checked(true)
-                        .expiredTime(ExpiredUtil.generateExpirationTime(RenewalExtUserTypeEnum.LONG_TERM.getDays(),
+                        .expiredTime(ExpiredUtils.generateExpirationTime(RenewalExtUserTypeEnum.LONG_TERM.getDays(),
                                 TimeUnit.DAYS))
                         .build())
                 .toList();

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.scheduler;
 
 import com.baiyi.cratos.common.exception.CustomSchedulerException;
-import com.baiyi.cratos.common.util.CronUtil;
+import com.baiyi.cratos.common.util.CronUtils;
 import com.baiyi.cratos.domain.view.schedule.ScheduleVO;
 import com.google.common.collect.Lists;
 import jakarta.annotation.PostConstruct;
@@ -211,7 +211,7 @@ public class SchedulerService {
                     .build();
             if (trigger instanceof CronTrigger cronTrigger) {
                 job.setCronExpression(cronTrigger.getCronExpression());
-                job.setExecutionTime(CronUtil.recentTime(cronTrigger.getCronExpression(), 5));
+                job.setExecutionTime(CronUtils.recentTime(cronTrigger.getCronExpression(), 5));
             }
             return job;
         } catch (SchedulerException e) {

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
-import com.baiyi.cratos.common.util.ExpiredUtil;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
@@ -46,7 +46,7 @@ public class CertificateInspection extends BaseInspection {
     protected String getMsg() throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate(
                 CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION);
-        Date expiry = ExpiredUtil.generateExpirationTime(CERTIFICATE_EXPIRY_DAYS, TimeUnit.DAYS);
+        Date expiry = ExpiredUtils.generateExpirationTime(CERTIFICATE_EXPIRY_DAYS, TimeUnit.DAYS);
         List<Certificate> certificateList = certificateService.queryByLessThanExpiry(expiry);
         return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                 .put(CERTIFICATES_FIELD, certificateList)
