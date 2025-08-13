@@ -18,9 +18,10 @@ public enum MessageState {
     DUPLICATE("复制会话"),
     DUPLICATE_BY_IP("复制会话"),
     RESIZE("改变窗体"),
-    CLOSE("关闭会话(登出所有服务器)"),
-    LOGOUT("登出服务器"),
-    BATCH_COMMAND("批量命令"),
+    CLOSE("关闭会话"),
+    CLOSE_ALL("关闭会话(登出所有服务器)"),
+    //LOGOUT("登出服务器"),
+    SET_BATCH_FLAG("设置批量命令标志"),
     UNKNOWN("未知的");
 
     private final String desc;

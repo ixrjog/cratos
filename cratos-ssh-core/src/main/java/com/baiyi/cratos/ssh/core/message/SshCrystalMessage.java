@@ -31,4 +31,40 @@ public class SshCrystalMessage {
         private String fromInstanceId;
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
+    public static class Resize extends SshMessage.BaseMessage {
+        private String instanceId;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
+    public static class Command extends SshMessage.BaseMessage {
+        private String instanceId;
+        private String input;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
+    public static class SetBatchFlag extends SshMessage.BaseMessage {
+        // 会话批量指令
+        private Boolean isBatch;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
+    public static class Close extends SshMessage.BaseMessage {
+        private String instanceId;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
+    public static class CloseAll extends SshMessage.BaseMessage {
+    }
+
 }
