@@ -19,7 +19,6 @@ public class HostSystemBuilder {
 
     public static HostSystem buildErrorHostSystem(String instanceId, String statusCd, String errorMsg) {
         return HostSystem.builder()
-                // 避免绕过未授权服务器
                 .instanceId(instanceId)
                 .errorMsg(errorMsg)
                 .statusCd(statusCd)

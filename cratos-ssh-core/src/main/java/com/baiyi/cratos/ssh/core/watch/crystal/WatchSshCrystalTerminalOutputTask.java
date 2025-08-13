@@ -1,4 +1,4 @@
-package com.baiyi.cratos.ssh.core.watch;
+package com.baiyi.cratos.ssh.core.watch.crystal;
 
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.SessionOutputUtils;
@@ -13,9 +13,9 @@ import java.io.InputStream;
  * &#064;Version 1.0
  */
 @Slf4j
-public class WatchServerTerminalOutputTask extends AbstractOutputTask {
+public class WatchSshCrystalTerminalOutputTask extends AbstractOutputTask {
 
-    public WatchServerTerminalOutputTask(SessionOutput sessionOutput, InputStream outFromChannel, String auditPath) {
+    public WatchSshCrystalTerminalOutputTask(SessionOutput sessionOutput, InputStream outFromChannel, String auditPath) {
         super(sessionOutput, outFromChannel, auditPath);
     }
 

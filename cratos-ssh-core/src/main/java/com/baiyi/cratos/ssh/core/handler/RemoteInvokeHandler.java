@@ -8,7 +8,7 @@ import com.baiyi.cratos.ssh.core.model.JSchSessionHolder;
 import com.baiyi.cratos.ssh.core.model.SessionOutput;
 import com.baiyi.cratos.ssh.core.util.ChannelShellUtils;
 import com.baiyi.cratos.ssh.core.util.SessionConfigUtils;
-import com.baiyi.cratos.ssh.core.watch.WatchServerTerminalOutputTask;
+import com.baiyi.cratos.ssh.core.watch.crystal.WatchSshCrystalTerminalOutputTask;
 import com.baiyi.cratos.ssh.core.watch.ssh.WatchSshServerOutputTask;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
@@ -64,7 +64,7 @@ public class RemoteInvokeHandler {
             // new session output
             SessionOutput sessionOutput = new SessionOutput(sessionId, hostSystem);
             // 启动线程处理会话
-            Runnable run = new WatchServerTerminalOutputTask(sessionOutput, channel.getInputStream(),
+            Runnable run = new WatchSshCrystalTerminalOutputTask(sessionOutput, channel.getInputStream(),
                     hostSystem.getAuditPath());
             // JDK21 VirtualThreads
             Thread.ofVirtual()

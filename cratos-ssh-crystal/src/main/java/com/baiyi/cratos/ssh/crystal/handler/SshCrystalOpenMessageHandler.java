@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.generator.SshSession;
-import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -22,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -52,54 +49,25 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
         SshCrystalMessage.Open openMessage = toMessage(message);
         // JDK21 VirtualThreads
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-
             heartbeat(sshSession.getSessionId());
             String username = getUsername();
             AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
                     openMessage.getAssetId());
             if (!accessControl.getPermission()) {
-                sendHostSystemErrMsgToSession(session, openMessage.getInstanceId(), AUTH_FAIL_STATUS,
-                        accessControl.getMsg());
+                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS, accessControl.getMsg());
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
             ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem hostSystem = HostSystemBuilder.buildHostSystem(server, serverAccount, credential);
-
             RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), hostSystem);
-
-//            for (ServerNode serverNode : loginMessage.getServerNodes()) {
-//                executor.submit(() -> {
-//                    SessionHolder.setUsername(username);
-//                    log.info("Open server: instanceId={}", serverNode.getInstanceId());
-//                    superAdminInterceptor.interceptLoginServer(serverNode.getId());
-//                    HostSystem hostSystem = hostSystemHandler.buildHostSystem(serverNode, loginMessage);
-//                    Server server = serverService.getById(serverNode.getId());
-//
-//
-//                    RemoteInvokeHandler.openWebTerminal(terminalSession.getSessionId(), serverNode.getInstanceId(),
-//                            hostSystem);
-//                    terminalSessionInstanceService.add(TerminalSessionInstanceBuilder.build(terminalSession, hostSystem,
-//                            InstanceSessionTypeEnum.SERVER));
-//                });
-//            }
+            // terminalSessionInstanceService.add(TerminalSessionInstanceBuilder.build(terminalSession, hostSystem, InstanceSessionTypeEnum.SERVER));
         } catch (Exception e) {
-            sendHostSystemErrMsgToSession(session, openMessage.getInstanceId(), HOST_FAIL_STATUS, e.getMessage());
-            log.error("Open server error: {}", e.getMessage());
-        }
-    }
-
-    private void sendHostSystemErrMsgToSession(Session session, String instanceId, String statusCd, String errorMsg) {
-        if (session.isOpen()) {
-            HostSystem hostSystem = HostSystemBuilder.buildErrorHostSystem(instanceId, AUTH_FAIL_STATUS, errorMsg);
-            try {
-                String jsonStr = JSONUtils.writeValueAsString(List.of(hostSystem));
-                session.getBasicRemote()
-                        .sendText(jsonStr);
-            } catch (IOException ioException) {
-                log.debug(ioException.getMessage());
-            }
+            sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                    HOST_FAIL_STATUS, e.getMessage());
+            log.error("Crystal ssh open error: {}", e.getMessage());
         }
     }
 
