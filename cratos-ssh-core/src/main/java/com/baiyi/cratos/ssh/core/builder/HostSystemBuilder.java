@@ -17,8 +17,17 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class HostSystemBuilder {
 
+    public static HostSystem buildErrorHostSystem(String instanceId, String statusCd, String errorMsg) {
+        return HostSystem.builder()
+                // 避免绕过未授权服务器
+                .instanceId(instanceId)
+                .errorMsg(errorMsg)
+                .statusCd(statusCd)
+                .build();
+    }
+
     public static HostSystem buildHostSystem(EdsAsset server, ServerAccount serverAccount,
-                                      Credential credential) throws SshException {
+                                             Credential credential) throws SshException {
         return HostSystem.builder()
                 // 避免绕过未授权服务器
                 .host(server.getAssetKey())
@@ -26,6 +35,5 @@ public class HostSystemBuilder {
                 .credential(credential)
                 .build();
     }
-
 
 }

@@ -1,13 +1,11 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.facade.AccessControlFacade;
-import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.ServerAccountService;
@@ -24,8 +22,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
+import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
 
 /**
  * &#064;Author  baiyi
@@ -42,23 +45,21 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final EdsAssetService edsAssetService;
     private final ServerAccountService serverAccountService;
     private final CredentialService credentialService;
-    private final AccessControlFacade accessControlFacade;
-    private final BusinessTagService businessTagService;
-    private final BusinessTagFacade businessTagFacade;
-
     private final ServerAccessControlFacade serverAccessControlFacade;
 
     @Override
     public void handle(String message, Session session, SshSession sshSession) {
+        SshCrystalMessage.Open openMessage = toMessage(message);
         // JDK21 VirtualThreads
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            SshCrystalMessage.Open openMessage = toMessage(message);
+
             heartbeat(sshSession.getSessionId());
             String username = getUsername();
             AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
                     openMessage.getAssetId());
             if (!accessControl.getPermission()) {
-                // TODO 发送未授权消息
+                sendHostSystemErrMsgToSession(session, openMessage.getInstanceId(), AUTH_FAIL_STATUS,
+                        accessControl.getMsg());
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
@@ -66,7 +67,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem hostSystem = HostSystemBuilder.buildHostSystem(server, serverAccount, credential);
 
-            RemoteInvokeHandler.openSSHServer(sshSession.getSessionId(), hostSystem, null);
+            RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), hostSystem);
 
 //            for (ServerNode serverNode : loginMessage.getServerNodes()) {
 //                executor.submit(() -> {
@@ -84,7 +85,21 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
 //                });
 //            }
         } catch (Exception e) {
+            sendHostSystemErrMsgToSession(session, openMessage.getInstanceId(), HOST_FAIL_STATUS, e.getMessage());
             log.error("Open server error: {}", e.getMessage());
+        }
+    }
+
+    private void sendHostSystemErrMsgToSession(Session session, String instanceId, String statusCd, String errorMsg) {
+        if (session.isOpen()) {
+            HostSystem hostSystem = HostSystemBuilder.buildErrorHostSystem(instanceId, AUTH_FAIL_STATUS, errorMsg);
+            try {
+                String jsonStr = JSONUtils.writeValueAsString(List.of(hostSystem));
+                session.getBasicRemote()
+                        .sendText(jsonStr);
+            } catch (IOException ioException) {
+                log.debug(ioException.getMessage());
+            }
         }
     }
 
