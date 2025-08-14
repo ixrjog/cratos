@@ -16,11 +16,11 @@ public interface SshCrystalMessageHandler {
 
     String NO_MESSAGE = "";
 
-    void handle(String message, Session session, SshSession sshSession);
-
+    void handle(String username, String message, Session session, SshSession sshSession);
 
     /**
      * WorkOrderKey
+     *
      * @return
      */
     default String getState() {

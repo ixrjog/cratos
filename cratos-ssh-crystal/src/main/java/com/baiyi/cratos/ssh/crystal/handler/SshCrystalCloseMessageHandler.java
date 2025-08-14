@@ -28,7 +28,7 @@ public class SshCrystalCloseMessageHandler extends BaseSshCrystalMessageHandler<
     private final ServerCommandAuditor serverCommandAuditor;
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Close closeMessage = toMessage(message);
         // 设置关闭会话
         simpleSshSessionFacade.closeSshSessionInstance(sshSession.getSessionId(), closeMessage.getInstanceId());

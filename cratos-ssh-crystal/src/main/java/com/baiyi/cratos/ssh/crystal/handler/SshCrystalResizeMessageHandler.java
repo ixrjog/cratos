@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class SshCrystalResizeMessageHandler extends BaseSshCrystalMessageHandler<SshCrystalMessage.Resize> {
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Resize resizeMessage = toMessage(message);
         try {
             JSchSession jSchSession = JSchSessionHolder.getSession(sshSession.getSessionId(),

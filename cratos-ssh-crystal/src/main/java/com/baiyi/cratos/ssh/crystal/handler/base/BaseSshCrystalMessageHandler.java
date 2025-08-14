@@ -3,17 +3,16 @@ package com.baiyi.cratos.ssh.crystal.handler.base;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
+import com.baiyi.cratos.ssh.core.message.SshMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.core.model.JSchSession;
 import com.baiyi.cratos.ssh.core.model.JSchSessionHolder;
 import com.baiyi.cratos.ssh.crystal.SshCrystalMessageHandler;
-import com.baiyi.cratos.ssh.core.message.SshMessage;
 import com.baiyi.cratos.ssh.crystal.factory.SshCrystalMessageHandlerFactory;
 import com.google.gson.GsonBuilder;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,12 +26,6 @@ import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
  */
 @Slf4j
 public abstract class BaseSshCrystalMessageHandler<T extends SshMessage.BaseMessage> implements SshCrystalMessageHandler, InitializingBean {
-
-    protected String getUsername() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-    }
 
     /**
      * 转换消息

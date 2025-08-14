@@ -32,7 +32,7 @@ public class SshCrystalCloseAllMessageHandler extends BaseSshCrystalMessageHandl
     private final ServerCommandAuditor serverCommandAuditor;
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.CloseAll closeAllMessage = toMessage(message);
         Map<String, JSchSession> sessionMap = JSchSessionHolder.getSession(sshSession.getSessionId());
         if (sessionMap == null) {

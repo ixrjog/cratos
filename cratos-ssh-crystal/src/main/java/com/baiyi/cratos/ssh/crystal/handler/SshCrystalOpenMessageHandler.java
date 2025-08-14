@@ -45,12 +45,11 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final ServerAccessControlFacade serverAccessControlFacade;
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Open openMessage = toMessage(message);
         // JDK21 VirtualThreads
         try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
             heartbeat(sshSession.getSessionId());
-            String username = getUsername();
             AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
                     openMessage.getAssetId());
             if (!accessControl.getPermission()) {

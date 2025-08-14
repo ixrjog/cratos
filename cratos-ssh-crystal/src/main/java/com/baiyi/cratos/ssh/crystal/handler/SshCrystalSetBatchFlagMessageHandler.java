@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class SshCrystalSetBatchFlagMessageHandler extends BaseSshCrystalMessageHandler<SshCrystalMessage.SetBatchFlag> {
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.SetBatchFlag setBatchFlagMessage = toMessage(message);
         JSchSessionHolder.setBatch(sshSession.getSessionId(), setBatchFlagMessage.getIsBatch());
     }

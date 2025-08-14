@@ -39,6 +39,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
     private static SshSessionService sshSessionService;
     private final String sessionId = UUID.randomUUID()
             .toString();
+    private String username;
 
     @Autowired
     public void setSshSessionService(SshSessionService sshSessionService) {
@@ -51,6 +52,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
+        this.username = username;
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
             log.info("Crystal ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
@@ -76,7 +78,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
             SimpleState ss = new GsonBuilder().create()
                     .fromJson(message, SimpleState.class);
             SshCrystalMessageHandlerFactory.getByState(ss.getState())
-                    .handle(message, session, sshSession);
+                    .handle(this.username, message, session, sshSession);
         } catch (Exception e) {
             log.debug(e.getMessage());
         }
@@ -85,7 +87,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
     @OnClose
     public void onClose(Session session) {
         SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE.name())
-                .handle(NO_MESSAGE, session, sshSession);
+                .handle(this.username, NO_MESSAGE, session, sshSession);
     }
 
     @OnError

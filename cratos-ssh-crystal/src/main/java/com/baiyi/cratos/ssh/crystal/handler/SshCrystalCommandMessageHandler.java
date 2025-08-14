@@ -27,7 +27,7 @@ import java.util.Map;
 public class SshCrystalCommandMessageHandler extends BaseSshCrystalMessageHandler<SshCrystalMessage.Command> {
 
     @Override
-    public void handle(String message, Session session, SshSession sshSession) {
+    public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Command commandMessage = toMessage(message);
         if (StringUtils.isEmpty(commandMessage.getInput())) {
             return;
