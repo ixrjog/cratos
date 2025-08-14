@@ -45,6 +45,13 @@ import org.springframework.util.StringUtils;
 @AllArgsConstructor
 public class HostSystem {
 
+    public static final String INITIAL_STATUS = "INITIAL";
+    public static final String AUTH_FAIL_STATUS = "AUTHFAIL";
+    public static final String PUBLIC_KEY_FAIL_STATUS = "KEYAUTHFAIL";
+    public static final String GENERIC_FAIL_STATUS = "GENERICFAIL";
+    public static final String SUCCESS_STATUS = "SUCCESS";
+    public static final String HOST_FAIL_STATUS = "HOSTFAIL";
+
     private static final int SSH_PORT = 22;
     public static final HostSystem NO_HOST = null;
 
@@ -85,16 +92,8 @@ public class HostSystem {
     private ServerAccount serverAccount;
     private Credential credential;
 
-
 //    private SshCredential sshCredential;
 
 //    private ServerMessage.BaseMessage loginMessage;
-
-    public static final String INITIAL_STATUS = "INITIAL";
-    public static final String AUTH_FAIL_STATUS = "AUTHFAIL";
-    public static final String PUBLIC_KEY_FAIL_STATUS = "KEYAUTHFAIL";
-    public static final String GENERIC_FAIL_STATUS = "GENERICFAIL";
-    public static final String SUCCESS_STATUS = "SUCCESS";
-    public static final String HOST_FAIL_STATUS = "HOSTFAIL";
 
 }
