@@ -1,9 +1,10 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
-import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.ServerAccount;
-import com.baiyi.cratos.domain.generator.SshSession;
+import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -43,6 +44,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final ServerAccountService serverAccountService;
     private final CredentialService credentialService;
     private final ServerAccessControlFacade serverAccessControlFacade;
+    private final BusinessTagFacade businessTagFacade;
 
     @Override
     public void handle(String username, String message, Session session, SshSession sshSession) {
@@ -58,7 +60,9 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
-            ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
+            // 查询serverAccount
+            ServerAccount serverAccount = serverAccountService.getByName(
+                    getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem hostSystem = HostSystemBuilder.buildHostSystem(server, serverAccount, credential);
             RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), hostSystem);
@@ -68,6 +72,19 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
                     HOST_FAIL_STATUS, e.getMessage());
             log.error("Crystal ssh open error: {}", e.getMessage());
         }
+    }
+
+    private String getServerAccountName(int assetId) {
+        BusinessTag accountBusinessTag = getServerBusinessTag(assetId);
+        return accountBusinessTag.getTagValue();
+    }
+
+    private BusinessTag getServerBusinessTag(int assetId) {
+        SimpleBusiness byBusiness = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(assetId)
+                .build();
+        return businessTagFacade.getBusinessTag(byBusiness, SysTagKeys.SERVER_ACCOUNT.getKey());
     }
 
 }
