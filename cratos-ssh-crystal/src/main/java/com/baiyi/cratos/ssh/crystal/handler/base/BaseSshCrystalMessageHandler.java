@@ -28,27 +28,10 @@ import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 @Slf4j
 public abstract class BaseSshCrystalMessageHandler<T extends SshMessage.BaseMessage> implements SshCrystalMessageHandler, InitializingBean {
 
-//    @Resource
-//    protected ServerCommandAudit serverCommandAudit;
-
-//    @Resource
-//    protected TerminalSessionInstanceService terminalSessionInstanceService;
-//
-//    @Resource
-//    protected HostSystemHandler hostSystemHandler;
-//
-//    @Resource
-//    protected SimpleTerminalSessionFacade simpleTerminalSessionFacade;
-
-
     protected String getUsername() {
         return SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-    }
-
-    public BaseSshCrystalMessageHandler() {
-
     }
 
     /**

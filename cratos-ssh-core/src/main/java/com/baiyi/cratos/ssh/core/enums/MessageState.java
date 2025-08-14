@@ -11,8 +11,6 @@ import lombok.Getter;
 public enum MessageState {
 
     HEARTBEAT("会话保持"),
-    PLAY("播放"),
-    LOGIN("登录服务器"),
     OPEN("打开实例会话"),
     COMMAND("交互命令"),
     DUPLICATE("复制会话"),
@@ -20,7 +18,6 @@ public enum MessageState {
     RESIZE("改变窗体"),
     CLOSE("关闭会话"),
     CLOSE_ALL("关闭会话(登出所有服务器)"),
-    //LOGOUT("登出服务器"),
     SET_BATCH_FLAG("设置批量命令标志"),
     UNKNOWN("未知的");
 

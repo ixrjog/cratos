@@ -35,41 +35,47 @@ public class ServerAccessControlFacade {
     private final ServerAccountService serverAccountService;
 
     public AccessControlVO.AccessControl generateAccessControl(String username, int assetId) {
-        // 校验服务器资产是否存在
+        // Check if the server asset exists
         EdsAsset server = edsAssetService.getById(assetId);
         if (server == null) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "服务器不存在");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "Server does not exist");
         }
-        // group标签
+        // group tag
         BusinessTag groupBusinessTag = getServerBusinessTag(assetId, SysTagKeys.GROUP);
         if (groupBusinessTag == null) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "服务器没有组信息");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "Server has no group information");
         }
         String groupName = groupBusinessTag.getTagValue();
-        // env标签
+        // env tag
         BusinessTag envBusinessTag = getServerBusinessTag(assetId, SysTagKeys.ENV);
         if (envBusinessTag == null) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "服务器没有环境信息");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "Server has no environment information");
         }
         String env = envBusinessTag.getTagValue();
         UserPermission userPermission = userPermissionService.getUserPermissionTagGroup(username, groupName, env);
-        // 校验用户的服务器资产授权
+        // Check user's server asset authorization
         if (userPermission == null || ExpiredUtils.isExpired(userPermission.getExpiredTime())) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "未授权或授权过期");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "Unauthorized or authorization expired");
         }
-        // 校验用户的服务器账户授权
+        // Check user's server account authorization
         BusinessTag accountBusinessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
         if (accountBusinessTag == null || !StringUtils.hasText(accountBusinessTag.getTagValue())) {
             return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
-                    "服务器没有ServerAccount信息");
+                    "Server has no ServerAccount information");
         }
         String serverAccount = accountBusinessTag.getTagValue();
         ServerAccount account = serverAccountService.getByName(serverAccount);
         if (account == null) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "ServerAccount不存在");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "ServerAccount does not exist");
         }
         if (!verifyAccountAuthorization(username, account, env)) {
-            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(), "未授权或授权过期");
+            return AccessControlVO.AccessControl.unauthorized(BusinessTypeEnum.EDS_ASSET.name(),
+                    "Unauthorized or authorization expired");
         }
         return AccessControlVO.AccessControl.authorized(BusinessTypeEnum.EDS_ASSET.name());
     }

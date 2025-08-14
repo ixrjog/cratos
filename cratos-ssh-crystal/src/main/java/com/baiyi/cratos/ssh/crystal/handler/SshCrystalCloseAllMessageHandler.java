@@ -40,21 +40,14 @@ public class SshCrystalCloseAllMessageHandler extends BaseSshCrystalMessageHandl
         }
         for (String instanceId : sessionMap.keySet()) {
             try {
-                JSchSession jSchSession = sessionMap.get(instanceId);
-                if (jSchSession.getChannel() != null) {
-                    jSchSession.getChannel()
-                            .disconnect();
-                }
-                jSchSession.setChannel(null);
-                jSchSession.setInputToChannel(null);
-                jSchSession.setCommander(null);
-                jSchSession = null;
                 // 设置关闭会话
                 simpleSshSessionFacade.closeSshSessionInstance(sshSession.getSessionId(), instanceId);
                 serverCommandAuditor.asyncRecordCommand(sshSession.getSessionId(), instanceId);
-
             } catch (Exception e) {
                 log.warn("关闭JSchSession错误: instanceId={}, {}", instanceId, e.getMessage());
+            } finally {
+                // 清理JSchSessionHolder中的会话
+                JSchSessionHolder.closeSession(sshSession.getSessionId(), instanceId);
             }
         }
         try {

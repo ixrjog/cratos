@@ -19,7 +19,6 @@ public interface SshCrystalMessageHandler {
     void handle(String message, Session session, SshSession sshSession);
 
 
-
     /**
      * WorkOrderKey
      * @return
