@@ -89,7 +89,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 
     @OnClose
     public void onClose(Session session) {
-        SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE.name())
+        SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE_ALL.name())
                 .handle(this.username, JSONUtils.writeValueAsString(CLOSE_ALL), session, sshSession);
     }
 

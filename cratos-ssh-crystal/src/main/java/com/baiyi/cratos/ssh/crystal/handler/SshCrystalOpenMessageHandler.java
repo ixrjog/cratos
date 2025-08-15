@@ -68,6 +68,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
                     serverAccount, credential);
+            targetSystem.setTerminalSize(new org.jline.terminal.Size(openMessage.getTerminal().getCols(), openMessage.getTerminal().getRows()));
             HostSystem proxySystem = getProxyHost(server);
             if (proxySystem == null) {
                 // 直连
