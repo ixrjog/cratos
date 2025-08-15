@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.param.http.user.UserFavoriteParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.domain.view.tag.TagGroupVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,6 +47,27 @@ public class UserFavoriteController {
     public HttpResult<Boolean> removeApplicationFavorite(
             @RequestBody @Valid UserFavoriteParam.RemoveUserFavorite removeUserFavorite) {
         userFavoriteFacade.unfavorite(BusinessTypeEnum.APPLICATION.name(), removeUserFavorite.getBusinessId());
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Query favorite groups")
+    @GetMapping(value = "/my/group/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<TagGroupVO.TagGroup>> getMyFavoriteGroup() {
+        return HttpResult.ofBody(userFavoriteFacade.getMyFavoriteGroup());
+    }
+
+    @Operation(summary = "Add application to my favorites")
+    @PostMapping(value = "/group/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addGroupFavorite(@RequestBody @Valid UserFavoriteParam.AddUserFavorite addUserFavorite) {
+        userFavoriteFacade.favorite(BusinessTypeEnum.TAG_GROUP.name(), addUserFavorite.getBusinessId());
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Remove group from my favorites")
+    @DeleteMapping(value = "/group/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> removeGroupFavorite(
+            @RequestBody @Valid UserFavoriteParam.RemoveUserFavorite removeUserFavorite) {
+        userFavoriteFacade.unfavorite(BusinessTypeEnum.TAG_GROUP.name(), removeUserFavorite.getBusinessId());
         return HttpResult.SUCCESS;
     }
 

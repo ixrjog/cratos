@@ -16,4 +16,6 @@ public interface UserFavoriteService extends BaseUniqueKeyService<UserFavorite, 
 
     List<Integer> queryUserFavoriteBusinessIds(@NonNull String username, @NonNull String businessType);
 
+    List<UserFavorite> queryUserFavorites(@NonNull String username, @NonNull String businessType);
+
 }

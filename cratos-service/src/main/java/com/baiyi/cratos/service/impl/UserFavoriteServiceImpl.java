@@ -52,4 +52,14 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
                 .toList();
     }
 
+    @Override
+    public List<UserFavorite> queryUserFavorites(@NonNull String username, @NonNull String businessType) {
+        Example example = new Example(UserFavorite.class);
+        example.createCriteria()
+                .andEqualTo("username", username)
+                .andEqualTo("businessType", businessType);
+        example.setOrderByClause("seq DESC");
+        return userFavoriteMapper.selectByExample(example);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.domain.view.tag.TagGroupVO;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public interface UserFavoriteFacade {
 
     List<ApplicationVO.Application> getMyFavoriteApplication();
+
+    List<TagGroupVO.TagGroup> getMyFavoriteGroup();
 
     boolean isUserFavorited(String username, String businessType, int businessId);
 

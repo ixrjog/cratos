@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.UserFavorite;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import com.baiyi.cratos.domain.view.tag.TagGroupVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserFavoriteService;
@@ -52,6 +53,25 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                     application.setFavorited(Boolean.TRUE);
                     return application;
                 })
+                .toList();
+    }
+
+    @Override
+    public List<TagGroupVO.TagGroup> getMyFavoriteGroup() {
+        String username = SessionUtils.getUsername();
+        if (!StringUtils.hasText(username)) {
+            return List.of();
+        }
+        List<UserFavorite> userFavorites = userFavoriteService.queryUserFavorites(username,
+                BusinessTypeEnum.TAG_GROUP.name());
+        if (CollectionUtils.isEmpty(userFavorites)) {
+            return List.of();
+        }
+        return userFavorites.stream()
+                .map(userFavorite -> TagGroupVO.TagGroup.builder()
+                        .name(userFavorite.getName())
+                        .businessId(userFavorite.getBusinessId())
+                        .build())
                 .toList();
     }
 
