@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -21,6 +22,11 @@ import jakarta.websocket.Session;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.Objects;
 
 import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
@@ -60,29 +66,73 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             ServerAccount serverAccount = serverAccountService.getByName(
                     getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
                     serverAccount, credential);
-            RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), hostSystem);
-            // terminalSessionInstanceService.add(TerminalSessionInstanceBuilder.build(terminalSession, hostSystem, InstanceSessionTypeEnum.SERVER));
+            HostSystem proxySystem = getProxyHost(server);
+            if (proxySystem == null) {
+                // 直连
+                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);
+            } else {
+                // 代理模式
+                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), proxySystem, targetSystem);
+            }
         } catch (Exception e) {
             sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
                     HOST_FAIL_STATUS, e.getMessage());
             log.error("Crystal ssh open error: {}", e.getMessage());
-            e.printStackTrace();
         }
     }
 
-    private String getServerAccountName(int assetId) {
-        BusinessTag accountBusinessTag = getServerBusinessTag(assetId);
-        return accountBusinessTag.getTagValue();
+    private HostSystem getProxyHost(EdsAsset server) {
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(server.getId())
+                .build(), SysTagKeys.SSH_PROXY.getKey());
+        if (Objects.isNull(sshProxyBusinessTag)) {
+            return HostSystem.NO_HOST;
+        }
+        // 搜索资产
+        String proxyIP = sshProxyBusinessTag.getTagValue();
+        if (!IpUtils.isIP(proxyIP)) {
+            return HostSystem.NO_HOST;
+        }
+        List<EdsAsset> proxyServers = edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(),
+                server.getAssetType(), proxyIP);
+        if (CollectionUtils.isEmpty(proxyServers)) {
+            return HostSystem.NO_HOST;
+        }
+        EdsAsset proxyServer = proxyServers.getFirst();
+        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(proxyServer.getId())
+                .build(), SysTagKeys.SERVER_ACCOUNT.getKey());
+        if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
+            return HostSystem.NO_HOST;
+        }
+        ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
+        Credential credential = credentialService.getById(serverAccount.getCredentialId());
+        return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
     }
 
-    private BusinessTag getServerBusinessTag(int assetId) {
+//    private String getServerSshProxy(int assetId) {
+//        BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SSH_PROXY);
+//        if (businessTag == null) {
+//            return null;
+//        }
+//        return businessTag.getTagValue();
+//    }
+
+    private String getServerAccountName(int assetId) {
+        BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
+        return businessTag.getTagValue();
+    }
+
+    private BusinessTag getServerBusinessTag(int assetId, SysTagKeys sysTagKeys) {
         SimpleBusiness byBusiness = SimpleBusiness.builder()
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(assetId)
                 .build();
-        return businessTagFacade.getBusinessTag(byBusiness, SysTagKeys.SERVER_ACCOUNT.getKey());
+        return businessTagFacade.getBusinessTag(byBusiness, sysTagKeys.getKey());
     }
 
 }

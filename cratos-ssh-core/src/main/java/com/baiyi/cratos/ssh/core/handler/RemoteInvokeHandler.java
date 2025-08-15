@@ -41,10 +41,98 @@ import java.util.UUID;
 @Component
 public class RemoteInvokeHandler {
 
-    //private static final int SSH_PORT = 22;
     private static final String LOCALHOST = "127.0.0.1";
     private static final String appId = UUID.randomUUID()
             .toString();
+
+    public static void openSshCrystal(String sessionId, HostSystem proxyHost, HostSystem targetHost) {
+        // 为代理和目标分别创建独立的JSch实例，避免密钥冲突
+        JSch proxyJsch = new JSch();
+        JSch targetJsch = new JSch();
+
+        proxyHost.setStatusCd(HostSystem.SUCCESS_STATUS);
+        targetHost.setStatusCd(HostSystem.SUCCESS_STATUS);
+        Session proxySession = null;
+        Session targetSession = null;
+        ChannelShell channel = null;
+
+        try {
+            if (proxyHost.getCredential() == null) {
+                log.error("Proxy host credential is null for session: {}", sessionId);
+                return;
+            }
+            if (targetHost.getCredential() == null) {
+                log.error("Target host credential is null for session: {}", sessionId);
+                return;
+            }
+
+            log.info("Establishing SSH Crystal proxy connection via {}@{}:{} to target {}@{}:{}",
+                    proxyHost.getLoginUsername(), proxyHost.getHost(), proxyHost.getPort(),
+                    targetHost.getLoginUsername(), targetHost.getHost(), targetHost.getPort());
+
+            // 1. 设置代理服务器的Session - 使用独立的JSch实例
+            proxySession = proxyJsch.getSession(proxyHost.getLoginUsername(), proxyHost.getHost(),
+                    proxyHost.getSshPortOrDefault());
+
+            // 设置代理服务器凭据
+            setSshCredential(proxyHost, proxyJsch, proxySession);
+            SessionConfigUtils.defaultConnect(proxySession);
+            log.info("Proxy connection established successfully");
+
+            // 2. 通过代理连接目标服务器 - 使用端口转发
+            int targetPort = targetHost.getSshPortOrDefault();
+            int localPort = proxySession.setPortForwardingL(0, targetHost.getHost(), targetPort);
+            log.debug("Port forwarding established: localhost:{} -> {}:{}", localPort, targetHost.getHost(),
+                    targetPort);
+
+            // 通过本地端口转发连接目标服务器 - 使用独立的JSch实例
+            targetSession = targetJsch.getSession(targetHost.getLoginUsername(), LOCALHOST, localPort);
+
+            // 设置目标服务器凭据
+            setSshCredential(targetHost, targetJsch, targetSession);
+            // 默认设置
+            SessionConfigUtils.defaultConnect(targetSession);
+            log.info("Target connection established via proxy");
+
+            // 3. 创建Shell通道
+            channel = (ChannelShell) targetSession.openChannel("shell");
+            ChannelShellUtils.setDefault(channel);
+            setChannelPtySize(channel, targetHost.getTerminalSize());
+
+            // 4. 设置会话输出处理 - 使用SSH Crystal终端输出任务
+            SessionOutput sessionOutput = new SessionOutput(sessionId, targetHost);
+            // 启动线程处理会话
+            Runnable run = new WatchSshCrystalTerminalOutputTask(sessionOutput, channel.getInputStream(),
+                    targetHost.getAuditPath());
+            // JDK21 VirtualThreads
+            Thread.ofVirtual()
+                    .name("ssh-crystal-proxy-output-" + sessionId)
+                    .start(run);
+
+            // 5. 创建JSchSession并保存代理会话引用
+            OutputStream inputToChannel = channel.getOutputStream();
+            JSchSession jSchSession = JSchSession.builder()
+                    .sessionId(sessionId)
+                    .instanceId(targetHost.getInstanceId())
+                    .commander(new PrintStream(inputToChannel, true))
+                    .inputToChannel(inputToChannel)
+                    .channel(channel)
+                    .hostSystem(targetHost)
+                    .proxySession(proxySession)  // 将代理Session存储到JSchSession中
+                    .build();
+            jSchSession.setSessionOutput(sessionOutput);
+            JSchSessionHolder.addSession(jSchSession);
+            channel.connect();
+            log.info("SSH Crystal proxy connection established successfully for session: {}", sessionId);
+
+        } catch (Exception e) {
+            log.error("Failed to establish SSH Crystal proxy connection for session: {}", sessionId, e);
+            // 清理资源
+            cleanupProxyResources(proxySession, targetSession, channel);
+            // 处理异常状态
+            handleProxyConnectionException(e, proxyHost, targetHost);
+        }
+    }
 
     public static void openSshCrystal(String sessionId, HostSystem hostSystem) {
         JSch jsch = new JSch();
@@ -103,7 +191,6 @@ public class RemoteInvokeHandler {
             }
         }
     }
-
 
     @SuppressWarnings("SpellCheckingInspection")
     public static void openSSHServer(String sessionId, HostSystem hostSystem, OutputStream out) throws SshException {
@@ -293,26 +380,14 @@ public class RemoteInvokeHandler {
             }
             default -> throw new IllegalStateException("Unexpected value: " + credentialTypeEnum.name());
         }
-
     }
-
-//    public static void setChannelPtySize(ChannelShell channel, ServerMessage.BaseMessage message) {
-//        if (channel == null || channel.isClosed()) {
-//            return;
-//        }
-//        channel.setPtySize(message.getCols(), message.getRows(), message.getWidth(), message.getHeight());
-//    }
 
     public static void setChannelPtySize(ChannelShell channel, Size size) {
         if (channel == null || channel.isClosed()) {
             return;
         }
-        if (size == null) {
-            channel.setPtySize(200, 40, 200 * 7, (int) Math.floor(40 / 14.4166));
-        } else {
-            channel.setPtySize(size.getColumns(), size.getRows(), size.getColumns() * 7,
-                    (int) Math.floor(size.getRows() / 14.4166));
-        }
+        channel.setPtySize(size.getColumns(), size.getRows(), size.getColumns() * 7,
+                (int) Math.floor(size.getRows() / 14.4166));
     }
 
     /**

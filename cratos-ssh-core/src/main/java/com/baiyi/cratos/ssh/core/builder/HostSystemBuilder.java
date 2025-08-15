@@ -26,7 +26,7 @@ public class HostSystemBuilder {
     }
 
     public static HostSystem buildHostSystem(EdsAsset server, ServerAccount serverAccount,
-                                             Credential credential) throws SshException {
+                                             Credential credential) {
         return HostSystem.builder()
                 .host(server.getAssetKey())
                 .serverAccount(serverAccount)
