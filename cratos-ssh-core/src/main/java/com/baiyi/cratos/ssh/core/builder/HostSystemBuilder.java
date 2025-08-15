@@ -28,7 +28,16 @@ public class HostSystemBuilder {
     public static HostSystem buildHostSystem(EdsAsset server, ServerAccount serverAccount,
                                              Credential credential) throws SshException {
         return HostSystem.builder()
-                // 避免绕过未授权服务器
+                .host(server.getAssetKey())
+                .serverAccount(serverAccount)
+                .credential(credential)
+                .build();
+    }
+
+    public static HostSystem buildHostSystem(String instanceId, EdsAsset server, ServerAccount serverAccount,
+                                             Credential credential) throws SshException {
+        return HostSystem.builder()
+                .instanceId(instanceId)
                 .host(server.getAssetKey())
                 .serverAccount(serverAccount)
                 .credential(credential)

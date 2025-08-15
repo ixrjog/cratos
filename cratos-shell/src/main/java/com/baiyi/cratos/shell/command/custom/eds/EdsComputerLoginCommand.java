@@ -167,8 +167,9 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
-            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(asset, serverAccount, credential);
-            targetSystem.setInstanceId(sshSessionInstanceId);
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(sshSessionInstanceId, asset, serverAccount,
+                    credential);
+            // targetSystem.setInstanceId(sshSessionInstanceId);
             targetSystem.setTerminalSize(helper.terminalSize());
             targetSystem.setAuditPath(auditPath);
 

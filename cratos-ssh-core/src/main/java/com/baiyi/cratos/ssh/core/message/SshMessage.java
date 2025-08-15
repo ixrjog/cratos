@@ -1,9 +1,12 @@
 package com.baiyi.cratos.ssh.core.message;
 
-import com.baiyi.cratos.domain.param.HasTerminalSize;
 import com.baiyi.cratos.domain.ssh.HasState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
@@ -15,45 +18,45 @@ public class SshMessage {
     @Data
     @NoArgsConstructor
     public static class Terminal {
-        private Integer width;
-        private Integer height;
+//        private Integer width;
+//        private Integer height;
+        private Integer rows;
+        private Integer cols;
     }
 
-    public static final BaseMessage UNKNOWN_MESSAGE = BaseMessage.builder().build();
+    public static final BaseMessage UNKNOWN_MESSAGE = BaseMessage.builder()
+            .build();
 
-    @Builder
+    @SuperBuilder(toBuilder = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
     @JsonIgnoreProperties
-    public static class BaseMessage implements HasState, HasTerminalSize {
-
-        public static final BaseMessage CLOSE = BaseMessage.builder()
-                .build();
+    public static class BaseMessage implements HasState {
 
         private String id;
         private String state;
         private Terminal terminal;
 
-        @Override
-        public Integer getWidth() {
-            return this.terminal.getWidth();
-        }
+//        @Override
+//        public Integer getWidth() {
+//            return this.terminal.getWidth();
+//        }
+//
+//        @Override
+//        public Integer getHeight() {
+//            return this.terminal.getHeight();
+//        }
 
-        @Override
-        public Integer getHeight() {
-            return this.terminal.getHeight();
-        }
-
-        @Override
-        public Integer getCols() {
-            return null;
-        }
-
-        @Override
-        public Integer getRows() {
-            return null;
-        }
+//        @Override
+//        public Integer getCols() {
+//            return this.terminal.getCols();
+//        }
+//
+//        @Override
+//        public Integer getRows() {
+//            return this.terminal.getRows();
+//        }
     }
 
     @EqualsAndHashCode(callSuper = true)

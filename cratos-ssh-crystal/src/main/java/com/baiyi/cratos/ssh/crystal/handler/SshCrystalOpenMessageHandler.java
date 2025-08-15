@@ -22,9 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
 
@@ -49,8 +46,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     @Override
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Open openMessage = toMessage(message);
-        // JDK21 VirtualThreads
-        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+        try {
             heartbeat(sshSession.getSessionId());
             AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
                     openMessage.getAssetId());
@@ -64,13 +60,15 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             ServerAccount serverAccount = serverAccountService.getByName(
                     getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(server, serverAccount, credential);
+            HostSystem hostSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
+                    serverAccount, credential);
             RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), hostSystem);
             // terminalSessionInstanceService.add(TerminalSessionInstanceBuilder.build(terminalSession, hostSystem, InstanceSessionTypeEnum.SERVER));
         } catch (Exception e) {
             sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
                     HOST_FAIL_STATUS, e.getMessage());
             log.error("Crystal ssh open error: {}", e.getMessage());
+            e.printStackTrace();
         }
     }
 

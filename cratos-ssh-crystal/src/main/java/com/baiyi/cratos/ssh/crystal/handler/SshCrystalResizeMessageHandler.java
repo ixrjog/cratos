@@ -33,8 +33,10 @@ public class SshCrystalResizeMessageHandler extends BaseSshCrystalMessageHandler
             JSchSession jSchSession = JSchSessionHolder.getSession(sshSession.getSessionId(),
                     resizeMessage.getInstanceId());
             assert jSchSession != null;
-            RemoteInvokeHandler.setChannelPtySize((ChannelShell) jSchSession.getChannel(),
-                    new Size(resizeMessage.getCols(), resizeMessage.getRows()));
+            RemoteInvokeHandler.setChannelPtySize((ChannelShell) jSchSession.getChannel(), new Size(
+                    resizeMessage.getTerminal()
+                            .getCols(), resizeMessage.getTerminal()
+                    .getRows()));
         } catch (Exception e) {
             log.warn("Crystal ssh resize error: {}", e.getMessage());
         }

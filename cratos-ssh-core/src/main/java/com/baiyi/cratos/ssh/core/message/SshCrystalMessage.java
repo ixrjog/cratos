@@ -1,8 +1,10 @@
 package com.baiyi.cratos.ssh.core.message;
 
+import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
@@ -62,9 +64,13 @@ public class SshCrystalMessage {
     }
 
     @EqualsAndHashCode(callSuper = true)
+    @SuperBuilder(toBuilder = true)
     @Data
     @JsonIgnoreProperties
     public static class CloseAll extends SshMessage.BaseMessage {
+        public static final CloseAll CLOSE_ALL = CloseAll.builder()
+                .state(MessageState.CLOSE_ALL.name())
+                .build();
     }
 
 }

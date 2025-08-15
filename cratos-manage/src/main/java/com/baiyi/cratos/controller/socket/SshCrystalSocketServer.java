@@ -5,6 +5,7 @@ import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.domain.ssh.SimpleState;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.service.session.SshSessionService;
 import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
@@ -23,7 +24,7 @@ import org.springframework.util.StringUtils;
 import java.util.UUID;
 
 import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT;
-import static com.baiyi.cratos.ssh.crystal.SshCrystalMessageHandler.NO_MESSAGE;
+import static com.baiyi.cratos.ssh.core.message.SshCrystalMessage.CloseAll.CLOSE_ALL;
 
 /**
  * &#064;Author  baiyi
@@ -52,7 +53,9 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 
     @OnOpen
     public void onOpen(Session session, @PathParam(value = "username") String username) {
+        super.onOpen(session, username);
         this.username = username;
+        session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
             log.info("Crystal ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
@@ -63,7 +66,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
             session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
             // 启动任务 JDK21 VirtualThreads
             Thread.ofVirtual()
-                    .start(new SentOutputTask(sessionId, session));
+                    .start(SentOutputTask.newTask(this.sessionId, session));
         } catch (Exception e) {
             log.error("Crystal ssh create connection error: {}", e.getMessage());
         }
@@ -87,7 +90,7 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
     @OnClose
     public void onClose(Session session) {
         SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE.name())
-                .handle(this.username, NO_MESSAGE, session, sshSession);
+                .handle(this.username, JSONUtils.writeValueAsString(CLOSE_ALL), session, sshSession);
     }
 
     @OnError

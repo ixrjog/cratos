@@ -307,8 +307,12 @@ public class RemoteInvokeHandler {
         if (channel == null || channel.isClosed()) {
             return;
         }
-        channel.setPtySize(size.getColumns(), size.getRows(), size.getColumns() * 7,
-                (int) Math.floor(size.getRows() / 14.4166));
+        if (size == null) {
+            channel.setPtySize(200, 40, 200 * 7, (int) Math.floor(40 / 14.4166));
+        } else {
+            channel.setPtySize(size.getColumns(), size.getRows(), size.getColumns() * 7,
+                    (int) Math.floor(size.getRows() / 14.4166));
+        }
     }
 
     /**
