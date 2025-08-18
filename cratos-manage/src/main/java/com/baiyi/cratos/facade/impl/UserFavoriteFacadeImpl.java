@@ -71,6 +71,7 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
                 .map(userFavorite -> TagGroupVO.TagGroup.builder()
                         .name(userFavorite.getName())
                         .businessId(userFavorite.getBusinessId())
+                        .favorited(Boolean.TRUE)
                         .build())
                 .toList();
     }

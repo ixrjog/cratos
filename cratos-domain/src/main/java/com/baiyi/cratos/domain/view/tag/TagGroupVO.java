@@ -1,5 +1,7 @@
 package com.baiyi.cratos.domain.view.tag;
 
+import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasFavorited;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -22,12 +24,14 @@ public class TagGroupVO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class TagGroup implements Serializable {
+    public static class TagGroup implements BaseBusiness.IBusinessAnnotate, HasFavorited, Serializable {
         @Serial
         private static final long serialVersionUID = -5909231498204278076L;
         private final String businessType = BusinessTypeEnum.TAG_GROUP.name();
         private String name;
         private Integer businessId;
+
+        private Boolean favorited;
     }
 
 }

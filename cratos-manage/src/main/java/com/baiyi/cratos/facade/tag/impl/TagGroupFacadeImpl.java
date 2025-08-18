@@ -15,6 +15,7 @@ import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
+import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.tag.TagGroupFacade;
 import com.baiyi.cratos.service.BusinessTagService;
@@ -31,6 +32,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.baiyi.cratos.domain.view.base.OptionsVO.NO_OPTIONS_AVAILABLE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/2 14:54
@@ -46,12 +49,13 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     private final EdsAssetWrapper edsAssetWrapper;
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionFacade permissionFacade;
+    private final UserFavoriteFacade userFavoriteFacade;
 
     @Override
     public OptionsVO.Options getGroupOptions(TagGroupParam.GetGroupOptions getGroupOptions) {
         Tag tag = getGroupTag();
         if (Objects.isNull(tag)) {
-            return OptionsVO.NO_OPTIONS_AVAILABLE;
+            return NO_OPTIONS_AVAILABLE;
         }
         BusinessTagParam.QueryByTag query = BusinessTagParam.QueryByTag.builder()
                 .tagId(tag.getId())
@@ -72,7 +76,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 queryAllBusinessUserPermissionDetails);
         // 没有数据
         if (CollectionUtils.isEmpty(userPermissionDetails.getUserPermissions())) {
-            return OptionsVO.NO_OPTIONS_AVAILABLE;
+            return NO_OPTIONS_AVAILABLE;
         }
         String queryName = getMyGroupOptions.getQueryName();
         Set<String> groupNames = userPermissionDetails.getUserPermissions()
@@ -80,9 +84,26 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .map(UserPermissionVO.UserPermissionBusiness::getName)
                 .filter(name -> StringUtils.hasText(name) && name.contains(queryName))
                 .collect(Collectors.toSet());
-        return OptionsVO.toOptions(groupNames);
+        return toTagGroupOptions(getMyGroupOptions.getUsername(), groupNames);
     }
 
+    private OptionsVO.Options toTagGroupOptions(String username, Set<String> strings) {
+        if (CollectionUtils.isEmpty(strings)) {
+            return NO_OPTIONS_AVAILABLE;
+        }
+        List<OptionsVO.Option> optionList = strings.stream()
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e)
+                        .value(e)
+                        .favorited(userFavoriteFacade.isUserFavorited(username, BusinessTypeEnum.TAG_GROUP.name(),
+                                e.hashCode()))
+                        .build())
+                .toList();
+        return OptionsVO.Options.builder()
+                .options(optionList)
+                .build();
+    }
+    
     @Override
     public DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.GroupAssetPageQuery pageQuery) {
         Tag tag = getGroupTag();
