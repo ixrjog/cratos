@@ -59,7 +59,7 @@ public class UserFavoriteController {
     @Operation(summary = "Add application to my favorites")
     @PostMapping(value = "/group/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addGroupFavorite(@RequestBody @Valid UserFavoriteParam.AddUserFavorite addUserFavorite) {
-        userFavoriteFacade.favorite(BusinessTypeEnum.TAG_GROUP.name(), addUserFavorite.getBusinessId());
+        userFavoriteFacade.favorite(BusinessTypeEnum.TAG_GROUP.name(), addUserFavorite.getName().hashCode());
         return HttpResult.SUCCESS;
     }
 
@@ -67,7 +67,7 @@ public class UserFavoriteController {
     @DeleteMapping(value = "/group/remove", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> removeGroupFavorite(
             @RequestBody @Valid UserFavoriteParam.RemoveUserFavorite removeUserFavorite) {
-        userFavoriteFacade.unfavorite(BusinessTypeEnum.TAG_GROUP.name(), removeUserFavorite.getBusinessId());
+        userFavoriteFacade.unfavorite(BusinessTypeEnum.TAG_GROUP.name(), removeUserFavorite.getName().hashCode());
         return HttpResult.SUCCESS;
     }
 

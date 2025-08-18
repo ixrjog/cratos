@@ -26,6 +26,7 @@ public class UserFavoriteParam {
         @Serial
         private static final long serialVersionUID = 7079888545195226283L;
         private String businessType;
+        private String name;
         private Integer businessId;
     }
 
@@ -38,6 +39,7 @@ public class UserFavoriteParam {
         @Serial
         private static final long serialVersionUID = 4746129912006363469L;
         private String businessType;
+        private String name;
         private Integer businessId;
     }
 

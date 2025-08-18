@@ -103,7 +103,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .options(optionList)
                 .build();
     }
-    
+
     @Override
     public DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.GroupAssetPageQuery pageQuery) {
         Tag tag = getGroupTag();
