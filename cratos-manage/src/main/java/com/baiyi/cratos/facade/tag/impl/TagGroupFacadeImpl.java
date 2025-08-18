@@ -10,9 +10,12 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.tag.TagGroupParam;
+import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
 import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.user.UserPermissionVO;
+import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.tag.TagGroupFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -20,9 +23,13 @@ import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -38,6 +45,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     private final EdsAssetService edsAssetService;
     private final EdsAssetWrapper edsAssetWrapper;
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
+    private final UserPermissionFacade permissionFacade;
 
     @Override
     public OptionsVO.Options getGroupOptions(TagGroupParam.GetGroupOptions getGroupOptions) {
@@ -51,6 +59,28 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .build();
         List<String> tagGroupNames = businessTagService.queryByValue(query);
         return OptionsVO.toOptions(tagGroupNames);
+    }
+
+    @Override
+    @SetSessionUserToParam(desc = "set query username")
+    public OptionsVO.Options getMyGroupOptions(TagGroupParam.GetMyGroupOptions getMyGroupOptions) {
+        UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails = UserPermissionParam.QueryAllBusinessUserPermissionDetails.builder()
+                .username(getMyGroupOptions.getUsername())
+                .businessType(BusinessTypeEnum.TAG_GROUP.name())
+                .build();
+        UserPermissionVO.UserPermissionDetails userPermissionDetails = permissionFacade.queryUserPermissionDetails(
+                queryAllBusinessUserPermissionDetails);
+        // 没有数据
+        if (CollectionUtils.isEmpty(userPermissionDetails.getUserPermissions())) {
+            return OptionsVO.NO_OPTIONS_AVAILABLE;
+        }
+        String queryName = getMyGroupOptions.getQueryName();
+        Set<String> groupNames = userPermissionDetails.getUserPermissions()
+                .stream()
+                .map(UserPermissionVO.UserPermissionBusiness::getName)
+                .filter(name -> StringUtils.hasText(name) && name.contains(queryName))
+                .collect(Collectors.toSet());
+        return OptionsVO.toOptions(groupNames);
     }
 
     @Override

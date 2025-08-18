@@ -14,6 +14,8 @@ public interface TagGroupFacade {
 
     OptionsVO.Options getGroupOptions(TagGroupParam.GetGroupOptions getGroupOptions);
 
+    OptionsVO.Options getMyGroupOptions(TagGroupParam.GetMyGroupOptions getMyGroupOptions);
+
     DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.GroupAssetPageQuery pageQuery);
 
     DataTable<EdsAssetVO.Asset> queryMyGroupAssetPage(TagGroupParam.MyGroupAssetPageQuery pageQuery);

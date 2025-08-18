@@ -36,6 +36,13 @@ public class TagGroupController {
         return HttpResult.ofBody(tagGroupFacade.getGroupOptions(getGroupOptions));
     }
 
+    @Operation(summary = "Get tag group options")
+    @PostMapping(value = "/my/options/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getMyGroupOptions(
+            @RequestBody @Valid TagGroupParam.GetMyGroupOptions getMyGroupOptions) {
+        return HttpResult.ofBody(tagGroupFacade.getMyGroupOptions(getMyGroupOptions));
+    }
+
     @Operation(summary = "Pagination query tag group asset")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsAssetVO.Asset>> queryGroupAssetPage(

@@ -23,6 +23,19 @@ public class TagGroupParam {
         private String queryName;
     }
 
+    @Data
+    @Schema
+    public static class GetMyGroupOptions implements HasSessionUser {
+        private String queryName;
+        @Null
+        private String username;
+
+        @Override
+        public void setSessionUser(String username) {
+            this.username = username;
+        }
+    }
+
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
