@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -11,6 +12,7 @@ import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagGroupService;
 import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.factory.SupportBusinessServiceFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -80,4 +82,9 @@ public class TagGroupServiceImpl implements TagGroupService {
                 .build();
     }
 
+    @Override
+    public void afterPropertiesSet() {
+        SupportBusinessServiceFactory.register(this);
+        PermissionBusinessServiceFactory.register(this);
+    }
 }
