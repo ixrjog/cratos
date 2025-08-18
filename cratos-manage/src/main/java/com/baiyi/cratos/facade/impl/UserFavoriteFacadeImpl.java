@@ -118,6 +118,34 @@ public class UserFavoriteFacadeImpl implements UserFavoriteFacade {
     }
 
     @Override
+    public void favorite(String name, String businessType, int businessId) {
+        boolean isExist = isUserFavorited(SessionUtils.getUsername(), businessType, businessId);
+        if (isExist) {
+            UserFavorite userFavorite = userFavoriteService.getByUniqueKey(UserFavorite.builder()
+                    .username(SessionUtils.getUsername())
+                    .businessType(businessType)
+                    .businessId(businessId)
+                    .build());
+            userFavorite.setSeq(userFavorite.getSeq() + 1);
+            userFavoriteService.updateByPrimaryKey(userFavorite);
+        } else {
+            if (!BusinessTypeEnum.TAG_GROUP.name()
+                    .equals(businessType)) {
+                throw new IllegalArgumentException("Unsupported business type: " + businessType);
+            }
+            // add new favorite
+            UserFavorite userFavorite = UserFavorite.builder()
+                    .username(SessionUtils.getUsername())
+                    .businessType(businessType)
+                    .businessId(businessId)
+                    .name(name)
+                    .seq(0)
+                    .build();
+            userFavoriteService.add(userFavorite);
+        }
+    }
+
+    @Override
     public boolean isUserFavorited(String username, String businessType, int businessId) {
         UserFavorite uk = UserFavorite.builder()
                 .username(username)

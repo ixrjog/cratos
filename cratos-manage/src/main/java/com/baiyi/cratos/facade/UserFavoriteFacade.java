@@ -22,4 +22,6 @@ public interface UserFavoriteFacade {
 
     void favorite(String businessType, int businessId);
 
+    void favorite(String name, String businessType, int businessId);
+
 }
