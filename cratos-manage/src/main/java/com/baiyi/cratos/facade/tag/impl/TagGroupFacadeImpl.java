@@ -1,13 +1,16 @@
 package com.baiyi.cratos.facade.tag.impl;
 
+import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.tag.TagGroupParam;
+import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.facade.tag.TagGroupFacade;
@@ -34,6 +37,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     private final BusinessTagService businessTagService;
     private final EdsAssetService edsAssetService;
     private final EdsAssetWrapper edsAssetWrapper;
+    private final UserPermissionBusinessFacade userPermissionBusinessFacade;
 
     @Override
     public OptionsVO.Options getGroupOptions(TagGroupParam.GetGroupOptions getGroupOptions) {
@@ -65,6 +69,20 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
                 .idList(businessIds)
                 .build();
         DataTable<EdsAsset> dataTable = edsAssetService.queryEdsInstanceAssetPage(param);
+        return edsAssetWrapper.wrapToTarget(dataTable);
+    }
+
+    @Override
+    @SetSessionUserToParam(desc = "set query username")
+    public DataTable<EdsAssetVO.Asset> queryMyGroupAssetPage(TagGroupParam.MyGroupAssetPageQuery pageQuery) {
+        EdsAssetQuery.UserPermissionPageQueryParam queryParam = EdsAssetQuery.UserPermissionPageQueryParam.builder()
+                .username(pageQuery.getUsername())
+                .page(pageQuery.getPage())
+                .length(pageQuery.getLength())
+                .queryName(pageQuery.getQueryName())
+                .queryGroupName(pageQuery.getTagGroup())
+                .build();
+        DataTable<EdsAsset> dataTable = userPermissionBusinessFacade.queryUserPermissionAssets(queryParam);
         return edsAssetWrapper.wrapToTarget(dataTable);
     }
 

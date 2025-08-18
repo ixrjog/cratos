@@ -16,4 +16,6 @@ public interface TagGroupFacade {
 
     DataTable<EdsAssetVO.Asset> queryGroupAssetPage(TagGroupParam.GroupAssetPageQuery pageQuery);
 
+    DataTable<EdsAssetVO.Asset> queryMyGroupAssetPage(TagGroupParam.MyGroupAssetPageQuery pageQuery);
+
 }

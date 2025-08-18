@@ -43,4 +43,11 @@ public class TagGroupController {
         return HttpResult.ofBody(tagGroupFacade.queryGroupAssetPage(pageQuery));
     }
 
+    @Operation(summary = "Pagination query my tag group asset")
+    @PostMapping(value = "/my/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<DataTable<EdsAssetVO.Asset>> queryMyGroupAssetPage(
+            @RequestBody @Valid TagGroupParam.MyGroupAssetPageQuery pageQuery) {
+        return HttpResult.ofBody(tagGroupFacade.queryMyGroupAssetPage(pageQuery));
+    }
+
 }
