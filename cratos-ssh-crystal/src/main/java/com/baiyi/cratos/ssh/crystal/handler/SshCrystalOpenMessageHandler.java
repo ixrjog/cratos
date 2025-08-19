@@ -104,7 +104,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             }
             try {
                 // 发送登录通知
-                sendUserLoginServerNotice(username, server);
+                sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
             } catch (IOException ioException) {
                 log.debug(ioException.getMessage(), ioException);
             }
@@ -115,19 +115,19 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
         }
     }
 
-    private void sendUserLoginServerNotice(String username, EdsAsset server) throws IOException {
+    private void sendUserLoginServerNotice(String username, EdsAsset server, String loginAccount) throws IOException {
         User user = userService.getByUsername(username);
-        DingtalkRobotModel.Msg msg = getMsg(user, username, server.getAssetKey(), server.getName());
+        DingtalkRobotModel.Msg msg = getMsg(user, loginAccount, server.getAssetKey(), server.getName());
         sendUserLoginServerNotice(msg);
     }
 
-    protected DingtalkRobotModel.Msg getMsg(User loginUser, String serverAccount, String serverIP,
+    protected DingtalkRobotModel.Msg getMsg(User loginUser, String loginAccount, String serverIP,
                                             String serverName) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
         String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                 .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
                 .put("targetServer", Joiner.on("@")
-                        .join(serverAccount, serverIP))
+                        .join(loginAccount, serverIP))
                 .put("serverName", serverName)
                 .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
                 .build());
