@@ -7,12 +7,15 @@ import com.baiyi.cratos.domain.model.AwsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/5 15:06
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AwsIamPolicyPermissionTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry param;

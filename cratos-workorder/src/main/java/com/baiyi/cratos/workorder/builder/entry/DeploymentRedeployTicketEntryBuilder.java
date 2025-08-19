@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -15,8 +17,8 @@ import java.util.Date;
  * &#064;Date  2025/7/15 11:28
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeploymentRedeployTicketEntryBuilder {
-
 
     private WorkOrderTicketParam.AddDeploymentRedeployTicketEntry param;
 

@@ -8,12 +8,15 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/19 11:12
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateAliyunRamUserTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry param;

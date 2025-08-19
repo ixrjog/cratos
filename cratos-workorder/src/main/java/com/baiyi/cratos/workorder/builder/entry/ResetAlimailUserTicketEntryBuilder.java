@@ -6,12 +6,15 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/28 10:13
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResetAlimailUserTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddResetAlimailUserTicketEntry param;

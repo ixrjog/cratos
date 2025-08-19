@@ -4,12 +4,15 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/17 17:42
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TicketBuilder {
 
     private User user;

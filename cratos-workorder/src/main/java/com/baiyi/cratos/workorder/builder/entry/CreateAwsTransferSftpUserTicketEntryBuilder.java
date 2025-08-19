@@ -8,12 +8,15 @@ import com.baiyi.cratos.domain.model.AwsTransferModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.google.common.base.Joiner;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/3 11:18
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateAwsTransferSftpUserTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry param;

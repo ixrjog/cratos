@@ -7,12 +7,15 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.user.UserVO;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/7/23 11:25
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResetUserPasswordTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddResetUserPasswordTicketEntry param;

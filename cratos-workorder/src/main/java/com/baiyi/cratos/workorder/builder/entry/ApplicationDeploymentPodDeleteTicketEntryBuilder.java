@@ -4,12 +4,15 @@ import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/9 17:10
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationDeploymentPodDeleteTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddApplicationDeletePodTicketEntry param;

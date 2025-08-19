@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.workorder.enums.ApprovalStatus;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -13,6 +15,7 @@ import java.util.Date;
  * &#064;Date  2025/3/18 10:45
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TicketNodeUpdater {
 
     private WorkOrderTicketNode node;

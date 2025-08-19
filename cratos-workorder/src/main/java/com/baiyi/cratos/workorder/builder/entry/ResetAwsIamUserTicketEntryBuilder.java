@@ -6,17 +6,19 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/29 13:35
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ResetAwsIamUserTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddResetAwsIamUserTicketEntry param;
     private EdsIdentityVO.CloudAccount cloudAccount;
-
 
     public static ResetAwsIamUserTicketEntryBuilder newBuilder() {
         return new ResetAwsIamUserTicketEntryBuilder();

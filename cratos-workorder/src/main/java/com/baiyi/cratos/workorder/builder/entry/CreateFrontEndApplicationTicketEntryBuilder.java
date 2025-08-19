@@ -6,6 +6,8 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import java.util.Map;
  * &#064;Date  2025/6/19 10:11
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateFrontEndApplicationTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry param;

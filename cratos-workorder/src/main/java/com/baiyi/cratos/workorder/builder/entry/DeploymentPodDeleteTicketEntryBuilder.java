@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -15,6 +17,7 @@ import java.util.Date;
  * &#064;Date  2025/5/12 15:44
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeploymentPodDeleteTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry param;
