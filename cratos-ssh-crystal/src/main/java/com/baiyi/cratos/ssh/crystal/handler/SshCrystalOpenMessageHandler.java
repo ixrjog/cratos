@@ -116,14 +116,6 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
         return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
     }
 
-//    private String getServerSshProxy(int assetId) {
-//        BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SSH_PROXY);
-//        if (businessTag == null) {
-//            return null;
-//        }
-//        return businessTag.getTagValue();
-//    }
-
     private String getServerAccountName(int assetId) {
         BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
         return businessTag.getTagValue();

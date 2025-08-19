@@ -23,7 +23,7 @@ public class SshCrystalMessageHandlerFactory {
     }
 
     public static void register(SshCrystalMessageHandler bean) {
-        log.debug("SshCrystalMessageHandlerFactory  Registered: state={}", bean.getState());
+        log.debug("SshCrystalMessageHandlerFactory Registered: state={}", bean.getState());
         context.put(bean.getState(), bean);
     }
 
