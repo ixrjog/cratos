@@ -284,6 +284,31 @@
                 <artifactId>cratos-eds-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-ssh-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-ssh-crystal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-ssh-kubernetes</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-workorder</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-socks-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
