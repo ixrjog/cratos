@@ -38,4 +38,6 @@ public interface CredentialFacade extends HasSetValid {
 
     void deleteById(int id);
 
+    void deleteMyCredentialById(int id);
+
 }

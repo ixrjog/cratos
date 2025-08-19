@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
+import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -170,6 +171,20 @@ public class CredentialFacadeImpl implements CredentialFacade {
         }
         // 删除凭据
         credentialService.deleteById(id);
+    }
+
+    @Override
+    public void deleteMyCredentialById(int id) {
+        Credential credential = getById(id);
+        if (!credential.getPrivateCredential()) {
+            throw new InvalidCredentialException("The credential is not private.");
+        }
+        String username = SessionUtils.getUsername();
+        if (StringUtils.hasText(username) && username.equals(credential.getUsername())) {
+            deleteById(id);
+        } else {
+            throw new InvalidCredentialException("The credential is not belong to you.");
+        }
     }
 
     private Credential getById(int id) {

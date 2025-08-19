@@ -29,7 +29,8 @@ public class CredentialController {
 
     @Operation(summary = "Pagination query credential")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<DataTable<CredentialVO.Credential>> queryCredentialPage(@RequestBody @Valid CredentialParam.CredentialPageQuery pageQuery) {
+    public HttpResult<DataTable<CredentialVO.Credential>> queryCredentialPage(
+            @RequestBody @Valid CredentialParam.CredentialPageQuery pageQuery) {
         return HttpResult.ofBody(credentialFacade.queryCredentialPage(pageQuery));
     }
 
@@ -64,6 +65,13 @@ public class CredentialController {
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteCredentialById(@RequestParam int id) {
         credentialFacade.deleteById(id);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete my credential by id")
+    @DeleteMapping(value = "/my/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteMyCredentialById(@RequestParam int id) {
+        credentialFacade.deleteMyCredentialById(id);
         return HttpResult.SUCCESS;
     }
 
