@@ -143,10 +143,10 @@ graph TD
     INPUT --> GROUPING[GroupingUtils.getGroups]
     
     GROUPING --> CALC[计算分组副本]
-    CALC --> G1_ASSIGN[G1 = groups[0]]
-    G1_ASSIGN --> G2_ASSIGN[G2 = groups[1]]
-    G2_ASSIGN --> G3_ASSIGN[G3 = groups[2]]
-    G3_ASSIGN --> G4_ASSIGN[G4 = groups[3]]
+    CALC --> G1_ASSIGN["G1 = groups[0]"]
+    G1_ASSIGN --> G2_ASSIGN["G2 = groups[1]"]
+    G2_ASSIGN --> G3_ASSIGN["G3 = groups[2]"]
+    G3_ASSIGN --> G4_ASSIGN["G4 = groups[3]"]
     
     G4_ASSIGN --> VALIDATE[验证分配结果]
     VALIDATE --> COMPENSATE{需要补偿?}
@@ -156,16 +156,66 @@ graph TD
     
     REDISTRIBUTE --> COMPLETE
     
-    subgraph "分配示例"
+    subgraph EXAMPLE_GROUP ["分配示例"]
         EXAMPLE[总副本数: 10]
-        EXAMPLE --> RESULT1[G1: 1副本]
-        EXAMPLE --> RESULT2[G2: 2副本]
-        EXAMPLE --> RESULT3[G3: 3副本]
-        EXAMPLE --> RESULT4[G4: 4副本]
+        EXAMPLE --> RESULT1["G1: 1副本"]
+        EXAMPLE --> RESULT2["G2: 2副本"]
+        EXAMPLE --> RESULT3["G3: 3副本"]
+        EXAMPLE --> RESULT4["G4: 4副本"]
     end
 ```
 
-### 3️⃣ 伸缩类型判断
+### 副本分配算法详解
+
+#### 算法核心逻辑
+
+```mermaid
+flowchart TD
+    A[输入总副本数 total] --> B[初始化空列表 groups]
+    B --> C[计算剩余副本数 remaining]
+    C --> D{remaining > 0?}
+    
+    D -->|否| E[排序并返回结果]
+    D -->|是| F{remaining <= 2?}
+    
+    F -->|是| G[直接添加 remaining]
+    F -->|否| H[计算分配数量 x]
+    
+    H --> I["x = floor((0.5 + groups.size() * 0.1) * remaining) + 1"]
+    I --> J[添加 x 到 groups]
+    J --> K[递归调用 grouping]
+    K --> C
+    
+    G --> E
+    E --> L[返回排序后的分组列表]
+    
+    style A fill:#e1f5fe
+    style E fill:#c8e6c9
+    style L fill:#c8e6c9
+```
+
+#### 分配示例演示
+
+```
+示例1: 总副本数 = 10
+├── 第1轮: remaining=10, x=floor((0.5+0*0.1)*10)+1=6, groups=[6]
+├── 第2轮: remaining=4, x=floor((0.5+1*0.1)*4)+1=3, groups=[6,3]  
+├── 第3轮: remaining=1, <=2直接添加, groups=[6,3,1]
+└── 排序结果: [1,3,6] → G1=1, G2=3, G3=6, G4=0
+
+示例2: 总副本数 = 15
+├── 第1轮: remaining=15, x=floor((0.5+0*0.1)*15)+1=8, groups=[8]
+├── 第2轮: remaining=7, x=floor((0.5+1*0.1)*7)+1=5, groups=[8,5]
+├── 第3轮: remaining=2, <=2直接添加, groups=[8,5,2]
+└── 排序结果: [2,5,8] → G1=2, G2=5, G3=8, G4=0
+
+示例3: 总副本数 = 20
+├── 第1轮: remaining=20, x=floor((0.5+0*0.1)*20)+1=11, groups=[11]
+├── 第2轮: remaining=9, x=floor((0.5+1*0.1)*9)+1=6, groups=[11,6]
+├── 第3轮: remaining=3, x=floor((0.5+2*0.1)*3)+1=3, groups=[11,6,3]
+├── 第4轮: remaining=0, 结束
+└── 排序结果: [3,6,11] → G1=3, G2=6, G3=11, G4=0
+```
 
 ```mermaid
 graph TD
