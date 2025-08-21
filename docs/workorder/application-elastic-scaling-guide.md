@@ -278,6 +278,7 @@ public class ApplicationElasticScalingTicketEntryProvider
 ```
 
 **核心特性**:
+
 - 🎯 **工单类型**: `APPLICATION_ELASTIC_SCALING`
 - 🏢 **业务类型**: `APPLICATION`
 - 🔄 **事务管理**: 确保数据一致性
@@ -311,6 +312,7 @@ public static void grouping(int total, List<Integer> groups) {
 ```
 
 **分配策略**:
+
 - 📊 **智能分配**: 基于数学算法的动态分配
 - 🔄 **递归计算**: 确保所有副本都被分配
 - ⚖️ **负载均衡**: 尽量平均分配到各个组
@@ -327,6 +329,7 @@ public enum ElasticScalingTypes {
 ```
 
 **类型说明**:
+
 | 类型 | 中文名称 | 触发条件 | 主要作用 |
 |------|---------|----------|----------|
 | `EXPANSION` | 扩容 | 期望副本 > 当前副本 | 增加应用处理能力 |
@@ -339,34 +342,34 @@ public enum ElasticScalingTypes {
 
 ### 应用配置变更模型
 
-```java
+java
 public class ApplicationReplicasModel {
-    
-    @Data
-    public static class ApplicationConfigurationChange {
-        private ApplicationVO.Application application;  // 应用信息
-        private String namespace;                       // 命名空间
-        private ApplicationConfig config;               // 配置信息
-    }
-    
-    @Data
-    public static class ApplicationConfig {
-        private Integer currentReplicas;    // 当前副本数
-        private Integer expectedReplicas;   // 期望副本数
-        private String elasticScalingType;  // 伸缩类型
-    }
+
+```
+@Data
+public static class ApplicationConfigurationChange {
+    private ApplicationVO.Application application;  // 应用信息
+    private String namespace;                       // 命名空间
+    private ApplicationConfig config;               // 配置信息
+}
+
+@Data
+public static class ApplicationConfig {
+    private Integer currentReplicas;    // 当前副本数
+    private Integer expectedReplicas;   // 期望副本数
+    private String elasticScalingType;  // 伸缩类型
 }
 ```
 
+}
+
 ### 工单表格展示
 
-```markdown
 | Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |
 | --- | --- | --- | --- | --- |
 | my-app | production | 6 | 10 | EXPANSION |
 | web-service | staging | 4 | 2 | REDUCTION |
 | api-gateway | default | 3 | 3 | REBALANCING |
-```
 
 ---
 
@@ -375,6 +378,7 @@ public class ApplicationReplicasModel {
 ### 1. 创建弹性伸缩工单
 
 #### 步骤1: 准备工单参数
+
 ```json
 {
   "workOrderKey": "APPLICATION_ELASTIC_SCALING",
@@ -393,12 +397,14 @@ public class ApplicationReplicasModel {
 ```
 
 #### 步骤2: 提交工单申请
+
 - 🌐 通过Web界面提交申请
 - 📋 系统自动验证应用信息
 - 🔍 检查应用分组配置
 - ⚖️ 计算副本分配方案
 
 #### 步骤3: 系统自动处理
+
 - 📊 分析当前部署状态
 - 🧮 计算伸缩类型和分配策略
 - 🎯 创建子工单（Deployment级别）
@@ -407,6 +413,7 @@ public class ApplicationReplicasModel {
 ### 2. 副本分配示例
 
 #### 场景1: 扩容操作
+
 ```
 应用: web-service
 当前副本: 6
@@ -421,6 +428,7 @@ public class ApplicationReplicasModel {
 ```
 
 #### 场景2: 缩容操作
+
 ```
 应用: api-gateway
 当前副本: 12
@@ -435,6 +443,7 @@ public class ApplicationReplicasModel {
 ```
 
 #### 场景3: 重平衡操作
+
 ```
 应用: data-processor
 当前副本: 10
@@ -504,16 +513,19 @@ private void validateResourceLimits(int expectedReplicas) {
 ### 3. 最佳实践
 
 #### 🎯 副本数量规划
+
 - **生产环境**: 建议最少3个副本保证高可用
 - **测试环境**: 可以使用1-2个副本节约资源
 - **开发环境**: 通常1个副本即可
 
 #### ⚖️ 分组策略
+
 - **G1组**: 承载最少副本，通常用于核心服务
 - **G4组**: 承载最多副本，用于处理主要负载
 - **均衡分配**: 避免单点故障和负载不均
 
 #### 🔄 伸缩时机
+
 - **扩容时机**: 监控显示CPU/内存使用率持续高于80%
 - **缩容时机**: 资源使用率持续低于30%且业务量下降
 - **重平衡**: 定期优化副本分布，提高资源利用率
@@ -590,6 +602,7 @@ groups:
 应用弹性伸缩工单是Cratos系统中的重要功能，它提供了：
 
 ### ✅ 核心优势
+
 - 🎯 **智能分配**: 基于算法的副本智能分配
 - 🔄 **多种模式**: 支持扩容、缩容、重平衡
 - 📊 **可视化**: 清晰的工单表格展示
@@ -597,9 +610,11 @@ groups:
 - 📈 **监控完善**: 全面的指标和告警机制
 
 ### 🚀 适用场景
+
 - **业务高峰**: 快速扩容应对流量激增
 - **成本优化**: 智能缩容节约资源成本
 - **负载均衡**: 重平衡优化副本分布
 - **容量规划**: 基于历史数据调整副本策略
 
 这个功能为企业提供了灵活、安全、可控的应用伸缩能力，是现代云原生应用管理的重要工具。
+
