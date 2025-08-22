@@ -12,6 +12,9 @@ import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.CONNECTION_TIMEOUT;
+import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.REQUEST_TIMEOUT;
+
 /**
  * @Author baiyi
  * @Date 2022/9/14 09:40
@@ -44,7 +47,10 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
         }
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential kubeconfigCredential = credentialService.getById(edsConfig.getCredentialId());
-            return io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
+            io.fabric8.kubernetes.client.Config config = io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
+            config.setConnectionTimeout(CONNECTION_TIMEOUT);
+            config.setRequestTimeout(REQUEST_TIMEOUT);
+            return config;
         } else {
             throw new EdsConfigException("Kubernetes does not specify credential(kubeconfig).");
         }

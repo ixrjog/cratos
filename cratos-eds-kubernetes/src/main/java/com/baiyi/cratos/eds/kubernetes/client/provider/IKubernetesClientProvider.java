@@ -14,9 +14,13 @@ import org.springframework.beans.factory.InitializingBean;
 public interface IKubernetesClientProvider extends InitializingBean {
 
     String KUBERNETES_KUBECONFIG_FILE = "kubeconfig";
-    String KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.request.timeout";
+    // io.fabric8.kubernetes.client.KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY
+
+    // String KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.request.timeout";
+    String KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY = io.fabric8.kubernetes.client.Config.KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY;
     String KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.websocket.timeout";
-    String KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.connection.timeout";
+    // KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY = "kubernetes.connection.timeout";
+    String KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY = io.fabric8.kubernetes.client.Config.KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY;
 
     String getName();
 
@@ -25,9 +29,12 @@ public interface IKubernetesClientProvider extends InitializingBean {
     KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes);
 
     default void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
-        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
-        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY, String.valueOf(KubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
+        System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY,
+                String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
+        System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY,
+                String.valueOf(KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT));
+        System.setProperty(KUBERNETES_CONNECTION_TIMEOUT_SYSTEM_PROPERTY,
+                String.valueOf(KubernetesClientBuilder.Values.CONNECTION_TIMEOUT));
     }
 
     @Override
