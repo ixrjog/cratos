@@ -19,20 +19,20 @@ public class SshAuditProperties {
 
     @Data
     public static class Audit {
-
         private String path;
         private Boolean open;
-
     }
 
     public interface Suffix {
         String AUDIT_LOG = ".log";
         String COMMAND_LOG = "_commander.log";
-        String FMT_COMMAND_LOG = "_commander_fmt.log";   // formatted
+        // formatted
+        String FMT_COMMAND_LOG = "_commander_fmt.log";
     }
 
     /**
      * /home/app/cratos-data/ssh/audit/{sessionId}/{instanceId}.log
+     *
      * @param sessionId
      * @param instanceId
      * @return
