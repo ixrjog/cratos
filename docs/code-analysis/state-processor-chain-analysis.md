@@ -10,31 +10,31 @@
 
 ```mermaid
 graph TB
-    subgraph "装配器层 (Assembler Layer)"
+    subgraph AssemblerLayer["装配器层 (Assembler Layer)"]
         ASSEMBLER[🔗 StateProcessorChainAssembler]
         
-        subgraph "装配方法"
+        subgraph AssemblerMethods["装配方法"]
             CONFIG_FULL[config(start, end)]
             CONFIG_START[config(start)]
             CONFIG_DEFAULT[config()]
         end
     end
     
-    subgraph "发现层 (Discovery Layer)"
+    subgraph DiscoveryLayer["发现层 (Discovery Layer)"]
         SPRING_CONTEXT[🌱 SpringContextUtils]
         ANNOTATION_SCAN[🔍 注解扫描器]
         
-        subgraph "注解处理"
+        subgraph AnnotationProcessing["注解处理"]
             TICKET_STATES[@TicketStates]
             AOP_UTILS[🎭 AopUtils]
             TARGET_CLASS[🎯 TargetClass获取]
         end
     end
     
-    subgraph "状态处理器层 (Processor Layer)"
+    subgraph ProcessorLayer["状态处理器层 (Processor Layer)"]
         BASE_PROCESSOR[📋 BaseTicketStateProcessor]
         
-        subgraph "具体处理器"
+        subgraph ConcreteProcessors["具体处理器"]
             CREATE_PROCESSOR[🆕 CreateProcessor]
             NEW_PROCESSOR[📝 NewProcessor]
             SUBMITTED_PROCESSOR[📤 SubmittedProcessor]
@@ -45,31 +45,31 @@ graph TB
         end
     end
     
-    subgraph "链接层 (Chain Layer)"
+    subgraph ChainLayer["链接层 (Chain Layer)"]
         CHAIN_BUILDER[🔗 链构建器]
         STATE_MAP[📊 状态映射表]
         
-        subgraph "链接逻辑"
+        subgraph ChainLogic["链接逻辑"]
             CURRENT_STATE[📍 当前状态]
             NEXT_STATE[➡️ 下一状态]
             SET_TARGET[🎯 设置目标]
         end
     end
     
-    subgraph "工厂层 (Factory Layer)"
+    subgraph FactoryLayer["工厂层 (Factory Layer)"]
         PROCESSOR_FACTORY[🏭 TicketInStateProcessorFactory]
         
-        subgraph "工厂方法"
+        subgraph FactoryMethods["工厂方法"]
             SET_PROCESSOR[📝 setStateProcessor]
             GET_BY_STATE[🔍 getByState]
             CHANGE_STATE[🔄 change]
         end
     end
     
-    subgraph "状态枚举层 (State Enum Layer)"
+    subgraph StateEnumLayer["状态枚举层 (State Enum Layer)"]
         TICKET_STATE[📊 TicketState枚举]
         
-        subgraph "状态定义"
+        subgraph StateDefinitions["状态定义"]
             CREATE[CREATE]
             NEW[NEW]
             SUBMITTED[SUBMITTED]
@@ -236,7 +236,7 @@ graph TD
 
 ```mermaid
 graph LR
-    subgraph "责任链结构"
+    subgraph ChainStructure["责任链结构"]
         CREATE_P[🆕 CreateProcessor] --> NEW_P[📝 NewProcessor]
         NEW_P --> SUBMITTED_P[📤 SubmittedProcessor]
         SUBMITTED_P --> APPROVAL_P[✅ ApprovalProcessor]
@@ -247,7 +247,7 @@ graph LR
         COMPLETED_P --> END_P[🔚 EndProcessor]
     end
     
-    subgraph "注解配置"
+    subgraph AnnotationConfig["注解配置"]
         CREATE_A["@TicketStates(state=CREATE, target=NEW)"]
         NEW_A["@TicketStates(state=NEW, target=SUBMITTED)"]
         SUBMITTED_A["@TicketStates(state=SUBMITTED, target=IN_APPROVAL)"]
@@ -564,7 +564,7 @@ private void validateChainCompleteness(Map<TicketState, BaseTicketStateProcessor
 
 ```mermaid
 graph TD
-    subgraph "责任链模式结构"
+    subgraph ChainPattern["责任链模式结构"]
         CLIENT[客户端请求]
         HANDLER1[处理器1]
         HANDLER2[处理器2]
@@ -577,7 +577,7 @@ graph TD
     HANDLER2 --> HANDLER3
     HANDLER3 --> HANDLERN
     
-    subgraph "工单状态链实现"
+    subgraph TicketChain["工单状态链实现"]
         EVENT[工单事件]
         CREATE_H[CreateProcessor]
         NEW_H[NewProcessor]
@@ -592,7 +592,7 @@ graph TD
     SUBMIT_H --> APPROVAL_H
     APPROVAL_H --> COMPLETE_H
     
-    subgraph "处理逻辑"
+    subgraph ProcessLogic["处理逻辑"]
         PROCESS[处理当前状态]
         FORWARD[转发到下一处理器]
         STOP[处理完成停止]
@@ -677,37 +677,37 @@ graph TD
     STEP4 --> STEP5[步骤5: 责任链构建]
     STEP5 --> STEP6[步骤6: 工厂注册]
     
-    subgraph "步骤1详情"
+    subgraph Step1Details["步骤1详情"]
         SCAN_CONTEXT[扫描Spring容器]
         FIND_BEANS[查找@TicketStates注解的Bean]
         FILTER_TYPE[过滤BaseTicketStateProcessor类型]
     end
     
-    subgraph "步骤2详情"
+    subgraph Step2Details["步骤2详情"]
         GET_ANNOTATION[获取@TicketStates注解]
         EXTRACT_STATE[提取state属性]
         EXTRACT_TARGET[提取target属性]
     end
     
-    subgraph "步骤3详情"
+    subgraph Step3Details["步骤3详情"]
         BUILD_MAP[构建状态->处理器映射]
         VALIDATE_MAP[验证映射完整性]
         CHECK_DUPLICATES[检查重复状态]
     end
     
-    subgraph "步骤4详情"
+    subgraph Step4Details["步骤4详情"]
         CHECK_START[检查起始状态处理器]
         CHECK_END[检查结束状态处理器]
         VALIDATE_PATH[验证状态路径连通性]
     end
     
-    subgraph "步骤5详情"
+    subgraph Step5Details["步骤5详情"]
         LINK_PROCESSORS[链接处理器]
         SET_TARGETS[设置目标处理器]
         PREVENT_CYCLES[防止循环依赖]
     end
     
-    subgraph "步骤6详情"
+    subgraph Step6Details["步骤6详情"]
         REGISTER_CHAIN[注册到工厂]
         LOG_SUCCESS[记录装配成功]
         READY_FOR_USE[准备使用]
