@@ -22,6 +22,7 @@ import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
+import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
@@ -71,6 +72,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final EdsInstanceHelper edsInstanceHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
+    private final SshAuditProperties sshAuditProperties;
     private final SimpleSshSessionFacade simpleSshSessionFacade;
 
     @Value("${cratos.language:en-us}")
@@ -80,6 +82,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Open openMessage = toMessage(message);
         try {
+            final String auditPath = sshAuditProperties.generateAuditLogFilePath(sshSession.getSessionId(),
+                    openMessage.getInstanceId());
             heartbeat(sshSession.getSessionId());
             AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
                     openMessage.getAssetId());
@@ -99,12 +103,12 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
             targetSystem.setTerminalSize(new org.jline.terminal.Size(openMessage.getTerminal()
                     .getCols(), openMessage.getTerminal()
                     .getRows()));
+            targetSystem.setAuditPath(auditPath);
             HostSystem proxySystem = getProxyHost(server);
             // 记录 SSH 会话实例
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
-                    targetSystem, SshSessionInstanceTypeEnum.SERVER, targetSystem.getAuditPath());
+                    targetSystem, SshSessionInstanceTypeEnum.SERVER, auditPath);
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-
             if (proxySystem == null) {
                 // 直连
                 RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);

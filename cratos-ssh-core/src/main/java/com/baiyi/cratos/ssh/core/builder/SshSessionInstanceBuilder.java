@@ -24,7 +24,8 @@ public class SshSessionInstanceBuilder {
 
     private static final String DEFAULT_LOGIN_USER = "SYSTEM";
 
-    public static SshSessionInstance build(String sessionId, HostSystem hostSystem, SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum,String auditPath) {
+    public static SshSessionInstance build(String sessionId, HostSystem hostSystem,
+                                           SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
         return SshSessionInstance.builder()
                 .sessionId(sessionId)
                 .instanceId(hostSystem.getInstanceId())
@@ -38,7 +39,8 @@ public class SshSessionInstanceBuilder {
                 .build();
     }
 
-    public static SshSessionInstance build(String sessionId, ApplicationKubernetesParam.PodRequest pod,SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
+    public static SshSessionInstance build(String sessionId, ApplicationKubernetesParam.PodRequest pod,
+                                           SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
         return SshSessionInstance.builder()
                 .sessionId(sessionId)
                 .instanceId(pod.getInstanceId())
@@ -52,7 +54,8 @@ public class SshSessionInstanceBuilder {
                 .build();
     }
 
-    public static SshSessionInstance build(String sessionId, PodAssetModel podAssetModel, SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
+    public static SshSessionInstance build(String sessionId, PodAssetModel podAssetModel,
+                                           SshSessionInstanceTypeEnum sshSessionInstanceTypeEnum, String auditPath) {
         final String podIP = Optional.of(podAssetModel)
                 .map(PodAssetModel::getPod)
                 .map(Pod::getStatus)

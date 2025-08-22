@@ -31,6 +31,12 @@ public class SshAuditProperties {
         String FMT_COMMAND_LOG = "_commander_fmt.log";   // formatted
     }
 
+    /**
+     * /home/app/cratos-data/ssh/audit/{sessionId}/{instanceId}.log
+     * @param sessionId
+     * @param instanceId
+     * @return
+     */
     public String generateAuditLogFilePath(String sessionId, String instanceId) {
         return Joiner.on("/")
                 .join(audit.getPath(), sessionId, instanceId + Suffix.AUDIT_LOG);
