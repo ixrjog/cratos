@@ -14,9 +14,9 @@ graph TB
         ASSEMBLER[🔗 StateProcessorChainAssembler]
         
         subgraph AssemblerMethods["装配方法"]
-            CONFIG_FULL[config(start, end)]
-            CONFIG_START[config(start)]
-            CONFIG_DEFAULT[config()]
+            CONFIG_FULL["config(start, end)"]
+            CONFIG_START["config(start)"]
+            CONFIG_DEFAULT["config()"]
         end
     end
     
@@ -25,7 +25,7 @@ graph TB
         ANNOTATION_SCAN[🔍 注解扫描器]
         
         subgraph AnnotationProcessing["注解处理"]
-            TICKET_STATES[@TicketStates]
+            TICKET_STATES["@TicketStates"]
             AOP_UTILS[🎭 AopUtils]
             TARGET_CLASS[🎯 TargetClass获取]
         end
@@ -200,7 +200,7 @@ sequenceDiagram
 graph TD
     START[开始装配] --> SCAN[扫描Spring容器]
     
-    SCAN --> GET_BEANS[获取@TicketStates注解的Bean]
+    SCAN --> GET_BEANS["获取@TicketStates注解的Bean"]
     GET_BEANS --> FILTER[过滤BaseTicketStateProcessor类型]
     
     FILTER --> EXTRACT_ANNOTATION[提取注解信息]
@@ -679,12 +679,12 @@ graph TD
     
     subgraph Step1Details["步骤1详情"]
         SCAN_CONTEXT[扫描Spring容器]
-        FIND_BEANS[查找@TicketStates注解的Bean]
+        FIND_BEANS["查找@TicketStates注解的Bean"]
         FILTER_TYPE[过滤BaseTicketStateProcessor类型]
     end
     
     subgraph Step2Details["步骤2详情"]
-        GET_ANNOTATION[获取@TicketStates注解]
+        GET_ANNOTATION["获取@TicketStates注解"]
         EXTRACT_STATE[提取state属性]
         EXTRACT_TARGET[提取target属性]
     end
