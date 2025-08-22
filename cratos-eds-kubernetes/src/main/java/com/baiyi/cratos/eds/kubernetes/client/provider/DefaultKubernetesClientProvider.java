@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.provider;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -42,7 +42,7 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
         if (edsConfig == null) {
             throw new EdsConfigException("No config specified for kubernetes.");
         }
-        if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential kubeconfigCredential = credentialService.getById(edsConfig.getCredentialId());
             return io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
         } else {

@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.RobotException;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.common.util.ExpiredUtils;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.ErrorEnum;
@@ -107,7 +107,7 @@ public class RobotFacadeImpl implements RobotFacade {
         if (!user.getValid()) {
             throw new RobotException("Robots cannot be attached to invalid user {}.", robot.getUsername());
         }
-        robot.setToken(IdentityUtil.randomUUID());
+        robot.setToken(IdentityUtils.randomUUID());
         robot.setValid(true);
         if (robot.getExpiredTime() == null) {
             robot.setExpiredTime(
@@ -127,7 +127,7 @@ public class RobotFacadeImpl implements RobotFacade {
     @SetSessionUserToParam(desc = "set CreatedBy")
     public RobotVO.RobotToken applyRobot(RobotParam.ApplyRobot applyRobot) {
         Robot robot = applyRobot.toTarget();
-        robot.setToken(IdentityUtil.randomUUID());
+        robot.setToken(IdentityUtils.randomUUID());
         robot.setValid(true);
         robot.setTrail(true);
         // 1年后过期

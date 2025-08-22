@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -74,7 +74,7 @@ public class ServerAccountFacadeImpl implements ServerAccountFacade {
                 .equals(serverAccount.getProtocol()) && ADMIN.equalsIgnoreCase(serverAccount.getUsername())) {
             serverAccount.setSudo(true);
         }
-        if (IdentityUtil.hasIdentity(serverAccount.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(serverAccount.getCredentialId())) {
             serverAccount.setValid(credService.getById(serverAccount.getCredentialId()) != null);
         } else {
             serverAccount.setValid(false);

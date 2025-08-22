@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.enums.CommandExecApprovalStatusEnum;
 import com.baiyi.cratos.common.enums.CommandExecApprovalTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.CommandExecException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -91,7 +91,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .map(CommandExecParam.AddCommandExec::getExecTarget)
                 .map(CommandExecParam.ExecTarget::getInstanceId)
                 .orElse(0);
-        if (!IdentityUtil.hasIdentity(instanceId)) {
+        if (!IdentityUtils.hasIdentity(instanceId)) {
             CommandExecException.runtime("Execution target error.");
         }
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);

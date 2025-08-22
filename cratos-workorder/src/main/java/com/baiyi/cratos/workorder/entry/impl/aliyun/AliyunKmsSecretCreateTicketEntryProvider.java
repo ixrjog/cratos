@@ -3,7 +3,7 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 import com.aliyun.sdk.service.kms20160120.models.CreateSecretResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.InfoSummaryUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -187,7 +187,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         int instanceId = Optional.ofNullable(addCreateAliyunKmsSecretTicketEntry)
                 .map(WorkOrderTicketParam.TicketEntry::getInstanceId)
                 .orElseThrow(() -> new WorkOrderTicketException("Instance ID is required"));
-        if (!IdentityUtil.hasIdentity(instanceId)) {
+        if (!IdentityUtils.hasIdentity(instanceId)) {
             WorkOrderTicketException.runtime("Invalid instance ID: " + instanceId);
         }
         EdsInstance instance = edsInstanceService.getById(instanceId);

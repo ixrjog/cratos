@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.event.impl;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
@@ -47,7 +47,7 @@ public class GitLabKeyEventConsumer extends BaseGitLabEventConsumer<SshKey> {
     @Override
     protected void postProcess(EdsInstance instance, EdsAsset asset, GitLabEventParam.SystemHook systemHook) {
         // 用户删除Key
-        if (!IdentityUtil.hasIdentity(systemHook.getId())) {
+        if (!IdentityUtils.hasIdentity(systemHook.getId())) {
             return;
         }
         Long keyId = systemHook.getId();

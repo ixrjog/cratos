@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.identity.extension.base;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsIdentityException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.HasEdsInstanceType;
@@ -78,7 +78,7 @@ public abstract class BaseEdsIdentityExtension {
     }
 
     protected List<EdsAsset> onlyInTheInstance(List<EdsAsset> assets, HasEdsInstanceId hasEdsInstanceId) {
-        if (IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+        if (IdentityUtils.hasIdentity(hasEdsInstanceId.getInstanceId())) {
             return assets.stream()
                     .filter(e -> e.getInstanceId()
                             .equals(hasEdsInstanceId.getInstanceId()))
@@ -98,7 +98,7 @@ public abstract class BaseEdsIdentityExtension {
     }
 
     private EdsInstance getEdsInstance(HasEdsInstanceId hasEdsInstanceId) {
-        if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+        if (!IdentityUtils.hasIdentity(hasEdsInstanceId.getInstanceId())) {
             EdsIdentityException.runtime("InstanceId is incorrect.");
         }
         EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());

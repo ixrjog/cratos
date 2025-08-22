@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -48,7 +48,7 @@ public abstract class BaseEdsConfigLoader<C extends IEdsConfigModel> {
         EdsConfig edsConfig = edsConfigService.getById(configId);
         String configContent = edsConfig.getConfigContent();
         C config;
-        if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credService.getById(edsConfig.getCredentialId());
             if (cred != null) {
                 return wrapConfig(edsConfig, configLoadAs(configCredTemplate.renderTemplate(configContent, cred)));
@@ -65,7 +65,7 @@ public abstract class BaseEdsConfigLoader<C extends IEdsConfigModel> {
     }
 
     private C wrapConfig(EdsConfig edsConfig, C config) {
-        if (IdentityUtil.hasIdentity(edsConfig.getInstanceId())) {
+        if (IdentityUtils.hasIdentity(edsConfig.getInstanceId())) {
             config.setEdsInstance(edsInstanceService.getById(edsConfig.getInstanceId()));
         }
         return config;

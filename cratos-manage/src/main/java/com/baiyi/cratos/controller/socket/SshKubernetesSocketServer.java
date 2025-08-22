@@ -1,6 +1,7 @@
 package com.baiyi.cratos.controller.socket;
 
 import com.baiyi.cratos.common.model.CratosHostHolder;
+import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.channel.factory.KubernetesSshChannelHandlerFactory;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,11 +32,9 @@ import java.util.concurrent.TimeUnit;
 @ServerEndpoint(value = "/socket/ssh/kubernetes/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
-    // private SshSession sshSession;
     private static SshSessionService sshSessionService;
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(15);
-    private final String sessionId = UUID.randomUUID()
-            .toString();
+    private final String sessionId = SshIdUtils.generateID();
     private String username;
 
     @Autowired

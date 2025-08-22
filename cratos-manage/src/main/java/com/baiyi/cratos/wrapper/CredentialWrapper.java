@@ -4,7 +4,7 @@ import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.common.cred.CredProviderFactory;
 import com.baiyi.cratos.common.cred.ICredProvider;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
@@ -42,7 +42,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
 
     @Override
     public void businessWrap(CredentialVO.HasCredential cred) {
-        IdentityUtil.validIdentityRun(cred.getCredentialId())
+        IdentityUtils.validIdentityRun(cred.getCredentialId())
                 .withTrue(() -> {
                     Credential credential = credentialService.getById(cred.getCredentialId());
                     if (credential == null) {

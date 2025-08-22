@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
@@ -50,7 +50,7 @@ public class DeploymentPodDeleteTicketEntryBuilder {
                 .success(deleteDeploymentPod.getSuccess())
                 .result(deleteDeploymentPod.getResult())
                 .subType(EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name())
-                .entryKey(deleteDeploymentPod.getPodName()+ ":" + IdentityUtil.randomUUID())
+                .entryKey(deleteDeploymentPod.getPodName()+ ":" + IdentityUtils.randomUUID())
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();

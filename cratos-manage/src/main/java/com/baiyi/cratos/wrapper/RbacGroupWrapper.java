@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RbacGroup;
@@ -50,7 +50,7 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
 
     @Override
     public void businessWrap(RbacGroupVO.HasRbacGroup group) {
-        IdentityUtil.validIdentityRun(group.getRbacGroupId())
+        IdentityUtils.validIdentityRun(group.getRbacGroupId())
                 .withTrue(() -> {
                     RbacGroup rbacGroup = rbacGroupService.getById(group.getRbacGroupId());
                     if (rbacGroup != null) {

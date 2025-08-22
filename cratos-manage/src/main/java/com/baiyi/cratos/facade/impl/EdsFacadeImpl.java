@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
@@ -222,7 +222,7 @@ public class EdsFacadeImpl implements EdsFacade {
     public void addEdsConfig(EdsConfigParam.AddEdsConfig addEdsConfig) {
         EdsConfig edsConfig = addEdsConfig.toTarget();
         edsConfigService.add(edsConfig);
-        if (IdentityUtil.hasIdentity(addEdsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(addEdsConfig.getCredentialId())) {
             SimpleBusiness business = SimpleBusiness.builder()
                     .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                     .businessId(edsConfig.getId())
@@ -240,7 +240,7 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                 .businessId(dbEdsConfig.getId())
                 .build();
-        IdentityUtil.tryIdentity(updateEdsConfig.getCredentialId())
+        IdentityUtils.tryIdentity(updateEdsConfig.getCredentialId())
                 .withValid(() -> handleValidCredentialId(updateEdsConfig, dbEdsConfig, business),
                         () -> handleInvalidCredentialId(dbEdsConfig, business));
         EdsConfig edsConfig = updateEdsConfig.toTarget();
@@ -251,7 +251,7 @@ public class EdsFacadeImpl implements EdsFacade {
 
     private void handleValidCredentialId(EdsConfigParam.UpdateEdsConfig updateEdsConfig, EdsConfig dbEdsConfig,
                                          SimpleBusiness business) {
-        IdentityUtil.tryIdentity(dbEdsConfig.getCredentialId())
+        IdentityUtils.tryIdentity(dbEdsConfig.getCredentialId())
                 .withValid(() -> {
                     if (!updateEdsConfig.getCredentialId()
                             .equals(dbEdsConfig.getCredentialId())) {
@@ -262,7 +262,7 @@ public class EdsFacadeImpl implements EdsFacade {
     }
 
     private void handleInvalidCredentialId(EdsConfig dbEdsConfig, SimpleBusiness business) {
-        if (IdentityUtil.hasIdentity(dbEdsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(dbEdsConfig.getCredentialId())) {
             businessCredentialFacade.revokeBusinessCredential(dbEdsConfig.getCredentialId(), business);
         }
     }
@@ -270,7 +270,7 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     public void deleteEdsConfigById(int id) {
         EdsConfig edsConfig = edsConfigService.getById(id);
-        IdentityUtil.tryIdentity(edsConfig.getInstanceId())
+        IdentityUtils.tryIdentity(edsConfig.getInstanceId())
                 .withValid(() -> {
                     EdsInstance edsInstance = edsInstanceService.getById(edsConfig.getInstanceId());
                     if (edsInstance == null || !edsInstance.getValid()) {
@@ -285,7 +285,7 @@ public class EdsFacadeImpl implements EdsFacade {
                 .businessType(BusinessTypeEnum.EDS_CONFIG.name())
                 .businessId(edsConfig.getId())
                 .build();
-        if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             businessCredentialFacade.revokeBusinessCredential(edsConfig.getCredentialId(), business);
         }
         edsConfigService.deleteById(edsConfig.getId());
@@ -331,7 +331,7 @@ public class EdsFacadeImpl implements EdsFacade {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteEdsAssetById(Integer id) {
-        if (!IdentityUtil.hasIdentity(id)) {
+        if (!IdentityUtils.hasIdentity(id)) {
             return;
         }
         EdsAsset asset = edsAssetService.getById(id);

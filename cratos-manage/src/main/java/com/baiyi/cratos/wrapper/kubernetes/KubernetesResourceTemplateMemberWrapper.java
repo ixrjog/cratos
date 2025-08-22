@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.kubernetes;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Env;
@@ -46,7 +46,7 @@ public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConver
 
     @Override
     public void businessWrap(KubernetesResourceTemplateVO.HasTemplateMembers hasTemplateMembers) {
-        IdentityUtil.validIdentityRun(hasTemplateMembers.getTemplateId())
+        IdentityUtils.validIdentityRun(hasTemplateMembers.getTemplateId())
                 .withTrue(() -> {
                     List<KubernetesResourceTemplateVO.Member> members = kubernetesResourceTemplateMemberService.queryMemberByTemplateId(
                                     hasTemplateMembers.getTemplateId())

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.converter.base;
 
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.converter.KubernetesResourceConverter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -41,7 +41,7 @@ public abstract class BaseKubernetesResourceConverter<Resource, S> implements Ku
         if (edsInstanceConfigMap.containsKey(edsInstance.getId())) {
             return edsInstanceConfigMap.get(edsInstance.getId());
         }
-        if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
+        if (IdentityUtils.hasIdentity(edsInstance.getConfigId())) {
             return getEdsInstanceProvider(edsInstance.getId()).getInstance()
                     .getEdsConfigModel();
         }

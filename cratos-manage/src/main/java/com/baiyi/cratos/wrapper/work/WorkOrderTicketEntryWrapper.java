@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper.work;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -71,7 +71,7 @@ public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkO
     }
 
     private void populateInstance(WorkOrderTicketVO.TicketEntry<?> entry) {
-        if (IdentityUtil.hasIdentity(entry.getInstanceId())) {
+        if (IdentityUtils.hasIdentity(entry.getInstanceId())) {
             EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
             entry.setInstance(edsInstanceWrapper.wrapToTarget(instance));
         }

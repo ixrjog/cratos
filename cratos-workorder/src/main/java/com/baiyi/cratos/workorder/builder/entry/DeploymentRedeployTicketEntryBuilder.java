@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
@@ -52,7 +52,7 @@ public class DeploymentRedeployTicketEntryBuilder {
                 .result(redeployDeployment.getResult())
                 .subType(EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name())
                 .entryKey(redeployDeployment.getAsset()
-                        .getName() + ":" + IdentityUtil.randomUUID())
+                        .getName() + ":" + IdentityUtils.randomUUID())
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();

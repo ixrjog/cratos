@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.cratos.provider;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
@@ -54,7 +54,7 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
                                          CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
-        String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtil.randomUUID();
+        String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtils.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {
             EdsAssetConversionException.runtime("`Remote Management IP` not a valid IP address.");
         }

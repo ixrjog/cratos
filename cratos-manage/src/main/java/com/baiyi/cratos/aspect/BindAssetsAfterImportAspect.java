@@ -1,6 +1,6 @@
 package com.baiyi.cratos.aspect;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.IImportFromAsset;
@@ -42,7 +42,7 @@ public class BindAssetsAfterImportAspect {
                 .map(arg -> (IImportFromAsset) arg)
                 .forEach(importFromAsset -> {
                     Integer assetId = importFromAsset.getFromAssetId();
-                    IdentityUtil.validIdentityRun(assetId)
+                    IdentityUtils.validIdentityRun(assetId)
                             .withTrue(() -> {
                                 if (businessObject instanceof ToBusinessTarget toBusinessTarget) {
                                     int businessId = toBusinessTarget.getId();

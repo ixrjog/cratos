@@ -4,7 +4,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -160,7 +160,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     @SetSessionUserToParam(desc = "set CreatedBy")
     public void createResourceByTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
-        if (!IdentityUtil.hasIdentity(createResourceByTemplate.getTemplateId())) {
+        if (!IdentityUtils.hasIdentity(createResourceByTemplate.getTemplateId())) {
             if (StringUtils.hasText(createResourceByTemplate.getTemplateKey())) {
                 KubernetesResourceTemplate uniqueKey = KubernetesResourceTemplate.builder()
                         .templateKey(createResourceByTemplate.getTemplateKey())

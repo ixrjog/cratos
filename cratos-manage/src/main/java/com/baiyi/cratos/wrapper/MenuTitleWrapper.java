@@ -1,6 +1,6 @@
 package com.baiyi.cratos.wrapper;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.MenuTitle;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.domain.view.menu.MyMenuVO;
@@ -34,7 +34,7 @@ public class MenuTitleWrapper extends BaseDataTableConverter<MenuVO.Title, MenuT
     }
 
     public void wrap(MenuVO.Menu menu) {
-        IdentityUtil.validIdentityRun(menu.getMenuId())
+        IdentityUtils.validIdentityRun(menu.getMenuId())
                 .withTrue(() -> menu.setMenuTitles(menuTitleService.queryByMenuId(menu.getMenuId())
                         .stream()
                         .map(this::wrapToTarget)

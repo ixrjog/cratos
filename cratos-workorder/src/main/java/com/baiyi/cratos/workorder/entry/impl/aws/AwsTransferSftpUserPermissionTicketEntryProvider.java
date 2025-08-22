@@ -3,7 +3,7 @@ package com.baiyi.cratos.workorder.entry.impl.aws;
 import com.amazonaws.services.transfer.model.HomeDirectoryMapEntry;
 import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
@@ -196,7 +196,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
                 .map(AwsTransferModel.SFTPUser::getAsset)
                 .map(EdsAssetVO.Asset::getInstanceId)
                 .orElse(0);
-        String instanceName = IdentityUtil.hasIdentity(instanceId) ? edsInstanceService.getById(instanceId)
+        String instanceName = IdentityUtils.hasIdentity(instanceId) ? edsInstanceService.getById(instanceId)
                 .getInstanceName() : "--";
         String endpoint = sftpUser.getTransferServerEndpoint();
         String transferLogin = Joiner.on("@")

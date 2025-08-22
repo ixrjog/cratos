@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.kubernetes.provider;
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
@@ -84,7 +84,7 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
         if (kubernetesInstance == null) {
             KubernetesResourceTemplateException.runtime("kubernetesInstance is null.");
         }
-        if (IdentityUtil.hasIdentity(kubernetesInstance.getId())) {
+        if (IdentityUtils.hasIdentity(kubernetesInstance.getId())) {
             EdsInstance edsInstance = edsInstanceService.getById(kubernetesInstance.getId());
             if (edsInstance != null) {
                 return edsInstance;
@@ -105,7 +105,7 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
     protected EdsKubernetesConfigModel.Kubernetes getEdsConfig(
             KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {
         EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
-        if (edsInstance != null && IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
+        if (edsInstance != null && IdentityUtils.hasIdentity(edsInstance.getConfigId())) {
             return getEdsInstanceProvider(edsInstance.getId()).getInstance()
                     .getEdsConfigModel();
         }

@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.RiskEventImpactException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -122,7 +122,7 @@ public class RiskEventFacadeImpl implements RiskEventFacade {
         } else {
             riskEventImpact.setCost(0);
         }
-        if (IdentityUtil.hasIdentity(riskEventImpact.getId())) {
+        if (IdentityUtils.hasIdentity(riskEventImpact.getId())) {
             impactService.updateByPrimaryKey(riskEventImpact);
         } else {
             impactService.add(riskEventImpact);

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -47,7 +47,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
 
     @Override
     public void businessWrap(RiskEventVO.IRiskEventImpacts iRiskEventImpacts) {
-        if (IdentityUtil.hasIdentity(iRiskEventImpacts.getEventId())) {
+        if (IdentityUtils.hasIdentity(iRiskEventImpacts.getEventId())) {
             List<RiskEventImpact> impactList = impactService.queryByEventId(iRiskEventImpacts.getEventId());
             if (CollectionUtils.isEmpty(impactList)) {
                 return;

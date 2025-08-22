@@ -1,5 +1,6 @@
 package com.baiyi.cratos.controller.socket;
 
+import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.configuration.socket.MyServerEndpointConfigConfig;
 import com.baiyi.cratos.controller.socket.base.BaseSocketAuthenticationServer;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
@@ -15,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,8 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationKubernetesDetailsServer extends BaseSocketAuthenticationServer {
 
     public static final long WEBSOCKET_TIMEOUT = TimeUnit.MINUTES.toMillis(5);
-    private final String sessionId = UUID.randomUUID()
-            .toString();
+    private final String sessionId = SshIdUtils.generateID();
 
     @Override
     @OnOpen

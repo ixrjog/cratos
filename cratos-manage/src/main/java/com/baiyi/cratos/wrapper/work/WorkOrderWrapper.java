@@ -3,7 +3,7 @@ package com.baiyi.cratos.wrapper.work;
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.annotation.I18nWrapper;
 import com.baiyi.cratos.common.enums.AccessLevel;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrder;
@@ -56,7 +56,7 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
 
     @Override
     public void businessWrap(WorkOrderVO.HasWorkOrderList hasWorkOrderList) {
-        if (IdentityUtil.hasIdentity(hasWorkOrderList.getGroupId())) {
+        if (IdentityUtils.hasIdentity(hasWorkOrderList.getGroupId())) {
             List<WorkOrderVO.WorkOrder> workOrderList = workOrderService.queryByGroupId(hasWorkOrderList.getGroupId())
                     .stream()
                     .map(this::wrapToTarget)

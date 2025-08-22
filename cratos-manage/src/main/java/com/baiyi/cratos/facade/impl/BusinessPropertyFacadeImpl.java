@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.BusinessProperty;
 import com.baiyi.cratos.domain.param.http.business.BusinessPropertyParam;
 import com.baiyi.cratos.facade.BusinessPropertyFacade;
@@ -47,7 +47,7 @@ public class BusinessPropertyFacadeImpl implements BusinessPropertyFacade {
     @Override
     public void saveProperty(BusinessPropertyParam.SaveBusinessProperty saveBusinessProperty) {
         BusinessProperty businessProperty = saveBusinessProperty.toTarget();
-        if (IdentityUtil.hasIdentity(saveBusinessProperty.getId())) {
+        if (IdentityUtils.hasIdentity(saveBusinessProperty.getId())) {
             businessPropertyService.updateByPrimaryKey(businessProperty);
         } else {
             businessPropertyService.add(businessProperty);

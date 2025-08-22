@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core;
 
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -244,7 +244,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     @Override
     public C produceConfig(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
-        if (IdentityUtil.hasIdentity(edsConfig.getCredentialId())) {
+        if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credentialService.getById(edsConfig.getCredentialId());
             if (cred != null) {
                 return configLoadAs(configCredTemplate.renderTemplate(configContent, cred));

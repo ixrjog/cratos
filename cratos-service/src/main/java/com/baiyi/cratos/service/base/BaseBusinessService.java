@@ -1,6 +1,6 @@
 package com.baiyi.cratos.service.base;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.service.factory.BusinessServiceFactory;
@@ -20,7 +20,7 @@ public interface BaseBusinessService<T extends HasIntegerPrimaryKey> extends Bas
 
     default void delete(T record) {
         if (record == null) return;
-        if (IdentityUtil.hasIdentity(record.getId())) {
+        if (IdentityUtils.hasIdentity(record.getId())) {
             deleteById(record.getId());
         }
     }

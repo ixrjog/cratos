@@ -105,7 +105,7 @@ public class UserFacadeImpl implements UserFacade {
     public User addUser(UserParam.AddUser addUser) {
         User user = addUser.toTarget();
         if (!StringUtils.hasText(user.getUuid())) {
-            user.setUuid(IdentityUtil.randomUUID());
+            user.setUuid(IdentityUtils.randomUUID());
         }
         userService.add(user);
         return user;

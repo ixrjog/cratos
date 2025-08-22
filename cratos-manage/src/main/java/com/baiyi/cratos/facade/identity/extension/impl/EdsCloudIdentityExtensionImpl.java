@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.identity.extension.impl;
 
 import com.baiyi.cratos.common.exception.EdsIdentityException;
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.HasEdsInstanceId;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -119,7 +119,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
 
     protected EdsInstance getAndVerifyEdsInstance(HasEdsInstanceId hasEdsInstanceId,
                                                   EdsInstanceTypeEnum instanceTypeEnum) {
-        if (!IdentityUtil.hasIdentity(hasEdsInstanceId.getInstanceId())) {
+        if (!IdentityUtils.hasIdentity(hasEdsInstanceId.getInstanceId())) {
             EdsIdentityException.runtime("{} instanceId is incorrect.", instanceTypeEnum.name());
         }
         EdsInstance instance = edsInstanceService.getById(hasEdsInstanceId.getInstanceId());

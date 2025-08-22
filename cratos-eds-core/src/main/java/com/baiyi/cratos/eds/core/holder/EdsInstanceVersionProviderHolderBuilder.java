@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.holder;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
@@ -38,7 +38,7 @@ public class EdsInstanceVersionProviderHolderBuilder {
             Integer instanceId) throws EdsInstanceVersionProviderException {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         IEdsConfigModel edsConfigModel = null;
-        if (IdentityUtil.hasIdentity(edsInstance.getConfigId())) {
+        if (IdentityUtils.hasIdentity(edsInstance.getConfigId())) {
             EdsConfig edsConfig = edsConfigService.getById(edsInstance.getConfigId());
             if (edsConfig != null) {
                 edsConfigModel = EdsInstanceProviderFactory.produceConfig(edsInstance.getEdsType(), edsConfig);

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.RiskChangeModel;
@@ -38,7 +38,7 @@ public class RiskChangeTicketEntryBuilder {
                 .businessId(riskChangeApplication.getApplicant()
                         .getBusinessId())
                 .completed(false)
-                .entryKey(IdentityUtil.randomUUID())
+                .entryKey(IdentityUtils.randomUUID())
                 .valid(true)
                 .content(YamlUtils.dump(param.getDetail()))
                 .build();

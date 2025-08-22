@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public final class IdentityUtil {
+public final class IdentityUtils {
 
     public static boolean hasIdentity(Integer id) {
         if (id == null) {
@@ -54,7 +54,8 @@ public final class IdentityUtil {
      * @return String UUID
      *//**/
     public static String randomUUID() {
-        String uuid = UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID()
+                .toString();
         return uuid.replaceAll("-", "");
     }
 

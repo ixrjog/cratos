@@ -1,6 +1,6 @@
 package com.baiyi.cratos.aspect;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.Commited;
 import com.baiyi.cratos.domain.annotation.Committing;
 import com.baiyi.cratos.domain.generator.BusinessCommit;
@@ -54,7 +54,7 @@ public class CommittingAspect {
                     .getAuthentication();
             final String username = authentication.getName();
             Integer businessId = getBusinessId(joinPoint, committing);
-            if (!IdentityUtil.hasIdentity(businessId)) {
+            if (!IdentityUtils.hasIdentity(businessId)) {
                 log.warn("businessId does not exist.");
                 return;
             }

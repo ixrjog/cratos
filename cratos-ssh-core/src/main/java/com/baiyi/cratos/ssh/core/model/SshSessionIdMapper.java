@@ -1,8 +1,8 @@
 package com.baiyi.cratos.ssh.core.model;
 
+import com.baiyi.cratos.common.util.SshIdUtils;
 import org.apache.sshd.common.io.IoSession;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,8 +15,7 @@ public class SshSessionIdMapper {
     private static final ConcurrentHashMap<Long, String> MAPPER = new ConcurrentHashMap<>();
 
     public static void put(IoSession ioSession) {
-        MAPPER.put(ioSession.getId(), UUID.randomUUID()
-                .toString());
+        MAPPER.put(ioSession.getId(), SshIdUtils.generateID());
     }
 
     public static String getSessionId(IoSession ioSession) {

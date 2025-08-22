@@ -3,6 +3,7 @@ package com.baiyi.cratos.shell.command.custom.eds;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IpUtils;
+import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -283,7 +284,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
 
     private String generateInstanceId(EdsAsset computerAsset) {
         return Joiner.on("#")
-                .join(computerAsset.getAssetId(), UUID.randomUUID());
+                .join(computerAsset.getAssetId(), SshIdUtils.generateID());
     }
 
     private boolean isClosed(String sessionId, String instanceId) {

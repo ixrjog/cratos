@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.provider.asset;
 
-import com.baiyi.cratos.common.util.IdentityUtil;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
@@ -64,13 +64,13 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
                                                       EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Optional.ofNullable(entity.getUserId())
-                .filter(IdentityUtil::hasIdentity)
+                .filter(IdentityUtils::hasIdentity)
                 .ifPresent(userId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_USER_ID, userId)));
         Optional.ofNullable(entity.getProjectId())
-                .filter(IdentityUtil::hasIdentity)
+                .filter(IdentityUtils::hasIdentity)
                 .ifPresent(projectId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_PROJECT_ID, projectId)));
         Optional.ofNullable(entity.getGroupId())
-                .filter(IdentityUtil::hasIdentity)
+                .filter(IdentityUtils::hasIdentity)
                 .ifPresent(projectId -> indices.add(createEdsAssetIndex(edsAsset, GITLAB_GROUP_ID, projectId)));
         return indices;
     }
