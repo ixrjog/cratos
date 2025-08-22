@@ -21,7 +21,10 @@ import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
+import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
+import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
+import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
@@ -68,6 +71,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
     private final EdsInstanceHelper edsInstanceHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
+    private final SimpleSshSessionFacade simpleSshSessionFacade;
+
     @Value("${cratos.language:en-us}")
     protected String language;
 
@@ -95,6 +100,11 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalMessageHandler<S
                     .getCols(), openMessage.getTerminal()
                     .getRows()));
             HostSystem proxySystem = getProxyHost(server);
+            // 记录 SSH 会话实例
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
+                    targetSystem, SshSessionInstanceTypeEnum.SERVER, targetSystem.getAuditPath());
+            simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
+
             if (proxySystem == null) {
                 // 直连
                 RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);
