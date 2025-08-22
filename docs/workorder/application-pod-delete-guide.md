@@ -117,7 +117,7 @@ graph TB
 
 ## 🔄 工单处理流程
 
-### 1️⃣ 紧急工单创建流程
+### 1️⃣ 完整工单生命周期流程
 
 ```mermaid
 sequenceDiagram
@@ -127,6 +127,7 @@ sequenceDiagram
     participant TokenHolder as 🔑 TokenHolder
     participant Redis as 📊 Redis
     participant K8sClient as ☸️ K8s客户端
+    participant EntryService as 📝 EntryService
     
     Note over User: 🚨 紧急情况发生
     User->>UI: 创建Pod删除工单
@@ -135,12 +136,17 @@ sequenceDiagram
     Provider->>Provider: 验证应用信息
     Provider->>Provider: 分析应用标签
     Provider->>Provider: 检查权限
+    Provider->>EntryService: 保存工单条目
     
     Note over Provider: 工单审批完成后
+    Provider->>Provider: processEntry()调用
     Provider->>TokenHolder: 创建临时授权Token
     TokenHolder->>Redis: 存储Token (2小时有效期)
     Redis-->>TokenHolder: 确认存储
     TokenHolder-->>Provider: Token创建成功
+    
+    Provider->>EntryService: 记录Token创建成功
+    Note over EntryService: 更新工单条目状态<br/>success=true, completed=true<br/>executedAt=now, completedAt=now
     
     Provider-->>UI: 返回工单详情
     UI-->>User: 显示授权Token信息
@@ -154,90 +160,359 @@ sequenceDiagram
     alt Token有效
         TokenHolder-->>K8sClient: 授权通过
         K8sClient->>K8sClient: 执行Pod删除操作
+        K8sClient->>EntryService: 记录删除操作结果
+        Note over EntryService: 记录实际删除操作<br/>包含删除的Pod信息<br/>操作时间和结果
         K8sClient-->>User: 删除成功
     else Token无效/过期
         TokenHolder-->>K8sClient: 授权失败
+        K8sClient->>EntryService: 记录授权失败
         K8sClient-->>User: 操作被拒绝
     end
 ```
 
-### 2️⃣ Token生命周期管理
+### 2️⃣ 工单条目状态管理
 
 ```mermaid
 stateDiagram-v2
-    [*] --> 工单创建
-    工单创建 --> 等待审批
+    [*] --> 条目创建
+    条目创建 --> 等待审批
     等待审批 --> 审批通过
     等待审批 --> 审批拒绝
     
-    审批通过 --> Token创建
-    Token创建 --> Token激活
-    Token激活 --> 授权有效期
+    审批通过 --> Token授权处理
+    Token授权处理 --> 处理成功 : processEntry()成功
+    Token授权处理 --> 处理失败 : processEntry()失败
     
-    授权有效期 --> Token使用中 : 用户操作
-    授权有效期 --> Token过期 : 2小时后
+    处理成功 --> 记录成功状态
+    处理失败 --> 记录失败状态
     
-    Token使用中 --> Pod删除执行
-    Pod删除执行 --> 操作完成
+    记录成功状态 --> 等待用户操作
+    记录失败状态 --> 工单关闭
     
-    Token过期 --> Token失效
+    等待用户操作 --> Pod删除操作 : 用户使用Token
+    Pod删除操作 --> 删除成功
+    Pod删除操作 --> 删除失败
+    
+    删除成功 --> 记录删除结果
+    删除失败 --> 记录删除结果
+    
+    记录删除结果 --> 工单完成
     审批拒绝 --> 工单关闭
-    操作完成 --> 工单关闭
-    Token失效 --> 工单关闭
-    
+    工单完成 --> [*]
     工单关闭 --> [*]
     
-    note right of 授权有效期
-        默认2小时有效期
-        存储在Redis中
+    note right of 记录成功状态
+        success = true
+        completed = true
+        executedAt = now
+        completedAt = now
     end note
     
-    note right of Token使用中
-        可多次使用
-        直到过期为止
+    note right of 记录失败状态
+        success = false
+        completed = true
+        result = error_message
+        executedAt = now
+        completedAt = now
     end note
 ```
 
-### 3️⃣ Pod删除执行流程
+### 3️⃣ 操作记录机制详解
 
 ```mermaid
 graph TD
-    START[开始删除操作] --> TOKEN_CHECK[检查Token有效性]
+    START[工单条目处理开始] --> PROCESS[processEntry执行]
     
-    TOKEN_CHECK --> VALID{Token有效?}
-    VALID -->|否| REJECT[拒绝操作]
-    VALID -->|是| APP_CHECK[验证应用信息]
+    PROCESS --> TOKEN_CREATE[创建Token授权]
+    TOKEN_CREATE --> SUCCESS{处理成功?}
     
-    APP_CHECK --> NAMESPACE_CHECK[检查命名空间权限]
-    NAMESPACE_CHECK --> POD_LIST[获取Pod列表]
+    SUCCESS -->|是| RECORD_SUCCESS[InvokeEntryResult.success]
+    SUCCESS -->|否| RECORD_FAILED[InvokeEntryResult.failed]
     
-    POD_LIST --> POD_FILTER[筛选目标Pod]
-    POD_FILTER --> CONFIRM{确认删除?}
+    RECORD_SUCCESS --> SET_SUCCESS[设置success=true]
+    RECORD_FAILED --> SET_FAILED[设置success=false]
+    RECORD_FAILED --> SET_ERROR[设置result=错误信息]
     
-    CONFIRM -->|否| CANCEL[取消操作]
-    CONFIRM -->|是| DELETE_PODS[执行Pod删除]
+    SET_SUCCESS --> SET_COMPLETED[设置completed=true]
+    SET_FAILED --> SET_COMPLETED
+    SET_ERROR --> SET_COMPLETED
     
-    DELETE_PODS --> MONITOR[监控删除状态]
-    MONITOR --> SUCCESS{删除成功?}
+    SET_COMPLETED --> SET_TIMES[设置executedAt和completedAt]
+    SET_TIMES --> SAVE_ENTRY[保存工单条目]
     
-    SUCCESS -->|是| LOG_SUCCESS[记录成功日志]
-    SUCCESS -->|否| LOG_ERROR[记录错误日志]
+    SAVE_ENTRY --> USER_OPERATION[用户执行Pod删除]
+    USER_OPERATION --> LOG_OPERATION[记录实际删除操作]
+    LOG_OPERATION --> END[处理完成]
     
-    LOG_SUCCESS --> COMPLETE[操作完成]
-    LOG_ERROR --> RETRY{需要重试?}
-    
-    RETRY -->|是| DELETE_PODS
-    RETRY -->|否| FAIL[操作失败]
-    
-    REJECT --> END[结束]
-    CANCEL --> END
-    COMPLETE --> END
-    FAIL --> END
+    style RECORD_SUCCESS fill:#c8e6c9
+    style RECORD_FAILED fill:#ffcdd2
+    style LOG_OPERATION fill:#e1f5fe
 ```
 
----
+## 📝 操作记录机制深度分析
 
-## 🏷️ 核心组件分析
+### 1. 工单条目状态字段
+
+```java
+// WorkOrderTicketEntry 关键字段
+public class WorkOrderTicketEntry {
+    private Boolean completed;      // 是否完成
+    private Boolean success;        // 是否成功
+    private String result;          // 结果信息(失败时记录错误)
+    private Date executedAt;        // 执行时间
+    private Date completedAt;       // 完成时间
+}
+```
+
+### 2. 操作记录工具类 (InvokeEntryResult)
+
+```java
+public class InvokeEntryResult {
+    
+    // 记录成功操作
+    public static void success(WorkOrderTicketEntry entry) {
+        entry.setSuccess(true);           // 标记成功
+        completed(entry);                 // 设置完成状态
+    }
+    
+    // 记录失败操作
+    public static void failed(WorkOrderTicketEntry entry, String message) {
+        entry.setResult(message);         // 记录错误信息
+        entry.setSuccess(false);          // 标记失败
+        completed(entry);                 // 设置完成状态
+    }
+    
+    // 设置完成状态
+    public static void completed(WorkOrderTicketEntry entry) {
+        entry.setExecutedAt(new Date());  // 记录执行时间
+        entry.setCompletedAt(new Date()); // 记录完成时间
+        entry.setCompleted(true);         // 标记已完成
+    }
+}
+```
+
+### 3. 基础处理器的记录逻辑
+
+```java
+// BaseTicketEntryProvider.processEntry()
+@Override
+public void processEntry(WorkOrderTicketEntry entry) {
+    Detail detail = loadAs(entry);
+    WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
+    
+    try {
+        // 调用具体的处理逻辑 (创建Token)
+        processEntry(ticket, entry, detail);
+        
+        // 记录成功状态
+        InvokeEntryResult.success(entry);
+        
+    } catch (Exception e) {
+        if (!(e instanceof WorkOrderTicketException)) {
+            log.debug("Error processing ticket entry: {}", e.getMessage());
+        }
+        
+        // 记录失败状态和错误信息
+        InvokeEntryResult.failed(entry, e.getMessage());
+    }
+    
+    // 保存工单条目状态到数据库
+    saveEntry(entry);
+}
+```
+
+### 4. Pod删除操作的双重记录机制
+
+#### 4.1 Token创建记录
+```java
+// ApplicationDeploymentPodDeleteTicketEntryProvider.processEntry()
+@Override
+protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
+                            ApplicationVO.Application application) throws WorkOrderTicketException {
+    try {
+        // 创建2小时有效的删除授权Token
+        applicationDeletePodTokenHolder.setToken(
+            workOrderTicket.getUsername(), 
+            application.getApplicationName(),
+            workOrderTicket
+        );
+        
+        // 这里会被BaseTicketEntryProvider自动记录为成功
+        // InvokeEntryResult.success(entry) 会被调用
+        
+    } catch (Exception e) {
+        // 如果Token创建失败，会被记录为失败
+        // InvokeEntryResult.failed(entry, e.getMessage()) 会被调用
+        throw new WorkOrderTicketException("Token创建失败: " + e.getMessage());
+    }
+}
+```
+
+#### 4.2 实际删除操作记录
+```java
+// 用户使用Token执行Pod删除时的记录逻辑
+public class PodDeleteOperationLogger {
+    
+    public void recordPodDeletionOperation(String username, String applicationName, 
+                                         List<String> deletedPods, boolean success, String error) {
+        
+        // 获取对应的工单条目
+        WorkOrderTicketEntry entry = findEntryByUserAndApp(username, applicationName);
+        
+        if (entry != null) {
+            // 创建操作记录
+            PodDeleteOperationRecord record = PodDeleteOperationRecord.builder()
+                .ticketId(entry.getTicketId())
+                .ticketEntryId(entry.getId())
+                .username(username)
+                .applicationName(applicationName)
+                .deletedPods(deletedPods)
+                .operationTime(new Date())
+                .success(success)
+                .errorMessage(error)
+                .build();
+            
+            // 保存操作记录
+            podDeleteOperationService.save(record);
+            
+            // 更新工单条目的最后操作时间
+            entry.setLastOperationAt(new Date());
+            workOrderTicketEntryService.updateByPrimaryKey(entry);
+        }
+    }
+}
+```
+
+### 5. 完整的操作审计链
+
+```mermaid
+graph TB
+    subgraph "工单层面记录"
+        TICKET_CREATE[工单创建记录]
+        TICKET_APPROVE[工单审批记录]
+        TICKET_COMPLETE[工单完成记录]
+    end
+    
+    subgraph "条目层面记录"
+        ENTRY_CREATE[条目创建记录]
+        ENTRY_PROCESS[条目处理记录]
+        ENTRY_SUCCESS[处理成功记录]
+        ENTRY_FAILED[处理失败记录]
+    end
+    
+    subgraph "Token层面记录"
+        TOKEN_CREATE[Token创建记录]
+        TOKEN_USE[Token使用记录]
+        TOKEN_EXPIRE[Token过期记录]
+    end
+    
+    subgraph "操作层面记录"
+        POD_DELETE[Pod删除操作记录]
+        POD_SUCCESS[删除成功记录]
+        POD_FAILED[删除失败记录]
+    end
+    
+    TICKET_CREATE --> ENTRY_CREATE
+    ENTRY_CREATE --> ENTRY_PROCESS
+    ENTRY_PROCESS --> ENTRY_SUCCESS
+    ENTRY_PROCESS --> ENTRY_FAILED
+    
+    ENTRY_SUCCESS --> TOKEN_CREATE
+    TOKEN_CREATE --> TOKEN_USE
+    TOKEN_USE --> POD_DELETE
+    
+    POD_DELETE --> POD_SUCCESS
+    POD_DELETE --> POD_FAILED
+    
+    POD_SUCCESS --> TICKET_COMPLETE
+    POD_FAILED --> TICKET_COMPLETE
+    
+    TOKEN_USE --> TOKEN_EXPIRE
+    TOKEN_EXPIRE --> TICKET_COMPLETE
+    
+    classDef ticketLevel fill:#e3f2fd
+    classDef entryLevel fill:#f3e5f5
+    classDef tokenLevel fill:#e8f5e8
+    classDef operationLevel fill:#fff3e0
+    
+    class TICKET_CREATE,TICKET_APPROVE,TICKET_COMPLETE ticketLevel
+    class ENTRY_CREATE,ENTRY_PROCESS,ENTRY_SUCCESS,ENTRY_FAILED entryLevel
+    class TOKEN_CREATE,TOKEN_USE,TOKEN_EXPIRE tokenLevel
+    class POD_DELETE,POD_SUCCESS,POD_FAILED operationLevel
+```
+
+### 6. 数据库记录示例
+
+#### 6.1 工单条目记录
+```sql
+-- work_order_ticket_entry 表记录
+INSERT INTO work_order_ticket_entry (
+    ticket_id, name, business_type, business_id,
+    completed, success, result, 
+    executed_at, completed_at, created_time
+) VALUES (
+    12345, 'web-service', 'APPLICATION', 100,
+    true, true, NULL,
+    '2025-08-22 10:00:00', '2025-08-22 10:00:01', '2025-08-22 09:30:00'
+);
+```
+
+#### 6.2 Token使用记录
+```sql
+-- pod_delete_token_usage 表记录
+INSERT INTO pod_delete_token_usage (
+    ticket_id, username, application_name,
+    token_created_at, token_used_at, token_expired_at,
+    operations_count, last_operation_at
+) VALUES (
+    12345, 'admin', 'web-service',
+    '2025-08-22 10:00:00', '2025-08-22 10:15:00', '2025-08-22 12:00:00',
+    3, '2025-08-22 11:30:00'
+);
+```
+
+#### 6.3 Pod删除操作记录
+```sql
+-- pod_delete_operations 表记录
+INSERT INTO pod_delete_operations (
+    ticket_id, ticket_entry_id, username, application_name,
+    namespace, deleted_pods, operation_time, success, error_message
+) VALUES (
+    12345, 67890, 'admin', 'web-service',
+    'production', '["web-service-7d4f8b9c-abc12", "web-service-7d4f8b9c-def34"]',
+    '2025-08-22 10:15:00', true, NULL
+);
+```
+
+### 7. 审计查询示例
+
+```java
+// 查询用户的Pod删除操作历史
+public List<PodDeleteAuditRecord> getUserPodDeleteHistory(String username, Date startTime, Date endTime) {
+    return auditService.queryPodDeleteOperations(
+        PodDeleteAuditQuery.builder()
+            .username(username)
+            .startTime(startTime)
+            .endTime(endTime)
+            .includeTokenInfo(true)
+            .includeTicketInfo(true)
+            .build()
+    );
+}
+
+// 查询应用的Pod删除操作历史
+public List<PodDeleteAuditRecord> getApplicationPodDeleteHistory(String applicationName, Date startTime, Date endTime) {
+    return auditService.queryPodDeleteOperations(
+        PodDeleteAuditQuery.builder()
+            .applicationName(applicationName)
+            .startTime(startTime)
+            .endTime(endTime)
+            .includeUserInfo(true)
+            .includeOperationDetails(true)
+            .build()
+    );
+}
+```
 
 ### 1. Pod删除工单提供者 (ApplicationDeploymentPodDeleteTicketEntryProvider)
 
@@ -541,22 +816,39 @@ public void deletePods(String applicationName, String namespace) {
 
 ```yaml
 # Prometheus监控指标
+- name: pod_delete_ticket_created_total
+  help: Pod删除工单创建总数
+  type: counter
+  labels: [application, username]
+  
 - name: pod_delete_token_created_total
   help: Pod删除Token创建总数
   type: counter
+  labels: [application, username, result]
   
 - name: pod_delete_token_expired_total  
   help: Pod删除Token过期总数
   type: counter
+  labels: [application, username]
   
 - name: pod_delete_operations_total
   help: Pod删除操作总数
   type: counter
-  labels: [application, namespace, result]
+  labels: [application, namespace, username, result]
   
 - name: pod_delete_token_active_count
   help: 当前活跃Token数量
   type: gauge
+  
+- name: pod_delete_entry_processing_duration
+  help: 工单条目处理时长
+  type: histogram
+  labels: [application, result]
+  
+- name: pod_delete_operation_success_rate
+  help: Pod删除操作成功率
+  type: gauge
+  labels: [application, time_window]
 ```
 
 ### 告警规则
@@ -573,6 +865,7 @@ groups:
           severity: warning
         annotations:
           summary: "紧急删除Token数量过多"
+          description: "当前活跃的Pod删除Token数量为 {{ $value }}，可能存在异常情况"
           
       - alert: PodDeleteFailureRate
         expr: rate(pod_delete_operations_total{result="failed"}[5m]) > 0.1
@@ -581,6 +874,25 @@ groups:
           severity: critical
         annotations:
           summary: "Pod删除失败率过高"
+          description: "Pod删除操作失败率为 {{ $value }}，需要立即检查"
+          
+      - alert: TokenProcessingFailure
+        expr: rate(pod_delete_token_created_total{result="failed"}[10m]) > 0.05
+        for: 3m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Token创建失败率异常"
+          description: "Token创建失败率为 {{ $value }}，可能存在系统问题"
+          
+      - alert: UnusedTokensAccumulating
+        expr: pod_delete_token_active_count - rate(pod_delete_operations_total[1h]) * 3600 > 5
+        for: 15m
+        labels:
+          severity: info
+        annotations:
+          summary: "存在大量未使用的Token"
+          description: "有 {{ $value }} 个Token创建后未被使用，可能需要关注"
 ```
 
 ---
