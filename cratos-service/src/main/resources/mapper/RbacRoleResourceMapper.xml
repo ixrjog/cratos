@@ -11,4 +11,11 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
+    <select id="queryResourceIds" resultType="java.lang.Integer">
+        select resource_id
+        from rbac_role_resource
+        where role_id = #{roleId}
+    </select>
+
 </mapper>

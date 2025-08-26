@@ -29,4 +29,6 @@ public interface RbacRoleFacade {
 
     boolean verifyRoleAccessLevelByUsername(AccessLevel accessLevel);
 
+    RbacRoleVO.RoleDetails queryRoleDetails(int id);
+
 }

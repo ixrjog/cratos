@@ -51,6 +51,12 @@ public class RbacController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Query role details")
+    @GetMapping(value = "/role/details/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<RbacRoleVO.RoleDetails> queryRoleDetails(@RequestParam int roleId) {
+        return HttpResult.ofBody(rbacRoleFacade.queryRoleDetails(roleId));
+    }
+
     @Operation(summary = "Add role")
     @PostMapping(value = "/role/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addRole(@RequestBody @Valid RbacRoleParam.AddRole addRole) {

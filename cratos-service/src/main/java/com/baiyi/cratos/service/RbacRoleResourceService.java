@@ -19,4 +19,6 @@ public interface RbacRoleResourceService extends BaseUniqueKeyService<RbacRoleRe
 
     List<RbacRoleResource> queryByRoleId(int roleId);
 
+    List<Integer> queryResourceIds(int roleId);
+
 }

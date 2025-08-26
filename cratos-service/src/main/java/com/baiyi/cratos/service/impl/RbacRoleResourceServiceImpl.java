@@ -58,6 +58,11 @@ public class RbacRoleResourceServiceImpl implements RbacRoleResourceService {
     }
 
     @Override
+    public List<Integer> queryResourceIds(int roleId) {
+        return rbacRoleResourceMapper.queryResourceIds(roleId);
+    }
+
+    @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACROLERESOURCE:ID:' + #id")
     public void clearCacheById(int id) {
     }
