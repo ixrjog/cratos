@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -70,6 +71,14 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<
         indices.add(createEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));
         indices.add(createEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
         return indices;
+    }
+
+    @Override
+    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.builder()
+                .comparisonName(true)
+                .build()
+                .compare(a1, a2);
     }
 
 }
