@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * @Author baiyi
  * @Date 2024/4/22 下午5:39
@@ -21,14 +24,12 @@ public class TableFooter {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Pagination {
-
+    public static class Pagination implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4462074819470952278L;
         private long totalNum;
-
         private int page;
-
         private int length;
-
         private String lang;
 
         public String toStr() {

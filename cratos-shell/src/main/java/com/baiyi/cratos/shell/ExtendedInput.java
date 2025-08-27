@@ -28,11 +28,8 @@ import java.util.List;
 public class ExtendedInput implements Input {
 
     public static final String PIPE = "|";
-
     public static final String ARROW = ">";
-
     public static final List<String> KEY_CHARS = Arrays.asList(PIPE, ARROW);
-
     private final Input base;
 
     /**

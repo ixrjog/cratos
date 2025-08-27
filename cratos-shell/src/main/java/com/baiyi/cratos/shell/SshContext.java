@@ -35,18 +35,12 @@ import java.util.List;
 public class SshContext {
 
     private SshShellRunnable sshShellRunnable;
-
     private Terminal terminal;
-
     private LineReader lineReader;
-
     private SshAuthentication authentication;
-
     private final List<PostProcessorObject> postProcessorsList = new ArrayList<>();
-
     @Setter
     private boolean background;
-
     private long backgroundCount = 0;
 
     /**

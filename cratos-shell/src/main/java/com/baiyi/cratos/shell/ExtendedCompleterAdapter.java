@@ -82,4 +82,5 @@ public class ExtendedCompleterAdapter extends CompleterAutoConfiguration.Complet
                 .collect(Collectors.toList());
         return words;
     }
+
 }

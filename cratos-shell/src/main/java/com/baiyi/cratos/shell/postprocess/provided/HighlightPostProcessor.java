@@ -27,8 +27,7 @@ import java.util.List;
  * Grep post processor
  */
 @Slf4j
-public class HighlightPostProcessor
-        implements PostProcessor<String, String> {
+public class HighlightPostProcessor implements PostProcessor<String, String> {
 
     @Override
     public String getName() {
@@ -49,8 +48,7 @@ public class HighlightPostProcessor
             String finalResult = result;
             for (String toHighlight : parameters) {
                 finalResult = finalResult.replaceAll(toHighlight,
-                        SshShellHelper.getBackgroundColoredMessage(toHighlight,
-                                PromptColor.YELLOW));
+                        SshShellHelper.getBackgroundColoredMessage(toHighlight, PromptColor.YELLOW));
             }
             return finalResult;
         }

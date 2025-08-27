@@ -30,8 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @AllArgsConstructor
-public class JsonPointerPostProcessor
-        implements PostProcessor<String, String> {
+public class JsonPointerPostProcessor implements PostProcessor<String, String> {
 
     private final ObjectMapper mapper;
 
@@ -55,14 +54,16 @@ public class JsonPointerPostProcessor
             }
             String path = parameters.getFirst();
             try {
-                JsonNode node = mapper.readTree(result).at(path);
+                JsonNode node = mapper.readTree(result)
+                        .at(path);
                 if (node.isMissingNode()) {
                     return "No node found with json path expression: " + path;
                 } else {
                     if (node.isTextual()) {
                         return node.asText();
                     } else {
-                        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+                        return mapper.writerWithDefaultPrettyPrinter()
+                                .writeValueAsString(node);
                     }
                 }
             } catch (IOException e) {

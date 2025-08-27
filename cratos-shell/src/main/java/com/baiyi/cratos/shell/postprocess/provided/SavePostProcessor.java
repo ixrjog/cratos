@@ -32,8 +32,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
  * Post processor used to save console result into file
  */
 @Slf4j
-public class SavePostProcessor
-        implements PostProcessor<Object, String> {
+public class SavePostProcessor implements PostProcessor<Object, String> {
 
     public static final String SAVE = "save";
 
@@ -68,7 +67,8 @@ public class SavePostProcessor
                 return "Zone saved to file: " + file.getAbsolutePath();
             } catch (IOException e) {
                 log.debug("Unable to write to file: " + file.getAbsolutePath(), e);
-                throw new PostProcessorException("Unable to write to file: " + file.getAbsolutePath() + ". " + e.getMessage(), e);
+                throw new PostProcessorException(
+                        "Unable to write to file: " + file.getAbsolutePath() + ". " + e.getMessage(), e);
             }
         }
     }
@@ -77,11 +77,13 @@ public class SavePostProcessor
         if (result instanceof String) {
             return (String) result;
         } else if (result instanceof Throwable) {
-            return ((Throwable) result).getClass().getName() + ": " + ((Throwable) result).getMessage();
+            return ((Throwable) result).getClass()
+                    .getName() + ": " + ((Throwable) result).getMessage();
         } else if (result != null) {
             return result.toString();
         } else {
             return "";
         }
     }
+
 }

@@ -30,8 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @AllArgsConstructor
-public class PrettyJsonPostProcessor
-        implements PostProcessor<Object, String> {
+public class PrettyJsonPostProcessor implements PostProcessor<Object, String> {
 
     private final ObjectMapper mapper;
 
@@ -48,10 +47,12 @@ public class PrettyJsonPostProcessor
     @Override
     public String process(Object result, List<String> parameters) throws PostProcessorException {
         try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result);
+            return mapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(result);
         } catch (JsonProcessingException e) {
             log.warn("Unable to prettify object: {}", result);
             throw new PostProcessorException("Unable to prettify object. " + e.getMessage(), e);
         }
     }
+
 }
