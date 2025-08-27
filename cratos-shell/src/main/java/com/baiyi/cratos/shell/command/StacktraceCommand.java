@@ -21,10 +21,8 @@ import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.postprocess.ExtendedResultHandlerService;
 import org.jline.terminal.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.shell.Availability;
-import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.commands.Stacktrace;
@@ -32,12 +30,12 @@ import org.springframework.shell.standard.commands.Stacktrace;
 /**
  * Override stacktrace command to get error per thread
  */
-@SshShellComponent
-@ShellCommandGroup("Built-In Commands")
-@ConditionalOnProperty(
-        name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + StacktraceCommand.GROUP + ".create",
-        havingValue = "true", matchIfMissing = true
-)
+//@SshShellComponent
+//@ShellCommandGroup("Built-In Commands")
+//@ConditionalOnProperty(
+//        name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + StacktraceCommand.GROUP + ".create",
+//        havingValue = "false", matchIfMissing = true
+//)
 public class StacktraceCommand extends AbstractCommand implements Stacktrace.Command {
 
     public static final String GROUP = "stacktrace";
