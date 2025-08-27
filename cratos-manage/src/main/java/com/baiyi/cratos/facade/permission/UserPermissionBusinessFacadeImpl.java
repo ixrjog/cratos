@@ -1,6 +1,7 @@
-package com.baiyi.cratos.facade.permission.impl;
+package com.baiyi.cratos.facade.permission;
 
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserPermissionBusinessException;
 import com.baiyi.cratos.common.util.EnvLifecycleUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
@@ -51,7 +52,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     private static final List<EdsAssetTypeEnum> EFFECTIVE_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
             EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
     private final Tag edsTagUniqueKey = Tag.builder()
-            .tagKey("EDS")
+            .tagKey(SysTagKeys.EDS.getKey())
             .build();
 
     @Override
@@ -173,7 +174,6 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         if (CollectionUtils.isEmpty(groups)) {
             return DataTable.NO_DATA;
         }
-
         String queryGroupName = param.getQueryGroupName();
         if (StringUtils.hasText(queryGroupName)) {
             groups = groups.stream()
@@ -183,12 +183,10 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                 return DataTable.NO_DATA;
             }
         }
-
         Tag tagGroup = tagGroupService.getTagGroup();
         if (tagGroup == null) {
             return DataTable.NO_DATA;
         }
-
         List<Integer> businessIds = edsAssetService.queryUserPermissionBusinessIds(
                 EdsAssetQuery.QueryUserPermissionBusinessIdParam.builder()
                         .username(param.getUsername())
@@ -198,7 +196,6 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         if (businessIds.isEmpty()) {
             return DataTable.NO_DATA;
         }
-
         param.setEffectiveAssetTypes(EFFECTIVE_ASSET_TYPES.stream()
                 .map(Enum::name)
                 .toList());
