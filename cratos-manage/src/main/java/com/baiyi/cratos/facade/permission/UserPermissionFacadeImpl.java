@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.permission.impl;
+package com.baiyi.cratos.facade.permission;
 
 import com.baiyi.cratos.business.PermissionBusinessService;
 import com.baiyi.cratos.business.PermissionBusinessServiceFactory;

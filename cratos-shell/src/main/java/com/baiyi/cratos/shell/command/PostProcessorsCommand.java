@@ -21,9 +21,7 @@ import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.postprocess.PostProcessor;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.shell.Availability;
-import org.springframework.shell.standard.ShellCommandGroup;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 
@@ -35,12 +33,12 @@ import java.util.List;
 /**
  * Command to list available post processors
  */
-@SshShellComponent
-@ShellCommandGroup("Built-In Commands")
-@ConditionalOnProperty(
-        name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + PostProcessorsCommand.GROUP + ".create",
-        havingValue = "true", matchIfMissing = true
-)
+//@SshShellComponent
+//@ShellCommandGroup("Built-In Commands")
+//@ConditionalOnProperty(
+//        name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + PostProcessorsCommand.GROUP + ".create",
+//        havingValue = "false", matchIfMissing = true
+//)
 public class PostProcessorsCommand extends AbstractCommand {
 
     public static final String GROUP = "postprocessors";

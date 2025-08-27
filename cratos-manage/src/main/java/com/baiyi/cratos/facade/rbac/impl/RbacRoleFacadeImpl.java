@@ -91,16 +91,8 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
         RbacRole rbacRole = rbacRoleService.getById(id);
         List<Integer> resourceIds = rbacRoleResourceService.queryResourceIds(id);
         Map<Integer, RbacGroup> rbacGroupMap = Maps.newHashMap();
-        Map<Integer, List<RbacResource>> groupResourceListMap = Maps.newHashMap();
-        for (Integer resourceId : resourceIds) {
-            RbacResource rbacResource = rbacResourceService.getById(resourceId);
-            if (rbacResource == null) continue;
-            int groupId = rbacResource.getGroupId();
-            rbacGroupMap.computeIfAbsent(groupId, k -> rbacGroupService.getById(groupId));
-            groupResourceListMap.computeIfAbsent(groupId, k -> Lists.newArrayList())
-                    .add(rbacResource);
-        }
-        List<RbacRoleVO.GroupResource> groupResources = groupResourceListMap.entrySet()
+        Map<Integer, List<RbacResource>> groupResourcesMap = queryGroupResourcesMap(id, rbacGroupMap);
+        List<RbacRoleVO.GroupResource> groupResources = groupResourcesMap.entrySet()
                 .stream()
                 .map(entry -> {
                     RbacGroupVO.Group group = BeanCopierUtils.copyProperties(rbacGroupMap.get(entry.getKey()),
@@ -119,6 +111,20 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
                 .role(BeanCopierUtils.copyProperties(rbacRole, RbacRoleVO.Role.class))
                 .groupResources(groupResources)
                 .build();
+    }
+
+    private Map<Integer, List<RbacResource>> queryGroupResourcesMap(int roleId, Map<Integer, RbacGroup> rbacGroupMap) {
+        List<Integer> resourceIds = rbacRoleResourceService.queryResourceIds(roleId);
+        Map<Integer, List<RbacResource>> groupResourcesMap = Maps.newHashMap();
+        for (Integer resourceId : resourceIds) {
+            RbacResource rbacResource = rbacResourceService.getById(resourceId);
+            if (rbacResource == null) continue;
+            int groupId = rbacResource.getGroupId();
+            rbacGroupMap.computeIfAbsent(groupId, k -> rbacGroupService.getById(groupId));
+            groupResourcesMap.computeIfAbsent(groupId, k -> Lists.newArrayList())
+                    .add(rbacResource);
+        }
+        return groupResourcesMap;
     }
 
     @Override
