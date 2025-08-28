@@ -15,7 +15,6 @@ import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
-import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
@@ -24,8 +23,6 @@ import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandle
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
@@ -85,19 +82,9 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
                     targetSystem, SshSessionInstanceTypeEnum.SERVER, auditPath);
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-            if (proxySystem == null) {
-                // 直连
-                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);
-            } else {
-                // 代理模式
-                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), proxySystem, targetSystem);
-            }
-            try {
-                // 发送登录通知
-                sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
-            } catch (IOException ioException) {
-                log.debug(ioException.getMessage(), ioException);
-            }
+            openSshCrystal(sshSession, targetSystem, proxySystem);
+            // 发送登录通知
+            sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
         } catch (Exception e) {
             sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
                     HOST_FAIL_STATUS, e.getMessage());

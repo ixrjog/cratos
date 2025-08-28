@@ -13,7 +13,6 @@ import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
-import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
@@ -22,6 +21,7 @@ import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandle
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -58,6 +58,11 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
     @Override
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.SuperOpen openMessage = toMessage(message);
+        if (!StringUtils.hasText(openMessage.getServerAccount())) {
+            sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                    AUTH_FAIL_STATUS, "Login serverAccount not specified");
+            return;
+        }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sshSession.getSessionId(),
                     openMessage.getInstanceId());
@@ -71,6 +76,11 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
             // 查询serverAccount
             ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
+            if (serverAccount == null) {
+                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS, "The specified login serverAccount does not exist");
+                return;
+            }
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
                     serverAccount, credential);
@@ -84,13 +94,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
             SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
                     targetSystem, SshSessionInstanceTypeEnum.SERVER, auditPath);
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-            if (proxySystem == null) {
-                // 直连
-                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);
-            } else {
-                // 代理模式
-                RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), proxySystem, targetSystem);
-            }
+            openSshCrystal(sshSession, targetSystem, proxySystem);
             try {
                 // 发送登录通知
                 sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());

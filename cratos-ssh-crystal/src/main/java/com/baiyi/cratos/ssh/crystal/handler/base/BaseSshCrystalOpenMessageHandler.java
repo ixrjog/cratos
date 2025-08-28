@@ -23,6 +23,7 @@ import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
+import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.message.SshMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
@@ -160,6 +161,16 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
                 .businessId(assetId)
                 .build();
         return businessTagFacade.getBusinessTag(byBusiness, sysTagKeys.getKey());
+    }
+
+    protected void openSshCrystal(SshSession sshSession, HostSystem targetSystem, HostSystem proxySystem) {
+        if (proxySystem == null) {
+            // 直连
+            RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), targetSystem);
+        } else {
+            // 代理模式
+            RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), proxySystem, targetSystem);
+        }
     }
 
 }
