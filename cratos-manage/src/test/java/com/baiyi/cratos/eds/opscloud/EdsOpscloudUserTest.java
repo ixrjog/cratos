@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserPermissionRepo;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
-import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;

@@ -11,6 +11,7 @@ import lombok.Getter;
 public enum MessageState {
 
     HEARTBEAT("会话保持"),
+    SUPER_OPEN("管理员打开实例会话"),
     OPEN("打开实例会话"),
     COMMAND("交互命令"),
     DUPLICATE("复制会话"),

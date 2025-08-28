@@ -16,6 +16,16 @@ public class SshCrystalMessage {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @JsonIgnoreProperties
+    public static class SuperOpen extends SshMessage.BaseMessage {
+        private Integer assetId;
+        private String instanceId;
+        private String instanceName;
+        private String serverAccount;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @JsonIgnoreProperties
     public static class Open extends SshMessage.BaseMessage {
         private Integer assetId;
         private String instanceId;

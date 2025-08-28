@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.rbac;
+package com.baiyi.cratos.common.facade;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.generator.RbacUserRole;

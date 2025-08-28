@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.rbac.impl;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.domain.generator.RbacUserRole;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
-import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -18,7 +18,7 @@ import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;
-import com.baiyi.cratos.facade.rbac.RbacUserRoleFacade;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;

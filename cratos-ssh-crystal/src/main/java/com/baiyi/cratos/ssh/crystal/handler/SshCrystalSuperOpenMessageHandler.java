@@ -1,11 +1,9 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
-import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.domain.SimpleBusiness;
-import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
@@ -32,46 +30,47 @@ import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/9/25 10:39
+ * &#064;Date  2025/8/28 13:33
  * &#064;Version 1.0
  */
-@SuppressWarnings({"rawtypes"})
 @Slf4j
 @Component
-@MessageStates(state = MessageState.OPEN)
-public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandler<SshCrystalMessage.Open> {
+@MessageStates(state = MessageState.SUPER_OPEN)
+public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessageHandler<SshCrystalMessage.SuperOpen> {
 
-    public SshCrystalOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
-                                        CredentialService credentialService,
-                                        ServerAccessControlFacade serverAccessControlFacade,
-                                        BusinessTagFacade businessTagFacade, UserService userService,
-                                        NotificationTemplateService notificationTemplateService,
-                                        EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
-                                        DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
-                                        SimpleSshSessionFacade simpleSshSessionFacade) {
+    private final RbacUserRoleFacade rbacUserRoleFacade;
+
+    public SshCrystalSuperOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
+                                             CredentialService credentialService,
+                                             ServerAccessControlFacade serverAccessControlFacade,
+                                             BusinessTagFacade businessTagFacade, UserService userService,
+                                             NotificationTemplateService notificationTemplateService,
+                                             EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                             DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
+                                             SimpleSshSessionFacade simpleSshSessionFacade,
+                                             RbacUserRoleFacade rbacUserRoleFacade) {
         super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceHelper, edsConfigService, dingtalkService,
                 sshAuditProperties, simpleSshSessionFacade);
+        this.rbacUserRoleFacade = rbacUserRoleFacade;
     }
 
     @Override
     public void handle(String username, String message, Session session, SshSession sshSession) {
-        SshCrystalMessage.Open openMessage = toMessage(message);
+        SshCrystalMessage.SuperOpen openMessage = toMessage(message);
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sshSession.getSessionId(),
                     openMessage.getInstanceId());
             heartbeat(sshSession.getSessionId());
-            AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
-                    openMessage.getAssetId());
-            if (!accessControl.getPermission()) {
+            // 鉴权
+            if (rbacUserRoleFacade.hasAccessLevel(username, AccessLevel.OPS)) {
                 sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS, accessControl.getMsg());
+                        AUTH_FAIL_STATUS, "Authentication failed, non-administrators are not allowed to log in");
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
             // 查询serverAccount
-            ServerAccount serverAccount = serverAccountService.getByName(
-                    getServerAccountName(openMessage.getAssetId()));
+            ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
                     serverAccount, credential);
@@ -103,20 +102,6 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                     HOST_FAIL_STATUS, e.getMessage());
             log.error("Crystal ssh open error: {}", e.getMessage());
         }
-    }
-
-    private String getServerAccountName(int assetId) {
-        BusinessTag businessTag = getServerBusinessTag(assetId, SysTagKeys.SERVER_ACCOUNT);
-        return businessTag.getTagValue();
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private BusinessTag getServerBusinessTag(int assetId, SysTagKeys sysTagKeys) {
-        SimpleBusiness byBusiness = SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(assetId)
-                .build();
-        return businessTagFacade.getBusinessTag(byBusiness, sysTagKeys.getKey());
     }
 
 }

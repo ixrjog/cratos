@@ -83,6 +83,7 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
     @OnError
     public void onError(Session session, Throwable error) {
         // TODO
+        log.error("Kubernetes ssh connection error: {}", error.getMessage(), error);
     }
 
     @OnClose

@@ -43,8 +43,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +70,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     private final NotificationTemplateService notificationTemplateService;
     private final UserService userService;
     private final EnvFacade envFacade;
-    
+
     @Value("${cratos.language:en-us}")
     protected String language;
 
@@ -185,7 +185,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
 
     private void sendInput(KubernetesSession kubernetesSession, String input) {
         try {
-            OutputStream out = kubernetesSession.getExecWatch()
+            BufferedOutputStream out = (BufferedOutputStream) kubernetesSession.getExecWatch()
                     .getInput();
             out.write(input.getBytes(StandardCharsets.UTF_8));
             out.flush();
