@@ -132,8 +132,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
     @SuppressWarnings("unchecked")
     private String getRemoteManagementIP(EdsAsset edsAsset) {
         EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(edsAsset.getAssetType());
-        if (EdsAssetTypeEnum.KUBERNETES_NODE.name()
-                .equals(edsAsset.getAssetType())) {
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
             EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
                     edsAsset.getInstanceId(), edsAsset.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
@@ -154,8 +153,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
             }
         }
         if (CLOUD_SERVER_TYPES.stream()
-                .filter(e -> e.equals(assetType))
-                .isParallel()) {
+                .anyMatch(e -> e.equals(assetType))) {
             return edsAsset.getAssetKey();
         }
         return "";
