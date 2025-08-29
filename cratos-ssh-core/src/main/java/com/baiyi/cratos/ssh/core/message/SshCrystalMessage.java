@@ -2,6 +2,8 @@ package com.baiyi.cratos.ssh.core.message;
 
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -17,9 +19,11 @@ public class SshCrystalMessage {
     @Data
     @JsonIgnoreProperties
     public static class SuperOpen extends SshMessage.BaseMessage {
+        @NotNull
         private Integer assetId;
         private String instanceId;
         private String instanceName;
+        @NotBlank
         private String serverAccount;
     }
 

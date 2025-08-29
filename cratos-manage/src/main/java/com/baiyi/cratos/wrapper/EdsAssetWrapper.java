@@ -3,9 +3,11 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.view.base.LoginServerVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.wrapper.AssetToBusinessWrapperFactory;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
@@ -55,6 +58,7 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
                 .put(makeResourceCountForAssetIndex(vo))
                 .build();
         vo.setResourceCount(resourceCount);
+        wrapLoginServer(vo);
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
@@ -80,6 +84,25 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(EDS_ASSET_INDEX.name(), edsAssetIndexService.selectCountByAssetId(asset.getId()));
         return resourceCount;
+    }
+
+    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
+            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
+
+    private void wrapLoginServer(EdsAssetVO.Asset vo) {
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.name()
+                .equals(vo.getAssetType())) {
+            return;
+        }
+        CLOUD_SERVER_TYPES.stream()
+                .filter(e -> e.name()
+                        .equals(vo.getAssetType()))
+                .findFirst()
+                .ifPresent(type -> {
+                    vo.setLoginServer(LoginServerVO.LoginServer.builder()
+                            .remoteManagementIP(vo.getAssetKey())
+                            .build());
+                });
     }
 
 }

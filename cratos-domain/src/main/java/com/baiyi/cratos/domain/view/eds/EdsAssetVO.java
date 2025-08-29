@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.model.cratos.CratosCommonModel;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
+import com.baiyi.cratos.domain.view.base.LoginServerVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -62,7 +63,7 @@ public class EdsAssetVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.EDS_ASSET)
-    public static class Asset extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasResourceCount, Serializable {
+    public static class Asset extends BaseVO implements BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, HasResourceCount, LoginServerVO.HasLoginServer,Serializable {
         @Serial
         private static final long serialVersionUID = 4604127025098701159L;
         private Integer id;
@@ -87,6 +88,7 @@ public class EdsAssetVO {
         private Map<String, Integer> resourceCount;
         private List<BusinessDocVO.BusinessDoc> businessDocs;
         private EdsInstanceVO.EdsInstance edsInstance;
+        private LoginServerVO.LoginServer loginServer;
 
         @Override
         public Integer getBusinessId() {
