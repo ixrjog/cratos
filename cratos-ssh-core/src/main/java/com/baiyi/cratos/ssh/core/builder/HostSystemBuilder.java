@@ -25,8 +25,7 @@ public class HostSystemBuilder {
                 .build();
     }
 
-    public static HostSystem buildHostSystem(EdsAsset server, ServerAccount serverAccount,
-                                             Credential credential) {
+    public static HostSystem buildHostSystem(EdsAsset server, ServerAccount serverAccount, Credential credential) {
         return HostSystem.builder()
                 .host(server.getAssetKey())
                 .serverAccount(serverAccount)
@@ -39,6 +38,16 @@ public class HostSystemBuilder {
         return HostSystem.builder()
                 .instanceId(instanceId)
                 .host(server.getAssetKey())
+                .serverAccount(serverAccount)
+                .credential(credential)
+                .build();
+    }
+
+    public static HostSystem buildHostSystem(String instanceId, String remoteManagementIP, ServerAccount serverAccount,
+                                             Credential credential) throws SshException {
+        return HostSystem.builder()
+                .instanceId(instanceId)
+                .host(remoteManagementIP)
                 .serverAccount(serverAccount)
                 .credential(credential)
                 .build();

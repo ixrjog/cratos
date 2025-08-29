@@ -2,9 +2,13 @@ package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
@@ -18,12 +22,17 @@ import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandler;
+import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeAddress;
+import io.fabric8.kubernetes.api.model.NodeStatus;
 import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 import static com.baiyi.cratos.ssh.core.model.HostSystem.AUTH_FAIL_STATUS;
 import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
@@ -39,6 +48,9 @@ import static com.baiyi.cratos.ssh.core.model.HostSystem.HOST_FAIL_STATUS;
 public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessageHandler<SshCrystalMessage.SuperOpen> {
 
     private final RbacUserRoleFacade rbacUserRoleFacade;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
+    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
+            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
 
     public SshCrystalSuperOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
                                              CredentialService credentialService,
@@ -48,11 +60,13 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
                                              DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
                                              SimpleSshSessionFacade simpleSshSessionFacade,
-                                             RbacUserRoleFacade rbacUserRoleFacade) {
+                                             RbacUserRoleFacade rbacUserRoleFacade,
+                                             EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceHelper, edsConfigService, dingtalkService,
                 sshAuditProperties, simpleSshSessionFacade);
         this.rbacUserRoleFacade = rbacUserRoleFacade;
+        this.holderBuilder = holderBuilder;
     }
 
     @Override
@@ -68,12 +82,19 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                     openMessage.getInstanceId());
             heartbeat(sshSession.getSessionId());
             // 鉴权
-            if (rbacUserRoleFacade.hasAccessLevel(username, AccessLevel.OPS)) {
+            if (!rbacUserRoleFacade.hasAccessLevel(username, AccessLevel.OPS)) {
                 sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
                         AUTH_FAIL_STATUS, "Authentication failed, non-administrators are not allowed to log in");
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
+            String remoteManagementIP = getRemoteManagementIP(server);
+            if (!IpUtils.isIP(remoteManagementIP)) {
+                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS,
+                        "The server you are trying to log in to is incorrect, unable to obtain a valid management IP");
+                return;
+            }
             // 查询serverAccount
             ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
             if (serverAccount == null) {
@@ -82,7 +103,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                 return;
             }
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), remoteManagementIP,
                     serverAccount, credential);
             // 初始化 Terminal size
             targetSystem.setTerminalSize(new org.jline.terminal.Size(openMessage.getTerminal()
@@ -106,6 +127,38 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                     HOST_FAIL_STATUS, e.getMessage());
             log.error("Crystal ssh open error: {}", e.getMessage());
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private String getRemoteManagementIP(EdsAsset edsAsset) {
+        EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(edsAsset.getAssetType());
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.name()
+                .equals(edsAsset.getAssetType())) {
+            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
+                    edsAsset.getInstanceId(), edsAsset.getAssetType());
+            Node node = edsInstanceProviderHolder.getProvider()
+                    .assetLoadAs(edsAsset.getOriginalModel());
+            List<NodeAddress> nodeAddresses = Optional.ofNullable(node)
+                    .map(Node::getStatus)
+                    .map(NodeStatus::getAddresses)
+                    .orElse(List.of());
+            Optional<NodeAddress> nodeAddressOptional = nodeAddresses.stream()
+                    .filter(nodeAddress -> nodeAddress.getType()
+                            .equals("InternalIP"))
+                    .findFirst();
+            if (nodeAddressOptional.isPresent()) {
+                return nodeAddressOptional.get()
+                        .getAddress();
+            } else {
+                return "";
+            }
+        }
+        if (CLOUD_SERVER_TYPES.stream()
+                .filter(e -> e.equals(assetType))
+                .isParallel()) {
+            return edsAsset.getAssetKey();
+        }
+        return "";
     }
 
 }

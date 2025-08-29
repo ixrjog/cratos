@@ -15,14 +15,19 @@ import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.IBaseWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
+import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeAddress;
+import io.fabric8.kubernetes.api.model.NodeStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
+import static com.baiyi.cratos.ssh.crystal.handler.SshCrystalSuperOpenMessageHandler.CLOUD_SERVER_TYPES;
 
 /**
  * @Author baiyi
@@ -86,23 +91,36 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         return resourceCount;
     }
 
-    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
-            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
-
     private void wrapLoginServer(EdsAssetVO.Asset vo) {
         if (EdsAssetTypeEnum.KUBERNETES_NODE.name()
                 .equals(vo.getAssetType())) {
+            @SuppressWarnings("unchecked") EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
+                    vo.getInstanceId(), vo.getAssetType());
+            Node node = edsInstanceProviderHolder.getProvider()
+                    .assetLoadAs(vo.getOriginalModel());
+            List<NodeAddress> nodeAddresses = Optional.ofNullable(node)
+                    .map(Node::getStatus)
+                    .map(NodeStatus::getAddresses)
+                    .orElse(List.of());
+            nodeAddresses.stream()
+                    .filter(nodeAddress -> nodeAddress.getType()
+                            .equals("InternalIP"))
+                    .findFirst()
+                    .ifPresent(nodeAddress -> {
+                        LoginServerVO.LoginServer loginServer = LoginServerVO.LoginServer.builder()
+                                .remoteManagementIP(nodeAddress.getAddress())
+                                .build();
+                        vo.setLoginServer(loginServer);
+                    });
             return;
         }
         CLOUD_SERVER_TYPES.stream()
-                .filter(e -> e.name()
-                        .equals(vo.getAssetType()))
+                .map(EdsAssetTypeEnum::name)
+                .filter(typeName -> typeName.equals(vo.getAssetType()))
                 .findFirst()
-                .ifPresent(type -> {
-                    vo.setLoginServer(LoginServerVO.LoginServer.builder()
-                            .remoteManagementIP(vo.getAssetKey())
-                            .build());
-                });
+                .ifPresent(typeName -> vo.setLoginServer(LoginServerVO.LoginServer.builder()
+                        .remoteManagementIP(vo.getAssetKey())
+                        .build()));
     }
 
 }
