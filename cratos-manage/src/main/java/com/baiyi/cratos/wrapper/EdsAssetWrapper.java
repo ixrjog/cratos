@@ -92,8 +92,8 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     }
 
     private void wrapLoginServer(EdsAssetVO.Asset vo) {
-        if (EdsAssetTypeEnum.KUBERNETES_NODE.name()
-                .equals(vo.getAssetType())) {
+        EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(vo.getAssetType());
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
             @SuppressWarnings("unchecked") EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
                     vo.getInstanceId(), vo.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
@@ -114,13 +114,12 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
                     });
             return;
         }
-        CLOUD_SERVER_TYPES.stream()
-                .map(EdsAssetTypeEnum::name)
-                .filter(typeName -> typeName.equals(vo.getAssetType()))
-                .findFirst()
-                .ifPresent(typeName -> vo.setLoginServer(LoginServerVO.LoginServer.builder()
-                        .remoteManagementIP(vo.getAssetKey())
-                        .build()));
+        if (CLOUD_SERVER_TYPES.stream()
+                .anyMatch(e -> e.equals(assetType))) {
+            vo.setLoginServer(LoginServerVO.LoginServer.builder()
+                    .remoteManagementIP(vo.getAssetKey())
+                    .build());
+        }
     }
 
 }
