@@ -49,8 +49,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
 
     private final RbacUserRoleFacade rbacUserRoleFacade;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
-    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
-            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
+
 
     public SshCrystalSuperOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
                                              CredentialService credentialService,

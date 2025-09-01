@@ -28,6 +28,7 @@ import com.baiyi.cratos.ssh.core.message.SshMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
+import com.google.api.client.util.Lists;
 import com.google.common.base.Joiner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +67,9 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final DingtalkService dingtalkService;
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
+
+    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
+            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -131,8 +135,17 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
         if (!IpUtils.isIP(proxyIP)) {
             return HostSystem.NO_HOST;
         }
-        List<EdsAsset> proxyServers = edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(),
-                server.getAssetType(), proxyIP);
+        final List<EdsAsset> proxyServers = Lists.newArrayList();
+        // Kubernetes node
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(EdsAssetTypeEnum.valueOf(server.getAssetType()))) {
+            CLOUD_SERVER_TYPES.forEach(type -> proxyServers.addAll(
+                    edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(), server.getAssetType(),
+                            proxyIP)));
+        } else {
+            proxyServers.addAll(
+                    edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(), server.getAssetType(),
+                            proxyIP));
+        }
         if (CollectionUtils.isEmpty(proxyServers)) {
             return HostSystem.NO_HOST;
         }

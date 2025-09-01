@@ -44,7 +44,7 @@ public class HostSystemBuilder {
     }
 
     public static HostSystem buildHostSystem(String instanceId, String remoteManagementIP, ServerAccount serverAccount,
-                                             Credential credential) throws SshException {
+                                             Credential credential) {
         return HostSystem.builder()
                 .instanceId(instanceId)
                 .host(remoteManagementIP)

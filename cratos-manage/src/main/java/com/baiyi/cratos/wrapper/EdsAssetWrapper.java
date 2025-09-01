@@ -91,10 +91,11 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
         return resourceCount;
     }
 
+    @SuppressWarnings("unchecked")
     private void wrapLoginServer(EdsAssetVO.Asset vo) {
         EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(vo.getAssetType());
         if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
-            @SuppressWarnings("unchecked") EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) holderBuilder.newHolder(
                     vo.getInstanceId(), vo.getAssetType());
             Node node = edsInstanceProviderHolder.getProvider()
                     .assetLoadAs(vo.getOriginalModel());
