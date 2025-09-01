@@ -138,9 +138,8 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
         final List<EdsAsset> proxyServers = Lists.newArrayList();
         // Kubernetes node
         if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(EdsAssetTypeEnum.valueOf(server.getAssetType()))) {
-            CLOUD_SERVER_TYPES.forEach(type -> proxyServers.addAll(
-                    edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(), server.getAssetType(),
-                            proxyIP)));
+            CLOUD_SERVER_TYPES.forEach(
+                    type -> proxyServers.addAll(edsAssetService.queryAssetByParam(proxyIP, type.name())));
         } else {
             proxyServers.addAll(
                     edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(), server.getAssetType(),
