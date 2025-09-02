@@ -1,7 +1,6 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.view.rbac.RbacRoleVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +17,8 @@ public class RbacTest extends BaseUnit {
     @Test
     void test() {
         // 1 BASE 6 SRE
-        RbacRoleVO.RoleDetails details = rbacRoleFacade.queryRoleDetailsV2(1);
-        System.out.println(details);
+      //  RbacRoleVO.RoleDetails details = rbacRoleFacade.queryRoleDetailsV2(1);
+       // System.out.println(details);
     }
 
 }

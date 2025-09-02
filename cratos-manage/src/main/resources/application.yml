@@ -73,6 +73,16 @@ cratos:
         - /actuator
         # Hooks
         - /api/receive/event/gitlab/v4/system/hooks
+        # 静态资源
+        - /index.html
+        - /static/
+        - /*.html
+        - /*.css
+        - /*.js
+        - /*.png
+        - /*.jpg
+        - /*.gif
+        - /*.ico
         # Callback
         - /api/callback/
 

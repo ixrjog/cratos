@@ -31,11 +31,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
-        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(new AntPathRequestMatcher("**"))
+        http.authorizeHttpRequests((authorize) -> authorize
+                        // 明确允许静态资源访问
+                        .requestMatchers("/", "/index.html", "/static/**", "/*.html", "/*.css", "/*.js", "/*.png", "/*.jpg", "/*.gif", "/*.ico")
+                        .permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("**"))
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 .cors(Customizer.withDefaults())
+                //.csrf(csrf -> csrf.disable()) // 禁用CSRF以便测试
                 .authenticationManager(authManager);
         return http.build();
     }
