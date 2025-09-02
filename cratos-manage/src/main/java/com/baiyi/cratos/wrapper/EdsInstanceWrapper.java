@@ -50,7 +50,7 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
                 .sorted(Comparator.comparingInt(EdsAssetTypeVO.Type::getSeq))
                 .toList();
         vo.setInstanceAssetTypes(instanceAssetTypes);
-        if (versionHolderBuilder.isSupport(vo.getId())) {
+        if (versionHolderBuilder.isSupported(vo.getId())) {
             // Version
             String version = ((EdsInstanceWrapper) AopContext.currentProxy()).queryVersion(vo.getId());
             if (StringUtils.hasText(version)) {

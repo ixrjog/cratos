@@ -26,7 +26,7 @@ public class EdsInstanceVersionProviderHolderBuilder {
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigService edsConfigService;
 
-    public boolean isSupport(Integer instanceId) {
+    public boolean isSupported(Integer instanceId) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         if (edsInstance == null) {
             return false;
