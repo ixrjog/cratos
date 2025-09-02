@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.jenkins.provider;
+package com.baiyi.cratos.eds.jenkins.provider.asset;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;

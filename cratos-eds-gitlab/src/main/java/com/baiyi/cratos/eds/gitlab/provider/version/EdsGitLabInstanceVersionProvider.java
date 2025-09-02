@@ -28,7 +28,7 @@ public class EdsGitLabInstanceVersionProvider implements IEdsInstanceVersionProv
             Version version = GitLabVersionRepo.getVersion(instance.getEdsConfigModel());
             return version.getVersion();
         } catch (GitLabApiException e) {
-            return null;
+            return "--";
         }
     }
 
