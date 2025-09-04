@@ -1,11 +1,10 @@
-package com.baiyi.cratos.eds.aliyun.provider;
+package com.baiyi.cratos.eds.aliyun.provider.slb;
 
-import com.aliyun.alb20200616.models.ListLoadBalancersResponseBody;
-import com.baiyi.cratos.domain.util.StringFormatter;
+
+import com.aliyun.nlb20220430.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.aliyun.model.AliyunAlb;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunLoadBalancersRepo;
+import com.baiyi.cratos.eds.aliyun.model.AliyunNlb;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -29,59 +28,52 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ALB_INSTANCE_URL;
-
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/3/29 14:58
- * &#064;Version  1.0
+ * &#064;Date  2025/9/4 15:30
+ * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ALB)
-public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunAlb.Alb> {
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_NLB)
+public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunNlb.Nlb> {
+    
+    private static final String DEFAULT_ENDPOINT = "nlb.cn-hangzhou.aliyuncs.com";
 
-    private final AliyunLoadBalancersRepo aliyunAlbRepo;
-
-    private static final String ALB_URL = "https://slb.console.aliyun.com/alb/{}/albs/{}";
-    private static final String DEFAULT_ENDPOINT = "alb.cn-hangzhou.aliyuncs.com";
-
-    public EdsAliyunAlbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsAliyunNlbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                      EdsAssetIndexFacade edsAssetIndexFacade,
                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                     EdsInstanceProviderHolderBuilder holderBuilder,
-                                     AliyunLoadBalancersRepo aliyunAlbRepo) {
+                                     EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.aliyunAlbRepo = aliyunAlbRepo;
     }
 
     @Override
     protected Set<String> listNamespace(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         List<String> endpoints = Optional.of(instance.getEdsConfigModel())
-                .map(EdsAliyunConfigModel.Aliyun::getAlb)
-                .map(EdsAliyunConfigModel.ALB::getEndpoints)
+                .map(EdsAliyunConfigModel.Aliyun::getNlb)
+                .map(EdsAliyunConfigModel.NLB::getEndpoints)
                 .orElse(Lists.newArrayList(DEFAULT_ENDPOINT));
         return new HashSet<>(endpoints);
     }
 
     @Override
-    protected List<AliyunAlb.Alb> listEntities(String namespace,
+    protected List<AliyunNlb.Nlb> listEntities(String namespace,
                                                ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return aliyunAlbRepo.listLoadBalancers(namespace, instance.getEdsConfigModel())
+            return AliyunNlbRepo.listLoadBalancers(namespace, instance.getEdsConfigModel())
                     .stream()
-                    .map(e -> toAlb(namespace, e))
+                    .map(e -> toNlb(namespace, e))
                     .toList();
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
-    private AliyunAlb.Alb toAlb(String endpoint,
+    private AliyunNlb.Nlb toNlb(String endpoint,
                                 ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers loadBalancers) {
-        return AliyunAlb.Alb.builder()
+        return AliyunNlb.Nlb.builder()
                 .regionId(AliyunRegionUtils.toRegionId(endpoint))
                 .loadBalancers(loadBalancers)
                 .build();
@@ -89,7 +81,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                  AliyunAlb.Alb entity) {
+                                         AliyunNlb.Nlb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()
                         .getLoadBalancerId())
@@ -101,19 +93,6 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
                         .getLoadBalancerStatus())
                 .regionOf(entity)
                 .build();
-    }
-
-    @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, AliyunAlb.Alb entity) {
-        List<EdsAssetIndex> indices = Lists.newArrayList();
-        try {
-            final String url = StringFormatter.arrayFormat(ALB_URL, entity.getRegionId(), entity.getLoadBalancers()
-                    .getLoadBalancerId());
-            indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ALB_INSTANCE_URL, url));
-        } catch (Exception ignored) {
-        }
-        return indices;
     }
 
 }

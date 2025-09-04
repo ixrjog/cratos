@@ -51,7 +51,13 @@
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>alb20200616</artifactId>
-            <version>1.1.5</version>
+            <version>1.2.8</version>
+        </dependency>
+        <!-- https://api.aliyun.com/api-tools/sdk/Nlb?spm=api-workbench.api_explorer.0.0.7ece5aec7qgbuw&version=2022-04-30&language=java-tea&tab=primer-doc -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>nlb20220430</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <!-- https://api.aliyun.com/api-tools/sdk/Domain?version=2018-01-29&language=java-async-tea&tab=primer-doc -->
         <dependency>

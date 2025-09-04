@@ -5,7 +5,7 @@
 > A secure general development framework for operations and maintenance
 
 + OpenJDK 21
-+ SpringBoot 3.5.3 (GA)
++ SpringBoot 3.5.5 (GA)
 + MySql 8+
 
 #### 简介

@@ -14,6 +14,7 @@ public enum EdsAssetTypeEnum {
 
     ALIYUN_CERT("Certificate", 0),
     ALIYUN_ALB("ALB", 0),
+    ALIYUN_NLB("NLB", 0),
     ALIYUN_ECS("ECS", 0),
     ALIYUN_DOMAIN("Domain", 0),
     ALIYUN_RAM_USER("RAM User", 10),

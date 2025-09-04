@@ -35,6 +35,7 @@ public class EdsAliyunConfigModel {
         @Schema(description = "凭据")
         private Cred cred;
         private ALB alb;
+        private NLB nlb;
         private OSS oss;
         private Domain domain;
         private EdsInstance edsInstance;
@@ -62,6 +63,13 @@ public class EdsAliyunConfigModel {
     @NoArgsConstructor
     @Schema
     public static class ALB {
+        private List<String> endpoints;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class NLB {
         private List<String> endpoints;
     }
 
