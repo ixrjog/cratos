@@ -49,7 +49,7 @@ public class ServerAccountController {
     @Operation(summary = "Pagination query account")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ServerAccountVO.ServerAccount>> queryServerAccountPage(@RequestBody @Valid ServerAccountParam.ServerAccountPageQuery pageQuery) {
-        return HttpResult.ofBody(serverAccountFacade.queryServerAccountPage(pageQuery));
+        return HttpResult.of(serverAccountFacade.queryServerAccountPage(pageQuery));
     }
 
     @Operation(summary = "Delete account by id")

@@ -31,7 +31,7 @@ public class UserFavoriteController {
     @Operation(summary = "Query favorite applications")
     @GetMapping(value = "/my/application/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<ApplicationVO.Application>> getMyFavoriteApplication() {
-        return HttpResult.ofBody(userFavoriteFacade.getMyFavoriteApplication());
+        return HttpResult.of(userFavoriteFacade.getMyFavoriteApplication());
     }
 
     @Operation(summary = "Add application to my favorites")
@@ -53,7 +53,7 @@ public class UserFavoriteController {
     @Operation(summary = "Query favorite groups")
     @GetMapping(value = "/my/group/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<TagGroupVO.TagGroup>> getMyFavoriteGroup() {
-        return HttpResult.ofBody(userFavoriteFacade.getMyFavoriteGroup());
+        return HttpResult.of(userFavoriteFacade.getMyFavoriteGroup());
     }
 
     @Operation(summary = "Add application to my favorites")

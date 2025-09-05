@@ -23,7 +23,7 @@ public class HttpResult<T> {
     private String msg;
     private int code;
 
-    public static <T> HttpResult<T> ofBody(T body) {
+    public static <T> HttpResult<T> of(T body) {
         return new HttpResult<>(body);
     }
 

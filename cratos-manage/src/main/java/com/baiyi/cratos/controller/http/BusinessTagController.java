@@ -30,13 +30,13 @@ public class BusinessTagController {
     @Operation(summary = "Query businessTag by business")
     @PostMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<BusinessTagVO.BusinessTag>> queryBusinessTagByBusiness(@RequestBody @Valid BusinessParam.GetByBusiness getByBusiness) {
-        return HttpResult.ofBody(businessTagFacade.getBusinessTagByBusiness(getByBusiness));
+        return HttpResult.of(businessTagFacade.getBusinessTagByBusiness(getByBusiness));
     }
 
     @Operation(summary = "Query businessTag value by tagValue")
     @PostMapping(value = "/query/by/value", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<String>> queryBusinessTagValue(@RequestBody @Valid BusinessTagParam.QueryByTag queryByValue) {
-        return HttpResult.ofBody(businessTagFacade.queryBusinessTagValue(queryByValue));
+        return HttpResult.of(businessTagFacade.queryBusinessTagValue(queryByValue));
     }
 
     @Operation(summary = "Save businessTag")

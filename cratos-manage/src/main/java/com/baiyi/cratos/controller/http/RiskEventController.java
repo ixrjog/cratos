@@ -34,13 +34,13 @@ public class RiskEventController {
     @Operation(summary = "Pagination query risk event")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<RiskEventVO.Event>> queryRiskEventPage(@RequestBody @Valid RiskEventParam.RiskEventPageQuery pageQuery) {
-        return HttpResult.ofBody(riskEventFacade.queryRiskEventPage(pageQuery));
+        return HttpResult.of(riskEventFacade.queryRiskEventPage(pageQuery));
     }
 
     @Operation(summary = "Get risk event")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RiskEventVO.Event> getRiskEventById(@RequestParam int id) {
-        return HttpResult.ofBody(riskEventFacade.getRiskEventById(id));
+        return HttpResult.of(riskEventFacade.getRiskEventById(id));
     }
 
     @Operation(summary = "Add risk event")
@@ -81,13 +81,13 @@ public class RiskEventController {
     @Operation(summary = "Get SLA report year options")
     @GetMapping(value = "/report/year/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getYearOptions() {
-        return HttpResult.ofBody(riskEventGraphFacade.getYearOptions());
+        return HttpResult.of(riskEventGraphFacade.getYearOptions());
     }
 
     @Operation(summary = "Query SLA graph")
     @PostMapping(value = "/graph/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<RiskEventGraphVO.Graph> queryGraph(@RequestBody @Valid RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
-        return HttpResult.ofBody(riskEventGraphFacade.queryGraph(riskEventGraphQuery));
+        return HttpResult.of(riskEventGraphFacade.queryGraph(riskEventGraphQuery));
     }
 
 }

@@ -31,14 +31,14 @@ public class ApplicationResourceController {
     @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<MessageResponse<KubernetesVO.KubernetesDetails>> queryApplicationResourceKubernetesDetails(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDetails queryKubernetesDetails) {
-        return HttpResult.ofBody(kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
+        return HttpResult.of(kubernetesDetailsFacade.queryKubernetesDetails(queryKubernetesDetails));
     }
 
     @Operation(summary = "Query application resource kubernetes deployment options")
     @PostMapping(value = "/kubernetes/deployment/options", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> queryApplicationResourceKubernetesDeploymentOptions(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
-        return HttpResult.ofBody(
+        return HttpResult.of(
                 kubernetesDetailsFacade.queryKubernetesDeploymentOptions(queryKubernetesDeploymentOptions));
     }
 
@@ -64,7 +64,7 @@ public class ApplicationResourceController {
     @PostMapping(value = "/kubernetes/deployment/pod/container/image/version/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<KubernetesContainerVO.ImageVersion> queryApplicationResourceKubernetesDeploymentImageVersion(
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
-        return HttpResult.ofBody(
+        return HttpResult.of(
                 kubernetesDetailsFacade.queryKubernetesDeploymentImageVersion(queryKubernetesDeploymentImageVersion));
     }
 

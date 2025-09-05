@@ -31,7 +31,7 @@ public class CredentialController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<CredentialVO.Credential>> queryCredentialPage(
             @RequestBody @Valid CredentialParam.CredentialPageQuery pageQuery) {
-        return HttpResult.ofBody(credentialFacade.queryCredentialPage(pageQuery));
+        return HttpResult.of(credentialFacade.queryCredentialPage(pageQuery));
     }
 
     @Operation(summary = "Add credential")
@@ -51,7 +51,7 @@ public class CredentialController {
     @Operation(summary = "Query credential type options")
     @GetMapping(value = "/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getCredentialOptions() {
-        return HttpResult.ofBody(CredentialTypeEnum.toOptions());
+        return HttpResult.of(CredentialTypeEnum.toOptions());
     }
 
     @Operation(summary = "Update credential valid")

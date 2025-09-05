@@ -33,28 +33,28 @@ public class TagGroupController {
     @PostMapping(value = "/options/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getGroupOptions(
             @RequestBody @Valid TagGroupParam.GetGroupOptions getGroupOptions) {
-        return HttpResult.ofBody(tagGroupFacade.getGroupOptions(getGroupOptions));
+        return HttpResult.of(tagGroupFacade.getGroupOptions(getGroupOptions));
     }
 
     @Operation(summary = "Get tag group options")
     @PostMapping(value = "/my/options/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getMyGroupOptions(
             @RequestBody @Valid TagGroupParam.GetMyGroupOptions getMyGroupOptions) {
-        return HttpResult.ofBody(tagGroupFacade.getMyGroupOptions(getMyGroupOptions));
+        return HttpResult.of(tagGroupFacade.getMyGroupOptions(getMyGroupOptions));
     }
 
     @Operation(summary = "Pagination query tag group asset")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsAssetVO.Asset>> queryGroupAssetPage(
             @RequestBody @Valid TagGroupParam.GroupAssetPageQuery pageQuery) {
-        return HttpResult.ofBody(tagGroupFacade.queryGroupAssetPage(pageQuery));
+        return HttpResult.of(tagGroupFacade.queryGroupAssetPage(pageQuery));
     }
 
     @Operation(summary = "Pagination query my tag group asset")
     @PostMapping(value = "/my/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<EdsAssetVO.Asset>> queryMyGroupAssetPage(
             @RequestBody @Valid TagGroupParam.MyGroupAssetPageQuery pageQuery) {
-        return HttpResult.ofBody(tagGroupFacade.queryMyGroupAssetPage(pageQuery));
+        return HttpResult.of(tagGroupFacade.queryMyGroupAssetPage(pageQuery));
     }
 
 }

@@ -33,14 +33,14 @@ public class ApplicationController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ApplicationVO.Application>> queryApplicationPage(
             @RequestBody @Valid ApplicationParam.ApplicationPageQuery pageQuery) {
-        return HttpResult.ofBody(applicationFacade.queryApplicationPage(pageQuery));
+        return HttpResult.of(applicationFacade.queryApplicationPage(pageQuery));
     }
 
     @Operation(summary = "Get application by name")
     @PostMapping(value = "/get/by/name", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<ApplicationVO.Application> getApplicationByName(
             @RequestBody @Valid ApplicationParam.GetApplication getApplication) {
-        return HttpResult.ofBody(applicationFacade.getApplicationByName(getApplication));
+        return HttpResult.of(applicationFacade.getApplicationByName(getApplication));
     }
 
     @Operation(summary = "Add application")
@@ -96,7 +96,7 @@ public class ApplicationController {
     @Operation(summary = "Get application resource namespace options")
     @GetMapping(value = "/resource/namespace/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getResourceNamespaceOptions() {
-        return HttpResult.ofBody(applicationResourceFacade.getNamespaceOptions());
+        return HttpResult.of(applicationResourceFacade.getNamespaceOptions());
     }
 
     @Operation(summary = "Get my application resource namespace options")
@@ -106,7 +106,7 @@ public class ApplicationController {
         ApplicationParam.GetMyApplicationResourceNamespaceOptions param = ApplicationParam.GetMyApplicationResourceNamespaceOptions.builder()
                 .applicationName(applicationName)
                 .build();
-        return HttpResult.ofBody(applicationResourceFacade.getMyApplicationResourceNamespaceOptions(param));
+        return HttpResult.of(applicationResourceFacade.getMyApplicationResourceNamespaceOptions(param));
     }
 
 }

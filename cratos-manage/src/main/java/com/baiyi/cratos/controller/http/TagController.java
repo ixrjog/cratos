@@ -52,13 +52,13 @@ public class TagController {
     @Operation(summary = "Pagination query tag")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TagVO.Tag>> queryTagPage(@RequestBody @Valid TagParam.TagPageQuery pageQuery) {
-        return HttpResult.ofBody(tagFacade.queryTagPage(pageQuery));
+        return HttpResult.of(tagFacade.queryTagPage(pageQuery));
     }
 
     @Operation(summary = "Query tag by business type")
     @PostMapping(value = "/business/type/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<List<TagVO.Tag>> queryTagByBusinessType(@RequestBody @Valid BusinessParam.QueryByBusinessType getByBusinessType) {
-        return HttpResult.ofBody(tagFacade.queryTagByBusinessType(getByBusinessType));
+        return HttpResult.of(tagFacade.queryTagByBusinessType(getByBusinessType));
     }
 
     @Operation(summary = "Delete tag by id")

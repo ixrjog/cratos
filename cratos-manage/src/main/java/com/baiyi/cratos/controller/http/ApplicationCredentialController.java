@@ -32,7 +32,7 @@ public class ApplicationCredentialController {
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<AliyunKmsVO.Secret>> queryApplicationPage(
             @RequestBody @Valid AliyunKmsParam.SecretPageQuery pageQuery) {
-        return HttpResult.ofBody(edsAliyunKmsFacade.queryAliyunKmsSecretPage(pageQuery));
+        return HttpResult.of(edsAliyunKmsFacade.queryAliyunKmsSecretPage(pageQuery));
     }
 
 }

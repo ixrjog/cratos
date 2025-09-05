@@ -49,7 +49,7 @@ public class ChannelNetworkController {
     @Operation(summary = "Pagination query channelNetwork")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<ChannelNetworkVO.ChannelNetwork>> queryChannelNetworkPage(@RequestBody @Valid ChannelNetworkParam.ChannelNetworkPageQuery pageQuery) {
-        return HttpResult.ofBody(channelNetworkFacade.queryChannelNetworkPage(pageQuery));
+        return HttpResult.of(channelNetworkFacade.queryChannelNetworkPage(pageQuery));
     }
 
     @Operation(summary = "Delete channelNetwork by id")
