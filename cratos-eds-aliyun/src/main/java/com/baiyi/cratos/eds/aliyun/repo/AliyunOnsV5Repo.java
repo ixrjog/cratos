@@ -53,6 +53,13 @@ public class AliyunOnsV5Repo {
         }
     }
 
+    public static GetInstanceResponse getInstance(@NonNull String regionId, @NonNull EdsAliyunConfigModel.Aliyun aliyun,
+                                                  @NonNull String instanceId) throws Exception {
+        String endpoint = getEndpoint(regionId);
+        com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
+        return client.getInstance(instanceId);
+    }
+
     public static List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> listTopics(@NonNull String endpoint,
                                                                                          @NonNull EdsAliyunConfigModel.Aliyun aliyun,
                                                                                          @NonNull String instanceId) throws Exception {

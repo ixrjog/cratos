@@ -1,8 +1,10 @@
 package com.baiyi.cratos.eds.aliyun.provider.ons;
 
+import com.aliyun.rocketmq20220801.models.GetInstanceResponse;
 import com.aliyun.rocketmq20220801.models.ListInstancesResponseBody;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -19,6 +21,7 @@ import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ONS_INSTANCE_INTERNET_ENDPOINT;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_ONS_INSTANCE_VPC_ENDPOINT;
 
 /**
  * &#064;Author  baiyi
@@ -69,7 +75,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                  ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
+                                         ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         try {
             return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                     .nameOf(entity.getInstanceName())
@@ -81,6 +87,32 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
         } catch (Exception ex) {
             throw new EdsAssetConversionException(ex.getMessage());
         }
+    }
+
+    @Override
+    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+            EdsAsset edsAsset,
+            ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
+        List<EdsAssetIndex> indices = Lists.newArrayList();
+        try {
+            GetInstanceResponse instanceResponse = AliyunOnsV5Repo.getInstance(entity.getRegionId(),
+                    instance.getEdsConfigModel(), entity.getInstanceId());
+            instanceResponse.getBody().getData().getNetworkInfo().endpoints.forEach(endpoint -> {
+
+                if ("TCP_VPC".equals(endpoint.getEndpointType())) {
+                    indices.add(
+                            createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_VPC_ENDPOINT, endpoint.getEndpointUrl()));
+                }
+
+                if ("TCP_INTERNET".equals(endpoint.getEndpointType())) {
+                    indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_INTERNET_ENDPOINT,
+                            endpoint.getEndpointUrl()));
+                }
+            });
+        } catch (Exception ignored) {
+        }
+        return indices;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.model;
 
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class AliyunOnsV5Model {
         @Serial
         private static final long serialVersionUID = -7405060456827694144L;
         private EdsInstanceVO.EdsInstance edsInstance;
+        private EdsAssetVO.Asset onsInstance;
         private String regionId;
         private String onsInstanceName;
         private String onsInstanceId;
@@ -45,6 +47,7 @@ public class AliyunOnsV5Model {
         @Serial
         private static final long serialVersionUID = 5456910395906968504L;
         private EdsInstanceVO.EdsInstance edsInstance;
+        private EdsAssetVO.Asset onsInstance;
         private String regionId;
         private String onsInstanceName;
         private String onsInstanceId;

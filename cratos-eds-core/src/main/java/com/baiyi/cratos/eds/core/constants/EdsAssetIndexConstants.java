@@ -20,6 +20,10 @@ public interface EdsAssetIndexConstants {
     String ALIYUN_ACR_REPO_NAMESPACE = "acr.repo.namespace";
 
     String ALIYUN_ONS_INSTANCE_ID = "ons.instanceId";
+    String ALIYUN_ONS_INSTANCE_VPC_ENDPOINT= "ons.instance.vpc.endpoint";
+    String ALIYUN_ONS_INSTANCE_INTERNET_ENDPOINT= "ons.instance.internet.endpoint";
+
+
     String ALIYUN_ONS_CONSUMER_GROUP_ID = "ons.consumerGroupId";
     String ALIYUN_ONS_TOPIC_NAME = "ons.topicName";
 
