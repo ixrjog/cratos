@@ -159,7 +159,6 @@ public class AliyunOnsV5Repo {
         String endpoint = getEndpoint(regionId);
         com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
         client.createConsumerGroup(instanceId, createConsumerGroup.getConsumerGroupId(), request);
-
     }
 
     public static GetTopicResponseBody.GetTopicResponseBodyData getTopic(String regionId,
@@ -170,7 +169,6 @@ public class AliyunOnsV5Repo {
         com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
         GetTopicResponse response = client.getTopic(instanceId, topicName);
         return response.getBody().getData();
-
     }
 
     public static void createTopic(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,

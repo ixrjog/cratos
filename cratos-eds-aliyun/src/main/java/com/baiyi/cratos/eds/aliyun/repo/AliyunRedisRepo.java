@@ -24,7 +24,6 @@ public class AliyunRedisRepo {
     private final AliyunClient aliyunClient;
 
     public static final String QUERY_ALL_INSTANCE = null;
-
     private static final int PAGE_SIZE = 50;
 
     public List<DescribeInstancesResponse.KVStoreInstance> listInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {

@@ -27,10 +27,10 @@ import static com.baiyi.cratos.domain.constant.Global.CREATED_BY;
 @RequiredArgsConstructor
 public class AliyunRamUserRepo {
 
-    public static final int PAGE_SIZE = 50;
-    public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
     private final AliyunClient aliyunClient;
 
+    public static final int PAGE_SIZE = 50;
+    public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
     public static final boolean CREATE_LOGIN_PROFILE = true;
     public static final boolean ENABLE_MFA = true;
 
@@ -84,7 +84,6 @@ public class AliyunRamUserRepo {
         return aliyunClient.getAcsResponse(regionId, aliyun, request)
                 .getUser();
     }
-
 
     /**
      * 开通控制台登录

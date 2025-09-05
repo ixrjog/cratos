@@ -89,7 +89,6 @@ public class AliyunAcrRepo {
      */
     public List<ListInstanceResponse.InstancesItem> listInstance(String regionId,
                                                                  EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
-        System.out.println(regionId);
         ListInstanceRequest request = new ListInstanceRequest();
         request.setSysRegionId(regionId);
         request.setPageSize(Query.PAGE_SIZE);
