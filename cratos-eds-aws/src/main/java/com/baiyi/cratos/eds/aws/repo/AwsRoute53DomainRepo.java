@@ -24,16 +24,17 @@ public class AwsRoute53DomainRepo {
     public static List<DomainSummary> listDomains(EdsAwsConfigModel.Aws aws) {
         ListDomainsRequest request = new ListDomainsRequest();
         List<DomainSummary> domainSummaries = Lists.newArrayList();
-        while (true) {
-            ListDomainsResult result = AmazonRoute53DomainsService.buildAmazonRoute53Domains(aws)
-                    .listDomains(request);
-            domainSummaries.addAll(result.getDomains());
-            if (StringUtils.hasText(result.getNextPageMarker())) {
-                request.setMarker(result.getNextPageMarker());
-            } else {
-                return domainSummaries;
+        var client = AmazonRoute53DomainsService.buildAmazonRoute53Domains(aws);
+        String nextPageMarker = null;
+        do {
+            if (nextPageMarker != null) {
+                request.setMarker(nextPageMarker);
             }
-        }
+            ListDomainsResult result = client.listDomains(request);
+            domainSummaries.addAll(result.getDomains());
+            nextPageMarker = result.getNextPageMarker();
+        } while (StringUtils.hasText(nextPageMarker));
+        return domainSummaries;
     }
 
 }

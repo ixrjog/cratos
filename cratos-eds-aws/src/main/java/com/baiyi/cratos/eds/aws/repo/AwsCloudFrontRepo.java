@@ -7,9 +7,7 @@ import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -28,22 +26,20 @@ public class AwsCloudFrontRepo {
     public static List<DistributionSummary> listDistributions(String regionId, EdsAwsConfigModel.Aws aws) {
         ListDistributionsRequest request = new ListDistributionsRequest();
         List<DistributionSummary> distributionSummaryList = Lists.newArrayList();
-        while (true) {
+        String nextMarker = null;
+        do {
+            if (nextMarker != null) {
+                request.setMarker(nextMarker);
+            }
             ListDistributionsResult result = AmazonCloudFrontService.buildAmazonCloudFront(regionId, aws)
                     .listDistributions(request);
-            List<DistributionSummary> distributionSummaries = Optional.of(result)
-                    .map(ListDistributionsResult::getDistributionList)
-                    .map(DistributionList::getItems)
-                    .orElse(Collections.emptyList());
-            distributionSummaryList.addAll(distributionSummaries);
-            if (StringUtils.hasText(result.getDistributionList()
-                    .getNextMarker())) {
-                request.setMarker(result.getDistributionList()
-                        .getNextMarker());
-            } else {
-                break;
+            DistributionList distributionList = result.getDistributionList();
+            if (distributionList != null && distributionList.getItems() != null) {
+                distributionSummaryList.addAll(distributionList.getItems());
             }
-        }
+            nextMarker = (distributionList != null && StringUtils.hasText(
+                    distributionList.getNextMarker())) ? distributionList.getNextMarker() : null;
+        } while (nextMarker != null);
         return distributionSummaryList;
     }
 
@@ -53,25 +49,22 @@ public class AwsCloudFrontRepo {
 
     public static List<ConflictingAlias> listConflictingAliases(String regionId, EdsAwsConfigModel.Aws aws,
                                                                 String distributionId) {
-        ListConflictingAliasesRequest request = new ListConflictingAliasesRequest()
-                .withDistributionId(distributionId);
+        ListConflictingAliasesRequest request = new ListConflictingAliasesRequest().withDistributionId(distributionId);
         List<ConflictingAlias> conflictingAliasList = Lists.newArrayList();
-        while (true) {
+        String nextMarker = null;
+        do {
+            if (nextMarker != null) {
+                request.setMarker(nextMarker);
+            }
             ListConflictingAliasesResult result = AmazonCloudFrontService.buildAmazonCloudFront(regionId, aws)
                     .listConflictingAliases(request);
-            List<ConflictingAlias> conflictingAliases = Optional.of(result)
-                    .map(ListConflictingAliasesResult::getConflictingAliasesList)
-                    .map(ConflictingAliasesList::getItems)
-                    .orElse(Collections.emptyList());
-            conflictingAliasList.addAll(conflictingAliases);
-            if (StringUtils.hasText(result.getConflictingAliasesList()
-                    .getNextMarker())) {
-                request.setMarker(result.getConflictingAliasesList()
-                        .getNextMarker());
-            } else {
-                break;
+            ConflictingAliasesList aliasesList = result.getConflictingAliasesList();
+            if (aliasesList != null && aliasesList.getItems() != null) {
+                conflictingAliasList.addAll(aliasesList.getItems());
             }
-        }
+            nextMarker = (aliasesList != null && StringUtils.hasText(
+                    aliasesList.getNextMarker())) ? aliasesList.getNextMarker() : null;
+        } while (nextMarker != null);
         return conflictingAliasList;
     }
 

@@ -25,19 +25,18 @@ import java.util.Map;
 public class AwsSqsRepo {
 
     public List<String> listQueues(String regionId, EdsAwsConfigModel.Aws aws) {
-        ListQueuesRequest request = new ListQueuesRequest();
-        request.setMaxResults(1000);
+        ListQueuesRequest request = new ListQueuesRequest().withMaxResults(1000);
         List<String> queues = Lists.newArrayList();
-        while (true) {
+        String nextToken = null;
+        do {
+            if (StringUtils.isNotBlank(nextToken)) {
+                request.setNextToken(nextToken);
+            }
             ListQueuesResult result = AmazonSqsService.buildAmazonSQS(regionId, aws)
                     .listQueues(request);
             queues.addAll(result.getQueueUrls());
-            if (StringUtils.isNotBlank(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.isNotBlank(nextToken));
         return queues;
     }
 

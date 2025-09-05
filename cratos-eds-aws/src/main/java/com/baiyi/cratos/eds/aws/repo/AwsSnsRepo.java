@@ -25,32 +25,28 @@ public class AwsSnsRepo {
     public List<Topic> listTopics(String regionId, EdsAwsConfigModel.Aws aws) {
         ListTopicsRequest request = new ListTopicsRequest();
         List<Topic> topics = Lists.newArrayList();
-        while (true) {
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
             ListTopicsResult result = AmazonSnsService.buildAmazonSNS(regionId, aws)
                     .listTopics(request);
             topics.addAll(result.getTopics());
-            if (StringUtils.isNotBlank(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.isNotBlank(nextToken));
         return topics;
     }
 
     public List<Subscription> listSubscriptions(String regionId, EdsAwsConfigModel.Aws aws) {
         ListSubscriptionsRequest request = new ListSubscriptionsRequest();
         List<Subscription> subscriptions = Lists.newArrayList();
-        while (true) {
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
             ListSubscriptionsResult result = AmazonSnsService.buildAmazonSNS(regionId, aws)
                     .listSubscriptions(request);
             subscriptions.addAll(result.getSubscriptions());
-            if (StringUtils.isNotBlank(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.isNotBlank(nextToken));
         return subscriptions;
     }
 

@@ -28,15 +28,16 @@ public class AwsEc2Repo {
     public List<Instance> listInstances(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeInstancesRequest request = new DescribeInstancesRequest();
         List<Instance> instanceList = Lists.newArrayList();
-        while (true) {
-            DescribeInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws).describeInstances(request);
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
+            DescribeInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws)
+                    .describeInstances(request);
             response.getReservations()
                     .forEach(e -> instanceList.addAll(e.getInstances()));
-            request.setNextToken(response.getNextToken());
-            if (response.getNextToken() == null) {
-                return instanceList;
-            }
-        }
+            nextToken = response.getNextToken();
+        } while (nextToken != null);
+        return instanceList;
     }
 
 }

@@ -24,18 +24,18 @@ public class AwsElbRepo {
 
     public static List<LoadBalancer> listLoadBalancer(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeLoadBalancersRequest request = new DescribeLoadBalancersRequest();
-        // request.setPageSize(400);
         List<LoadBalancer> loadBalancers = Lists.newArrayList();
-        while (true) {
+        String nextMarker = null;
+        do {
+            if (nextMarker != null) {
+                request.setMarker(nextMarker);
+            }
             DescribeLoadBalancersResult result = AmazonElbService.buildAmazonELB(regionId, aws)
                     .describeLoadBalancers(request);
             loadBalancers.addAll(result.getLoadBalancers());
-            if (StringUtils.hasText(result.getNextMarker())) {
-                request.setMarker(result.getNextMarker());
-            } else {
-                return loadBalancers;
-            }
-        }
+            nextMarker = result.getNextMarker();
+        } while (StringUtils.hasText(nextMarker));
+        return loadBalancers;
     }
 
 }

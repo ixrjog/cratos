@@ -23,38 +23,39 @@ public class AwsVpcRepo {
     public static List<Vpc> describeVpcs(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeVpcsRequest request = new DescribeVpcsRequest();
         List<Vpc> vpcList = Lists.newArrayList();
-        while (true) {
-            DescribeVpcsResult result = buildAmazonEC2(aws, regionId).describeVpcs(request);
-            if (CollectionUtils.isEmpty(result.getVpcs())) {
-                return vpcList;
+        AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
+            DescribeVpcsResult result = ec2.describeVpcs(request);
+            List<Vpc> vpcs = result.getVpcs();
+            if (!CollectionUtils.isEmpty(vpcs)) {
+                vpcList.addAll(vpcs);
             }
-            vpcList.addAll(result.getVpcs());
-            request.setNextToken(result.getNextToken());
-            if (result.getNextToken() == null) {
-                return vpcList;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (nextToken != null);
+        return vpcList;
     }
 
     public static List<Subnet> describeSubnets(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeSubnetsRequest request = new DescribeSubnetsRequest();
         List<Subnet> subnetList = Lists.newArrayList();
-        while (true) {
-            DescribeSubnetsResult result = buildAmazonEC2(aws, regionId).describeSubnets(request);
-            if (CollectionUtils.isEmpty(result.getSubnets())) {
-                return subnetList;
+        AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
+            DescribeSubnetsResult result = ec2.describeSubnets(request);
+            List<Subnet> subnets = result.getSubnets();
+            if (!CollectionUtils.isEmpty(subnets)) {
+                subnetList.addAll(subnets);
             }
-            subnetList.addAll(result.getSubnets());
-            request.setNextToken(result.getNextToken());
-            if (result.getNextToken() == null) {
-                return subnetList;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (nextToken != null);
+        return subnetList;
     }
 
     private static AmazonEC2 buildAmazonEC2(EdsAwsConfigModel.Aws aws, String regionId) {
         return AmazonEc2Service.buildAmazonEC2(regionId, aws);
     }
-
 
 }

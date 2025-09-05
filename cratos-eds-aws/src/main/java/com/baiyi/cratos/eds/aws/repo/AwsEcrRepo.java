@@ -24,19 +24,18 @@ public class AwsEcrRepo {
     private static final int MAX_RESULTS = 1000;
 
     public static List<Repository> describeRepositories(String regionId, EdsAwsConfigModel.Aws aws) {
-        DescribeRepositoriesRequest request = new DescribeRepositoriesRequest();
-        request.setMaxResults(MAX_RESULTS);
+        DescribeRepositoriesRequest request = new DescribeRepositoriesRequest().withMaxResults(MAX_RESULTS);
         List<Repository> repositories = Lists.newArrayList();
-        while (true) {
+        String nextToken = null;
+        do {
+            if (StringUtils.isNotBlank(nextToken)) {
+                request.setNextToken(nextToken);
+            }
             DescribeRepositoriesResult result = AmazonEcrService.buildAmazonECR(regionId, aws)
                     .describeRepositories(request);
             repositories.addAll(result.getRepositories());
-            if (StringUtils.isNotBlank(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.isNotBlank(nextToken));
         return repositories;
     }
 
@@ -56,19 +55,18 @@ public class AwsEcrRepo {
      */
     public static List<Repository> describeRepositories(String regionId, EdsAwsConfigModel.Aws aws,
                                                         List<String> repositoryNames) {
-        DescribeRepositoriesRequest request = new DescribeRepositoriesRequest();
-        request.setRepositoryNames(repositoryNames);
+        DescribeRepositoriesRequest request = new DescribeRepositoriesRequest().withRepositoryNames(repositoryNames);
         List<Repository> repositories = Lists.newArrayList();
-        while (true) {
+        String nextToken = null;
+        do {
+            if (StringUtils.isNotBlank(nextToken)) {
+                request.setNextToken(nextToken);
+            }
             DescribeRepositoriesResult result = AmazonEcrService.buildAmazonECR(regionId, aws)
                     .describeRepositories(request);
             repositories.addAll(result.getRepositories());
-            if (StringUtils.isNotBlank(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.isNotBlank(nextToken));
         return repositories;
     }
 
@@ -82,8 +80,7 @@ public class AwsEcrRepo {
 
     public static void deleteRepository(String regionId, EdsAwsConfigModel.Aws aws, String registryId,
                                         @NonNull String repositoryName) {
-        DeleteRepositoryRequest request = new DeleteRepositoryRequest()
-                .withForce(true)
+        DeleteRepositoryRequest request = new DeleteRepositoryRequest().withForce(true)
                 .withRegistryId(registryId)
                 .withRepositoryName(repositoryName);
         AmazonEcrService.buildAmazonECR(regionId, aws)

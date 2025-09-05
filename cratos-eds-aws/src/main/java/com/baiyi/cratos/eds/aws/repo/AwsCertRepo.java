@@ -24,16 +24,14 @@ public class AwsCertRepo {
     public static List<CertificateSummary> listCert(String regionId, EdsAwsConfigModel.Aws aws) {
         ListCertificatesRequest request = new ListCertificatesRequest();
         List<CertificateSummary> certificateSummaryList = Lists.newArrayList();
-        while (true) {
-            ListCertificatesResult result = AmazonAcmService.buildAWSCertificateManager(regionId, aws)
-                    .listCertificates(request);
+        var acm = AmazonAcmService.buildAWSCertificateManager(regionId, aws);
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
+            ListCertificatesResult result = acm.listCertificates(request);
             certificateSummaryList.addAll(result.getCertificateSummaryList());
-            if (StringUtils.hasText(result.getNextToken())) {
-                request.setNextToken(result.getNextToken());
-            } else {
-                break;
-            }
-        }
+            nextToken = result.getNextToken();
+        } while (StringUtils.hasText(nextToken));
         return certificateSummaryList;
     }
 

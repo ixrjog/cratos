@@ -29,14 +29,15 @@ public class AwsEbsRepo {
     public List<Volume> listVolumes(String regionId, EdsAwsConfigModel.Aws aws) {
         DescribeVolumesRequest request = new DescribeVolumesRequest();
         List<Volume> volumeList = Lists.newArrayList();
-        while (true) {
-            DescribeVolumesResult response = buildAmazonEC2(aws, regionId).describeVolumes(request);
+        AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
+        String nextToken = null;
+        do {
+            request.setNextToken(nextToken);
+            DescribeVolumesResult response = ec2.describeVolumes(request);
             volumeList.addAll(response.getVolumes());
-            request.setNextToken(response.getNextToken());
-            if (response.getNextToken() == null) {
-                return volumeList;
-            }
-        }
+            nextToken = response.getNextToken();
+        } while (nextToken != null);
+        return volumeList;
     }
 
     private AmazonEC2 buildAmazonEC2(EdsAwsConfigModel.Aws aws, String regionId) {

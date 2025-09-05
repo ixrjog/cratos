@@ -24,16 +24,17 @@ public class AwsRoute53Repo {
     public static List<HostedZone> listHostedZones(EdsAwsConfigModel.Aws aws) {
         ListHostedZonesRequest request = new ListHostedZonesRequest();
         List<HostedZone> hostedZones = Lists.newArrayList();
-        while (true) {
-            ListHostedZonesResult result = AmazonRoute53Service.buildAmazonRoute53(aws)
-                    .listHostedZones(request);
-            hostedZones.addAll(result.getHostedZones());
-            if (StringUtils.hasText(result.getNextMarker())) {
-                request.setMarker(result.getNextMarker());
-            } else {
-                return hostedZones;
+        var route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
+        String nextMarker = null;
+        do {
+            if (nextMarker != null) {
+                request.setMarker(nextMarker);
             }
-        }
+            ListHostedZonesResult result = route53.listHostedZones(request);
+            hostedZones.addAll(result.getHostedZones());
+            nextMarker = result.getNextMarker();
+        } while (StringUtils.hasText(nextMarker));
+        return hostedZones;
     }
 
 }
