@@ -29,14 +29,4 @@ public class ExampleController {
         return HttpResult.of(ExampleVO.HelloWorld.EXAMPLE);
     }
 
-//    @Operation(summary = "Example for get username from SecurityContextHolder")
-//    @GetMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public HttpResult<String> auth() {
-//        Authentication authentication = SecurityContextHolder.getContext()
-//                .getAuthentication();
-//        String username = (String) authentication.getPrincipal();
-//        log.info(username);
-//        return new HttpResult<>(username);
-//    }
-
 }

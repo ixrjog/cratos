@@ -75,7 +75,7 @@ public class AliyunDmsRepo {
     public static void registerUser(EdsAliyunConfigModel.Aliyun aliyun, Long tid,
                                     AliyunDms.User user) throws Exception {
         MyDmsClient myDmsClient = AliyunDmsClient.createMyClient(aliyun);
-        // DINGDING
+        // DINGTALK
         RegisterUserRequest request = new RegisterUserRequest();
         request.setTid(tid);
         request.setUserNick(user.getNickName());

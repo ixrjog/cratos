@@ -110,8 +110,15 @@ public class ApplicationParam {
     @AllArgsConstructor
     @Schema
     public static class GetMyApplicationResourceNamespaceOptions implements HasSessionUser {
+
         private String applicationName;
         private String sessionUser;
+
+        public static GetMyApplicationResourceNamespaceOptions ofName(String applicationName) {
+            return GetMyApplicationResourceNamespaceOptions.builder()
+                    .applicationName(applicationName)
+                    .build();
+        }
     }
 
 }

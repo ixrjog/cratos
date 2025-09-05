@@ -12,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @Author baiyi
@@ -22,38 +21,33 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class AliyunDomainRepo {
 
-    public static List<QueryDomainListResponseBody.Domain> listDomain(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    public static List<QueryDomainListResponseBody.Domain> listDomain(
+            EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
         int pageNum = 1;
         List<QueryDomainListResponseBody.Domain> domainList = Lists.newArrayList();
         try (AsyncClient client = AliyunDomainAsyncClient.createClient(aliyun)) {
-            while (true) {
+            boolean hasNextPage;
+            do {
                 QueryDomainListRequest request = QueryDomainListRequest.builder()
                         .pageNum(pageNum)
                         .pageSize(10)
                         .build();
-                CompletableFuture<QueryDomainListResponse> completableFutureResponse = client.queryDomainList(request);
-                QueryDomainListResponse response = completableFutureResponse.get();
-                Optional<QueryDomainListResponseBody.Data> optionalData = Optional.ofNullable(response)
+                QueryDomainListResponse response = client.queryDomainList(request)
+                        .get();
+                QueryDomainListResponseBody.Data data = Optional.ofNullable(response)
                         .map(QueryDomainListResponse::getBody)
-                        .map(QueryDomainListResponseBody::getData);
-                if (optionalData.isPresent()) {
-                    QueryDomainListResponseBody.Data data = optionalData.get();
-                    if (CollectionUtils.isEmpty(data.getDomain())) {
-                        break;
-                    }
-                    domainList.addAll(data.getDomain());
-                    if (response.getBody()
-                            .getNextPage()) {
-                        pageNum++;
-                    } else {
-                        break;
-                    }
-                } else {
+                        .map(QueryDomainListResponseBody::getData)
+                        .orElse(null);
+                if (data == null || CollectionUtils.isEmpty(data.getDomain())) {
                     break;
                 }
-            }
+                domainList.addAll(data.getDomain());
+                hasNextPage = Boolean.TRUE.equals(response.getBody()
+                        .getNextPage());
+                pageNum++;
+            } while (hasNextPage);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Failed to list domains: {}", e.getMessage(), e);
             throw e;
         }
         return domainList;

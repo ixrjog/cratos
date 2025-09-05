@@ -103,10 +103,8 @@ public class ApplicationController {
     @GetMapping(value = "/resource/namespace/my/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getMyResourceNamespaceOptions(
             @RequestParam @Valid @NotBlank String applicationName) {
-        ApplicationParam.GetMyApplicationResourceNamespaceOptions param = ApplicationParam.GetMyApplicationResourceNamespaceOptions.builder()
-                .applicationName(applicationName)
-                .build();
-        return HttpResult.of(applicationResourceFacade.getMyApplicationResourceNamespaceOptions(param));
+        return HttpResult.of(applicationResourceFacade.getMyApplicationResourceNamespaceOptions(
+                ApplicationParam.GetMyApplicationResourceNamespaceOptions.ofName(applicationName)));
     }
 
 }
