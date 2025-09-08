@@ -1,6 +1,6 @@
 ![SVG Image](https://raw.githubusercontent.com/ixrjog/cratos/main/logo/cratos-logo.svg)
 
-`Start in sync with the world
+Start in sync with the world
 
 > A secure general development framework for operations and maintenance
 
