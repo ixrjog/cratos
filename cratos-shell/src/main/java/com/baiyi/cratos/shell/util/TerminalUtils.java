@@ -4,6 +4,8 @@ import com.baiyi.cratos.ssh.core.handler.RemoteInvokeHandler;
 import com.baiyi.cratos.ssh.core.model.JSchSession;
 import com.baiyi.cratos.ssh.core.model.JSchSessionHolder;
 import com.jcraft.jsch.ChannelShell;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jline.terminal.Attributes;
 import org.jline.terminal.Size;
@@ -18,13 +20,11 @@ import java.util.EnumSet;
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TerminalUtils {
 
     private static final int OFF = 0;
     private static final int ON = 1;
-
-    private TerminalUtils() {
-    }
 
     /**
      * 行模式支持 Ctrl+C

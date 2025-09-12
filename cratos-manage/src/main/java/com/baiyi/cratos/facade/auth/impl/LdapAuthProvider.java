@@ -37,9 +37,7 @@ import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
 public class LdapAuthProvider extends BaseAuthProvider {
 
     private final LdapClient ldapClient;
-
     private final EdsFacade edsFacade;
-
     private final EdsConfigService edsConfigService;
 
     public LdapAuthProvider(UserTokenFacade userTokenFacade, UserService userService,

@@ -28,11 +28,8 @@ import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
 public abstract class BaseAuthProvider implements IAuthProvider, InitializingBean {
 
     private final UserTokenFacade userTokenFacade;
-
     private final UserService userService;
-
     private final BusinessCredentialService businessCredentialService;
-
     private final CredentialService credentialService;
 
     @Override

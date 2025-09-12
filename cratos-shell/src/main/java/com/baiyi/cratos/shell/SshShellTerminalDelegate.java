@@ -209,6 +209,11 @@ public class SshShellTerminalDelegate implements Terminal {
     }
 
     @Override
+    public MouseTracking getCurrentMouseTracking() {
+        return null;
+    }
+
+    @Override
     public MouseEvent readMouseEvent() {
         return delegate().readMouseEvent();
     }
@@ -216,6 +221,16 @@ public class SshShellTerminalDelegate implements Terminal {
     @Override
     public MouseEvent readMouseEvent(IntSupplier intSupplier) {
         return delegate().readMouseEvent(intSupplier);
+    }
+
+    @Override
+    public MouseEvent readMouseEvent(String s) {
+        return null;
+    }
+
+    @Override
+    public MouseEvent readMouseEvent(IntSupplier intSupplier, String s) {
+        return null;
     }
 
     @Override

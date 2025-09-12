@@ -10,10 +10,7 @@ import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * &#064;Author  baiyi
@@ -57,9 +54,12 @@ public class KubernetesDeploymentAttributeBuilder {
                 .filter(e -> JAVA_OPTS.equals(e.getName()))
                 .findFirst()
                 .ifPresent(javaOptsEnvVar -> {
-                    List<String> javaOptsList = Splitter.onPattern(" |\\n")
-                            .omitEmptyStrings()
-                            .splitToList(javaOptsEnvVar.getValue());
+                    String javaOpts = javaOptsEnvVar.getValue();
+                    List<String> javaOptsList = javaOpts != null ?
+                            Splitter.onPattern(" |\\n")
+                                    .omitEmptyStrings()
+                                    .splitToList(javaOpts) :
+                            Collections.emptyList();
                     // JAVA_OPTS
                     put(ENV_JAVA_OPTS, Joiner.on("\n")
                             .skipNulls()

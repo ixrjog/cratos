@@ -2,6 +2,8 @@ package com.baiyi.cratos.shell.util;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +13,19 @@ import java.util.List;
  * &#064;Date  2025/9/11 14:51
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MyLineMarkdownUtils {
 
     public static String of(BusinessDocVO.BusinessTextDoc doc) {
-        if (doc.getText() == null || doc.getText()
-                .trim()
+        String text = doc.getText();
+        if (text == null || text.trim()
                 .isEmpty()) {
             return "";
         }
-        String[] lines = doc.getText()
-                .split("\n");
+        String[] lines = text.split("\n");
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < lines.length; i++) {
+        int i = 0;
+        while (i < lines.length) {
             String line = lines[i].trim();
             // 检查是否是表格头部（包含|）
             if (line.contains("|") && !line.matches("^\\s*\\|\\s*[-:]+\\s*\\|.*")) {
@@ -30,44 +33,41 @@ public class MyLineMarkdownUtils {
                 if (headers.size() > 1) {
                     // 跳过分隔符行
                     if (i + 1 < lines.length && lines[i + 1].matches(".*\\|.*[-:]+.*\\|.*")) {
-                        i++; // 跳过分隔符行
+                        i++;
                     }
-
                     PrettyTable table = PrettyTable.fieldNames(headers.toArray(new String[0]));
-
-                    // 读取表格数据行
                     i++;
-                    while (i < lines.length && lines[i].trim()
-                            .contains("|")) {
-                        List<String> row = parseTableRow(lines[i].trim());
+                    while (i < lines.length) {
+                        String dataLine = lines[i].trim();
+                        if (!dataLine.contains("|")) break;
+                        List<String> row = parseTableRow(dataLine);
                         if (row.size() == headers.size()) {
                             table.addRow(row.toArray());
                         }
                         i++;
                     }
-                    i--; // 回退一行
                     result.append(table)
                             .append("\n");
-                } else {
-                    result.append(lines[i]).append("\n");
+                    continue;
                 }
-            } else {
-                result.append(lines[i]).append("\n");
             }
+            result.append(lines[i])
+                    .append("\n");
+            i++;
         }
-
         return result.toString();
     }
 
     private static List<String> parseTableRow(String line) {
-        List<String> cells = new ArrayList<>();
-        String[] parts = line.split("\\|");
-
-        for (String part : parts) {
-            String cell = part.trim();
-            if (!cell.isEmpty()) {
-                cells.add(cell);
-            }
+        String[] parts = line.split("\\|", -1);
+        int start = 0, end = parts.length;
+        if (parts.length > 0 && parts[0].trim()
+                .isEmpty()) start++;
+        if (parts.length > 1 && parts[parts.length - 1].trim()
+                .isEmpty()) end--;
+        List<String> cells = new ArrayList<>(end - start);
+        for (int i = start; i < end; i++) {
+            cells.add(parts[i].trim());
         }
         return cells;
     }

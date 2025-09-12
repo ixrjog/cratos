@@ -30,6 +30,7 @@ import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.command.custom.eds.handler.WatchTerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
+import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
@@ -276,7 +277,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     helper.print("Document: " + doc.getName(), PromptColor.CYAN);
                     helper.print(
                             "--------------------------------------------------------------------------------------");
-                    helper.print(doc.getText(), PromptColor.BRIGHT);
+                    helper.print(MyLineMarkdownUtils.of(doc), PromptColor.BRIGHT);
                     helper.print(
                             "--------------------------------------------------------------------------------------");
                 });
