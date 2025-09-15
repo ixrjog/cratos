@@ -1,8 +1,12 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * 信息摘要工具类
@@ -10,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author baiyi
  */
+@NoArgsConstructor(access = PRIVATE)
 public class InfoSummaryUtils {
 
     public static final String SHA256 = "SHA-256";

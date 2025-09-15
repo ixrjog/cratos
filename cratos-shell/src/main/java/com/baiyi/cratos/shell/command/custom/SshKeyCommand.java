@@ -3,7 +3,7 @@ package com.baiyi.cratos.shell.command.custom;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtils;
-import com.baiyi.cratos.common.util.SshFingerprintUtil;
+import com.baiyi.cratos.common.util.SshFingerprintUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
@@ -118,7 +118,7 @@ public class SshKeyCommand extends AbstractCommand {
                 .username(username)
                 .credentialType(CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name())
                 .credential(pubKey)
-                .fingerprint(SshFingerprintUtil.calcFingerprint(null, pubKey))
+                .fingerprint(SshFingerprintUtils.calcFingerprint(null, pubKey))
                 .privateCredential(true)
                 .valid(true)
                 .expiredTime(ExpiredUtils.generateExpirationTime(366L * 5, TimeUnit.DAYS))

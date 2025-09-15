@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
-import com.baiyi.cratos.common.util.AbstractUtil;
+import com.baiyi.cratos.common.util.AbstractUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -89,7 +89,7 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
             }
             indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
-        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_SERVICE_SELECTOR, AbstractUtil.mapToString(selector)));
+        indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_SERVICE_SELECTOR, AbstractUtils.mapToString(selector)));
         return indices;
     }
 

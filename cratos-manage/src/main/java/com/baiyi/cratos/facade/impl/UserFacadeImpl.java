@@ -250,7 +250,7 @@ public class UserFacadeImpl implements UserFacade {
                 .username(addSshKey.getUsername())
                 .credentialType(CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name())
                 .credential(pubKey)
-                .fingerprint(SshFingerprintUtil.calcFingerprint(null, pubKey))
+                .fingerprint(SshFingerprintUtils.calcFingerprint(null, pubKey))
                 .privateCredential(true)
                 .valid(true)
                 .expiredTime(ExpiredUtils.generateExpirationTime(366L * 5, TimeUnit.DAYS))

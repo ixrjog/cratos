@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
 import com.baiyi.cratos.common.util.IpUtils;
-import com.baiyi.cratos.common.util.NetworkUtil;
+import com.baiyi.cratos.common.util.NetworkUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetwork;
@@ -77,7 +77,7 @@ public class GlobalNetworkPlanningFacadeImpl implements GlobalNetworkPlanningFac
         if (globalNetwork == null) {
             return;
         }
-        if (!NetworkUtil.inNetwork(globalNetwork.getCidrBlock(), globalNetworkPlanning.getCidrBlock())) {
+        if (!NetworkUtils.inNetwork(globalNetwork.getCidrBlock(), globalNetworkPlanning.getCidrBlock())) {
             throw new GlobalNetworkException("The subnet {} is not in the network {}.",
                     globalNetworkPlanning.getCidrBlock(), globalNetwork.getCidrBlock());
         }

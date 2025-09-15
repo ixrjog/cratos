@@ -1,7 +1,7 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.AbstractUtil;
+import com.baiyi.cratos.common.util.AbstractUtils;
 import com.google.common.collect.Maps;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +22,7 @@ public class AbstractUtilTest extends BaseUnit {
         map.put("k1", "v1");
         map.put("k3", "v3");
         map.put("k4", "v4");
-        System.out.println(AbstractUtil.mapToString(map));
+        System.out.println(AbstractUtils.mapToString(map));
     }
 
 }

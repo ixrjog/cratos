@@ -1,6 +1,9 @@
 package com.baiyi.cratos.common.util;
 
 import com.baiyi.cratos.domain.view.network.NetworkInfo;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * IP 网段计算工具类
@@ -8,6 +11,7 @@ import com.baiyi.cratos.domain.view.network.NetworkInfo;
  *
  * @author baiyi
  */
+@NoArgsConstructor(access = PRIVATE)
 public class IPNetworkCalculator {
 
     public static NetworkInfo calculateNetworkInfo(String cidr) {

@@ -71,7 +71,6 @@ public final class IOUtils {
         try {
             FileUtils.forceMkdir(file);
         } catch (IOException e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
     }

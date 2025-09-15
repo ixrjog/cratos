@@ -1,14 +1,18 @@
 package com.baiyi.cratos.common.util;
 
 import com.baiyi.cratos.domain.generator.Env;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/4 10:44
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EnvUtils {
 
     public static String getEnvSuffix(Map<String, Env> envMap, String name) {

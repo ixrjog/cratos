@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common.otp;
 
 import com.baiyi.cratos.common.exception.OtpException;
-import com.baiyi.cratos.common.util.Base32StringUtil;
+import com.baiyi.cratos.common.util.Base32StringUtils;
 import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
 import lombok.NoArgsConstructor;
 import org.slf4j.helpers.MessageFormatter;
@@ -68,7 +68,7 @@ public class OptGenerator {
      * @throws OtpException.DecodingException
      */
     public static SecretKey of(String otpSecretKeyStr) throws OtpException.DecodingException {
-        return new SecretKeySpec(Base32StringUtil.decode(otpSecretKeyStr), "HmacSHA1");
+        return new SecretKeySpec(Base32StringUtils.decode(otpSecretKeyStr), "HmacSHA1");
     }
 
     public static SecretKey toKey(byte[] var1) throws OtpException.DecodingException {

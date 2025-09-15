@@ -1,7 +1,7 @@
 package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.common.table.PrettyTable;
-import com.baiyi.cratos.common.util.NetworkUtil;
+import com.baiyi.cratos.common.util.NetworkUtils;
 import com.baiyi.cratos.domain.generator.GlobalNetworkPlanning;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
@@ -57,7 +57,7 @@ public class GlobalNetworkDetailsWrapper {
                 GlobalNetworkVO.PlanningDetails.class);
         PrettyTable subnetTable = PrettyTable.fieldNames(SUBNET_TABLE_FIELD_NAME);
         allSubnets.stream()
-                .filter(e -> NetworkUtil.inNetwork(planning.getCidrBlock(), e.getCidrBlock()))
+                .filter(e -> NetworkUtils.inNetwork(planning.getCidrBlock(), e.getCidrBlock()))
                 .forEach(e -> subnetTable.addRow(e.getMainName(), e.getMainType(), e.getName(), e.getSubnetKey(),
                         e.getRegion(), e.getZone(), e.getCidrBlock(), e.getResourceTotal(), e.getComment()));
         planningDetails.setSubnetTable(subnetTable.toString());

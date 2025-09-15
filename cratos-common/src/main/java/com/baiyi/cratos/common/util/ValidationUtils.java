@@ -1,9 +1,12 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static lombok.AccessLevel.PRIVATE;
 
 
 /**
@@ -11,6 +14,7 @@ import java.util.regex.Pattern;
  * &#064;Date  2025/3/3 14:33
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ValidationUtils {
 
     private interface RegexMatches {

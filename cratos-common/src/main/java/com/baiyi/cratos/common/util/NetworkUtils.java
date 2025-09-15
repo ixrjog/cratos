@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)
-public class NetworkUtil {
+public class NetworkUtils {
 
     /**
      * 判断子网是否在Network中

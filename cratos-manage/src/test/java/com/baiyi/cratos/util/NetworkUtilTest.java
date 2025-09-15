@@ -49,7 +49,7 @@ public class NetworkUtilTest extends BaseUnit {
 //      }
     }
 
-    //         int resourceTotal = NetworkUtil.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
+    //         int resourceTotal = NetworkUtils.getIpCount(StringUtils.substringAfter(globalNetwork.getCidrBlock(),"/"));
     @Test
     void test2() {
         String mask = "192.168.0.0/24";

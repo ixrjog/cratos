@@ -1,13 +1,18 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/21 10:44
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class KubernetesNameValidator {
 
     // 正则表达式：以字母或数字开头，中间可以有连字符，以字母或数字结尾，总长度不超过253

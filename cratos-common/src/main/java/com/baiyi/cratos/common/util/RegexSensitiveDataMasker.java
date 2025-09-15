@@ -1,13 +1,18 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/7 14:54
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class RegexSensitiveDataMasker {
 
     // 定义各种敏感信息的正则表达式

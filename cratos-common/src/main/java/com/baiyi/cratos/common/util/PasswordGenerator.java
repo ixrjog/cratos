@@ -1,9 +1,13 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
@@ -11,6 +15,7 @@ import java.util.stream.IntStream;
  * &#064;Version 1.0
  */
 @SuppressWarnings("SpellCheckingInspection")
+@NoArgsConstructor(access = PRIVATE)
 public class PasswordGenerator {
 
     private static final String LOWERCASE = "abcdefghijklmnpqrstuvwxyz";

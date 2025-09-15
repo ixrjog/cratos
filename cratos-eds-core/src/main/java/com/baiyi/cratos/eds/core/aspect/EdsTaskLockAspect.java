@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.core.aspect;
 
 import com.baiyi.cratos.common.RedisUtil;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.common.util.ReadableDurationUtil;
+import com.baiyi.cratos.common.util.ReadableDurationUtils;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.exception.EdsTaskLockException;
@@ -117,7 +117,7 @@ public class EdsTaskLockAspect {
     }
 
     private void lock(String lockKey, String time) {
-        Duration duration = ReadableDurationUtil.parse(time);
+        Duration duration = ReadableDurationUtils.parse(time);
         redisUtil.set(lockKey, RUNNING, duration.getSeconds());
     }
 

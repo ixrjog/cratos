@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.util;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,20 +13,20 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2024/3/1 09:58
  * @Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = PRIVATE)
 public final class TimeUtils {
 
     public static final String YEAR = "yyyy";
     public static final int THE_NUMBER_OF_SECONDS_IN_A_DAY = 86_400;
     public static final TimeZone UTC_TZ = TimeZone.getTimeZone("UTC");
-
-    private TimeUtils() {
-    }
 
     /**
      * @param d

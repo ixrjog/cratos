@@ -12,16 +12,16 @@ import java.util.stream.IntStream;
  * @Date 2024/1/19 17:24
  * @Version 1.0
  */
-public final class Base32StringUtil {
+public final class Base32StringUtils {
 
     // singleton
 
     /**
      * RFC 4648/3548
      */
-    private static final Base32StringUtil INSTANCE = new Base32StringUtil("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
+    private static final Base32StringUtils INSTANCE = new Base32StringUtils("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
 
-    static Base32StringUtil getInstance() {
+    static Base32StringUtils getInstance() {
         return INSTANCE;
     }
 
@@ -32,7 +32,7 @@ public final class Base32StringUtil {
 
     private static final String SEPARATOR = "-";
 
-    private Base32StringUtil(String alphabet) {
+    private Base32StringUtils(String alphabet) {
         // 32 alpha-numeric characters.
         DIGITS = alphabet.toCharArray();
         MASK = DIGITS.length - 1;

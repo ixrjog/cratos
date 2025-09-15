@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.exception.GlobalNetworkException;
 import com.baiyi.cratos.common.util.IPNetworkCalculator;
 import com.baiyi.cratos.common.util.IpUtils;
-import com.baiyi.cratos.common.util.NetworkUtil;
+import com.baiyi.cratos.common.util.NetworkUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.DataTable;
@@ -68,7 +68,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
         GlobalNetwork globalNetwork = addGlobalNetwork.toTarget();
         final String cidrBlock = globalNetwork.getCidrBlock()
                 .trim();
-        if (!NetworkUtil.isValidIpRange(cidrBlock)) {
+        if (!NetworkUtils.isValidIpRange(cidrBlock)) {
             throw new GlobalNetworkException("cidrBlock is invalid.");
         }
         try {
@@ -130,7 +130,7 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
         }
         return globalNetworkService.queryByValid()
                 .stream()
-                .filter(e -> id != e.getId() && NetworkUtil.inNetwork(e.getCidrBlock(), globalNetwork.getCidrBlock()))
+                .filter(e -> id != e.getId() && NetworkUtils.inNetwork(e.getCidrBlock(), globalNetwork.getCidrBlock()))
                 .map(globalNetworkWrapper::wrapToTarget)
                 .toList();
     }
@@ -138,12 +138,12 @@ public class GlobalNetworkFacadeImpl implements GlobalNetworkFacade {
     @Override
     public List<GlobalNetworkVO.Network> checkGlobalNetworkByCidrBlock(String cidrBlock) {
         final String cidr = cidrBlock.trim();
-        if (!NetworkUtil.isValidIpRange(cidr)) {
+        if (!NetworkUtils.isValidIpRange(cidr)) {
             throw new GlobalNetworkException("cidrBlock is invalid.");
         }
         return globalNetworkService.queryByValid()
                 .stream()
-                .filter(e -> NetworkUtil.inNetwork(e.getCidrBlock(), cidr))
+                .filter(e -> NetworkUtils.inNetwork(e.getCidrBlock(), cidr))
                 .map(globalNetworkWrapper::wrapToTarget)
                 .toList();
     }

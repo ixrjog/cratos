@@ -1,10 +1,15 @@
 package com.baiyi.cratos.common.util;
 
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/1 10:31
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class VersionValidator {
 
     /**

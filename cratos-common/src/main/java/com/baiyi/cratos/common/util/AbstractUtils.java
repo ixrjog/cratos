@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class AbstractUtil {
+public class AbstractUtils {
 
     @Data
     @Builder
