@@ -29,7 +29,7 @@ public abstract class BaseSupportBusinessFacade<T extends BaseBusiness.HasBusine
         return SupportBusinessServiceFactory.getService(business.getBusinessType()) != null;
     }
 
-    protected void trySupportedBusiness(BaseBusiness.HasBusiness business) {
+    protected void validateSupportedBusiness(BaseBusiness.HasBusiness business) {
         if (!isSupportedBusiness(business)) {
             throw new BusinessException("BusinessType {} does not support business factory.", business.getBusinessType());
         }

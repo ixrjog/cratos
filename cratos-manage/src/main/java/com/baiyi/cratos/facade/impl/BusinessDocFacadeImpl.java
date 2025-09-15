@@ -61,7 +61,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
-        trySupportedBusiness(businessDocument);
+        validateSupportedBusiness(businessDocument);
         businessDocService.add(businessDocument);
     }
 
@@ -70,7 +70,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
-        trySupportedBusiness(businessDocument);
+        validateSupportedBusiness(businessDocument);
         // Author
         BusinessDocument dBBusinessDocument = businessDocService.getById(updateBusinessDoc.getId());
         businessDocument.setAuthor(dBBusinessDocument.getAuthor());

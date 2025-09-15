@@ -17,14 +17,18 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.EnvService;
 import com.google.api.client.util.Maps;
+import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -73,10 +77,19 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         if (Objects.isNull(deployment)) {
             return null;
         }
-        Map<String, String> labels = deployment.getMetadata()
-                .getLabels();
-        List<Pod> pods = labels.containsKey("group") ? kubernetesPodRepo.list(kubernetes, namespace,
-                Map.of("app", labels.get("app"), "group", labels.get("group"))) : getPods(kubernetes, deployment);
+        Map<String, String> labels = Optional.of(deployment)
+                .map(Deployment::getSpec)
+                .map(DeploymentSpec::getTemplate)
+                .map(PodTemplateSpec::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Map.of());
+        List<Pod> pods;
+        if (labels.containsKey("group")) {
+            pods = kubernetesPodRepo.list(kubernetes, namespace,
+                    Map.of("app", labels.get("app"), "group", labels.get("group")));
+        } else {
+            pods = getPods(kubernetes, deployment);
+        }
         KubernetesCommonVO.KubernetesCluster kubernetesCluster = KubernetesCommonVO.KubernetesCluster.builder()
                 .name(edsInstance.getInstanceName())
                 .build();
