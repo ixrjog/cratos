@@ -3,6 +3,8 @@ package com.baiyi.cratos.domain.session;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.common.collect.Maps;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.map.HashedMap;
 
@@ -15,6 +17,7 @@ import java.util.Map;
  */
 @SuppressWarnings("ALL")
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EdsKubernetesNodeDetailsRequestSession<T extends HasSocketRequest> {
 
     private static Map<String, Map<String, ? extends HasSocketRequest>> sessionRequestMap = new HashedMap<>();
@@ -29,8 +32,8 @@ public class EdsKubernetesNodeDetailsRequestSession<T extends HasSocketRequest> 
             return;
         }
         if (containsBySessionId(sessionId)) {
-            ((Map<String, T>) EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.get(sessionId)).put(message.getTopic(),
-                    message);
+            ((Map<String, T>) EdsKubernetesNodeDetailsRequestSession.sessionRequestMap.get(sessionId)).put(
+                    message.getTopic(), message);
         } else {
             Map<String, T> queryMap = Maps.newHashMap();
             queryMap.put(message.getTopic(), message);

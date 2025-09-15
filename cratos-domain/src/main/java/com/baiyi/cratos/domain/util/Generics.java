@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.util;
 
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.ParameterizedType;
@@ -9,15 +10,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static lombok.AccessLevel.PRIVATE;
-
 /**
  * @Author baiyi
  * @Date 2024/1/9 11:43
  * @Version 1.0
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-@NoArgsConstructor(access = PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Generics {
 
     /**

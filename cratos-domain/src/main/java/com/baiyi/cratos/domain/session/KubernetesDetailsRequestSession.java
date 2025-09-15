@@ -3,6 +3,8 @@ package com.baiyi.cratos.domain.session;
 import com.baiyi.cratos.domain.enums.SocketActionRequestEnum;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.google.common.collect.Maps;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @SuppressWarnings("ALL")
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class KubernetesDetailsRequestSession<T extends HasSocketRequest> {
 
     private static final Map<String, Map<String, ? extends HasSocketRequest>> SESSION_REQUEST_MAP = new ConcurrentHashMap<>();

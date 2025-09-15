@@ -2,7 +2,9 @@ package com.baiyi.cratos.domain.util.dnsgoogle.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import java.util.List;
  * &#064;Date  2025/1/16 13:54
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DnsGoogleModel {
 
     @Data
