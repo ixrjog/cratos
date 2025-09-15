@@ -6,7 +6,9 @@ package com.baiyi.cratos.domain.enums;
  * &#064;Version 1.0
  */
 public enum InstanceHealthStatus {
+
     OK,
     ERROR,
     INACTIVE
+
 }

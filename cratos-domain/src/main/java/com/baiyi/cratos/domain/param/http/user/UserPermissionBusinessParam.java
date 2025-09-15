@@ -11,11 +11,14 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/1/17 10:17
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class UserPermissionBusinessParam {
 
     @EqualsAndHashCode(callSuper = true)

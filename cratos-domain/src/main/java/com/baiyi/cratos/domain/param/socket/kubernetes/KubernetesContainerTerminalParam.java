@@ -9,14 +9,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
+
+import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/1/8 13:53
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class KubernetesContainerTerminalParam {
 
     public static KubernetesContainerTerminalRequest loadAs(String message) throws JsonSyntaxException {

@@ -101,7 +101,7 @@ public class UserExtFacadeImpl implements UserExtFacade {
         }
     }
 
-    @Committing(typeOf = BusinessTypeEnum.USER, businessId = "#userId")
+    @Committing(businessType = BusinessTypeEnum.USER, businessId = "#userId")
     public SimpleCommited renewalOfExtUser(int userId, UserExtParam.RenewalExtUser renewalExtUser) {
         return SimpleCommited.builder()
                 .name(renewalExtUser.getUsername())

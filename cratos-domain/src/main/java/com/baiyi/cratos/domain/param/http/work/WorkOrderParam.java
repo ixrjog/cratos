@@ -13,11 +13,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/1 10:33
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class WorkOrderParam {
 
     @EqualsAndHashCode(callSuper = true)

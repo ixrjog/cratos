@@ -12,11 +12,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/13 17:34
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CratosAssetParam {
 
     @Data

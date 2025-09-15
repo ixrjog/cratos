@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Committing {
 
-    BusinessTypeEnum typeOf();
+    BusinessTypeEnum businessType();
 
     @Schema(description = "SpEL specified parameters.")
     String businessId();

@@ -7,11 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/24 10:24
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ApplicationActuatorParam {
 
     @EqualsAndHashCode(callSuper = true)

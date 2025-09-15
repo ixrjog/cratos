@@ -9,12 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * @Author baiyi
  * @Date 2021/10/28 4:27 下午
  * @Version 1.0
  */
 @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
+@NoArgsConstructor(access = PRIVATE)
 public class GitLabEventParam {
 
     /**

@@ -7,11 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/8/14 下午1:56
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficLayerIngressParam {
 
     @Data

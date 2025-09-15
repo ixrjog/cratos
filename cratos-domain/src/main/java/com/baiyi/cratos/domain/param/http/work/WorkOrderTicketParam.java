@@ -25,11 +25,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/3/17 17:34
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class WorkOrderTicketParam {
 
     public interface HasEntryDetail<T> {

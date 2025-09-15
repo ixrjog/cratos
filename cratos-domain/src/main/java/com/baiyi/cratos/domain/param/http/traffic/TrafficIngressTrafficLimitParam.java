@@ -13,11 +13,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/9 13:36
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class TrafficIngressTrafficLimitParam {
 
     @EqualsAndHashCode(callSuper = true)

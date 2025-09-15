@@ -10,11 +10,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/2/26 15:55
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class EdsIdentityParam {
 
     @Data

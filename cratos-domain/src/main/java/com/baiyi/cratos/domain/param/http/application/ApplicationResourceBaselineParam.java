@@ -8,11 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/30 17:08
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class ApplicationResourceBaselineParam {
 
     @EqualsAndHashCode(callSuper = true)

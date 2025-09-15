@@ -148,7 +148,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     }
 
     @SuppressWarnings("unchecked")
-    @Committing(typeOf = BusinessTypeEnum.EDS_ASSET, businessId = "#updateIngressTrafficLimit.assetId")
+    @Committing(businessType = BusinessTypeEnum.EDS_ASSET, businessId = "#updateIngressTrafficLimit.assetId")
     public SimpleCommited updateIngressTrafficLimit(
             TrafficIngressTrafficLimitParam.UpdateIngressTrafficLimit updateIngressTrafficLimit) {
         String commitMessage = Optional.ofNullable(updateIngressTrafficLimit)

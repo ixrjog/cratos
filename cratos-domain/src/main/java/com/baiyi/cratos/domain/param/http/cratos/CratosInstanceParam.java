@@ -10,11 +10,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/7 15:24
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class CratosInstanceParam {
 
     @EqualsAndHashCode(callSuper = true)
@@ -51,6 +54,5 @@ public class CratosInstanceParam {
         private List<Integer> idList;
         private Boolean valid;
     }
-
 
 }

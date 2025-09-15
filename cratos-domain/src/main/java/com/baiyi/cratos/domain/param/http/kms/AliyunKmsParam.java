@@ -8,11 +8,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/6/23 10:08
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class AliyunKmsParam {
 
     @EqualsAndHashCode(callSuper = true)

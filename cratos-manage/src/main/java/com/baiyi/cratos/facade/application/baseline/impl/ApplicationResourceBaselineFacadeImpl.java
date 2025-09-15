@@ -86,7 +86,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     @Override
-    @Committing(typeOf = BusinessTypeEnum.APPLICATION_RESOURCE_BASELINE, businessId = "#baselineId")
+    @Committing(businessType = BusinessTypeEnum.APPLICATION_RESOURCE_BASELINE, businessId = "#baselineId")
     public SimpleCommited mergeToBaseline(int baselineId) {
         ApplicationResourceBaseline baseline = baselineService.getById(baselineId);
         if (baseline == null) {

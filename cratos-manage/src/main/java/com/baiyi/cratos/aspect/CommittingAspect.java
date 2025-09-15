@@ -58,7 +58,7 @@ public class CommittingAspect {
                 log.warn("businessId does not exist.");
                 return;
             }
-            submit(commited, username, committing.typeOf()
+            submit(commited, username, committing.businessType()
                     .name(), businessId);
         }
     }

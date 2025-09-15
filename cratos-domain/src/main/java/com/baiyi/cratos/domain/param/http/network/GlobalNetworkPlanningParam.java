@@ -17,11 +17,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/9/2 16:22
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = PRIVATE)
 public class GlobalNetworkPlanningParam {
 
     @EqualsAndHashCode(callSuper = true)
