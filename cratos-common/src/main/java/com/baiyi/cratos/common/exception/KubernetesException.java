@@ -18,6 +18,7 @@ import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.KUBE
 @Data
 @NoArgsConstructor
 public class KubernetesException extends BaseException {
+
     @Serial
     private static final long serialVersionUID = 693230133280405644L;
     private int code;

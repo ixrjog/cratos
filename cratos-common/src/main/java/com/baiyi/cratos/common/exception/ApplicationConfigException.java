@@ -18,6 +18,7 @@ import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.APPL
 @Data
 @NoArgsConstructor
 public class ApplicationConfigException extends BaseException {
+
     @Serial
     private static final long serialVersionUID = 2622464939629229505L;
     private int code;

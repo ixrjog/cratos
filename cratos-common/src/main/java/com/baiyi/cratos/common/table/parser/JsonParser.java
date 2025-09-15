@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * JsonParser class.
+ *
  * @author liangjian
  */
 public final class JsonParser implements Parser {
@@ -25,17 +26,17 @@ public final class JsonParser implements Parser {
             if (root.isEmpty()) {
                 return PrettyTable.fieldNames();
             }
-            PrettyTable pt = PrettyTable.fieldNames(root.get(0).fieldNames());
+            PrettyTable pt = PrettyTable.fieldNames(root.get(0)
+                    .fieldNames());
             for (JsonNode c : root) {
                 List<Object> values = new ArrayList<>();
-                c.fields().forEachRemaining(f -> values.add(toStr(f)));
+                c.properties().iterator().forEachRemaining(f -> values.add(toStr(f)));
                 pt.addRow(values.toArray());
             }
             return pt;
         } else {
             PrettyTable pt = PrettyTable.fieldNames("Name", "Value");
-            root.fields().forEachRemaining(
-                    f -> pt.addRow(f.getKey(), toStr(f)));
+            root.properties().iterator().forEachRemaining(f -> pt.addRow(f.getKey(), toStr(f)));
             return pt;
         }
     }
@@ -52,7 +53,8 @@ public final class JsonParser implements Parser {
                 return value.asText();
             }
             case NUMBER -> {
-                return value.toString().contains(".") ? value.asDouble() : value.asInt();
+                return value.toString()
+                        .contains(".") ? value.asDouble() : value.asInt();
             }
             default -> {
                 return value.toString();

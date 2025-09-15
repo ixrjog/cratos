@@ -18,6 +18,7 @@ import static com.baiyi.cratos.common.exception.constant.ErrorCodeConstants.EDS_
 @Data
 @NoArgsConstructor
 public class EdsIdentityException extends BaseException {
+
     @Serial
     private static final long serialVersionUID = 3715871500875806873L;
     private int code;
