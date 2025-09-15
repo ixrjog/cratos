@@ -4,6 +4,7 @@ package com.baiyi.cratos.common.table;
 import com.baiyi.cratos.common.table.converter.PlainConsoleConverter;
 import com.baiyi.cratos.common.table.parser.JsonParser;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
@@ -17,10 +18,15 @@ public class PrettyTable {
 
     private final List<String> fieldNames = new ArrayList<>();
     private final List<Object[]> rows = new ArrayList<>();
+    @Getter
     private boolean comma = false;
+    @Getter
     private boolean border = true;
+    @Getter
     private boolean color = false;
+    @Getter
     private String fontColor = "DEFAULT";
+    @Getter
     private String borderColor = "DEFAULT";
     private Parser parser = new JsonParser();
     private Converter converter = new PlainConsoleConverter();
@@ -32,26 +38,6 @@ public class PrettyTable {
 
     public List<Object[]> getRows() {
         return new ArrayList<>(rows);
-    }
-
-    public boolean isComma() {
-        return comma;
-    }
-
-    public boolean isBorder() {
-        return border;
-    }
-
-    public boolean isColor() {
-        return color;
-    }
-
-    public String getFontColor() {
-        return fontColor;
-    }
-
-    public String getBorderColor() {
-        return borderColor;
     }
 
     /**
