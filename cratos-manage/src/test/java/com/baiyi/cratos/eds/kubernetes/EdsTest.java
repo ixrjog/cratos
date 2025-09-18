@@ -1,16 +1,22 @@
 package com.baiyi.cratos.eds.kubernetes;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesEventRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.api.client.util.Maps;
+import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Event;
+import io.fabric8.kubernetes.api.model.PodSpec;
+import io.fabric8.kubernetes.api.model.PodTemplateSpec;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
+import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -36,6 +43,8 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
     private EdsAssetService edsAssetService;
     @Resource
     private EdsAssetIndexService edsAssetIndexService;
+    @Resource
+    private KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
     @Data
     @Builder
@@ -132,6 +141,39 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
                 }
             }
         });
+    }
+
+    @Test
+    void test2() {
+        // config_ack-pre 13
+        // config_ack-channel-prod 29
+
+        Map<String, ApplicationView> viewMap = Maps.newHashMap();
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(29);
+        kubernetesDeploymentRepo.list(kubernetes, "pre")
+                .forEach(d -> {
+                    List<Container> containers = Optional.of(d)
+                            .map(Deployment::getSpec)
+                            .map(DeploymentSpec::getTemplate)
+                            .map(PodTemplateSpec::getSpec)
+                            .map(PodSpec::getContainers)
+                            .orElse(List.of());
+
+                    containers.stream()
+                            .filter(e -> e.getName()
+                                    .equals("consul-agent"))
+                            .findFirst()
+                            .ifPresent(c -> {
+                                d.getSpec()
+                                        .setReplicas(0);
+                                kubernetesDeploymentRepo.update(kubernetes, d);
+                                System.out.println(d.getMetadata()
+                                        .getName() + " set replicas 0");
+                            });
+
+                });
+
+
     }
 
 }

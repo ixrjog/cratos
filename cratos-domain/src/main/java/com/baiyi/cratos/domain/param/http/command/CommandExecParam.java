@@ -58,7 +58,7 @@ public class CommandExecParam {
         private final Boolean success = false;
 
         @Valid
-        @NotNull
+        @NotNull(message = "Exec target cannot be null")
         private ExecTarget execTarget;
 
         @Override
@@ -74,9 +74,9 @@ public class CommandExecParam {
     @Schema
     public static class ExecTarget {
         @Schema(description = "Eds Kubernetes Instance ID")
-        @NotNull
+        @NotNull(message = "Instance ID cannot be null")
         private Integer instanceId;
-        @NotBlank
+        @NotBlank(message = "Namespace cannot be empty")
         private String namespace;
         private final boolean useDefaultExecContainer = true;
         @Max(60L)
