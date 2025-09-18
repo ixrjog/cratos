@@ -99,9 +99,9 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .equals(edsInstance.getEdsType())) {
             CommandExecException.runtime("Eds kubernetes instance does not exist or the type is incorrect.");
         }
-        String namespace = Optional.of(addCommandExec)
-                .map(CommandExecParam.AddCommandExec::getExecTarget)
+        String namespace = Optional.ofNullable(addCommandExec.getExecTarget())
                 .map(CommandExecParam.ExecTarget::getNamespace)
+                .filter(StringUtils::hasText)
                 .orElseThrow(() -> new CommandExecException("The namespace cannot be empty."));
         commandExec.setNamespace(namespace);
         CommandExecModel.EdsInstance instance = CommandExecModel.EdsInstance.builder()

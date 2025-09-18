@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.CommandExec;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +57,8 @@ public class CommandExecParam {
         private final Boolean completed = false;
         private final Boolean success = false;
 
+        @Valid
+        @NotNull
         private ExecTarget execTarget;
 
         @Override
@@ -71,7 +74,9 @@ public class CommandExecParam {
     @Schema
     public static class ExecTarget {
         @Schema(description = "Eds Kubernetes Instance ID")
+        @NotNull
         private Integer instanceId;
+        @NotBlank
         private String namespace;
         private final boolean useDefaultExecContainer = true;
         @Max(60L)
