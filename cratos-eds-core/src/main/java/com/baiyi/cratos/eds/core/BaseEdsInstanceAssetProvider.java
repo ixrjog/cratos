@@ -119,6 +119,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
             EdsAsset edsAsset = saveAsset(convertToEdsAsset(instance, entity));
             List<EdsAssetIndex> indices = createEdsAssetIndices(instance, edsAsset, entity);
             edsAssetIndexFacade.saveAssetIndexList(edsAsset.getId(), indices);
+            processingAssetTags(edsAsset, instance, entity, indices);
             return edsAsset;
         } catch (EdsAssetConversionException e) {
             log.error("Asset conversion error. {}", e.getMessage());
@@ -126,7 +127,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         }
     }
 
-    private List<EdsAssetIndex> createEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+    private List<EdsAssetIndex> createEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
+                                                      A entity) {
         List<EdsAssetIndex> indices = convertToEdsAssetIndexList(instance, edsAsset, entity);
         EdsAssetIndex index = convertToEdsAssetIndex(instance, edsAsset, entity);
         if (index == null) {
@@ -148,7 +150,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return Collections.emptyList();
     }
 
-    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset, A entity) {
+    protected void processingAssetTags(EdsAsset asset, ExternalDataSourceInstance<C> instance, A entity,
+                                       List<EdsAssetIndex> indices) {
+    }
+
+    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
+                                                   A entity) {
         return null;
     }
 

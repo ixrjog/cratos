@@ -20,8 +20,8 @@ public interface EdsAssetIndexConstants {
     String ALIYUN_ACR_REPO_NAMESPACE = "acr.repo.namespace";
 
     String ALIYUN_ONS_INSTANCE_ID = "ons.instanceId";
-    String ALIYUN_ONS_INSTANCE_VPC_ENDPOINT= "ons.instance.vpc.endpoint";
-    String ALIYUN_ONS_INSTANCE_INTERNET_ENDPOINT= "ons.instance.internet.endpoint";
+    String ALIYUN_ONS_INSTANCE_VPC_ENDPOINT = "ons.instance.vpc.endpoint";
+    String ALIYUN_ONS_INSTANCE_INTERNET_ENDPOINT = "ons.instance.internet.endpoint";
 
 
     String ALIYUN_ONS_CONSUMER_GROUP_ID = "ons.consumerGroupId";
@@ -41,7 +41,7 @@ public interface EdsAssetIndexConstants {
     String ALIYUN_KMS_ENDPOINT = "aliyun.kms.endpoint";
     String ALIYUN_KMS_INSTANCE_ID = "aliyun.kms.instanceId";
     // 内容Ha
-    String CONTENT_HASH ="content.hash";
+    String CONTENT_HASH = "content.hash";
 
     String ALIYUN_ARMS_APP_HOME = "aliyun.arms.app.home";
 
@@ -117,5 +117,7 @@ public interface EdsAssetIndexConstants {
     String CLOUDFLARE_ZONE_CNAME_SUFFIX = "cloudflare.zone.cname.suffix";
     String CLOUDFLARE_ZONE_DNS_RECORD_PROXIED = "cloudflare.zone.dns.record.proxied";
     String CLOUDFLARE_ZONE_DNS_RECORD_CONTENT = "cloudflare.zone.dns.record.content";
+
+    String COUNTRYCODE = "countrycode";
 
 }

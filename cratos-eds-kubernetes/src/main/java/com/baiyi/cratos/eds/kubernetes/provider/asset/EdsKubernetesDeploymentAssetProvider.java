@@ -1,8 +1,14 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.HasSetValid;
+import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -15,12 +21,14 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
-import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
+import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -28,6 +36,7 @@ import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -47,6 +56,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAssetProvider<Deployment> {
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+    private final BusinessTagFacade businessTagFacade;
+    private final BusinessTagService businessTagService;
+    private final HasSetValid tagFacade;
+    private final TagService tagService;
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                 CredentialService credentialService,
@@ -55,10 +68,17 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                                                 UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
                                                 EdsInstanceProviderHolderBuilder holderBuilder,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
-                                                KubernetesDeploymentRepo kubernetesDeploymentRepo) {
+                                                KubernetesDeploymentRepo kubernetesDeploymentRepo,
+                                                BusinessTagFacade businessTagFacade,
+                                                BusinessTagService businessTagService, HasSetValid tagFacade,
+                                                TagService tagService) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
+        this.businessTagFacade = businessTagFacade;
+        this.businessTagService = businessTagService;
+        this.tagFacade = tagFacade;
+        this.tagService = tagService;
     }
 
     @Override
@@ -87,21 +107,49 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             }
             indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
         }
-
         int replicas = KubeUtils.getReplicas(entity);
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
 
-        // group标签
         Map<String, String> labels = Optional.of(entity)
                 .map(Deployment::getSpec)
                 .map(DeploymentSpec::getTemplate)
                 .map(PodTemplateSpec::getMetadata)
                 .map(ObjectMeta::getLabels)
                 .orElse(Maps.newHashMap());
+        // group标签
         if (labels.containsKey("group")) {
             indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
         }
+        // countrycode标签
+        if (labels.containsKey("countrycode")) {
+            indices.add(createEdsAssetIndex(edsAsset, COUNTRYCODE, labels.get("countrycode")));
+        }
         return indices;
+    }
+
+    @Override
+    protected void processingAssetTags(EdsAsset asset,
+                                       ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                       Deployment entity, List<EdsAssetIndex> indices) {
+        if (CollectionUtils.isEmpty(indices)) {
+            return;
+        }
+        indices.stream()
+                .filter(e -> "countrycode".equals(e.getName()))
+                .findFirst()
+                .ifPresent(e -> {
+                    String countryCode = e.getValue();
+                    Tag tag = tagService.getByTagKey(SysTagKeys.COUNTRY_CODE);
+                    if (tag != null) {
+                        BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
+                                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                                .businessId(asset.getId())
+                                .tagId(tag.getId())
+                                .tagValue(countryCode)
+                                .build();
+                        businessTagFacade.saveBusinessTag(saveBusinessTag);
+                    }
+                });
     }
 
     @Override

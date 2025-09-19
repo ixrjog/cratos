@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.google.api.client.util.Maps;
+import com.google.common.base.Joiner;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.api.model.PodSpec;
@@ -143,13 +144,14 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         });
     }
 
+
     @Test
     void test2() {
         // config_ack-pre 13
         // config_ack-channel-prod 29
 
         Map<String, ApplicationView> viewMap = Maps.newHashMap();
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(29);
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
         kubernetesDeploymentRepo.list(kubernetes, "pre")
                 .forEach(d -> {
                     List<Container> containers = Optional.of(d)
@@ -164,16 +166,69 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
                                     .equals("consul-agent"))
                             .findFirst()
                             .ifPresent(c -> {
-                                d.getSpec()
-                                        .setReplicas(0);
-                                kubernetesDeploymentRepo.update(kubernetes, d);
                                 System.out.println(d.getMetadata()
-                                        .getName() + " set replicas 0");
+                                        .getName() + Joiner.on(" ")
+                                        .join(c.getArgs()));
                             });
-
                 });
-
-
     }
+
+    @Test
+    void test3() {
+        // config_ack-pre 13
+        // config_ack-channel-prod 29
+
+        Map<String, ApplicationView> viewMap = Maps.newHashMap();
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
+        kubernetesDeploymentRepo.list(kubernetes, "pre")
+                .forEach(d -> {
+                    List<Container> containers = Optional.of(d)
+                            .map(Deployment::getSpec)
+                            .map(DeploymentSpec::getTemplate)
+                            .map(PodTemplateSpec::getSpec)
+                            .map(PodSpec::getContainers)
+                            .orElse(List.of());
+
+                    d.getSpec()
+                            .setReplicas(1);
+                    kubernetesDeploymentRepo.update(kubernetes, d);
+                    System.out.println(d.getMetadata()
+                            .getName() + " set replicas 1");
+                });
+    }
+
+
+    @Test
+    void test4() {
+        // config_ack-pre 13
+        // config_ack-channel-prod 29
+
+        Map<String, ApplicationView> viewMap = Maps.newHashMap();
+        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
+        kubernetesDeploymentRepo.list(kubernetes, "pre")
+                .forEach(d -> {
+                    Optional<Container> optionalContainer = Optional.of(d)
+                            .map(Deployment::getSpec)
+                            .map(DeploymentSpec::getTemplate)
+                            .map(PodTemplateSpec::getSpec)
+                            .map(PodSpec::getContainers)
+                            .orElse(List.of())
+                            .stream()
+                            .filter(e -> e.getName()
+                                    .equals("consul-agent"))
+                            .findFirst();
+                    if (optionalContainer.isPresent()) {
+                        d.getSpec()
+                                .getTemplate()
+                                .getSpec()
+                                .getContainers()
+                                .remove(optionalContainer.get());
+                        System.out.println(d.getMetadata()
+                                .getName() + " remove consul-agent");
+                        kubernetesDeploymentRepo.update(kubernetes, d);
+                    }
+                });
+    }
+
 
 }
