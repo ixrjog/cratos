@@ -135,9 +135,10 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
             return indices;
         }
         if (CollectionUtils.isEmpty(indices)) {
-            return List.of(index);
+            return Collections.singletonList(index);
         }
-        if (!indices.contains(index)) {
+        if (indices.stream()
+                .noneMatch(i -> i.equals(index))) {
             List<EdsAssetIndex> result = Lists.newArrayList(indices);
             result.add(index);
             return result;

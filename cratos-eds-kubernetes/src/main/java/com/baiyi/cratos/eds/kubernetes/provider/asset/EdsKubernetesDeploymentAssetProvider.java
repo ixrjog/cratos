@@ -1,6 +1,5 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
-import com.baiyi.cratos.HasSetValid;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -30,7 +29,6 @@ import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
@@ -58,7 +56,6 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final BusinessTagFacade businessTagFacade;
     private final BusinessTagService businessTagService;
-    private final HasSetValid tagFacade;
     private final TagService tagService;
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
@@ -70,14 +67,12 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                 KubernetesDeploymentRepo kubernetesDeploymentRepo,
                                                 BusinessTagFacade businessTagFacade,
-                                                BusinessTagService businessTagService, HasSetValid tagFacade,
-                                                TagService tagService) {
+                                                BusinessTagService businessTagService, TagService tagService) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.businessTagFacade = businessTagFacade;
         this.businessTagService = businessTagService;
-        this.tagFacade = tagFacade;
         this.tagService = tagService;
     }
 
@@ -109,20 +104,23 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
         }
         int replicas = KubeUtils.getReplicas(entity);
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_REPLICAS, replicas));
-
-        Map<String, String> labels = Optional.of(entity)
+        // group标签
+        Map<String, String> specTemplateMetadataLabels = Optional.of(entity)
                 .map(Deployment::getSpec)
                 .map(DeploymentSpec::getTemplate)
                 .map(PodTemplateSpec::getMetadata)
                 .map(ObjectMeta::getLabels)
-                .orElse(Maps.newHashMap());
-        // group标签
-        if (labels.containsKey("group")) {
-            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_GROUP, labels.get("group")));
+                .orElse(Map.of());
+        if (specTemplateMetadataLabels.containsKey("group")) {
+            indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_GROUP, specTemplateMetadataLabels.get("group")));
         }
         // countrycode标签
-        if (labels.containsKey("countrycode")) {
-            indices.add(createEdsAssetIndex(edsAsset, COUNTRYCODE, labels.get("countrycode")));
+        Map<String, String> metadataLabels = Optional.of(entity)
+                .map(Deployment::getMetadata)
+                .map(ObjectMeta::getLabels)
+                .orElse(Map.of());
+        if (metadataLabels.containsKey("countrycode")) {
+            indices.add(createEdsAssetIndex(edsAsset, COUNTRYCODE, metadataLabels.get("countrycode")));
         }
         return indices;
     }
@@ -135,7 +133,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
             return;
         }
         indices.stream()
-                .filter(e -> "countrycode".equals(e.getName()))
+                .filter(e -> "countrycode".equalsIgnoreCase(e.getName()))
                 .findFirst()
                 .ifPresent(e -> {
                     String countryCode = e.getValue();
