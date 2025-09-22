@@ -27,7 +27,7 @@ public class ApplicationWrapper extends BaseDataTableConverter<ApplicationVO.App
     private final UserFavoriteFacade userFavoriteFacade;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(ApplicationVO.Application vo) {
         resourceWrapper.wrap(vo);
         String username = SessionUtils.getUsername();

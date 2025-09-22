@@ -27,7 +27,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
     private final EnvService envService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(EnvVO.Env vo) {
     }
 

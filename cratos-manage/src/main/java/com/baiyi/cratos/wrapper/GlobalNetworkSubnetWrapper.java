@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class GlobalNetworkSubnetWrapper extends BaseDataTableConverter<GlobalNetworkVO.Subnet, GlobalNetworkSubnet> implements IBaseWrapper<GlobalNetworkVO.Subnet> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Subnet vo) {
     }
 

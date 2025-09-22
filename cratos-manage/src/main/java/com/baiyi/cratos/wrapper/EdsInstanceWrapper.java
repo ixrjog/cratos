@@ -37,7 +37,7 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
     private final EdsInstanceVersionProviderHolderBuilder versionHolderBuilder;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(EdsInstanceVO.EdsInstance vo) {
         // Eds Instance Registered
         vo.setRegistered(vo.getConfigId() != null);

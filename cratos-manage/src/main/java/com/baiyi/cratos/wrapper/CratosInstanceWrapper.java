@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class CratosInstanceWrapper extends BaseDataTableConverter<CratosInstanceVO.RegisteredInstance, CratosInstance> implements IBaseWrapper<CratosInstanceVO.RegisteredInstance> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(CratosInstanceVO.RegisteredInstance vo) {
     }
 

@@ -25,6 +25,6 @@ public @interface BusinessWrapper {
      * 不指定，则从类注解@BusinessType中获取类型
      * @return
      */
-    BusinessTypeEnum[] ofTypes() default {};
+    BusinessTypeEnum[] types() default {};
 
 }

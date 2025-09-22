@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class DomainWrapper extends BaseDataTableConverter<DomainVO.Domain, Domain> implements IBaseWrapper<DomainVO.Domain> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(DomainVO.Domain vo) {
     }
 

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class RiskEventWrapper extends BaseDataTableConverter<RiskEventVO.Event, RiskEvent> implements IBaseWrapper<RiskEventVO.Event> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})
     public void wrap(RiskEventVO.Event vo) {
     }
 

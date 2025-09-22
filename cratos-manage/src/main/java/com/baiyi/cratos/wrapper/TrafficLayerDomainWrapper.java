@@ -48,7 +48,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     private static final String AWS_ROUTE53_DNS_CONSOLE_TPL = "https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones?region=eu-west-1#ListRecordSets/{}";
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(TrafficLayerDomainVO.Domain vo) {
         Map<String, Integer> resourceCount = ResourceCountBuilder.newBuilder()
                 .put(buildResourceCountForRecord(vo))

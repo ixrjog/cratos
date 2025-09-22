@@ -29,7 +29,7 @@ public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Gr
     private final WorkOrderGroupService workOrderGroupService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER})
+    @BusinessWrapper(types = {BusinessTypeEnum.WORKORDER})
     @I18nWrapper
     public void wrap(WorkOrderVO.Group vo) {
         // This is a good idea

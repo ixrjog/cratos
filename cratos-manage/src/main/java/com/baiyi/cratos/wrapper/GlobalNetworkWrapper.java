@@ -26,7 +26,7 @@ public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO
     private final GlobalNetworkService globalNetworkService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.GLOBAL_NETWORK_PLANNING, BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.GLOBAL_NETWORK_PLANNING, BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(GlobalNetworkVO.Network vo) {
     }
 

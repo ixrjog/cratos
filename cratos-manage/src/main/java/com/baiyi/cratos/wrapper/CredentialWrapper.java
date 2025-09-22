@@ -32,7 +32,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     private final CredentialService credentialService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     @Sensitive
     public void wrap(CredentialVO.Credential vo) {
         // tips

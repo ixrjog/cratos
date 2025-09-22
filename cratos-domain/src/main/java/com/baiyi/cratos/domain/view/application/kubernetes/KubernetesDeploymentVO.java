@@ -1,14 +1,13 @@
 package com.baiyi.cratos.domain.view.application.kubernetes;
 
-import com.baiyi.cratos.domain.generator.Env;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
+import com.baiyi.cratos.domain.view.env.EnvVO;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -27,13 +26,15 @@ public class KubernetesDeploymentVO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
-    public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Comparable<Deployment>, Serializable {
+    public static class Deployment implements KubernetesCommonVO.HasKubernetesCluster, Comparable<Deployment>, BusinessTagVO.HasBusinessTags, EnvVO.HasEnv, Serializable {
         @Serial
         private static final long serialVersionUID = 9137044441466358774L;
 
         public static final Deployment INVALID = Deployment.builder()
                 .build();
 
+        private static final BusinessTypeEnum BUSINESS_TYPE_ENUM = BusinessTypeEnum.EDS_ASSET;
+        private Integer assetId;
         private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
         private KubernetesCommonVO.Metadata metadata;
         private DeploymentSpec spec;
@@ -42,13 +43,27 @@ public class KubernetesDeploymentVO {
         private KubernetesCommonVO.TopologyDetails topologyDetails;
         @Schema(description = "属性")
         private Map<String, String> attributes;
-        private Env env;
+        private EnvVO.Env env;
+        private String envName;
+        @Schema(description = "Business Tags")
+        private List<BusinessTagVO.BusinessTag> businessTags;
+
+        @Override
+        public Integer getBusinessId() {
+            return this.assetId;
+        }
 
         @Override
         public int compareTo(Deployment o) {
             return this.metadata.getName()
                     .compareTo(o.metadata.getName());
         }
+
+        @Override
+        public String getBusinessType() {
+            return BUSINESS_TYPE_ENUM.name();
+        }
+
     }
 
     @Data

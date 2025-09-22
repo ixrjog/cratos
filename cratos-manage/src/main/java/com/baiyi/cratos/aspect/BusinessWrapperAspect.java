@@ -34,7 +34,7 @@ public class BusinessWrapperAspect {
     private void run(JoinPoint joinPoint, BusinessWrapper businessWrapper) {
         Object business = joinPoint.getArgs()[0];
         // 未指定types则从类注解中获取BusinessType
-        BusinessTypeEnum[] types = businessWrapper.ofTypes().length != 0 ? businessWrapper.ofTypes() : new BusinessTypeEnum[]{AopUtils.getTargetClass(
+        BusinessTypeEnum[] types = businessWrapper.types().length != 0 ? businessWrapper.types() : new BusinessTypeEnum[]{AopUtils.getTargetClass(
                         joinPoint.getTarget())
                 .getAnnotation(BusinessType.class).type()};
         Arrays.stream(types)

@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class SshSessionWrapper extends BaseDataTableConverter<SshSessionVO.Session, SshSession> implements IBaseWrapper<SshSessionVO.Session> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.SSH_INSTANCE})
+    @BusinessWrapper(types = {BusinessTypeEnum.SSH_INSTANCE})
     public void wrap(SshSessionVO.Session vo) {
         vo.initDurationTime();
     }

@@ -34,7 +34,7 @@ public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<A
     private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.ENV})
+    @BusinessWrapper(types = {BusinessTypeEnum.ENV})
     public void wrap(ApplicationResourceBaselineVO.ResourceBaseline vo) {
         vo.setIsDeploying(deploymentRedeployFacade.isRedeploying(vo.getId()));
         vo.setContainer(buildContainer(vo));

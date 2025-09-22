@@ -33,7 +33,7 @@ public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.Com
     private final CommandExecApprovalService approvalService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.ENV})
+    @BusinessWrapper(types = {BusinessTypeEnum.ENV})
     public void wrap(CommandExecVO.CommandExec vo) {
         String sessionUsername = SessionUtils.getUsername();
         boolean isMask = CommandExecUtils.isMask(sessionUsername, vo);

@@ -40,7 +40,7 @@ public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrd
     private final WorkOrderGroupWrapper workOrderGroupWrapper;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.BUSINESS_TAG})
     @I18nWrapper
     public void wrap(WorkOrderVO.WorkOrder vo) {
         // Workflow Data

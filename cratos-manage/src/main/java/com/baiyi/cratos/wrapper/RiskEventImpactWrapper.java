@@ -34,7 +34,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
     private final RiskEventImpactService impactService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG})
     public void wrap(RiskEventVO.Impact vo) {
         if (vo.getCost() != 0) {
             RiskEventVO.CostDetail costDetail = RiskEventVO.CostDetail.builder()

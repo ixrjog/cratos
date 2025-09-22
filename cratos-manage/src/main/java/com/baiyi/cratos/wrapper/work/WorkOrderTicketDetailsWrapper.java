@@ -47,7 +47,7 @@ public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTick
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BEFORE)
+    @BusinessWrapper(types = {BusinessTypeEnum.WORKORDER_TICKET, BusinessTypeEnum.WORKORDER_TICKET_ENTRY, BusinessTypeEnum.WORKORDER_TICKET_NODE}, invokeAt = BEFORE)
     public void wrap(WorkOrderTicketVO.TicketDetails vo) {
         WorkOrder workOrder = workOrderService.getById(vo.getTicket()
                 .getWorkOrderId());

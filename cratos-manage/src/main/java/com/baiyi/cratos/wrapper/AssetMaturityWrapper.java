@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class AssetMaturityWrapper extends BaseDataTableConverter<AssetMaturityVO.AssetMaturity, AssetMaturity> implements IBaseWrapper<AssetMaturityVO.AssetMaturity> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(AssetMaturityVO.AssetMaturity vo) {
     }
 

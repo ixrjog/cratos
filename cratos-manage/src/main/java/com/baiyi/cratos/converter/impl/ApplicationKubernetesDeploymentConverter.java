@@ -1,10 +1,11 @@
 package com.baiyi.cratos.converter.impl;
 
+import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.converter.base.BaseKubernetesResourceConverter;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
@@ -23,6 +24,7 @@ import io.fabric8.kubernetes.api.model.PodTemplateSpec;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.api.model.apps.DeploymentSpec;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,6 +43,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final KubernetesPodRepo kubernetesPodRepo;
+
 
     public ApplicationKubernetesDeploymentConverter(EdsInstanceService edsInstanceService,
                                                     EdsInstanceProviderHolderBuilder holderBuilder,
@@ -93,13 +96,19 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
         KubernetesCommonVO.KubernetesCluster kubernetesCluster = KubernetesCommonVO.KubernetesCluster.builder()
                 .name(edsInstance.getInstanceName())
                 .build();
-        Env env = envService.getByEnvName(namespace);
-        return KubernetesDeploymentBuilder.newBuilder()
+        KubernetesDeploymentVO.Deployment vo = KubernetesDeploymentBuilder.newBuilder()
+                .withAssetId(assetId)
                 .withKubernetes(kubernetesCluster)
                 .withDeployment(deployment)
                 .withPods(pods)
-                .withEnv(env)
+                .withEnvName(namespace)
                 .build();
+        ((ApplicationKubernetesDeploymentConverter) AopContext.currentProxy()).wrap(vo);
+        return vo;
+    }
+
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.ENV})
+    public void wrap(KubernetesDeploymentVO.Deployment vo) {
     }
 
     private List<Pod> getPods(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {

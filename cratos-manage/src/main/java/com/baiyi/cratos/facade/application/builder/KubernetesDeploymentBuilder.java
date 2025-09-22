@@ -1,9 +1,9 @@
 package com.baiyi.cratos.facade.application.builder;
 
-import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesPodVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
+import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerLifecycleBuilder;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerProbeBuilder;
@@ -26,13 +26,20 @@ import java.util.*;
  */
 public class KubernetesDeploymentBuilder {
 
+    private Integer assetId;
     private Deployment deployment;
-    private Env env;
+    private String envName;
     private List<Pod> pods;
+    private List<BusinessTagVO.BusinessTag> businessTags;
     private KubernetesCommonVO.KubernetesCluster kubernetesCluster;
 
     public static KubernetesDeploymentBuilder newBuilder() {
         return new KubernetesDeploymentBuilder();
+    }
+
+    public KubernetesDeploymentBuilder withAssetId(Integer assetId) {
+        this.assetId = assetId;
+        return this;
     }
 
     public KubernetesDeploymentBuilder withDeployment(Deployment deployment) {
@@ -50,8 +57,13 @@ public class KubernetesDeploymentBuilder {
         return this;
     }
 
-    public KubernetesDeploymentBuilder withEnv(Env env) {
-        this.env = env;
+    public KubernetesDeploymentBuilder withEnvName(String envName) {
+        this.envName = envName;
+        return this;
+    }
+
+    public KubernetesDeploymentBuilder withBusinessTags(List<BusinessTagVO.BusinessTag> businessTags) {
+        this.businessTags = businessTags;
         return this;
     }
 
@@ -181,12 +193,14 @@ public class KubernetesDeploymentBuilder {
 
     public KubernetesDeploymentVO.Deployment build() {
         return KubernetesDeploymentVO.Deployment.builder()
+                .assetId(this.assetId)
                 .kubernetesCluster(this.kubernetesCluster)
                 .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
                 .pods(makePods())
                 .spec(makeSpec())
                 .attributes(makeAttributes())
-                .env(this.env)
+                .envName(this.envName)
+                .businessTags(this.businessTags)
                 .build();
     }
 

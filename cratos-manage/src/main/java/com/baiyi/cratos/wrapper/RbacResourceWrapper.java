@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class RbacResourceWrapper extends BaseDataTableConverter<RbacResourceVO.Resource, RbacResource> implements IBaseWrapper<RbacResourceVO.Resource> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.RBAC_GROUP})
+    @BusinessWrapper(types = {BusinessTypeEnum.RBAC_GROUP})
     public void wrap(RbacResourceVO.Resource vo) {
     }
 

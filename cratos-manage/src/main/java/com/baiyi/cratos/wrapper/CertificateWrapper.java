@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class CertificateWrapper extends BaseDataTableConverter<CertificateVO.Certificate, Certificate> implements IBaseWrapper<CertificateVO.Certificate> {
 
     @Override
-    @BusinessWrapper(ofTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(CertificateVO.Certificate vo) {
         // This is a good idea
     }

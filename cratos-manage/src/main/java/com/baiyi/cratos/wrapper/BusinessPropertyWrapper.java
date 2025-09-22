@@ -28,7 +28,7 @@ public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessProp
     private final BusinessPropertyService businessPropertyService;
 
     @Override
-    @BusinessWrapper(ofTypes = BusinessTypeEnum.BUSINESS_PROPERTY)
+    @BusinessWrapper(types = BusinessTypeEnum.BUSINESS_PROPERTY)
     public void wrap(BusinessPropertyVO.BusinessProperty vo) {
         // This is a good idea
     }

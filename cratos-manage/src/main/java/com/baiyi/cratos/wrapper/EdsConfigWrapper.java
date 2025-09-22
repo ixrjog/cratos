@@ -24,7 +24,7 @@ public class EdsConfigWrapper extends BaseDataTableConverter<EdsConfigVO.EdsConf
     private final EdsConfigService edsConfigService;
 
     @Override
-    @BusinessWrapper(ofTypes = BusinessTypeEnum.CREDENTIAL)
+    @BusinessWrapper(types = BusinessTypeEnum.CREDENTIAL)
     public void wrap(EdsConfigVO.EdsConfig vo) {
         // Eds Instance Registered
     }
