@@ -6,7 +6,9 @@ import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesContainerVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.facade.application.ApplicationKubernetesDeploymentFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
+import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationResourceController {
 
     private final ApplicationKubernetesDetailsFacade kubernetesDetailsFacade;
+    private final ApplicationKubernetesDeploymentFacade kubernetesDeploymentFacade;
 
     @Operation(summary = "Query application resource kubernetes details")
     @PostMapping(value = "/kubernetes/details/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,6 +69,14 @@ public class ApplicationResourceController {
             @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeploymentImageVersion queryKubernetesDeploymentImageVersion) {
         return HttpResult.of(
                 kubernetesDetailsFacade.queryKubernetesDeploymentImageVersion(queryKubernetesDeploymentImageVersion));
+    }
+
+    @Operation(summary = "Query kubernetes deployment")
+    @PostMapping(value = "/kubernetes/deployment/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Deployment> queryApplicationResourceKubernetesDeployment(
+            @RequestBody @Valid ApplicationKubernetesParam.QueryKubernetesDeployment queryKubernetesDeployment) {
+        return HttpResult.of(
+                kubernetesDeploymentFacade.queryApplicationResourceKubernetesDeployment(queryKubernetesDeployment));
     }
 
 }

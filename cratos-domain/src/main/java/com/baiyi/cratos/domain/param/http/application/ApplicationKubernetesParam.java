@@ -76,4 +76,13 @@ public class ApplicationKubernetesParam {
         private String deploymentName;
     }
 
+    @Data
+    @Builder
+    @Schema
+    public static class QueryKubernetesDeployment {
+        @NotBlank
+        private String applicationName;
+        private Integer assetId;
+    }
+
 }

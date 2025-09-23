@@ -37,4 +37,8 @@ public class KubernetesException extends BaseException {
         throw new KubernetesException(message);
     }
 
+    public static void runtime(String message, Object... var2) {
+        throw new KubernetesException(message, var2);
+    }
+
 }
