@@ -33,9 +33,7 @@ import java.util.Objects;
 public class OcApplicationFacadeImpl implements OcApplicationFacade {
 
     private final ApplicationService applicationService;
-
     private final ApplicationFacade applicationFacade;
-
     private final BusinessTagFacade businessTagFacade;
     private final EdsFacade edsFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
@@ -93,18 +91,16 @@ public class OcApplicationFacadeImpl implements OcApplicationFacade {
             return;
         }
         ocApplication.getTags()
-                .forEach(tag -> {
-                    Arrays.stream(LEVEL_TAGS)
-                            .filter(levelTag -> levelTag.equals(tag.getTagKey()))
-                            .map(levelTag -> BusinessTagParam.SaveBusinessTag.builder()
-                                    .businessId(application.getId())
-                                    .businessType(BusinessTypeEnum.APPLICATION.name())
-                                    // Level
-                                    .tagId(37)
-                                    .tagValue(tag.getTagKey())
-                                    .build())
-                            .forEach(businessTagFacade::saveBusinessTag);
-                });
+                .forEach(tag -> Arrays.stream(LEVEL_TAGS)
+                        .filter(levelTag -> levelTag.equals(tag.getTagKey()))
+                        .map(levelTag -> BusinessTagParam.SaveBusinessTag.builder()
+                                .businessId(application.getId())
+                                .businessType(BusinessTypeEnum.APPLICATION.name())
+                                // Level
+                                .tagId(37)
+                                .tagValue(tag.getTagKey())
+                                .build())
+                        .forEach(businessTagFacade::saveBusinessTag));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.application.builder;
 
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
-import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import com.baiyi.cratos.facade.application.builder.util.ConverterUtils;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Service;
 
@@ -58,7 +58,7 @@ public class KubernetesServiceBuilder {
             return KubernetesServiceVO.Service.EMPTY;
         }
         return KubernetesServiceVO.Service.builder()
-                .metadata(ConverterUtil.toMetadata(this.service.getMetadata()))
+                .metadata(ConverterUtils.toMetadata(this.service.getMetadata()))
                 .spec(makeServiceSpec())
                 .build();
     }

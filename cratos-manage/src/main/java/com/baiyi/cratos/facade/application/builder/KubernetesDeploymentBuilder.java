@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerLifecycleBuilder;
 import com.baiyi.cratos.facade.application.baseline.builder.ContainerProbeBuilder;
 import com.baiyi.cratos.facade.application.builder.attribute.KubernetesDeploymentAttributeBuilder;
-import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import com.baiyi.cratos.facade.application.builder.util.ConverterUtils;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -195,7 +195,7 @@ public class KubernetesDeploymentBuilder {
         return KubernetesDeploymentVO.Deployment.builder()
                 .assetId(this.assetId)
                 .kubernetesCluster(this.kubernetesCluster)
-                .metadata(ConverterUtil.toMetadata(this.deployment.getMetadata()))
+                .metadata(ConverterUtils.toMetadata(this.deployment.getMetadata()))
                 .pods(makePods())
                 .spec(makeSpec())
                 .attributes(makeAttributes())

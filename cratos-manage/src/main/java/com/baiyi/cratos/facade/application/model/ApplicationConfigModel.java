@@ -1,8 +1,8 @@
 package com.baiyi.cratos.facade.application.model;
 
 import com.baiyi.cratos.common.exception.ApplicationConfigException;
-import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.YamlDump;
+import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.Application;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
@@ -17,6 +17,7 @@ import java.util.Map;
  * &#064;Date  2024/11/15 17:41
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationConfigModel {
 
     public static ApplicationConfigModel.Config loadAs(Application application) {

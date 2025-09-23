@@ -40,18 +40,19 @@ public class EdsArmsFacadeImpl implements EdsArmsFacade {
         }
         for (EdsAssetIndex index : indices) {
             EdsAsset asset = edsAssetService.getById(index.getAssetId());
-            if (asset != null && EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS.name()
+            if (asset == null || !EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS.name()
                     .equals(asset.getAssetType())) {
-                EdsAssetIndex envIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(), ENV);
-                if (envIndex != null && namespace.equals(envIndex.getValue())) {
-                    EdsAssetIndex homeIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(),
-                            ALIYUN_ARMS_APP_HOME);
-                    if (homeIndex != null && homeIndex.getValue() != null) {
-                        return KubernetesVO.ARMS.builder()
-                                .home(homeIndex.getValue())
-                                .build();
-                    }
-                }
+                continue;
+            }
+            EdsAssetIndex envIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(), ENV);
+            if (envIndex == null || !namespace.equals(envIndex.getValue())) {
+                continue;
+            }
+            EdsAssetIndex homeIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(), ALIYUN_ARMS_APP_HOME);
+            if (homeIndex != null && homeIndex.getValue() != null) {
+                return KubernetesVO.ARMS.builder()
+                        .home(homeIndex.getValue())
+                        .build();
             }
         }
         return KubernetesVO.ARMS.NO_DATA;

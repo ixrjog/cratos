@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.kubernetes.builder;
 
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
-import com.baiyi.cratos.facade.application.builder.util.ConverterUtil;
+import com.baiyi.cratos.facade.application.builder.util.ConverterUtils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Node;
@@ -60,8 +60,8 @@ public class KubernetesNodeBuilder {
                 .getConditions()
                 .stream()
                 .map(e -> KubernetesNodeVO.NodeCondition.builder()
-                        .lastTransitionTime(ConverterUtil.parse(e.getLastTransitionTime()))
-                        .lastHeartbeatTime(ConverterUtil.parse(e.getLastTransitionTime()))
+                        .lastTransitionTime(ConverterUtils.parse(e.getLastTransitionTime()))
+                        .lastHeartbeatTime(ConverterUtils.parse(e.getLastTransitionTime()))
                         .reason(e.getReason())
                         .message(e.getMessage())
                         .status(e.getStatus())
@@ -126,7 +126,7 @@ public class KubernetesNodeBuilder {
         return KubernetesNodeVO.Node.builder()
                 .zone(getZone())
                 .region(getRegion())
-                .metadata(ConverterUtil.toMetadata(this.node.getMetadata()))
+                .metadata(ConverterUtils.toMetadata(this.node.getMetadata()))
                 .status(makeStatus())
                 .attributes(makeAttributes())
                 .usage(this.nodeUsage)

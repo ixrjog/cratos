@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommandExecModel {
 
     public static ExecTarget loadAs(CommandExec commandExec) {
