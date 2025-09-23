@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AmazonEksClientProvider implements IKubernetesClientProvider {
+public class AmazonEksClientProvider implements BaseKubernetesClientProvider {
 
     private final AmazonEksTokenGenerator amazonEksGenerator;
 

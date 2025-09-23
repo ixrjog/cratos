@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTempla
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.kubernetes.KubernetesResourceTemplateMemberService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,9 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE_MEMBER)
-public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConverter<KubernetesResourceTemplateVO.Member, KubernetesResourceTemplateMember> implements IBusinessWrapper<KubernetesResourceTemplateVO.HasTemplateMembers, KubernetesResourceTemplateVO.Member> {
+public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConverter<KubernetesResourceTemplateVO.Member, KubernetesResourceTemplateMember> implements BaseBusinessWrapper<KubernetesResourceTemplateVO.HasTemplateMembers, KubernetesResourceTemplateVO.Member> {
 
     private final KubernetesResourceTemplateMemberService kubernetesResourceTemplateMemberService;
-
     private final EnvService envService;
 
     @Override

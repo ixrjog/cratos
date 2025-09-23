@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderGroup;
 import com.baiyi.cratos.domain.view.work.WorkOrderVO;
 import com.baiyi.cratos.service.work.WorkOrderGroupService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import java.util.Objects;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER_GROUP)
-public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Group, WorkOrderGroup> implements IBusinessWrapper<WorkOrderVO.HasWorkOrderGroup, WorkOrderVO.Group> {
+public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Group, WorkOrderGroup> implements BaseBusinessWrapper<WorkOrderVO.HasWorkOrderGroup, WorkOrderVO.Group> {
 
     private final WorkOrderGroupService workOrderGroupService;
 

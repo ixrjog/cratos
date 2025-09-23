@@ -10,7 +10,7 @@ import com.baiyi.cratos.facade.application.ApplicationResourceBaselineRedeployin
 import com.baiyi.cratos.service.ApplicationResourceBaselineMemberService;
 import com.baiyi.cratos.wrapper.application.converter.BaselineConverter;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.google.api.client.util.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<ApplicationResourceBaselineVO.ResourceBaseline, ApplicationResourceBaseline> implements IBaseWrapper<ApplicationResourceBaselineVO.ResourceBaseline> {
+public class ApplicationResourceBaselineWrapper extends BaseDataTableConverter<ApplicationResourceBaselineVO.ResourceBaseline, ApplicationResourceBaseline> implements BaseWrapper<ApplicationResourceBaselineVO.ResourceBaseline> {
 
     private final ApplicationResourceBaselineMemberService baselineMemberService;
     private final ApplicationResourceBaselineRedeployingFacade deploymentRedeployFacade;

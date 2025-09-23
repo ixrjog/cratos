@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
 import com.baiyi.cratos.service.RbacGroupService;
 import com.baiyi.cratos.service.RbacResourceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,9 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_RESOURCE;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RBAC_GROUP)
-public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements IBusinessWrapper<RbacGroupVO.HasRbacGroup, RbacGroupVO.Group> {
+public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, RbacGroup> implements BaseBusinessWrapper<RbacGroupVO.HasRbacGroup, RbacGroupVO.Group> {
 
     private final RbacResourceService rbacResourceService;
-
     private final RbacGroupService rbacGroupService;
 
     @Override

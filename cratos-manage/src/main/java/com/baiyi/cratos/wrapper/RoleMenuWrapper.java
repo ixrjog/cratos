@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.view.menu.RoleMenuVO;
 import com.baiyi.cratos.service.MenuService;
 import com.baiyi.cratos.service.RbacRoleMenuService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Menu> implements IBaseWrapper<RoleMenuVO.Menu> {
+public class RoleMenuWrapper extends BaseDataTableConverter<RoleMenuVO.Menu, Menu> implements BaseWrapper<RoleMenuVO.Menu> {
 
     private final MenuTitleWrapper menuTitleWrapper;
     private final MenuService menuService;

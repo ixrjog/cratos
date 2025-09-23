@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.facade.UserFavoriteFacade;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApplicationWrapper extends BaseDataTableConverter<ApplicationVO.Application, Application> implements IBaseWrapper<ApplicationVO.Application> {
+public class ApplicationWrapper extends BaseDataTableConverter<ApplicationVO.Application, Application> implements BaseWrapper<ApplicationVO.Application> {
 
     private final ApplicationResourceWrapper resourceWrapper;
     private final UserFavoriteFacade userFavoriteFacade;

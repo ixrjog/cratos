@@ -3,7 +3,7 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsAssetIndexWrapper extends BaseDataTableConverter<EdsAssetVO.Index, EdsAssetIndex> implements IBaseWrapper<EdsAssetVO.Index> {
+public class EdsAssetIndexWrapper extends BaseDataTableConverter<EdsAssetVO.Index, EdsAssetIndex> implements BaseWrapper<EdsAssetVO.Index> {
 
     @Override
     public void wrap(EdsAssetVO.Index vo) {

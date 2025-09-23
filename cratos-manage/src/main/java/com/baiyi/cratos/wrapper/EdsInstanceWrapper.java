@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolderBuilder;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements IBaseWrapper<EdsInstanceVO.EdsInstance> {
+public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements BaseWrapper<EdsInstanceVO.EdsInstance> {
 
     private final EdsConfigWrapper edsConfigWrapper;
     private final EdsInstanceVersionProviderHolderBuilder versionHolderBuilder;

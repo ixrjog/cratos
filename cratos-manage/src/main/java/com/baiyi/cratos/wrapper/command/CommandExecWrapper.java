@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.view.command.CommandExecVO;
 import com.baiyi.cratos.model.CommandExecModel;
 import com.baiyi.cratos.service.CommandExecApprovalService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.baiyi.cratos.wrapper.command.util.CommandExecUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.CommandExec, CommandExec> implements IBaseWrapper<CommandExecVO.CommandExec> {
+public class CommandExecWrapper extends BaseDataTableConverter<CommandExecVO.CommandExec, CommandExec> implements BaseWrapper<CommandExecVO.CommandExec> {
 
     private final CommandExecApprovalService approvalService;
 

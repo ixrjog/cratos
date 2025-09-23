@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class MyMenuWrapper implements Converter<Menu, MyMenuVO.MyMenu> {
 
     private final MenuService menuService;
-
     private final MenuTitleWrapper menuTitleWrapper;
 
     public void wrap(MyMenuVO.MyMenu menu, List<Integer> myMenuIds) {

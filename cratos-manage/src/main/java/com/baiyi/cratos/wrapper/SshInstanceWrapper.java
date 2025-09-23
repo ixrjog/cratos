@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.view.ssh.SshInstanceVO;
 import com.baiyi.cratos.service.session.SshSessionInstanceCommandService;
 import com.baiyi.cratos.service.session.SshSessionInstanceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.SSH_COMMAND;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.SSH_INSTANCE)
-public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Instance, SshSessionInstance> implements IBusinessWrapper<SshInstanceVO.HasSessionInstances, SshInstanceVO.Instance> {
+public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Instance, SshSessionInstance> implements BaseBusinessWrapper<SshInstanceVO.HasSessionInstances, SshInstanceVO.Instance> {
 
     private final SshSessionInstanceService instanceService;
     private final SshSessionInstanceCommandService commandService;

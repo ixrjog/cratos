@@ -5,7 +5,7 @@ package com.baiyi.cratos.wrapper.base;
  * @Date 2024/1/2 18:10
  * @Version 1.0
  */
-public interface IBaseWrapper<T> {
+public interface BaseWrapper<T> {
 
     void wrap(T vo);
 

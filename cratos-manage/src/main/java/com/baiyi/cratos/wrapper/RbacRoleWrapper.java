@@ -8,7 +8,7 @@ import com.baiyi.cratos.service.RbacRoleResourceService;
 import com.baiyi.cratos.service.RbacRoleService;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,10 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.USER;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RBAC_ROLE)
-public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, RbacRole> implements IBusinessWrapper<RbacRoleVO.IRbacRoles, RbacRoleVO.Role> {
+public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, RbacRole> implements BaseBusinessWrapper<RbacRoleVO.IRbacRoles, RbacRoleVO.Role> {
 
     private final RbacRoleService rbacRoleService;
-
     private final RbacRoleResourceService rbacRoleResourceService;
-
     private final RbacUserRoleService rbacUserRoleService;
 
     @Override

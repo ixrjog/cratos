@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.KubernetesResourceTemplate;
 import com.baiyi.cratos.domain.view.kubernetes.resource.KubernetesResourceTemplateVO;
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.google.api.client.util.Lists;
 import com.google.api.client.util.Sets;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE_TEMPLATE)
-public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<KubernetesResourceTemplateVO.Template, KubernetesResourceTemplate> implements IBaseWrapper<KubernetesResourceTemplateVO.Template> {
+public class KubernetesResourceTemplateWrapper extends BaseDataTableConverter<KubernetesResourceTemplateVO.Template, KubernetesResourceTemplate> implements BaseWrapper<KubernetesResourceTemplateVO.Template> {
 
     private final EnvService envService;
 

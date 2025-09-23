@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ServerAccountWrapper extends BaseDataTableConverter<ServerAccountVO.ServerAccount, ServerAccount> implements IBaseWrapper<ServerAccountVO.ServerAccount> {
+public class ServerAccountWrapper extends BaseDataTableConverter<ServerAccountVO.ServerAccount, ServerAccount> implements BaseWrapper<ServerAccountVO.ServerAccount> {
 
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.CREDENTIAL})

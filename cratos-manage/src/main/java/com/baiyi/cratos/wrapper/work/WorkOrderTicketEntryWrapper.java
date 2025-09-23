@@ -16,7 +16,7 @@ import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
 import com.baiyi.cratos.wrapper.EdsInstanceWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER_TICKET_ENTRY)
-public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkOrderTicketVO.TicketEntry<T>, WorkOrderTicketEntry> implements IBusinessWrapper<WorkOrderTicketVO.HasTicketEntries, WorkOrderTicketVO.TicketEntry<T>> {
+public class WorkOrderTicketEntryWrapper<T> extends BaseDataTableConverter<WorkOrderTicketVO.TicketEntry<T>, WorkOrderTicketEntry> implements BaseBusinessWrapper<WorkOrderTicketVO.HasTicketEntries, WorkOrderTicketVO.TicketEntry<T>> {
 
     private final WorkOrderService workOrderService;
     private final WorkOrderTicketService workOrderTicketService;

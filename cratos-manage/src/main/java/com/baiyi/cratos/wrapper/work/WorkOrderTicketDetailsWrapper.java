@@ -16,7 +16,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,7 @@ import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER_TICKET_DETAILS)
-public class WorkOrderTicketDetailsWrapper implements IBaseWrapper<WorkOrderTicketVO.TicketDetails> {
+public class WorkOrderTicketDetailsWrapper implements BaseWrapper<WorkOrderTicketVO.TicketDetails> {
 
     private final WorkOrderService workOrderService;
     private final WorkOrderWrapper workOrderWrapper;

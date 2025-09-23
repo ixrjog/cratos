@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.ENV)
-public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements IBusinessWrapper<EnvVO.HasEnv, EnvVO.Env> {
+public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implements BaseBusinessWrapper<EnvVO.HasEnv, EnvVO.Env> {
 
     private final EnvService envService;
 

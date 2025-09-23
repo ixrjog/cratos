@@ -12,7 +12,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.KUBERNETES_RESOURCE)
-public class KubernetesResourceWrapper extends BaseDataTableConverter<KubernetesResourceVO.Resource, KubernetesResource> implements IBaseWrapper<KubernetesResourceVO.Resource> {
+public class KubernetesResourceWrapper extends BaseDataTableConverter<KubernetesResourceVO.Resource, KubernetesResource> implements BaseWrapper<KubernetesResourceVO.Resource> {
 
     private final EdsAssetService edsAssetService;
     private final EdsAssetWrapper edsAssetWrapper;

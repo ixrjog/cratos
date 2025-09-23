@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.view.asset.AssetMaturityVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AssetMaturityWrapper extends BaseDataTableConverter<AssetMaturityVO.AssetMaturity, AssetMaturity> implements IBaseWrapper<AssetMaturityVO.AssetMaturity> {
+public class AssetMaturityWrapper extends BaseDataTableConverter<AssetMaturityVO.AssetMaturity, AssetMaturity> implements BaseWrapper<AssetMaturityVO.AssetMaturity> {
 
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})

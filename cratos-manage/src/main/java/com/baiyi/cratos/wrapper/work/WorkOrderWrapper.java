@@ -15,7 +15,7 @@ import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.workorder.enums.WorkOrderStatus;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.WORKORDER)
-public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements IBusinessWrapper<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
+public class WorkOrderWrapper extends BaseDataTableConverter<WorkOrderVO.WorkOrder, WorkOrder> implements BaseBusinessWrapper<WorkOrderVO.HasWorkOrderList, WorkOrderVO.WorkOrder> {
 
     private final WorkOrderService workOrderService;
     private final WorkOrderGroupService workOrderGroupService;

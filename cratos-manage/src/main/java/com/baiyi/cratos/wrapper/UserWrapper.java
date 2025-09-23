@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.service.RbacUserRoleService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.baiyi.cratos.wrapper.util.UserAvatarUtils;
 import com.google.common.collect.Maps;
@@ -27,7 +27,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.RBAC_USER_ROLE;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements IBaseWrapper<UserVO.User> {
+public class UserWrapper extends BaseDataTableConverter<UserVO.User, User> implements BaseWrapper<UserVO.User> {
 
     private final RbacUserRoleService rbacUserRoleService;
     private final UserAvatarUtils userAvatarUtils;

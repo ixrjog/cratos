@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.client;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.kubernetes.client.provider.IKubernetesClientProvider;
+import com.baiyi.cratos.eds.kubernetes.client.provider.BaseKubernetesClientProvider;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class KubernetesClientBuilder {
 
     public KubernetesClient build(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         if (StringUtils.isNotBlank(kubernetes.getProvider())) {
-            IKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
+            BaseKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
             if (kubernetesClientProvider == null) {
                  KubernetesException.runtime("Invalid provider {}", kubernetes.getProvider());
             }

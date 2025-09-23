@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/3/27 10:34
  * @Version 1.0
  */
-public interface IKubernetesClientProvider extends InitializingBean {
+public interface BaseKubernetesClientProvider extends InitializingBean {
 
     String KUBERNETES_KUBECONFIG_FILE = "kubeconfig";
     // io.fabric8.kubernetes.client.KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY

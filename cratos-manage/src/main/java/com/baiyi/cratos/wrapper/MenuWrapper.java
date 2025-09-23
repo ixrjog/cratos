@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.view.menu.MenuVO;
 import com.baiyi.cratos.service.MenuService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,10 +26,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.MENU)
-public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> implements IBaseWrapper<MenuVO.Menu> {
+public class MenuWrapper extends BaseDataTableConverter<MenuVO.Menu, Menu> implements BaseWrapper<MenuVO.Menu> {
 
     private final MenuTitleWrapper menuTitleWrapper;
-
     private final MenuService menuService;
 
     @Override

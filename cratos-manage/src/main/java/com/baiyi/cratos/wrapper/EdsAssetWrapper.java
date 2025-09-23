@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Node;
@@ -37,7 +37,7 @@ import static com.baiyi.cratos.ssh.crystal.handler.SshCrystalSuperOpenMessageHan
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, EdsAsset> implements IBaseWrapper<EdsAssetVO.Asset> {
+public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, EdsAsset> implements BaseWrapper<EdsAssetVO.Asset> {
 
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsAssetIndexService edsAssetIndexService;

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes.client.istio;
 
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientProviderFactory;
-import com.baiyi.cratos.eds.kubernetes.client.provider.IKubernetesClientProvider;
+import com.baiyi.cratos.eds.kubernetes.client.provider.BaseKubernetesClientProvider;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
 import io.fabric8.istio.client.DefaultIstioClient;
 import io.fabric8.istio.client.IstioClient;
@@ -26,7 +26,7 @@ public class IstioClientFactory {
 
     public static io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
         if (StringUtils.isNotBlank(kubernetes.getProvider())) {
-            IKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
+            BaseKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
             if (kubernetesClientProvider == null) {
                 throw new KubernetesException("Invalid provider {}", kubernetes.getProvider());
             }

@@ -3,7 +3,7 @@ package com.baiyi.cratos.aspect;
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.factory.BusinessWrapperFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -40,7 +40,7 @@ public class BusinessWrapperAspect {
         Arrays.stream(types)
                 .forEachOrdered(businessTypeEnum -> {
                     log.debug("BusinessWrapper: {}", businessTypeEnum.name());
-                    IBusinessWrapper businessWrapperBean = BusinessWrapperFactory.getWrapper(businessTypeEnum.name());
+                    BaseBusinessWrapper businessWrapperBean = BusinessWrapperFactory.getWrapper(businessTypeEnum.name());
                     if (businessWrapperBean != null) {
                         businessWrapperBean.businessWrap(business);
                     }

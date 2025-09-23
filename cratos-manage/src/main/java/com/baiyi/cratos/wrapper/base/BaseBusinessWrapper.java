@@ -9,7 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/1/5 15:18
  * @Version 1.0
  */
-public interface IBusinessWrapper<B, T> extends IBaseWrapper<T>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
+public interface BaseBusinessWrapper<B, T> extends BaseWrapper<T>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
     void businessWrap(B b);
 

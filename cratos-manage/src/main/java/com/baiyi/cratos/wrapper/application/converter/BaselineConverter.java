@@ -3,12 +3,15 @@ package com.baiyi.cratos.wrapper.application.converter;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
 import com.baiyi.cratos.facade.application.baseline.mode.DeploymentBaselineModel;
 import com.google.common.base.Joiner;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/1/2 10:13
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaselineConverter {
 
     public static ApplicationResourceBaselineVO.EnvVar toEnv(String content) {

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceVO;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ApplicationResourceWrapper extends BaseDataTableConverter<ApplicationResourceVO.Resource, ApplicationResource> implements IBaseWrapper<ApplicationResourceVO.Resource> {
+public class ApplicationResourceWrapper extends BaseDataTableConverter<ApplicationResourceVO.Resource, ApplicationResource> implements BaseWrapper<ApplicationResourceVO.Resource> {
 
     private final ApplicationResourceService resourceService;
 

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.RiskEvent;
 import com.baiyi.cratos.domain.view.risk.RiskEventVO;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBaseWrapper;
+import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RISK_EVENT)
-public class RiskEventWrapper extends BaseDataTableConverter<RiskEventVO.Event, RiskEvent> implements IBaseWrapper<RiskEventVO.Event> {
+public class RiskEventWrapper extends BaseDataTableConverter<RiskEventVO.Event, RiskEvent> implements BaseWrapper<RiskEventVO.Event> {
 
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC, BusinessTypeEnum.RISK_EVENT_IMPACT})

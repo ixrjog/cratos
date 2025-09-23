@@ -26,11 +26,8 @@ import java.util.stream.Collectors;
 public class GlobalNetworkDetailsWrapper {
 
     private final GlobalNetworkWrapper globalNetworkWrapper;
-
     private final GlobalNetworkPlanningService globalNetworkPlanningService;
-
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
-
     public final static String[] SUBNET_TABLE_FIELD_NAME = {"Main Name", "Main Type", "Name", "Subnet KmsKey", "Region", "Zone", "CIDR Block", "Resource", "Comment"};
 
     public void wrap(GlobalNetworkVO.NetworkDetails networkDetails) {

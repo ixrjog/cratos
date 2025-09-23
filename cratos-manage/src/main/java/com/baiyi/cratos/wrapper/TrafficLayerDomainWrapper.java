@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DOMAIN_
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)
-public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements IBusinessWrapper<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
+public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLayerDomainVO.Domain, TrafficLayerDomain> implements BaseBusinessWrapper<TrafficLayerDomainVO.HasDomain, TrafficLayerDomainVO.Domain> {
 
     private final TrafficLayerDomainService domainService;
     private final TrafficLayerDomainRecordService recordService;

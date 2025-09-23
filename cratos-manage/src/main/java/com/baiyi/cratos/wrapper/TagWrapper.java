@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.view.tag.TagVO;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.IBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.TAG)
-public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implements IBusinessWrapper<TagVO.HasTag,TagVO.Tag> {
+public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implements BaseBusinessWrapper<TagVO.HasTag,TagVO.Tag> {
 
     private final TagService tagService;
 

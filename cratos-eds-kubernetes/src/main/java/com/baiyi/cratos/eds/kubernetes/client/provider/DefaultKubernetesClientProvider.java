@@ -22,7 +22,7 @@ import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Val
  */
 @RequiredArgsConstructor
 @Component
-public class DefaultKubernetesClientProvider implements IKubernetesClientProvider {
+public class DefaultKubernetesClientProvider implements BaseKubernetesClientProvider {
 
     private final CredentialService credentialService;
     private final EdsConfigService edsConfigService;
@@ -59,7 +59,7 @@ public class DefaultKubernetesClientProvider implements IKubernetesClientProvide
     @Override
     public void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
 //        System.setProperty(KUBERNETES_KUBECONFIG_FILE, toKubeconfigPath(kubernetes));
-//        IKubernetesClientProvider.super.setProperties(kubernetes);
+//        BaseKubernetesClientProvider.super.setProperties(kubernetes);
     }
 
 //    private static String toKubeconfigPath(EdsKubernetesConfigModel.Kubernetes kubernetes) {
