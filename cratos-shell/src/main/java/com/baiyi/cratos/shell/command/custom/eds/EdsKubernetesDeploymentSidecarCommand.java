@@ -15,7 +15,7 @@ import com.baiyi.cratos.shell.SshShellProperties;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
-import com.baiyi.cratos.shell.model.CopyDeploymentSidecarParam;
+import com.baiyi.cratos.shell.model.KubernetesDeploymentSidecarParam;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.PodSpec;
 import io.fabric8.kubernetes.api.model.PodTemplateSpec;
@@ -47,6 +47,7 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
 
     public static final String GROUP = "kubernetes-deployment";
     private static final String COMMAND_DEPLOYMENT_SIDECAR_COPY = GROUP + "-sidecar-copy";
+    private static final String COMMAND_DEPLOYMENT_SIDECAR_REMOVE = GROUP + "-sidecar-remove";
 
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
@@ -68,7 +69,8 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
     public void deploymentSidecarCopy(
             @ShellOption(help = "{EdsKubernetesInstanceName}:{Namespace}:{Deployment}:{Container}", defaultValue = "") String from,
             @ShellOption(help = "{EdsKubernetesInstanceName}:{Namespace}:{Deployment}", defaultValue = "") String to) {
-        CopyDeploymentSidecarParam.CopyDeploymentSidecar copyParam = parseParams(from, to);
+        KubernetesDeploymentSidecarParam.CopyDeploymentSidecar copyParam = KubernetesDeploymentSidecarParam.CopyDeploymentSidecar.parse(
+                from, to);
         if (copyParam == null) {
             return;
         }
@@ -130,28 +132,51 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
         helper.print("Sidecar container copied successfully.", PromptColor.GREEN);
     }
 
-    private CopyDeploymentSidecarParam.CopyDeploymentSidecar parseParams(String from, String to) {
-        String[] fromParts = from.split(":");
-        if (fromParts.length != 4) {
-            helper.printError(
-                    "Invalid 'from' parameter format. Expected format: {EdsKubernetesInstanceName}:{Namespace}:{Deployment}:{Container}");
-            return null;
+    @ShellAuthentication(resource = "/kubernetes/deployment/sidecar/remove")
+    @ShellMethod(key = COMMAND_DEPLOYMENT_SIDECAR_REMOVE, value = "Remove deployment sidecar")
+    public void deploymentSidecarRemove(
+            @ShellOption(help = "{EdsKubernetesInstanceName}:{Namespace}:{Deployment}:{Container}", defaultValue = "") String target) {
+        KubernetesDeploymentSidecarParam.RemoveDeploymentSidecar removeParam = KubernetesDeploymentSidecarParam.RemoveDeploymentSidecar.parse(
+                target);
+        if (removeParam == null) {
+            return;
         }
-        String[] toParts = to.split(":");
-        if (toParts.length != 3) {
-            helper.printError(
-                    "Invalid 'to' parameter format. Expected format: {EdsKubernetesInstanceName}:{Namespace}:{Deployment}");
-            return null;
+        // source
+        EdsInstance instance = edsInstanceService.getByName(removeParam.getInstanceName());
+        if (instance == null) {
+            helper.printError(StringFormatter.format("Eds instance {} does not exist.", removeParam.getInstanceName()));
+            return;
         }
-        return CopyDeploymentSidecarParam.CopyDeploymentSidecar.builder()
-                .fromInstanceName(fromParts[0])
-                .fromNamespace(fromParts[1])
-                .fromDeploymentName(fromParts[2])
-                .fromContainerName(fromParts[3])
-                .toInstanceName(toParts[0])
-                .toNamespace(toParts[1])
-                .toDeploymentName(toParts[2])
-                .build();
+        if (!EdsInstanceTypeEnum.KUBERNETES.name()
+                .equals(instance.getEdsType())) {
+            helper.printError("Eds instance incorrect type.");
+            return;
+        }
+        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> instanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+                instance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        Deployment deployment = kubernetesDeploymentRepo.get(instanceProviderHolder.getInstance()
+                .getEdsConfigModel(), removeParam.getNamespace(), removeParam.getDeploymentName());
+        Optional<Container> optionalContainer = Optional.ofNullable(deployment)
+                .map(Deployment::getSpec)
+                .map(DeploymentSpec::getTemplate)
+                .map(PodTemplateSpec::getSpec)
+                .map(PodSpec::getContainers)
+                .flatMap(containers -> containers.stream()
+                        .filter(c -> c.getName()
+                                .equals(removeParam.getContainerName()))
+                        .findFirst());
+        if (optionalContainer.isEmpty()) {
+            helper.printError("Remove container not found.");
+            return;
+        }
+        deployment.getSpec()
+                .getTemplate()
+                .getSpec()
+                .getContainers()
+                .remove(optionalContainer.get());
+        kubernetesDeploymentRepo.update(instanceProviderHolder.getInstance()
+                .getEdsConfigModel(), deployment);
+        helper.print("Sidecar container was successfully removed.", PromptColor.GREEN);
     }
-
+    
 }

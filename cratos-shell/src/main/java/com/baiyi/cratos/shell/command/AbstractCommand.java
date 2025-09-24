@@ -33,9 +33,7 @@ import java.util.List;
 public class AbstractCommand extends AbstractShellComponent {
 
     protected final SshShellHelper helper;
-
     protected final SshShellProperties properties;
-
     protected final CommandProperties commandProperties;
 
     public AbstractCommand(SshShellHelper helper, SshShellProperties properties, CommandProperties commandProperties) {
