@@ -20,7 +20,7 @@ public class RegexSensitiveDataMasker {
     private static final String ID_CARD_PATTERN = "\\b[1-9]\\d{5}(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])\\d{3}[0-9Xx]\\b";
     private static final String BANK_CARD_PATTERN = "\\b\\d{16,19}\\b";
     private static final String EMAIL_PATTERN = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b";
-    private static final String PASSWORD_PATTERN = "(?i)\\b(password|pwd|密码)\\s*[:=]\\s*[^\\s,;]{6,}\\b";
+    private static final String PASSWORD_PATTERN = "(?i)\\b(password|pwd|密码)\\s*[:=]\\s*[\"']?[^\"'\\s,;]{6,}[\"']?";
     private static final String LONG_NUMBER_PATTERN = "\\b\\d{11,}\\b";
     private static final String LONG_ALPHANUMERIC_PATTERN = "\\b[A-Za-z0-9]{16,}\\b";
 
@@ -108,8 +108,15 @@ public class RegexSensitiveDataMasker {
             // 找到密码值的部分
             int colonIndex = Math.max(passwordField.indexOf(':'), passwordField.indexOf('='));
             if (colonIndex == -1) return passwordField;
-            String prefix = passwordField.substring(0, colonIndex + 1);
-            return prefix + "********";
+            
+            String beforeColon = passwordField.substring(0, colonIndex + 1);
+            String afterColon = passwordField.substring(colonIndex + 1).trim();
+            
+            // 检查是否有引号
+            boolean hasQuotes = afterColon.startsWith("\"") || afterColon.startsWith("'");
+            String quote = hasQuotes ? String.valueOf(afterColon.charAt(0)) : "";
+            
+            return beforeColon + " " + quote + "********" + quote;
         });
         // 脱敏AWS访问密钥
         result = maskWithRegex(result, AWS_ACCESS_KEY_PATTERN, key -> key.substring(0, 4) + "**************");
