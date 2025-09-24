@@ -178,5 +178,5 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
                 .getEdsConfigModel(), deployment);
         helper.print("Sidecar container was successfully removed.", PromptColor.GREEN);
     }
-    
+
 }
