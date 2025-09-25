@@ -69,6 +69,7 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
     public void deploymentSidecarCopy(
             @ShellOption(help = "{EdsKubernetesInstanceName}:{Namespace}:{Deployment}:{Container}", defaultValue = "") String from,
             @ShellOption(help = "{EdsKubernetesInstanceName}:{Namespace}:{Deployment}", defaultValue = "") String to) {
+        // Strategy=Replace
         KubernetesDeploymentSidecarParam.CopyDeploymentSidecar copyParam = KubernetesDeploymentSidecarParam.CopyDeploymentSidecar.parse(
                 from, to);
         if (copyParam == null) {
@@ -122,6 +123,13 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
             helper.printError("Target deployment not found.");
             return;
         }
+        // 替换策略=替换，容器已存在
+        targetDeployment.getSpec()
+                .getTemplate()
+                .getSpec()
+                .getContainers()
+                .removeIf(c -> c.getName()
+                        .equals(copyParam.getFromContainerName()));
         targetDeployment.getSpec()
                 .getTemplate()
                 .getSpec()
