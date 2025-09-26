@@ -35,6 +35,16 @@
           limit #{limit}
     </select>
 
+    <select id="queryIndexByIngressServiceName" resultMap="BaseResultMap">
+        select a0.*
+        from eds_asset_index a0
+                 join eds_asset a1 on a0.asset_id = a1.id
+        where a1.asset_type = #{assetType}
+          and a0.value like CONCAT('%', #{serviceName}, '%')
+          and a0.name like '% -> %'
+        limit #{limit}
+    </select>
+
     <select id="queryInvalidIndex"
             resultMap="BaseResultMap">
         select *

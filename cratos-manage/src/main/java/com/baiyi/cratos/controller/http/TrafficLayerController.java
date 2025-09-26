@@ -137,4 +137,12 @@ public class TrafficLayerController {
         return HttpResult.SUCCESS;
     }
 
+    // service
+    @Operation(summary = "Query traffic layer ingress service details")
+    @PostMapping(value = "/service/ingress/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
+            @RequestBody @Valid TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressDetails) {
+        return HttpResult.of(trafficLayerIngressFacade.queryIngressServcieDetails(queryIngressDetails));
+    }
+
 }

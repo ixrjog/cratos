@@ -32,6 +32,16 @@ public class TrafficLayerIngressParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class QueryIngressServiceDetails {
+        @NotBlank
+        private String queryService;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class QueryIngressDetails {
         @NotBlank
         private String name;

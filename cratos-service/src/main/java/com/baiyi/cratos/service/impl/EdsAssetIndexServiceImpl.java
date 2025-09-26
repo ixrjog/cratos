@@ -58,8 +58,8 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     }
 
     @Override
-    public List<EdsAssetIndex> queryInvalidIndex(){
-       return edsAssetIndexMapper.queryInvalidIndex();
+    public List<EdsAssetIndex> queryInvalidIndex() {
+        return edsAssetIndexMapper.queryInvalidIndex();
     }
 
     @Override
@@ -140,6 +140,13 @@ public class EdsAssetIndexServiceImpl implements EdsAssetIndexService {
     public List<EdsAssetIndex> queryIndexByParam(@NonNull String namePrefix, @NonNull String assetType, int size) {
         int limit = Math.min(size, 100);
         return edsAssetIndexMapper.queryIndexByNamePrefixAndAssetType(namePrefix, assetType, limit);
+    }
+
+    @Override
+    public List<EdsAssetIndex> queryIndexByIngressServiceName(@NonNull String serviceName, @NonNull String assetType,
+                                                              int size) {
+        int limit = Math.min(size, 100);
+        return edsAssetIndexMapper.queryIndexByIngressServiceName(serviceName, assetType, limit);
     }
 
     @Override

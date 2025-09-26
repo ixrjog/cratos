@@ -60,6 +60,21 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
         if (CollectionUtils.isEmpty(indices)) {
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
+        return of(indices);
+    }
+
+    @Override
+    public TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
+            TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressServiceDetails) {
+        List<EdsAssetIndex> indices = indexService.queryIndexByIngressServiceName(
+                queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), MAX_SIZE);
+        if (CollectionUtils.isEmpty(indices)) {
+            return TrafficLayerIngressVO.IngressDetails.EMPTY;
+        }
+        return of(indices);
+    }
+
+    private TrafficLayerIngressVO.IngressDetails of(List<EdsAssetIndex> indices) {
         PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
         Set<String> names = Sets.newHashSet();
         indices.forEach(index -> {
@@ -79,6 +94,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                 .ingressTable(ingressTable.toString())
                 .names(names)
                 .build();
+
     }
 
     private String getIngressLBName(EdsAssetIndex edsAssetIndex) {
