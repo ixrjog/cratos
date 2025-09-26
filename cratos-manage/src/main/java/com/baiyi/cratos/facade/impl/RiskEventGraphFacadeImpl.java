@@ -1,5 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessTag;
@@ -44,8 +45,6 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
     private final RiskEventImpactService impactService;
     private final BusinessTagService businessTagService;
 
-    private static final String FIN_LOSSES_TAG = "FinLosses";
-
     @Override
     public RiskEventGraphVO.Graph queryGraph(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
         RiskEventGraphVO.SlaPieGraph slaPieGraph = getSlaPieGraph(riskEventGraphQuery);
@@ -72,7 +71,7 @@ public class RiskEventGraphFacadeImpl implements RiskEventGraphFacade {
 
     private RiskEventGraphVO.FinLosses getFinLosses(RiskEventParam.RiskEventGraphQuery riskEventGraphQuery) {
         Tag tagUniqueKey = Tag.builder()
-                .tagKey(FIN_LOSSES_TAG)
+                .tagKey(SysTagKeys.FIN_LOSSES.getKey())
                 .build();
         Tag tag = tagService.getByUniqueKey(tagUniqueKey);
         if (tag == null) {

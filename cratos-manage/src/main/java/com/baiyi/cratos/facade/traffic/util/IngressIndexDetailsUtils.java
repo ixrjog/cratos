@@ -16,7 +16,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IngressIndexDetailsUtil {
+public class IngressIndexDetailsUtils {
 
     public static IngressDetailsModel.IngressIndexDetails toIngressIndexDetails(List<EdsAssetIndex> indices) {
         IngressDetailsModel.IngressIndexDetails details = IngressDetailsModel.IngressIndexDetails.builder()

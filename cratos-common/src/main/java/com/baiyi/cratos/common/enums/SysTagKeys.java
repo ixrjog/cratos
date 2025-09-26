@@ -37,7 +37,8 @@ public enum SysTagKeys {
     ROCKET_MQ("RocketMQ"),
     FRONT_END("FrontEnd"),
     SSH_PROXY("SSHProxy"),
-    COUNTRY_CODE("CountryCode")
+    COUNTRY_CODE("CountryCode"),
+    FIN_LOSSES("FinLosses")
     ;
 
     private final String key;

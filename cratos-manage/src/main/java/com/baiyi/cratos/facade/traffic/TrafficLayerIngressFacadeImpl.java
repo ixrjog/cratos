@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.TrafficLayerIngressFacade;
 import com.baiyi.cratos.facade.traffic.model.IngressDetailsModel;
-import com.baiyi.cratos.facade.traffic.util.IngressIndexDetailsUtil;
+import com.baiyi.cratos.facade.traffic.util.IngressIndexDetailsUtils;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -118,7 +118,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             final String kubernetesInstance = edsInstance.getInstanceName();
             final String ingress = asset.getAssetKey();
             List<EdsAssetIndex> indices = indexService.queryIndexByAssetId(asset.getId());
-            IngressDetailsModel.IngressIndexDetails ingressIndexDetails = IngressIndexDetailsUtil.toIngressIndexDetails(
+            IngressDetailsModel.IngressIndexDetails ingressIndexDetails = IngressIndexDetailsUtils.toIngressIndexDetails(
                     indices);
             if (!CollectionUtils.isEmpty(ingressIndexDetails.getRules())) {
                 ingressIndexDetails.getRules()
