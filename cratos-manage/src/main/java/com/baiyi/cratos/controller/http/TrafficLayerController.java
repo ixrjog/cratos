@@ -140,9 +140,9 @@ public class TrafficLayerController {
     // service
     @Operation(summary = "Query traffic layer ingress service details")
     @PostMapping(value = "/service/ingress/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressHostDetails(
+    public HttpResult<TrafficLayerIngressVO.IngressDetails> queryIngressServiceDetails(
             @RequestBody @Valid TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressDetails) {
-        return HttpResult.of(trafficLayerIngressFacade.queryIngressServcieDetails(queryIngressDetails));
+        return HttpResult.of(trafficLayerIngressFacade.queryIngressServiceDetails(queryIngressDetails));
     }
 
 }

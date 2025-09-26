@@ -64,10 +64,10 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
     }
 
     @Override
-    public TrafficLayerIngressVO.IngressDetails queryIngressHostDetails(
+    public TrafficLayerIngressVO.IngressDetails queryIngressServiceDetails(
             TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressServiceDetails) {
         List<EdsAssetIndex> indices = indexService.queryIndexByIngressServiceName(
-                queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), MAX_SIZE);
+                queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), 500);
         if (CollectionUtils.isEmpty(indices)) {
             return TrafficLayerIngressVO.IngressDetails.EMPTY;
         }
