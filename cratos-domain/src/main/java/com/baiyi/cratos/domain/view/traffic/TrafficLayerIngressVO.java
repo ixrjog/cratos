@@ -29,7 +29,7 @@ public class TrafficLayerIngressVO {
     public static class IngressDetails implements Serializable {
         @Serial
         private static final long serialVersionUID = 8597024146017004032L;
-        public static final IngressDetails EMPTY = IngressDetails.builder()
+        public static final IngressDetails NO_DATA = IngressDetails.builder()
                 .build();
         private String ingressTable;
         private Set<String> names;

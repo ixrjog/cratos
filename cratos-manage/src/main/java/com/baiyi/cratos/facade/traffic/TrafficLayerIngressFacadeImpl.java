@@ -57,9 +57,6 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             TrafficLayerIngressParam.QueryIngressHostDetails queryIngressHostDetails) {
         List<EdsAssetIndex> indices = indexService.queryIndexByParam(queryIngressHostDetails.getQueryHost(),
                 EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), MAX_SIZE);
-        if (CollectionUtils.isEmpty(indices)) {
-            return TrafficLayerIngressVO.IngressDetails.EMPTY;
-        }
         return of(indices);
     }
 
@@ -68,13 +65,13 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
             TrafficLayerIngressParam.QueryIngressServiceDetails queryIngressServiceDetails) {
         List<EdsAssetIndex> indices = indexService.queryIndexByIngressServiceName(
                 queryIngressServiceDetails.getQueryService(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name(), 500);
-        if (CollectionUtils.isEmpty(indices)) {
-            return TrafficLayerIngressVO.IngressDetails.EMPTY;
-        }
         return of(indices);
     }
 
     private TrafficLayerIngressVO.IngressDetails of(List<EdsAssetIndex> indices) {
+        if (CollectionUtils.isEmpty(indices)) {
+            return TrafficLayerIngressVO.IngressDetails.NO_DATA;
+        }
         PrettyTable ingressTable = PrettyTable.fieldNames(INGRESS_TABLE_FIELD_NAME);
         Set<String> names = Sets.newHashSet();
         indices.forEach(index -> {
@@ -94,7 +91,6 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
                 .ingressTable(ingressTable.toString())
                 .names(names)
                 .build();
-
     }
 
     private String getIngressLBName(EdsAssetIndex edsAssetIndex) {
@@ -113,7 +109,7 @@ public class TrafficLayerIngressFacadeImpl implements TrafficLayerIngressFacade 
         List<EdsAsset> ingressAssets = assetService.queryAssetByParam(queryIngressDetails.getName(),
                 EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         if (CollectionUtils.isEmpty(ingressAssets)) {
-            return TrafficLayerIngressVO.IngressDetails.EMPTY;
+            return TrafficLayerIngressVO.IngressDetails.NO_DATA;
         }
         IngressDetailsModel.IngressEntries ingressEntries = IngressDetailsModel.IngressEntries.builder()
                 .build();
