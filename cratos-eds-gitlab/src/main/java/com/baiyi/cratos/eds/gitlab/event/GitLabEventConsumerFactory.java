@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.event;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
+import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

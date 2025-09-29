@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.gitlab.event.impl;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
+import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

@@ -17,16 +17,16 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class CredProviderFactory {
 
-    private static final Map<String, ICredProvider> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, BaseCredProvider> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(ICredProvider cred) {
+    public static void register(BaseCredProvider cred) {
         CONTEXT.put(cred.getType()
                 .name(), cred);
         log.debug("CredProviderFactory Registered: credType={}", cred.getType()
                 .name());
     }
 
-    public static ICredProvider getCredProvider(String credType) {
+    public static BaseCredProvider getCredProvider(String credType) {
         if (CONTEXT.containsKey(credType)) {
             return CONTEXT.get(credType);
         }

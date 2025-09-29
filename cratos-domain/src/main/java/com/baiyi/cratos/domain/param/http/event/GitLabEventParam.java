@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.param.http.gitlab;
+package com.baiyi.cratos.domain.param.http.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.gitlab;
 
-import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
+import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 
 /**
  * &#064;Author  baiyi

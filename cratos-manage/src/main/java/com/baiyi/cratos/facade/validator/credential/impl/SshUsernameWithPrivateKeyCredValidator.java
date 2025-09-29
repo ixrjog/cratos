@@ -6,7 +6,7 @@ import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.facade.validator.credential.BaseFingerprintAlgorithm;
 import com.baiyi.cratos.facade.validator.credential.CredValidationRules;
-import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.BaseCredentialValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Expires(termOfValidity = 366L * 5, unit = TimeUnit.DAYS)
-public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgorithm implements ICredentialValidator {
+public class SshUsernameWithPrivateKeyCredValidator extends BaseFingerprintAlgorithm implements BaseCredentialValidator {
 
     @Value("${cratos.credential.highSecurity:false}")
     private boolean highSecurity;

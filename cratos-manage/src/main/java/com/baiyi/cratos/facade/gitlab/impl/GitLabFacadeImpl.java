@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.gitlab.impl;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.param.http.gitlab.GitLabEventParam;
+import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.gitlab.event.GitLabEventConsumer;
 import com.baiyi.cratos.eds.gitlab.event.GitLabEventConsumerFactory;
 import com.baiyi.cratos.facade.gitlab.EdsGitLabInstanceManager;

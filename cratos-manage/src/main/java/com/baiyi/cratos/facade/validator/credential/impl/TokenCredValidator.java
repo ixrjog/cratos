@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.annotation.Expires;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.facade.validator.credential.CredValidationRules;
-import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.BaseCredentialValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Expires(termOfValidity = 366L * 5, unit = TimeUnit.DAYS)
-public class TokenCredValidator implements ICredentialValidator {
+public class TokenCredValidator implements BaseCredentialValidator {
 
     private static final CredValidationRules rules = CredValidationRules.builder()
             .credentialNullMessage("The token must be specified.")

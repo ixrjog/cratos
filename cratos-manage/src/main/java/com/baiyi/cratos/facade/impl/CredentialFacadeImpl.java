@@ -17,7 +17,7 @@ import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.validator.credential.BaseFingerprintAlgorithm;
 import com.baiyi.cratos.facade.validator.credential.CredentialValidatorFactory;
-import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.BaseCredentialValidator;
 import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -130,7 +130,7 @@ public class CredentialFacadeImpl implements CredentialFacade {
     public void addCredential(CredentialParam.AddCredential addCredential) {
         Credential credential = addCredential.toTarget();
         CredentialTypeEnum credentialTypeEnum = CredentialTypeEnum.valueOf(credential.getCredentialType());
-        ICredentialValidator credValidator = CredentialValidatorFactory.getValidator(credentialTypeEnum);
+        BaseCredentialValidator credValidator = CredentialValidatorFactory.getValidator(credentialTypeEnum);
         if (credValidator == null) {
             InvalidCredentialException.runtime("The credential type is incorrect.");
         }

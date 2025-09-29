@@ -108,6 +108,8 @@ public enum EdsAssetTypeEnum {
 
     JENKINS_COMPUTER("Computer Node", 84),
 
+    EAGLECLOUD_SASE_DATA_SECURITY_EVENT("Data security event", 0),
+
     DEF("Default", 9999);
 
     private final String displayName;

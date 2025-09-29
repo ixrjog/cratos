@@ -3,7 +3,7 @@ package com.baiyi.cratos.wrapper;
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.annotation.Sensitive;
 import com.baiyi.cratos.common.cred.CredProviderFactory;
-import com.baiyi.cratos.common.cred.ICredProvider;
+import com.baiyi.cratos.common.cred.BaseCredProvider;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -36,7 +36,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     @Sensitive
     public void wrap(CredentialVO.Credential vo) {
         // tips
-        ICredProvider iCredProvider = CredProviderFactory.getCredProvider(vo.getCredentialType());
+        BaseCredProvider iCredProvider = CredProviderFactory.getCredProvider(vo.getCredentialType());
         vo.setTips(iCredProvider != null ? iCredProvider.getDesc() : NOT_APPLICABLE);
     }
 

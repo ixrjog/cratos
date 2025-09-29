@@ -39,6 +39,7 @@
         <module>cratos-eds-remote-gateway</module>
         <module>cratos-socks-server</module>
         <module>cratos-eds-azure</module>
+        <module>cratos-eds-eaglecloud</module>
     </modules>
 
     <properties>

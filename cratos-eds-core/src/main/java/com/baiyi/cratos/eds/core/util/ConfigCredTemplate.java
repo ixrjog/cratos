@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.util;
 
 import com.baiyi.cratos.common.cred.CredProviderFactory;
-import com.baiyi.cratos.common.cred.ICredProvider;
+import com.baiyi.cratos.common.cred.BaseCredProvider;
 import com.baiyi.cratos.common.exception.CredException;
 import com.baiyi.cratos.domain.generator.Credential;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public final class ConfigCredTemplate {
      * @return
      */
     public String renderTemplate(String yaml, Credential credential) {
-        ICredProvider iCredProvider = CredProviderFactory.getCredProvider(credential.getCredentialType());
+        BaseCredProvider iCredProvider = CredProviderFactory.getCredProvider(credential.getCredentialType());
         if (iCredProvider == null) {
             throw new CredException("CredType error: {}", credential.getCredentialType());
         }

@@ -18,16 +18,16 @@ public class CredentialValidatorFactory {
     private CredentialValidatorFactory() {
     }
 
-    private static final Map<CredentialTypeEnum, ICredentialValidator> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<CredentialTypeEnum, BaseCredentialValidator> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(ICredentialValidator bean) {
+    public static void register(BaseCredentialValidator bean) {
         CONTEXT.put(bean.getType(), bean);
         log.debug(StringFormatter.inDramaFormat("CredentialValidatorFactory"));
         log.debug("CredentialValidatorFactory Registered: beanName={}, type={}", bean.getClass()
                 .getSimpleName(), bean.getType().name());
     }
 
-    public static ICredentialValidator getValidator(CredentialTypeEnum typeEnum) {
+    public static BaseCredentialValidator getValidator(CredentialTypeEnum typeEnum) {
         if (CONTEXT.containsKey(typeEnum)) {
             return CONTEXT.get(typeEnum);
         }

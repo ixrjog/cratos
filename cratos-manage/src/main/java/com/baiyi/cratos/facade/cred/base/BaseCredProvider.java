@@ -2,7 +2,6 @@ package com.baiyi.cratos.facade.cred.base;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.common.cred.CredInjectionNameEnum;
-import com.baiyi.cratos.common.cred.ICredProvider;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -19,7 +18,7 @@ import static com.baiyi.cratos.domain.constant.Global.NOT_APPLICABLE;
  * @Date 2024/2/29 14:48
  * @Version 1.0
  */
-public abstract class BaseCredProvider implements ICredProvider {
+public abstract class BaseCredProvider implements com.baiyi.cratos.common.cred.BaseCredProvider {
 
     protected CredInjectionNameEnum[] listCredInjectionNameEnums() {
         return new CredInjectionNameEnum[]{};

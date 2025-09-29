@@ -11,21 +11,24 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/7/29 上午10:48
+ * &#064;Date  2025/9/29 10:59
  * &#064;Version 1.0
  */
 @Component
 @Expires(termOfValidity = 366L * 5, unit = TimeUnit.DAYS)
-public class GoogleAdcCredValidator implements BaseCredentialValidator {
+public class AzureServicePrincipalValidator implements BaseCredentialValidator {
 
     private static final CredValidationRules rules = CredValidationRules.builder()
-            .credentialNullMessage("The Application Default Credentials (ADC) must be specified.")
+            .credentialNullMessage("The Azure Service Principal appId must be specified.")
+            .verifyCredentialNotNull(true)
+            .credential2NullMessage("The Azure Service Principal password must be specified.")
+            .verifyCredential2NotNull(true)
             .verifyExpiredTime(true)
             .maxExpiredTime(TimeUnit.MILLISECONDS.convert(366L * 5, TimeUnit.DAYS))
             .build();
 
     public CredentialTypeEnum getType() {
-        return CredentialTypeEnum.GOOGLE_ADC;
+        return CredentialTypeEnum.AZURE_SERVICE_PRINCIPAL;
     }
 
     @Override
@@ -34,4 +37,3 @@ public class GoogleAdcCredValidator implements BaseCredentialValidator {
     }
 
 }
-

@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.validator.credential.impl;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.InvalidCredentialException;
 import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.BaseCredentialValidator;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @Version 1.0
  */
 @Component
-public class OtpCredValidator implements ICredentialValidator {
+public class OtpCredValidator implements BaseCredentialValidator {
 
     public CredentialTypeEnum getType() {
         return CredentialTypeEnum.OTP;

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/2/4 10:34
  * @Version 1.0
  */
-public interface ICredentialValidator extends InitializingBean {
+public interface BaseCredentialValidator extends InitializingBean {
 
     CredentialTypeEnum getType();
 

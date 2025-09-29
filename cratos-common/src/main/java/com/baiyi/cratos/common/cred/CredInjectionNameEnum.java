@@ -11,6 +11,9 @@ public enum CredInjectionNameEnum {
     CRED_PASSWORD,
     CRED_TOKEN,
     CRED_ACCESS_KEY,
-    CRED_SECRET
+    CRED_SECRET,
+    // Azure Service Principal
+    CRED_CLIENT_ID,
+    CRED_CLIENT_SECRET
 
 }

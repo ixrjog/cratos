@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.validator.credential.impl;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.facade.validator.credential.CredValidationRules;
-import com.baiyi.cratos.facade.validator.credential.ICredentialValidator;
+import com.baiyi.cratos.facade.validator.credential.BaseCredentialValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Component
-public class UsernameWithPasswordCredValidator implements ICredentialValidator {
+public class UsernameWithPasswordCredValidator implements BaseCredentialValidator {
 
     // Private as individual user credentials
     private static final CredValidationRules privateRules = CredValidationRules.builder()
