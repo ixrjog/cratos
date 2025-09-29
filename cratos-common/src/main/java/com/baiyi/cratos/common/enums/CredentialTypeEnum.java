@@ -32,7 +32,8 @@ public enum CredentialTypeEnum {
     // 字典
     DICTIONARY("Dictionary"),
     // https://cloud.google.com/docs/authentication/application-default-credentials?hl=zh-cn
-    GOOGLE_ADC("Google Application Default Credentials");
+    GOOGLE_ADC("Google Application Default Credentials"),
+    AZURE_SERVICE_PRINCIPAL("Azure Service Principal");
 
     private final String displayName;
 

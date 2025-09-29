@@ -38,6 +38,7 @@
         <module>cratos-eds-cratos</module>
         <module>cratos-eds-remote-gateway</module>
         <module>cratos-socks-server</module>
+        <module>cratos-eds-azure</module>
     </modules>
 
     <properties>
