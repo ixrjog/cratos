@@ -55,8 +55,8 @@ public class ReceiveEventController {
             @RequestHeader(AUTHORIZATION) @NotNull(message = "Header `Authorization` is null") String authorization,
             @RequestBody EagleCloudEventParam.SaseHook saseHook) {
         try {
-            eagleCloudSaseFacade.consumeEvent(saseHook, authorization);
             log.info("Eaglecloud sase hooks: {}", JSONUtils.writeValueAsString(saseHook));
+            eagleCloudSaseFacade.consumeEvent(saseHook, authorization);
         } catch (Exception e) {
             log.error("Failed to process eaglecloud sase hooks: {}", saseHook, e);
         }

@@ -1,11 +1,16 @@
 package com.baiyi.cratos.domain.param.http.event;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,6 +35,7 @@ public class EagleCloudEventParam {
         @Schema(description = "数据时间")
         private String dataTime;
         @Schema(description = "时间戳")
+        @JsonDeserialize(using = TimestampDeserializer.class)
         private Date timestamp;
         @Schema(description = "消息标题")
         private String title;
@@ -106,6 +112,21 @@ public class EagleCloudEventParam {
                 contentObj.setTimeStr(timeMatcher.group(1));
             }
             return contentObj;
+        }
+    }
+
+    /**
+     * 时间戳反序列化器
+     */
+    public static class TimestampDeserializer extends JsonDeserializer<Date> {
+        @Override
+        public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+            String timestamp = p.getText();
+            try {
+                return new Date(Long.parseLong(timestamp));
+            } catch (NumberFormatException e) {
+                throw new IOException("Invalid timestamp format: " + timestamp, e);
+            }
         }
     }
 
