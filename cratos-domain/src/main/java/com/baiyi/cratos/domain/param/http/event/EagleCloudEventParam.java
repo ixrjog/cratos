@@ -39,7 +39,6 @@ public class EagleCloudEventParam {
         private Date timestamp;
         @Schema(description = "消息标题")
         private String title;
-
     }
 
     @Builder
@@ -113,6 +112,32 @@ public class EagleCloudEventParam {
             }
             return contentObj;
         }
+    }
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Alert {
+        private String actionUrl;
+        private String text;
+        private String dataTime;
+        private Date timestamp;
+        private String title;
+        private Content content;
+        // 接收者
+        private Receiver receiver;
+    }
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class Receiver {
+        private String dingtalkUserId;
+        private String displayName;
     }
 
     /**

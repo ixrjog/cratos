@@ -54,4 +54,16 @@ public class DingtalkUserParam {
         private Long deptId = 1L;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GetUser {
+        @Builder.Default
+        private String language = "zh_CN";
+        @JsonProperty("userid")
+        private String userId;
+    }
+
 }

@@ -39,6 +39,16 @@ public interface DingtalkService {
                                       @RequestBody DingtalkUserParam.QueryUserPage queryUserPage);
 
     /**
+     * https://open.dingtalk.com/document/orgapp/query-user-details
+     * @param accessToken
+     * @param getUser
+     * @return
+     */
+    @PostExchange("/topapi/v2/user/get?access_token={accessToken}")
+    DingtalkUserModel.GetUserResult getUser(@PathVariable String accessToken,
+                                      @RequestBody DingtalkUserParam.GetUser getUser);
+
+    /**
      * https://developers.dingtalk.com/document/app/asynchronous-sending-of-enterprise-session-messages
      * @param accessToken
      * @param asyncSendMessage

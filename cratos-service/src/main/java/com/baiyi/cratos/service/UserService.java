@@ -9,6 +9,8 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/10 10:19
@@ -21,5 +23,9 @@ public interface UserService extends BaseUniqueKeyService<User, UserMapper>, Bas
     DataTable<User> queryExtUserPage(UserExtParam.UserExtPageQueryParam param);
 
     User getByUsername(String username);
+
+    List<User> queryByEmail(String email);
+
+    List<User> queryByMobilePhone(String mobilePhone);
 
 }

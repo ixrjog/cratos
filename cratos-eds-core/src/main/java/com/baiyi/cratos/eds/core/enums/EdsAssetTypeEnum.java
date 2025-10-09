@@ -108,7 +108,9 @@ public enum EdsAssetTypeEnum {
 
     JENKINS_COMPUTER("Computer Node", 84),
 
-    EAGLECLOUD_SASE_DATA_SECURITY_EVENT("Data security event", 0),
+    EAGLECLOUD_SASE_DATA_SECURITY_EVENT("Data Security Event", 0),
+    EAGLECLOUD_SASE_DATA_SECURITY_ALERT_NOTIFICATION("Data Security Alert Notification", 1),
+    EAGLECLOUD_SASE_DATA_SECURITY_ALERT_RECORD("Data Security Alert Record", 2),
 
     DEF("Default", 9999);
 

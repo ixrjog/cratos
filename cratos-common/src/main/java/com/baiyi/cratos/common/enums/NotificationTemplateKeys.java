@@ -23,4 +23,6 @@ public enum NotificationTemplateKeys {
     CRYSTAL_USER_LOGIN_SERVER_NOTICE,
     NETWORK_INFO,
 
+    DATA_SECURITY_ALERT_NOTICE,
+
 }

@@ -71,6 +71,7 @@ public interface EdsAssetIndexConstants {
     String DINGTALK_USER_AVATAR = "dingtalk.avatar";
     String DINGTALK_USER_BOSS = "dingtalk.boss";
     String DINGTALK_USER_JOB_NUMBER = "dingtalk.jobNumber";
+    String DINGTALK_MANAGER_USER_ID = "dingtalk.manager.userId";
 
     String ENV = "env";
 

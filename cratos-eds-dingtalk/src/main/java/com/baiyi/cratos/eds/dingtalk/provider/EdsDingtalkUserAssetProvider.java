@@ -23,6 +23,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -40,6 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * @Date 2024/5/6 下午2:23
  * @Version 1.0
  */
+@Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_USER)
 public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkUserModel.User> {
@@ -99,7 +101,8 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
             DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
-        String mobilePhone = Joiner.on("-").skipNulls()
+        String mobilePhone = Joiner.on("-")
+                .skipNulls()
                 .join(entity.getStateCode(), entity.getMobile());
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_MOBILE, mobilePhone));
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_LEADER, entity.getLeader()
@@ -116,12 +119,22 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
         if (StringUtils.hasText(entity.getEmail())) {
             indices.add(createEdsAssetIndex(edsAsset, USER_MAIL, entity.getEmail()));
         }
+        // Manager
+        try {
+            DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getEdsConfigModel(),
+                    entity.getUserid());
+            if (StringUtils.hasText(getUser.getManagerUserid())) {
+                indices.add(createEdsAssetIndex(edsAsset, DINGTALK_MANAGER_USER_ID, getUser.getManagerUserid()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
         return indices;
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
-                                  DingtalkUserModel.User entity) {
+                                         DingtalkUserModel.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserid())
                 .assetKeyOf(entity.getUnionid())
                 .nameOf(entity.getName())

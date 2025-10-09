@@ -58,6 +58,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> queryByEmail(String email) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("email", email);
+        return userMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<User> queryByMobilePhone(String mobilePhone) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("mobilePhone", mobilePhone);
+        return userMapper.selectByExample(example);
+    }
+
+    @Override
     public User getByUniqueKey(@NonNull User record) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
