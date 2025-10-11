@@ -97,7 +97,7 @@ public class DingtalkUserModel {
         private String unionid;
         private String boss;
         @JsonProperty("role_list")
-        private RoleList roleList;
+        private List<RoleList> roleList;
         @JsonProperty("exclusive_account")
         private Boolean exclusiveAccount;
         @JsonProperty("manager_userid")

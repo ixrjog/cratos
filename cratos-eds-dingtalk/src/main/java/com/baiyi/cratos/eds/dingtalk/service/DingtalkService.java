@@ -48,6 +48,11 @@ public interface DingtalkService {
     DingtalkUserModel.GetUserResult getUser(@PathVariable String accessToken,
                                       @RequestBody DingtalkUserParam.GetUser getUser);
 
+
+    @PostExchange("/topapi/v2/user/get?access_token={accessToken}")
+    String getUserTest(@PathVariable String accessToken,
+                                            @RequestBody DingtalkUserParam.GetUser getUser);
+
     /**
      * https://developers.dingtalk.com/document/app/asynchronous-sending-of-enterprise-session-messages
      * @param accessToken

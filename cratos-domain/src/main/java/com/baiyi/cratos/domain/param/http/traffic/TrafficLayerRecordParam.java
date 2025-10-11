@@ -21,7 +21,9 @@ public class TrafficLayerRecordParam {
 
     public interface IToTrafficLayerRecord {
         Integer getDomainId();
+
         String getEnvName();
+
         default TrafficLayerDomainRecord toTrafficLayerRecord() {
             return TrafficLayerDomainRecord.builder()
                     .domainId(getDomainId())
@@ -58,10 +60,14 @@ public class TrafficLayerRecordParam {
     @NoArgsConstructor
     @Schema
     public static class AddRecord implements IToTarget<TrafficLayerDomainRecord> {
+        @NotNull
         private Integer domainId;
+        @NotBlank(message = "Environment name cannot be empty")
         private String envName;
+        @NotBlank(message = "Record name cannot be empty")
         private String recordName;
         private String routeTrafficTo;
+        @NotBlank(message = "Origin server address cannot be empty")
         private String originServer;
         private Boolean valid;
         private String comment;

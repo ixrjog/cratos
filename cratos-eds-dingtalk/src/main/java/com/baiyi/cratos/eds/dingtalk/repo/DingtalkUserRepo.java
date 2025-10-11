@@ -66,4 +66,12 @@ public class DingtalkUserRepo extends BaseDingtalkToken {
         return getUserResult.getResult();
     }
 
+    public String getUserTest(EdsDingtalkConfigModel.Dingtalk dingtalk, String userId) {
+        DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
+        DingtalkUserParam.GetUser param = DingtalkUserParam.GetUser.builder()
+                .userId(userId)
+                .build();
+        return dingtalkService.getUserTest(tokenResponse.getAccessToken(), param);
+    }
+
 }
