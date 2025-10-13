@@ -10,5 +10,4 @@ public enum ElasticScalingTypes {
     EXPANSION,
     REDUCTION,
     REBALANCING
-
 }

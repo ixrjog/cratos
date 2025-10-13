@@ -9,5 +9,4 @@ public enum WorkOrderGroupTypes {
 
     USER,
     SYSTEM
-
 }

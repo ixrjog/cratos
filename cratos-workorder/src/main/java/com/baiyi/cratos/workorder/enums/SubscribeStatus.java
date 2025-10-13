@@ -6,6 +6,7 @@ package com.baiyi.cratos.workorder.enums;
  * &#064;Version 1.0
  */
 public enum SubscribeStatus {
+
     APPLICANT,
     APPROVED_BY,
     CC_TO

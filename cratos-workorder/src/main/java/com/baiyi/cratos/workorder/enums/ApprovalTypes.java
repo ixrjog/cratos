@@ -6,6 +6,7 @@ package com.baiyi.cratos.workorder.enums;
  * &#064;Version 1.0
  */
 public enum ApprovalTypes {
+
     USER_SPECIFIED,
     OR_BATCH,
     CC_TO

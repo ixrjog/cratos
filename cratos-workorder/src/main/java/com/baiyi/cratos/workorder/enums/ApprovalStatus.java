@@ -6,6 +6,7 @@ package com.baiyi.cratos.workorder.enums;
  * &#064;Version 1.0
  */
 public enum ApprovalStatus {
+
     AGREE,
     REJECT,
     READ

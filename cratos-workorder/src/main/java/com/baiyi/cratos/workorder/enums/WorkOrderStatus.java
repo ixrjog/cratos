@@ -9,5 +9,4 @@ public enum WorkOrderStatus {
 
     NORMAL,
     DEVELOPING
-
 }
