@@ -1,12 +1,12 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
@@ -73,14 +73,9 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
         this.ldapPersonRepo = ldapPersonRepo;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Username | Name | Display Name | Mail |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator("| Username | Name | Display Name | Mail |");
     }
 
     @SuppressWarnings("unchecked")
@@ -160,7 +155,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         UserVO.User user = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, user.getUsername(), user.getName(), user.getDisplayName(),
+        return MarkdownUtils.generateMarkdownTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
                 user.getEmail());
     }
 

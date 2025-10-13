@@ -1,11 +1,14 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.util.GroupingUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.ApplicationResource;
+import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -74,13 +77,8 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator("| Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |");
     }
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     /**
      * @param entry
@@ -89,7 +87,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationReplicasModel.ApplicationConfigurationChange configurationChange = loadAs(entry);
-        return StringFormatter.arrayFormat(ROW_TPL, entry.getName(), entry.getNamespace(),
+        return MarkdownUtils.generateMarkdownTableRow(entry.getName(), entry.getNamespace(),
                 configurationChange.getConfig()
                         .getCurrentReplicas(), configurationChange.getConfig()
                         .getExpectedReplicas(), configurationChange.getConfig()

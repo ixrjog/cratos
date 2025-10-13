@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.emergency;
 
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -7,7 +8,6 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -46,20 +46,16 @@ public class DeploymentRedeployTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Instance Name | Namespace | Deployment Name | Redeploy Operation Time |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Instance Name | Namespace | Deployment Name | Redeploy Operation Time |");
     }
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.RedeployDeployment redeployDeployment = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(),
                 redeployDeployment.getAsset()
                         .getName(), redeployDeployment.getRedeployOperationTime());
     }

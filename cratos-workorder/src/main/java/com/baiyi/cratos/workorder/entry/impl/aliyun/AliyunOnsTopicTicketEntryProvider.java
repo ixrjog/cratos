@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 
 import com.aliyun.rocketmq20220801.models.GetTopicResponseBody;
 import com.aliyun.rocketmq20220801.models.ListTopicsResponseBody;
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -57,14 +57,10 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | ONS Instance Name | Topic Name | Message Type | Remark |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | ONS Instance Name | Topic Name | Message Type | Remark |");
     }
 
     @Override
@@ -145,7 +141,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunOnsV5Model.Topic topic = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), topic.getOnsInstanceName(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), topic.getOnsInstanceName(),
                 topic.getTopicName(), topic.getMessageType(), topic.getRemark());
     }
 

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -47,13 +47,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_SS
 @WorkOrderKey(key = WorkOrderKeys.GITLAB_PROJECT_PERMISSION)
 public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermissionTicketEntryProvider<WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> {
 
-    private static final String TABLE_TITLE = """
-            | Instance Name | Project SshURL | Role |
-            | --- | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} | {} |";
-
     public GitLabProjectPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                       WorkOrderTicketService workOrderTicketService,
                                                       WorkOrderService workOrderService,
@@ -71,7 +64,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return TABLE_TITLE;
+        return MarkdownUtils.generateMarkdownSeparator("| Instance Name | Project SshURL | Role |");
     }
 
     /**
@@ -82,7 +75,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         GitLabPermissionModel.Permission projectPermission = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getName(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getName(),
                 projectPermission.getRole());
     }
 

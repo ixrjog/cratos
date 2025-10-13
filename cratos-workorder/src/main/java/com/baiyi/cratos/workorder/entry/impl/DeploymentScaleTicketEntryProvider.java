@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -65,13 +65,9 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Instance Name | Namespace | Deployment | Current Replicas | Expected Replicas |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Instance Name | Namespace | Deployment | Current Replicas | Expected Replicas |");
     }
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     /**
      * @param entry
@@ -81,7 +77,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.DeploymentScale deploymentScale = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(), entry.getName(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(), entry.getName(),
                 deploymentScale.getCurrentReplicas(), deploymentScale.getExpectedReplicas());
     }
 
@@ -118,7 +114,8 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
                         .map(WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry::getDetail)
                         .map(ApplicationDeploymentModel.DeploymentScale::getDeployment)
                         .orElse(null)));
-        param.getDetail().setCurrentReplicas(currentReplicas);
+        param.getDetail()
+                .setCurrentReplicas(currentReplicas);
         return ApplicationDeploymentScaleTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .buildEntry();

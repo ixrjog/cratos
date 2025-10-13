@@ -4,9 +4,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetUserMFAInfoResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.aliyuncs.ram.model.v20150501.UnbindMFADeviceResponse;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -85,14 +85,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         this.edsIdentityFacade = edsIdentityFacade;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |");
     }
 
     @SuppressWarnings("unchecked")
@@ -252,9 +248,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         String resetPassword = Boolean.TRUE.equals(resetAliyunAccount.getResetPassword()) ? "Yes" : "No";
         String unbindMFA = Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA()) ? "Yes" : "No";
         // | Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
                 .getLoginUsername(), resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
                 .getLoginUrl());
+
     }
 
     @Override

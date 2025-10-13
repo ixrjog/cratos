@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.emergency;
 
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -46,13 +47,9 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Application Name | Tags |
-                | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Application Name | Tags |");
     }
-
-    private static final String ROW_TPL = "| {} | {} |";
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
@@ -63,7 +60,7 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
                 .map(tag -> StringFormatter.arrayFormat("{}:{}", tag.getTag()
                         .getTagKey(), tag.getTagValue()))
                 .collect(Collectors.joining(","));
-        return StringFormatter.arrayFormat(ROW_TPL, application.getApplicationName(), tags);
+        return MarkdownUtils.generateMarkdownTableRow(application.getApplicationName(), tags);
     }
 
     @Override

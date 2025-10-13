@@ -3,6 +3,7 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.PutSecretValueResponseBody;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -12,7 +13,6 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -51,7 +51,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_KMS_SECRET_UPDATE)
 public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.UpdateSecret, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry> {
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -157,17 +156,15 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | Secret Name | Version ID | Config Center Value |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | Secret Name | Version ID | Config Center Value |");
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunKmsModel.UpdateSecret updateSecret = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), updateSecret.getSecretName(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), updateSecret.getSecretName(),
                 updateSecret.getVersionId(), "KMS#" + updateSecret.getSecretName());
     }
 

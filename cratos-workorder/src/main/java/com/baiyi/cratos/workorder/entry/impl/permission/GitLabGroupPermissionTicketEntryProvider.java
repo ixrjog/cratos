@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -47,13 +47,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WE
 @WorkOrderKey(key = WorkOrderKeys.GITLAB_GROUP_PERMISSION)
 public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissionTicketEntryProvider<WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> {
 
-    private static final String TABLE_TITLE = """
-            | Instance Name | Group Name | Group WebURL | Role |
-            | --- | --- | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     public GitLabGroupPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                     WorkOrderTicketService workOrderTicketService,
                                                     WorkOrderService workOrderService,
@@ -71,7 +64,7 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return TABLE_TITLE;
+        return MarkdownUtils.generateMarkdownSeparator("| Instance Name | Group Name | Group WebURL | Role |");
     }
 
     /**
@@ -86,7 +79,7 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
                         .getId(), REPO_WEB_URL))
                 .map(EdsAssetIndex::getValue)
                 .orElse("-");
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getName(), webUrl,
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getName(), webUrl,
                 groupPermission.getRole());
     }
 

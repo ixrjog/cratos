@@ -5,8 +5,8 @@ import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
 import com.aliyuncs.ram.model.v20150501.CreateUserResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -78,8 +78,6 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         this.createDataWorkAKNoticeSender = createDataWorkAKNoticeSender;
         this.workOrderService = workOrderService;
     }
-
-    private static final String ROW_TPL = "| {} | {} |";
 
     @SuppressWarnings("unchecked")
     @Override
@@ -172,17 +170,15 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | AK RAM User |
-                | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | AK RAM User |");
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunDataWorksModel.AliyunAccount aliyunAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), aliyunAccount.getAccount());
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunAccount.getAccount());
     }
 
     @Override

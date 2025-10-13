@@ -1,9 +1,9 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
@@ -72,14 +72,9 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
         this.resetAlimailUserNoticeSender = resetAlimailUserNoticeSender;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Alimail Instance | User ID | Mail | Login URL |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator("| Alimail Instance | User ID | Mail | Login URL |");
     }
 
     @SuppressWarnings("unchecked")
@@ -155,7 +150,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         EdsIdentityVO.MailAccount mailAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), mailAccount.getAccount()
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), mailAccount.getAccount()
                 .getAssetId(), mailAccount.getAccountLogin()
                 .getLoginUsername(), mailAccount.getAccountLogin()
                 .getLoginUrl());

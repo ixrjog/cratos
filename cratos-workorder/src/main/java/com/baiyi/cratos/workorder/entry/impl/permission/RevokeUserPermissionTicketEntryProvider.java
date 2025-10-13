@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.permission;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -21,9 +21,9 @@ import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.RevokeUserPermissionTicketEntryBuilder;
-import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProvider;
 import com.baiyi.cratos.workorder.entry.TicketEntryProviderFactory;
+import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -61,13 +61,6 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         this.userService = userService;
     }
 
-    private static final String TABLE_TITLE = """
-            | Username | Name | DisplayName | Email | Tags |
-            | --- | --- | --- | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
-
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 UserVO.User detail) throws WorkOrderTicketException {
@@ -88,7 +81,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return TABLE_TITLE;
+        return MarkdownUtils.generateMarkdownSeparator("| Username | Name | DisplayName | Email | Tags |");
     }
 
     @Override
@@ -103,7 +96,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .map(e -> e.getTag()
                         .getTagKey())
                 .collect(Collectors.joining(","));
-        return StringFormatter.arrayFormat(ROW_TPL, user.getUsername(), user.getName(), user.getDisplayName(),
+        return MarkdownUtils.generateMarkdownTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
                 user.getEmail(), tags);
     }
 

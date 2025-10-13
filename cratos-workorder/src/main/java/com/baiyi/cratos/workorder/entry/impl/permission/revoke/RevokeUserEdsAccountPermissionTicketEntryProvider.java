@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.permission.revoke;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -59,13 +59,6 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
-    private static final String TABLE_TITLE = """
-            | Instance Name | Instance Type | Account Type | Account Name |
-            | --- | --- | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     @Override
     protected WorkOrderTicketEntry paramToEntry(
             WorkOrderTicketParam.AddRevokeUserEdsAccountPermissionTicketEntry addRevokeUserEdsAccountPermissionTicketEntry) {
@@ -115,14 +108,15 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return TABLE_TITLE;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Instance Name | Instance Type | Account Type | Account Name |");
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         EdsAssetVO.Asset asset = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), instance.getEdsType(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), instance.getEdsType(),
                 entry.getSubType(), entry.getName());
     }
 

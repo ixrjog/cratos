@@ -1,7 +1,7 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -76,8 +76,6 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         this.tagService = tagService;
         this.businessTagFacade = businessTagFacade;
     }
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
@@ -191,10 +189,8 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Application Name | Type | Level | Repository SSH URL | Web Site |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Application Name | Type | Level | Repository SSH URL | Web Site |");
     }
 
     /**
@@ -219,8 +215,8 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
                 .map(ApplicationModel.CreateFrontEndApplication::getMappingsPath)
                 .orElse("/");
         String webSite = WebSiteUtils.generateWebSite(createFrontEndApplication.getDomain(), mappingsPath);
-        return StringFormatter.arrayFormat(ROW_TPL, createFrontEndApplication.getApplicationName(), FRONT_END.getKey(),
-                level, sshUrl, webSite);
+        return MarkdownUtils.generateMarkdownTableRow(createFrontEndApplication.getApplicationName(),
+                FRONT_END.getKey(), level, sshUrl, webSite);
     }
 
     @Override

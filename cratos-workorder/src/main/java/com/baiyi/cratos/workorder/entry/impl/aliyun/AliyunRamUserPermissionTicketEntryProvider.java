@@ -4,9 +4,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.CreateUserResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -80,14 +80,10 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         this.createAliyunRamUserNoticeSender = createAliyunRamUserNoticeSender;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | RAM Login Username | Login Link |
-                | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | RAM Login Username | Login Link |");
     }
 
     @SuppressWarnings("unchecked")
@@ -190,7 +186,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunModel.AliyunAccount aliyunAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), aliyunAccount.getAccount(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunAccount.getAccount(),
                 aliyunAccount.getLoginLink());
     }
 

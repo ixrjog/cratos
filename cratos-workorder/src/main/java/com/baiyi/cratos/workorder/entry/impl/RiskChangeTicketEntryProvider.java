@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl;
 
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -35,14 +36,9 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
     }
 
-    private static final String ROW_TPL = "| {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Applicant | Title |
-                | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator("| Applicant | Title |");
     }
 
     @Override
@@ -68,7 +64,7 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
                 .getDisplayName() : riskChangeApplication.getApplicant()
                 .getName(), riskChangeApplication.getApplicant()
                 .getEmail());
-        return StringFormatter.arrayFormat(ROW_TPL, applicantName, riskChangeApplication.getTitle());
+        return MarkdownUtils.generateMarkdownTableRow(applicantName, riskChangeApplication.getTitle());
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.workorder.entry.impl.emergency;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -46,20 +46,16 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Instance Name | Namespace | Deployment Name | Pod Name | Delete Operation Time |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Instance Name | Namespace | Deployment Name | Pod Name | Delete Operation Time |");
     }
-
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.DeleteDeploymentPod deleteDeploymentPod = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), entry.getNamespace(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(),
                 deleteDeploymentPod.getAsset()
                         .getName(), deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
     }

@@ -3,8 +3,8 @@ package com.baiyi.cratos.workorder.entry.impl.aliyun;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetPolicyResponse;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -72,14 +72,10 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | RAM Login Username | Policy Name | Policy Type | Policy Desc |
-                | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | RAM Login Username | Policy Name | Policy Type | Policy Desc |");
     }
 
     @SuppressWarnings("unchecked")
@@ -158,7 +154,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
         AliyunModel.AliyunPolicy aliyunPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = aliyunPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), aliyunPolicy.getRamLoginUsername(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunPolicy.getRamLoginUsername(),
                 policy.getAssetKey(), policy.getKind(),
                 StringUtils.hasText(policy.getDescription()) ? policy.getDescription() : "--");
     }

@@ -5,6 +5,7 @@ import com.aliyun.sdk.service.kms20160120.models.DescribeSecretResponseBody;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.InfoSummaryUtils;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -12,7 +13,6 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AliyunKmsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
@@ -51,13 +51,13 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CONTENT
  * &#064;Date  2025/6/20 10:45
  * &#064;Version 1.0
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 @Component
 @BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
 @WorkOrderKey(key = WorkOrderKeys.ALIYUN_KMS_SECRET_CREATE)
 public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryProvider<AliyunKmsModel.CreateSecret, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry> {
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -82,7 +82,6 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         this.edsAssetService = edsAssetService;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void verifyEntryParam(WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry param,
                                     WorkOrderTicketEntry entry) {
@@ -95,7 +94,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
         // 校验secretName是否合规
-        if(!ValidationUtils.isAliyunKMSSecretName(createSecret.getSecretName())) {
+        if (!ValidationUtils.isAliyunKMSSecretName(createSecret.getSecretName())) {
             WorkOrderTicketException.runtime(
                     languageUtils.getFormattedMessage("workorder.ticket.aliyun.kms.secret.create.name.invalid",
                             createSecret.getSecretName()));
@@ -107,7 +106,6 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunKmsModel.CreateSecret createSecret) throws WorkOrderTicketException {
@@ -229,17 +227,15 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Duplicate Secret | Description |
-                | --- | --- | --- | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aliyun Instance | Secret Name | Version ID | Encryption Key ID | Config Center Value | Duplicate Secret | Description |");
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), createSecret.getSecretName(),
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), createSecret.getSecretName(),
                 createSecret.getVersionId(), createSecret.getEncryptionKeyId(), "KMS#" + createSecret.getSecretName(),
                 createSecret.getDuplicateSecrets(), createSecret.getDescription());
     }

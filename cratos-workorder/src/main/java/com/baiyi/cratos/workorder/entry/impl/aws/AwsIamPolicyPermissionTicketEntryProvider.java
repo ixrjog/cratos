@@ -1,8 +1,8 @@
 package com.baiyi.cratos.workorder.entry.impl.aws;
 
 import com.amazonaws.auth.policy.Policy;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -45,8 +45,6 @@ import java.util.Optional;
 @WorkOrderKey(key = WorkOrderKeys.AWS_IAM_POLICY_PERMISSION)
 public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryProvider<AwsModel.AwsPolicy, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry> {
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     private final EdsInstanceService edsInstanceService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsIdentityFacade edsIdentityFacade;
@@ -69,10 +67,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | AWS Instance | IAM Login Username | Policy Name | ARN |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator("| AWS Instance | IAM Login Username | Policy Name | ARN |");
     }
 
     @SuppressWarnings("unchecked")
@@ -86,11 +81,14 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         try {
             String policyARN = awsPolicy.getAsset()
                     .getAssetKey();
-            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getCloudAccount().getUsername())
+            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getCloudAccount()
+                            .getUsername())
                     .stream()
-                    .anyMatch(e -> e.getPolicyArn().equals(policyARN));
+                    .anyMatch(e -> e.getPolicyArn()
+                            .equals(policyARN));
             if (!alreadyAttached) {
-                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getCloudAccount().getUsername(), policyARN);
+                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getCloudAccount()
+                        .getUsername(), policyARN);
                 // TODO 同步资产
             }
         } catch (Exception e) {
@@ -136,8 +134,9 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         AwsModel.AwsPolicy awsPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = awsPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return StringFormatter.arrayFormat(ROW_TPL, instance.getInstanceName(), awsPolicy.getCloudAccount().getAccountLogin().getLoginUsername(),
-                policy.getName(), policy.getAssetKey());
+        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), awsPolicy.getCloudAccount()
+                .getAccountLogin()
+                .getLoginUsername(), policy.getName(), policy.getAssetKey());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.amazonaws.services.transfer.model.HomeDirectoryMapEntry;
 import com.amazonaws.services.transfer.model.ListedUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
@@ -56,7 +57,6 @@ import static com.baiyi.cratos.workorder.entry.impl.aws.AwsTransferSftpUserPermi
 @WorkOrderKey(key = WorkOrderKeys.AWS_TRANSFER_SFTP_USER_PERMISSION)
 public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicketEntryProvider<AwsTransferModel.SFTPUser, WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry> {
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
     private final EdsInstanceService edsInstanceService;
     private final BusinessTagService businessTagService;
     private final TagService tagService;
@@ -183,10 +183,8 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aws Instance | Transfer Username@Server | Key Fingerprint | Desc |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aws Instance | Transfer Username@Server | Key Fingerprint | Desc |");
     }
 
     @Override
@@ -201,7 +199,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         String endpoint = sftpUser.getTransferServerEndpoint();
         String transferLogin = Joiner.on("@")
                 .join(sftpUser.getUsername(), endpoint);
-        return StringFormatter.arrayFormat(ROW_TPL, instanceName, transferLogin,
+        return MarkdownUtils.generateMarkdownTableRow(instanceName, transferLogin,
                 SshKeyUtils.calcFingerprint(sftpUser.getPublicKey()), sftpUser.getDescription());
     }
 

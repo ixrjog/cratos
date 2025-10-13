@@ -1,15 +1,15 @@
 package com.baiyi.cratos.workorder.entry.impl.aws;
 
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.model.AwsModel;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
+import com.baiyi.cratos.domain.model.AwsModel;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
@@ -63,8 +63,8 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
                                               WorkOrderTicketService workOrderTicketService,
                                               WorkOrderService workOrderService,
                                               EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                              UserService userService,
-                                              EdsIdentityFacade edsIdentityFacade, AwsIamUserRepo awsIamUserRepo,
+                                              UserService userService, EdsIdentityFacade edsIdentityFacade,
+                                              AwsIamUserRepo awsIamUserRepo,
                                               ResetAwsIamUserNoticeSender resetAwsIamUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
@@ -75,14 +75,10 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
         this.resetAwsIamUserNoticeSender = resetAwsIamUserNoticeSender;
     }
 
-    private static final String ROW_TPL = "| {} | {} | {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return """
-                | Aws Instance | Account ID or alias | IAM Username | Login Link |
-                | --- | --- | --- | --- |
-                """;
+        return MarkdownUtils.generateMarkdownSeparator(
+                "| Aws Instance | Account ID or alias | IAM Username | Login Link |");
     }
 
     @SuppressWarnings("unchecked")
@@ -172,7 +168,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
         String link = Optional.ofNullable(cloudAccount.getAccountLogin())
                 .map(EdsIdentityVO.AccountLoginDetails::getLoginUrl)
                 .orElse("--");
-        return StringFormatter.arrayFormat(ROW_TPL, instanceName, accountId, iamUsername, link);
+        return MarkdownUtils.generateMarkdownTableRow(instanceName, accountId, iamUsername, link);
     }
 
     @Override

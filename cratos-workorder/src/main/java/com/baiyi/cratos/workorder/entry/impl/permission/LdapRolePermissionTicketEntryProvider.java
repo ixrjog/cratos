@@ -2,7 +2,7 @@ package com.baiyi.cratos.workorder.entry.impl.permission;
 
 import com.baiyi.cratos.common.enums.RenewalExtUserTypeEnum;
 import com.baiyi.cratos.common.util.ExpiredUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -53,16 +53,9 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
     }
 
-    private static final String TABLE_TITLE = """
-            | LDAP Role | Description |
-            | --- | --- |
-            """;
-
-    private static final String ROW_TPL = "| {} | {} |";
-
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return TABLE_TITLE;
+        return MarkdownUtils.generateMarkdownSeparator("| LDAP Role | Description |");
     }
 
     /**
@@ -72,7 +65,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         LdapUserGroupModel.Role role = loadAs(entry);
-        return StringFormatter.arrayFormat(ROW_TPL, role.getGroup(), role.getDescription());
+        return MarkdownUtils.generateMarkdownTableRow(role.getGroup(), role.getDescription());
     }
 
     @SuppressWarnings("unchecked")
