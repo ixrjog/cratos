@@ -28,6 +28,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.AliyunRamPolicyPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -74,8 +75,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aliyun Instance | RAM Login Username | Policy Name | Policy Type | Policy Desc |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_RAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")

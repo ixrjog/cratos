@@ -43,6 +43,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.APPLICATION_ELASTIC_SCALING;
 
 /**
  * &#064;Author  baiyi
@@ -77,7 +78,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Application Name | Namespace | Current Replicas | Expected Replicas | Scaling Type |");
+        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_ELASTIC_SCALING);
     }
 
     /**

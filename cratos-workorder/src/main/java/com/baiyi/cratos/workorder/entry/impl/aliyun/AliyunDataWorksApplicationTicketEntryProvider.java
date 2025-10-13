@@ -29,6 +29,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.AliyunDataWorksInstanceTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -103,6 +104,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     /**
      * 发送通知
+     *
      * @param workOrderTicket
      * @param username
      * @param ramUsername
@@ -170,8 +172,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aliyun Instance | AK RAM User |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_DATAWORKS_AK);
     }
 
     @Override

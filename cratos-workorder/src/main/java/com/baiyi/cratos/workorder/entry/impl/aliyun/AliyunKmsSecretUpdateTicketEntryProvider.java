@@ -29,6 +29,7 @@ import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.AliyunKmsSecretUpdateTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -156,8 +157,7 @@ public class AliyunKmsSecretUpdateTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aliyun Instance | Secret Name | Version ID | Config Center Value |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_KMS_SECRET_UPDATE);
     }
 
     @Override

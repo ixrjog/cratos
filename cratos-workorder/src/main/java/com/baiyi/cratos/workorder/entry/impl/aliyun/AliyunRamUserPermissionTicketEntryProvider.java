@@ -29,6 +29,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.CreateAliyunRamUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -82,8 +83,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aliyun Instance | RAM Login Username | Login Link |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_RAM_USER_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")
@@ -166,13 +166,15 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     @SuppressWarnings("unchecked")
     @Override
     protected WorkOrderTicketEntry paramToEntry(WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry param) {
-       int instanceId = Optional.of(param)
+        int instanceId = Optional.of(param)
                 .map(WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry::getDetail)
                 .map(AliyunModel.AliyunAccount::getEdsInstance)
                 .map(EdsInstanceVO.EdsInstance::getId)
-               .orElseThrow(()-> new WorkOrderTicketException("Eds instanceId is null"));
+                .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
         EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
-                param.getDetail().getEdsInstance().getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
+                param.getDetail()
+                        .getEdsInstance()
+                        .getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
         EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
                 .getEdsConfigModel();
         return CreateAliyunRamUserTicketEntryBuilder.newBuilder()

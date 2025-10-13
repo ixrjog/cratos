@@ -15,6 +15,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ApplicationDeploymentRedeployTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.holder.ApplicationRedeployTokenHolder;
@@ -47,8 +48,7 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Application Name | Tags |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.APPLICATION_REDEPLOY);
     }
 
     @Override

@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.LDAP_ROLE_PERMISSION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/5/26 14:38
@@ -55,7 +57,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| LDAP Role | Description |");
+        return MarkdownUtils.generateMarkdownSeparator(LDAP_ROLE_PERMISSION);
     }
 
     /**

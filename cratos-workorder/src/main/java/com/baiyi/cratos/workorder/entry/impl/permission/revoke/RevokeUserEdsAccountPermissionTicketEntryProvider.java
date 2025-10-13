@@ -21,6 +21,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.revoke.*;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -108,8 +109,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Instance Name | Instance Type | Account Type | Account Name |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.REVOKE_USER_ACCOUNT_PERMISSION);
     }
 
     @Override

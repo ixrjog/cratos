@@ -29,6 +29,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ResetAwsIamUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -77,8 +78,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aws Instance | Account ID or alias | IAM Username | Login Link |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_IAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")

@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.APPLICATION_DEPLOYMENT_SCALE;
 
 /**
  * &#064;Author  baiyi
@@ -65,8 +66,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Instance Name | Namespace | Deployment | Current Replicas | Expected Replicas |");
+        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_DEPLOYMENT_SCALE);
     }
 
     /**

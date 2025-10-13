@@ -39,6 +39,7 @@ import java.util.Optional;
 import static com.baiyi.cratos.common.enums.SysTagKeys.FRONT_END;
 import static com.baiyi.cratos.common.enums.SysTagKeys.LEVEL;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_SSH_URL;
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.APPLICATION_FRONTEND_CREATE;
 
 /**
  * &#064;Author  baiyi
@@ -189,8 +190,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Application Name | Type | Level | Repository SSH URL | Web Site |");
+        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_FRONTEND_CREATE);
     }
 
     /**

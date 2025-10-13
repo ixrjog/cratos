@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.REVOKE_USER_PERMISSION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/14 10:06
@@ -81,7 +83,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Username | Name | DisplayName | Email | Tags |");
+        return MarkdownUtils.generateMarkdownSeparator(REVOKE_USER_PERMISSION);
     }
 
     @Override

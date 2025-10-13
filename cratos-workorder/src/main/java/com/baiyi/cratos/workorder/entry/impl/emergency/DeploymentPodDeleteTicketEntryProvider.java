@@ -16,6 +16,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.DeploymentPodDeleteTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
@@ -46,8 +47,7 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Instance Name | Namespace | Deployment Name | Pod Name | Delete Operation Time |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.DEPLOYMENT_DELETE_POD);
     }
 
     @Override

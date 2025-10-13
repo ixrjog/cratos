@@ -27,6 +27,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.AwsIamPolicyPermissionTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -67,7 +68,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| AWS Instance | IAM Login Username | Policy Name | ARN |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_IAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")

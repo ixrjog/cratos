@@ -36,6 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_SSH_URL;
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.GITLAB_PROJECT_PERMISSION;
 
 /**
  * &#064;Author  baiyi
@@ -64,7 +65,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Instance Name | Project SshURL | Role |");
+        return MarkdownUtils.generateMarkdownSeparator(GITLAB_PROJECT_PERMISSION);
     }
 
     /**

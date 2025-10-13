@@ -31,6 +31,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ResetAliyunRamUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -87,8 +88,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_RAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")

@@ -33,6 +33,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.CreateAwsTransferSftpUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -183,8 +184,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(
-                "| Aws Instance | Transfer Username@Server | Key Fingerprint | Desc |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_TRANSFER_SFTP_USER_PERMISSION);
     }
 
     @Override

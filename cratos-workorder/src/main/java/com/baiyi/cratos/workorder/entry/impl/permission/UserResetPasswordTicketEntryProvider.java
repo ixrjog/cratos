@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.USER_RESET_PASSWORD;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/7/23 11:01
@@ -75,7 +77,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Username | Name | Display Name | Mail |");
+        return MarkdownUtils.generateMarkdownSeparator(USER_RESET_PASSWORD);
     }
 
     @SuppressWarnings("unchecked")

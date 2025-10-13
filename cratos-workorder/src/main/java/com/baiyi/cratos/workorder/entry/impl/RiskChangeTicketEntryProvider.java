@@ -20,6 +20,8 @@ import com.baiyi.cratos.workorder.model.TicketEntryModel;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import static com.baiyi.cratos.workorder.enums.TableHeaderConstants.RISK_CHANGE;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/7/3 09:52
@@ -38,7 +40,7 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Applicant | Title |");
+        return MarkdownUtils.generateMarkdownSeparator(RISK_CHANGE);
     }
 
     @Override

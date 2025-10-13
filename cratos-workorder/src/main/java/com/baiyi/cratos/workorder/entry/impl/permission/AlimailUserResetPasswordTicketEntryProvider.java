@@ -25,6 +25,7 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.WorkOrderKey;
 import com.baiyi.cratos.workorder.builder.entry.ResetAlimailUserTicketEntryBuilder;
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
+import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -74,7 +75,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator("| Alimail Instance | User ID | Mail | Login URL |");
+        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIMAIL_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")
