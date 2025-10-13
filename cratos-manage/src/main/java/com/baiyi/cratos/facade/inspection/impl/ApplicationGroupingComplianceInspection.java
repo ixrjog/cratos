@@ -2,11 +2,11 @@ package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.util.GroupingUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.report.ListAppGroup;
@@ -21,7 +21,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -39,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  * &#064;Version 1.0
  */
 @Slf4j
-@Component
+//@Component
 public class ApplicationGroupingComplianceInspection extends BaseInspection {
 
     private final EdsAssetService edsAssetService;
