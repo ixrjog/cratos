@@ -75,7 +75,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIMAIL_USER_RESET);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIMAIL_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")

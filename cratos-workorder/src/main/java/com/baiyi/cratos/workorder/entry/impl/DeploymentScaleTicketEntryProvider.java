@@ -66,7 +66,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_DEPLOYMENT_SCALE);
+        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_DEPLOYMENT_SCALE);
     }
 
     /**

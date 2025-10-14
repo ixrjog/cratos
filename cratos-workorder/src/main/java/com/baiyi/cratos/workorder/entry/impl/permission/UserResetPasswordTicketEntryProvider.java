@@ -77,7 +77,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(USER_RESET_PASSWORD);
+        return MarkdownUtils.generateMarkdownTableHeader(USER_RESET_PASSWORD);
     }
 
     @SuppressWarnings("unchecked")

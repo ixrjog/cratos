@@ -78,7 +78,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_ELASTIC_SCALING);
+        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_ELASTIC_SCALING);
     }
 
     /**

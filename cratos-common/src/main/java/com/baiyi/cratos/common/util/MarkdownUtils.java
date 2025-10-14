@@ -24,10 +24,20 @@ public class MarkdownUtils {
         return renderer.render(document);
     }
 
+    public static String generateMarkdownTableHeader(String header) {
+        return header + "\n" + generateMarkdownSeparator(header) + "\n";
+    }
+
     public static String generateMarkdownSeparator(String header) {
         // 计算表头中的字段数量（通过 | 分隔符计算）
-        // 减去首尾的空字符串
-        int fieldCount = header.split("\\|").length - 2;
+        String[] parts = header.split("\\|");
+        // 过滤掉空字符串，计算实际字段数量
+        int fieldCount = 0;
+        for (String part : parts) {
+            if (!part.trim().isEmpty()) {
+                fieldCount++;
+            }
+        }
         // 生成分隔符行
         StringBuilder separator = new StringBuilder("|");
         for (int i = 0; i < fieldCount; i++) {

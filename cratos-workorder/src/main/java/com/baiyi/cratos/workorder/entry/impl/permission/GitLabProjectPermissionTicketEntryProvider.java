@@ -65,7 +65,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(GITLAB_PROJECT_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(GITLAB_PROJECT_PERMISSION);
     }
 
     /**

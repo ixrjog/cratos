@@ -83,7 +83,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(REVOKE_USER_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(REVOKE_USER_PERMISSION);
     }
 
     @Override

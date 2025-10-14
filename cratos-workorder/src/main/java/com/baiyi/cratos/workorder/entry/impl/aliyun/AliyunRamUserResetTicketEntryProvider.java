@@ -88,7 +88,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_RAM_USER_RESET);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_RAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")

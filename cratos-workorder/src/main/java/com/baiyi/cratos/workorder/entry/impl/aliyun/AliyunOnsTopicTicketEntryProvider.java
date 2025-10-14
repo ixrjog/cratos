@@ -60,7 +60,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_ONS_TOPIC);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_ONS_TOPIC);
     }
 
     @Override

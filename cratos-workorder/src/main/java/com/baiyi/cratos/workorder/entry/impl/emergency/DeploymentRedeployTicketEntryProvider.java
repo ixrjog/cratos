@@ -47,7 +47,7 @@ public class DeploymentRedeployTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.DEPLOYMENT_REDEPLOY);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.DEPLOYMENT_REDEPLOY);
     }
 
     @Override

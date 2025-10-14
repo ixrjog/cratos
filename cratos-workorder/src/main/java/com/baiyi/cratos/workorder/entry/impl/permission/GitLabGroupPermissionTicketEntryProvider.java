@@ -65,7 +65,7 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(GITLAB_GROUP_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(GITLAB_GROUP_PERMISSION);
     }
 
     /**

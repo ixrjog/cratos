@@ -75,7 +75,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_RAM_POLICY_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_RAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")

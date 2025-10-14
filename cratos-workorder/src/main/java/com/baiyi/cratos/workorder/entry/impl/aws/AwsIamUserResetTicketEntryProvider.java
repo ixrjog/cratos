@@ -78,7 +78,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_IAM_USER_RESET);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_IAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")

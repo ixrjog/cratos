@@ -228,7 +228,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_KMS_SECRET_CREATE);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_KMS_SECRET_CREATE);
     }
 
     @Override

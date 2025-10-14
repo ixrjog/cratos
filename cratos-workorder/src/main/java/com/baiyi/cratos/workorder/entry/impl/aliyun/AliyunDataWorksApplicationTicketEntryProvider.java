@@ -172,7 +172,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.ALIYUN_DATAWORKS_AK);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_DATAWORKS_AK);
     }
 
     @Override

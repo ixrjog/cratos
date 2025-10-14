@@ -40,7 +40,7 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(RISK_CHANGE);
+        return MarkdownUtils.generateMarkdownTableHeader(RISK_CHANGE);
     }
 
     @Override

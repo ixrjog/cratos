@@ -190,7 +190,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(APPLICATION_FRONTEND_CREATE);
+        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_FRONTEND_CREATE);
     }
 
     /**

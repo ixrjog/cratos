@@ -184,7 +184,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_TRANSFER_SFTP_USER_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_TRANSFER_SFTP_USER_PERMISSION);
     }
 
     @Override

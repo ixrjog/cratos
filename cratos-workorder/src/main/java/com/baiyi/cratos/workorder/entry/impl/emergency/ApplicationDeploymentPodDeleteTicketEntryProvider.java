@@ -48,7 +48,7 @@ public class ApplicationDeploymentPodDeleteTicketEntryProvider extends BaseTicke
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.APPLICATION_DELETE_POD);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.APPLICATION_DELETE_POD);
     }
 
     @Override

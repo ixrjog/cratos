@@ -57,7 +57,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(LDAP_ROLE_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(LDAP_ROLE_PERMISSION);
     }
 
     /**

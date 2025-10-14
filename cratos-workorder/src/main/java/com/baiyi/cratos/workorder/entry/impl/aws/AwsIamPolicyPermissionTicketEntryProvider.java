@@ -68,7 +68,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownSeparator(TableHeaderConstants.AWS_IAM_POLICY_PERMISSION);
+        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_IAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")
