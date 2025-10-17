@@ -89,7 +89,9 @@ public class EagleCloudEventParam {
             Pattern eventIdPattern = Pattern.compile("事件ID：(.+?)\\s*\\n");
             Matcher eventIdMatcher = eventIdPattern.matcher(content);
             if (eventIdMatcher.find()) {
-                String eventId = eventIdMatcher.group(1).replace("\\ ", "");
+                String eventId = eventIdMatcher.group(1).replace("\\ ", "").trim();
+                // 清理多余的符号和字符，保留有效的ID部分
+                eventId = eventId.replaceAll("[\\s;\\\\]+.*$", "");
                 contentObj.setEventId(eventId);
             }
 
