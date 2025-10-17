@@ -73,42 +73,48 @@ public class EagleCloudEventParam {
             Pattern alarmActionPattern = Pattern.compile("敏感数据(.+?)告警通知");
             Matcher alarmActionMatcher = alarmActionPattern.matcher(content);
             if (alarmActionMatcher.find()) {
-                contentObj.setAction(alarmActionMatcher.group(1));
+                String action = alarmActionMatcher.group(1).replace("\\ ", "");
+                contentObj.setAction(action);
             }
 
             // 解析事件名称
             Pattern eventNamePattern = Pattern.compile("事件名称：(.+?)\\s*\\n");
             Matcher eventNameMatcher = eventNamePattern.matcher(content);
             if (eventNameMatcher.find()) {
-                contentObj.setEventName(eventNameMatcher.group(1));
+                String eventName = eventNameMatcher.group(1).replace("\\ ", "");
+                contentObj.setEventName(eventName);
             }
 
             // 解析事件ID
             Pattern eventIdPattern = Pattern.compile("事件ID：(.+?)\\s*\\n");
             Matcher eventIdMatcher = eventIdPattern.matcher(content);
             if (eventIdMatcher.find()) {
-                contentObj.setEventId(eventIdMatcher.group(1));
+                String eventId = eventIdMatcher.group(1).replace("\\ ", "");
+                contentObj.setEventId(eventId);
             }
 
             // 解析告警内容
             Pattern thresholdPattern = Pattern.compile("告警内容：(.+?)\\s*\\n");
             Matcher thresholdMatcher = thresholdPattern.matcher(content);
             if (thresholdMatcher.find()) {
-                contentObj.setThreshold(thresholdMatcher.group(1));
+                String threshold = thresholdMatcher.group(1).replace("\\ ", "");
+                contentObj.setThreshold(threshold);
             }
 
             // 解析告警对象
             Pattern entityNamePattern = Pattern.compile("告警对象：(.+?)\\s*\\n");
             Matcher entityNameMatcher = entityNamePattern.matcher(content);
             if (entityNameMatcher.find()) {
-                contentObj.setEntityName(entityNameMatcher.group(1));
+                String entityName = entityNameMatcher.group(1).replace("\\ ", "");
+                contentObj.setEntityName(entityName);
             }
 
             // 解析告警时间
             Pattern timePattern = Pattern.compile("告警时间：(.+?)(?:\\s*\\n|$)");
             Matcher timeMatcher = timePattern.matcher(content);
             if (timeMatcher.find()) {
-                contentObj.setTimeStr(timeMatcher.group(1));
+                String timeStr = timeMatcher.group(1).replace("\\ ", "");
+                contentObj.setTimeStr(timeStr);
             }
             return contentObj;
         }
