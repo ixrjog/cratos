@@ -112,6 +112,10 @@ public enum EdsAssetTypeEnum {
     EAGLECLOUD_SASE_DATA_SECURITY_ALERT_NOTIFICATION("Data Security Alert Notification", 1),
     EAGLECLOUD_SASE_DATA_SECURITY_ALERT_RECORD("Data Security Alert Record", 2),
 
+    ZBX_HOST("Host", 85),
+    ZBX_HOSTGROUP("HostGroup", 86),
+    ZBX_TEMPLATE("Template", 87),
+
     DEF("Default", 9999);
 
     private final String displayName;

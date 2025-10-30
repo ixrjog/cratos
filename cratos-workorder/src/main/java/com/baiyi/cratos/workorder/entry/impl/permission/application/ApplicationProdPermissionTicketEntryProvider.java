@@ -42,6 +42,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
     private final EnvFacade envFacade;
 
     private static final String GROUP_VALUE = "prod";
+    public static final Long TEMP_AUTH_TIME_MINUTES = 120L;
 
     public ApplicationProdPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,
@@ -108,7 +109,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
                                 UserPermissionBusinessParam.BusinessPermission businessPermission) throws WorkOrderTicketException {
         List<Env> envs = queryEnv(GROUP_VALUE);
         // 临时授权15分钟
-        Date expiredTime = ExpiredUtils.generateExpirationTime(15L, TimeUnit.MINUTES);
+        Date expiredTime = ExpiredUtils.generateExpirationTime(TEMP_AUTH_TIME_MINUTES, TimeUnit.MINUTES);
         UserPermissionBusinessParam.BusinessPermission prodBusinessPermission = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(businessPermission.getBusinessId())
                 .name(businessPermission.getName())

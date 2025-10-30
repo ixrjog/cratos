@@ -33,7 +33,8 @@ public enum EdsInstanceTypeEnum {
     OPSCLOUD,
     ALIMAIL,
     JENKINS,
-    EAGLECLOUD_SASE;
+    EAGLECLOUD_SASE,
+    ZABBIX;
 
     public static OptionsVO.Options toOptions(){
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()

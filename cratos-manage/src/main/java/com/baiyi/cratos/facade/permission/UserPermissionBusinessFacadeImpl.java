@@ -24,6 +24,7 @@ import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * &#064;Date  2025/1/17 10:11
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessFacade {
@@ -89,15 +91,20 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                 .businessId(permissionBusiness.getBusinessId())
                 .build();
         Map<String, UserPermission> userPermissionMap = queryUserPermissionMap(username, hasBusiness);
-        businessPermission.getRoleMembers()
-                .forEach(roleMember -> {
-                    if (roleMember.getChecked()) {
-                        grantPermission(username, businessType, businessPermission, permissionBusiness, envLifecycleMap,
-                                userPermissionMap, roleMember);
-                    } else {
-                        revokePermission(userPermissionMap, roleMember);
-                    }
-                });
+        for (UserPermissionBusinessParam.RoleMember roleMember : businessPermission.getRoleMembers()) {
+            if (roleMember.getChecked()) {
+                try {
+                    grantPermission(username, businessType, businessPermission, permissionBusiness, envLifecycleMap,
+                            userPermissionMap, roleMember);
+                } catch (Exception e) {
+                    log.error("Failed to grant user permission. username={}, businessType={}, businessId={}, role={}",
+                            username, businessType, businessPermission.getBusinessId(), roleMember.getRole());
+                    log.error(e.getMessage(), e);
+                }
+            } else {
+                revokePermission(userPermissionMap, roleMember);
+            }
+        }
     }
 
     private void grantPermission(String username, String businessType,

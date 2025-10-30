@@ -40,6 +40,7 @@
         <module>cratos-socks-server</module>
         <module>cratos-eds-azure</module>
         <module>cratos-eds-eaglecloud</module>
+        <module>cratos-eds-zabbix</module>
     </modules>
 
     <properties>
