@@ -92,6 +92,7 @@ public class ZbxHostResult {
         private String hostid;
         private List<ZbxTemplateResult.Template> parentTemplates;
         private List<ZbxHostGroupResult.HostGroup> hostgroups;
+        private List<ZbxInterfaceResult.Interface> interfaces;
     }
 
 }

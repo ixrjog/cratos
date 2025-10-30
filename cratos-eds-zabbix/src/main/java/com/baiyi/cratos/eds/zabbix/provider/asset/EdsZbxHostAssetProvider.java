@@ -14,13 +14,16 @@ import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.zabbix.repo.ZbxHostRepo;
 import com.baiyi.cratos.eds.zabbix.reslut.ZbxHostResult;
+import com.baiyi.cratos.eds.zabbix.reslut.ZbxInterfaceResult;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -72,8 +75,17 @@ public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZab
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance,
                                          ZbxHostResult.Host entity) {
+        String assetKey = Optional.ofNullable(entity)
+                .map(ZbxHostResult.Host::getHostExtend)
+                .map(ZbxHostResult.HostExtend::getInterfaces)
+                .flatMap(list -> list.stream()
+                        .filter(e -> e != null && e.getUseip() == 1)
+                        .findFirst()
+                        .map(ZbxInterfaceResult.Interface::getIp))
+                .filter(StringUtils::hasText)
+                .orElse(entity.getName());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getHostid())
-                .assetKeyOf(entity.getName())
+                .assetKeyOf(assetKey)
                 .nameOf(entity.getName())
                 .descriptionOf(entity.getDescription())
                 .build();

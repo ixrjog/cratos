@@ -14,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Map.entry;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/10/29 11:41
@@ -35,8 +37,12 @@ public class ZbxHostRepo {
 
     public ZbxHostResult.HostExtend getHostExtend(EdsZabbixConfigModel.Zabbix zbx, String hostid) {
         ZbxHostService zbxService = ZbxServiceFactory.createService(zbx, ZbxHostService.class);
-        Map<String, Object> params = Map.of("output", "extend", "selectParentTemplates", List.of("templateid", "name"),
-                "selectHostGroups", "extend", "hostids", hostid);
+        Map<String, Object> params = Map.ofEntries(
+                entry("output", "extend"),
+                entry("selectParentTemplates", List.of("templateid", "name")),
+                entry("selectHostGroups", "extend"),
+                entry("selectInterfaces", "extend"),
+                entry("hostids", hostid));
         ZbxHostParam.GetHostParam param = ZbxHostParam.GetHostParam.builder()
                 .params(params)
                 .build();
