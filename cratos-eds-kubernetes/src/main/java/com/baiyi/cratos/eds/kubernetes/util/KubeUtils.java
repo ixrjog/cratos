@@ -59,6 +59,11 @@ public class KubeUtils {
             if (CollectionUtils.isEmpty(containers)) {
                 return Optional.empty();
             }
+            // 策略1：只有一个容器直接返回
+            if (containers.size() == 1) {
+                return Optional.of(containers.getFirst());
+            }
+            // 策略2：按deployment名称匹配
             Optional<Container> optionalContainer = containers.stream()
                     .filter(e -> e.getName()
                             .equals(deploymentName))
@@ -66,6 +71,7 @@ public class KubeUtils {
             if (optionalContainer.isPresent()) {
                 return optionalContainer;
             }
+            // 策略3：如果策略1没找到，按应用名称匹配
             return containers.stream()
                     .filter(e -> e.getName()
                             .equals(appNameOf(deployment)))
@@ -108,11 +114,9 @@ public class KubeUtils {
         Optional<Map<String, String>> optionalLabels = Optional.of(deployment)
                 .map(Deployment::getMetadata)
                 .map(ObjectMeta::getLabels);
-
         if (optionalLabels.isEmpty()) {
             return deploymentName;
         }
-
         if (optionalLabels.get()
                 .containsKey("app")) {
             final String app = optionalLabels.get()
