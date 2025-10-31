@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.zabbix.param.base;
+package com.baiyi.cratos.eds.zabbix.request.base;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder(toBuilder = true)
-public class HasZbxMethod implements BaseZbxParam.HasMethodAnnotate {
+public class HasZbxMethod implements BaseZbxRequest.HasMethodAnnotate {
 
     private String method;
 

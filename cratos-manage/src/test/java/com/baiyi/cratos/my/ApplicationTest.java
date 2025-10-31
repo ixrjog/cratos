@@ -165,7 +165,7 @@ public class ApplicationTest extends BaseUnit {
                     .businessId(app.getId())
                     .build();
 
-            BusinessTag businessTag = businessTagFacade.getBusinessTag(hasBusiness, SysTagKeys.LEVEL.getKey());
+            BusinessTag businessTag = businessTagFacade.getBusinessTag(hasBusiness, SysTagKeys.LEVEL.name());
 
 
             if (Objects.nonNull(businessTag) && "A1".equals(businessTag.getTagValue())) {

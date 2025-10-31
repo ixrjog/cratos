@@ -1,7 +1,8 @@
 package com.baiyi.cratos.eds.zabbix.service;
 
-import com.baiyi.cratos.eds.zabbix.auth.ZbxAuthParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.ZbxAuthRequest;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
@@ -15,7 +16,7 @@ import org.springframework.web.service.annotation.PostExchange;
 public interface ZbxAuthService extends BaseZbxService {
 
     @PostExchange("/api_jsonrpc.php")
-    ZbxResponse<String> userLogin(@RequestBody ZbxAuthParam.LoginParam param);
+    ZbxResponse<String> userLogin(@RequestBody ZbxAuthRequest.Login request);
 
 }
 

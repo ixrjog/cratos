@@ -1,9 +1,10 @@
 package com.baiyi.cratos.eds.zabbix.auth;
 
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.ZbxAuthRequest;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxAuthService;
-import com.baiyi.cratos.eds.zabbix.service.ZbxServiceFactory;
+import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class ZbxTokenHolder {
     @Cacheable(cacheNames = VERY_SHORT, key = "'V0:ZBX:TOKEN:SERVERURL:'+ #zbx.url + ':USERNAME:' + #zbx.cred.username", unless = "#result == null")
     public String getToken(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxAuthService zbxAuthService = ZbxServiceFactory.createService(zbx, ZbxAuthService.class);
-        ZbxAuthParam.LoginParam param = ZbxAuthParam.LoginParam.builder()
+        ZbxAuthRequest.Login param = ZbxAuthRequest.Login.builder()
                 .build();
         param.setUsername(zbx.getCred()
                 .getUsername());
@@ -33,7 +34,7 @@ public class ZbxTokenHolder {
     @Cacheable(cacheNames = VERY_SHORT, key = "'V0:ZBX:BEARER:SERVERURL:'+ #zbx.url + ':USERNAME:' + #zbx.cred.username", unless = "#result == null")
     public String getBearer(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxAuthService zbxAuthService = ZbxServiceFactory.createService(zbx, ZbxAuthService.class);
-        ZbxAuthParam.LoginParam param = ZbxAuthParam.LoginParam.builder()
+        ZbxAuthRequest.Login param = ZbxAuthRequest.Login.builder()
                 .build();
         param.setUsername(zbx.getCred()
                 .getUsername());

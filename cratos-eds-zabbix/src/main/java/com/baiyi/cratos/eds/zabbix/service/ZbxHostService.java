@@ -1,8 +1,9 @@
 package com.baiyi.cratos.eds.zabbix.service;
 
-import com.baiyi.cratos.eds.zabbix.param.ZbxHostParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxHostResult;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
+import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -20,10 +21,10 @@ public interface ZbxHostService extends BaseZbxService {
 
     @PostExchange("/api_jsonrpc.php")
     ZbxResponse<List<ZbxHostResult.Host>> getHost(@RequestHeader("Authorization") String bearer,
-                                                  @RequestBody ZbxHostParam.GetHostParam param);
+                                                  @RequestBody ZbxHostRequest.GetHost request);
 
     @PostExchange("/api_jsonrpc.php")
     ZbxResponse<List<ZbxHostResult.HostExtend>> getHostExtend(@RequestHeader("Authorization") String bearer,
-                                                                    @RequestBody ZbxHostParam.GetHostParam param);
+                                                                    @RequestBody ZbxHostRequest.GetHost request);
 
 }

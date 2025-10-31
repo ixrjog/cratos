@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.zabbix.param.base;
+package com.baiyi.cratos.eds.zabbix.request.base;
 
 import com.baiyi.cratos.eds.zabbix.annotation.ZbxParamMethod;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction;
@@ -17,10 +17,9 @@ import java.util.Map;
  * &#064;Date  2025/10/29 10:14
  * &#064;Version 1.0
  */
-public class BaseZbxParam {
+public class BaseZbxRequest {
 
     public interface BaseRequest {
-
         void setMethod(String method);
 
         void setAuth(String auth);
@@ -28,6 +27,12 @@ public class BaseZbxParam {
         String getMethod();
 
         String getAuth();
+
+        Map<String, Object> getParams();
+
+        default void putParam(String key, Object value) {
+            getParams().put(key, value);
+        }
     }
 
     interface HasMethodAnnotate {
@@ -49,7 +54,7 @@ public class BaseZbxParam {
     @EqualsAndHashCode(callSuper = true)
     @Data
     @SuperBuilder(toBuilder = true)
-    public static class DefaultParam extends HasZbxMethod implements BaseZbxParam.BaseRequest {
+    public static class DefaultRequest extends HasZbxMethod implements BaseZbxRequest.BaseRequest {
         private final String jsonrpc = "2.0";
         @Builder.Default
         private Map<String, Object> params = Maps.newHashMap();
@@ -60,7 +65,7 @@ public class BaseZbxParam {
 
     @SuperBuilder(toBuilder = true)
     @ZbxParamMethod(group = ZbxAPIGroup.APIINFO, action = ZbxAPIAction.VERSION)
-    public static class InfoVersionParam extends BaseZbxParam.DefaultParam {
+    public static class InfoVersion extends DefaultRequest {
     }
 
 }

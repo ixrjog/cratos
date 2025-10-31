@@ -1,8 +1,8 @@
-package com.baiyi.cratos.eds.zabbix.param;
+package com.baiyi.cratos.eds.zabbix.request;
 
 import com.baiyi.cratos.eds.zabbix.annotation.ZbxParamMethod;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIGroup;
-import com.baiyi.cratos.eds.zabbix.param.base.BaseZbxParam;
+import com.baiyi.cratos.eds.zabbix.request.base.BaseZbxRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -13,16 +13,16 @@ import lombok.experimental.SuperBuilder;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ZbxHostParam {
+public class ZbxHostRequest {
 
     @SuperBuilder(toBuilder = true)
     @ZbxParamMethod(group = ZbxAPIGroup.HOST, action = com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction.GET)
-    public static class GetHostParam extends BaseZbxParam.DefaultParam {
+    public static class GetHost extends BaseZbxRequest.DefaultRequest {
     }
 
     @SuperBuilder(toBuilder = true)
     @ZbxParamMethod(group = ZbxAPIGroup.HOSTPROTOTYPE, action = com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction.GET)
-    public static class GetHostPrototypeParam extends BaseZbxParam.DefaultParam {
+    public static class GetHostPrototype extends BaseZbxRequest.DefaultRequest {
     }
 
 }

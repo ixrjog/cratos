@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.zabbix.reslut;
+package com.baiyi.cratos.eds.zabbix.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;

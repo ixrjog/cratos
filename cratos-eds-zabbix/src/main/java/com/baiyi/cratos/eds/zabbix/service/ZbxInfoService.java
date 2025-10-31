@@ -1,7 +1,8 @@
 package com.baiyi.cratos.eds.zabbix.service;
 
-import com.baiyi.cratos.eds.zabbix.param.base.BaseZbxParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.base.BaseZbxRequest;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
@@ -15,6 +16,6 @@ import org.springframework.web.service.annotation.PostExchange;
 public interface ZbxInfoService extends BaseZbxService {
 
     @PostExchange("/api_jsonrpc.php")
-    ZbxResponse<String> getVersion(@RequestBody BaseZbxParam.InfoVersionParam param);
+    ZbxResponse<String> getVersion(@RequestBody BaseZbxRequest.InfoVersion request);
 
 }

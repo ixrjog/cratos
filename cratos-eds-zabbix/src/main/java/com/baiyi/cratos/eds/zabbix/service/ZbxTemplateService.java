@@ -1,8 +1,9 @@
 package com.baiyi.cratos.eds.zabbix.service;
 
-import com.baiyi.cratos.eds.zabbix.param.ZbxTemplateParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxTemplateResult;
+import com.baiyi.cratos.eds.zabbix.request.ZbxTemplateRequest;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.result.ZbxTemplateResult;
+import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -20,6 +21,6 @@ public interface ZbxTemplateService extends BaseZbxService {
 
     @PostExchange("/api_jsonrpc.php")
     ZbxResponse<List<ZbxTemplateResult.Template>> getTemplate(@RequestHeader("Authorization") String bearer,
-                                                              @RequestBody ZbxTemplateParam.GetTemplateParam param);
+                                                              @RequestBody ZbxTemplateRequest.GetTemplate request);
 
 }

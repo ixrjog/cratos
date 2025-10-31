@@ -2,11 +2,11 @@ package com.baiyi.cratos.eds.zabbix.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
-import com.baiyi.cratos.eds.zabbix.param.ZbxHostParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxHostResult;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
+import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxHostService;
-import com.baiyi.cratos.eds.zabbix.service.ZbxServiceFactory;
+import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -29,7 +29,7 @@ public class ZbxHostRepo {
 
     public List<ZbxHostResult.Host> listHost(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxHostService zbxService = ZbxServiceFactory.createService(zbx, ZbxHostService.class);
-        ZbxHostParam.GetHostParam param = ZbxHostParam.GetHostParam.builder()
+        ZbxHostRequest.GetHost param = ZbxHostRequest.GetHost.builder()
                 .build();
         ZbxResponse<List<ZbxHostResult.Host>> response = zbxService.getHost(zbxTokenHolder.getBearer(zbx), param);
         return response.getResult();
@@ -43,11 +43,11 @@ public class ZbxHostRepo {
                 entry("selectHostGroups", "extend"),
                 entry("selectInterfaces", "extend"),
                 entry("hostids", hostid));
-        ZbxHostParam.GetHostParam param = ZbxHostParam.GetHostParam.builder()
+        ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .params(params)
                 .build();
         ZbxResponse<List<ZbxHostResult.HostExtend>> response = zbxService.getHostExtend(zbxTokenHolder.getBearer(zbx),
-                param);
+                request);
         return CollectionUtils.isEmpty(response.getResult()) ? null : response.getResult()
                 .getFirst();
     }

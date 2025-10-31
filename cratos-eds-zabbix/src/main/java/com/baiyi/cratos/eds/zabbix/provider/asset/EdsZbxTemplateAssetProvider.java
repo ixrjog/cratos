@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.zabbix.repo.ZbxTemplateRepo;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxTemplateResult;
+import com.baiyi.cratos.eds.zabbix.result.ZbxTemplateResult;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;

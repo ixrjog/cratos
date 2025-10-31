@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.zabbix.service;
+package com.baiyi.cratos.eds.zabbix.service.base;
 
 /**
  * &#064;Author  baiyi

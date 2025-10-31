@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.zabbix.reslut;
+package com.baiyi.cratos.eds.zabbix.result.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

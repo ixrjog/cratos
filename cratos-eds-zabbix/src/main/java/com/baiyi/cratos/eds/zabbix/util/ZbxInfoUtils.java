@@ -1,10 +1,10 @@
 package com.baiyi.cratos.eds.zabbix.util;
 
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
-import com.baiyi.cratos.eds.zabbix.param.base.BaseZbxParam;
-import com.baiyi.cratos.eds.zabbix.reslut.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.request.base.BaseZbxRequest;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxInfoService;
-import com.baiyi.cratos.eds.zabbix.service.ZbxServiceFactory;
+import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +18,7 @@ public class ZbxInfoUtils {
 
     public static String getVersion(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxInfoService zbxService = ZbxServiceFactory.createService(zbx, ZbxInfoService.class);
-        BaseZbxParam.InfoVersionParam param = BaseZbxParam.InfoVersionParam.builder()
+        BaseZbxRequest.InfoVersion param = BaseZbxRequest.InfoVersion.builder()
                 .build();
         ZbxResponse<String> response = zbxService.getVersion(param);
         return response.getResult();

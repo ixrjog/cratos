@@ -33,9 +33,22 @@ public class KubeUtils {
 
     /**
      * 从Deployment中找出应用容器
+     * 
+     * deployment-pod中有多个container（如主应用容器、sidecar容器、init容器等），
+     * findAppContainerOf方法通过多种策略找出应用对应的主容器，并返回给前端页面标识主应用容器（前端默认选中）
+     * 
+     * 查找策略（按优先级）：
+     * 1. 单容器场景：如果只有一个容器，直接返回
+     * 2. 按deployment名称匹配：容器名称与deployment名称相同
+     * 3. 按应用名称匹配：容器名称与应用名称相同（通过appNameOf方法获取）
+     * 
+     * 使用场景：
+     * - 在多容器Pod中识别主应用容器
+     * - 区分应用容器和sidecar容器（如istio-proxy、日志收集、监控等辅助容器）
+     * - 为前端提供默认选中的容器，提升用户体验
      *
-     * @param deployment
-     * @return
+     * @param deployment Kubernetes Deployment对象
+     * @return Optional<Container> 找到的主应用容器，可能为空
      */
     public static Optional<Container> findAppContainerOf(Deployment deployment) {
         if (deployment == null) {
