@@ -18,9 +18,9 @@ public class ZbxInfoUtils {
 
     public static String getVersion(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxInfoService zbxService = ZbxServiceFactory.createService(zbx, ZbxInfoService.class);
-        BaseZbxRequest.InfoVersion param = BaseZbxRequest.InfoVersion.builder()
+        BaseZbxRequest.InfoVersion request = BaseZbxRequest.InfoVersion.builder()
                 .build();
-        ZbxResponse<String> response = zbxService.getVersion(param);
+        ZbxResponse<String> response = zbxService.getVersion(request);
         return response.getResult();
     }
 

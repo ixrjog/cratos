@@ -1,7 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
-import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
 import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
@@ -25,29 +24,23 @@ import static java.util.Map.entry;
 @RequiredArgsConstructor
 public class ZbxHostRepo {
 
-    private final ZbxTokenHolder zbxTokenHolder;
-
     public List<ZbxHostResult.Host> listHost(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxHostService zbxService = ZbxServiceFactory.createService(zbx, ZbxHostService.class);
-        ZbxHostRequest.GetHost param = ZbxHostRequest.GetHost.builder()
+        ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .build();
-        ZbxResponse<List<ZbxHostResult.Host>> response = zbxService.getHost(zbxTokenHolder.getBearer(zbx), param);
+        ZbxResponse<List<ZbxHostResult.Host>> response = zbxService.getHost(request);
         return response.getResult();
     }
 
     public ZbxHostResult.HostExtend getHostExtend(EdsZabbixConfigModel.Zabbix zbx, String hostid) {
         ZbxHostService zbxService = ZbxServiceFactory.createService(zbx, ZbxHostService.class);
-        Map<String, Object> params = Map.ofEntries(
-                entry("output", "extend"),
-                entry("selectParentTemplates", List.of("templateid", "name")),
-                entry("selectHostGroups", "extend"),
-                entry("selectInterfaces", "extend"),
-                entry("hostids", hostid));
+        Map<String, Object> params = Map.ofEntries(entry("output", "extend"),
+                entry("selectParentTemplates", List.of("templateid", "name")), entry("selectHostGroups", "extend"),
+                entry("selectInterfaces", "extend"), entry("hostids", hostid));
         ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .params(params)
                 .build();
-        ZbxResponse<List<ZbxHostResult.HostExtend>> response = zbxService.getHostExtend(zbxTokenHolder.getBearer(zbx),
-                request);
+        ZbxResponse<List<ZbxHostResult.HostExtend>> response = zbxService.getHostExtend(request);
         return CollectionUtils.isEmpty(response.getResult()) ? null : response.getResult()
                 .getFirst();
     }

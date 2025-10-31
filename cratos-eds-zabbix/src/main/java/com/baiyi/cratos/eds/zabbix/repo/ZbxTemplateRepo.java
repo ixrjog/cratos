@@ -1,12 +1,11 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
-import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
 import com.baiyi.cratos.eds.zabbix.request.ZbxTemplateRequest;
-import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.result.ZbxTemplateResult;
-import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxTemplateService;
+import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ZbxTemplateRepo {
 
-    private final ZbxTokenHolder zbxTokenHolder;
-
     public List<ZbxTemplateResult.Template> listTemplate(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxTemplateService zbxService = ZbxServiceFactory.createService(zbx, ZbxTemplateService.class);
         ZbxTemplateRequest.GetTemplate request = ZbxTemplateRequest.GetTemplate.builder()
                 .build();
-        ZbxResponse<List<ZbxTemplateResult.Template>> response = zbxService.getTemplate(zbxTokenHolder.getBearer(zbx), request);
+        ZbxResponse<List<ZbxTemplateResult.Template>> response = zbxService.getTemplate(request);
         return response.getResult();
     }
 

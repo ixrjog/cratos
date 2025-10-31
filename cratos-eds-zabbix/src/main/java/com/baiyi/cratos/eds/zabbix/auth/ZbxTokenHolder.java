@@ -18,6 +18,12 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
 @Component
 public class ZbxTokenHolder {
 
+    /**
+     * 测试使用
+     *
+     * @param zbx
+     * @return
+     */
     @Cacheable(cacheNames = VERY_SHORT, key = "'V0:ZBX:TOKEN:SERVERURL:'+ #zbx.url + ':USERNAME:' + #zbx.cred.username", unless = "#result == null")
     public String getToken(EdsZabbixConfigModel.Zabbix zbx) {
         ZbxAuthService zbxAuthService = ZbxServiceFactory.createService(zbx, ZbxAuthService.class);
