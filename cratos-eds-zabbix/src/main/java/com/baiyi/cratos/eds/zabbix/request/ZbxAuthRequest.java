@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.request;
 
-import com.baiyi.cratos.eds.zabbix.annotation.ZbxParamMethod;
+import com.baiyi.cratos.eds.zabbix.annotation.ZbxRequestMethod;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIGroup;
 import com.baiyi.cratos.eds.zabbix.request.base.BaseZbxRequest;
@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class ZbxAuthRequest {
 
     @SuperBuilder(toBuilder = true)
-    @ZbxParamMethod(group = ZbxAPIGroup.USER, action = ZbxAPIAction.LOGIN)
+    @ZbxRequestMethod(group = ZbxAPIGroup.USER, action = ZbxAPIAction.LOGIN)
     public static class Login extends BaseZbxRequest.DefaultRequest {
 
         public void setUsername(String username) {

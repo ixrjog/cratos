@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.request.base;
 
-import com.baiyi.cratos.eds.zabbix.annotation.ZbxParamMethod;
+import com.baiyi.cratos.eds.zabbix.annotation.ZbxRequestMethod;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIGroup;
 import com.google.common.collect.Maps;
@@ -37,8 +37,8 @@ public class BaseZbxRequest {
 
     interface HasMethodAnnotate {
         default String acqMethod() {
-            ZbxParamMethod zbxParamMethod = AopUtils.getTargetClass(this)
-                    .getAnnotation(ZbxParamMethod.class);
+            ZbxRequestMethod zbxParamMethod = AopUtils.getTargetClass(this)
+                    .getAnnotation(ZbxRequestMethod.class);
             if (zbxParamMethod != null) {
                 return zbxParamMethod.group()
                         .name()
@@ -64,7 +64,7 @@ public class BaseZbxRequest {
     }
 
     @SuperBuilder(toBuilder = true)
-    @ZbxParamMethod(group = ZbxAPIGroup.APIINFO, action = ZbxAPIAction.VERSION)
+    @ZbxRequestMethod(group = ZbxAPIGroup.APIINFO, action = ZbxAPIAction.VERSION)
     public static class InfoVersion extends DefaultRequest {
     }
 

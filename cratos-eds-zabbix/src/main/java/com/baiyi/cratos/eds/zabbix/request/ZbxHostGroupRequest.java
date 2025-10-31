@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.request;
 
-import com.baiyi.cratos.eds.zabbix.annotation.ZbxParamMethod;
+import com.baiyi.cratos.eds.zabbix.annotation.ZbxRequestMethod;
 import com.baiyi.cratos.eds.zabbix.enums.ZbxAPIGroup;
 import com.baiyi.cratos.eds.zabbix.request.base.BaseZbxRequest;
 import lombok.AccessLevel;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class ZbxHostGroupRequest {
 
     @SuperBuilder(toBuilder = true)
-    @ZbxParamMethod(group = ZbxAPIGroup.HOSTGROUP, action = com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction.GET)
+    @ZbxRequestMethod(group = ZbxAPIGroup.HOSTGROUP, action = com.baiyi.cratos.eds.zabbix.enums.ZbxAPIAction.GET)
     public static class GetHostGroup extends BaseZbxRequest.DefaultRequest {
     }
 
