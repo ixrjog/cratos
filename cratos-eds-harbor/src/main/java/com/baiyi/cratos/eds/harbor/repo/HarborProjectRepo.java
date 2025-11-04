@@ -6,6 +6,8 @@ import com.baiyi.cratos.eds.harbor.model.HarborProject;
 import com.baiyi.cratos.eds.harbor.service.HarborService;
 import com.baiyi.cratos.eds.harbor.service.HarborServiceFactory;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
  * &#064;Date  2024/7/16 上午11:07
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HarborProjectRepo {
 
     public static List<HarborProject.Project> listProjects(EdsHarborConfigModel.Harbor harbor) {
@@ -28,8 +31,7 @@ public class HarborProjectRepo {
                 .build();
         List<HarborProject.Project> result = Lists.newArrayList();
         while (true) {
-            List<HarborProject.Project> projects = harborService.listProjects(harbor.getCred()
-                    .toBasic(), param);
+            List<HarborProject.Project> projects = harborService.listProjects(param);
             if (CollectionUtils.isEmpty(projects)) {
                 return result;
             }

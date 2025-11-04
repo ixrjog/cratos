@@ -30,24 +30,20 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_TEMPLATE)
 public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxTemplateResult.Template> {
 
-    private final ZbxTemplateRepo zbxTemplateRepo;
-
     public EdsZbxTemplateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                        EdsAssetIndexFacade edsAssetIndexFacade,
                                        UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                       EdsInstanceProviderHolderBuilder holderBuilder,
-                                       ZbxTemplateRepo zbxTemplateRepo) {
+                                       EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.zbxTemplateRepo = zbxTemplateRepo;
     }
 
     @Override
     protected List<ZbxTemplateResult.Template> listEntities(
             ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            return zbxTemplateRepo.listTemplate(instance.getEdsConfigModel());
+            return ZbxTemplateRepo.listTemplate(instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

@@ -50,6 +50,8 @@ public class TrafficLayerDomainVO {
         private Boolean valid;
         private String comment;
         private Map<String, Integer> resourceCount;
+        @Schema(description = "Record Environments")
+        private List<TrafficLayerDomainVO.DomainEnv> recordEnvs;
 
         @Override
         public Integer getBusinessId() {

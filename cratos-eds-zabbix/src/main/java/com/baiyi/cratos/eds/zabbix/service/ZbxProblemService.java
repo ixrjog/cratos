@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.zabbix.service;
 
-import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
-import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
+import com.baiyi.cratos.eds.zabbix.request.ZbxProblemRequest;
+import com.baiyi.cratos.eds.zabbix.result.ZbxProblemResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,23 +9,19 @@ import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/10/29 11:37
+ * &#064;Date  2025/11/3 17:02
  * &#064;Version 1.0
  */
 @HttpExchange(accept = "application/json-rpc", contentType = "application/json")
-public interface ZbxHostService extends BaseZbxService {
+public interface ZbxProblemService extends BaseZbxService {
 
     @PostExchange("/api_jsonrpc.php")
-    ZbxResponse<List<ZbxHostResult.Host>> getHost(@RequestBody ZbxHostRequest.GetHost request);
+    ZbxResponse<List<ZbxProblemResult.Problem>> getProblem(@RequestBody ZbxProblemRequest.GetProblem request);
 
     @PostExchange("/api_jsonrpc.php")
-    ZbxResponse<Map<String, ZbxHostResult.Host>> listHostIds(@RequestBody ZbxHostRequest.GetHost request);
-
-    @PostExchange("/api_jsonrpc.php")
-    ZbxResponse<List<ZbxHostResult.HostExtend>> getHostExtend(@RequestBody ZbxHostRequest.GetHost request);
+    String getProblemTest(@RequestBody ZbxProblemRequest.GetProblem request);
 
 }

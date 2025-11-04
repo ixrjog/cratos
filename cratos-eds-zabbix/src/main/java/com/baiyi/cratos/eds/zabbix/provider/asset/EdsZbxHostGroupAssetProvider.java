@@ -30,24 +30,21 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_HOSTGROUP)
 public class EdsZbxHostGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxHostGroupResult.HostGroup> {
 
-    private final ZbxHostGroupRepo zbxHostGroupRepo;
-
     public EdsZbxHostGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                         EdsAssetIndexFacade edsAssetIndexFacade,
                                         UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                        EdsInstanceProviderHolderBuilder holderBuilder,
-                                        ZbxHostGroupRepo zbxHostGroupRepo) {
+                                        EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.zbxHostGroupRepo = zbxHostGroupRepo;
+
     }
 
     @Override
     protected List<ZbxHostGroupResult.HostGroup> listEntities(
             ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            return zbxHostGroupRepo.listHostGroup(instance.getEdsConfigModel());
+            return ZbxHostGroupRepo.listHostGroup(instance.getEdsConfigModel());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

@@ -34,23 +34,20 @@ import java.util.Optional;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_HOST)
 public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxHostResult.Host> {
 
-    private final ZbxHostRepo zbxHostRepo;
-
     public EdsZbxHostAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                    CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                    EdsAssetIndexFacade edsAssetIndexFacade,
                                    UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                   EdsInstanceProviderHolderBuilder holderBuilder, ZbxHostRepo zbxHostRepo) {
+                                   EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.zbxHostRepo = zbxHostRepo;
     }
 
     @Override
     protected List<ZbxHostResult.Host> listEntities(
             ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            List<ZbxHostResult.Host> hosts = zbxHostRepo.listHost(instance.getEdsConfigModel());
+            List<ZbxHostResult.Host> hosts = ZbxHostRepo.listHost(instance.getEdsConfigModel());
             if (CollectionUtils.isEmpty(hosts)) {
                 return List.of();
             } else {
@@ -65,7 +62,7 @@ public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZab
     private void enrichHosts(EdsZabbixConfigModel.Zabbix zbx, List<ZbxHostResult.Host> hosts) {
         for (ZbxHostResult.Host host : hosts) {
             try {
-                ZbxHostResult.HostExtend hostExtend = zbxHostRepo.getHostExtend(zbx, host.getHostid());
+                ZbxHostResult.HostExtend hostExtend = ZbxHostRepo.getHostExtend(zbx, host.getHostid());
                 host.setHostExtend(hostExtend);
             } catch (Exception ignored) {
             }

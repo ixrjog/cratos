@@ -6,6 +6,8 @@ import com.baiyi.cratos.eds.harbor.model.HarborRepository;
 import com.baiyi.cratos.eds.harbor.service.HarborService;
 import com.baiyi.cratos.eds.harbor.service.HarborServiceFactory;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
  * &#064;Date  2024/7/16 上午11:52
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HarborRepositoryRepo {
 
     public static List<HarborRepository.Repository> listRepositories(EdsHarborConfigModel.Harbor harbor,
@@ -29,8 +32,7 @@ public class HarborRepositoryRepo {
                 .build();
         List<HarborRepository.Repository> result = Lists.newArrayList();
         while (true) {
-            List<HarborRepository.Repository> repositories = harborService.listRepositories(harbor.getCred()
-                    .toBasic(), project, param);
+            List<HarborRepository.Repository> repositories = harborService.listRepositories(project, param);
             if (CollectionUtils.isEmpty(repositories)) {
                 return result;
             }

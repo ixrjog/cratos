@@ -2,18 +2,20 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.util.IdentityUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
+import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.builder.ResourceCountBuilder;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetService assetService;
     private final EdsAssetIndexService assetIndexService;
+    private final TrafficLayerDomainFacade trafficLayerDomainFacade;
 
     // https://dns.console.aliyun.com/#/dns/setting/example.com
     private static final String ALIYUN_DNS_CONSOLE_TPL = "https://dns.console.aliyun.com/#/dns/setting/{}";
@@ -77,6 +80,11 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
                     .toList();
             vo.setDnsProviders(dnsProviders);
         }
+        List<TrafficLayerDomainVO.DomainEnv> recordEnvs = trafficLayerDomainFacade.queryTrafficLayerDomainEnv(
+                TrafficLayerDomainParam.QueryDomainEnv.builder()
+                        .domainId(vo.getId())
+                        .build());
+        vo.setRecordEnvs(recordEnvs);
     }
 
     private String getConsoleUrl(String providerType, String registeredDomain, EdsAsset asset) {

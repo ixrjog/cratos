@@ -6,9 +6,7 @@ import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.DomainUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.StringUtils;
 
@@ -87,6 +85,8 @@ public class TrafficLayerDomainParam {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     @Schema
     public static class QueryDomainEnv {
