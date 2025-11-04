@@ -4,15 +4,11 @@ import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
@@ -22,9 +18,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.TRAFFIC_LAYER_RECORD;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DOMAIN_NAME;
@@ -44,7 +42,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetService assetService;
     private final EdsAssetIndexService assetIndexService;
-    private final TrafficLayerDomainFacade trafficLayerDomainFacade;
+    private final EnvService envService;
 
     // https://dns.console.aliyun.com/#/dns/setting/example.com
     private static final String ALIYUN_DNS_CONSOLE_TPL = "https://dns.console.aliyun.com/#/dns/setting/{}";
@@ -80,7 +78,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
                     .toList();
             vo.setDnsProviders(dnsProviders);
         }
-        List<TrafficLayerDomainVO.DomainEnv> recordEnvs = trafficLayerDomainFacade.queryTrafficLayerDomainEnv(
+        List<TrafficLayerDomainVO.DomainEnv> recordEnvs = queryTrafficLayerDomainEnv(
                 TrafficLayerDomainParam.QueryDomainEnv.builder()
                         .domainId(vo.getId())
                         .build());
@@ -114,6 +112,29 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
         Map<String, Integer> resourceCount = Maps.newHashMap();
         resourceCount.put(TRAFFIC_LAYER_RECORD.name(), recordService.selectCountByDomainId(domain.getId()));
         return resourceCount;
+    }
+
+    public List<TrafficLayerDomainVO.DomainEnv> queryTrafficLayerDomainEnv(
+            TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
+        return envService.selectAll()
+                .stream()
+                .filter(Env::getValid)
+                .map(e -> toTrafficLayerDomainEnv(queryDomainEnv.getDomainId(), e))
+                .sorted(Comparator.comparing(TrafficLayerDomainVO.DomainEnv::getSeq))
+                .collect(Collectors.toList());
+    }
+
+    private TrafficLayerDomainVO.DomainEnv toTrafficLayerDomainEnv(int domainId, Env env) {
+        TrafficLayerDomainRecord uniqueKey = TrafficLayerDomainRecord.builder()
+                .envName(env.getEnvName())
+                .domainId(domainId)
+                .build();
+        boolean valid = recordService.getByUniqueKey(uniqueKey) != null;
+        return TrafficLayerDomainVO.DomainEnv.builder()
+                .envName(env.getEnvName())
+                .seq(env.getSeq())
+                .valid(valid)
+                .build();
     }
 
 }

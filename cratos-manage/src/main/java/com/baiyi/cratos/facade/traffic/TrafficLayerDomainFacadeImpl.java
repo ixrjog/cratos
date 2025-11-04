@@ -4,9 +4,7 @@ import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.common.exception.TrafficLayerException;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
-import com.baiyi.cratos.domain.generator.TrafficLayerDomainRecord;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
@@ -18,9 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -68,25 +64,7 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
     @Override
     public List<TrafficLayerDomainVO.DomainEnv> queryTrafficLayerDomainEnv(
             TrafficLayerDomainParam.QueryDomainEnv queryDomainEnv) {
-        return envService.selectAll()
-                .stream()
-                .filter(Env::getValid)
-                .map(e -> toTrafficLayerDomainEnv(queryDomainEnv.getDomainId(), e))
-                .sorted(Comparator.comparing(TrafficLayerDomainVO.DomainEnv::getSeq))
-                .collect(Collectors.toList());
-    }
-
-    private TrafficLayerDomainVO.DomainEnv toTrafficLayerDomainEnv(int domainId, Env env) {
-        TrafficLayerDomainRecord uniqueKey = TrafficLayerDomainRecord.builder()
-                .envName(env.getEnvName())
-                .domainId(domainId)
-                .build();
-        boolean valid = recordService.getByUniqueKey(uniqueKey) != null;
-        return TrafficLayerDomainVO.DomainEnv.builder()
-                .envName(env.getEnvName())
-                .seq(env.getSeq())
-                .valid(valid)
-                .build();
+        return domainWrapper.queryTrafficLayerDomainEnv(queryDomainEnv);
     }
 
 }
