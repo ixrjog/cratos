@@ -41,7 +41,6 @@ public class EdsEagleCloudSaseInstanceManager {
                 .filter(instance -> {
                     EdsEagleCloudConfigModel.Sase sase = Optional.ofNullable(
                                     eagleCloudSaseConfigLoader.getConfig(instance.getConfigId()))
-                            .map(EdsEagleCloudConfigModel.Sase.class::cast)
                             .orElse(null);
                     return sase != null && token.equals(sase.getCred()
                             .getToken());

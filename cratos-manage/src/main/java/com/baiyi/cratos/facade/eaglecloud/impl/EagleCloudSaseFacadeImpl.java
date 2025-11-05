@@ -22,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTALK_MANAGER_USER_ID;
 
@@ -59,7 +60,6 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
         if (eventHolder != null) {
             eventHolder.importAsset(saseHook);
         }
-
         EagleCloudEventParam.Content content = EagleCloudEventParam.Content.parse(saseHook);
         if (content == null || !org.springframework.util.StringUtils.hasText(content.getEntityName())) {
             return;
@@ -71,20 +71,48 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
             return;
         }
         EdsAsset dingtalkUser = dingtalkUsers.getFirst();
+        // 查询主管
+        List<EdsAsset> dingtalkManagers = queryDingtalkManagers(eventHolder.getInstance()
+                .getEdsConfigModel(), dingtalkUser);
+        sendAlert(edsInstance, saseHook, content, dingtalkManagers);
+    }
+
+    private List<EdsAsset> queryDingtalkManagers(EdsEagleCloudConfigModel.Sase sase, EdsAsset dingtalkUser) {
         EdsAssetIndex dingtalkManagerUserIdIndex = edsAssetIndexService.getByAssetIdAndName(dingtalkUser.getId(),
                 DINGTALK_MANAGER_USER_ID);
         // 没有主管
-        if (dingtalkManagerUserIdIndex == null) {
-            return;
+        if (dingtalkManagerUserIdIndex != null) {
+            return edsAssetService.queryInstanceAssetsById(dingtalkUser.getInstanceId(),
+                    EdsAssetTypeEnum.DINGTALK_USER.name(), dingtalkManagerUserIdIndex.getValue());
         }
-        // 查询主管
-        List<EdsAsset> dingtalkManagers = edsAssetService.queryInstanceAssetsById(dingtalkUser.getInstanceId(),
-                EdsAssetTypeEnum.DINGTALK_USER.name(), dingtalkManagerUserIdIndex.getValue());
+        // 从数据源配置中获取安全管理员
+        List<EdsEagleCloudConfigModel.SecurityAdministrator> securityAdministrators = Optional.of(sase)
+                .map(EdsEagleCloudConfigModel.Sase::getSecurityAdministrators)
+                .orElse(List.of());
+        if (CollectionUtils.isEmpty(securityAdministrators)) {
+            return List.of();
+        }
+        // 遍历安全管理员
+        return securityAdministrators.stream()
+                .filter(sa -> org.springframework.util.StringUtils.hasText(sa.getDingtalkUserId()))
+                .map(sa -> edsAssetService.queryInstanceAssetsById(0, EdsAssetTypeEnum.DINGTALK_USER.name(),
+                        sa.getDingtalkUserId()))
+                .filter(managers -> !CollectionUtils.isEmpty(managers))
+                .flatMap(List::stream)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    private void sendAlert(EdsInstance edsInstance, EagleCloudEventParam.SaseHook saseHook,
+                           EagleCloudEventParam.Content content, List<EdsAsset> dingtalkManagers) {
         // 没有主管
         if (CollectionUtils.isEmpty(dingtalkManagers)) {
             return;
         }
-        EdsAsset dingtalkManager = dingtalkManagers.getFirst();
+        dingtalkManagers.forEach(dingtalkManager -> sendAlert(edsInstance, saseHook, content, dingtalkManager));
+    }
+
+    private void sendAlert(EdsInstance edsInstance, EagleCloudEventParam.SaseHook saseHook,
+                           EagleCloudEventParam.Content content, EdsAsset dingtalkManager) {
         EagleCloudEventParam.Receiver receiver = EagleCloudEventParam.Receiver.builder()
                 .dingtalkUserId(dingtalkManager.getAssetId())
                 .displayName(dingtalkManager.getName())
