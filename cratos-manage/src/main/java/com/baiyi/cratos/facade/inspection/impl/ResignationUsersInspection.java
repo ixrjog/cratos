@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.RESIGNATION_USERS_INSPECTION_NOTIFICATION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/4/21 11:31
@@ -67,7 +69,6 @@ public class ResignationUsersInspection extends BaseInspection {
     }
 
     public final static String[] RESIGNATION_USER_TABLE_FIELD_NAME = {"Username", "Name", "DisplayName", "Email", "Phone"};
-    public static final String RESIGNATION_USERS_INSPECTION_NOTIFICATION = "RESIGNATION_USERS_INSPECTION_NOTIFICATION";
     private static final String USERS_FIELD = "users";
     private static final boolean PRINT_TABLE = true;
 

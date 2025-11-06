@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION;
 import static com.baiyi.cratos.domain.constant.Global.APP_NAME;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
@@ -44,7 +45,6 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public static final String APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION = "APPLICATION_GROUPING_COMPLIANCE_INSPECTION_NOTIFICATION";
     private static final String MSG_TPL = "{}[{}/{}][{}/{}][{}/{}][{}/{}]<{}>";
     private static final String FILTER_LIST = """
             oss-chuanyinet-front-static

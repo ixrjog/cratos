@@ -73,14 +73,18 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      */
     protected List<EdsAsset> queryAssetsByInstanceAndType(ExternalDataSourceInstance<C> instance,
                                                           EdsAssetTypeEnum edsAssetTypeEnum) {
-        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
-                .getId(), edsAssetTypeEnum.name());
+        return edsAssetService.queryInstanceAssets(
+                instance.getEdsInstance()
+                        .getId(), edsAssetTypeEnum.name()
+        );
     }
 
     protected List<EdsAsset> queryAssetsByInstanceTypeAndRegion(ExternalDataSourceInstance<C> instance,
                                                                 EdsAssetTypeEnum edsAssetTypeEnum, String region) {
-        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
-                .getId(), edsAssetTypeEnum.name(), region);
+        return edsAssetService.queryInstanceAssets(
+                instance.getEdsInstance()
+                        .getId(), edsAssetTypeEnum.name(), region
+        );
     }
 
     protected abstract List<A> listEntities(ExternalDataSourceInstance<C> instance) throws EdsQueryEntitiesException;
@@ -96,9 +100,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         Set<Integer> idSet = getExistingAssetIds(instance);
         entities.forEach(e -> processAndRecordEntity(instance, idSet, e));
         if (!CollectionUtils.isEmpty(idSet)) {
-            log.info("Delete eds instance asset: instance={}, assetIds={}", instance.getEdsInstance()
-                    .getInstanceName(), Joiner.on("|")
-                    .join(idSet));
+            log.info(
+                    "Delete eds instance asset: instance={}, assetIds={}", instance.getEdsInstance()
+                            .getInstanceName(), Joiner.on("|")
+                            .join(idSet)
+            );
             idSet.forEach(simpleEdsFacade::deleteEdsAssetById);
         }
         // post processing
@@ -203,7 +209,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         EdsAsset edsAsset = edsAssetService.getByUniqueKey(newEdsAsset);
         if (edsAsset == null) {
             try {
-                edsAssetService.add(newEdsAsset);
+                addNewAsset(newEdsAsset);
             } catch (Exception e) {
                 log.error("Enter eds asset err: {}", e.getMessage());
             }
@@ -217,6 +223,28 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         }
         return newEdsAsset;
     }
+
+    /**
+     * 真正新增资产
+     * @param newEdsAsset
+     */
+    private void addNewAsset(EdsAsset newEdsAsset) {
+        try {
+            edsAssetService.add(newEdsAsset);
+            afterAssetCreated(newEdsAsset);
+        } catch (Exception e) {
+            log.error("Enter eds asset err: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * 新增资产 执行后续处理逻辑
+     * @param asset
+     */
+    protected void afterAssetCreated(EdsAsset asset) {
+        // 执行后续处理逻辑
+    }
+
 
     /**
      * 重写
@@ -245,8 +273,10 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
      * @return
      */
     private List<EdsAsset> queryExistingAssets(ExternalDataSourceInstance<C> instance) {
-        return edsAssetService.queryInstanceAssets(instance.getEdsInstance()
-                .getId(), getAssetType());
+        return edsAssetService.queryInstanceAssets(
+                instance.getEdsInstance()
+                        .getId(), getAssetType()
+        );
     }
 
     @Override

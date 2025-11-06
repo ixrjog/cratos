@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/8 下午4:30
@@ -33,7 +35,6 @@ public class CertificateInspection extends BaseInspection {
     private static final int CERTIFICATE_EXPIRY_DAYS = 30;
     private static final String CERTIFICATES_FIELD = "certificates";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
-    public static final String CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION = "CERTIFICATE_EXPIRATION_INSPECTION_NOTIFICATION";
 
     public CertificateInspection(NotificationTemplateService notificationTemplateService,
                                  DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,

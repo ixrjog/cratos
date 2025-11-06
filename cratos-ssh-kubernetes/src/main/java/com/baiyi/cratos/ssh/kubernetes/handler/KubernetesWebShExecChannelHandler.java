@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.kubernetes.handler;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -84,8 +85,10 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              EdsConfigService edsConfigService, DingtalkService dingtalkService,
                                              NotificationTemplateService notificationTemplateService,
                                              UserService userService, EnvFacade envFacade) {
-        super(simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
-                edsInstanceService, sshAuditProperties, accessControlFacade, applicationService);
+        super(
+                simpleSshSessionFacade, kubernetesRemoteInvokeHandler, edsInstanceProviderHolderBuilder,
+                edsInstanceService, sshAuditProperties, accessControlFacade, applicationService
+        );
         this.podCommandAuditor = podCommandAuditor;
         this.edsInstanceHelper = edsInstanceHelper;
         this.edsConfigService = edsConfigService;
@@ -107,7 +110,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     if (session.isOpen()) {
                         session.getBasicRemote()
                                 .sendText(MessageResponse.unauthorizedAccess()
-                                        .toString());
+                                                  .toString());
                     }
                     return;
                 }
@@ -144,8 +147,11 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 .forEach(pod -> {
                     final String instanceId = pod.getInstanceId();
                     final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, instanceId);
-                    SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, pod,
-                            SshSessionInstanceTypeEnum.CONTAINER_SHELL, auditPath);
+                    SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(
+                            sessionId, pod,
+                            SshSessionInstanceTypeEnum.CONTAINER_SHELL,
+                            auditPath
+                    );
                     sendUserLoginContainerNotice(username, deployment, pod);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
@@ -198,8 +204,10 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         Optional.of(deploymentRequest)
                 .map(ApplicationKubernetesParam.DeploymentRequest::getPods)
                 .ifPresent(pods -> pods.forEach(pod -> {
-                    KubernetesSession kubernetesSession = KubernetesSessionPool.getBySessionId(sessionId,
-                            pod.getInstanceId());
+                    KubernetesSession kubernetesSession = KubernetesSessionPool.getBySessionId(
+                            sessionId,
+                            pod.getInstanceId()
+                    );
                     if (kubernetesSession != null) {
                         kubernetesSession.resize(pod);
                     }
@@ -232,22 +240,28 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     protected DingtalkRobotModel.Msg getMsg(User loginUser, ApplicationKubernetesParam.DeploymentRequest deployment,
                                             ApplicationKubernetesParam.PodRequest pod) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
-        String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
-                .put("kubernetesClusterName", deployment.getKubernetesClusterName())
-                .put("podName", pod.getName())
-                .put("containerName", pod.getContainer()
-                        .getName())
-                .put("namespace", pod.getNamespace())
-                .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
-                .build());
+        String msg = BeetlUtil.renderTemplate(
+                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
+                        .put("kubernetesClusterName", deployment.getKubernetesClusterName())
+                        .put("podName", pod.getName())
+                        .put(
+                                "containerName", pod.getContainer()
+                                        .getName()
+                        )
+                        .put("namespace", pod.getNamespace())
+                        .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
+                        .build()
+        );
         return DingtalkRobotModel.loadAs(msg);
     }
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginContainerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                "InspectionNotification");
+        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+                EdsInstanceTypeEnum.DINGTALK_ROBOT,
+                SysTagKeys.INSPECTION_NOTIFICATION.getKey()
+        );
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
@@ -256,8 +270,8 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
-                    .getEdsInstance()
-                    .getConfigId());
+                                                                   .getEdsInstance()
+                                                                   .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
             dingtalkService.send(robot.getToken(), message);

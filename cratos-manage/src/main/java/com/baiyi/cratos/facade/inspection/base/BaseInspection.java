@@ -1,5 +1,7 @@
 package com.baiyi.cratos.facade.inspection.base;
 
+import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
@@ -42,9 +44,8 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     @Value("${cratos.notification:NORMAL}")
     private String notification;
 
-    public BaseInspection(NotificationTemplateService notificationTemplateService,
-                          DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
-                          EdsConfigService edsConfigService) {
+    public BaseInspection(NotificationTemplateService notificationTemplateService, DingtalkService dingtalkService,
+                          EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService) {
         this.notificationTemplateService = notificationTemplateService;
         this.dingtalkService = dingtalkService;
         this.edsInstanceHelper = edsInstanceHelper;
@@ -55,9 +56,9 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
         send();
     }
 
-    protected NotificationTemplate getNotificationTemplate(String notificationTemplateKey) {
+    protected NotificationTemplate getNotificationTemplate(NotificationTemplateKeys key) {
         NotificationTemplate query = NotificationTemplate.builder()
-                .notificationTemplateKey(notificationTemplateKey)
+                .notificationTemplateKey(key.name())
                 .lang(language)
                 .build();
         return notificationTemplateService.getByUniqueKey(query);
@@ -66,8 +67,10 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     abstract protected String getMsg() throws IOException;
 
     protected void send() {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                "InspectionNotification");
+        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+                EdsInstanceTypeEnum.DINGTALK_ROBOT,
+                SysTagKeys.INSPECTION_NOTIFICATION.getKey()
+        );
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
@@ -76,8 +79,8 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
-                    .getEdsInstance()
-                    .getConfigId());
+                                                                   .getEdsInstance()
+                                                                   .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
             try {

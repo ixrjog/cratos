@@ -43,7 +43,7 @@ public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     protected List<ZbxTemplateResult.Template> listEntities(
             ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            return ZbxTemplateRepo.listTemplate(instance.getEdsConfigModel());
+            return ZbxTemplateRepo.listTemplate(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

@@ -1,8 +1,10 @@
 package com.baiyi.cratos.eds.zabbix.enums;
 
+import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import lombok.Getter;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * @Author baiyi
@@ -43,12 +45,39 @@ public enum SeverityType {
     public static String getName(int type) {
         return Arrays.stream(SeverityType.values())
                 .filter(severityType -> severityType.getType() == type)
-                .findFirst().map(SeverityType::getName)
+                .findFirst()
+                .map(SeverityType::getName)
                 .orElse("DEFAULT");
     }
 
     public static SeverityType getByName(String name) {
-        return Arrays.stream(SeverityType.values()).filter(severityType -> severityType.name.equals(name)).findFirst().orElse(null);
+        return Arrays.stream(SeverityType.values())
+                .filter(severityType -> severityType.name.equals(name))
+                .findFirst()
+                .orElse(null);
     }
+
+    public static List<Integer> of(EdsZabbixConfigModel.Zabbix zbx) {
+        List<String> severityTypes = Optional.ofNullable(zbx)
+                .map(EdsZabbixConfigModel.Zabbix::getSeverityTypes)
+                .orElse(List.of());
+        if (CollectionUtils.isEmpty(severityTypes)) {
+            severityTypes = Arrays.stream(SeverityType.values())
+                    .map(SeverityType::getName)
+                    .toList();
+        }
+        return severityTypes.stream()
+                .map(SeverityType::getByName)
+                .filter(Objects::nonNull)
+                .map(SeverityType::getType)
+                .toList();
+    }
+
+    public static List<Integer> of(Set<SeverityType> severityTypes) {
+        return severityTypes.stream()
+                .map(SeverityType::getType)
+                .toList();
+    }
+
 
 }

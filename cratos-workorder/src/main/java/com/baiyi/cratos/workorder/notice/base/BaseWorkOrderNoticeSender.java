@@ -1,13 +1,14 @@
 package com.baiyi.cratos.workorder.notice.base;
 
+import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
+import com.baiyi.cratos.util.LanguageUtils;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,10 @@ public abstract class BaseWorkOrderNoticeSender {
     protected void sendMsgToUsername(String username, String notificationTemplateKey, Map<String, Object> dict) {
         User user = userService.getByUsername(username);
         sendMsgToUser(user, notificationTemplateKey, dict);
+    }
+
+    protected void sendMsgToUser(User sendToUser, NotificationTemplateKeys notificationTemplateKey, Map<String, Object> dict) {
+        this.sendMsgToUser(sendToUser, notificationTemplateKey.name(), dict);
     }
 
     protected void sendMsgToUser(User sendToUser, String notificationTemplateKey, Map<String, Object> dict) {

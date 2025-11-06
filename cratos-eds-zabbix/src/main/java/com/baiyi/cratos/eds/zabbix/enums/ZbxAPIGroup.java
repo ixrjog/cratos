@@ -13,6 +13,7 @@ public enum ZbxAPIGroup {
     HOSTPROTOTYPE,
     HOSTGROUP,
     TEMPLATE,
-    PROBLEM
+    PROBLEM,
+    EVENT
 
 }

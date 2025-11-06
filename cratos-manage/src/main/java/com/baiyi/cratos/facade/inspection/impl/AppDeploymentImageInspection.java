@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
 
 /**
@@ -41,8 +42,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  */
 @Component
 public class AppDeploymentImageInspection extends BaseInspection {
-
-    public static final String APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION = "APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION";
 
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;

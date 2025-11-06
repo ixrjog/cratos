@@ -55,7 +55,6 @@ public class ZbxProblemResult {
          * 1 - 问题被抑制。
          */
         private Integer suppressed;
-
         private List<Acknowledge> acknowledges;
     }
 
@@ -72,6 +71,18 @@ public class ZbxProblemResult {
         private String eventid;
         private String clock;
         private String message;
+        /**
+         * 可能的位图值：
+         * 1 - 关闭问题；
+         * 2 - acknowledge事件；
+         * 4 - 添加消息；
+         * 8 - 更改严重性；
+         * 16 - 取消acknowledge事件；
+         * 32 - 抑制事件；
+         * 64 - 取消抑制事件；
+         * 128 - 更改事件等级为原因；
+         * 256 - 更改事件等级为症状。
+         */
         private String action;
         @JsonProperty("old_severity")
         private String oldSeverity;

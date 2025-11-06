@@ -4,6 +4,7 @@ import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
+import com.baiyi.cratos.eds.zabbix.result.base.ZbxMapResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxHostService;
 import com.baiyi.cratos.eds.zabbix.service.factory.ZbxServiceFactory;
 import lombok.AccessLevel;
@@ -37,12 +38,13 @@ public class ZbxHostRepo {
         ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .params(params)
                 .build();
-        ZbxResponse<Map<String, ZbxHostResult.Host>> response =  zbxService.listHostIds(request);
+        ZbxMapResponse<ZbxHostResult.Host> response = zbxService.listHostIds(request);
         Map<String, ZbxHostResult.Host> resultMap = response.getResult();
         if (resultMap == null || resultMap.isEmpty()) {
             return List.of();
         }
-        return resultMap.values().stream()
+        return resultMap.values()
+                .stream()
                 .map(ZbxHostResult.Host::getHostid)
                 .collect(Collectors.toList());
     }

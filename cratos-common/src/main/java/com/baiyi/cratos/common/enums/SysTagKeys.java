@@ -38,7 +38,10 @@ public enum SysTagKeys {
     FRONT_END("FrontEnd"),
     SSH_PROXY("SSHProxy"),
     COUNTRY_CODE("CountryCode"),
-    FIN_LOSSES("FinLosses")
+    FIN_LOSSES("FinLosses"),
+    INSPECTION_NOTIFICATION("InspectionNotification"),
+    ALERT_NOTIFICATION("AlertNotification")
+
     ;
 
     private final String key;

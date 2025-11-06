@@ -18,4 +18,8 @@ public class ExternalDataSourceInstance<Config extends IEdsConfigModel> {
 
     Config edsConfigModel;
 
+    public Config getConfig() {
+        return edsConfigModel;
+    }
+
 }

@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/5/8 下午4:29
@@ -31,7 +33,6 @@ public class DomainInspection extends BaseInspection {
     private final DomainService domainService;
 
     private static final int DOMAIN_EXPIRY_DAYS = 30;
-    public static final String DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION = "DOMAIN_EXPIRATION_INSPECTION_NOTIFICATION";
     private static final String DOMAINS_FIELD = "domains";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 

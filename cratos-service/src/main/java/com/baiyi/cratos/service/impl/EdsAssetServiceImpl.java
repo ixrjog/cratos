@@ -1,6 +1,7 @@
 package com.baiyi.cratos.service.impl;
 
 import com.baiyi.cratos.annotation.DeleteBoundBusiness;
+import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -84,8 +85,10 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     public List<EdsAsset> queryInstanceAssetsById(Integer instanceId, String assetType, String assetId) {
         Example example = new Example(EdsAsset.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("instanceId", instanceId)
-                .andEqualTo("assetType", assetType)
+        if (IdentityUtils.hasIdentity(instanceId)) {
+            criteria.andEqualTo("instanceId", instanceId);
+        }
+        criteria.andEqualTo("assetType", assetType)
                 .andEqualTo("assetId", assetId);
         return edsAssetMapper.selectByExample(example);
     }

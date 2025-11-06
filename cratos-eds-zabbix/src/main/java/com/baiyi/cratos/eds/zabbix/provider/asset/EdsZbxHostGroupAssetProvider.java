@@ -37,7 +37,6 @@ public class EdsZbxHostGroupAssetProvider extends BaseEdsInstanceAssetProvider<E
                                         EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-
     }
 
     @Override

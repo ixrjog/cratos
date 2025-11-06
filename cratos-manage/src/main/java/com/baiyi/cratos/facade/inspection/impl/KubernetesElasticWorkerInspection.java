@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.KUBERNETES_ELASTIC_WORKER_INSPECTION_NOTIFICATION;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/12/9 09:51
@@ -29,7 +31,6 @@ import java.util.Map;
 public class KubernetesElasticWorkerInspection extends BaseInspection {
 
     private static final String WORKER_NAME_PREFIX = "ack-elastic-worker";
-    private static final String KUBERNETES_ELASTIC_WORKER_INSPECTION_NOTIFICATION = "KUBERNETES_ELASTIC_WORKER_INSPECTION_NOTIFICATION";
     private static final String WORKERS_FIELD = "workers";
 
     private final EdsAssetService edsAssetService;

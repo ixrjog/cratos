@@ -1,22 +1,19 @@
 package com.baiyi.cratos.eds;
 
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
 import com.baiyi.cratos.eds.zabbix.enums.SeverityType;
-import com.baiyi.cratos.eds.zabbix.facade.ZbxProblemFacade;
-import com.baiyi.cratos.eds.zabbix.repo.ZbxHostGroupRepo;
-import com.baiyi.cratos.eds.zabbix.repo.ZbxHostRepo;
-import com.baiyi.cratos.eds.zabbix.repo.ZbxProblemRepo;
-import com.baiyi.cratos.eds.zabbix.repo.ZbxTemplateRepo;
-import com.baiyi.cratos.eds.zabbix.result.ZbxHostGroupResult;
-import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
-import com.baiyi.cratos.eds.zabbix.result.ZbxProblemResult;
-import com.baiyi.cratos.eds.zabbix.result.ZbxTemplateResult;
+import com.baiyi.cratos.eds.zabbix.facade.ZbxFacade;
+import com.baiyi.cratos.eds.zabbix.repo.*;
+import com.baiyi.cratos.eds.zabbix.result.*;
 import com.baiyi.cratos.eds.zabbix.util.ZbxInfoUtils;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -76,7 +73,11 @@ public class EdsZbxTest extends BaseEdsTest<EdsZabbixConfigModel.Zabbix> {
         EdsZabbixConfigModel.Zabbix zbx = getConfig(49);
         Set<SeverityType> severityTypes = Set.of(SeverityType.AVERAGE);
         List<ZbxProblemResult.Problem> problems = ZbxProblemRepo.listProblem(zbx, severityTypes);
-        //System.out.println(problems);
+        printProblems(problems);
+
+    }
+
+    void printProblems(List<ZbxProblemResult.Problem> problems) {
         for (ZbxProblemResult.Problem problem : problems) {
             StringBuilder sb = new StringBuilder();
             sb.append("{");
@@ -104,40 +105,40 @@ public class EdsZbxTest extends BaseEdsTest<EdsZabbixConfigModel.Zabbix> {
             sb.append("}");
             System.out.println(sb.toString());
         }
-
     }
 
     @Test
-    void test9() {
+    void test10() {
         EdsZabbixConfigModel.Zabbix zbx = getConfig(49);
-        Set<SeverityType> severityTypes = Set.of(SeverityType.WARNING, SeverityType.AVERAGE);
-        List<ZbxProblemResult.Problem>  problems = ZbxProblemFacade.listProblem(zbx, severityTypes);
-        for (ZbxProblemResult.Problem problem : problems) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("{");
-            java.lang.reflect.Method[] methods = problem.getClass()
-                    .getMethods();
-            boolean first = true;
-            for (java.lang.reflect.Method m : methods) {
-                if (java.lang.reflect.Modifier.isPublic(m.getModifiers()) && m.getParameterCount() == 0 && m.getName()
-                        .startsWith("get") && !m.getName()
-                        .equals("getClass")) {
-                    try {
-                        Object val = m.invoke(problem);
-                        String name = m.getName()
-                                .substring(3);
-                        name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-                        if (!first) sb.append(", ");
-                        sb.append(name)
-                                .append("=")
-                                .append(val);
-                        first = false;
-                    } catch (Exception ignored) {
-                    }
-                }
+        Set<SeverityType> severityTypes = Set.of(SeverityType.WARNING, SeverityType.AVERAGE, SeverityType.HIGH);
+        List<ZbxEventResult.Event> events = ZbxEventRepo.listEvent(zbx);
+
+        List<ZbxEventResult.Event> events2 = events.stream()
+                .filter(event -> !event.getREventid()
+                        .equals("0"))
+                .toList();
+
+        System.out.println(events2);
+    }
+
+    @Test
+    void test11() {
+        EdsZabbixConfigModel.Zabbix zbx = getConfig(49);
+        Set<SeverityType> severityTypes = Set.of(SeverityType.AVERAGE, SeverityType.HIGH);
+        List<ZbxEventResult.Event> events = ZbxFacade.listEvent(zbx);
+        // System.out.println(events);
+        for (ZbxEventResult.Event event : events) {
+            List<ZbxHostResult.Host> hosts = Optional.of(event)
+                    .map(ZbxEventResult.Event::getHosts)
+                    .orElse(List.of());
+            if (CollectionUtils.isEmpty(hosts)) {
+                System.out.println(event.getName() + " no host");
+                continue;
             }
-            sb.append("}");
-            System.out.println(sb.toString());
+            ZbxHostResult.Host host = hosts.getFirst();
+            System.out.println(
+                    StringFormatter.arrayFormat("EventID {} Host {} -> {}", event.getEventid(), host.getHost(),
+                                                event.getName()));
         }
     }
 

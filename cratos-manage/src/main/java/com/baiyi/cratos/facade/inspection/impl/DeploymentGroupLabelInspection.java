@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
+import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
@@ -32,8 +33,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 @Component
 public class DeploymentGroupLabelInspection extends BaseInspection {
 
-    public static final String DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION = "DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION";
-
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -57,7 +56,7 @@ public class DeploymentGroupLabelInspection extends BaseInspection {
     @Override
     protected String getMsg() throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate(
-                DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION);
+                NotificationTemplateKeys.DEPLOYMENT_GROUP_LABEL_INSPECTION_NOTIFICATION);
         List<DeploymentInspectionModel.Deployment> deploymentList = Lists.newArrayList();
         deploymentList.addAll(getDeploymentList(ACK_PROD_INSTANCE_ID));
         deploymentList.addAll(getDeploymentList(EKS_PROD_INSTANCE_ID));

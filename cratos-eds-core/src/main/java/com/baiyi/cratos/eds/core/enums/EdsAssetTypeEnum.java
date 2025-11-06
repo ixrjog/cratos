@@ -115,6 +115,7 @@ public enum EdsAssetTypeEnum {
     ZBX_HOST("Host", 85),
     ZBX_HOSTGROUP("HostGroup", 86),
     ZBX_TEMPLATE("Template", 87),
+    ZBX_EVENT("Event", 88),
 
     DEF("Default", 9999);
 

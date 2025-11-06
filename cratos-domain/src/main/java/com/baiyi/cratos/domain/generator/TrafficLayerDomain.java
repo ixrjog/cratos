@@ -2,7 +2,10 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serial;
@@ -14,6 +17,9 @@ import java.util.Date;
  * 表注释：流量层域
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "traffic_layer_domain")
 public class TrafficLayerDomain implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial

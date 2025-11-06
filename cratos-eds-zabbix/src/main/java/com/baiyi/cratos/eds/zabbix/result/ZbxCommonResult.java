@@ -1,7 +1,9 @@
 package com.baiyi.cratos.eds.zabbix.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.io.Serializable;
  * &#064;Date  2025/10/30 11:01
  * &#064;Version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxCommonResult {
 
     @Data

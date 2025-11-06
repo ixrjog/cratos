@@ -63,6 +63,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.SSHSERVER_USER_LOGIN_SERVER_NOTICE;
+import static com.baiyi.cratos.common.enums.SysTagKeys.INSPECTION_NOTIFICATION;
 import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerLoginCommand.GROUP;
 
 
@@ -342,7 +343,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     @SuppressWarnings("unchecked")
     private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
         List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                "InspectionNotification");
+                                                                                    INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;

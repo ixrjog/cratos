@@ -68,8 +68,12 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
 
-    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
-            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
+    public static final List<EdsAssetTypeEnum> CLOUD_SERVER_TYPES = List.of(
+            EdsAssetTypeEnum.ALIYUN_ECS,
+            EdsAssetTypeEnum.AWS_EC2,
+            EdsAssetTypeEnum.HUAWEICLOUD_ECS,
+            EdsAssetTypeEnum.CRATOS_COMPUTER
+    );
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -83,20 +87,24 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected DingtalkRobotModel.Msg getMsg(User loginUser, String loginAccount, String serverIP,
                                             String serverName) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
-        String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
-                .put("targetServer", Joiner.on("@")
-                        .join(loginAccount, serverIP))
-                .put("serverName", serverName)
-                .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
-                .build());
+        String msg = BeetlUtil.renderTemplate(
+                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
+                        .put(
+                                "targetServer", Joiner.on("@")
+                                        .join(loginAccount, serverIP)
+                        )
+                        .put("serverName", serverName)
+                        .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
+                        .build()
+        );
         return DingtalkRobotModel.loadAs(msg);
     }
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                "InspectionNotification");
+        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
@@ -105,8 +113,8 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
-                    .getEdsInstance()
-                    .getConfigId());
+                                                                   .getEdsInstance()
+                                                                   .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .produceConfig(edsConfig);
             dingtalkService.send(robot.getToken(), message);
@@ -123,10 +131,12 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     }
 
     protected HostSystem getProxyHost(EdsAsset server) {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(server.getId())
-                .build(), SysTagKeys.SSH_PROXY.getKey());
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
+                SimpleBusiness.builder()
+                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                        .businessId(server.getId())
+                        .build(), SysTagKeys.SSH_PROXY.getKey()
+        );
         if (Objects.isNull(sshProxyBusinessTag)) {
             return HostSystem.NO_HOST;
         }
@@ -142,17 +152,19 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
                     type -> proxyServers.addAll(edsAssetService.queryAssetByParam(proxyIP, type.name())));
         } else {
             proxyServers.addAll(
-                    edsAssetService.queryInstanceAssetByTypeAndKey(server.getInstanceId(), server.getAssetType(),
-                            proxyIP));
+                    edsAssetService.queryInstanceAssetByTypeAndKey(
+                            server.getInstanceId(), server.getAssetType(), proxyIP));
         }
         if (CollectionUtils.isEmpty(proxyServers)) {
             return HostSystem.NO_HOST;
         }
         EdsAsset proxyServer = proxyServers.getFirst();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(proxyServer.getId())
-                .build(), SysTagKeys.SERVER_ACCOUNT.getKey());
+        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(
+                SimpleBusiness.builder()
+                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                        .businessId(proxyServer.getId())
+                        .build(), SysTagKeys.SERVER_ACCOUNT.getKey()
+        );
         if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
             return HostSystem.NO_HOST;
         }

@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/10/29 10:44
@@ -22,6 +24,7 @@ public class EdsZabbixConfigModel {
         @Schema(description = "凭据")
         private Cred cred;
         private String region;
+        private List<String> severityTypes;
         private EdsInstance edsInstance;
     }
 
