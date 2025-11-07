@@ -74,13 +74,13 @@ public class EdsZbxEventAssetProvider extends BaseEdsInstanceAssetProvider<EdsZa
                     .getHost();
         }
         //  pk-obs-middleware-prod-2 | WARNING | Linux: FS [/data/1]: Space is low (used > 80%, total 195.9GB)
-        final String name = StringFormatter.arrayFormat(
+        final String assetKey = StringFormatter.arrayFormat(
                 "{} | {} | {}", hostName,
                 SeverityType.getName(entity.getSeverity()), entity.getName()
         );
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getEventid())
-                .assetKeyOf(entity.getEventid())
-                .nameOf(name)
+                .assetKeyOf(assetKey)
+                .nameOf(entity.getName())
                 .build();
     }
 

@@ -23,6 +23,7 @@ public class EdsZabbixConfigModel {
         private String url;
         @Schema(description = "凭据")
         private Cred cred;
+        private Alert alert;
         private String region;
         private List<String> severityTypes;
         private EdsInstance edsInstance;
@@ -34,6 +35,26 @@ public class EdsZabbixConfigModel {
     public static class Cred {
         private String username;
         private String password;
+    }
+
+    /**
+     * alert:
+     * silencing:
+     * rules:
+     * - 'Linux: High memory utilization *'
+     */
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Alert {
+        private Silencing silencing;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class Silencing {
+        private List<String> rules;
     }
 
 }

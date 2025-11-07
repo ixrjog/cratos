@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  * &#064;Date  2025/2/28 11:17
  * &#064;Version 1.0
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("ALL")
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)

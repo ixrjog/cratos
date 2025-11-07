@@ -9,11 +9,15 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
+import com.baiyi.cratos.eds.zabbix.result.ZbxEventResult;
+import com.baiyi.cratos.eds.zabbix.util.ZbxAlertUtils;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
 import lombok.RequiredArgsConstructor;
@@ -42,22 +46,30 @@ public class AlertNotificationSender {
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
+    private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     @Value("${cratos.language:en-us}")
     protected String language;
 
     public void sendAlertNotice(EdsAsset asset) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
-                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey());
+        EdsInstanceProviderHolder<EdsZabbixConfigModel.Zabbix, ZbxEventResult.Event> zbxEventHolder = (EdsInstanceProviderHolder<EdsZabbixConfigModel.Zabbix, ZbxEventResult.Event>) holderBuilder.newHolder(
+                asset.getInstanceId(), EdsAssetTypeEnum.ZBX_EVENT.name());
+        EdsZabbixConfigModel.Zabbix zbx = zbxEventHolder.getInstance()
+                .getConfig();
+        if (ZbxAlertUtils.matchRule(zbx, asset.getName())) {
+            // 静默告警
+            return;
+        }
+        List<EdsInstance> edsInstanceList = queryDingtalkRobotInstances();
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send alert notifications.");
             return;
         }
         try {
             DingtalkRobotModel.Msg message = getMsg(asset);
-            List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+            List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> dingtalkRobotHolders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
                     edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
-            holders.forEach(providerHolder -> {
+            dingtalkRobotHolders.forEach(providerHolder -> {
                 EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                                                                        .getEdsInstance()
                                                                        .getConfigId());
@@ -71,12 +83,17 @@ public class AlertNotificationSender {
         }
     }
 
+    private List<EdsInstance> queryDingtalkRobotInstances() {
+        return edsInstanceHelper.queryValidEdsInstance(
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey());
+    }
+
     protected DingtalkRobotModel.Msg getMsg(EdsAsset asset) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
         String msg = BeetlUtil.renderTemplate(
                 notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                         .put("eventId", asset.getAssetId())
-                        .put("message", asset.getName())
+                        .put("message", asset.getAssetKey())
                         .build()
         );
         return DingtalkRobotModel.loadAs(msg);
@@ -89,5 +106,8 @@ public class AlertNotificationSender {
                 .build();
         return notificationTemplateService.getByUniqueKey(query);
     }
+
+
+
 
 }
