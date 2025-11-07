@@ -3,9 +3,7 @@ package com.baiyi.cratos.facade.rbac.impl;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.domain.generator.RbacGroup;
-import com.baiyi.cratos.domain.generator.RbacResource;
-import com.baiyi.cratos.domain.generator.RbacRole;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.rbac.RbacGroupVO;
@@ -19,6 +17,7 @@ import com.google.api.client.util.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
@@ -42,6 +41,7 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
     private final RbacResourceService rbacResourceService;
     private final RbacGroupService rbacGroupService;
     private final RbacRoleResourceService rbacRoleResourceService;
+    private final RbacRoleMenuService rbacRoleMenuService;
 
     @Override
     public DataTable<RbacRoleVO.Role> queryRolePage(RbacRoleParam.RolePageQuery pageQuery) {
@@ -95,8 +95,10 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
         List<RbacRoleVO.GroupResource> groupResources = groupResourcesMap.entrySet()
                 .stream()
                 .map(entry -> {
-                    RbacGroupVO.Group group = BeanCopierUtils.copyProperties(rbacGroupMap.get(entry.getKey()),
-                            RbacGroupVO.Group.class);
+                    RbacGroupVO.Group group = BeanCopierUtils.copyProperties(
+                            rbacGroupMap.get(entry.getKey()),
+                            RbacGroupVO.Group.class
+                    );
                     List<RbacResourceVO.Resource> resources = entry.getValue()
                             .stream()
                             .map(r -> BeanCopierUtils.copyProperties(r, RbacResourceVO.Resource.class))
@@ -128,8 +130,34 @@ public class RbacRoleFacadeImpl implements RbacRoleFacade {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public void deleteRoleById(int id) {
-        // TODO
+        RbacRole rbacRole = rbacRoleService.getById(id);
+        if (rbacRole == null) {
+            return;
+        }
+        // 删除 rbac_role_resource
+        List<RbacRoleResource> rbacRoleResources = rbacRoleResourceService.queryByRoleId(id);
+        if (!CollectionUtils.isEmpty(rbacRoleResources)) {
+            for (RbacRoleResource rbacRoleResource : rbacRoleResources) {
+                rbacRoleResourceService.deleteById(rbacRoleResource.getId());
+            }
+        }
+        // 删除 rbac_user_role
+        List<RbacUserRole> rbacUserRoles = rbacUserRoleService.queryByRoleId(id);
+        if (!CollectionUtils.isEmpty(rbacUserRoles)) {
+            for (RbacUserRole rbacUserRole : rbacUserRoles) {
+                rbacUserRoleService.deleteById(rbacUserRole.getId());
+            }
+        }
+        // 删除 rbac_role_menu
+        List<RbacRoleMenu> rbacRoleMenus = rbacRoleMenuService.queryByRoleId(id);
+        if (!CollectionUtils.isEmpty(rbacRoleMenus)) {
+            for (RbacRoleMenu rbacRoleMenu : rbacRoleMenus) {
+                rbacRoleMenuService.deleteById(rbacRoleMenu.getId());
+            }
+        }
+        rbacRoleService.deleteById(id);
     }
 
 }

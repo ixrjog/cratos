@@ -65,6 +65,14 @@ public class RbacUserRoleServiceImpl implements RbacUserRoleService {
     }
 
     @Override
+    public List<RbacUserRole> queryByRoleId(int roleId) {
+        Example example = new Example(RbacUserRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleId", roleId);
+        return rbacUserRoleMapper.selectByExample(example);
+    }
+
+    @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACUSERROLE:ID:' + #id")
     public void clearCacheById(int id) {
     }
