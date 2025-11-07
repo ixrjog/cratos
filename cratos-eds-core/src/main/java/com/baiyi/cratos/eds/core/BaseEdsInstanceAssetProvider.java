@@ -280,7 +280,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     }
 
     @Override
-    public C produceConfig(EdsConfig edsConfig) {
+    public C configLoadAs(EdsConfig edsConfig) {
         String configContent = edsConfig.getConfigContent();
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential cred = credentialService.getById(edsConfig.getCredentialId());

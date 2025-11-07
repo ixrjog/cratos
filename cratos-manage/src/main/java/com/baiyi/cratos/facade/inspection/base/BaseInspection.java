@@ -82,7 +82,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
                                                                    .getEdsInstance()
                                                                    .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
-                    .produceConfig(edsConfig);
+                    .configLoadAs(edsConfig);
             try {
                 DingtalkRobotModel.Msg message = DingtalkRobotModel.loadAs(getMsg());
                 if (notification.equals("LOCAL")) {

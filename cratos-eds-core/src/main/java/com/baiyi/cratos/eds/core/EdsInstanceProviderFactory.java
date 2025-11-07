@@ -58,7 +58,7 @@ public class EdsInstanceProviderFactory {
                                                                         EdsConfig edsConfig) {
         return (Config) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
-                .produceConfig(edsConfig);
+                .configLoadAs(edsConfig);
     }
 
     /**
@@ -79,7 +79,7 @@ public class EdsInstanceProviderFactory {
                     instanceType);
             for (String assetType : pMap.keySet()) {
                 return (Config) pMap.get(assetType)
-                        .produceConfig(edsConfig);
+                        .configLoadAs(edsConfig);
             }
         } catch (Exception e) {
             throw new EdsConfigException("The eds instance type is incorrect: {}.", e.getMessage());

@@ -355,7 +355,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     .getEdsInstance()
                     .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
-                    .produceConfig(edsConfig);
+                    .configLoadAs(edsConfig);
             dingtalkService.send(robot.getToken(), message);
             providerHolder.importAsset(message);
         });

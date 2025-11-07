@@ -62,7 +62,7 @@ public class AlertNotificationSender {
                                                                        .getEdsInstance()
                                                                        .getConfigId());
                 EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
-                        .produceConfig(edsConfig);
+                        .configLoadAs(edsConfig);
                 dingtalkService.send(robot.getToken(), message);
                 providerHolder.importAsset(message);
             });

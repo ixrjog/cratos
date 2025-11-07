@@ -23,7 +23,7 @@ public interface EdsInstanceAssetProvider<Config extends IEdsConfigModel, Asset>
      */
     EdsAsset importAsset(ExternalDataSourceInstance<Config> instance, Asset asset);
 
-    Config produceConfig(EdsConfig edsConfig);
+    Config configLoadAs(EdsConfig edsConfig);
 
     Asset assetLoadAs(String originalModel);
 
