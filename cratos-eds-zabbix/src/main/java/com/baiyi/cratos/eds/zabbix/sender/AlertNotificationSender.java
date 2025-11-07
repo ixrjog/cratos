@@ -32,6 +32,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.ZBX_ALERT_N
  * &#064;Date  2025/11/6 17:17
  * &#064;Version 1.0
  */
+@SuppressWarnings("ALL")
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -74,6 +75,7 @@ public class AlertNotificationSender {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
         String msg = BeetlUtil.renderTemplate(
                 notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put("eventId", asset.getAssetId())
                         .put("message", asset.getName())
                         .build()
         );
