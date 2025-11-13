@@ -105,7 +105,7 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
             approverDict.put("approver", approver.getUsername());
             approverDict.put("token", workOrderTicketSubscriber.getToken());
             approverDict.put("approvalNode", approvalNode);
-            sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE.name(), approverDict);
+            sendMsgToUser(approver, NotificationTemplateKeys.WORK_ORDER_TICKET_APPROVAL_NOTICE, approverDict);
         });
     }
 

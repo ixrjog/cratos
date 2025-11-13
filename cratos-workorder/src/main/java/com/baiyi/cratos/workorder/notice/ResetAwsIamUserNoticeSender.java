@@ -50,7 +50,7 @@ public class ResetAwsIamUserNoticeSender extends BaseWorkOrderNoticeSender {
     }
 
     private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
-        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_AWS_IAM_USER_NOTICE.name(), dict);
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_AWS_IAM_USER_NOTICE, dict);
     }
 
 }

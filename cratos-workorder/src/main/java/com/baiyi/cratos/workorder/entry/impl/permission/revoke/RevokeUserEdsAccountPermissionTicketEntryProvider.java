@@ -69,7 +69,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
         try {
             edsAssetTypeEnum = EdsAssetTypeEnum.valueOf(assetType);
         } catch (IllegalArgumentException illegalArgumentException) {
-            throw new WorkOrderTicketException("不支持的资产类型: {}", asset.getAssetType());
+            throw new WorkOrderTicketException("Unsupported asset type: {}", asset.getAssetType());
         }
         return switch (edsAssetTypeEnum) {
             case EdsAssetTypeEnum.LDAP_PERSON -> RevokeUserEdsLdapUserPermissionTicketEntryBuilder.newBuilder()
@@ -79,6 +79,9 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                     .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
                     .buildEntry();
             case EdsAssetTypeEnum.AWS_IAM_USER -> RevokeUserEdsAwsIamUserPermissionTicketEntryBuilder.newBuilder()
+                    .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
+                    .buildEntry();
+            case EdsAssetTypeEnum.AZURE_USER -> RevokeUserEdsAzureUserPermissionTicketEntryBuilder.newBuilder()
                     .withParam(addRevokeUserEdsAccountPermissionTicketEntry)
                     .buildEntry();
             case EdsAssetTypeEnum.GCP_MEMBER -> RevokeUserEdsGcpMemberPermissionTicketEntryBuilder.newBuilder()
@@ -94,7 +97,8 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
             case EdsAssetTypeEnum.ALIMAIL_USER -> {
                 EdsAssetIndex mailIndex = edsAssetIndexService.getByAssetIdAndName(
                         addRevokeUserEdsAccountPermissionTicketEntry.getDetail()
-                                .getId(), USER_MAIL);
+                                .getId(), USER_MAIL
+                );
                 if (Objects.isNull(mailIndex)) {
                     throw new WorkOrderTicketException("Assets are missing mail");
                 }
@@ -103,7 +107,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .withEmail(mailIndex.getValue())
                         .buildEntry();
             }
-            default -> throw new WorkOrderTicketException("不支持的账户类型类型: {}", assetType);
+            default -> throw new WorkOrderTicketException("Unsupported asset type: {}", assetType);
         };
     }
 
@@ -116,8 +120,10 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         EdsAssetVO.Asset asset = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), instance.getEdsType(),
-                entry.getSubType(), entry.getName());
+        return MarkdownUtils.generateMarkdownTableRow(
+                instance.getInstanceName(), instance.getEdsType(),
+                entry.getSubType(), entry.getName()
+        );
     }
 
     @Override
@@ -132,26 +138,26 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 EdsAssetVO.Asset detail) throws WorkOrderTicketException {
         String assetType = detail.getAssetType();
-        switch (EdsAssetTypeEnum.valueOf(assetType)) {
+        EdsAssetTypeEnum edsAssetTypeEnum = EdsAssetTypeEnum.valueOf(assetType);
+        if (EdsAssetTypeEnum.getCloudIdentityTypes()
+                .contains(edsAssetTypeEnum)) {
+            EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
+                    .instanceId(entry.getInstanceId())
+                    .account(entry.getName())
+                    .accountId(detail.getAssetId())
+                    .build();
+            // 增加导入资产逻辑
+            edsIdentityFacade.blockCloudAccount(blockCloudAccount);
+            return;
+        }
+        // other
+        switch (edsAssetTypeEnum) {
             case EdsAssetTypeEnum.LDAP_PERSON -> {
                 EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity = EdsIdentityParam.DeleteLdapIdentity.builder()
                         .instanceId(entry.getInstanceId())
                         .username(entry.getName())
                         .build();
                 edsIdentityFacade.deleteLdapIdentity(deleteLdapIdentity);
-            }
-            case EdsAssetTypeEnum.ALIYUN_RAM_USER, EdsAssetTypeEnum.AWS_IAM_USER,
-                 EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER -> {
-                EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
-                        .instanceId(entry.getInstanceId())
-                        .account(entry.getName())
-                        .accountId(detail.getAssetId())
-                        .build();
-                // 增加导入资产逻辑
-                edsIdentityFacade.blockCloudAccount(blockCloudAccount);
-            }
-            case EdsAssetTypeEnum.GCP_MEMBER -> {
-                // TODO
             }
             case EdsAssetTypeEnum.ALIMAIL_USER -> {
                 EdsIdentityParam.BlockMailAccount blockMailAccount = EdsIdentityParam.BlockMailAccount.builder()
@@ -168,7 +174,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                         .build();
                 edsIdentityFacade.blockGitLabIdentity(blockGitLabIdentity);
             }
-            default -> throw new WorkOrderTicketException("不支持的资产类型: {}", assetType);
+            default -> WorkOrderTicketException.runtime("Unsupported asset type: {}", assetType);
         }
     }
 

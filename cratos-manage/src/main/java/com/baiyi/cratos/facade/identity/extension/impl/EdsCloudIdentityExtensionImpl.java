@@ -12,9 +12,9 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.EdsFacade;
-import com.baiyi.cratos.eds.core.facade.EdsCloudIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.base.BaseEdsIdentityExtension;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
@@ -49,24 +49,28 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                                          EdsAssetService edsAssetService, EdsFacade edsFacade,
                                          EdsAssetIndexService edsAssetIndexService, TagService tagService,
                                          BusinessTagService businessTagService) {
-        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
+        super(
+                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
+        );
     }
-
-    private static final List<String> CLOUD_ACCOUNT_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_RAM_USER.name(),
-            EdsAssetTypeEnum.AWS_IAM_USER.name(), EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER.name(),
-            EdsAssetTypeEnum.GCP_MEMBER.name());
 
     private List<EdsAsset> queryAccountAssets(EdsIdentityParam.QueryCloudIdentityDetails queryCloudIdentityDetails) {
         List<EdsAsset> cloudIdentityAssets = Lists.newArrayList();
-        List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(CLOUD_ACCOUNT_USERNAME,
-                        queryCloudIdentityDetails.getUsername())
+        List<EdsAsset> byIndexUsername = edsAssetIndexService.queryIndexByNameAndValue(
+                        CLOUD_ACCOUNT_USERNAME,
+                        queryCloudIdentityDetails.getUsername()
+                )
                 .stream()
                 .map(e -> edsAssetService.getById(e.getAssetId()))
                 .toList();
         cloudIdentityAssets.addAll(byIndexUsername);
-        cloudIdentityAssets.addAll(
-                queryByUsernameTag(queryCloudIdentityDetails.getUsername(), CLOUD_ACCOUNT_ASSET_TYPES));
+        cloudIdentityAssets.addAll(queryByUsernameTag(
+                queryCloudIdentityDetails.getUsername(), EdsAssetTypeEnum.getCloudIdentityTypes()
+                        .stream()
+                        .map(Enum::name)
+                        .toList()
+        ));
         return cloudIdentityAssets.stream()
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
                 .values()
@@ -112,8 +116,10 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
 
     private void putAccounts(Map<String, List<EdsIdentityVO.CloudAccount>> accounts,
                              EdsIdentityVO.CloudAccount cloudAccount) {
-        accounts.computeIfAbsent(cloudAccount.getInstance()
-                        .getEdsType(), k -> Lists.newArrayList())
+        accounts.computeIfAbsent(
+                        cloudAccount.getInstance()
+                                .getEdsType(), k -> Lists.newArrayList()
+                )
                 .add(cloudAccount);
     }
 

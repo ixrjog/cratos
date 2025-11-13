@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.identity.extension.cloud.impl;
+package com.baiyi.cratos.facade.identity.extension.cloud.provider;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.CreateUserResponse;
@@ -18,7 +18,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
-import com.baiyi.cratos.facade.identity.extension.cloud.BaseCloudIdentityProvider;
+import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;

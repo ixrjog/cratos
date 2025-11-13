@@ -1,6 +1,12 @@
 package com.baiyi.cratos.eds.core.enums;
 
+import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
 import lombok.Getter;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author baiyi
@@ -16,6 +22,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_NLB("NLB", 3),
     ALIYUN_ECS("ECS", 4),
     ALIYUN_DOMAIN("Domain", 5),
+    @CloudIdentity
     ALIYUN_RAM_USER("RAM User", 6),
     ALIYUN_RAM_POLICY("RAM Policy", 7),
     ALIYUN_RAM_ACCESS_KEY("RAM AccessKey", 8),
@@ -59,10 +66,12 @@ public enum EdsAssetTypeEnum {
     AWS_ECR_REPOSITORY("ECR Repository", 44),
     AWS_VPC("VPC", 45),
     AWS_SUBNET("Subnet", 46),
+    @CloudIdentity
     AWS_IAM_USER("IAM User", 47),
     AWS_IAM_POLICY("IAM Policy", 48),
 
     HUAWEICLOUD_ECS("ECS", 49),
+    @CloudIdentity
     HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("Certificate", 51),
     HUAWEICLOUD_VPC("VPC", 52),
@@ -104,6 +113,7 @@ public enum EdsAssetTypeEnum {
     HARBOR_REPOSITORY("Harbor Repository", 81),
 
     GCP_CERTIFICATE("Certificate", 82),
+    @CloudIdentity
     GCP_MEMBER("Member", 83),
 
     JENKINS_COMPUTER("Computer Node", 84),
@@ -116,6 +126,8 @@ public enum EdsAssetTypeEnum {
     ZBX_HOSTGROUP("HostGroup", 86),
     ZBX_TEMPLATE("Template", 87),
     ZBX_EVENT("Event", 88),
+    @CloudIdentity
+    AZURE_USER("User", 89),
 
     DEF("Default", 9999);
 
@@ -125,6 +137,19 @@ public enum EdsAssetTypeEnum {
     EdsAssetTypeEnum(String displayName, Integer seq) {
         this.displayName = displayName;
         this.seq = seq;
+    }
+
+    public static List<EdsAssetTypeEnum> getCloudIdentityTypes() {
+        return Arrays.stream(EdsAssetTypeEnum.values())
+                .filter(assetType -> {
+                    try {
+                        Field field = EdsAssetTypeEnum.class.getField(assetType.name());
+                        return field.isAnnotationPresent(CloudIdentity.class);
+                    } catch (NoSuchFieldException e) {
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
 }

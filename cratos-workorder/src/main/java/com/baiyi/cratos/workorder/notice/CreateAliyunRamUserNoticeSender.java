@@ -49,7 +49,7 @@ public class CreateAliyunRamUserNoticeSender extends BaseWorkOrderNoticeSender {
     }
 
     private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
-        sendMsgToUser(sendToUser, NotificationTemplateKeys.CREATE_ALIYUN_RAM_USER_NOTICE.name(), dict);
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.CREATE_ALIYUN_RAM_USER_NOTICE, dict);
     }
 
 }

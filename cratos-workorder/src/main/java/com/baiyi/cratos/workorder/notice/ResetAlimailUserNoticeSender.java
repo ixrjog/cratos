@@ -48,7 +48,7 @@ public class ResetAlimailUserNoticeSender extends BaseWorkOrderNoticeSender {
     }
 
     private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
-        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_ALIMAIL_USER_NOTICE.name(), dict);
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.RESET_ALIMAIL_USER_NOTICE, dict);
     }
 
 }

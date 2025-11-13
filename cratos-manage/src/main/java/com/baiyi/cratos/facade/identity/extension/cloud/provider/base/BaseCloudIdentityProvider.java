@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.identity.extension.cloud;
+package com.baiyi.cratos.facade.identity.extension.cloud.provider.base;
 
 import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.common.util.PasswordGenerator;
@@ -11,6 +11,8 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
+import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;

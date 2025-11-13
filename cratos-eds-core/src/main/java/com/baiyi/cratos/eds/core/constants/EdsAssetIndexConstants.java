@@ -57,6 +57,8 @@ public interface EdsAssetIndexConstants {
 
     String GCP_MEMBER_ROLES = "gcp.member.roles";
 
+    String AZURE_POLICIES = "azure.policies";
+
     String HUAWEICLOUD_IAM_POLICIES = "iam.policies";
 
     String AWS_SNS_SUBSCRIPTION_ENDPOINT = "endpoint";

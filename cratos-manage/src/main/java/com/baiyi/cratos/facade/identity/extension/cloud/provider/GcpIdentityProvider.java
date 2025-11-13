@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.identity.extension.cloud.impl;
+package com.baiyi.cratos.facade.identity.extension.cloud.provider;
 
 import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.common.util.ValidationUtils;
@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleMemberModel;
-import com.baiyi.cratos.facade.identity.extension.cloud.BaseCloudIdentityProvider;
+import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;

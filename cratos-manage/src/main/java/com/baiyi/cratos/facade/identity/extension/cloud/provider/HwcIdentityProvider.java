@@ -1,4 +1,4 @@
-package com.baiyi.cratos.facade.identity.extension.cloud.impl;
+package com.baiyi.cratos.facade.identity.extension.cloud.provider;
 
 import com.baiyi.cratos.common.exception.CloudIdentityException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -14,7 +14,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcIamRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.util.HwcUserConvertor;
-import com.baiyi.cratos.facade.identity.extension.cloud.BaseCloudIdentityProvider;
+import com.baiyi.cratos.facade.identity.extension.cloud.provider.base.BaseCloudIdentityProvider;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;

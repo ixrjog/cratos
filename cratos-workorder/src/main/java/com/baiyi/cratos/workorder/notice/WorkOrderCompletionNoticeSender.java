@@ -56,7 +56,7 @@ public class WorkOrderCompletionNoticeSender extends BaseWorkOrderNoticeSender {
     }
 
     protected void sendMsgToApplicant(User applicantUser, Map<String, Object> dict) {
-        sendMsgToUser(applicantUser, WORK_ORDER_COMPLETION_NOTICE.name(), dict);
+        sendMsgToUser(applicantUser, WORK_ORDER_COMPLETION_NOTICE, dict);
     }
 
 }

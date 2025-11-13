@@ -49,7 +49,7 @@ public class CreateDataWorkAKNoticeSender extends BaseWorkOrderNoticeSender {
     }
 
     private void sendMsgToUser(User sendToUser, Map<String, Object> dict) {
-        sendMsgToUser(sendToUser, NotificationTemplateKeys.CREATE_ALIYUN_DATAWORKS_RAM_AK_NOTICE.name(), dict);
+        sendMsgToUser(sendToUser, NotificationTemplateKeys.CREATE_ALIYUN_DATAWORKS_RAM_AK_NOTICE, dict);
     }
 
 }
