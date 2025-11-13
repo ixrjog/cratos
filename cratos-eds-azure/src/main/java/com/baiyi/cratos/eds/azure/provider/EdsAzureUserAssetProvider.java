@@ -80,7 +80,10 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
         List<EdsAssetIndex> indices = Lists.newArrayList();
         String username = StringUtils.substringBefore(entity.getUserPrincipalName(), "@");
         indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, username));
-        indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, entity.getAccountEnabled()));
+        indices.add(createEdsAssetIndex(
+                edsAsset, CLOUD_LOGIN_PROFILE,
+                entity.getAccountEnabled() ? "Enabled" : "Disabled"
+        ));
         return indices;
     }
 
