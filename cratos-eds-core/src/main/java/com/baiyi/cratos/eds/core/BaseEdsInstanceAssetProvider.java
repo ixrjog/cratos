@@ -45,6 +45,7 @@ import java.util.stream.Collectors;
  * @Date 2024/2/26 14:15
  * @Version 1.0
  */
+@SuppressWarnings("unchecked")
 @Slf4j
 @AllArgsConstructor
 public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
@@ -59,7 +60,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
 
-    @SuppressWarnings("unchecked")
     protected EdsInstanceProviderHolder<C, A> getHolder(int instanceId) {
         return (EdsInstanceProviderHolder<C, A>) holderBuilder.newHolder(instanceId, getAssetType());
     }
@@ -291,14 +291,12 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         return configLoadAs(configContent);
     }
 
-    @SuppressWarnings("unchecked")
     protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
         return ConfigUtils.loadAs(configContent, clazz);
     }
-
-    @SuppressWarnings("unchecked")
+    
     @Override
     public A assetLoadAs(String originalModel) {
         // Get the entity type of generic `A`
