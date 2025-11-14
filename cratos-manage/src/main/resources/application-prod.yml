@@ -8,6 +8,7 @@ logging:
     HuaweiCloud-SDK-Access: ERROR
     java.util.concurrent.ExecutionException: OFF
     com.aliyun.sdk.gateway.pop.exception.PopClientException: OFF
+    com.azure.core.http.netty.implementation: OFF
 
 # 关闭视图层脱敏
 #cratos:

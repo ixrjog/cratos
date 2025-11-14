@@ -17,35 +17,25 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!--    <dependencyManagement>-->
-    <!--        <dependencies>-->
-    <!--            <dependency>-->
-    <!--                <groupId>io.netty</groupId>-->
-    <!--                <artifactId>netty-bom</artifactId>-->
-    <!--                <version>4.1.127.Final</version>-->
-    <!--                <type>pom</type>-->
-    <!--                <scope>import</scope>-->
-    <!--            </dependency>-->
-    <!--        </dependencies>-->
-    <!--    </dependencyManagement>-->
-
     <dependencies>
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-eds-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!-- Azure Identity - 固定版本 -->
+        <!-- Azure Identity - https://mvnrepository.com/artifact/com.azure/azure-identity -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-identity</artifactId>
-            <version>[1.11,)</version>
+            <!--            <version>[1.11,)</version>-->
+            <version>1.18.1</version>
         </dependency>
-        <!-- Microsoft Graph SDK - 固定版本 -->
+        <!-- Microsoft Graph SDK - https://mvnrepository.com/artifact/com.microsoft.graph/microsoft-graph -->
         <dependency>
             <groupId>com.microsoft.graph</groupId>
             <artifactId>microsoft-graph</artifactId>
-            <version>[6.0,)</version>
+            <!--            <version>[6.0,)</version>-->
+            <version>6.56.0</version>
         </dependency>
     </dependencies>
 
