@@ -136,7 +136,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
     private List<EdsAssetIndex> createEdsAssetIndices(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
                                                       A entity) {
         List<EdsAssetIndex> indices = toIndexes(instance, edsAsset, entity);
-        EdsAssetIndex index = convertToEdsAssetIndex(instance, edsAsset, entity);
+        EdsAssetIndex index = toIndex(instance, edsAsset, entity);
         if (index == null) {
             return indices;
         }
@@ -161,8 +161,8 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
                                        List<EdsAssetIndex> indices) {
     }
 
-    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
-                                                   A entity) {
+    protected EdsAssetIndex toIndex(ExternalDataSourceInstance<C> instance, EdsAsset edsAsset,
+                                    A entity) {
         return null;
     }
 

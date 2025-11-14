@@ -75,8 +75,8 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
     }
 
     @Override
-    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                            EdsAsset edsAsset, HostedZone entity) {
+    protected EdsAssetIndex toIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                    EdsAsset edsAsset, HostedZone entity) {
         String name = edsAsset.getName();
         String domainName = name != null && name.endsWith(".") ? org.apache.commons.lang3.StringUtils.removeEnd(name,
                 ".") : name;
