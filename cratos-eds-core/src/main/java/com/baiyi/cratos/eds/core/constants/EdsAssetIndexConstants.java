@@ -57,7 +57,7 @@ public interface EdsAssetIndexConstants {
 
     String GCP_MEMBER_ROLES = "gcp.member.roles";
 
-    String AZURE_POLICIES = "azure.policies";
+    String AZURE_DIRECTORY_ROLES = "azure.directory.roles";
 
     String HUAWEICLOUD_IAM_POLICIES = "iam.policies";
 

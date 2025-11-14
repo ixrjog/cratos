@@ -6,39 +6,38 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/11/12 17:13
+ * &#064;Date  2025/11/14 11:28
  * &#064;Version 1.0
  */
-public class GraphUserModel {
+public class GraphDirectoryModel {
+
+
+    // DirectoryRole
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     @Schema
-    public static class User implements BaseGraph.GraphMapper<User> {
+    public static class Role implements BaseGraph.GraphMapper<Role> {
 
-        public static User of(Map<String, Object> map) {
-            return User.builder()
+        public static Role of(Map<String, Object> map) {
+            return Role.builder()
                     .build()
                     .to(map);
         }
 
-        private List<String> businessPhones;
+        private String roleTemplateId;
         private String displayName;
-        private String surname;
-        private String givenName;
+        private String description;
         private String id;
         private String odataType;
-        private String userPrincipalName;
-        private Boolean accountEnabled;
-        private List<String> directoryRoleIds;
 
     }
+
 
 }

@@ -23,11 +23,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_ACCOUNT_USERNAME;
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_LOGIN_PROFILE;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
 /**
  * &#064;Author  baiyi
@@ -54,11 +55,15 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
             ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance) throws EdsQueryEntitiesException {
         return GraphUserRepo.listUsers(instance.getConfig())
                 .stream()
-                .peek(e -> {
-                    GraphUserModel.User base = GraphUserRepo.getUserById(instance.getConfig(), e.getId());
-                    e.setAccountEnabled(base.getAccountEnabled());
-                })
+                .peek(e -> wrapUser(instance.getConfig(), e))
                 .toList();
+    }
+
+    private void wrapUser(EdsAzureConfigModel.Azure azure, GraphUserModel.User user) {
+        GraphUserModel.User base = GraphUserRepo.getUserById(azure, user.getId());
+        user.setAccountEnabled(base.getAccountEnabled());
+        List<String> roleIds = GraphUserRepo.getUserDirectoryRoleIds(azure, user.getId());
+        user.setDirectoryRoleIds(roleIds);
     }
 
     @Override
@@ -84,6 +89,18 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
                 edsAsset, CLOUD_LOGIN_PROFILE,
                 entity.getAccountEnabled() ? "Enabled" : "Disabled"
         ));
+        // 角色
+        if (!CollectionUtils.isEmpty(entity.getDirectoryRoleIds())) {
+            java.util.Set<String> dirRoleIdsSet = Set.copyOf(entity.getDirectoryRoleIds());
+            String joined = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.AZURE_DIRECTORY_ROLE).stream()
+                    .filter(role -> dirRoleIdsSet.contains(role.getAssetId()))
+                    .map(EdsAsset::getName)
+                    .filter(StringUtils::isNotBlank)
+                    .collect(java.util.stream.Collectors.joining(INDEX_VALUE_DIVISION_SYMBOL));
+            if (StringUtils.isNotBlank(joined)) {
+                indices.add(createEdsAssetIndex(edsAsset, AZURE_DIRECTORY_ROLES, joined));
+            }
+        }
         return indices;
     }
 

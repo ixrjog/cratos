@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.azure.repo;
 import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostResponse;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
@@ -65,7 +66,22 @@ public class GraphUserRepo {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         User user = new User();
         user.setAccountEnabled(false);
-        User result = graphClient.users().byUserId(userId).patch(user);
+        User result = graphClient.users()
+                .byUserId(userId)
+                .patch(user);
+    }
+
+    public static List<String> getUserDirectoryRoleIds(EdsAzureConfigModel.Azure azure, String userId) {
+        final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
+        com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody getMemberObjectsPostRequestBody = new com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody();
+        getMemberObjectsPostRequestBody.setSecurityEnabledOnly(true);
+        var result = graphClient.directoryObjects()
+                .byDirectoryObjectId(userId)
+                .getMemberObjects()
+                .post(getMemberObjectsPostRequestBody);
+        return Optional.ofNullable(result)
+                .map(GetMemberObjectsPostResponse::getValue)
+                .orElse(List.of());
     }
 
 }

@@ -24,7 +24,7 @@ import com.baiyi.cratos.wrapper.UserWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AZURE_POLICIES;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AZURE_DIRECTORY_ROLES;
 
 /**
  * &#064;Author  baiyi
@@ -65,7 +65,7 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsAzureCon
 
     @Override
     public String getPolicyIndexName(EdsAsset asset) {
-        return AZURE_POLICIES;
+        return AZURE_DIRECTORY_ROLES;
     }
 
     @Override

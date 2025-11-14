@@ -1,9 +1,13 @@
 package com.baiyi.cratos.eds;
 
 
+import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
+import com.baiyi.cratos.eds.azure.graph.model.GraphDirectoryModel;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
+import com.baiyi.cratos.eds.azure.repo.GraphDirectoryRepo;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.microsoft.graph.serviceclient.GraphServiceClient;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -40,6 +44,33 @@ public class EdsAzureTest extends BaseEdsTest<EdsAzureConfigModel.Azure> {
         EdsAzureConfigModel.Azure azure = getConfig(51);
         GraphUserModel.User u = GraphUserRepo.getUserById(azure, "102e560b-9741-42b4-9324-4428ad0c70ae");
         System.out.println(u);
+    }
+
+    @Test
+    void test3() {
+        EdsAzureConfigModel.Azure azure = getConfig(51);
+        // 测试用户权限（权限要求较低）
+//        List<GraphUserModel.User> users = GraphUserRepo.listUsers(azure);
+//        System.out.println("Users count: " + users.size());
+
+        // 如果需要测试目录角色，需要在 Azure Portal 中添加 Directory.Read.All 权限
+        List<GraphDirectoryModel.Role> r = GraphDirectoryRepo.listRoles(azure);
+        System.out.println(r);
+    }
+
+
+    @Test
+    void test4() {
+        EdsAzureConfigModel.Azure azure = getConfig(51);
+        final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
+
+        com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody getMemberObjectsPostRequestBody = new com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody();
+        getMemberObjectsPostRequestBody.setSecurityEnabledOnly(true);
+        var result = graphClient.directoryObjects().byDirectoryObjectId("c7e1cf04-e0e1-4ee4-aec2-fd1a98f4fc60").getMemberObjects().post(getMemberObjectsPostRequestBody);
+
+        result.getValue();
+
+        System.out.println(result);
     }
 
 }

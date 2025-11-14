@@ -22,8 +22,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_NLB("NLB", 3),
     ALIYUN_ECS("ECS", 4),
     ALIYUN_DOMAIN("Domain", 5),
-    @CloudIdentity
-    ALIYUN_RAM_USER("RAM User", 6),
+    @CloudIdentity ALIYUN_RAM_USER("RAM User", 6),
     ALIYUN_RAM_POLICY("RAM Policy", 7),
     ALIYUN_RAM_ACCESS_KEY("RAM AccessKey", 8),
     ALIYUN_OSS_BUCKET("OSS Bucket", 9),
@@ -66,13 +65,11 @@ public enum EdsAssetTypeEnum {
     AWS_ECR_REPOSITORY("ECR Repository", 44),
     AWS_VPC("VPC", 45),
     AWS_SUBNET("Subnet", 46),
-    @CloudIdentity
-    AWS_IAM_USER("IAM User", 47),
+    @CloudIdentity AWS_IAM_USER("IAM User", 47),
     AWS_IAM_POLICY("IAM Policy", 48),
 
     HUAWEICLOUD_ECS("ECS", 49),
-    @CloudIdentity
-    HUAWEICLOUD_IAM_USER("IAM User", 50),
+    @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("Certificate", 51),
     HUAWEICLOUD_VPC("VPC", 52),
     HUAWEICLOUD_SUBNET("Subnet", 53),
@@ -113,8 +110,7 @@ public enum EdsAssetTypeEnum {
     HARBOR_REPOSITORY("Harbor Repository", 81),
 
     GCP_CERTIFICATE("Certificate", 82),
-    @CloudIdentity
-    GCP_MEMBER("Member", 83),
+    @CloudIdentity GCP_MEMBER("Member", 83),
 
     JENKINS_COMPUTER("Computer Node", 84),
 
@@ -128,6 +124,7 @@ public enum EdsAssetTypeEnum {
     ZBX_EVENT("Event", 88),
     @CloudIdentity
     AZURE_USER("User", 89),
+    AZURE_DIRECTORY_ROLE("DirectoryRole", 90),
 
     DEF("Default", 9999);
 
