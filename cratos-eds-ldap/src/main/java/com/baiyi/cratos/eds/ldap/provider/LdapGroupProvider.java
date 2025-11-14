@@ -64,8 +64,8 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
-                                                      EdsAsset edsAsset, LdapGroup.Group entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+                                            EdsAsset edsAsset, LdapGroup.Group entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, LDAP_GROUP_DN, Joiner.on(",")
                 .skipNulls()

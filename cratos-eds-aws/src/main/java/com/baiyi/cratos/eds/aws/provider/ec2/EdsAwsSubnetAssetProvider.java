@@ -83,8 +83,8 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                                      EdsAsset edsAsset, AwsEc2.Subnet entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                            EdsAsset edsAsset, AwsEc2.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()
                 .getCidrBlock()));

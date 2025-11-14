@@ -66,8 +66,8 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, DescribeVpcsResponse.Vpc entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset, DescribeVpcsResponse.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getCidrBlock()));
         return indices;

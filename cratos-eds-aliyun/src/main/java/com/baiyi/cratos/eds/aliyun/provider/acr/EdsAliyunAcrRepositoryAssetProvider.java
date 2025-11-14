@@ -96,9 +96,9 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset,
-                                                      ListRepositoryResponse.RepositoriesItem entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset,
+                                            ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ACR_INSTANCE_ID, entity.getInstanceId()));

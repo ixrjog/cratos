@@ -78,8 +78,8 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                                      EdsAsset edsAsset, AwsEc2.Vpc entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                            EdsAsset edsAsset, AwsEc2.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()
                 .getCidrBlock()));

@@ -79,9 +79,9 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset,
-                                                      com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset,
+                                            com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_REDIS_PRIVATE_IP, entity.getPrivateIp()));

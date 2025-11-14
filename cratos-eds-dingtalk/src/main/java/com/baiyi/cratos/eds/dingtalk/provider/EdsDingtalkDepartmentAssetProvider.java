@@ -109,7 +109,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkDepartmentModel.Department entity) {
         if (entity.getParentId() == null) {

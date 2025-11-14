@@ -107,9 +107,9 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset,
-                                                      ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset,
+                                            ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             indices.add(createEdsAssetIndex(edsAsset, ALIYUN_ONS_INSTANCE_ID, entity.getInstanceId()));

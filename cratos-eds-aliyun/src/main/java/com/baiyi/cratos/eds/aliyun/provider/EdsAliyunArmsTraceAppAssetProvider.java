@@ -109,8 +109,8 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                             EdsAsset edsAsset, AliyunArms.TraceApps entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset, AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
         String env = EnvUtils.getEnvSuffix(envMap, name);

@@ -85,7 +85,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
             AlimailUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

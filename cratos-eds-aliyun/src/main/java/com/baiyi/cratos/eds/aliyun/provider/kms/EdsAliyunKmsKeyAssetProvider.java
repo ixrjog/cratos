@@ -103,8 +103,8 @@ public class EdsAliyunKmsKeyAssetProvider extends BaseHasEndpointsEdsAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, AliyunKms.KmsKey entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset, AliyunKms.KmsKey entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_INSTANCE_ID, entity.getMetadata()

@@ -60,8 +60,8 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
-                                                      EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                            EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Optional.ofNullable(entity.getUserId())
                 .filter(IdentityUtils::hasIdentity)

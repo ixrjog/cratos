@@ -57,7 +57,7 @@ public class EdsIstioDestinationRuleAssetProvider extends BaseEdsKubernetesAsset
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             DestinationRule entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

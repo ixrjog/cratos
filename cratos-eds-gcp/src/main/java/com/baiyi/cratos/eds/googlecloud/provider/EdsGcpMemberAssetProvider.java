@@ -80,7 +80,7 @@ public class EdsGcpMemberAssetProvider extends BaseEdsInstanceAssetProvider<EdsG
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance, EdsAsset edsAsset,
             GoogleMemberModel.Member entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

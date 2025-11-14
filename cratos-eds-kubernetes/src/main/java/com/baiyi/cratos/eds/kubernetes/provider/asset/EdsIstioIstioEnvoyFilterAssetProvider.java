@@ -57,7 +57,7 @@ public class EdsIstioIstioEnvoyFilterAssetProvider extends BaseEdsKubernetesAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             EnvoyFilter entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

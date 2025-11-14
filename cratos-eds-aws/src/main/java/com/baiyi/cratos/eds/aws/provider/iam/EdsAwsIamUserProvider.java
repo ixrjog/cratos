@@ -81,8 +81,8 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                                      EdsAsset edsAsset, User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                            EdsAsset edsAsset, User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(instance.getEdsConfigModel(),

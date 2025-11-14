@@ -96,7 +96,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

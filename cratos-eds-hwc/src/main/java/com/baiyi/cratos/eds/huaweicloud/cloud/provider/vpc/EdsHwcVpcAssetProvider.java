@@ -83,7 +83,7 @@ public class EdsHwcVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
             HwcVpc.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

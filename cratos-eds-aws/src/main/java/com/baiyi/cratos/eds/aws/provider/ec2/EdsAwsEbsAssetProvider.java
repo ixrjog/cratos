@@ -62,8 +62,8 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                                      EdsAsset edsAsset, Volume entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                            EdsAsset edsAsset, Volume entity) {
         return entity.getAttachments()
                 .stream()
                 .filter(attachment -> StringUtils.hasText(attachment.getInstanceId()))

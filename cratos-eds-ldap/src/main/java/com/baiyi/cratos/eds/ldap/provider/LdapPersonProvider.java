@@ -68,8 +68,8 @@ public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConf
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
-                                                      EdsAsset edsAsset, LdapPerson.Person entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+                                            EdsAsset edsAsset, LdapPerson.Person entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, LDAP_USER_DN, Joiner.on(",")
                 .skipNulls()

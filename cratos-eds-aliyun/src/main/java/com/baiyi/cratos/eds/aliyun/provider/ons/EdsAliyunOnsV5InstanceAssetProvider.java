@@ -90,7 +90,7 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
             EdsAsset edsAsset,
             ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {

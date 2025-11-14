@@ -91,8 +91,8 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
-                                                      EdsAsset edsAsset, AwsSns.Subscription entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+                                            EdsAsset edsAsset, AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()
                 .getEndpoint()));

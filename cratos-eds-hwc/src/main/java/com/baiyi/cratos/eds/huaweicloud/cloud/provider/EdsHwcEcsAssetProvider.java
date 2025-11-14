@@ -115,7 +115,7 @@ public class EdsHwcEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHw
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance, EdsAsset edsAsset,
             HwcEcs.Ecs entity) {
         Map<String, List<HwcEcs.ServerAddress>> addressTypeMap = toAddressTypeMap(entity.getServerDetail()

@@ -90,7 +90,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, EdsAsset edsAsset,
             CloudflareDns.DnsRecord entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

@@ -79,7 +79,7 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance, EdsAsset edsAsset,
             GraphUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

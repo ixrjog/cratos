@@ -99,8 +99,8 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, AliyunVirtualSwitch.Switch entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset, AliyunVirtualSwitch.Switch entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()
                 .getCidrBlock()));

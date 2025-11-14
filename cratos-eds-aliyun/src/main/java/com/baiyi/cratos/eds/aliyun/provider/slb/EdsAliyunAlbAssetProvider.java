@@ -100,7 +100,7 @@ public class EdsAliyunAlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, EdsAsset edsAsset, AliyunAlb.Alb entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {

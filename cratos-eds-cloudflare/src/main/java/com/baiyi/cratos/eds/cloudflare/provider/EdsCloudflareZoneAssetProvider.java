@@ -66,7 +66,7 @@ public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, EdsAsset edsAsset,
             CloudflareZone.Zone entity) {
         if (StringUtils.hasText(entity.getCnameSuffix())) {

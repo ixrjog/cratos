@@ -87,8 +87,8 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
-                                                      EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+                                            EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListEntitiesForPolicyResponse.User> users = aliyunRamUserRepo.listUsersForPolicy(

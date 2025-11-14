@@ -75,7 +75,7 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvi
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
             AlimailDepartment.Department entity) {
         return List.of(createEdsAssetIndex(edsAsset, ALIMAIL_DEPARTMENT_PARENT_ID, entity.getParentId()));

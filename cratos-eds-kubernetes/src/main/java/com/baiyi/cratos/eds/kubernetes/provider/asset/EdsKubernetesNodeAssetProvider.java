@@ -90,7 +90,7 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
      * @return
      */
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset, Node entity) {
         Optional<Map<String, Quantity>> optionalMap = Optional.of(entity)
                 .map(Node::getStatus)

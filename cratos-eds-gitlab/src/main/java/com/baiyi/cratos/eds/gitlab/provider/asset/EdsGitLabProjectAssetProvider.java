@@ -64,8 +64,8 @@ public class EdsGitLabProjectAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
-                                                      EdsAsset edsAsset, Project entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                            EdsAsset edsAsset, Project entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, REPO_SSH_URL, entity.getSshUrlToRepo()));
         indices.add(createEdsAssetIndex(edsAsset, REPO_HTTP_URL, entity.getHttpUrlToRepo()));

@@ -84,7 +84,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(
+    protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

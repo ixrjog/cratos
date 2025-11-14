@@ -65,8 +65,8 @@ public class EdsGitLabUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> convertToEdsAssetIndexList(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
-                                                      EdsAsset edsAsset, User entity) {
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+                                            EdsAsset edsAsset, User entity) {
         if (ValidationUtils.isURL(entity.getAvatarUrl())) {
             return List.of(createEdsAssetIndex(edsAsset, USER_AVATAR, entity.getAvatarUrl()));
         }
