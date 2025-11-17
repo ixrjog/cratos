@@ -1,14 +1,12 @@
 package com.baiyi.cratos.eds.alimail.repo;
 
-import com.baiyi.cratos.eds.alimail.client.AlimailTokenClient;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
-import com.baiyi.cratos.eds.alimail.model.AlimailToken;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
 import com.google.common.collect.Lists;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -18,11 +16,9 @@ import java.util.List;
  * &#064;Date  2025/3/11 16:29
  * &#064;Version 1.0
  */
-@Component
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AlimailDepartmentRepo {
 
-    private final AlimailTokenClient alimailTokenClient;
     public static final String ROOT = "$root";
 
     /**
@@ -32,15 +28,14 @@ public class AlimailDepartmentRepo {
      * @param id      部门ID
      * @return
      */
-    public List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail, String id) {
-        AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
-        AlimailToken.Token token = alimailTokenClient.getToken(alimail);
+    public static List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail, String id) {
+        AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         List<AlimailDepartment.Department> result = Lists.newArrayList();
         int offset = 0;
         final int limit = 100;
         AlimailDepartment.ListSubDepartmentsResult dept;
         do {
-            dept = alimailService.listSubDepartments(token.toBearer(), id, limit, offset);
+            dept = alimailService.listSubDepartments(id, limit, offset);
             if (!CollectionUtils.isEmpty(dept.getDepartments())) {
                 result.addAll(dept.getDepartments());
                 offset += limit;
@@ -49,7 +44,7 @@ public class AlimailDepartmentRepo {
         return result;
     }
 
-    public List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail,
+    public static List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail,
                                                                  List<AlimailDepartment.Department> departments) {
         List<AlimailDepartment.Department> result = Lists.newArrayList();
         List<AlimailDepartment.Department> stack = Lists.newArrayList(departments); // 使用显式栈代替递归

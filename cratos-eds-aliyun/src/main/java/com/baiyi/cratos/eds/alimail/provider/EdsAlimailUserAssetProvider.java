@@ -37,17 +37,13 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
 public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAlimailConfigModel.Alimail, AlimailUser.User> {
 
-    private final AlimailUserRepo alimailUserRepo;
-
     public EdsAlimailUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                        EdsAssetIndexFacade edsAssetIndexFacade,
                                        UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                       EdsInstanceProviderHolderBuilder holderBuilder,
-                                       AlimailUserRepo alimailUserRepo) {
+                                       EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.alimailUserRepo = alimailUserRepo;
     }
 
     @Override
@@ -60,7 +56,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
             }
             List<AlimailUser.User> entities = Lists.newArrayList();
             departments.forEach(department -> {
-                List<AlimailUser.User> users = alimailUserRepo.listUsersOfDepartment(instance.getEdsConfigModel(),
+                List<AlimailUser.User> users = AlimailUserRepo.listUsersOfDepartment(instance.getEdsConfigModel(),
                         department.getAssetId());
                 if (!CollectionUtils.isEmpty(users)) {
                     entities.addAll(users);

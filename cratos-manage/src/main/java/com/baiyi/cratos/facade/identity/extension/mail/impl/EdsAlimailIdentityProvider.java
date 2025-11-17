@@ -31,16 +31,13 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
 public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsAlimailConfigModel.Alimail, AlimailUser.User> {
 
-    private final AlimailUserRepo alimailUserRepo;
-
     public EdsAlimailIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                       EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
                                       UserService userService, UserWrapper userWrapper,
                                       EdsInstanceWrapper instanceWrapper,
-                                      EdsInstanceProviderHolderBuilder holderBuilder, AlimailUserRepo alimailUserRepo) {
+                                      EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsInstanceService, edsAssetService, edsAssetWrapper, edsAssetIndexService, userService, userWrapper,
                 instanceWrapper, holderBuilder);
-        this.alimailUserRepo = alimailUserRepo;
     }
 
     @Override
@@ -63,7 +60,7 @@ public class EdsAlimailIdentityProvider extends BaseMailIdentityProvider<EdsAlim
                         blockMailAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
                 .getEdsConfigModel();
-        alimailUserRepo.freezeUser(alimail, blockMailAccount.getUserId());
+        AlimailUserRepo.freezeUser(alimail, blockMailAccount.getUserId());
     }
 
 }

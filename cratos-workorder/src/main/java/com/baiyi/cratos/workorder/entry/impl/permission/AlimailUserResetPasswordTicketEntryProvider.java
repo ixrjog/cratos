@@ -50,7 +50,6 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsInstanceService edsInstanceService;
     private final EdsIdentityFacade edsIdentityFacade;
-    private final AlimailUserRepo alimailUserRepo;
     private final WorkOrderService workOrderService;
     private final UserService userService;
     private final ResetAlimailUserNoticeSender resetAlimailUserNoticeSender;
@@ -61,13 +60,12 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
                                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                        EdsInstanceService edsInstanceService,
                                                        EdsIdentityFacade edsIdentityFacade,
-                                                       AlimailUserRepo alimailUserRepo, UserService userService,
+                                                       UserService userService,
                                                        ResetAlimailUserNoticeSender resetAlimailUserNoticeSender) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsInstanceService = edsInstanceService;
         this.edsIdentityFacade = edsIdentityFacade;
-        this.alimailUserRepo = alimailUserRepo;
         this.workOrderService = workOrderService;
         this.userService = userService;
         this.resetAlimailUserNoticeSender = resetAlimailUserNoticeSender;
@@ -90,7 +88,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
         try {
             final String mailUserId = mailAccount.getAccount()
                     .getAssetId();
-            alimailUserRepo.resetPassword(alimail, mailUserId, newPassword);
+            AlimailUserRepo.resetPassword(alimail, mailUserId, newPassword);
         } catch (Exception e) {
             WorkOrderTicketException.runtime(e.getMessage());
         }

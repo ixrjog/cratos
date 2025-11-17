@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.alimail.client;
+package com.baiyi.cratos.eds.alimail.auth;
 
 import com.baiyi.cratos.eds.alimail.model.AlimailToken;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
@@ -20,7 +20,7 @@ import static com.baiyi.cratos.common.configuration.CachingConfiguration.Reposit
  */
 @Slf4j
 @Component
-public class AlimailTokenClient {
+public class AlimailTokenHolder {
 
     /**
      * API Docs
@@ -44,6 +44,11 @@ public class AlimailTokenClient {
                 .body(BodyInserters.fromFormData(formData))
                 .retrieve()
                 .bodyToMono(AlimailToken.Token.class).block();
+    }
+
+    @Cacheable(cacheNames = SHORT_TERM, key = "'ALIMAIL:V0:BEARER:APPID:'+ #alimail.cred.id", unless = "#result == null")
+    public String getBearer(EdsAlimailConfigModel.Alimail alimail) {
+        return getToken(alimail).toBearer();
     }
 
 }

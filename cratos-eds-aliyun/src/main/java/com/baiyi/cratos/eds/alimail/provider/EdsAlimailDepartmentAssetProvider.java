@@ -34,31 +34,26 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIMAIL
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_DEPARTMENT)
 public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsAlimailConfigModel.Alimail, AlimailDepartment.Department> {
 
-    private final AlimailDepartmentRepo alimailDepartmentRepo;
-
     public EdsAlimailDepartmentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
-                                             EdsInstanceProviderHolderBuilder holderBuilder,
-                                             AlimailDepartmentRepo alimailDepartmentRepo) {
+                                             EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);
-        this.alimailDepartmentRepo = alimailDepartmentRepo;
     }
-
 
     @Override
     protected List<AlimailDepartment.Department> listEntities(
             ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance) throws EdsQueryEntitiesException {
         try {
-            List<AlimailDepartment.Department> departments = alimailDepartmentRepo.listSubDepartments(
+            List<AlimailDepartment.Department> departments = AlimailDepartmentRepo.listSubDepartments(
                     instance.getEdsConfigModel(), AlimailDepartmentRepo.ROOT);
             if (CollectionUtils.isEmpty(departments)) {
                 return List.of();
             }
             // 递归查询
-            return alimailDepartmentRepo.listSubDepartments(instance.getEdsConfigModel(), departments);
+            return AlimailDepartmentRepo.listSubDepartments(instance.getEdsConfigModel(), departments);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

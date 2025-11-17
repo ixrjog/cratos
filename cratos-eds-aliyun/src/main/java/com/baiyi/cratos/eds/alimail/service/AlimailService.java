@@ -7,7 +7,6 @@ import com.baiyi.cratos.eds.alimail.param.AlimailTokenParam;
 import com.baiyi.cratos.eds.alimail.param.AlimailUserParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PatchExchange;
@@ -24,21 +23,20 @@ public interface AlimailService {
     @GetExchange("/oauth2/v2.0/token")
     AlimailToken.Token getToken(@RequestBody AlimailTokenParam.GetToken getTokenParam);
 
-    @GetExchange("/v2/departments/{id}")
-    AlimailToken.Token departments(@RequestBody AlimailTokenParam.GetToken getTokenParam);
+//    @GetExchange("/v2/departments/{id}")
+//    AlimailToken.Token departments(@RequestBody AlimailTokenParam.GetToken getTokenParam);
 
     /**
      * https://alimail-cn.aliyuncs.com/v2/departments/{id}/departments
      *
-     * @param authorization
      * @param id
      * @param limit
      * @param offset
      * @return
+     * @RequestHeader("Authorization") String authorization
      */
     @GetExchange("/v2/departments/{id}/departments?limit={limit}&offset={offset}")
-    AlimailDepartment.ListSubDepartmentsResult listSubDepartments(@RequestHeader("Authorization") String authorization,
-                                                                  @PathVariable String id, @PathVariable Integer limit,
+    AlimailDepartment.ListSubDepartmentsResult listSubDepartments(@PathVariable String id, @PathVariable Integer limit,
                                                                   @PathVariable Integer offset);
 
     /**
@@ -51,17 +49,15 @@ public interface AlimailService {
      * @return
      */
     @GetExchange("/v2/departments/{id}/users?limit={limit}&offset={offset}")
-    AlimailUser.ListUsersOfDepartmentResult listUsersOfDepartment(@RequestHeader("Authorization") String authorization,
-                                                                  @PathVariable String id, @PathVariable Integer limit,
+    AlimailUser.ListUsersOfDepartmentResult listUsersOfDepartment(@PathVariable String id, @PathVariable Integer limit,
                                                                   @PathVariable Integer offset);
 
 
     @PatchExchange("/v2/users/{id}")
-    void freezeUser(@RequestHeader("Authorization") String authorization, @PathVariable String id,
-                    @RequestBody AlimailUserParam.UpdateUser freezeUser);
+    void freezeUser(@PathVariable String id, @RequestBody AlimailUserParam.UpdateUser freezeUser);
 
     @PostExchange("/v2/users/{id}/resetPassword")
-    AlimailUser.ResetPasswordResult resetPassword(@RequestHeader("Authorization") String authorization, @PathVariable String id,
+    AlimailUser.ResetPasswordResult resetPassword(@PathVariable String id,
                                                   @RequestBody AlimailUserParam.ResetPassword resetPassword);
 
 }

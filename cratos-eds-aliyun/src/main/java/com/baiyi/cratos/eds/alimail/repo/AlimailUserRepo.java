@@ -1,17 +1,15 @@
 package com.baiyi.cratos.eds.alimail.repo;
 
 import com.baiyi.cratos.common.exception.EdsIdentityException;
-import com.baiyi.cratos.eds.alimail.client.AlimailTokenClient;
-import com.baiyi.cratos.eds.alimail.model.AlimailToken;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.param.AlimailUserParam;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
 import com.google.common.collect.Lists;
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
@@ -22,21 +20,17 @@ import java.util.List;
  * &#064;Date  2025/3/12 09:31
  * &#064;Version 1.0
  */
-@Component
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AlimailUserRepo {
 
-    private final AlimailTokenClient alimailTokenClient;
-
-    public List<AlimailUser.User> listUsersOfDepartment(EdsAlimailConfigModel.Alimail alimail, String deptId) {
-        AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
-        AlimailToken.Token token = alimailTokenClient.getToken(alimail);
+    public static List<AlimailUser.User> listUsersOfDepartment(EdsAlimailConfigModel.Alimail alimail, String deptId) {
+        AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         List<AlimailUser.User> users = Lists.newArrayList();
         int offset = 0;
         final int limit = 100;
         AlimailUser.ListUsersOfDepartmentResult result;
         do {
-            result = alimailService.listUsersOfDepartment(token.toBearer(), deptId, limit, offset);
+            result = alimailService.listUsersOfDepartment(deptId, limit, offset);
             if (!CollectionUtils.isEmpty(result.getUsers())) {
                 users.addAll(result.getUsers());
                 offset += limit;
@@ -45,11 +39,10 @@ public class AlimailUserRepo {
         return users;
     }
 
-    public void freezeUser(EdsAlimailConfigModel.Alimail alimail, String userId) {
-        AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
-        AlimailToken.Token token = alimailTokenClient.getToken(alimail);
+    public static void freezeUser(EdsAlimailConfigModel.Alimail alimail, String userId) {
+        AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         try {
-            alimailService.freezeUser(token.toBearer(), userId, AlimailUserParam.UpdateUser.FREEZE_USER);
+            alimailService.freezeUser(userId, AlimailUserParam.UpdateUser.FREEZE_USER);
         } catch (WebClientResponseException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 // 用户不存在
@@ -59,14 +52,13 @@ public class AlimailUserRepo {
         }
     }
 
-    public AlimailUser.ResetPasswordResult resetPassword(EdsAlimailConfigModel.Alimail alimail, String userId,
+    public static AlimailUser.ResetPasswordResult resetPassword(EdsAlimailConfigModel.Alimail alimail, String userId,
                                                          String newPassword) {
-        AlimailService alimailService = AlimailServiceFactory.createAlimailService(alimail);
-        AlimailToken.Token token = alimailTokenClient.getToken(alimail);
+        AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         AlimailUserParam.ResetPassword resetPassword = AlimailUserParam.ResetPassword.builder()
                 .password(newPassword)
                 .build();
-        return alimailService.resetPassword(token.toBearer(), userId, resetPassword);
+        return alimailService.resetPassword(userId, resetPassword);
     }
 
 }

@@ -1,10 +1,8 @@
 package com.baiyi.cratos.eds;
 
-import com.baiyi.cratos.eds.alimail.client.AlimailTokenClient;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.repo.AlimailDepartmentRepo;
 import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
-import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,11 +14,6 @@ import java.util.List;
  */
 public class EdsAlimailTest extends BaseEdsTest<EdsAlimailConfigModel.Alimail> {
 
-    @Resource
-    private AlimailTokenClient alimailTokenClient;
-
-    @Resource
-    private AlimailDepartmentRepo alimailDepartmentRepo;
 
 //    @Test
 //    void test() {
@@ -32,7 +25,7 @@ public class EdsAlimailTest extends BaseEdsTest<EdsAlimailConfigModel.Alimail> {
     @Test
     void test2() {
         EdsAlimailConfigModel.Alimail alimail = getConfig(33);
-        List<AlimailDepartment.Department> departments = alimailDepartmentRepo.listSubDepartments(alimail, "$root");
+        List<AlimailDepartment.Department> departments = AlimailDepartmentRepo.listSubDepartments(alimail, "$root");
         System.out.println(departments);
     }
 

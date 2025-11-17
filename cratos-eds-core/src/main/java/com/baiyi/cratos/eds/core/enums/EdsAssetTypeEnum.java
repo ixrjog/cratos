@@ -122,8 +122,7 @@ public enum EdsAssetTypeEnum {
     ZBX_HOSTGROUP("HostGroup", 86),
     ZBX_TEMPLATE("Template", 87),
     ZBX_EVENT("Event", 88),
-    @CloudIdentity
-    AZURE_USER("User", 89),
+    @CloudIdentity AZURE_USER("User", 89),
     AZURE_DIRECTORY_ROLE("DirectoryRole", 90),
 
     DEF("Default", 9999);

@@ -45,7 +45,7 @@ public class KubernetesPodExec {
             }
             log.debug("Exec Output: {}", execContext.getOut());
             execContext.setExitCode(execWatch.exitCode()
-                    .get());
+                                            .get());
         } catch (InterruptedException ie) {
             Thread.currentThread()
                     .interrupt();
@@ -54,7 +54,7 @@ public class KubernetesPodExec {
             try {
                 execContext.getError()
                         .write(executionException.getMessage()
-                                .getBytes());
+                                       .getBytes());
             } catch (IOException ignored) {
             }
             log.warn("Execution Exception while waiting for the exec: {}", executionException.getMessage());
@@ -87,12 +87,7 @@ public class KubernetesPodExec {
         return new PodExecListener(execLatch);
     }
 
-    private static class PodExecListener implements ExecListener {
-        private final CountDownLatch execLatch;
-
-        public PodExecListener(CountDownLatch execLatch) {
-            this.execLatch = execLatch;
-        }
+    private record PodExecListener(CountDownLatch execLatch) implements ExecListener {
 
         @Override
         public void onOpen() {

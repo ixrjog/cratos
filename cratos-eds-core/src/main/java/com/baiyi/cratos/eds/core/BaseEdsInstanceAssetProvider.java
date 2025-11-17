@@ -296,7 +296,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A>
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
         return ConfigUtils.loadAs(configContent, clazz);
     }
-    
+
     @Override
     public A assetLoadAs(String originalModel) {
         // Get the entity type of generic `A`
