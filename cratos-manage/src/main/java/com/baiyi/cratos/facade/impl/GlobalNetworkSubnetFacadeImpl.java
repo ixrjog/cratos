@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -41,7 +41,7 @@ public class GlobalNetworkSubnetFacadeImpl implements GlobalNetworkSubnetFacade 
     }
 
     @Override
-    @BindAssetsAfterImport
+    @PostImportProcessor(ofType =  BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
     public GlobalNetworkSubnet addGlobalNetworkSubnet(GlobalNetworkSubnetParam.AddGlobalNetworkSubnet addGlobalNetworkSubnet) {
         GlobalNetworkSubnet globalNetworkSubnet = addGlobalNetworkSubnet.toTarget();
         globalNetworkSubnetService.add(globalNetworkSubnet);

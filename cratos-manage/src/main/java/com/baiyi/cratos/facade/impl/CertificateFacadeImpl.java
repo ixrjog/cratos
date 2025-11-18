@@ -1,7 +1,8 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.http.certificate.CertificateParam;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
@@ -27,7 +28,7 @@ public class CertificateFacadeImpl implements CertificateFacade {
     private final CertificateWrapper certificateWrapper;
 
     @Override
-    @BindAssetsAfterImport
+    @PostImportProcessor(ofType = BusinessTypeEnum.CERTIFICATE)
     public Certificate addCertificate(CertificateParam.AddCertificate addCertificate) {
         Certificate certificate = addCertificate.toTarget();
         certificateService.add(certificate);

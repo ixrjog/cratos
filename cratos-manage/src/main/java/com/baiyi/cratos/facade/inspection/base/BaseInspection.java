@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -35,7 +35,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
 
     private final NotificationTemplateService notificationTemplateService;
     private final DingtalkService dingtalkService;
-    protected final EdsInstanceHelper edsInstanceHelper;
+    protected final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsConfigService edsConfigService;
 
     @Value("${cratos.language:en-us}")
@@ -45,10 +45,10 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     private String notification;
 
     public BaseInspection(NotificationTemplateService notificationTemplateService, DingtalkService dingtalkService,
-                          EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService) {
+                          EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService) {
         this.notificationTemplateService = notificationTemplateService;
         this.dingtalkService = dingtalkService;
-        this.edsInstanceHelper = edsInstanceHelper;
+        this.edsInstanceQueryHelper = edsInstanceQueryHelper;
         this.edsConfigService = edsConfigService;
     }
 
@@ -67,7 +67,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     abstract protected String getMsg() throws IOException;
 
     protected void send() {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
                 EdsInstanceTypeEnum.DINGTALK_ROBOT,
                 SysTagKeys.INSPECTION_NOTIFICATION.getKey()
         );
@@ -75,7 +75,7 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()

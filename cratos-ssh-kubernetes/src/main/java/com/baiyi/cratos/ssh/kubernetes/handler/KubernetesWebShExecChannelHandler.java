@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -65,7 +65,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.KUBERNETES_
 public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChannelHandler<KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest> {
 
     private final PodCommandAuditor podCommandAuditor;
-    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
@@ -81,7 +81,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              EdsInstanceService edsInstanceService,
                                              SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
                                              AccessControlFacade accessControlFacade,
-                                             ApplicationService applicationService, EdsInstanceHelper edsInstanceHelper,
+                                             ApplicationService applicationService, EdsInstanceQueryHelper edsInstanceQueryHelper,
                                              EdsConfigService edsConfigService, DingtalkService dingtalkService,
                                              NotificationTemplateService notificationTemplateService,
                                              UserService userService, EnvFacade envFacade) {
@@ -90,7 +90,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                 edsInstanceService, sshAuditProperties, accessControlFacade, applicationService
         );
         this.podCommandAuditor = podCommandAuditor;
-        this.edsInstanceHelper = edsInstanceHelper;
+        this.edsInstanceQueryHelper = edsInstanceQueryHelper;
         this.edsConfigService = edsConfigService;
         this.dingtalkService = dingtalkService;
         this.notificationTemplateService = notificationTemplateService;
@@ -258,7 +258,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginContainerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
                 EdsInstanceTypeEnum.DINGTALK_ROBOT,
                 SysTagKeys.INSPECTION_NOTIFICATION.getKey()
         );
@@ -266,7 +266,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()

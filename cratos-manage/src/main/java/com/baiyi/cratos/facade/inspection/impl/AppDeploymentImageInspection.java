@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -52,10 +52,10 @@ public class AppDeploymentImageInspection extends BaseInspection {
     private static final String[] FILTER_LIST = {"-1", "-2", "-3", "-4"};
 
     public AppDeploymentImageInspection(NotificationTemplateService notificationTemplateService,
-                                        DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
+                                        DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
                                         EdsConfigService edsConfigService, EdsAssetService edsAssetService,
                                         EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }

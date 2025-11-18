@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.HasSessionUser;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.IImportFromAsset;
+import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
@@ -68,7 +68,7 @@ public class UserParam {
     @Schema
     @Builder
     @BusinessType(type = BusinessTypeEnum.USER)
-    public static class AddUser implements IToTarget<User>, IImportFromAsset {
+    public static class AddUser implements IToTarget<User>, HasImportFromAsset {
         private Integer id;
         private String username;
         private String uuid;

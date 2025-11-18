@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
@@ -101,13 +101,14 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    @BindAssetsAfterImport
+    @PostImportProcessor(ofType = BusinessTypeEnum.USER)
     public User addUser(UserParam.AddUser addUser) {
         User user = addUser.toTarget();
         if (!StringUtils.hasText(user.getUuid())) {
             user.setUuid(IdentityUtils.randomUUID());
         }
         userService.add(user);
+        // 从DingTalk导入的用户，需要创举LDAP用户
         return user;
     }
 
@@ -213,8 +214,8 @@ public class UserFacadeImpl implements UserFacade {
     public List<CredentialVO.Credential> queryMySshKey() {
         UserParam.QuerySshKey querySshKey = UserParam.QuerySshKey.builder()
                 .username(SecurityContextHolder.getContext()
-                        .getAuthentication()
-                        .getName())
+                                  .getAuthentication()
+                                  .getName())
                 .build();
         return querySshKey(querySshKey);
     }
@@ -230,9 +231,9 @@ public class UserFacadeImpl implements UserFacade {
     @SetSessionUserToParam(desc = "set Author")
     public void addMySshKey(UserParam.AddMySshKey addMySshKey) {
         this.addSshKey(UserParam.AddSshKey.builder()
-                .username(addMySshKey.getUsername())
-                .pubKey(addMySshKey.getPubKey())
-                .build());
+                               .username(addMySshKey.getUsername())
+                               .pubKey(addMySshKey.getPubKey())
+                               .build());
     }
 
     @Override

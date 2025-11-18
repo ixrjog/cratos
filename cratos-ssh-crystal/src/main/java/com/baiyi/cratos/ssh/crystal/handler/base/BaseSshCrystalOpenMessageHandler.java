@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -62,7 +62,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final BusinessTagFacade businessTagFacade;
     protected final UserService userService;
     protected final NotificationTemplateService notificationTemplateService;
-    protected final EdsInstanceHelper edsInstanceHelper;
+    protected final EdsInstanceQueryHelper edsInstanceQueryHelper;
     protected final EdsConfigService edsConfigService;
     protected final DingtalkService dingtalkService;
     protected final SshAuditProperties sshAuditProperties;
@@ -103,13 +103,13 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(
+        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
                 EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()

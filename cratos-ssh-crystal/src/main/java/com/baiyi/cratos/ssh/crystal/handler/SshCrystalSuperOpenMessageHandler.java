@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -56,13 +56,13 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              ServerAccessControlFacade serverAccessControlFacade,
                                              BusinessTagFacade businessTagFacade, UserService userService,
                                              NotificationTemplateService notificationTemplateService,
-                                             EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                             EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                              DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
                                              SimpleSshSessionFacade simpleSshSessionFacade,
                                              RbacUserRoleFacade rbacUserRoleFacade,
                                              EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
-                userService, notificationTemplateService, edsInstanceHelper, edsConfigService, dingtalkService,
+                userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
                 sshAuditProperties, simpleSshSessionFacade);
         this.rbacUserRoleFacade = rbacUserRoleFacade;
         this.holderBuilder = holderBuilder;

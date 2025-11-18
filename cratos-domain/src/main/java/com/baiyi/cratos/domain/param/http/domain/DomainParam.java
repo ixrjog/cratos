@@ -3,7 +3,7 @@ package com.baiyi.cratos.domain.param.http.domain;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Domain;
-import com.baiyi.cratos.domain.param.IImportFromAsset;
+import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
@@ -61,7 +61,7 @@ public class DomainParam {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.DOMAIN)
-    public static class AddDomain implements IToTarget<Domain>, IImportFromAsset {
+    public static class AddDomain implements IToTarget<Domain>, HasImportFromAsset {
         private Integer id;
         /**
          * 名称
@@ -86,7 +86,7 @@ public class DomainParam {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.DOMAIN)
-    public static class UpdateDomain implements IToTarget<Domain>, IImportFromAsset {
+    public static class UpdateDomain implements IToTarget<Domain>, HasImportFromAsset {
         private Integer id;
         /**
          * 名称

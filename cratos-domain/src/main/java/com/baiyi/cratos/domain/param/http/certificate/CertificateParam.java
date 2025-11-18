@@ -3,7 +3,7 @@ package com.baiyi.cratos.domain.param.http.certificate;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
-import com.baiyi.cratos.domain.param.IImportFromAsset;
+import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,7 +28,7 @@ public class CertificateParam {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
-    public static class AddCertificate implements IToTarget<Certificate>, IImportFromAsset {
+    public static class AddCertificate implements IToTarget<Certificate>, HasImportFromAsset {
         private String certificateId;
         private String name;
         @Schema(description = "域名")

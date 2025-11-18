@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.UserExtFacade;
@@ -56,11 +56,11 @@ public class ResignationUsersInspection extends BaseInspection {
     private final TagService tagService;
 
     public ResignationUsersInspection(NotificationTemplateService notificationTemplateService,
-                                      DingtalkService dingtalkService, EdsInstanceHelper edsInstanceHelper,
+                                      DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
                                       EdsConfigService edsConfigService, UserService userService,
                                       UserExtFacade userExtFacade, UserFacade userFacade,
                                       EdsIdentityFacade edsIdentityFacade, TagService tagService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.userService = userService;
         this.userExtFacade = userExtFacade;
         this.userFacade = userFacade;

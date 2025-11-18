@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.inspection.base.BaseInspection;
@@ -44,10 +44,10 @@ public class DeploymentGroupLabelInspection extends BaseInspection {
 
     public DeploymentGroupLabelInspection(NotificationTemplateService notificationTemplateService,
                                           DingtalkService dingtalkService,
-                                          EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                          EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                           EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                           EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;

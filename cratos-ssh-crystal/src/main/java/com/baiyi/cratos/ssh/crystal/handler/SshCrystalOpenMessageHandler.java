@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
@@ -43,11 +43,11 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                                         ServerAccessControlFacade serverAccessControlFacade,
                                         BusinessTagFacade businessTagFacade, UserService userService,
                                         NotificationTemplateService notificationTemplateService,
-                                        EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                        EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                         DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
                                         SimpleSshSessionFacade simpleSshSessionFacade) {
         super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
-                userService, notificationTemplateService, edsInstanceHelper, edsConfigService, dingtalkService,
+                userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
                 sshAuditProperties, simpleSshSessionFacade);
     }
 

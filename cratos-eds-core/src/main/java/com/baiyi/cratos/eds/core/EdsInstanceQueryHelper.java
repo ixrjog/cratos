@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class EdsInstanceHelper {
+public class EdsInstanceQueryHelper {
 
     private final EdsInstanceService edsInstanceService;
     private final TagService tagService;
@@ -43,6 +43,15 @@ public class EdsInstanceHelper {
         return Arrays.stream(instanceTypes)
                 .flatMap(instanceType -> queryInstance(instanceType, tag).stream())
                 .collect(Collectors.toList());
+    }
+
+    public List<EdsInstance> queryInstance(EdsInstanceTypeEnum instanceType) {
+        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
+                .page(1)
+                .length(1024)
+                .edsType(instanceType.name())
+                .build();
+        return queryInstance(pageQuery);
     }
 
     public List<EdsInstance> queryInstance(EdsInstanceTypeEnum instanceType, String tagKey) {
@@ -92,7 +101,8 @@ public class EdsInstanceHelper {
                 .toList();
     }
 
-    public List<? extends EdsInstanceProviderHolder<?, ?>> buildHolder(List<EdsInstance> edsInstanceList, String assetType) {
+    public List<? extends EdsInstanceProviderHolder<?, ?>> buildHolder(List<EdsInstance> edsInstanceList,
+                                                                       String assetType) {
         return edsInstanceList.stream()
                 .map(e -> holderBuilder.newHolder(e.getId(), assetType))
                 .toList();

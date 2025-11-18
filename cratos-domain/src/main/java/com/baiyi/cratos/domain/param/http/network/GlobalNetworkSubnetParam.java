@@ -3,7 +3,7 @@ package com.baiyi.cratos.domain.param.http.network;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
-import com.baiyi.cratos.domain.param.IImportFromAsset;
+import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
@@ -59,7 +59,7 @@ public class GlobalNetworkSubnetParam {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-    public static class AddGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, IImportFromAsset {
+    public static class AddGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, HasImportFromAsset {
         private Integer id;
         private String name;
         private String mainName;
@@ -79,7 +79,7 @@ public class GlobalNetworkSubnetParam {
     @Data
     @Schema
     @BusinessType(type = BusinessTypeEnum.GLOBAL_NETWORK_SUBNET)
-    public static class UpdateGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, IImportFromAsset {
+    public static class UpdateGlobalNetworkSubnet implements IToTarget<GlobalNetworkSubnet>, HasImportFromAsset {
         private Integer id;
         private String name;
         private String mainName;

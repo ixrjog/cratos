@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.gitlab;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsGitLabConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -22,12 +22,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EdsGitLabInstanceManager {
 
-    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsGitLabConfigLoader edsGitLabConfigLoader;
     private static final EdsInstanceTypeEnum[] INSTANCE_TYPES = {EdsInstanceTypeEnum.GITLAB};
 
     public EdsInstance findInstanceByHookToken(String hookToken) {
-        return edsInstanceHelper.queryInstance(INSTANCE_TYPES, SysTagKeys.EVENT.getKey())
+        return edsInstanceQueryHelper.queryInstance(INSTANCE_TYPES, SysTagKeys.EVENT.getKey())
                 .stream()
                 .filter(instance -> Optional.ofNullable(edsGitLabConfigLoader.getConfig(instance.getConfigId()))
                         .map(EdsGitLabConfigModel.GitLab::getSystemHooks)

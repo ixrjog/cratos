@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -42,7 +42,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.ZBX_ALERT_N
 @RequiredArgsConstructor
 public class AlertNotificationSender {
 
-    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
@@ -67,7 +67,7 @@ public class AlertNotificationSender {
         }
         try {
             DingtalkRobotModel.Msg message = getMsg(asset);
-            List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> dingtalkRobotHolders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+            List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> dingtalkRobotHolders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                     edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
             dingtalkRobotHolders.forEach(providerHolder -> {
                 EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
@@ -84,7 +84,7 @@ public class AlertNotificationSender {
     }
 
     private List<EdsInstance> queryDingtalkRobotInstances() {
-        return edsInstanceHelper.queryValidEdsInstance(
+        return edsInstanceQueryHelper.queryValidEdsInstance(
                 EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey());
     }
 

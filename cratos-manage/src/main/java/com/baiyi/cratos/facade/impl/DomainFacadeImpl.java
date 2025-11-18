@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.BindAssetsAfterImport;
+import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -36,7 +36,7 @@ public class DomainFacadeImpl implements DomainFacade {
     }
 
     @Override
-    @BindAssetsAfterImport
+    @PostImportProcessor(ofType = BusinessTypeEnum.DOMAIN)
     public Domain addDomain(DomainParam.AddDomain addDomain) {
         Domain domain = addDomain.toTarget();
         domainService.add(domain);

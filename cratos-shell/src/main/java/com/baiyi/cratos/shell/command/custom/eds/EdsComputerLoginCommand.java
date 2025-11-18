@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -91,7 +91,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
 
     private final EdsAssetService edsAssetService;
     private final ServerAccountService serverAccountService;
-    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
@@ -107,7 +107,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                                    SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
                                    BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade,
                                    EdsAssetService edsAssetService, ServerAccountService serverAccountService,
-                                   EdsInstanceHelper edsInstanceHelper, EdsConfigService edsConfigService,
+                                   EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                    DingtalkService dingtalkService,
                                    NotificationTemplateService notificationTemplateService, UserService userService) {
         super(helper, properties, properties.getCommands()
@@ -120,7 +120,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.businessTagFacade = businessTagFacade;
         this.edsAssetService = edsAssetService;
         this.serverAccountService = serverAccountService;
-        this.edsInstanceHelper = edsInstanceHelper;
+        this.edsInstanceQueryHelper = edsInstanceQueryHelper;
         this.edsConfigService = edsConfigService;
         this.dingtalkService = dingtalkService;
         this.notificationTemplateService = notificationTemplateService;
@@ -342,13 +342,13 @@ public class EdsComputerLoginCommand extends AbstractCommand {
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                                                                                    INSPECTION_NOTIFICATION.getKey());
+        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
+                                                                                         INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()

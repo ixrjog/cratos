@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.eaglecloud;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsEagleCloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EagleCloudSaseConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -23,7 +21,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EdsEagleCloudSaseInstanceManager {
 
-    private final EdsInstanceHelper edsInstanceHelper;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EagleCloudSaseConfigLoader eagleCloudSaseConfigLoader;
     private static final EdsInstanceTypeEnum[] INSTANCE_TYPES = {EdsInstanceTypeEnum.EAGLECLOUD_SASE};
 
@@ -36,14 +34,12 @@ public class EdsEagleCloudSaseInstanceManager {
         if (!StringUtils.hasText(token)) {
             return null;
         }
-        return edsInstanceHelper.queryInstance(INSTANCE_TYPES, SysTagKeys.EVENT.getKey())
+        return edsInstanceQueryHelper.queryInstance(INSTANCE_TYPES, SysTagKeys.EVENT.getKey())
                 .stream()
                 .filter(instance -> {
-                    EdsEagleCloudConfigModel.Sase sase = Optional.ofNullable(
-                                    eagleCloudSaseConfigLoader.getConfig(instance.getConfigId()))
-                            .orElse(null);
+                    EdsEagleCloudConfigModel.Sase sase = eagleCloudSaseConfigLoader.getConfig(instance.getConfigId());
                     return sase != null && token.equals(sase.getCred()
-                            .getToken());
+                                                                .getToken());
                 })
                 .findFirst()
                 .orElse(null);

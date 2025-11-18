@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.EdsInstanceHelper;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.report.ListAppGroup;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
@@ -145,11 +145,11 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
 
     public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
                                                    DingtalkService dingtalkService,
-                                                   EdsInstanceHelper edsInstanceHelper,
+                                                   EdsInstanceQueryHelper edsInstanceQueryHelper,
                                                    EdsConfigService edsConfigService, ListAppGroup listAppGroup,
                                                    EdsAssetService edsAssetService,
                                                    EdsAssetIndexService edsAssetIndexService) {
-        super(notificationTemplateService, dingtalkService, edsInstanceHelper, edsConfigService);
+        super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }
