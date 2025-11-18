@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.business.processor;
+package com.baiyi.cratos.processor;
 
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;

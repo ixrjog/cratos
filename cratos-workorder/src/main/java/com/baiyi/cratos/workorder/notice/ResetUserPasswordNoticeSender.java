@@ -29,11 +29,21 @@ public class ResetUserPasswordNoticeSender extends BaseWorkOrderNoticeSender {
                                          UserService userService, TicketWorkflowFacade ticketWorkflowFacade,
                                          EdsDingtalkMessageFacade edsDingtalkMessageFacade, LanguageUtils languageUtils,
                                          NotificationTemplateService notificationTemplateService) {
-        super(workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
-                notificationTemplateService);
+        super(
+                workOrderTicketEntryService, userService, ticketWorkflowFacade, edsDingtalkMessageFacade, languageUtils,
+                notificationTemplateService
+        );
     }
 
     public void sendMsg(WorkOrder workOrder, WorkOrderTicket ticket, String username, String password) {
+        Map<String, Object> dict = SimpleMapBuilder.newBuilder()
+                .put("username", username)
+                .put("password", password)
+                .build();
+        sendMsgToUser(username, dict);
+    }
+
+    public void sendMsg(String username, String password) {
         Map<String, Object> dict = SimpleMapBuilder.newBuilder()
                 .put("username", username)
                 .put("password", password)

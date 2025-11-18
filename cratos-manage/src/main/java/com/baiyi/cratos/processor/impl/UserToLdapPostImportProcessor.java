@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.business.processor.impl;
+package com.baiyi.cratos.processor.impl;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -7,12 +7,13 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.business.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.workorder.notice.ResetUserPasswordNoticeSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -37,6 +38,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
     private final UserService userService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final ResetUserPasswordNoticeSender resetUserPasswordNoticeSender;
 
     @Override
     public BusinessTypeEnum getBusinessType() {
@@ -77,6 +79,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
                         .build();
                 log.info("create ldap identity: {}", createLdapIdentity);
                 EdsIdentityVO.LdapIdentity ldapIdentity = edsIdentityFacade.createLdapIdentity(createLdapIdentity);
+                resetUserPasswordNoticeSender.sendMsg(user.getUsername(), password);
             }
         });
     }

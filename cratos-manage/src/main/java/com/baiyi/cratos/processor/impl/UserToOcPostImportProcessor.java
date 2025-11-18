@@ -1,11 +1,11 @@
-package com.baiyi.cratos.eds.business.processor.impl;
+package com.baiyi.cratos.processor.impl;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.eds.business.processor.BasePostImportAssetProcessor;
+import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
