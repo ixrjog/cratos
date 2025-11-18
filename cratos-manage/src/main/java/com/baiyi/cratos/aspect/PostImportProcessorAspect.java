@@ -2,15 +2,14 @@ package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
-import com.baiyi.cratos.eds.business.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.business.processor.PostImportAssetProcessorFactory;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -66,11 +65,12 @@ public class PostImportProcessorAspect {
                             .withTrue(() -> {
                                 try {
                                     EdsAsset asset = edsAssetService.getById(assetId);
-                                    BasePostImportAssetProcessor postImportAssetProcessor = PostImportAssetProcessorFactory.getProcessor(
-                                            businessTypeEnum, EdsAssetTypeEnum.valueOf(asset.getAssetType()));
-                                    if (postImportAssetProcessor != null) {
-                                        postImportAssetProcessor.process(toBusinessTarget.getId(), asset);
-                                    }
+                                    PostImportAssetProcessorFactory.process(
+                                            SimpleBusiness.builder()
+                                                    .businessType(businessTypeEnum.name())
+                                                    .businessId(toBusinessTarget.getId())
+                                                    .build(), asset
+                                    );
                                 } catch (Exception e) {
                                     log.error(e.getMessage());
                                 }

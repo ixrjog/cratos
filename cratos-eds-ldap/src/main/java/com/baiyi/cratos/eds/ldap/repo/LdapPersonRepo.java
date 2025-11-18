@@ -78,7 +78,6 @@ public class LdapPersonRepo {
 
     public Boolean checkPersonInLdap(EdsLdapConfigModel.Ldap ldap, String username) {
         return ldapClient.hasPersonInLdap(ldap, username);
-
     }
 
     public List<String> searchUserGroupByUsername(EdsLdapConfigModel.Ldap ldap, String username) {

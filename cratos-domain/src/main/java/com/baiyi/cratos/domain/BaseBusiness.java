@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain;
 
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import org.springframework.aop.support.AopUtils;
 
 /**
@@ -27,6 +28,10 @@ public interface BaseBusiness {
 
     interface HasBusinessType {
         String getBusinessType();
+
+        default BusinessTypeEnum getBusinessTypeEnum() {
+            return BusinessTypeEnum.valueOf(getBusinessType());
+        }
     }
 
     interface IBusinessTypeAnnotate {

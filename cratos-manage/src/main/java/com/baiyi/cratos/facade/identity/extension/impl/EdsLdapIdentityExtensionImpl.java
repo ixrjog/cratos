@@ -119,7 +119,9 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                 EdsIdentityException.runtime("The user already exists in the instance.");
             }
             ldapPersonRepo.create(holder.getInstance()
-                    .getEdsConfigModel(), person);
+                                          .getConfig(), person);
+            // 擦除密码
+            person.setUserPassword(null);
             // 导入资产
             EdsAsset personAsset = holder.getProvider()
                     .importAsset(holder.getInstance(), person);

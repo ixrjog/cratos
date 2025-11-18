@@ -14,6 +14,8 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -25,6 +27,8 @@ import java.util.Optional;
  * &#064;Date  2025/11/17 16:50
  * &#064;Version 1.0
  */
+@Slf4j
+@Order(1)
 @Component
 @RequiredArgsConstructor
 public class UserToLdapPostImportProcessor implements BasePostImportAssetProcessor {
@@ -58,15 +62,17 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
                     .build();
             EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
                     queryLdapIdentityDetails);
-            // 身份不存在
-            if (Optional.ofNullable(ldapIdentityDetails)
+            // 确认身份不存在后创建
+            List<EdsIdentityVO.LdapIdentity> ldapIdentities = Optional.ofNullable(ldapIdentityDetails)
                     .map(EdsIdentityVO.LdapIdentityDetails::getLdapIdentities)
-                    .isEmpty()) {
+                    .orElse(List.of());
+            if (CollectionUtils.isEmpty(ldapIdentities)) {
                 EdsIdentityParam.CreateLdapIdentity createLdapIdentity = EdsIdentityParam.CreateLdapIdentity.builder()
                         .instanceId(ldapInstance.getId())
                         .username(user.getUsername())
                         .password(PasswordGenerator.generatePassword())
                         .build();
+                log.info("create ldap identity: {}", createLdapIdentity);
                 EdsIdentityVO.LdapIdentity ldapIdentity = edsIdentityFacade.createLdapIdentity(createLdapIdentity);
             }
         });
