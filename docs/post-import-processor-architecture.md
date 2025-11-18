@@ -8,7 +8,7 @@
 
 ```mermaid
 graph TB
-    A[业务方法调用] --> B[@PostImportProcessor注解]
+    A[业务方法调用] --> B[PostImportProcessor注解]
     B --> C[PostImportProcessorAspect切面拦截]
     
     C --> D[doAfterReturning方法]
