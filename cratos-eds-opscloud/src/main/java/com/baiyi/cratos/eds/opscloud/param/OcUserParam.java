@@ -64,4 +64,24 @@ public class OcUserParam {
 
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class AddUser {
+        private String username;
+        private String displayName;
+        private String comment;
+        private Integer id;
+        @Builder.Default
+        private Boolean isActive = true;
+        private String name;
+        private Boolean needInitializeDefaultConfiguration = true;
+        private String password;
+        private String phone;
+        private String email;
+        private String wechat;
+    }
+
 }

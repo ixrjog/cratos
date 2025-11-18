@@ -67,7 +67,7 @@ public class PostImportAssetProcessorFactory {
         return processors != null ? processors : Lists.newArrayList();
     }
 
-    public static void process(BaseBusiness.HasBusiness hasBusiness, EdsAsset asset) {
+    public static void process(BaseBusiness.HasBusiness hasBusiness, EdsAsset asset, Map<String, Object> context) {
         List<BasePostImportAssetProcessor> processors = getProcessors(
                 hasBusiness.getBusinessTypeEnum(),
                 EdsAssetTypeEnum.valueOf(asset.getAssetType())
@@ -77,7 +77,7 @@ public class PostImportAssetProcessorFactory {
         }
         for (BasePostImportAssetProcessor processor : processors) {
             try {
-                processor.process(hasBusiness.getBusinessId(), asset);
+                processor.process(hasBusiness.getBusinessId(), asset, context);
             } catch (Exception e) {
                 log.error(
                         "Error processing asset with processor: {}", processor.getClass()

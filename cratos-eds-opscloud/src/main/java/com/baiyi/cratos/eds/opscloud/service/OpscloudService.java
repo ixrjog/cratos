@@ -39,4 +39,9 @@ public interface OpscloudService {
     HttpResult<OcLeoVO.BuildImage> queryBuildImageVersion(@RequestHeader("AccessToken") String accessToken,
                                                           @RequestBody OcLeoParam.QueryBuildImageVersion queryBuildImageVersion);
 
+
+    @PostExchange("/api/user/add")
+    HttpResult<OcUserVO.User> addUser(@RequestHeader("AccessToken") String accessToken,
+                                                 @RequestBody OcUserParam.AddUser addUser);
+
 }

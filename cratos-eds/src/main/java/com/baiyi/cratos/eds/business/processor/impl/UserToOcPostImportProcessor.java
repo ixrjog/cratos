@@ -5,13 +5,15 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
-import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.business.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
+import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
+import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
+import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
 import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,22 +23,22 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2025/11/17 16:50
+ * &#064;Date  2025/11/18 13:48
  * &#064;Version 1.0
  */
 @Slf4j
-@Order(1)
+@Order(2)
 @Component
 @RequiredArgsConstructor
-public class UserToLdapPostImportProcessor implements BasePostImportAssetProcessor {
+public class UserToOcPostImportProcessor implements BasePostImportAssetProcessor {
 
     private final UserService userService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
 
     @Override
     public BusinessTypeEnum getBusinessType() {
@@ -52,31 +54,28 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
     public void process(Integer businessId, EdsAsset asset, Map<String, Object> context) {
         User user = userService.getById(businessId);
         // 创建Ldap用户
-        List<EdsInstance> ldapInstances = edsInstanceQueryHelper.queryInstance(EdsInstanceTypeEnum.LDAP);
-        if (CollectionUtils.isEmpty(ldapInstances)) {
+        List<EdsInstance> opscloudInstances = edsInstanceQueryHelper.queryInstance(EdsInstanceTypeEnum.OPSCLOUD);
+        if (CollectionUtils.isEmpty(opscloudInstances)) {
             return;
         }
         final String password = context.containsKey("PASSWORD") ? context.get("PASSWORD")
                 .toString() : PasswordGenerator.generatePassword();
-        ldapInstances.forEach(ldapInstance -> {
-            EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsIdentityParam.QueryLdapIdentityDetails.builder()
+        opscloudInstances.forEach(opscloudInstance -> {
+            EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
+                    opscloudInstance.getConfigId());
+            OcUserParam.AddUser addUser = OcUserParam.AddUser.builder()
+                    .email(user.getEmail())
+                    .phone(user.getMobilePhone())
+                    .displayName(user.getDisplayName())
+                    .name(user.getName())
+                    .password(password)
                     .username(user.getUsername())
-                    .instanceId(ldapInstance.getId())
                     .build();
-            EdsIdentityVO.LdapIdentityDetails ldapIdentityDetails = edsIdentityFacade.queryLdapIdentityDetails(
-                    queryLdapIdentityDetails);
-            // 确认身份不存在后创建
-            List<EdsIdentityVO.LdapIdentity> ldapIdentities = Optional.ofNullable(ldapIdentityDetails)
-                    .map(EdsIdentityVO.LdapIdentityDetails::getLdapIdentities)
-                    .orElse(List.of());
-            if (CollectionUtils.isEmpty(ldapIdentities)) {
-                EdsIdentityParam.CreateLdapIdentity createLdapIdentity = EdsIdentityParam.CreateLdapIdentity.builder()
-                        .instanceId(ldapInstance.getId())
-                        .username(user.getUsername())
-                        .password(password)
-                        .build();
-                log.info("create ldap identity: {}", createLdapIdentity);
-                EdsIdentityVO.LdapIdentity ldapIdentity = edsIdentityFacade.createLdapIdentity(createLdapIdentity);
+            log.debug("create opscloud identity: {}", addUser);
+            try {
+                OcUserRepo.addUser(opscloud, addUser);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
         });
     }

@@ -2,6 +2,7 @@ package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.BusinessAssetBind;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.service.BusinessAssetBindService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
+import com.google.api.client.util.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -23,6 +25,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @Author baiyi
@@ -64,12 +67,14 @@ public class PostImportProcessorAspect {
                     IdentityUtils.validIdentityRun(assetId)
                             .withTrue(() -> {
                                 try {
+                                    Map<String, Object> context = Maps.newHashMap();
+                                    context.put("PASSWORD", PasswordGenerator.generatePassword());
                                     EdsAsset asset = edsAssetService.getById(assetId);
                                     PostImportAssetProcessorFactory.process(
                                             SimpleBusiness.builder()
                                                     .businessType(businessTypeEnum.name())
                                                     .businessId(toBusinessTarget.getId())
-                                                    .build(), asset
+                                                    .build(), asset, context
                                     );
                                 } catch (Exception e) {
                                     log.error(e.getMessage());

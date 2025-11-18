@@ -40,7 +40,6 @@ public class OcUserVO {
         private String createdBy;
         private String source;
         private String comment;
-
     }
 
 }

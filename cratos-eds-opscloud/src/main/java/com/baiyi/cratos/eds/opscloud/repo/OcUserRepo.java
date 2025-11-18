@@ -51,4 +51,14 @@ public class OcUserRepo {
         return result;
     }
 
+    public static OcUserVO.User addUser(EdsOpscloudConfigModel.Opscloud opscloud, OcUserParam.AddUser addUser) {
+        OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
+        HttpResult<OcUserVO.User> httpResult = opscloudService.addUser(opscloud.getCred()
+                .getAccessToken(), addUser);
+        if (!httpResult.isSuccess()) {
+            return null;
+        }
+        return httpResult.getBody();
+    }
+
 }
