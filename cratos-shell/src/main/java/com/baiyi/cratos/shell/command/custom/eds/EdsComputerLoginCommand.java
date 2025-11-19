@@ -59,7 +59,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.SSHSERVER_USER_LOGIN_SERVER_NOTICE;
@@ -75,9 +78,12 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerLoginCommand.
 @Slf4j
 @Component
 @SshShellComponent
-@ShellCommandGroup("Eds Computer Commands")
+@ShellCommandGroup("Eds CloudComputer Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class EdsComputerLoginCommand extends AbstractCommand {
+
+    public static final String GROUP = "computer";
+    private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
 
     private final SimpleSshSessionFacade simpleSshSessionFacade;
     private final CredentialService credentialService;
@@ -85,10 +91,6 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final ServerCommandAuditor serverCommandAuditor;
     private final BusinessDocFacade businessDocFacade;
     private final BusinessTagFacade businessTagFacade;
-
-    public static final String GROUP = "computer";
-    private static final String COMMAND_COMPUTER_LOGIN = GROUP + "-login";
-
     private final EdsAssetService edsAssetService;
     private final ServerAccountService serverAccountService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
@@ -110,8 +112,10 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                                    EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                    DingtalkService dingtalkService,
                                    NotificationTemplateService notificationTemplateService, UserService userService) {
-        super(helper, properties, properties.getCommands()
-                .getComputer());
+        super(
+                helper, properties, properties.getCommands()
+                        .getComputer()
+        );
         this.simpleSshSessionFacade = simpleSshSessionFacade;
         this.credentialService = credentialService;
         this.sshAuditProperties = sshAuditProperties;
@@ -132,11 +136,11 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     @ShellAuthentication(resource = "/computer/login")
     public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account,
-                              @ShellOption(help = "Preview Docs", defaultValue = "false") boolean proxy,
+                              @ShellOption(help = "Connect to the target server using a proxy", defaultValue = "false") boolean proxy,
                               @ShellOption(help = "Preview Docs", defaultValue = "false") boolean docs) {
         Map<Integer, EdsAsset> computerMapper = ComputerAssetContext.getComputerContext();
         if (CollectionUtils.isEmpty(computerMapper) || !computerMapper.containsKey(id)) {
-            helper.print("Computer does not exist, exec computer-list first, then login", PromptColor.RED);
+            helper.print("CloudComputer does not exist, exec computer-list first, then login", PromptColor.RED);
             return;
         }
         EdsAsset asset = computerMapper.get(id);
@@ -170,25 +174,35 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         }
         try {
             final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);
-            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(sshSessionInstanceId, asset, serverAccount,
-                    credential);
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
+                    sshSessionInstanceId, asset, serverAccount,
+                    credential
+            );
             // targetSystem.setInstanceId(sshSessionInstanceId);
             targetSystem.setTerminalSize(helper.terminalSize());
             targetSystem.setAuditPath(auditPath);
 
-            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sessionId, targetSystem,
-                    SshSessionInstanceTypeEnum.COMPUTER, auditPath);
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(
+                    sessionId, targetSystem,
+                    SshSessionInstanceTypeEnum.COMPUTER,
+                    auditPath
+            );
             // Watch signal
-            WatchTerminalSignalHandler watchTerminalSignalHandler = new WatchTerminalSignalHandler(sessionId,
-                    sshSessionInstanceId, terminal);
+            WatchTerminalSignalHandler watchTerminalSignalHandler = new WatchTerminalSignalHandler(
+                    sessionId,
+                                                                                                   sshSessionInstanceId,
+                                                                                                   terminal
+            );
             Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 try {
                     User user = userService.getByUsername(helper.getSshSession()
-                            .getUsername());
-                    DingtalkRobotModel.Msg msg = getMsg(user, serverAccount.getUsername(), asset.getAssetKey(),
-                            asset.getName());
+                                                                  .getUsername());
+                    DingtalkRobotModel.Msg msg = getMsg(
+                            user, serverAccount.getUsername(), asset.getAssetKey(),
+                            asset.getName()
+                    );
                     sendUserLoginServerNotice(msg);
                 } catch (IOException ignored) {
                 }
@@ -238,10 +252,12 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     }
 
     private HostSystem getProxyHost(EdsAsset targetComputer) throws SshException {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(targetComputer.getId())
-                .build(), SysTagKeys.SSH_PROXY.getKey());
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
+                SimpleBusiness.builder()
+                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                        .businessId(targetComputer.getId())
+                        .build(), SysTagKeys.SSH_PROXY.getKey()
+        );
         if (Objects.isNull(sshProxyBusinessTag)) {
             return HostSystem.NO_HOST;
         }
@@ -250,16 +266,21 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         if (!IpUtils.isIP(proxyIP)) {
             return HostSystem.NO_HOST;
         }
-        List<EdsAsset> proxyComputers = edsAssetService.queryInstanceAssetByTypeAndKey(targetComputer.getInstanceId(),
-                targetComputer.getAssetType(), proxyIP);
+        List<EdsAsset> proxyComputers = edsAssetService.queryInstanceAssetByTypeAndKey(
+                targetComputer.getInstanceId(),
+                targetComputer.getAssetType(),
+                proxyIP
+        );
         if (CollectionUtils.isEmpty(proxyComputers)) {
             return HostSystem.NO_HOST;
         }
         EdsAsset proxyComputer = proxyComputers.getFirst();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(proxyComputer.getId())
-                .build(), SysTagKeys.SERVER_ACCOUNT.getKey());
+        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(
+                SimpleBusiness.builder()
+                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                        .businessId(proxyComputer.getId())
+                        .build(), SysTagKeys.SERVER_ACCOUNT.getKey()
+        );
         if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
             return HostSystem.NO_HOST;
         }
@@ -330,20 +351,24 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     protected DingtalkRobotModel.Msg getMsg(User loginUser, String serverAccount, String serverIP,
                                             String serverName) throws IOException {
         NotificationTemplate notificationTemplate = getNotificationTemplate();
-        String msg = BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
-                .put("targetServer", Joiner.on("@")
-                        .join(serverAccount, serverIP))
-                .put("serverName", serverName)
-                .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
-                .build());
+        String msg = BeetlUtil.renderTemplate(
+                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
+                        .put(
+                                "targetServer", Joiner.on("@")
+                                        .join(serverAccount, serverIP)
+                        )
+                        .put("serverName", serverName)
+                        .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
+                        .build()
+        );
         return DingtalkRobotModel.loadAs(msg);
     }
 
     @SuppressWarnings("unchecked")
     private void sendUserLoginServerNotice(DingtalkRobotModel.Msg message) {
-        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                                                                                         INSPECTION_NOTIFICATION.getKey());
+        List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
@@ -352,8 +377,8 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
-                    .getEdsInstance()
-                    .getConfigId());
+                                                                   .getEdsInstance()
+                                                                   .getConfigId());
             EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
                     .configLoadAs(edsConfig);
             dingtalkService.send(robot.getToken(), message);

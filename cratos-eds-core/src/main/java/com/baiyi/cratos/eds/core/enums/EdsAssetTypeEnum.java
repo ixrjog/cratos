@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.enums;
 
+import com.baiyi.cratos.eds.core.annotation.CloudComputer;
 import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
 import lombok.Getter;
 
@@ -16,10 +17,11 @@ import java.util.stream.Collectors;
 @Getter
 public enum EdsAssetTypeEnum {
 
-    CRATOS_COMPUTER("Computer", 1),
+    CRATOS_COMPUTER("CloudComputer", 1),
 
     ALIYUN_ALB("ALB", 2),
     ALIYUN_NLB("NLB", 3),
+    @CloudComputer
     ALIYUN_ECS("ECS", 4),
     ALIYUN_DOMAIN("Domain", 5),
     @CloudIdentity ALIYUN_RAM_USER("RAM User", 6),
@@ -52,6 +54,7 @@ public enum EdsAssetTypeEnum {
     AWS_CERT("Certificate", 31),
     AWS_STS_VPN("Site-to-Site VPN", 32),
     AWS_ELB("ELB", 33),
+    @CloudComputer
     AWS_EC2("EC2", 34),
     AWS_EBS("EBS", 35),
     AWS_DOMAIN("Domain", 36),
@@ -67,7 +70,7 @@ public enum EdsAssetTypeEnum {
     AWS_SUBNET("Subnet", 46),
     @CloudIdentity AWS_IAM_USER("IAM User", 47),
     AWS_IAM_POLICY("IAM Policy", 48),
-
+    @CloudComputer
     HUAWEICLOUD_ECS("ECS", 49),
     @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("Certificate", 51),
@@ -112,7 +115,7 @@ public enum EdsAssetTypeEnum {
     GCP_CERTIFICATE("Certificate", 82),
     @CloudIdentity GCP_MEMBER("Member", 83),
 
-    JENKINS_COMPUTER("Computer Node", 84),
+    JENKINS_COMPUTER("CloudComputer Node", 84),
 
     EAGLECLOUD_SASE_DATA_SECURITY_EVENT("Data Security Event", 0),
     EAGLECLOUD_SASE_DATA_SECURITY_ALERT_NOTIFICATION("Data Security Alert Notification", 1),

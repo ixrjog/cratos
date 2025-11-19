@@ -1,6 +1,7 @@
 package com.baiyi.cratos.ssh.core.model;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +22,8 @@ public class JSchSessionHolder {
     }
 
     public static void addSession(JSchSession jSchSession) {
-        ConcurrentHashMap<String, JSchSession> sessionMap = jSchSessionMap.computeIfAbsent(jSchSession.getSessionId(), k -> new ConcurrentHashMap<>());
+        ConcurrentHashMap<String, JSchSession> sessionMap = jSchSessionMap.computeIfAbsent(
+                jSchSession.getSessionId(), k -> new ConcurrentHashMap<>());
         sessionMap.put(jSchSession.getInstanceId(), jSchSession);
     }
 
@@ -47,10 +49,14 @@ public class JSchSessionHolder {
 
     /**
      * 关闭并移除会话
+     *
      * @param sessionId
      * @param instanceId
      */
     public static void closeSession(String sessionId, String instanceId) {
+        if (!StringUtils.hasText(sessionId) || !StringUtils.hasText(instanceId)) {
+            return;
+        }
         JSchSession jSchSession = JSchSessionHolder.getSession(sessionId, instanceId);
         removeSession(sessionId, instanceId);
         if (jSchSession != null) {

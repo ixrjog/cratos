@@ -67,4 +67,6 @@ public interface ErrorCodeConstants {
 
     int EDS_ALIYUN_KMS_ERROR = 60000;
 
+    int CLOUD_COMPUTER_OPERATION_ERROR = 61000;
+
 }

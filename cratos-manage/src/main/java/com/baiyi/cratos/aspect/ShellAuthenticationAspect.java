@@ -28,7 +28,6 @@ import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_FAILED;
 public class ShellAuthenticationAspect {
 
     private final SshShellHelper helper;
-
     private final RbacFacade rbacFacade;
 
     private static final String SHELL_PREFIX = "/shell";

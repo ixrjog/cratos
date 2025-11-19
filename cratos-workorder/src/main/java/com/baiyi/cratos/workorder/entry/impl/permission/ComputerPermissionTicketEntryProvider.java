@@ -187,7 +187,7 @@ public class ComputerPermissionTicketEntryProvider extends BaseTicketEntryProvid
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(namespaces)
-                .desc("Computer permission")
+                .desc("CloudComputer permission")
                 .build();
     }
 

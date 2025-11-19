@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
@@ -102,6 +103,51 @@ public class AliyunEcsRepo {
         } catch (ClientException e) {
             log.error(e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    public String rebootInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+        try {
+            RebootInstanceRequest request = new RebootInstanceRequest();
+            request.setInstanceId(instanceId);
+            request.setForceStop(true);
+            RebootInstanceResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+            return Optional.ofNullable(response)
+                    .map(RebootInstanceResponse::getRequestId)
+                    .orElse(null);
+        } catch (ClientException e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
+    public String startInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+        try {
+            StartInstanceRequest request = new StartInstanceRequest();
+            request.setInstanceId(instanceId);
+
+            StartInstanceResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+            return Optional.ofNullable(response)
+                    .map(StartInstanceResponse::getRequestId)
+                    .orElse(null);
+        } catch (ClientException e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
+    public String stopInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+        try {
+            StopInstanceRequest request = new StopInstanceRequest();
+            request.setInstanceId(instanceId);
+            request.setForceStop(true);
+            StopInstanceResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
+            return Optional.ofNullable(response)
+                    .map(StopInstanceResponse::getRequestId)
+                    .orElse(null);
+        } catch (ClientException e) {
+            log.error(e.getMessage());
+            return null;
         }
     }
 

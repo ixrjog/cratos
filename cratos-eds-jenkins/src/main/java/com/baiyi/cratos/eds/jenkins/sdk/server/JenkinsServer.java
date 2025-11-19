@@ -526,7 +526,7 @@ public class JenkinsServer implements Closeable {
      * Get a list of all the computers on the server (at the summary level)
      *
      * @return map of defined computers (summary level, for details @see
-     * Computer#details
+     * CloudComputer#details
      * @throws IOException in case of an error.
      */
     public Map<String, Computer> getComputers() throws IOException {

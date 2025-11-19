@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.BusinessAssetBind;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
-import com.baiyi.cratos.eds.business.processor.PostImportAssetProcessorFactory;
+import com.baiyi.cratos.processor.PostImportAssetProcessorFactory;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.service.BusinessAssetBindService;

@@ -38,30 +38,22 @@ public class OcUserParam {
     @NoArgsConstructor
     @Schema
     public static class UserBusinessPermissionPageQuery extends HasPageParam {
-
         private int businessType;
-
         @Schema(description = "查询名称")
         private String queryName;
-
         @Schema(description = "应用ID")
         private Integer applicationId;
-
         @Schema(description = "用户ID")
         private Integer userId;
-
         @Schema(description = "是否授权")
         @NotNull(message = "是否授权选项不能为空")
         @Builder.Default
         private Boolean authorized = true;
-
         @Schema(description = "是否管理员")
         @Builder.Default
         private Boolean admin = false;
-
         @Builder.Default
         private Boolean extend = false;
-
     }
 
     @Data
