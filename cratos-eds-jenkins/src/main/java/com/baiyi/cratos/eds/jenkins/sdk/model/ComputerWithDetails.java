@@ -60,7 +60,7 @@ public class ComputerWithDetails extends Computer implements Serializable {
      */
     public LoadStatistics getLoadStatistics() throws IOException {
         // TODO: Think about the following handling, cause that has also being
-        // done in Computer#details().
+        // done in CloudComputer#details().
         String name = ComputerNameUtils.toName(displayName);
         // TODO: ?depth=2 good idea or could this being done better?
         return client.get("/computer/" + name + "/" + "loadStatistics/?depth=2", LoadStatistics.class);

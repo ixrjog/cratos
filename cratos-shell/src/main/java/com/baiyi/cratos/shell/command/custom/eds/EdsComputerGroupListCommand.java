@@ -40,7 +40,7 @@ import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerGroupListComm
 @Slf4j
 @Component
 @SshShellComponent
-@ShellCommandGroup("Eds Computer Commands")
+@ShellCommandGroup("Eds CloudComputer Commands")
 @ConditionalOnProperty(name = SshShellProperties.SSH_SHELL_PREFIX + ".commands." + GROUP + ".create", havingValue = "true", matchIfMissing = true)
 public class EdsComputerGroupListCommand extends AbstractCommand {
 

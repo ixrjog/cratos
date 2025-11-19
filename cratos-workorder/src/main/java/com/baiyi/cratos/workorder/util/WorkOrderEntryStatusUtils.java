@@ -12,7 +12,7 @@ import java.util.Date;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class InvokeEntryResult {
+public class WorkOrderEntryStatusUtils {
 
     public static void success(WorkOrderTicketEntry entry) {
         entry.setSuccess(true);

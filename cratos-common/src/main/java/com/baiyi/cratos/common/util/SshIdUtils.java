@@ -3,6 +3,8 @@ package com.baiyi.cratos.common.util;
 import lombok.NoArgsConstructor;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -22,14 +24,11 @@ public class SshIdUtils {
     }
 
     private static String generateID(int length) {
-        StringBuilder sb = new StringBuilder(length);
         ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(CHARSET_SIZE);
-            sb.append(CHARACTERS.charAt(index));
-        }
-        return sb.toString();
+        return IntStream.range(0, length)
+                .map(i -> random.nextInt(CHARSET_SIZE))
+                .mapToObj(index -> String.valueOf(CHARACTERS.charAt(index)))
+                .collect(Collectors.joining());
     }
 
 }
