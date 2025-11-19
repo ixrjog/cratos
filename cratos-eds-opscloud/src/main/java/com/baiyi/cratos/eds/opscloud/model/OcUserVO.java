@@ -31,6 +31,7 @@ public class OcUserVO {
         private String displayName;
         private String name;
         private String email;
+        @Builder.Default
         private Boolean isActive = true;
         private String wechat;
         @Schema(description = "手机")

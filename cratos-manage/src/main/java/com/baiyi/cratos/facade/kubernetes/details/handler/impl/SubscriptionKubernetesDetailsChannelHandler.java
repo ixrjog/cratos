@@ -34,6 +34,7 @@ public class SubscriptionKubernetesDetailsChannelHandler extends BaseKubernetesD
                 .equalsIgnoreCase(message.getAction())) {
             QueryKubernetesDetails param = QueryKubernetesDetails.builder()
                     .applicationName(message.getApplicationName())
+                    .instanceName(message.getInstanceName())
                     .namespace(message.getNamespace())
                     .name(message.getName())
                     .build();

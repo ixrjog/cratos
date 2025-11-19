@@ -77,6 +77,7 @@ public class OcUserParam {
         @Builder.Default
         private Boolean isActive = true;
         private String name;
+        @Builder.Default
         private Boolean needInitializeDefaultConfiguration = true;
         private String password;
         private String phone;

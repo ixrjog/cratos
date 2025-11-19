@@ -33,6 +33,7 @@ public class ApplicationKubernetesParam {
         private String action;
         //@NotBlank
         private String applicationName;
+        private String instanceName;
         //@NotBlank
         private String namespace;
         private String name;
