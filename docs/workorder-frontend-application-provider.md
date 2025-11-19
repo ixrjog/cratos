@@ -23,9 +23,9 @@
 ```mermaid
 graph TB
     A[CreateFrontEndApplicationTicketEntryProvider] --> B[BaseTicketEntryProvider]
-    A --> C[@Component]
-    A --> D[@BusinessType]
-    A --> E[@WorkOrderKey]
+    A --> C[Component注解]
+    A --> D[BusinessType注解]
+    A --> E[WorkOrderKey注解]
     
     A --> F[processEntry方法]
     A --> G[verifyEntryParam方法]
