@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.domain.model.GandiDomain;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GANDI, assetTypeOf = EdsAssetTypeEnum.GANDI_DOMAIN)
 public class GandiDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<GandiDomain.Domain> {
 
-    public GandiDomainAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
-        super(businessAssetBindService);
+    public GandiDomainAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
+        super(businessAssetBoundService);
     }
 
     @Override

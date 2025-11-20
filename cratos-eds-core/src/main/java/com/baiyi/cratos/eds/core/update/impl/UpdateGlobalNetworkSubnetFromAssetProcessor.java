@@ -2,12 +2,12 @@ package com.baiyi.cratos.eds.core.update.impl;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.GlobalNetworkSubnet;
 import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProcessor;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.GlobalNetworkSubnetService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +28,17 @@ public class UpdateGlobalNetworkSubnetFromAssetProcessor extends BaseUpdateBusin
     private final GlobalNetworkSubnetService globalNetworkSubnetService;
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public UpdateGlobalNetworkSubnetFromAssetProcessor(BusinessAssetBindService businessAssetBindService,
+    public UpdateGlobalNetworkSubnetFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService,
                                                        GlobalNetworkSubnetService globalNetworkSubnetService,
                                                        EdsAssetIndexService edsAssetIndexService) {
-        super(businessAssetBindService);
+        super(businessAssetBoundService);
         this.globalNetworkSubnetService = globalNetworkSubnetService;
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
     @Override
-    protected GlobalNetworkSubnet getBusiness(BusinessAssetBind businessAssetBind) {
-        return globalNetworkSubnetService.getById(businessAssetBind.getBusinessId());
+    protected GlobalNetworkSubnet getBusiness(BusinessAssetBound businessAssetBound) {
+        return globalNetworkSubnetService.getById(businessAssetBound.getBusinessId());
     }
 
     @Override

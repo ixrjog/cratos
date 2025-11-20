@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.network.base.BaseGlobalNetwork
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import org.springframework.stereotype.Component;
@@ -28,10 +28,10 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SUBNET)
 public class AwsSubnetAssetToBusinessWrapper extends BaseGlobalNetworkAssetToBusinessWrapper<AwsEc2.Subnet> {
 
-    public AwsSubnetAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService,
+    public AwsSubnetAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService,
                                            EdsInstanceService edsInstanceService,
                                            EdsAssetIndexService edsAssetIndexService) {
-        super(businessAssetBindService, edsInstanceService, edsAssetIndexService);
+        super(businessAssetBoundService, edsInstanceService, edsAssetIndexService);
     }
 
     @Override

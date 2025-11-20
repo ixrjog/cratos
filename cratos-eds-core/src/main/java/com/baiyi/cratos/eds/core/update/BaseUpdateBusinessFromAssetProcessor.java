@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.core.update;
 
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 
 /**
  * &#064;Author  baiyi
@@ -11,26 +11,26 @@ import com.baiyi.cratos.service.BusinessAssetBindService;
  */
 public abstract class BaseUpdateBusinessFromAssetProcessor<B> implements IUpdateBusinessFromAssetProcessor {
 
-    public BaseUpdateBusinessFromAssetProcessor(BusinessAssetBindService businessAssetBindService) {
-        this.businessAssetBindService = businessAssetBindService;
+    public BaseUpdateBusinessFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService) {
+        this.businessAssetBoundService = businessAssetBoundService;
     }
 
-    private final BusinessAssetBindService businessAssetBindService;
+    private final BusinessAssetBoundService businessAssetBoundService;
 
     @Override
-    public void update(EdsAsset asset, BusinessAssetBind businessAssetBind) {
-        B business = getBusiness(businessAssetBind);
+    public void update(EdsAsset asset, BusinessAssetBound businessAssetBound) {
+        B business = getBusiness(businessAssetBound);
         if (business != null) {
             updateBusiness(asset, business);
         } else {
             try {
-                businessAssetBindService.deleteById(businessAssetBind.getId());
+                businessAssetBoundService.deleteById(businessAssetBound.getId());
             } catch (Exception ignored) {
             }
         }
     }
 
-    abstract protected B getBusiness(BusinessAssetBind businessAssetBind);
+    abstract protected B getBusiness(BusinessAssetBound businessAssetBound);
 
     abstract protected void updateBusiness(EdsAsset asset, B business);
 

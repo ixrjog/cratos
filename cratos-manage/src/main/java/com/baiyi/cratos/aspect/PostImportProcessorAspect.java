@@ -5,14 +5,14 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.HasImportFromAsset;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.processor.PostImportAssetProcessorFactory;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
 import com.google.api.client.util.Maps;
@@ -41,7 +41,7 @@ public class PostImportProcessorAspect {
     private final EdsAssetService edsAssetService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final UserService userService;
-    private final BusinessAssetBindService businessAssetBindService;
+    private final BusinessAssetBoundService businessAssetBoundService;
     private final EdsIdentityFacade edsIdentityFacade;
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.PostImportProcessor)")
@@ -100,13 +100,13 @@ public class PostImportProcessorAspect {
             // 资产不存在
             return;
         }
-        BusinessAssetBind businessAssetBind = BusinessAssetBind.builder()
+        BusinessAssetBound businessAssetBound = BusinessAssetBound.builder()
                 .assetId(assetId)
                 .businessType(importFromAsset.getBusinessType())
                 .businessId(businessId)
                 .assetType(asset.getAssetType())
                 .build();
-        businessAssetBindService.add(businessAssetBind);
+        businessAssetBoundService.add(businessAssetBound);
     }
 
 }

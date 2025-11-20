@@ -19,8 +19,8 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "business_asset_bind")
-public class BusinessAssetBind implements HasIntegerPrimaryKey, Serializable {
+@Table(name = "business_asset_bound")
+public class BusinessAssetBound implements HasIntegerPrimaryKey, Serializable {
     @Serial
     private static final long serialVersionUID = -6943360012509689935L;
     @Id

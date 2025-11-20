@@ -80,7 +80,7 @@ public class EdsFacadeImpl implements EdsFacade {
     private final ApplicationResourceFacade applicationResourceFacade;
     private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
-    private final BusinessAssetBindService businessAssetBindService;
+    private final BusinessAssetBoundService businessAssetBoundService;
     private final EdsAssetIndexFacade edsAssetIndexFacade;
 
     @Override
@@ -348,9 +348,9 @@ public class EdsFacadeImpl implements EdsFacade {
                 .build();
         applicationResourceFacade.deleteByBusiness(byBusiness);
         // 删除绑定关系
-        List<BusinessAssetBind> assetBinds = businessAssetBindService.queryByAssetId(id);
+        List<BusinessAssetBound> assetBinds = businessAssetBoundService.queryByAssetId(id);
         if (!CollectionUtils.isEmpty(assetBinds)) {
-            assetBinds.forEach(e -> businessAssetBindService.deleteById(e.getId()));
+            assetBinds.forEach(e -> businessAssetBoundService.deleteById(e.getId()));
         }
         edsAssetService.deleteById(id);
     }

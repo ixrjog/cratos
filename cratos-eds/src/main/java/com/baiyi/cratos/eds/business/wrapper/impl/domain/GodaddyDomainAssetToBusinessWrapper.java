@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.domain.model.GodaddyDomain;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GODADDY, assetTypeOf = EdsAssetTypeEnum.GODADDY_DOMAIN)
 public class GodaddyDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<GodaddyDomain.Domain> {
 
-    public GodaddyDomainAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
-        super(businessAssetBindService);
+    public GodaddyDomainAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
+        super(businessAssetBoundService);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.domain.base.BaseDomainAssetToB
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_DOMAIN)
 public class AwsDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWrapper<DomainSummary> {
 
-    public AwsDomainAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
-        super(businessAssetBindService);
+    public AwsDomainAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
+        super(businessAssetBoundService);
     }
 
     @Override

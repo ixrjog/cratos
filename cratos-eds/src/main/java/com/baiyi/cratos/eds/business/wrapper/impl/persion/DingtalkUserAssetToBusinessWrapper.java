@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -26,8 +26,8 @@ import java.util.Optional;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_USER)
 public class DingtalkUserAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<User, DingtalkUserModel.User> {
 
-    public DingtalkUserAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService) {
-        super(businessAssetBindService);
+    public DingtalkUserAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
+        super(businessAssetBoundService);
     }
 
     @Override

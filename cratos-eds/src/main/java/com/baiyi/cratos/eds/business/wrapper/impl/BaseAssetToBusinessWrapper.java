@@ -1,11 +1,11 @@
 package com.baiyi.cratos.eds.business.wrapper.impl;
 
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.view.ToBusinessTarget;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.wrapper.IAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class BaseAssetToBusinessWrapper<B extends ToBusinessTarget, T> implements IAssetToBusinessWrapper<B> {
 
-    protected final BusinessAssetBindService businessAssetBindService;
+    protected final BusinessAssetBoundService businessAssetBoundService;
 
     protected T getAssetModel(EdsAssetVO.Asset asset) {
         return EdsInstanceProviderFactory.produceModel(getInstanceType(), getAssetType(), asset);
@@ -38,25 +38,25 @@ public abstract class BaseAssetToBusinessWrapper<B extends ToBusinessTarget, T> 
     }
 
     protected EdsAssetVO.ToBusiness getToBusiness(int assetId) {
-        BusinessAssetBind businessAssetBind = getBusinessAssetBind(assetId);
-        return businessAssetBind == null ? EdsAssetVO.ToBusiness.builder()
+        BusinessAssetBound businessAssetBound = getBusinessAssetBound(assetId);
+        return businessAssetBound == null ? EdsAssetVO.ToBusiness.builder()
                 .businessType(getBusinessType())
                 .assetId(assetId)
                 .bind(false)
                 .build() : EdsAssetVO.ToBusiness.builder()
                 .businessType(getBusinessType())
-                .businessId(businessAssetBind.getBusinessId())
+                .businessId(businessAssetBound.getBusinessId())
                 .assetId(assetId)
                 .bind(true)
                 .build();
     }
 
-    protected BusinessAssetBind getBusinessAssetBind(Integer assetId) {
-        BusinessAssetBind query = BusinessAssetBind.builder()
+    protected BusinessAssetBound getBusinessAssetBound(Integer assetId) {
+        BusinessAssetBound query = BusinessAssetBound.builder()
                 .businessType(getBusinessType())
                 .assetId(assetId)
                 .build();
-        return businessAssetBindService.getByUniqueKey(query);
+        return businessAssetBoundService.getByUniqueKey(query);
     }
 
 }

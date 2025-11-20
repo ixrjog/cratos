@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.update;
 
 import com.baiyi.cratos.domain.BaseBusiness;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -12,6 +12,6 @@ import org.springframework.beans.factory.InitializingBean;
  */
 public interface IUpdateBusinessFromAssetProcessor extends BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
-    void update(EdsAsset asset, BusinessAssetBind businessAssetBind);
+    void update(EdsAsset asset, BusinessAssetBound businessAssetBound);
 
 }

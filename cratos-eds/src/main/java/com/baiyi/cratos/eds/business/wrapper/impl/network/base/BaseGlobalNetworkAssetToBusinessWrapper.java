@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.business.exception.AssetToBusinessException;
 import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
 import com.baiyi.cratos.eds.business.wrapper.impl.network.model.MainModel;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsInstanceService;
 
@@ -21,10 +21,10 @@ public abstract class BaseGlobalNetworkAssetToBusinessWrapper<B> extends BaseAss
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetIndexService edsAssetIndexService;
 
-    public BaseGlobalNetworkAssetToBusinessWrapper(BusinessAssetBindService businessAssetBindService,
+    public BaseGlobalNetworkAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService,
                                                    EdsInstanceService edsInstanceService,
                                                    EdsAssetIndexService edsAssetIndexService) {
-        super(businessAssetBindService);
+        super(businessAssetBoundService);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetIndexService = edsAssetIndexService;
     }

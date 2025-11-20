@@ -1,6 +1,9 @@
 package com.baiyi.cratos.facade.identity.extension.impl;
 
 import com.baiyi.cratos.common.util.ValidationUtils;
+import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.User;
@@ -38,14 +41,20 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
 @Component
 public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension implements EdsDingtalkIdentityExtension {
 
+    private final BusinessAssetBoundService businessAssetBoundService;
+
     public EdsDingtalkIdentityExtensionImpl(EdsAssetWrapper edsAssetWrapper, EdsInstanceService edsInstanceService,
                                             EdsInstanceWrapper edsInstanceWrapper, UserService userService,
                                             UserWrapper userWrapper, EdsInstanceProviderHolderBuilder holderBuilder,
                                             EdsAssetService edsAssetService, EdsFacade edsFacade,
                                             EdsAssetIndexService edsAssetIndexService, TagService tagService,
-                                            BusinessTagService businessTagService) {
-        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
+                                            BusinessTagService businessTagService,
+                                            BusinessAssetBoundService businessAssetBoundService) {
+        super(
+                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
+        );
+        this.businessAssetBoundService = businessAssetBoundService;
     }
 
     @Override
@@ -62,8 +71,10 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
         }
         List<EdsIdentityVO.DingtalkIdentity> dingtalkIdentities = assets.stream()
                 .map(asset -> {
-                    EdsAssetIndex mobileIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(),
-                            DINGTALK_USER_MOBILE);
+                    EdsAssetIndex mobileIndex = edsAssetIndexService.getByAssetIdAndName(
+                            asset.getId(),
+                            DINGTALK_USER_MOBILE
+                    );
                     EdsAssetIndex mailIndex = edsAssetIndexService.getByAssetIdAndName(asset.getId(), USER_MAIL);
                     return EdsIdentityVO.DingtalkIdentity.builder()
                             .username(username)
@@ -72,11 +83,11 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
                                     edsInstanceWrapper.wrapToTarget(edsInstanceService.getById(asset.getInstanceId())))
                             .account(edsAssetWrapper.wrapToTarget(asset))
                             .email(Optional.ofNullable(mailIndex)
-                                    .map(EdsAssetIndex::getValue)
-                                    .orElse(null))
+                                           .map(EdsAssetIndex::getValue)
+                                           .orElse(null))
                             .mobile(Optional.ofNullable(mobileIndex)
-                                    .map(EdsAssetIndex::getValue)
-                                    .orElse(null))
+                                            .map(EdsAssetIndex::getValue)
+                                            .orElse(null))
                             .avatar(getAvatar(asset))
                             .build();
                 })
@@ -89,10 +100,32 @@ public class EdsDingtalkIdentityExtensionImpl extends BaseEdsIdentityExtension i
 
     private List<EdsAsset> queryDingtalkAssets(User user,
                                                EdsIdentityParam.QueryDingtalkIdentityDetails queryDingtalkIdentityDetails) {
-        return Stream.of(queryDingtalkAssetByMobile(user.getMobilePhone()),
+        return Stream.of(
+                        queryUserBoundDingtalkUser(user), queryDingtalkAssetByMobile(user.getMobilePhone()),
                         queryDingtalkAssetByEmail(user.getEmail()),
-                        queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name()))
+                        queryByUsernameTag(user.getUsername(), EdsAssetTypeEnum.DINGTALK_USER.name())
+                )
                 .flatMap(assets -> onlyInTheInstance(assets, queryDingtalkIdentityDetails).stream())
+                .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
+                .values()
+                .stream()
+                .toList();
+    }
+
+    private List<EdsAsset> queryUserBoundDingtalkUser(User user) {
+        SimpleBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.USER.name())
+                .businessId(user.getId())
+                .build();
+        List<BusinessAssetBound> bounds = businessAssetBoundService.queryByBusiness(
+                business, EdsAssetTypeEnum.DINGTALK_USER.name());
+        if (CollectionUtils.isEmpty(bounds)) {
+            return List.of();
+        }
+        return bounds.stream()
+                .map(e -> edsAssetService.getById(e.getAssetId()))
+                // 过滤掉 null 值
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(EdsAsset::getId, asset -> asset, (existing, replacement) -> existing))
                 .values()
                 .stream()

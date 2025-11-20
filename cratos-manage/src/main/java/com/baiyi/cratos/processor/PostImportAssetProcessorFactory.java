@@ -43,7 +43,6 @@ public class PostImportAssetProcessorFactory {
             int order2 = getOrder(p2);
             return Integer.compare(order1, order2);
         });
-
         log.info(
                 "Registered PostImportAssetProcessor: businessType={}, assetType={}, order={}", businessType,
                 fromAssetType, getOrder(processorBean)

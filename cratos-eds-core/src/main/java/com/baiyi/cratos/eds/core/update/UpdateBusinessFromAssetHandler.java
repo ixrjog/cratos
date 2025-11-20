@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.core.update;
 
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,21 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UpdateBusinessFromAssetHandler {
 
-    private final BusinessAssetBindService businessAssetBindService;
+    private final BusinessAssetBoundService businessAssetBoundService;
 
     public void update(EdsAsset asset) {
-        List<BusinessAssetBind> businessAssetBinds = businessAssetBindService.queryByAssetId(asset.getId());
-        if (CollectionUtils.isEmpty(businessAssetBinds)) {
+        List<BusinessAssetBound> businessAssetBounds = businessAssetBoundService.queryByAssetId(asset.getId());
+        if (CollectionUtils.isEmpty(businessAssetBounds)) {
             return;
         }
-        businessAssetBinds.forEach(e -> update(asset, e));
+        businessAssetBounds.forEach(e -> update(asset, e));
     }
 
-    private void update(EdsAsset asset, BusinessAssetBind businessAssetBind) {
+    private void update(EdsAsset asset, BusinessAssetBound businessAssetBound) {
         IUpdateBusinessFromAssetProcessor provider = UpdateBusinessFromAssetProcessorFactory.getProvider(
-                businessAssetBind.getBusinessType());
+                businessAssetBound.getBusinessType());
         if (provider != null) {
-            provider.update(asset, businessAssetBind);
+            provider.update(asset, businessAssetBound);
         }
     }
 

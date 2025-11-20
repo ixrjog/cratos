@@ -3,11 +3,11 @@ package com.baiyi.cratos.facade;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.network.GlobalNetworkParam;
 import com.baiyi.cratos.domain.view.network.GlobalNetworkVO;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.GlobalNetworkSubnetService;
 import jakarta.annotation.Resource;
@@ -30,7 +30,7 @@ public class GlobalNetworkFacadeTest extends BaseUnit {
     private GlobalNetworkSubnetService globalNetworkSubnetService;
 
     @Resource
-    private BusinessAssetBindService businessAssetBindService;
+    private BusinessAssetBoundService businessAssetBoundService;
 
     @Resource
     private EdsAssetService edsAssetService;
@@ -53,9 +53,9 @@ public class GlobalNetworkFacadeTest extends BaseUnit {
                             .businessType(BusinessTypeEnum.GLOBAL_NETWORK_SUBNET.name())
                             .businessId(e.getId())
                             .build();
-                    List<BusinessAssetBind> binds = businessAssetBindService.queryByBusiness(simpleBusiness);
+                    List<BusinessAssetBound> binds = businessAssetBoundService.queryByBusiness(simpleBusiness);
                     if (!CollectionUtils.isEmpty(binds)) {
-                        BusinessAssetBind bind = binds.getFirst();
+                        BusinessAssetBound bind = binds.getFirst();
                         EdsAsset edsAsset = edsAssetService.getById(bind.getAssetId());
                         if (edsAsset != null) {
                             e.setSubnetKey(edsAsset.getAssetId());

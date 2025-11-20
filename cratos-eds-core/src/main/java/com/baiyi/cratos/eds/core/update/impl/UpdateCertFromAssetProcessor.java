@@ -2,11 +2,11 @@ package com.baiyi.cratos.eds.core.update.impl;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProcessor;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.CertificateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,15 +23,15 @@ public class UpdateCertFromAssetProcessor extends BaseUpdateBusinessFromAssetPro
 
     private final CertificateService certificateService;
 
-    public UpdateCertFromAssetProcessor(BusinessAssetBindService businessAssetBindService,
+    public UpdateCertFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService,
                                         CertificateService certificateService) {
-        super(businessAssetBindService);
+        super(businessAssetBoundService);
         this.certificateService = certificateService;
     }
 
     @Override
-    protected Certificate getBusiness(BusinessAssetBind businessAssetBind) {
-        return certificateService.getById(businessAssetBind.getBusinessId());
+    protected Certificate getBusiness(BusinessAssetBound businessAssetBound) {
+        return certificateService.getById(businessAssetBound.getBusinessId());
     }
 
     @Override

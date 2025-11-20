@@ -2,11 +2,11 @@ package com.baiyi.cratos.eds.core.update.impl;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessAssetBind;
+import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.update.BaseUpdateBusinessFromAssetProcessor;
-import com.baiyi.cratos.service.BusinessAssetBindService;
+import com.baiyi.cratos.service.BusinessAssetBoundService;
 import com.baiyi.cratos.service.DomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,15 +23,15 @@ public class UpdateDomainFromAssetProcessor extends BaseUpdateBusinessFromAssetP
 
     private final DomainService domainService;
 
-    public UpdateDomainFromAssetProcessor(BusinessAssetBindService businessAssetBindService,
+    public UpdateDomainFromAssetProcessor(BusinessAssetBoundService businessAssetBoundService,
                                           DomainService domainService) {
-        super(businessAssetBindService);
+        super(businessAssetBoundService);
         this.domainService = domainService;
     }
 
     @Override
-    protected Domain getBusiness(BusinessAssetBind businessAssetBind) {
-        return domainService.getById(businessAssetBind.getBusinessId());
+    protected Domain getBusiness(BusinessAssetBound businessAssetBound) {
+        return domainService.getById(businessAssetBound.getBusinessId());
     }
 
     @Override
