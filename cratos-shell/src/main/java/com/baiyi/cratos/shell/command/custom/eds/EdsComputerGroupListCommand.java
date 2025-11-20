@@ -51,7 +51,7 @@ public class EdsComputerGroupListCommand extends AbstractCommand {
     private final UserService userService;
     public final static String[] GROUP_TABLE_FIELD_NAME = {"ID", "GROUP NAME"};
     private final EnvFacade envFacade;
-    public static final String UNAUTHORIZED = "--";
+    public static final String UNAUTHORIZED = Global.NONE;
     public final String AUTHORIZATION_EXPIRED;
 
     public EdsComputerGroupListCommand(SshShellHelper helper, SshShellProperties properties, UserService userService,

@@ -57,7 +57,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
     private static final String COMMAND_LIST = GROUP + "-list";
-    public static final String UNAUTHORIZED = "--";
+    public static final String UNAUTHORIZED = Global.NONE;
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionService userPermissionService;
     private final EdsInstanceService edsInstanceService;
@@ -126,7 +126,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                     .withTable(computerTable)
                     .withId(id)
                     .withAsset(asset)
-                    .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), "--"))
+                    .withCloud(edsInstanceMap.getOrDefault(asset.getInstanceId(), Global.NONE))
                     .withGroup(tagGroup)
                     .withEnv(renderEnv(envMap, env))
                     .withServerAccounts(toServerAccounts(serverAccountBusinessTag, serverAccounts))
@@ -188,7 +188,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
         BusinessTag businessTag = getBusinessTag(edsAsset, sysTagKey);
-        return Objects.nonNull(businessTag) ? businessTag.getTagValue() : "--";
+        return Objects.nonNull(businessTag) ? businessTag.getTagValue() : Global.NONE;
     }
 
     private BusinessTag getBusinessTag(EdsAsset edsAsset, SysTagKeys sysTagKey) {
@@ -210,7 +210,7 @@ public class EdsComputerListCommand extends AbstractCommand {
 
     private String toServerAccounts(BusinessTag serverAccountBusinessTag, List<ServerAccount> serverAccounts) {
         if (CollectionUtils.isEmpty(serverAccounts)) {
-            return "--";
+            return Global.NONE;
         }
         if (Objects.nonNull(serverAccountBusinessTag)) {
             Optional<ServerAccount> optionalServerAccount = serverAccounts.stream()

@@ -53,7 +53,7 @@ public class EdsComputerOpsCommand extends AbstractCommand {
     @ClearScreen
     @ShellMethod(key = {COMMAND_COMPUTER_OPS, "cops"}, value = "Ops computer.")
     @ShellAuthentication(resource = "/computer/ops")
-    public void computerOps(@ShellOption(help = "ID", defaultValue = "1") int id,
+    public void opsComputer(@ShellOption(help = "ID", defaultValue = "1") int id,
                             @ShellOption(help = "Stop the computer", defaultValue = "false") boolean stop,
                             @ShellOption(help = "Start the computer", defaultValue = "false") boolean start,
                             @ShellOption(help = "Reboot the computer", defaultValue = "false") boolean reboot) {

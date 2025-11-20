@@ -24,21 +24,23 @@ public class HarborServiceFactory {
         if (harbor == null) {
             throw new IllegalArgumentException("harbor must not be null");
         }
+        java.time.Duration responseTimeout = java.time.Duration.ofSeconds(30);
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-                .responseTimeout(java.time.Duration.ofSeconds(30))
+                .responseTimeout(responseTimeout)
                 .compress(true);
         WebClient.Builder webClientBuilder = WebClient.builder()
                 .baseUrl(harbor.acqUrl())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .codecs(configurer -> configurer.defaultCodecs()
+                .codecs(cfg -> cfg.defaultCodecs()
                         .maxInMemorySize(10 * 1024 * 1024));
         String basic = (harbor.getCred() != null) ? harbor.getCred()
                 .toBasic() : null;
-        if (StringUtils.hasText(basic)) {
-            webClientBuilder.defaultHeader(Global.AUTHORIZATION.toLowerCase(), basic);
-        }
-
+        webClientBuilder.defaultHeaders(headers -> {
+            if (StringUtils.hasText(basic)) {
+                headers.set(Global.AUTHORIZATION.toLowerCase(), basic);
+            }
+        });
         WebClient webClient = webClientBuilder.build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)

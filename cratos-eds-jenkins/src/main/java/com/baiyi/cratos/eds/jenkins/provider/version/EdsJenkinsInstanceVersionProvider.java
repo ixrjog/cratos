@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.jenkins.provider.version;
 
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsJenkinsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -29,7 +30,7 @@ public class EdsJenkinsInstanceVersionProvider implements IEdsInstanceVersionPro
             JenkinsVersion jenkinsVersion = jenkinsServer.getVersion();
             return jenkinsVersion.getLiteralVersion();
         } catch (URISyntaxException uriSyntaxException) {
-            return "--";
+            return Global.NONE;
         }
     }
 

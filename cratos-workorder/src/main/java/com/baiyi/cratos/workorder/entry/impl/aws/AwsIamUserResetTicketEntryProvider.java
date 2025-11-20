@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.generator.WorkOrder;
@@ -158,16 +159,16 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
         String instanceName = Optional.of(cloudAccount)
                 .map(EdsIdentityVO.CloudAccount::getInstance)
                 .map(EdsInstanceVO.EdsInstance::getInstanceName)
-                .orElse("--");
+                .orElse(Global.NONE);
         String accountId = Optional.ofNullable(cloudAccount.getAccountLogin())
                 .map(EdsIdentityVO.AccountLoginDetails::getAccountId)
-                .orElse("--");
+                .orElse(Global.NONE);
         String iamUsername = Optional.ofNullable(cloudAccount.getAccountLogin())
                 .map(EdsIdentityVO.AccountLoginDetails::getLoginUsername)
-                .orElse("--");
+                .orElse(Global.NONE);
         String link = Optional.ofNullable(cloudAccount.getAccountLogin())
                 .map(EdsIdentityVO.AccountLoginDetails::getLoginUrl)
-                .orElse("--");
+                .orElse(Global.NONE);
         return MarkdownUtils.generateMarkdownTableRow(instanceName, accountId, iamUsername, link);
     }
 

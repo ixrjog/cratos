@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.provider.version;
 
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -28,7 +29,7 @@ public class EdsGitLabInstanceVersionProvider implements IEdsInstanceVersionProv
             Version version = GitLabVersionRepo.getVersion(instance.getEdsConfigModel());
             return version.getVersion();
         } catch (GitLabApiException e) {
-            return "--";
+            return Global.NONE;
         }
     }
 

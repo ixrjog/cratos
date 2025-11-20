@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
@@ -532,7 +533,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
                     return LdapUserGroupModel.Role.builder()
                             .asset(e)
                             .group(e.getName())
-                            .description(descriptionTag != null ? descriptionTag.getTagValue() : "--")
+                            .description(descriptionTag != null ? descriptionTag.getTagValue() : Global.NONE)
                             .build();
                 })
                 .toList();

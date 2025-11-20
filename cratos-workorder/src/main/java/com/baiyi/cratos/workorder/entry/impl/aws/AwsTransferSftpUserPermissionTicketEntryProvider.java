@@ -6,6 +6,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SshKeyUtils;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
@@ -195,7 +196,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
                 .map(EdsAssetVO.Asset::getInstanceId)
                 .orElse(0);
         String instanceName = IdentityUtils.hasIdentity(instanceId) ? edsInstanceService.getById(instanceId)
-                .getInstanceName() : "--";
+                .getInstanceName() : Global.NONE;
         String endpoint = sftpUser.getTransferServerEndpoint();
         String transferLogin = Joiner.on("@")
                 .join(sftpUser.getUsername(), endpoint);
@@ -229,7 +230,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
             BusinessTag businessTag = businessTagService.getByUniqueKey(uk);
             return businessTag.getTagValue();
         }
-        return "--";
+        return Global.NONE;
     }
 
 }

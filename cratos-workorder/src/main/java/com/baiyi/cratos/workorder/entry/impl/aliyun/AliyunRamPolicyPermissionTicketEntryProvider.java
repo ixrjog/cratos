@@ -6,6 +6,7 @@ import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
@@ -156,7 +157,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunPolicy.getRamLoginUsername(),
                 policy.getAssetKey(), policy.getKind(),
-                StringUtils.hasText(policy.getDescription()) ? policy.getDescription() : "--");
+                StringUtils.hasText(policy.getDescription()) ? policy.getDescription() : Global.NONE);
     }
 
     @Override

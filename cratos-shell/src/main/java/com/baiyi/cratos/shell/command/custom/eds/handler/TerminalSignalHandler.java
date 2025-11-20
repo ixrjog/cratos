@@ -5,13 +5,12 @@ import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 
 /**
+ * https://en.wikipedia.org/wiki/Signal_(IPC)#SIGWINCH
  * &#064;Author  baiyi
  * &#064;Date  2024/7/17 下午5:45
  * &#064;Version 1.0
  */
-public class WatchTerminalSignalHandler implements Terminal.SignalHandler {
-
-    // https://en.wikipedia.org/wiki/Signal_(IPC)#SIGWINCH
+public class TerminalSignalHandler implements Terminal.SignalHandler {
 
     private final Size size = new Size();
 
@@ -19,7 +18,7 @@ public class WatchTerminalSignalHandler implements Terminal.SignalHandler {
     private final String instanceId;
     private final Terminal terminal;
 
-    public WatchTerminalSignalHandler(String sessionId, String instanceId, Terminal terminal) {
+    public TerminalSignalHandler(String sessionId, String instanceId, Terminal terminal) {
         this.sessionId = sessionId;
         this.instanceId = instanceId;
         this.terminal = terminal;

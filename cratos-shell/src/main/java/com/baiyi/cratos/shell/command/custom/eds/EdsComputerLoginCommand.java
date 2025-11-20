@@ -28,7 +28,7 @@ import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
-import com.baiyi.cratos.shell.command.custom.eds.handler.WatchTerminalSignalHandler;
+import com.baiyi.cratos.shell.command.custom.eds.handler.TerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
@@ -134,7 +134,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     @ClearScreen
     @ShellMethod(key = {COMMAND_COMPUTER_LOGIN, "cl", "login"}, value = "Open to the computer.")
     @ShellAuthentication(resource = "/computer/login")
-    public void computerLogin(@ShellOption(help = "ID", defaultValue = "1") int id,
+    public void loginComputer(@ShellOption(help = "ID", defaultValue = "1") int id,
                               @ShellOption(help = "Account", defaultValue = "") String account,
                               @ShellOption(help = "Connect to the target server using a proxy", defaultValue = "false") boolean proxy,
                               @ShellOption(help = "Preview Docs", defaultValue = "false") boolean docs) {
@@ -188,11 +188,8 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     auditPath
             );
             // Watch signal
-            WatchTerminalSignalHandler watchTerminalSignalHandler = new WatchTerminalSignalHandler(
-                    sessionId,
-                                                                                                   sshSessionInstanceId,
-                                                                                                   terminal
-            );
+            TerminalSignalHandler watchTerminalSignalHandler = new TerminalSignalHandler(
+                    sessionId, sshSessionInstanceId, terminal);
             Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);

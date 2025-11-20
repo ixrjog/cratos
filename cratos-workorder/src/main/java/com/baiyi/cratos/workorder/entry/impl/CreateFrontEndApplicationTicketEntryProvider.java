@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
@@ -200,7 +201,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationModel.CreateFrontEndApplication createFrontEndApplication = loadAs(entry);
-        String level = "--";
+        String level = Global.NONE;
         if (!CollectionUtils.isEmpty(createFrontEndApplication.getTags())) {
             Map<String, String> tags = createFrontEndApplication.getTags();
             if (tags.containsKey(SysTagKeys.LEVEL.getKey())) {
@@ -210,7 +211,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         String sshUrl = Optional.of(createFrontEndApplication)
                 .map(ApplicationModel.CreateFrontEndApplication::getRepository)
                 .map(ApplicationModel.GitLabRepository::getSshUrl)
-                .orElse("--");
+                .orElse(Global.NONE);
         String mappingsPath = Optional.of(createFrontEndApplication)
                 .map(ApplicationModel.CreateFrontEndApplication::getMappingsPath)
                 .orElse("/");

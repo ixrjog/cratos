@@ -2,6 +2,7 @@ package com.baiyi.cratos.workorder.notice;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.NotificationTemplateKeys;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.WorkflowModel;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
@@ -85,14 +86,14 @@ public class WorkOrderApprovalNoticeSender extends BaseWorkOrderNoticeSender {
         Optional<WorkflowModel.Node> optionalNode = WorkflowUtils.getNodeByName(workflow, ticketNode);
         approvers.forEach(approver -> {
             // 审批节点名称
-            String approvalNode = "--";
+            String approvalNode = Global.NONE;
             if (optionalNode.isPresent()) {
                 WorkflowModel.Node node = optionalNode.get();
                 String lang = languageUtils.getLanguageOf(approver);
                 approvalNode = node.getLangMap()
                         .getOrDefault(lang, null) != null ? node.getLangMap()
                         .get(lang)
-                        .getDisplayName() : "--";
+                        .getDisplayName() : Global.NONE;
             }
             // 手机审批按钮
             WorkOrderTicketSubscriber uk = WorkOrderTicketSubscriber.builder()

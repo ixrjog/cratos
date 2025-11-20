@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerRecordParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
@@ -131,9 +132,9 @@ public class TrafficLayerFacadeTest extends BaseUnit {
 
             String[] fields = line.split("\t");
             String domain = fields.length > 0 ? fields[0].trim() : "";
-            String business = fields.length > 1 ? fields[1].trim() : "--";
-            String owner = fields.length > 2 ? fields[2].trim() : "--";
-            String tl = fields.length > 3 ? fields[3].trim() : "--";
+            String business = fields.length > 1 ? fields[1].trim() : Global.NONE;
+            String owner = fields.length > 2 ? fields[2].trim() : Global.NONE;
+            String tl = fields.length > 3 ? fields[3].trim() : Global.NONE;
             TrafficLayerDomain uk = TrafficLayerDomain.builder()
                     .domain(domain)
                     .build();
