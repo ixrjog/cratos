@@ -32,13 +32,19 @@ public class CratosModel {
     }
 
     @Data
-    public static class Rbac {
+    public static class RBAC {
         private AutoConfiguration autoConfiguration;
+        private ImportUser importUser;
     }
 
     @Data
     public static class AutoConfiguration {
         private Boolean enabled;
+    }
+
+    @Data
+    public static class ImportUser {
+        private List<String> defaultRoles;
     }
 
 }

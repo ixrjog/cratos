@@ -83,7 +83,7 @@ public class RbacAutoConfigInitializer implements CommandLineRunner {
     private boolean isRbacAutoConfigurationEnabled() {
         return Optional.ofNullable(cratosConfiguration)
                 .map(CratosConfiguration::getRbac)
-                .map(CratosModel.Rbac::getAutoConfiguration)
+                .map(CratosModel.RBAC::getAutoConfiguration)
                 .map(CratosModel.AutoConfiguration::getEnabled)
                 .orElse(false);
     }

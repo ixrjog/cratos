@@ -1,19 +1,20 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.annotation.PostImportProcessor;
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.common.configuration.CratosConfiguration;
+import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.UserException;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.common.util.*;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.BusinessCredential;
-import com.baiyi.cratos.domain.generator.Credential;
-import com.baiyi.cratos.domain.generator.Tag;
-import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
@@ -21,10 +22,7 @@ import com.baiyi.cratos.domain.view.credential.CredentialVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
-import com.baiyi.cratos.service.BusinessCredentialService;
-import com.baiyi.cratos.service.CredentialService;
-import com.baiyi.cratos.service.TagService;
-import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.wrapper.CredentialWrapper;
 import com.baiyi.cratos.wrapper.UserWrapper;
@@ -57,8 +55,11 @@ public class UserFacadeImpl implements UserFacade {
     private final BusinessCredentialService businessCredentialService;
     private final CredentialService credentialService;
     private final TagService tagService;
+    private final CratosConfiguration cratosConfiguration;
+    private final RbacUserRoleFacade rbacUserRoleFacade;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
+    private final RbacRoleService rbacRoleService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.USER)
@@ -108,8 +109,28 @@ public class UserFacadeImpl implements UserFacade {
             user.setUuid(IdentityUtils.randomUUID());
         }
         userService.add(user);
-        // 从DingTalk导入的用户，需要创举LDAP用户
+        // 导入用户需要设置默认角色
+        addDefaultRolesToUser(user);
         return user;
+    }
+
+    private void addDefaultRolesToUser(User user) {
+        List<String> defaultRoles = Optional.ofNullable(cratosConfiguration)
+                .map(CratosConfiguration::getRbac)
+                .map(CratosModel.RBAC::getImportUser)
+                .map(CratosModel.ImportUser::getDefaultRoles)
+                .orElseGet(List::of);
+        if (defaultRoles.isEmpty()) {
+            return;
+        }
+        defaultRoles.stream()
+                .map(rbacRoleService::getByRoleName)
+                .filter(Objects::nonNull)
+                .map(rbacRole -> RbacUserRoleParam.AddUserRole.builder()
+                        .username(user.getUsername())
+                        .roleId(rbacRole.getId())
+                        .build())
+                .forEach(rbacUserRoleFacade::addUserRole);
     }
 
     @Override

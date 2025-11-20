@@ -7,9 +7,11 @@ import com.baiyi.cratos.mapper.RbacRoleMapper;
 import com.baiyi.cratos.service.RbacRoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -36,6 +38,22 @@ public class RbacRoleServiceImpl implements RbacRoleService {
     @Override
     @CacheEvict(cacheNames = LONG_TERM, key = "'DOMAIN:RBACROLE:ID:' + #id")
     public void clearCacheById(int id) {
+    }
+
+    @Override
+    public RbacRole getByUniqueKey(@NonNull RbacRole record) {
+        Example example = new Example(RbacRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleName", record.getRoleName());
+        return rbacRoleMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public RbacRole getByRoleName(String roleName) {
+        RbacRole uniqueKey = RbacRole.builder()
+                .roleName(roleName)
+                .build();
+        return getByUniqueKey(uniqueKey);
     }
 
 }

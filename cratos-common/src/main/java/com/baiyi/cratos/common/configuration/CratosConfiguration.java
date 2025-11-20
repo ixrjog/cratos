@@ -21,7 +21,7 @@ import java.util.Optional;
 public class CratosConfiguration {
 
     private CratosModel.Auth auth;
-    private CratosModel.Rbac rbac;
+    private CratosModel.RBAC rbac;
     private CratosModel.Credential credential;
     private String tenant;
 

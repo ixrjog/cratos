@@ -24,6 +24,10 @@ cratos:
   rbac:
     auto-configuration:
       enabled: off
+    import-user:
+      default-roles:
+        - BASE
+        - DEV
   tenant: PP
 
 springdoc:

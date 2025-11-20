@@ -1,6 +1,7 @@
 package com.baiyi.cratos.aspect;
 
 import com.baiyi.cratos.annotation.PostImportProcessor;
+import com.baiyi.cratos.common.configuration.CratosConfiguration;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -43,6 +44,7 @@ public class PostImportProcessorAspect {
     private final UserService userService;
     private final BusinessAssetBoundService businessAssetBoundService;
     private final EdsIdentityFacade edsIdentityFacade;
+    private final CratosConfiguration cratosConfiguration;
 
     @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.PostImportProcessor)")
     public void annotationPoint() {

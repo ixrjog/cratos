@@ -1,6 +1,8 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Builder
+@AllArgsConstructor
 @Table(name = "rbac_role")
 public class RbacRole implements HasIntegerPrimaryKey, Serializable {
     @Serial
