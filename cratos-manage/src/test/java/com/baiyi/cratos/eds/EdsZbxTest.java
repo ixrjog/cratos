@@ -74,7 +74,6 @@ public class EdsZbxTest extends BaseEdsTest<EdsZabbixConfigModel.Zabbix> {
         Set<SeverityType> severityTypes = Set.of(SeverityType.AVERAGE);
         List<ZbxProblemResult.Problem> problems = ZbxProblemRepo.listProblem(zbx, severityTypes);
         printProblems(problems);
-
     }
 
     void printProblems(List<ZbxProblemResult.Problem> problems) {
@@ -137,10 +136,18 @@ public class EdsZbxTest extends BaseEdsTest<EdsZabbixConfigModel.Zabbix> {
             }
             ZbxHostResult.Host host = hosts.getFirst();
             System.out.println(
-                    StringFormatter.arrayFormat("EventID {} Host {} -> {}", event.getEventid(), host.getHost(),
-                                                event.getName()));
+                    StringFormatter.arrayFormat(
+                            "EventID {} Host {} -> {}", event.getEventid(), host.getHost(), event.getName()));
         }
     }
+
+    @Test
+    void test12() {
+        EdsZabbixConfigModel.Zabbix zbx = getConfig(49);
+        List<ZbxUserResult.User> users = ZbxUserRepo.listUser(zbx);
+        System.out.println(users);
+    }
+
 
 }
 
