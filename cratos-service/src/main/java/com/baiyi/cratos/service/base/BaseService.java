@@ -19,7 +19,6 @@ import java.util.List;
  * @Date 2024/1/2 16:06
  * @Version 1.0
  */
-
 public interface BaseService<T extends HasIntegerPrimaryKey, M extends Mapper<T>> {
 
     @SuppressWarnings("unchecked")

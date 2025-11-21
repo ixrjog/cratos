@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.kubernetes;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsKubernetesDeploymentListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.kubernetes.EdsKubernetesDeploymentListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi

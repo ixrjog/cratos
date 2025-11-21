@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.kubernetes;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.util.StringFormatter;
@@ -58,7 +58,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsKubernetesPodCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.kubernetes.EdsKubernetesPodCommand.GROUP;
 import static com.baiyi.cratos.ssh.core.util.ChannelShellUtils.DEF_UNICODE;
 
 /**

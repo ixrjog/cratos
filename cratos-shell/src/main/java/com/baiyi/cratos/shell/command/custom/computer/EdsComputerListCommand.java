@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerListCommand.GROUP;
 
 /**
  * &#064;Author  baiyi

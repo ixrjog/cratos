@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
@@ -28,7 +28,7 @@ import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
 import com.baiyi.cratos.shell.command.AbstractCommand;
 import com.baiyi.cratos.shell.command.SshShellComponent;
-import com.baiyi.cratos.shell.command.custom.eds.handler.TerminalSignalHandler;
+import com.baiyi.cratos.shell.command.custom.handler.TerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
@@ -67,7 +67,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.SSHSERVER_USER_LOGIN_SERVER_NOTICE;
 import static com.baiyi.cratos.common.enums.SysTagKeys.INSPECTION_NOTIFICATION;
-import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerLoginCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerLoginCommand.GROUP;
 
 
 /**

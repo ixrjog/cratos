@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds.handler;
+package com.baiyi.cratos.shell.command.custom.handler;
 
 import com.baiyi.cratos.shell.util.TerminalUtils;
 import org.jline.terminal.Size;

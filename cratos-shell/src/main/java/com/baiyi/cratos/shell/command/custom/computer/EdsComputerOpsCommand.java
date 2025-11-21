@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.computer.CloudComputerOperatorFactory;
@@ -21,7 +21,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Map;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerLoginCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerLoginCommand.GROUP;
 
 /**
  * &#064;Author  baiyi

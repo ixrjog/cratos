@@ -1,4 +1,4 @@
-package com.baiyi.cratos.shell.command.custom.eds;
+package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtils;
@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static com.baiyi.cratos.shell.command.custom.eds.EdsComputerGroupListCommand.GROUP;
+import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerGroupListCommand.GROUP;
 
 /**
  * @Author 修远
