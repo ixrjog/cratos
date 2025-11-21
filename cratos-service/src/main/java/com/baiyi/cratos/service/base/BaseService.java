@@ -25,7 +25,7 @@ public interface BaseService<T extends HasIntegerPrimaryKey, M extends Mapper<T>
     @SuppressWarnings("unchecked")
     default M getMapper() {
         final String mapperBeanName = BeanNameConverter.serviceImplNameToMapperName(this.getClass()
-                .getSimpleName());
+                                                                                            .getSimpleName());
         return (M) SpringContextUtils.getBean(mapperBeanName);
     }
 
@@ -37,7 +37,7 @@ public interface BaseService<T extends HasIntegerPrimaryKey, M extends Mapper<T>
 
     // 方法映射
     @DomainDecrypt
-    default T getById(int id) {
+    default T getById(Integer id) {
         return getMapper().selectByPrimaryKey(id);
     }
 
