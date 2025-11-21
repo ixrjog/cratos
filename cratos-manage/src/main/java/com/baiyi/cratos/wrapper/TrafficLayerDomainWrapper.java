@@ -103,7 +103,7 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
                 .withTrue(() -> {
                     TrafficLayerDomain trafficLayerDomain = domainService.getById(hasDomain.getDomainId());
                     TrafficLayerDomainVO.Domain domain = this.convert(trafficLayerDomain);
-                    wrapFromProxy(domain);
+                    delegateWrap(domain);
                     hasDomain.setDomain(domain);
                 });
     }

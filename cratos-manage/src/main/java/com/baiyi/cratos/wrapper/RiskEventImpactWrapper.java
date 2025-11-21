@@ -56,7 +56,7 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
             List<RiskEventVO.Impact> impacts = impactList.stream()
                     .map(e -> {
                         RiskEventVO.Impact impact = this.convert(e);
-                        wrapFromProxy(impact);
+                        delegateWrap(impact);
                         sumCost.set(sumCost.get() + impact.getCost());
                         return impact;
                     })

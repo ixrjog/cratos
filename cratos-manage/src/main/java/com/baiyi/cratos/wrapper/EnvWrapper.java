@@ -44,7 +44,7 @@ public class EnvWrapper extends BaseDataTableConverter<EnvVO.Env, Env> implement
             return;
         }
         EnvVO.Env envVO = this.convert(env);
-        wrapFromProxy(envVO);
+        delegateWrap(envVO);
         hasEnv.setEnv(envVO);
     }
 

@@ -31,7 +31,7 @@ public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implement
     public void businessWrap(TagVO.HasTag iTag) {
         Tag tag = tagService.getById(iTag.getTagId());
         TagVO.Tag t = convert(tag);
-        wrapFromProxy(t);
+        delegateWrap(t);
         iTag.setTag(t);
     }
 

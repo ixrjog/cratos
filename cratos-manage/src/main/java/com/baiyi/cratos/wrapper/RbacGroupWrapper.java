@@ -54,7 +54,7 @@ public class RbacGroupWrapper extends BaseDataTableConverter<RbacGroupVO.Group, 
                     RbacGroup rbacGroup = rbacGroupService.getById(group.getRbacGroupId());
                     if (rbacGroup != null) {
                         RbacGroupVO.Group groupVO = this.convert(rbacGroup);
-                        wrapFromProxy(groupVO);
+                        delegateWrap(groupVO);
                         group.setRbacGroup(groupVO);
                     }
                 });

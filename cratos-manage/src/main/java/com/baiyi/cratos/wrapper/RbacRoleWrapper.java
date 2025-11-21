@@ -69,7 +69,7 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
                     RbacRole role = rbacRoleService.getById(e.getRoleId());
                     RbacRoleVO.Role roleVO = this.convert(role);
                     // AOP增强
-                    wrapFromProxy(roleVO);
+                    delegateWrap(roleVO);
                     return roleVO;
                 })
                 .toList();

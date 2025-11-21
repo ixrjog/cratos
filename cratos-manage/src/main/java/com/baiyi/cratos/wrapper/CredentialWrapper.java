@@ -50,7 +50,7 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
                     }
                     CredentialVO.Credential credentialVO = this.convert(credential);
                     // 重入切面
-                    wrapFromProxy(credentialVO);
+                    delegateWrap(credentialVO);
                     cred.setCredential(credentialVO);
                 });
     }

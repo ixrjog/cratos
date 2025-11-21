@@ -9,9 +9,9 @@ import org.springframework.beans.factory.InitializingBean;
  * @Date 2024/1/5 15:18
  * @Version 1.0
  */
-public interface BaseBusinessWrapper<B, T> extends BaseWrapper<T>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
+public interface BaseBusinessWrapper<Business, T> extends BaseWrapper<T>, BaseBusiness.IBusinessTypeAnnotate, InitializingBean {
 
-    void businessWrap(B b);
+    void businessWrap(Business b);
 
     default void afterPropertiesSet() {
         BusinessWrapperFactory.register(this);

@@ -52,7 +52,7 @@ public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConver
                             .stream()
                             .map(e -> {
                                 KubernetesResourceTemplateVO.Member vo = convert(e);
-                                wrapFromProxy(vo);
+                                delegateWrap(vo);
                                 return vo;
                             })
                             .sorted(Comparator.comparingInt(KubernetesResourceTemplateVO.Member::getSeq))

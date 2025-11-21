@@ -40,7 +40,7 @@ public class BusinessPropertyWrapper extends BaseDataTableConverter<BusinessProp
                 .map(bizTag -> {
                     BusinessPropertyVO.BusinessProperty businessProperty = this.convert(bizTag);
                     // AOP增强
-                    wrapFromProxy(businessProperty);
+                    delegateWrap(businessProperty);
                     return businessProperty;
                 })
                 .collect(Collectors.toList()));
