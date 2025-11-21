@@ -28,12 +28,12 @@ public abstract class BaseDataTableConverter<T, S> implements BaseWrapper<T>, Co
      */
     public T wrapToTarget(S s) {
         T t = convert(s);
-        wrapFromProxy(t);
+        delegateWrap(t);
         return t;
     }
 
     @SuppressWarnings("unchecked")
-    protected void wrapFromProxy(T t) {
+    protected void delegateWrap(T t) {
         // BaseDataTableConverter<T, S> bean = (BaseDataTableConverter<T, S>) AopContext.currentProxy();
         BaseWrapper<T> bean = SpringContextUtils.getBean(this.getClass());
         bean.wrap(t);
