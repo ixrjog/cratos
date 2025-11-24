@@ -63,7 +63,6 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         this.ldapGroupRepo = ldapGroupRepo;
     }
 
-
     @Override
     public EdsIdentityVO.LdapIdentityDetails queryLdapIdentityDetails(
             EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails) {

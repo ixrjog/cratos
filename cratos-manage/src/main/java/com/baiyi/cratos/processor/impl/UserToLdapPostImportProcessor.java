@@ -77,7 +77,7 @@ public class UserToLdapPostImportProcessor implements BasePostImportAssetProcess
                         .username(user.getUsername())
                         .password(password)
                         .build();
-                log.info("create ldap identity: {}", createLdapIdentity);
+                log.info("Create ldap identity: {}", createLdapIdentity);
                 EdsIdentityVO.LdapIdentity ldapIdentity = edsIdentityFacade.createLdapIdentity(createLdapIdentity);
                 resetUserPasswordNoticeSender.sendMsg(user.getUsername(), password);
             }
