@@ -170,6 +170,20 @@ public class EdsAssetServiceImpl implements EdsAssetService {
     }
 
     @Override
+    public List<EdsAsset> queryInstanceAssetByTypeAndName(@NonNull Integer instanceId, @NonNull String assetType, @NonNull String name, boolean isPrefix) {
+        Example example = new Example(EdsAsset.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("instanceId", instanceId)
+                .andEqualTo("assetType", assetType);
+        if (isPrefix) {
+            criteria.andLike("name", name + "%");
+        } else {
+            criteria.andEqualTo("name", name);
+        }
+        return edsAssetMapper.selectByExample(example);
+    }
+
+    @Override
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG})
     public void deleteById(int id) {

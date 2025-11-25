@@ -27,7 +27,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.EDS_ASSET_INDEX;
-import static com.baiyi.cratos.ssh.crystal.handler.SshCrystalSuperOpenMessageHandler.CLOUD_SERVER_TYPES;
 
 /**
  * @Author baiyi
@@ -47,11 +46,13 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     @Override
     @BusinessWrapper(types = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
     public void wrap(EdsAssetVO.Asset vo) {
-        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(vo.getInstanceId(),
-                vo.getAssetType());
+        EdsInstanceProviderHolder<?, ?> edsInstanceProviderHolder = holderBuilder.newHolder(
+                vo.getInstanceId(),
+                vo.getAssetType()
+        );
         // TODO 是否要序列化对象？
         vo.setOriginalAsset(edsInstanceProviderHolder.getProvider()
-                .assetLoadAs(vo.getOriginalModel()));
+                                    .assetLoadAs(vo.getOriginalModel()));
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
                 vo.getAssetType());
@@ -67,11 +68,13 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
     }
 
     public void wrap(EdsAssetVO.Asset asset, boolean skipLoadAsset) {
-        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(asset.getInstanceId(),
-                asset.getAssetType());
+        EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(
+                asset.getInstanceId(),
+                asset.getAssetType()
+        );
         if (!skipLoadAsset) {
             asset.setOriginalAsset(providerHolder.getProvider()
-                    .assetLoadAs(asset.getOriginalModel()));
+                                           .assetLoadAs(asset.getOriginalModel()));
         }
         // ToBusiness
         IAssetToBusinessWrapper<?> assetToBusinessWrapper = AssetToBusinessWrapperFactory.getProvider(
@@ -115,11 +118,11 @@ public class EdsAssetWrapper extends BaseDataTableConverter<EdsAssetVO.Asset, Ed
                     });
             return;
         }
-        if (CLOUD_SERVER_TYPES.stream()
+        if (EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
                 .anyMatch(e -> e.equals(assetType))) {
             vo.setLoginServer(LoginServerVO.LoginServer.builder()
-                    .remoteManagementIP(vo.getAssetKey())
-                    .build());
+                                      .remoteManagementIP(vo.getAssetKey())
+                                      .build());
         }
     }
 

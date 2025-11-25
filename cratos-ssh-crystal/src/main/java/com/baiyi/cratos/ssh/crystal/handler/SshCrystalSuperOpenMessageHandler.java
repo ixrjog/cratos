@@ -56,14 +56,17 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              ServerAccessControlFacade serverAccessControlFacade,
                                              BusinessTagFacade businessTagFacade, UserService userService,
                                              NotificationTemplateService notificationTemplateService,
-                                             EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
-                                             DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
+                                             EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                             EdsConfigService edsConfigService, DingtalkService dingtalkService,
+                                             SshAuditProperties sshAuditProperties,
                                              SimpleSshSessionFacade simpleSshSessionFacade,
                                              RbacUserRoleFacade rbacUserRoleFacade,
                                              EdsInstanceProviderHolderBuilder holderBuilder) {
-        super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
+        super(
+                edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade);
+                sshAuditProperties, simpleSshSessionFacade
+        );
         this.rbacUserRoleFacade = rbacUserRoleFacade;
         this.holderBuilder = holderBuilder;
     }
@@ -72,47 +75,65 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.SuperOpen openMessage = toMessage(message);
         if (!StringUtils.hasText(openMessage.getServerAccount())) {
-            sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                    AUTH_FAIL_STATUS, "Login serverAccount not specified");
+            sendHostSystemErrMsgToSession(
+                    session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                    AUTH_FAIL_STATUS, "Login serverAccount not specified"
+            );
             return;
         }
         try {
-            final String auditPath = sshAuditProperties.generateAuditLogFilePath(sshSession.getSessionId(),
-                    openMessage.getInstanceId());
+            final String auditPath = sshAuditProperties.generateAuditLogFilePath(
+                    sshSession.getSessionId(),
+                    openMessage.getInstanceId()
+            );
             heartbeat(sshSession.getSessionId());
             // 鉴权
             if (!rbacUserRoleFacade.hasAccessLevel(username, AccessLevel.OPS)) {
-                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS, "Authentication failed, non-administrators are not allowed to log in");
+                sendHostSystemErrMsgToSession(
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS,
+                        "Authentication failed, non-administrators are not allowed to log in"
+                );
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
             String remoteManagementIP = getRemoteManagementIP(server);
             if (!IpUtils.isIP(remoteManagementIP)) {
-                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS,
-                        "The server you are trying to log in to is incorrect, unable to obtain a valid management IP");
+                sendHostSystemErrMsgToSession(
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(), AUTH_FAIL_STATUS,
+                        "The server you are trying to log in to is incorrect, unable to obtain a valid management IP"
+                );
                 return;
             }
             // 查询serverAccount
             ServerAccount serverAccount = serverAccountService.getByName(openMessage.getServerAccount());
             if (serverAccount == null) {
-                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS, "The specified login serverAccount does not exist");
+                sendHostSystemErrMsgToSession(
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS, "The specified login serverAccount does not exist"
+                );
                 return;
             }
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), remoteManagementIP,
-                    serverAccount, credential);
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
+                    openMessage.getInstanceId(), remoteManagementIP,
+                    serverAccount, credential
+            );
             // 初始化 Terminal size
-            targetSystem.setTerminalSize(new org.jline.terminal.Size(openMessage.getTerminal()
-                    .getCols(), openMessage.getTerminal()
-                    .getRows()));
+            targetSystem.setTerminalSize(new org.jline.terminal.Size(
+                    openMessage.getTerminal()
+                            .getCols(), openMessage.getTerminal()
+                            .getRows()
+            ));
             targetSystem.setAuditPath(auditPath);
             HostSystem proxySystem = getProxyHost(server);
             // 记录 SSH 会话实例
-            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
-                    targetSystem, SshSessionInstanceTypeEnum.SERVER, auditPath);
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(
+                    sshSession.getSessionId(),
+                    targetSystem,
+                    SshSessionInstanceTypeEnum.SERVER,
+                    auditPath
+            );
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
             openSshCrystal(sshSession, targetSystem, proxySystem);
             try {
@@ -122,8 +143,10 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                 log.debug(ioException.getMessage(), ioException);
             }
         } catch (Exception e) {
-            sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                    HOST_FAIL_STATUS, e.getMessage());
+            sendHostSystemErrMsgToSession(
+                    session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                    HOST_FAIL_STATUS, e.getMessage()
+            );
             log.error("Crystal ssh open error: {}", e.getMessage());
         }
     }
@@ -151,7 +174,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                 return "";
             }
         }
-        if (CLOUD_SERVER_TYPES.stream()
+        if (EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
                 .anyMatch(e -> e.equals(assetType))) {
             return edsAsset.getAssetKey();
         }

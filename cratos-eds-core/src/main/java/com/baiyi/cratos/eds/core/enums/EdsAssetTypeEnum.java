@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
  */
 @Getter
 public enum EdsAssetTypeEnum {
-
-    CRATOS_COMPUTER("CloudComputer", 1),
+    @CloudComputer CRATOS_COMPUTER("CloudComputer", 1),
 
     ALIYUN_ALB("ALB", 2),
     ALIYUN_NLB("NLB", 3),
-    @CloudComputer
-    ALIYUN_ECS("ECS", 4),
+    @CloudComputer ALIYUN_ECS("ECS", 4),
     ALIYUN_DOMAIN("Domain", 5),
     @CloudIdentity ALIYUN_RAM_USER("RAM User", 6),
     ALIYUN_RAM_POLICY("RAM Policy", 7),
@@ -54,8 +52,7 @@ public enum EdsAssetTypeEnum {
     AWS_CERT("Certificate", 31),
     AWS_STS_VPN("Site-to-Site VPN", 32),
     AWS_ELB("ELB", 33),
-    @CloudComputer
-    AWS_EC2("EC2", 34),
+    @CloudComputer AWS_EC2("EC2", 34),
     AWS_EBS("EBS", 35),
     AWS_DOMAIN("Domain", 36),
     AWS_HOSTED_ZONE("Hosted Zone", 37),
@@ -70,8 +67,7 @@ public enum EdsAssetTypeEnum {
     AWS_SUBNET("Subnet", 46),
     @CloudIdentity AWS_IAM_USER("IAM User", 47),
     AWS_IAM_POLICY("IAM Policy", 48),
-    @CloudComputer
-    HUAWEICLOUD_ECS("ECS", 49),
+    @CloudComputer HUAWEICLOUD_ECS("ECS", 49),
     @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("Certificate", 51),
     HUAWEICLOUD_VPC("VPC", 52),
@@ -138,12 +134,29 @@ public enum EdsAssetTypeEnum {
         this.seq = seq;
     }
 
-    public static List<EdsAssetTypeEnum> getCloudIdentityTypes() {
+    public static final List<EdsAssetTypeEnum> CLOUD_IDENTITY_TYPES = getCloudIdentityTypes();
+
+    private static List<EdsAssetTypeEnum> getCloudIdentityTypes() {
         return Arrays.stream(EdsAssetTypeEnum.values())
                 .filter(assetType -> {
                     try {
                         Field field = EdsAssetTypeEnum.class.getField(assetType.name());
                         return field.isAnnotationPresent(CloudIdentity.class);
+                    } catch (NoSuchFieldException e) {
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    public static final List<EdsAssetTypeEnum> CLOUD_COMPUTER_TYPES = getCloudComputerTypes();
+
+    private static List<EdsAssetTypeEnum> getCloudComputerTypes() {
+        return Arrays.stream(EdsAssetTypeEnum.values())
+                .filter(assetType -> {
+                    try {
+                        Field field = EdsAssetTypeEnum.class.getField(assetType.name());
+                        return field.isAnnotationPresent(CloudComputer.class);
                     } catch (NoSuchFieldException e) {
                         return false;
                     }

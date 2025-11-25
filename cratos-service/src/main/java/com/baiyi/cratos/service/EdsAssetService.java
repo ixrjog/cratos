@@ -38,6 +38,8 @@ public interface EdsAssetService extends BaseUniqueKeyService<EdsAsset, EdsAsset
 
     List<EdsAsset> queryByTypeAndKey(@NonNull String assetType, @NonNull String key);
 
+    List<EdsAsset> queryInstanceAssetByTypeAndName(@NonNull Integer instanceId, @NonNull String assetType, @NonNull String name, boolean isPrefix);
+
     List<EdsAsset> queryInstanceAssetByTypeAndKey(@NonNull Integer instanceId, @NonNull String assetType,
                                                   @NonNull String key);
 

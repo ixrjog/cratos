@@ -15,16 +15,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SshCrystalMessageHandlerFactory {
 
-    static Map<String, SshCrystalMessageHandler> context = new ConcurrentHashMap<>();
+    private static final Map<String, SshCrystalMessageHandler> CONTEXT = new ConcurrentHashMap<>();
 
     public static SshCrystalMessageHandler getByState(String state) {
-        SshCrystalMessageHandler handler = context.get(state);
-        return handler != null ? handler : context.get(MessageState.UNKNOWN.name());
+        SshCrystalMessageHandler handler = CONTEXT.get(state);
+        return handler != null ? handler : CONTEXT.get(MessageState.UNKNOWN.name());
     }
 
     public static void register(SshCrystalMessageHandler bean) {
         log.debug("SshCrystalMessageHandlerFactory Registered: state={}", bean.getState());
-        context.put(bean.getState(), bean);
+        CONTEXT.put(bean.getState(), bean);
     }
 
 }

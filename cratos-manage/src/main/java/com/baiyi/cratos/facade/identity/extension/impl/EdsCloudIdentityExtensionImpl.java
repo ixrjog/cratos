@@ -66,7 +66,7 @@ public class EdsCloudIdentityExtensionImpl extends BaseEdsIdentityExtension impl
                 .toList();
         cloudIdentityAssets.addAll(byIndexUsername);
         cloudIdentityAssets.addAll(queryByUsernameTag(
-                queryCloudIdentityDetails.getUsername(), EdsAssetTypeEnum.getCloudIdentityTypes()
+                queryCloudIdentityDetails.getUsername(), EdsAssetTypeEnum.CLOUD_IDENTITY_TYPES
                         .stream()
                         .map(Enum::name)
                         .toList()
