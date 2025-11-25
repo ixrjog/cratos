@@ -2,7 +2,6 @@ package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
@@ -32,6 +31,7 @@ import com.baiyi.cratos.shell.command.custom.handler.TerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
+import com.baiyi.cratos.ssh.core.ProxyHostHolder;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
@@ -91,13 +91,12 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final ServerCommandAuditor serverCommandAuditor;
     private final BusinessDocFacade businessDocFacade;
     private final BusinessTagFacade businessTagFacade;
-    private final EdsAssetService edsAssetService;
-    private final ServerAccountService serverAccountService;
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
     private final EdsConfigService edsConfigService;
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
     private final UserService userService;
+    private final ProxyHostHolder proxyHostHolder;
 
     @Value("${cratos.notification:NORMAL}")
     private String notification;
@@ -108,10 +107,10 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                                    SimpleSshSessionFacade simpleSshSessionFacade, CredentialService credentialService,
                                    SshAuditProperties sshAuditProperties, ServerCommandAuditor serverCommandAuditor,
                                    BusinessDocFacade businessDocFacade, BusinessTagFacade businessTagFacade,
-                                   EdsAssetService edsAssetService, ServerAccountService serverAccountService,
                                    EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                    DingtalkService dingtalkService,
-                                   NotificationTemplateService notificationTemplateService, UserService userService) {
+                                   NotificationTemplateService notificationTemplateService, UserService userService,
+                                   ProxyHostHolder proxyHostHolder) {
         super(
                 helper, properties, properties.getCommands()
                         .getComputer()
@@ -122,13 +121,12 @@ public class EdsComputerLoginCommand extends AbstractCommand {
         this.serverCommandAuditor = serverCommandAuditor;
         this.businessDocFacade = businessDocFacade;
         this.businessTagFacade = businessTagFacade;
-        this.edsAssetService = edsAssetService;
-        this.serverAccountService = serverAccountService;
         this.edsInstanceQueryHelper = edsInstanceQueryHelper;
         this.edsConfigService = edsConfigService;
         this.dingtalkService = dingtalkService;
         this.notificationTemplateService = notificationTemplateService;
         this.userService = userService;
+        this.proxyHostHolder = proxyHostHolder;
     }
 
     @ClearScreen
@@ -249,41 +247,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     }
 
     private HostSystem getProxyHost(EdsAsset targetComputer) throws SshException {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(targetComputer.getId())
-                        .build(), SysTagKeys.SSH_PROXY.getKey()
-        );
-        if (Objects.isNull(sshProxyBusinessTag)) {
-            return HostSystem.NO_HOST;
-        }
-        // 搜索资产
-        String proxyIP = sshProxyBusinessTag.getTagValue();
-        if (!IpUtils.isIP(proxyIP)) {
-            return HostSystem.NO_HOST;
-        }
-        List<EdsAsset> proxyComputers = edsAssetService.queryInstanceAssetByTypeAndKey(
-                targetComputer.getInstanceId(),
-                targetComputer.getAssetType(),
-                proxyIP
-        );
-        if (CollectionUtils.isEmpty(proxyComputers)) {
-            return HostSystem.NO_HOST;
-        }
-        EdsAsset proxyComputer = proxyComputers.getFirst();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(proxyComputer.getId())
-                        .build(), SysTagKeys.SERVER_ACCOUNT.getKey()
-        );
-        if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
-            return HostSystem.NO_HOST;
-        }
-        ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
-        Credential credential = credentialService.getById(serverAccount.getCredentialId());
-        return HostSystemBuilder.buildHostSystem(proxyComputer, serverAccount, credential);
+        return proxyHostHolder.getSshProxyHost(targetComputer);
     }
 
     private void previewDocs(EdsAsset asset) {

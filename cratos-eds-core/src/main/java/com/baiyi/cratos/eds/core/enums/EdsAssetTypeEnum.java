@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 public enum EdsAssetTypeEnum {
-    @CloudComputer CRATOS_COMPUTER("CloudComputer", 1),
+    @CloudComputer CRATOS_COMPUTER("Computer", 1),
 
     ALIYUN_ALB("ALB", 2),
     ALIYUN_NLB("NLB", 3),

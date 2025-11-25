@@ -11,6 +11,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.ssh.core.ProxyHostHolder;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -50,7 +51,6 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
     private final RbacUserRoleFacade rbacUserRoleFacade;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
-
     public SshCrystalSuperOpenMessageHandler(EdsAssetService edsAssetService, ServerAccountService serverAccountService,
                                              CredentialService credentialService,
                                              ServerAccessControlFacade serverAccessControlFacade,
@@ -61,11 +61,12 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              SshAuditProperties sshAuditProperties,
                                              SimpleSshSessionFacade simpleSshSessionFacade,
                                              RbacUserRoleFacade rbacUserRoleFacade,
-                                             EdsInstanceProviderHolderBuilder holderBuilder) {
+                                             EdsInstanceProviderHolderBuilder holderBuilder,
+                                             ProxyHostHolder proxyHostHolder) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade
+                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder
         );
         this.rbacUserRoleFacade = rbacUserRoleFacade;
         this.holderBuilder = holderBuilder;
@@ -90,8 +91,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
             // 鉴权
             if (!rbacUserRoleFacade.hasAccessLevel(username, AccessLevel.OPS)) {
                 sendHostSystemErrMsgToSession(
-                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS,
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(), AUTH_FAIL_STATUS,
                         "Authentication failed, non-administrators are not allowed to log in"
                 );
                 return;

@@ -2,7 +2,6 @@ package com.baiyi.cratos.ssh.crystal.handler.base;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -19,7 +18,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
+import com.baiyi.cratos.ssh.core.ProxyHostHolder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
@@ -34,13 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.CRYSTAL_USER_LOGIN_SERVER_NOTICE;
 
@@ -67,6 +63,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final DingtalkService dingtalkService;
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
+    private final ProxyHostHolder proxyHostHolder;
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -124,56 +121,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     }
 
     protected HostSystem getProxyHost(EdsAsset server) {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(server.getId())
-                        .build(), SysTagKeys.SSH_PROXY.getKey()
-        );
-        if (Objects.isNull(sshProxyBusinessTag)) {
-            return HostSystem.NO_HOST;
-        }
-        // 搜索资产
-        String proxyValue = sshProxyBusinessTag.getTagValue();
-        List<EdsAsset> proxyServers = IpUtils.isIP(proxyValue) ? queryProxyServerByIP(server, proxyValue) :queryProxyServerByName(server, proxyValue);
-        return getProxyHostSystem( proxyServers);
-    }
-
-    private HostSystem getProxyHostSystem(List<EdsAsset> proxyServers) {
-        if (CollectionUtils.isEmpty(proxyServers)) {
-            return HostSystem.NO_HOST;
-        }
-        EdsAsset proxyServer = proxyServers.getFirst();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(proxyServer.getId())
-                        .build(), SysTagKeys.SERVER_ACCOUNT.getKey()
-        );
-        if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
-            return HostSystem.NO_HOST;
-        }
-        ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
-        Credential credential = credentialService.getById(serverAccount.getCredentialId());
-        return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
-    }
-
-    private List<EdsAsset> queryProxyServerByName(EdsAsset server, String proxyName) {
-        return EdsAssetTypeEnum.KUBERNETES_NODE.name()
-                .equals(server.getAssetType()) ? EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
-                .flatMap(type -> edsAssetService.queryByTypeAndName(type.name(), proxyName, false)
-                        .stream())
-                .collect(Collectors.toList()) : edsAssetService.queryInstanceAssetByTypeAndName(
-                server.getInstanceId(), server.getAssetType(), proxyName, false);
-    }
-
-    private List<EdsAsset> queryProxyServerByIP(EdsAsset server, String proxyIP) {
-        return EdsAssetTypeEnum.KUBERNETES_NODE.name()
-                .equals(server.getAssetType()) ? EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
-                .flatMap(type -> edsAssetService.queryAssetByParam(proxyIP, type.name())
-                        .stream())
-                .collect(Collectors.toList()) : edsAssetService.queryInstanceAssetByTypeAndKey(
-                server.getInstanceId(), server.getAssetType(), proxyIP);
+        return proxyHostHolder.getSshProxyHost(server);
     }
 
     private String getServerAccountName(int assetId) {

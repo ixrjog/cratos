@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.ssh.core.ProxyHostHolder;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -43,26 +44,36 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                                         ServerAccessControlFacade serverAccessControlFacade,
                                         BusinessTagFacade businessTagFacade, UserService userService,
                                         NotificationTemplateService notificationTemplateService,
-                                        EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
-                                        DingtalkService dingtalkService, SshAuditProperties sshAuditProperties,
-                                        SimpleSshSessionFacade simpleSshSessionFacade) {
-        super(edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
+                                        EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                        EdsConfigService edsConfigService, DingtalkService dingtalkService,
+                                        SshAuditProperties sshAuditProperties,
+                                        SimpleSshSessionFacade simpleSshSessionFacade,
+                                        ProxyHostHolder proxyHostHolder) {
+        super(
+                edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade);
+                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder
+        );
     }
 
     @Override
     public void handle(String username, String message, Session session, SshSession sshSession) {
         SshCrystalMessage.Open openMessage = toMessage(message);
         try {
-            final String auditPath = sshAuditProperties.generateAuditLogFilePath(sshSession.getSessionId(),
-                    openMessage.getInstanceId());
+            final String auditPath = sshAuditProperties.generateAuditLogFilePath(
+                    sshSession.getSessionId(),
+                    openMessage.getInstanceId()
+            );
             heartbeat(sshSession.getSessionId());
-            AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(username,
-                    openMessage.getAssetId());
+            AccessControlVO.AccessControl accessControl = serverAccessControlFacade.generateAccessControl(
+                    username,
+                    openMessage.getAssetId()
+            );
             if (!accessControl.getPermission()) {
-                sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                        AUTH_FAIL_STATUS, accessControl.getMsg());
+                sendHostSystemErrMsgToSession(
+                        session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                        AUTH_FAIL_STATUS, accessControl.getMsg()
+                );
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
@@ -70,24 +81,34 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             ServerAccount serverAccount = serverAccountService.getByName(
                     getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
-            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(openMessage.getInstanceId(), server,
-                    serverAccount, credential);
+            HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
+                    openMessage.getInstanceId(), server,
+                    serverAccount, credential
+            );
             // 初始化 Terminal size
-            targetSystem.setTerminalSize(new org.jline.terminal.Size(openMessage.getTerminal()
-                    .getCols(), openMessage.getTerminal()
-                    .getRows()));
+            targetSystem.setTerminalSize(new org.jline.terminal.Size(
+                    openMessage.getTerminal()
+                            .getCols(), openMessage.getTerminal()
+                            .getRows()
+            ));
             targetSystem.setAuditPath(auditPath);
             HostSystem proxySystem = getProxyHost(server);
             // 记录 SSH 会话实例
-            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(sshSession.getSessionId(),
-                    targetSystem, SshSessionInstanceTypeEnum.SERVER, auditPath);
+            SshSessionInstance sshSessionInstance = SshSessionInstanceBuilder.build(
+                    sshSession.getSessionId(),
+                    targetSystem,
+                    SshSessionInstanceTypeEnum.SERVER,
+                    auditPath
+            );
             simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
             openSshCrystal(sshSession, targetSystem, proxySystem);
             // 发送登录通知
             sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
         } catch (Exception e) {
-            sendHostSystemErrMsgToSession(session, sshSession.getSessionId(), openMessage.getInstanceId(),
-                    HOST_FAIL_STATUS, e.getMessage());
+            sendHostSystemErrMsgToSession(
+                    session, sshSession.getSessionId(), openMessage.getInstanceId(),
+                    HOST_FAIL_STATUS, e.getMessage()
+            );
             log.error("Crystal ssh open error: {}", e.getMessage());
         }
     }

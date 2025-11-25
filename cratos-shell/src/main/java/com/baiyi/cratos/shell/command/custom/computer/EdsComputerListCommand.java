@@ -3,7 +3,6 @@ package com.baiyi.cratos.shell.command.custom.computer;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.ExpiredUtils;
-import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
@@ -26,6 +25,7 @@ import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.baiyi.cratos.shell.writer.ComputerTableWriter;
+import com.baiyi.cratos.ssh.core.ProxyHostHolder;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +64,7 @@ public class EdsComputerListCommand extends AbstractCommand {
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
+    private final ProxyHostHolder proxyHostHolder;
     public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     protected static final int PAGE_FOOTER_SIZE = 6;
@@ -72,15 +73,18 @@ public class EdsComputerListCommand extends AbstractCommand {
                                   EdsInstanceService edsInstanceService,
                                   UserPermissionBusinessFacade userPermissionBusinessFacade,
                                   UserPermissionService userPermissionService, BusinessTagFacade businessTagFacade,
-                                  UserService userService, EnvFacade envFacade) {
-        super(helper, properties, properties.getCommands()
-                .getComputer());
+                                  UserService userService, EnvFacade envFacade, ProxyHostHolder proxyHostHolder) {
+        super(
+                helper, properties, properties.getCommands()
+                        .getComputer()
+        );
         this.userPermissionBusinessFacade = userPermissionBusinessFacade;
         this.userPermissionService = userPermissionService;
         this.edsInstanceService = edsInstanceService;
         this.businessTagFacade = businessTagFacade;
         this.envFacade = envFacade;
         this.userService = userService;
+        this.proxyHostHolder = proxyHostHolder;
     }
 
     @ShellMethod(key = COMMAND_LIST, value = "List computer asset")
@@ -96,7 +100,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                 SHORT_COMPUTER_TABLE_FIELD_NAME) : PrettyTable.fieldNames(COMPUTER_TABLE_FIELD_NAME);
         int pageLength = rows - PAGE_FOOTER_SIZE;
         User user = userService.getByUsername(helper.getSshSession()
-                .getUsername());
+                                                      .getUsername());
         EdsAssetQuery.UserPermissionPageQueryParam queryParam = EdsAssetQuery.UserPermissionPageQueryParam.builder()
                 .username(user.getUsername())
                 .page(page)
@@ -154,19 +158,8 @@ public class EdsComputerListCommand extends AbstractCommand {
     }
 
     private String getProxyIP(EdsAsset targetComputer) {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(SimpleBusiness.builder()
-                .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                .businessId(targetComputer.getId())
-                .build(), SysTagKeys.SSH_PROXY.getKey());
-        if (Objects.isNull(sshProxyBusinessTag)) {
-            return "";
-        }
-        // 搜索资产
-        String proxyIP = sshProxyBusinessTag.getTagValue();
-        if (!IpUtils.isIP(proxyIP)) {
-            return "";
-        }
-        return helper.getColored(proxyIP, PromptColor.GREEN);
+        String proxyValue = proxyHostHolder.getSshProxyValue(targetComputer);
+        return helper.getColored(proxyValue, PromptColor.GREEN);
     }
 
     private String toPermission(User user, String group, String env) {
@@ -177,13 +170,14 @@ public class EdsComputerListCommand extends AbstractCommand {
         if (ExpiredUtils.isExpired(userPermission.getExpiredTime())) {
             return UNAUTHORIZED;
         }
-        return helper.getColored(
-                TimeUtils.parse(userPermission.getExpiredTime(), Global.ISO8601), PromptColor.GREEN);
+        return helper.getColored(TimeUtils.parse(userPermission.getExpiredTime(), Global.ISO8601), PromptColor.GREEN);
     }
 
     private String renderEnv(Map<String, Env> envMap, String env) {
-        return envMap.containsKey(env) ? helper.getColored(env, PromptColor.valueOf(envMap.get(env)
-                .getPromptColor())) : env;
+        return envMap.containsKey(env) ? helper.getColored(
+                env, PromptColor.valueOf(envMap.get(env)
+                                                 .getPromptColor())
+        ) : env;
     }
 
     private String getTagValue(EdsAsset edsAsset, SysTagKeys sysTagKey) {
@@ -223,8 +217,8 @@ public class EdsComputerListCommand extends AbstractCommand {
         }
         return Joiner.on(" ")
                 .join(serverAccounts.stream()
-                        .map(this::toServerAccount)
-                        .toList());
+                              .map(this::toServerAccount)
+                              .toList());
     }
 
     private String toServerAccount(ServerAccount serverAccount) {
