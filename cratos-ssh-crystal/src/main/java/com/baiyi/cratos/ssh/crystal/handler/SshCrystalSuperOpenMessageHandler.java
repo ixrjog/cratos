@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.ssh.core.ProxyHostHolder;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -62,7 +62,7 @@ public class SshCrystalSuperOpenMessageHandler extends BaseSshCrystalOpenMessage
                                              SimpleSshSessionFacade simpleSshSessionFacade,
                                              RbacUserRoleFacade rbacUserRoleFacade,
                                              EdsInstanceProviderHolderBuilder holderBuilder,
-                                             ProxyHostHolder proxyHostHolder) {
+                                             SshProxyHostHolder proxyHostHolder) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,

@@ -31,7 +31,7 @@ import com.baiyi.cratos.shell.command.custom.handler.TerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
-import com.baiyi.cratos.ssh.core.ProxyHostHolder;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
@@ -96,7 +96,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
     private final UserService userService;
-    private final ProxyHostHolder proxyHostHolder;
+    private final SshProxyHostHolder proxyHostHolder;
 
     @Value("${cratos.notification:NORMAL}")
     private String notification;
@@ -110,7 +110,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                                    EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
                                    DingtalkService dingtalkService,
                                    NotificationTemplateService notificationTemplateService, UserService userService,
-                                   ProxyHostHolder proxyHostHolder) {
+                                   SshProxyHostHolder proxyHostHolder) {
         super(
                 helper, properties, properties.getCommands()
                         .getComputer()

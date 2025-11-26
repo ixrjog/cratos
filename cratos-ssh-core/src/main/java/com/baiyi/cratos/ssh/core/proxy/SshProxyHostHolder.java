@@ -1,7 +1,8 @@
-package com.baiyi.cratos.ssh.core;
+package com.baiyi.cratos.ssh.core.proxy;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.IpUtils;
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @RequiredArgsConstructor
-public class ProxyHostHolder {
+public class SshProxyHostHolder {
 
     private final BusinessTagFacade businessTagFacade;
     private final EdsAssetService edsAssetService;
@@ -39,29 +40,21 @@ public class ProxyHostHolder {
     private final CredentialService credentialService;
 
     public HostSystem getSshProxyHost(EdsAsset server) {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(server.getId())
-                        .build(), SysTagKeys.SSH_PROXY.getKey()
-        );
-        if (Objects.isNull(sshProxyBusinessTag)) {
+        String proxyValue = getSshProxyValue(server);
+        if (!StringUtils.hasText(proxyValue)) {
             return HostSystem.NO_HOST;
         }
-        // 搜索资产
-        String proxyValue = sshProxyBusinessTag.getTagValue();
         List<EdsAsset> proxyServers = IpUtils.isIP(proxyValue) ? queryProxyServerByIP(
                 server, proxyValue) : queryProxyServerByName(server, proxyValue);
         return getProxyHostSystem(proxyServers);
     }
 
     public String getSshProxyValue(EdsAsset targetComputer) {
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(targetComputer.getId())
-                        .build(), SysTagKeys.SSH_PROXY.getKey()
-        );
+        BaseBusiness.HasBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(targetComputer.getId())
+                .build();
+        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_PROXY.getKey());
         if (Objects.isNull(sshProxyBusinessTag)) {
             return "";
         }
@@ -75,12 +68,11 @@ public class ProxyHostHolder {
             return HostSystem.NO_HOST;
         }
         EdsAsset proxyServer = proxyServers.getFirst();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(
-                SimpleBusiness.builder()
-                        .businessType(BusinessTypeEnum.EDS_ASSET.name())
-                        .businessId(proxyServer.getId())
-                        .build(), SysTagKeys.SERVER_ACCOUNT.getKey()
-        );
+        BaseBusiness.HasBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(proxyServer.getId())
+                .build();
+        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(business, SysTagKeys.SERVER_ACCOUNT.getKey());
         if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
             return HostSystem.NO_HOST;
         }

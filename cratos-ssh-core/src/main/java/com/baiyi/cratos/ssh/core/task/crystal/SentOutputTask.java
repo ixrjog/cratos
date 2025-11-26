@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class SentOutputTask implements Runnable {
 
-    Session session;
-    String sessionId;
+    private final Session session;
+    private final String sessionId;
 
     public SentOutputTask(String sessionId, Session session) {
         this.sessionId = sessionId;

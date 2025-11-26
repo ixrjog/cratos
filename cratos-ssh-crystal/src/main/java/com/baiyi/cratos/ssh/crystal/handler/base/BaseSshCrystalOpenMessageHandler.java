@@ -18,7 +18,7 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.ssh.core.ProxyHostHolder;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
 import com.baiyi.cratos.ssh.core.enums.MessageState;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
@@ -63,7 +63,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final DingtalkService dingtalkService;
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
-    private final ProxyHostHolder proxyHostHolder;
+    private final SshProxyHostHolder proxyHostHolder;
 
     @Value("${cratos.language:en-us}")
     protected String language;

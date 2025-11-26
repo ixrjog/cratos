@@ -25,7 +25,7 @@ import com.baiyi.cratos.shell.command.SshShellComponent;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.pagination.TableFooter;
 import com.baiyi.cratos.shell.writer.ComputerTableWriter;
-import com.baiyi.cratos.ssh.core.ProxyHostHolder;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +64,7 @@ public class EdsComputerListCommand extends AbstractCommand {
     private final UserService userService;
     private final EnvFacade envFacade;
     private final BusinessTagFacade businessTagFacade;
-    private final ProxyHostHolder proxyHostHolder;
+    private final SshProxyHostHolder proxyHostHolder;
     public static final String[] COMPUTER_TABLE_FIELD_NAME = {"ID", "Cloud", "Instance ID", "Type", "Region", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     public static final String[] SHORT_COMPUTER_TABLE_FIELD_NAME = {"ID", "Group", "Env", "Name", "IP", "Proxy", "Open Account", "Permission"};
     protected static final int PAGE_FOOTER_SIZE = 6;
@@ -73,7 +73,7 @@ public class EdsComputerListCommand extends AbstractCommand {
                                   EdsInstanceService edsInstanceService,
                                   UserPermissionBusinessFacade userPermissionBusinessFacade,
                                   UserPermissionService userPermissionService, BusinessTagFacade businessTagFacade,
-                                  UserService userService, EnvFacade envFacade, ProxyHostHolder proxyHostHolder) {
+                                  UserService userService, EnvFacade envFacade, SshProxyHostHolder proxyHostHolder) {
         super(
                 helper, properties, properties.getCommands()
                         .getComputer()
