@@ -101,6 +101,26 @@
         <maxFlushTime>5000</maxFlushTime>
     </appender>
 
+    <!-- SSH 认证日志单独输出 -->
+    <appender name="SSH_AUTH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${HOME}/cratos-data/ssh/honeypot/ssh-auth.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>${FILE_LOG_CHARSET}</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${HOME}/cratos-data/ssh/honeypot/ssh-auth-%d{yyyyMMdd}.%i.gz</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- SSH 认证日志 Logger -->
+    <logger name="com.baiyi.cratos.shell.auth.SshShellPasswordAuthenticationProvider" level="INFO" additivity="false">
+        <appender-ref ref="SSH_AUTH_FILE"/>
+        <appender-ref ref="ASYNC_CONSOLE"/>
+    </logger>
+
     <!-- K8s/生产环境配置：只输出到控制台 -->
     <springProfile name="k8s,kubernetes,prod">
         <root level="INFO">

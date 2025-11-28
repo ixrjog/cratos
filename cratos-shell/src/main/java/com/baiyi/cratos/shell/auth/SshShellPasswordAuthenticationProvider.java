@@ -26,8 +26,7 @@ import java.util.UUID;
  * Password implementation
  */
 @Slf4j
-public class SshShellPasswordAuthenticationProvider
-        implements SshShellAuthenticationProvider {
+public class SshShellPasswordAuthenticationProvider implements SshShellAuthenticationProvider {
 
     private final String user;
     private final String password;
@@ -36,7 +35,8 @@ public class SshShellPasswordAuthenticationProvider
         this.user = user;
         String pass = password;
         if (pass == null) {
-            pass = UUID.randomUUID().toString();
+            pass = UUID.randomUUID()
+                    .toString();
             log.info(" --- Generating password for ssh connection: {}", pass);
         }
         this.password = pass;
@@ -45,9 +45,10 @@ public class SshShellPasswordAuthenticationProvider
     @Override
     public boolean authenticate(String username, String pass,
                                 ServerSession serverSession) throws PasswordChangeRequiredException {
-
-        serverSession.getIoSession().setAttribute(AUTHENTICATION_ATTRIBUTE, new SshAuthentication(username, username));
-        return username.equals(this.user) && pass.equals(this.password);
+        serverSession.getIoSession()
+                .setAttribute(AUTHENTICATION_ATTRIBUTE, new SshAuthentication(username, username));
+        boolean result = username.equals(this.user) && pass.equals(this.password);
+        return result;
     }
 
 }

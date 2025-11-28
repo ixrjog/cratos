@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static com.baiyi.cratos.domain.ErrorEnum.AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION;
@@ -37,6 +38,8 @@ public class CustomPasswordConfiguration {
     private Boolean authEnabled;
     @Value("${cratos.auth.provider:LOCAL}")
     private String provider;
+    @Value("${ssh.honeypot.enable:off}")
+    private boolean honeypotEnable;
 
     @Bean
     @Primary
@@ -54,10 +57,18 @@ public class CustomPasswordConfiguration {
                                 AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
                 User user = Optional.ofNullable(userService.getByUsername(username))
                         .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
-                log.info("Username {} attempts to login {}", username, serverSession.getClientAddress()
-                        .toString());
+                log.info(
+                        "Username {} attempts to login {}", username, serverSession.getClientAddress()
+                                .toString()
+                );
                 return authProvider.verifyPassword(user, pass);
             } catch (AuthenticationException e) {
+                if (honeypotEnable) {
+                    log.warn(
+                            "[HONEYPOT]  {}:{} ip={} timestamp={}", username, pass, serverSession.getClientAddress(),
+                            Instant.now()
+                    );
+                }
                 return false;
             }
         };

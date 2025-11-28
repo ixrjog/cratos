@@ -113,6 +113,8 @@ mybatis:
     map-underscore-to-camel-case: on
 
 ssh:
+  honeypot:
+    enable: on
   audit:
     # on 开启审计日志 off 关闭审计日志
     open: on
