@@ -9,11 +9,16 @@ import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.internal.KubeConfigUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.CONNECTION_TIMEOUT;
 import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.REQUEST_TIMEOUT;
+import static io.fabric8.kubernetes.client.Config.empty;
 
 /**
  * @Author baiyi
@@ -47,7 +52,19 @@ public class DefaultKubernetesClientProvider implements BaseKubernetesClientProv
         }
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential kubeconfigCredential = credentialService.getById(edsConfig.getCredentialId());
-            io.fabric8.kubernetes.client.Config config = io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
+            String contextName = Optional.of(kubernetes)
+                    .map(EdsKubernetesConfigModel.Kubernetes::getKubeconfig)
+                    .map(EdsKubernetesConfigModel.Kubeconfig::getUseContext)
+                    .orElse(null);
+            io.fabric8.kubernetes.client.Config config;
+            if (StringUtils.hasText(contextName)) {
+                io.fabric8.kubernetes.api.model.Config kubeconfig = KubeConfigUtils.parseConfigFromString(
+                        kubeconfigCredential.getCredential());
+                config = empty();
+                KubeConfigUtils.merge(config, contextName, kubeconfig);
+            } else {
+                config = io.fabric8.kubernetes.client.Config.fromKubeconfig(kubeconfigCredential.getCredential());
+            }
             config.setConnectionTimeout(CONNECTION_TIMEOUT);
             config.setRequestTimeout(REQUEST_TIMEOUT);
             return config;
@@ -58,19 +75,7 @@ public class DefaultKubernetesClientProvider implements BaseKubernetesClientProv
 
     @Override
     public void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-//        System.setProperty(KUBERNETES_KUBECONFIG_FILE, toKubeconfigPath(kubernetes));
-//        BaseKubernetesClientProvider.super.setProperties(kubernetes);
     }
-
-//    private static String toKubeconfigPath(EdsKubernetesConfigModel.Kubernetes kubernetes) {
-//        String kubeConfigPath = Optional.ofNullable(kubernetes)
-//                .map(EdsKubernetesConfigModel.Kubernetes::getKubeconfig)
-//                .map(EdsKubernetesConfigModel.Kubeconfig::getPath)
-//                .orElse("");
-//        String path = Joiner.on("/")
-//                .join(kubeConfigPath, io.fabric8.kubernetes.client.Config.KUBERNETES_KUBECONFIG_FILE);
-//        return SystemEnvUtils.renderEnvHome(path);
-//    }
 
     @Override
     public String getName() {

@@ -54,6 +54,8 @@ public class EdsKubernetesConfigModel {
     @Schema
     public static class Kubeconfig {
         private String path;
+        @Schema(description = "Kubeconfig context name")
+        private String useContext;
     }
 
     @Data
