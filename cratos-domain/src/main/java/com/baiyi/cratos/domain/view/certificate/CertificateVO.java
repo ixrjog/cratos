@@ -6,12 +6,12 @@ import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
+import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -54,14 +54,30 @@ public class CertificateVO {
         @Schema(description = "Expired time")
         @JsonFormat(timezone = "UTC", pattern = Global.ISO8601)
         private Date expiredTime;
+
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
         @Schema(description = "Business Tags")
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema
+    @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
+    public static class CertificateDeployment implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -2456572680092141917L;
+        private Certificate certificate;
+        private EdsInstanceVO.EdsInstance edsInstance;
+        private EdsAssetVO.Asset asset;
     }
 
 }

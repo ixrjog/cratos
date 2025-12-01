@@ -23,4 +23,8 @@ public interface CertificateService extends BaseValidService<Certificate, Certif
 
     List<Certificate> queryByLessThanExpiry(Date date);
 
+    List<String> getCertificateNameOptions(CertificateParam.GetCertificateNameOptions getCertificateNameOptions);
+
+    List<Certificate> queryByName(String name);
+
 }

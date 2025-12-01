@@ -10,4 +10,7 @@ public interface CertificateMapper extends Mapper<Certificate> {
 
     List<Certificate> queryPageByParam(CertificateParam.CertificatePageQuery pageQuery);
 
+    List<String> getCertificateNameOptions(
+            CertificateParam.GetCertificateNameOptions getCertificateNameOptions);
+
 }

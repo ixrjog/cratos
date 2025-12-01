@@ -8,9 +8,8 @@ import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -81,6 +80,24 @@ public class CertificateParam {
     public static class CertificatePageQuery extends PageParam {
         @Schema(description = "查询名称")
         private String queryName;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class GetCertificateNameOptions {
+        @Schema(description = "查询名称")
+        private String queryName;
+    }
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
+    public static class GetCertificateDeploymentDetails {
+        @NotBlank(message = "必须指定名称")
+        private String name;
     }
 
 }

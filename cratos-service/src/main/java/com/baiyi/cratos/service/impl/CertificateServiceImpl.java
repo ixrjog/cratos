@@ -57,6 +57,20 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
+    public List<String> getCertificateNameOptions(
+            CertificateParam.GetCertificateNameOptions getCertificateNameOptions) {
+        return certificateMapper.getCertificateNameOptions(getCertificateNameOptions);
+    }
+
+    @Override
+    public List<Certificate> queryByName(String name) {
+        Example example = new Example(Certificate.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("name", name);
+        return certificateMapper.selectByExample(example);
+    }
+
+    @Override
     // 删除用证书关联的业务标签、凭据
     @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_CREDENTIAL, BusinessTypeEnum.BUSINESS_DOC})
     public void deleteById(int id) {

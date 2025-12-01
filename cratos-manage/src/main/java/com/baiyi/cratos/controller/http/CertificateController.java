@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/3 11:25
@@ -66,6 +68,20 @@ public class CertificateController {
     public HttpResult<Boolean> deleteCertificateById(@RequestParam int id) {
         certificateFacade.deleteById(id);
         return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Get certificate name options")
+    @PostMapping(value = "/name/options/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<String>> getCertificateNameOptions(
+            @RequestBody @Valid CertificateParam.GetCertificateNameOptions getCertificateNameOptions) {
+        return HttpResult.of(certificateFacade.getCertificateNameOptions(getCertificateNameOptions));
+    }
+
+    @Operation(summary = "Get certificate deployment details")
+    @PostMapping(value = "/deployment/details/get", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<CertificateVO.CertificateDeployment>> getCertificateDeploymentDetails(
+            @RequestBody @Valid CertificateParam.GetCertificateDeploymentDetails getCertificateDeploymentDetails) {
+        return HttpResult.of(certificateFacade.getCertificateDeploymentDetails(getCertificateDeploymentDetails));
     }
 
 }

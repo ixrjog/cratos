@@ -35,4 +35,12 @@
         </choose>
     </select>
 
+    <select id="getCertificateNameOptions" parameterType="com.baiyi.cratos.domain.param.http.certificate.CertificateParam$GetCertificateNameOptions"
+            resultType="java.lang.String">
+        select distinct name from certificate
+        <if test="queryName != null and queryName != ''">
+            where name like "%" #{queryName} "%"
+        </if>
+    </select>
+
 </mapper>

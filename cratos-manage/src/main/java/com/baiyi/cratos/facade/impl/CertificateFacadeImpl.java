@@ -9,10 +9,14 @@ import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import com.baiyi.cratos.facade.CertificateFacade;
 import com.baiyi.cratos.service.CertificateService;
 import com.baiyi.cratos.service.base.BaseValidService;
+import com.baiyi.cratos.wrapper.CertificateDeploymentWrapper;
 import com.baiyi.cratos.wrapper.CertificateWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @Author baiyi
@@ -26,6 +30,7 @@ public class CertificateFacadeImpl implements CertificateFacade {
 
     private final CertificateService certificateService;
     private final CertificateWrapper certificateWrapper;
+    private final CertificateDeploymentWrapper certificateDeploymentWrapper;
 
     @Override
     @PostImportProcessor(ofType = BusinessTypeEnum.CERTIFICATE)
@@ -57,7 +62,32 @@ public class CertificateFacadeImpl implements CertificateFacade {
     }
 
     @Override
+    public List<String> getCertificateNameOptions(
+            CertificateParam.GetCertificateNameOptions getCertificateNameOptions) {
+        return certificateService.getCertificateNameOptions(getCertificateNameOptions);
+    }
+
+    @Override
+    public List<CertificateVO.CertificateDeployment> getCertificateDeploymentDetails(
+            CertificateParam.GetCertificateDeploymentDetails getCertificateDeploymentDetails) {
+        List<Certificate> certificates = certificateService.queryByName(getCertificateDeploymentDetails.getName());
+        if (CollectionUtils.isEmpty(certificates)) {
+            return List.of();
+        }
+        return certificates.stream()
+                .map(certificate -> {
+                    CertificateVO.CertificateDeployment vo = CertificateVO.CertificateDeployment.builder()
+                            .certificate(certificateWrapper.wrapToTarget(certificate))
+                            .build();
+                    certificateDeploymentWrapper.wrap(vo);
+                    return vo;
+                })
+                .toList();
+    }
+
+    @Override
     public BaseValidService<?, ?> getValidService() {
         return certificateService;
     }
+
 }

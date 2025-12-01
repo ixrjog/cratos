@@ -7,6 +7,8 @@ import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/3 13:47
@@ -26,6 +28,16 @@ public class CertificateFacadeTest extends BaseUnit {
         DataTable<CertificateVO.Certificate> dataTable = certificateFacade.queryCertificatePage(pageQuery);
         System.out.println(pageQuery);
         System.out.println(dataTable);
+    }
+
+    @Test
+    void test1() {
+        CertificateParam.GetCertificateDeploymentDetails getCertificateDeploymentDetails = CertificateParam.GetCertificateDeploymentDetails.builder()
+                .name("*.sharpmfi.co")
+                .build();
+        List<CertificateVO.CertificateDeployment> deployments = certificateFacade.getCertificateDeploymentDetails(
+                getCertificateDeploymentDetails);
+        System.out.println(deployments);
     }
 
 }

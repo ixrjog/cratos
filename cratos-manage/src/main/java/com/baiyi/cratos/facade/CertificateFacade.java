@@ -6,6 +6,8 @@ import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.param.http.certificate.CertificateParam;
 import com.baiyi.cratos.domain.view.certificate.CertificateVO;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/1/3 11:27
@@ -22,5 +24,10 @@ public interface CertificateFacade extends HasSetValid {
     void deleteByCertificateId(String certificateId);
 
     void deleteById(int id);
+
+    List<String> getCertificateNameOptions(CertificateParam.GetCertificateNameOptions getCertificateNameOptions);
+
+    List<CertificateVO.CertificateDeployment> getCertificateDeploymentDetails(
+            CertificateParam.GetCertificateDeploymentDetails getCertificateDeploymentDetails);
 
 }
