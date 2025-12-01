@@ -42,7 +42,7 @@ public class ApplicationProdPermissionTicketEntryProvider extends BaseTicketEntr
     private final EnvFacade envFacade;
 
     private static final String GROUP_VALUE = "prod";
-    public static final Long TEMP_AUTH_TIME_MINUTES = 120L;
+    public static final Long TEMP_AUTH_TIME_MINUTES = 15L;
 
     public ApplicationProdPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                         WorkOrderTicketService workOrderTicketService,

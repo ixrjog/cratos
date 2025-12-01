@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.core.enums;
 
+import com.baiyi.cratos.eds.core.annotation.CloudCertificate;
 import com.baiyi.cratos.eds.core.annotation.CloudComputer;
 import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
 import lombok.Getter;
@@ -44,11 +45,12 @@ public enum EdsAssetTypeEnum {
     ALIYUN_KMS_SECRET("KMS Secret", 25),
     ALIYUN_KMS_KEY("KMS Key", 26),
     ALIYUN_DMS_USER("DMS User", 27),
+    @CloudCertificate
     ALIYUN_CERT("Certificate", 28),
 
     ALIMAIL_DEPARTMENT("Department", 29),
     ALIMAIL_USER("User", 30),
-
+    @CloudCertificate
     AWS_CERT("Certificate", 31),
     AWS_STS_VPN("Site-to-Site VPN", 32),
     AWS_ELB("ELB", 33),
@@ -69,11 +71,14 @@ public enum EdsAssetTypeEnum {
     AWS_IAM_POLICY("IAM Policy", 48),
     @CloudComputer HUAWEICLOUD_ECS("ECS", 49),
     @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
-    HUAWEICLOUD_SCM_CERT("Certificate", 51),
-    HUAWEICLOUD_VPC("VPC", 52),
-    HUAWEICLOUD_SUBNET("Subnet", 53),
+    HUAWEICLOUD_SCM_CERT("SCM Certificate", 52),
+    @CloudCertificate
+    HUAWEICLOUD_ELB_CERT("ELB Certificate", 51),
+    HUAWEICLOUD_VPC("VPC", 53),
+    HUAWEICLOUD_SUBNET("Subnet", 54),
 
     CLOUDFLARE_ZONE("Zone", 54),
+    @CloudCertificate
     CLOUDFLARE_CERT("Certificate", 55),
     CLOUDFLARE_DNS_RECORD("DNS Record", 56),
 
@@ -107,7 +112,7 @@ public enum EdsAssetTypeEnum {
 
     HARBOR_PROJECT("Harbor Project", 80),
     HARBOR_REPOSITORY("Harbor Repository", 81),
-
+    @CloudCertificate
     GCP_CERTIFICATE("Certificate", 82),
     @CloudIdentity GCP_MEMBER("Member", 83),
 

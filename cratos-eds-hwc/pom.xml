@@ -56,6 +56,11 @@
         </dependency>
         <dependency>
             <groupId>com.huaweicloud.sdk</groupId>
+            <artifactId>huaweicloud-sdk-elb</artifactId>
+            <version>${huaweicloud-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.huaweicloud.sdk</groupId>
             <artifactId>huaweicloud-sdk-obs</artifactId>
             <version>${huaweicloud-sdk.version}</version>
         </dependency>
