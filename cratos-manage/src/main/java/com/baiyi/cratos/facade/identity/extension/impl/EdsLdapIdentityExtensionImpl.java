@@ -57,8 +57,10 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                                         EdsAssetIndexService edsAssetIndexService, TagService tagService,
                                         BusinessTagService businessTagService, LdapPersonRepo ldapPersonRepo,
                                         LdapGroupRepo ldapGroupRepo) {
-        super(edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
-                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService);
+        super(
+                edsAssetWrapper, edsInstanceService, edsInstanceWrapper, userService, userWrapper, holderBuilder,
+                edsAssetService, edsFacade, edsAssetIndexService, tagService, businessTagService
+        );
         this.ldapPersonRepo = ldapPersonRepo;
         this.ldapGroupRepo = ldapGroupRepo;
     }
@@ -73,7 +75,8 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         }
         List<EdsAsset> assets = onlyInTheInstance(
                 edsAssetService.queryByTypeAndKey(EdsAssetTypeEnum.LDAP_PERSON.name(), username),
-                queryLdapIdentityDetails);
+                queryLdapIdentityDetails
+        );
         if (CollectionUtils.isEmpty(assets)) {
             return EdsIdentityVO.LdapIdentityDetails.NO_DATA;
         }
@@ -112,13 +115,17 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
                     createLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            if (ldapPersonRepo.checkPersonInLdap(holder.getInstance()
-                    .getEdsConfigModel(), person.getUsername())) {
+            if (ldapPersonRepo.checkPersonInLdap(
+                    holder.getInstance()
+                            .getEdsConfigModel(), person.getUsername()
+            )) {
                 // 身份已存在
                 EdsIdentityException.runtime("The user already exists in the instance.");
             }
-            ldapPersonRepo.create(holder.getInstance()
-                                          .getConfig(), person);
+            ldapPersonRepo.create(
+                    holder.getInstance()
+                            .getConfig(), person
+            );
             // 擦除密码
             person.setUserPassword(null);
             // 导入资产
@@ -150,13 +157,17 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
         try {
             EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
                     resetLdapUserPassword.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
-            if (!ldapPersonRepo.checkPersonInLdap(holder.getInstance()
-                    .getEdsConfigModel(), resetLdapUserPassword.getUsername())) {
+            if (!ldapPersonRepo.checkPersonInLdap(
+                    holder.getInstance()
+                            .getEdsConfigModel(), resetLdapUserPassword.getUsername()
+            )) {
                 // 身份已存在
                 EdsIdentityException.runtime("The user not exist in the instance.");
             }
-            ldapPersonRepo.update(holder.getInstance()
-                    .getEdsConfigModel(), person);
+            ldapPersonRepo.update(
+                    holder.getInstance()
+                            .getEdsConfigModel(), person
+            );
             return EdsIdentityVO.LdapIdentity.builder()
                     .username(resetLdapUserPassword.getUsername())
                     .password(password)
@@ -184,8 +195,10 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                     deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             EdsLdapConfigModel.Ldap ldap = holder.getInstance()
                     .getEdsConfigModel();
-            if (!ldapPersonRepo.checkPersonInLdap(holder.getInstance()
-                    .getEdsConfigModel(), deleteLdapIdentity.getUsername())) {
+            if (!ldapPersonRepo.checkPersonInLdap(
+                    holder.getInstance()
+                            .getEdsConfigModel(), deleteLdapIdentity.getUsername()
+            )) {
                 // 身份不存在
                 return;
             }
@@ -196,20 +209,79 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                     ldapGroupRepo.removeGroupMember(ldap, group.getGroupName(), username);
                     // 重写Eds Ldap group资产
                     ldapGroupHolder.getProvider()
-                            .importAsset(ldapGroupHolder.getInstance(),
-                                    ldapGroupRepo.findGroup(ldap, group.getGroupName()));
+                            .importAsset(
+                                    ldapGroupHolder.getInstance(),
+                                    ldapGroupRepo.findGroup(ldap, group.getGroupName())
+                            );
                 });
             }
             // 删除Ldap user
             ldapPersonRepo.delete(ldap, username);
             // 删除资产
-            edsAssetService.queryInstanceAssetByTypeAndKey(deleteLdapIdentity.getInstanceId(),
-                            EdsAssetTypeEnum.LDAP_PERSON.name(), username)
+            edsAssetService.queryInstanceAssetByTypeAndKey(
+                            deleteLdapIdentity.getInstanceId(),
+                            EdsAssetTypeEnum.LDAP_PERSON.name(), username
+                    )
                     .stream()
                     .mapToInt(EdsAsset::getId)
                     .forEach(edsFacade::deleteEdsAssetById);
         } catch (Exception ex) {
             throw new EdsIdentityException("Delete LDAP identity error: {}", ex.getMessage());
+        }
+    }
+
+    public void fixDeleteLdapIdentity(EdsIdentityParam.DeleteLdapIdentity deleteLdapIdentity) {
+        EdsInstance instance = getEdsInstance(deleteLdapIdentity);
+        User user = userService.getByUsername(deleteLdapIdentity.getUsername());
+        if (Objects.isNull(user)) {
+            EdsIdentityException.runtime("User {} does not exist.", deleteLdapIdentity.getUsername());
+        }
+        final String username = deleteLdapIdentity.getUsername();
+        // 删除用户
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> ldapPersonHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) holderBuilder.newHolder(
+                    deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_PERSON.name());
+            EdsLdapConfigModel.Ldap ldap = ldapPersonHolder.getInstance()
+                    .getEdsConfigModel();
+            if (ldapPersonRepo.checkPersonInLdap(
+                    ldapPersonHolder.getInstance()
+                            .getEdsConfigModel(), deleteLdapIdentity.getUsername()
+            )) {
+                // 删除Ldap user
+                ldapPersonRepo.delete(ldap, username);
+                // 删除资产
+                edsAssetService.queryInstanceAssetByTypeAndKey(
+                                deleteLdapIdentity.getInstanceId(),
+                                EdsAssetTypeEnum.LDAP_PERSON.name(), username
+                        )
+                        .stream()
+                        .mapToInt(EdsAsset::getId)
+                        .forEach(edsFacade::deleteEdsAssetById);
+            }
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Delete LDAP identity error: {}", ex.getMessage());
+        }
+        // 删除组
+        try {
+            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group> ldapGroupHolder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapGroup.Group>) holderBuilder.newHolder(
+                    deleteLdapIdentity.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
+            EdsLdapConfigModel.Ldap ldap = ldapGroupHolder.getInstance()
+                    .getEdsConfigModel();
+            List<LdapGroup.Group> groups = ldapGroupRepo.searchGroupByUsername(ldap, username);
+            // 删除用户的所有组权限
+            if (!CollectionUtils.isEmpty(groups)) {
+                groups.forEach(group -> {
+                    ldapGroupRepo.removeGroupMember(ldap, group.getGroupName(), username);
+                    // 重写Eds Ldap group资产
+                    ldapGroupHolder.getProvider()
+                            .importAsset(
+                                    ldapGroupHolder.getInstance(),
+                                    ldapGroupRepo.findGroup(ldap, group.getGroupName())
+                            );
+                });
+            }
+        } catch (Exception ex) {
+            throw new EdsIdentityException("Delete LDAP group identity error: {}", ex.getMessage());
         }
     }
 
@@ -225,8 +297,10 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
                     addLdapUserToGroup.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
             final EdsLdapConfigModel.Ldap ldap = ldapGroupHolder.getInstance()
                     .getEdsConfigModel();
-            if (!ldapPersonRepo.checkPersonInLdap(ldapGroupHolder.getInstance()
-                    .getEdsConfigModel(), addLdapUserToGroup.getUsername())) {
+            if (!ldapPersonRepo.checkPersonInLdap(
+                    ldapGroupHolder.getInstance()
+                            .getEdsConfigModel(), addLdapUserToGroup.getUsername()
+            )) {
                 // 身份不存在
                 EdsIdentityException.runtime("The user does not exist in LDAP instance.");
             }
@@ -262,10 +336,14 @@ public class EdsLdapIdentityExtensionImpl extends BaseEdsIdentityExtension imple
             if (Objects.isNull(group)) {
                 EdsIdentityException.runtime("LDAP group {} does not exist.", removeLdapUserFromGroup.getGroup());
             }
-            ldapGroupRepo.removeGroupMember(ldap, removeLdapUserFromGroup.getGroup(),
-                    removeLdapUserFromGroup.getUsername());
-            postRefreshEdsData(ldap, removeLdapUserFromGroup, user, removeLdapUserFromGroup.getGroup(),
-                    ldapGroupHolder);
+            ldapGroupRepo.removeGroupMember(
+                    ldap, removeLdapUserFromGroup.getGroup(),
+                    removeLdapUserFromGroup.getUsername()
+            );
+            postRefreshEdsData(
+                    ldap, removeLdapUserFromGroup, user, removeLdapUserFromGroup.getGroup(),
+                    ldapGroupHolder
+            );
         } catch (Exception ex) {
             throw new EdsIdentityException("Remove LDAP user from group error: {}", ex.getMessage());
         }
