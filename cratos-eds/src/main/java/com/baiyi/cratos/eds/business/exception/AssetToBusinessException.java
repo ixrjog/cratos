@@ -34,4 +34,8 @@ public class AssetToBusinessException extends BaseException {
         this.code = ASSET_TO_BUSINESS_ERROR;
     }
 
+    public static void runtime(String message) {
+        throw new AssetToBusinessException(message);
+    }
+
 }

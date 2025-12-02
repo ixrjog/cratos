@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core.enums;
 
 import com.baiyi.cratos.eds.core.annotation.CloudCertificate;
 import com.baiyi.cratos.eds.core.annotation.CloudComputer;
+import com.baiyi.cratos.eds.core.annotation.CloudDomain;
 import com.baiyi.cratos.eds.core.annotation.CloudIdentity;
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public enum EdsAssetTypeEnum {
     ALIYUN_ALB("ALB", 2),
     ALIYUN_NLB("NLB", 3),
     @CloudComputer ALIYUN_ECS("ECS", 4),
-    ALIYUN_DOMAIN("Domain", 5),
+    @CloudDomain ALIYUN_DOMAIN("Domain", 5),
     @CloudIdentity ALIYUN_RAM_USER("RAM User", 6),
     ALIYUN_RAM_POLICY("RAM Policy", 7),
     ALIYUN_RAM_ACCESS_KEY("RAM AccessKey", 8),
@@ -45,18 +46,16 @@ public enum EdsAssetTypeEnum {
     ALIYUN_KMS_SECRET("KMS Secret", 25),
     ALIYUN_KMS_KEY("KMS Key", 26),
     ALIYUN_DMS_USER("DMS User", 27),
-    @CloudCertificate
-    ALIYUN_CERT("Certificate", 28),
+    @CloudCertificate ALIYUN_CERT("Certificate", 28),
 
     ALIMAIL_DEPARTMENT("Department", 29),
     ALIMAIL_USER("User", 30),
-    @CloudCertificate
-    AWS_CERT("Certificate", 31),
+    @CloudCertificate AWS_CERT("Certificate", 31),
     AWS_STS_VPN("Site-to-Site VPN", 32),
     AWS_ELB("ELB", 33),
     @CloudComputer AWS_EC2("EC2", 34),
     AWS_EBS("EBS", 35),
-    AWS_DOMAIN("Domain", 36),
+    @CloudDomain AWS_DOMAIN("Domain", 36),
     AWS_HOSTED_ZONE("Hosted Zone", 37),
     AWS_SQS_QUEUE("SQS Queue", 38),
     AWS_SNS_TOPIC("SNS Topic", 39),
@@ -72,14 +71,12 @@ public enum EdsAssetTypeEnum {
     @CloudComputer HUAWEICLOUD_ECS("ECS", 49),
     @CloudIdentity HUAWEICLOUD_IAM_USER("IAM User", 50),
     HUAWEICLOUD_SCM_CERT("SCM Certificate", 52),
-    @CloudCertificate
-    HUAWEICLOUD_ELB_CERT("ELB Certificate", 51),
+    @CloudCertificate HUAWEICLOUD_ELB_CERT("ELB Certificate", 51),
     HUAWEICLOUD_VPC("VPC", 53),
     HUAWEICLOUD_SUBNET("Subnet", 54),
 
     CLOUDFLARE_ZONE("Zone", 54),
-    @CloudCertificate
-    CLOUDFLARE_CERT("Certificate", 55),
+    @CloudCertificate CLOUDFLARE_CERT("Certificate", 55),
     CLOUDFLARE_DNS_RECORD("DNS Record", 56),
 
     KUBERNETES_NAMESPACE("Namespace", 57),
@@ -106,14 +103,13 @@ public enum EdsAssetTypeEnum {
     GITLAB_USER("User", 75),
     GITLAB_SSHKEY("SSH Key", 76),
     GITLAB_SYSTEM_HOOK("System Hooks", 77),
-    GANDI_DOMAIN("Domain", 78),
+    @CloudDomain GANDI_DOMAIN("Domain", 78),
 
-    GODADDY_DOMAIN("Domain", 79),
+    @CloudDomain GODADDY_DOMAIN("Domain", 79),
 
     HARBOR_PROJECT("Harbor Project", 80),
     HARBOR_REPOSITORY("Harbor Repository", 81),
-    @CloudCertificate
-    GCP_CERTIFICATE("Certificate", 82),
+    @CloudCertificate GCP_CERTIFICATE("Certificate", 82),
     @CloudIdentity GCP_MEMBER("Member", 83),
 
     JENKINS_COMPUTER("CloudComputer Node", 84),

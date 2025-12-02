@@ -24,9 +24,4 @@ public class AwsDomainAssetToBusinessWrapper extends BaseDomainAssetToBusinessWr
         super(businessAssetBoundService);
     }
 
-    @Override
-    protected String getDomainType() {
-        return EdsAssetTypeEnum.AWS_DOMAIN.name();
-    }
-
 }

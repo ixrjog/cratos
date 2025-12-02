@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.business.wrapper.impl.persion;
+package com.baiyi.cratos.eds.business.wrapper.impl.person;
 
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;

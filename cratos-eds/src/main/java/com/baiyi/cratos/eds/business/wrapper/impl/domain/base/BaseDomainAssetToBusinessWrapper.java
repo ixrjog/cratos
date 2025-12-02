@@ -2,7 +2,9 @@ package com.baiyi.cratos.eds.business.wrapper.impl.domain.base;
 
 import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
+import com.baiyi.cratos.eds.business.exception.AssetToBusinessException;
 import com.baiyi.cratos.eds.business.wrapper.impl.BaseAssetToBusinessWrapper;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 
 /**
@@ -16,7 +18,13 @@ public abstract class BaseDomainAssetToBusinessWrapper<B> extends BaseAssetToBus
         super(businessAssetBoundService);
     }
 
-    abstract protected String getDomainType();
+    protected String getDomainType() {
+        EdsInstanceAssetType annotation = this.getClass().getAnnotation(EdsInstanceAssetType.class);
+        if (annotation == null) {
+            AssetToBusinessException.runtime("EdsInstanceAssetType annotation not found.");
+        }
+        return annotation.assetTypeOf().name();
+    }
 
     @Override
     protected Domain toTarget(EdsAssetVO.Asset asset) {

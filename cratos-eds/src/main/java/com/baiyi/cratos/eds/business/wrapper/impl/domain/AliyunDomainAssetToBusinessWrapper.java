@@ -24,9 +24,4 @@ public class AliyunDomainAssetToBusinessWrapper extends BaseDomainAssetToBusines
         super(businessAssetBoundService);
     }
 
-    @Override
-    protected String getDomainType() {
-        return EdsAssetTypeEnum.ALIYUN_DOMAIN.name();
-    }
-
 }

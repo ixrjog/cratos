@@ -11,9 +11,9 @@ import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
 /**
- * &#064;Author  baiyi
- * &#064;Date  2024/6/4 下午6:06
- * &#064;Version 1.0
+ * @Author baiyi
+ * @Date 2024/6/4 下午6:06
+ * @Version 1.0
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
@@ -22,11 +22,6 @@ public class GandiDomainAssetToBusinessWrapper extends BaseDomainAssetToBusiness
 
     public GandiDomainAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
         super(businessAssetBoundService);
-    }
-
-    @Override
-    protected String getDomainType() {
-        return EdsAssetTypeEnum.GANDI_DOMAIN.name();
     }
 
 }

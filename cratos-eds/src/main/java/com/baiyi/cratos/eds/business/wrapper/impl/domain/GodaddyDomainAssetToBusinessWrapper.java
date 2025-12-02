@@ -11,9 +11,9 @@ import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
 /**
- * &#064;Author  baiyi
- * &#064;Date  2024/6/5 下午3:50
- * &#064;Version 1.0
+ * @Author baiyi
+ * @Date 2024/6/5 下午3:50
+ * @Version 1.0
  */
 @Component
 @BusinessType(type = BusinessTypeEnum.DOMAIN)
@@ -22,11 +22,6 @@ public class GodaddyDomainAssetToBusinessWrapper extends BaseDomainAssetToBusine
 
     public GodaddyDomainAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
         super(businessAssetBoundService);
-    }
-
-    @Override
-    protected String getDomainType() {
-        return EdsAssetTypeEnum.GODADDY_DOMAIN.name();
     }
 
 }
