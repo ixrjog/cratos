@@ -139,7 +139,7 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
                                 EdsAssetVO.Asset detail) throws WorkOrderTicketException {
         String assetType = detail.getAssetType();
         EdsAssetTypeEnum edsAssetTypeEnum = EdsAssetTypeEnum.valueOf(assetType);
-        if (EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES
+        if (EdsAssetTypeEnum.CLOUD_IDENTITY_TYPES
                 .contains(edsAssetTypeEnum)) {
             EdsIdentityParam.BlockCloudAccount blockCloudAccount = EdsIdentityParam.BlockCloudAccount.builder()
                     .instanceId(entry.getInstanceId())
