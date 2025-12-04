@@ -1,6 +1,7 @@
 package com.baiyi.cratos.workorder.entry.impl.aws;
 
 import com.amazonaws.auth.policy.Policy;
+import com.amazonaws.services.identitymanagement.model.User;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
+import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -50,6 +52,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsIdentityFacade edsIdentityFacade;
     private final AwsIamPolicyRepo awsIamPolicyRepo;
+    private final AwsIamUserRepo awsIamUserRepo;
 
     public AwsIamPolicyPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                      WorkOrderTicketService workOrderTicketService,
@@ -58,12 +61,13 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
                                                      EdsInstanceService edsInstanceService,
                                                      EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                      EdsIdentityFacade edsIdentityFacade,
-                                                     AwsIamPolicyRepo awsIamPolicyRepo) {
+                                                     AwsIamPolicyRepo awsIamPolicyRepo, AwsIamUserRepo awsIamUserRepo) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.edsIdentityFacade = edsIdentityFacade;
         this.awsIamPolicyRepo = awsIamPolicyRepo;
+        this.awsIamUserRepo = awsIamUserRepo;
     }
 
     @Override
@@ -79,18 +83,24 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_POLICY.name());
         EdsAwsConfigModel.Aws aws = policyHolder.getInstance()
                 .getEdsConfigModel();
+        String iamUsername = awsPolicy.getCloudAccount()
+                .getUsername();
         try {
             String policyARN = awsPolicy.getAsset()
                     .getAssetKey();
-            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, awsPolicy.getCloudAccount()
-                            .getUsername())
+            boolean alreadyAttached = awsIamPolicyRepo.listUserPolicies(aws, iamUsername)
                     .stream()
                     .anyMatch(e -> e.getPolicyArn()
                             .equals(policyARN));
             if (!alreadyAttached) {
-                awsIamPolicyRepo.attachUserPolicy(aws, awsPolicy.getCloudAccount()
-                        .getUsername(), policyARN);
-                // TODO 同步资产
+                awsIamPolicyRepo.attachUserPolicy(aws, iamUsername, policyARN);
+            }
+            // 在最后一条entry执行同步资产
+            if (isLastEntry(entry)) {
+                User iamUser = awsIamUserRepo.getUser(aws, iamUsername);
+                EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, User> iamUserHolder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, User>) edsInstanceProviderHolderBuilder.newHolder(
+                        entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
+                iamUserHolder.importAsset(iamUser);
             }
         } catch (Exception e) {
             WorkOrderTicketException.runtime(e.getMessage());
@@ -135,9 +145,11 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         AwsModel.AwsPolicy awsPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = awsPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.createTableRow(instance.getInstanceName(), awsPolicy.getCloudAccount()
-                .getAccountLogin()
-                .getLoginUsername(), policy.getName(), policy.getAssetKey());
+        return MarkdownUtils.createTableRow(
+                instance.getInstanceName(), awsPolicy.getCloudAccount()
+                        .getAccountLogin()
+                        .getLoginUsername(), policy.getName(), policy.getAssetKey()
+        );
     }
 
     @Override
