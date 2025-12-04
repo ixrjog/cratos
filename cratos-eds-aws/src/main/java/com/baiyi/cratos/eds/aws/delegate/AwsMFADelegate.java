@@ -17,9 +17,9 @@ import javax.crypto.SecretKey;
 import java.util.concurrent.TimeUnit;
 
 /**
- * &#064;Author  baiyi
- * &#064;Date  2025/12/4 10:02
- * &#064;Version 1.0
+ * @Author baiyi
+ * @Date 2025/12/4 10:02
+ * @Version 1.0
  */
 @Slf4j
 @Component
@@ -30,17 +30,29 @@ public class AwsMFADelegate {
 
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Retryable(retryFor = RetryException.class, maxAttempts = 5, backoff = @Backoff(delay = 3000))
-    public void enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername, VirtualMFADevice vMFADevice) throws RetryException {
+    public void enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername,
+                                VirtualMFADevice vMFADevice) throws RetryException {
         try {
-            TimeUnit.SECONDS.sleep(3L);
-            log.info("尝试启用IAM虚拟MFA: username={}, serialNumber={}", iamUsername, vMFADevice.getSerialNumber());
-            String secretKeyStr = new String(vMFADevice.getBase32StringSeed().array());
-            SecretKey key = OptGenerator.of(secretKeyStr);
+            TimeUnit.SECONDS.sleep(15L);
+            log.info(
+                    "Attempting to enable IAM virtual MFA: IAM username={}, serialNumber={}", iamUsername,
+                    vMFADevice.getSerialNumber()
+            );
+            String secretKey = new String(vMFADevice.getBase32StringSeed()
+                                                  .array());
+            SecretKey key = OptGenerator.of(secretKey);
             OTPAccessCode.AccessCode accessCode = OptGenerator.generateOtpAccessCode(key);
-            EnableMFADeviceResult result = awsMFADeviceRepo.enableMFADevice(aws, iamUsername, vMFADevice.getSerialNumber(), accessCode.getCurrentPassword(), accessCode.getFuturePassword());
-            log.info("启用虚拟MFA设备成功: username={}, requestId={}", iamUsername, result.getSdkResponseMetadata().getRequestId());
+            EnableMFADeviceResult result = awsMFADeviceRepo.enableMFADevice(
+                    aws, iamUsername, vMFADevice.getSerialNumber(), accessCode.getCurrentPassword(),
+                    accessCode.getFuturePassword()
+            );
+            log.info(
+                    "Successfully enabled virtual MFA device: IAM username={}, requestId={}", iamUsername,
+                    result.getSdkResponseMetadata()
+                            .getRequestId()
+            );
         } catch (Exception e) {
-            log.error("启用虚拟MFA设备失败: {}", e.getMessage());
+            log.warn("Failed to enable virtual MFA device: {}", e.getMessage());
             throw new RetryException(e.getMessage());
         }
     }
