@@ -8,6 +8,7 @@ package com.baiyi.cratos.eds.core.config.base;
 public interface HasRegionId {
 
     String getRegionId();
+
     void setRegionId(String regionId);
 
 }

@@ -5,6 +5,9 @@ import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.RetryException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +21,23 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class AwsMFADeviceRepo {
+
+    public static final String SERIAL_NUMBER_TPL = "arn:aws:iam::{}:mfa/{}";
+
+    @Retryable(retryFor = RetryException.class, maxAttempts = 2, backoff = @Backoff(delay = 5000))
+    public VirtualMFADevice createVirtualMFADevice(EdsAwsConfigModel.Aws aws,
+                                                   String iamUsername) throws RetryException {
+        try {
+            CreateVirtualMFADeviceRequest request = new CreateVirtualMFADeviceRequest();
+            request.setVirtualMFADeviceName(iamUsername);
+            CreateVirtualMFADeviceResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                    .createVirtualMFADevice(request);
+            return result.getVirtualMFADevice();
+        } catch (Exception e) {
+            log.error("创建虚拟MFA设备错误: {}", e.getMessage());
+            throw new RetryException("创建虚拟MFA设备错误: " + e.getMessage());
+        }
+    }
 
     public void deactivateMFADevice(EdsAwsConfigModel.Aws aws, String serialNumber, String iamUsername) {
         DeactivateMFADeviceRequest request = new DeactivateMFADeviceRequest();
@@ -40,6 +60,15 @@ public class AwsMFADeviceRepo {
         ListMFADevicesResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
                 .listMFADevices(request);
         return result.getMFADevices();
+    }
+
+    public EnableMFADeviceResult enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername, String serialNumber, String authenticationCode1, String authenticationCode2) {
+        EnableMFADeviceRequest request = new EnableMFADeviceRequest();
+        request.setUserName(iamUsername);
+        request.setSerialNumber(serialNumber);
+        request.setAuthenticationCode1(authenticationCode1);
+        request.setAuthenticationCode2(authenticationCode2);
+        return AmazonIdentityManagementService.buildAmazonIdentityManagement(aws).enableMFADevice(request);
     }
 
 }

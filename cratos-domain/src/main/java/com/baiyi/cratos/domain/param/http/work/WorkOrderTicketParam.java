@@ -488,6 +488,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddCreateAwsIamUserTicketEntry extends TicketEntry<AwsModel.AwsAccount> implements BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = 4654362333910726876L;
+        private final String businessType = BusinessTypeEnum.EDS_INSTANCE.name();
+        private AwsModel.AwsAccount detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddResetAliyunRamUserTicketEntry extends TicketEntry<AliyunModel.ResetAliyunAccount> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -5319582937582510299L;

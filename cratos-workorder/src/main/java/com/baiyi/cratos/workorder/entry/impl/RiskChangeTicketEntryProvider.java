@@ -40,7 +40,7 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(RISK_CHANGE);
+        return MarkdownUtils.createTableHeader(RISK_CHANGE);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class RiskChangeTicketEntryProvider extends BaseTicketEntryProvider<RiskC
                 .getDisplayName() : riskChangeApplication.getApplicant()
                 .getName(), riskChangeApplication.getApplicant()
                 .getEmail());
-        return MarkdownUtils.generateMarkdownTableRow(applicantName, riskChangeApplication.getTitle());
+        return MarkdownUtils.createTableRow(applicantName, riskChangeApplication.getTitle());
     }
 
     @Override

@@ -88,7 +88,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_RAM_USER_RESET);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_RAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")
@@ -248,7 +248,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         String resetPassword = Boolean.TRUE.equals(resetAliyunAccount.getResetPassword()) ? "Yes" : "No";
         String unbindMFA = Boolean.TRUE.equals(resetAliyunAccount.getUnbindMFA()) ? "Yes" : "No";
         // | Aliyun Instance | RAM Login Username | Reset Password | Unbind MFA | Login Link |
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), resetAliyunAccount.getAccountLogin()
                 .getLoginUsername(), resetPassword, unbindMFA, resetAliyunAccount.getAccountLogin()
                 .getLoginUrl());
 

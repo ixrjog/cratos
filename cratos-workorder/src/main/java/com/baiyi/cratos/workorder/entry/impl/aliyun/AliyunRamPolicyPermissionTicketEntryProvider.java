@@ -76,7 +76,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_RAM_POLICY_PERMISSION);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_RAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")
@@ -155,7 +155,7 @@ public class AliyunRamPolicyPermissionTicketEntryProvider extends BaseTicketEntr
         AliyunModel.AliyunPolicy aliyunPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = aliyunPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunPolicy.getRamLoginUsername(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), aliyunPolicy.getRamLoginUsername(),
                 policy.getAssetKey(), policy.getKind(),
                 StringUtils.hasText(policy.getDescription()) ? policy.getDescription() : Global.NONE);
     }

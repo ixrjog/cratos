@@ -47,7 +47,7 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.DEPLOYMENT_DELETE_POD);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.DEPLOYMENT_DELETE_POD);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class DeploymentPodDeleteTicketEntryProvider extends BaseTicketEntryProvi
         ApplicationDeploymentModel.DeleteDeploymentPod deleteDeploymentPod = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getNamespace(),
                 deleteDeploymentPod.getAsset()
                         .getName(), deleteDeploymentPod.getPodName(), deleteDeploymentPod.getDeleteOperationTime());
     }

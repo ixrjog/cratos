@@ -77,7 +77,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(USER_RESET_PASSWORD);
+        return MarkdownUtils.createTableHeader(USER_RESET_PASSWORD);
     }
 
     @SuppressWarnings("unchecked")
@@ -157,7 +157,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         UserVO.User user = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
+        return MarkdownUtils.createTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
                 user.getEmail());
     }
 

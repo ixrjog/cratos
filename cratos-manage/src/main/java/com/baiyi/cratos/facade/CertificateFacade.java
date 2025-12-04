@@ -30,4 +30,6 @@ public interface CertificateFacade extends HasSetValid {
     List<CertificateVO.CertificateDeployment> getCertificateDeploymentDetails(
             CertificateParam.GetCertificateDeploymentDetails getCertificateDeploymentDetails);
 
+    CertificateVO.CertificateDistributionStatistics getCertificateDistribution();
+
 }

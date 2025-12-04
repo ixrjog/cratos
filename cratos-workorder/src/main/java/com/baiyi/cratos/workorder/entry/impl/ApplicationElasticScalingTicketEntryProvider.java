@@ -78,7 +78,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_ELASTIC_SCALING);
+        return MarkdownUtils.createTableHeader(APPLICATION_ELASTIC_SCALING);
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationReplicasModel.ApplicationConfigurationChange configurationChange = loadAs(entry);
-        return MarkdownUtils.generateMarkdownTableRow(entry.getName(), entry.getNamespace(),
+        return MarkdownUtils.createTableRow(entry.getName(), entry.getNamespace(),
                 configurationChange.getConfig()
                         .getCurrentReplicas(), configurationChange.getConfig()
                         .getExpectedReplicas(), configurationChange.getConfig()

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.workorder.entry;
 
+import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +46,10 @@ public class TicketEntryProviderFactory {
         }
         return CONTEXT.get(key)
                 .get(businessType);
+    }
+
+    public static TicketEntryProvider<?, ?> getProvider(WorkOrderKeys key, String businessType) {
+        return getProvider(key.name(), businessType);
     }
 
 }

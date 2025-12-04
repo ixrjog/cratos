@@ -83,7 +83,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_RAM_USER_PERMISSION);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_RAM_USER_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")
@@ -99,7 +99,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         String ramLoginUsername = aliyunAccount.getRamLoginUsername();
         String username = aliyunAccount.getUsername();
         final String password = PasswordGenerator.generatePassword();
-        CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername, password);
+        CreateUserResponse.User createUser = createRamUser(aliyun, ramUsername, password);
         // 发送通知
         sendMsg(workOrderTicket, username, ramLoginUsername, password, aliyun.getRam()
                 .toLoginUrl());
@@ -137,7 +137,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         }
     }
 
-    private CreateUserResponse.User createRAMUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,
+    private CreateUserResponse.User createRamUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,
                                                   String password) {
         try {
             return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, ramUsername, password,
@@ -188,7 +188,7 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunModel.AliyunAccount aliyunAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunAccount.getAccount(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), aliyunAccount.getAccount(),
                 aliyunAccount.getLoginLink());
     }
 

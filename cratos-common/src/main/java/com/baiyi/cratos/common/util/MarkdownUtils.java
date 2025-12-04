@@ -8,50 +8,39 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.text.TextContentRenderer;
 
 /**
- * &#064;Author  baiyi
- * &#064;Date  2025/3/14 15:04
- * &#064;Version 1.0
+ * @Author baiyi
+ * @Date 2025/3/14 15:04
+ * @Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MarkdownUtils {
 
-    public static String removeMarkdownTags(String markdown) {
-        Parser parser = Parser.builder()
-                .build();
+    public static String toPlainText(String markdown) {
+        Parser parser = Parser.builder().build();
         Node document = parser.parse(markdown);
-        TextContentRenderer renderer = TextContentRenderer.builder()
-                .build();
+        TextContentRenderer renderer = TextContentRenderer.builder().build();
         return renderer.render(document);
     }
 
-    public static String generateMarkdownTableHeader(String header) {
-        return header + "\n" + generateMarkdownSeparator(header) + "\n";
+    public static String createTableHeader(String header) {
+        return header + "\n" + createTableSeparator(header) + "\n";
     }
 
-    public static String generateMarkdownSeparator(String header) {
-        // 计算表头中的字段数量（通过 | 分隔符计算）
+    private static String createTableSeparator(String header) {
         String[] parts = header.split("\\|");
-        // 过滤掉空字符串，计算实际字段数量
         int fieldCount = 0;
         for (String part : parts) {
             if (!part.trim().isEmpty()) {
                 fieldCount++;
             }
         }
-        // 生成分隔符行
-        StringBuilder separator = new StringBuilder("|");
-        for (int i = 0; i < fieldCount; i++) {
-            separator.append(" --- |");
-        }
-        return separator.toString();
+        return "|" + " --- |".repeat(Math.max(0, fieldCount));
     }
 
-    public static String generateMarkdownTableRow(Object... columns) {
+    public static String createTableRow(Object... columns) {
         StringBuilder row = new StringBuilder("|");
         for (Object column : columns) {
-            row.append(" ")
-                    .append(column)
-                    .append(" |");
+            row.append(" ").append(column).append(" |");
         }
         return row.toString();
     }

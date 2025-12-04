@@ -43,7 +43,7 @@ public class MarkdownUtilsTest extends BaseUnit {
 
     @Test
     void test() {
-       System.out.println(MarkdownUtils.removeMarkdownTags(MD_TEST));
+       System.out.println(MarkdownUtils.toPlainText(MD_TEST));
     }
 
 

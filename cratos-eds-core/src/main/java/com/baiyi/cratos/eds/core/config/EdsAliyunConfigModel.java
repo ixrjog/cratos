@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.core.config;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.eds.core.config.base.HasDnsNameServers;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.google.common.base.Joiner;
@@ -46,6 +47,7 @@ public class EdsAliyunConfigModel {
         private RAM ram;
         private KMS kms;
         private DMS dms;
+        private DNS dns;
     }
 
     @Data
@@ -139,6 +141,13 @@ public class EdsAliyunConfigModel {
     public static class DMS {
         private String endpoint;
         private Long tid;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class DNS implements HasDnsNameServers {
+        private List<String> nameServers;
     }
 
     @Data

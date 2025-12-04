@@ -68,7 +68,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_IAM_POLICY_PERMISSION);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.AWS_IAM_POLICY_PERMISSION);
     }
 
     @SuppressWarnings("unchecked")
@@ -135,7 +135,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
         AwsModel.AwsPolicy awsPolicy = loadAs(entry);
         EdsAssetVO.Asset policy = awsPolicy.getAsset();
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), awsPolicy.getCloudAccount()
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), awsPolicy.getCloudAccount()
                 .getAccountLogin()
                 .getLoginUsername(), policy.getName(), policy.getAssetKey());
     }

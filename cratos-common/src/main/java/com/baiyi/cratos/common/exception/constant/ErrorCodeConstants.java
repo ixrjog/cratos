@@ -69,4 +69,6 @@ public interface ErrorCodeConstants {
 
     int CLOUD_COMPUTER_OPERATION_ERROR = 61000;
 
+    int ENABLE_VIRTUAL_MFA_ERROR = 62000;
+
 }

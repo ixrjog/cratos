@@ -60,7 +60,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_ONS_TOPIC);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_ONS_TOPIC);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunOnsV5Model.Topic topic = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), topic.getOnsInstanceName(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), topic.getOnsInstanceName(),
                 topic.getTopicName(), topic.getMessageType(), topic.getRemark());
     }
 

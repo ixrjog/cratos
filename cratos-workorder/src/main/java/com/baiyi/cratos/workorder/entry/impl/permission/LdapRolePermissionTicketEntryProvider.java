@@ -57,7 +57,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(LDAP_ROLE_PERMISSION);
+        return MarkdownUtils.createTableHeader(LDAP_ROLE_PERMISSION);
     }
 
     /**
@@ -67,7 +67,7 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         LdapUserGroupModel.Role role = loadAs(entry);
-        return MarkdownUtils.generateMarkdownTableRow(role.getGroup(), role.getDescription());
+        return MarkdownUtils.createTableRow(role.getGroup(), role.getDescription());
     }
 
     @SuppressWarnings("unchecked")

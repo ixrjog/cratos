@@ -79,7 +79,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_IAM_USER_RESET);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.AWS_IAM_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")
@@ -169,7 +169,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
         String link = Optional.ofNullable(cloudAccount.getAccountLogin())
                 .map(EdsIdentityVO.AccountLoginDetails::getLoginUrl)
                 .orElse(Global.NONE);
-        return MarkdownUtils.generateMarkdownTableRow(instanceName, accountId, iamUsername, link);
+        return MarkdownUtils.createTableRow(instanceName, accountId, iamUsername, link);
     }
 
     @Override

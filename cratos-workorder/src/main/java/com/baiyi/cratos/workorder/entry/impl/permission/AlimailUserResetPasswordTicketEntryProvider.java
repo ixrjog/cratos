@@ -73,7 +73,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIMAIL_USER_RESET);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIMAIL_USER_RESET);
     }
 
     @SuppressWarnings("unchecked")
@@ -149,7 +149,7 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         EdsIdentityVO.MailAccount mailAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), mailAccount.getAccount()
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), mailAccount.getAccount()
                 .getAssetId(), mailAccount.getAccountLogin()
                 .getLoginUsername(), mailAccount.getAccountLogin()
                 .getLoginUrl());

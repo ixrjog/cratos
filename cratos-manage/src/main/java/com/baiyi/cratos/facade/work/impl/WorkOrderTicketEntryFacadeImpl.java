@@ -71,7 +71,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_PERMISSION, addTicketEntry.getBusinessType());
         if (Objects.nonNull(ticketEntryProvider)) {
             ticketEntryProvider.addEntry(addTicketEntry);
         }
@@ -81,7 +81,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationProdPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_PROD_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_PROD_PERMISSION, addTicketEntry.getBusinessType());
         if (Objects.nonNull(ticketEntryProvider)) {
             ticketEntryProvider.addEntry(addTicketEntry);
         }
@@ -91,7 +91,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationTestPermissionTicketEntry(
             WorkOrderTicketParam.AddApplicationPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_TEST_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_TEST_PERMISSION, addTicketEntry.getBusinessType());
         if (Objects.nonNull(ticketEntryProvider)) {
             ticketEntryProvider.addEntry(addTicketEntry);
         }
@@ -101,7 +101,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationElasticScalingTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_ELASTIC_SCALING, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -110,7 +110,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationDeploymentElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_ELASTIC_SCALING.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_ELASTIC_SCALING, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -118,7 +118,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.COMPUTER_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.COMPUTER_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -127,7 +127,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addRevokeUserPermissionTicketEntry(
             WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.REVOKE_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.REVOKE_USER_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -135,7 +135,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addLdapRolePermissionTicketEntry(WorkOrderTicketParam.AddLdapRolePermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddLdapRolePermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddLdapRolePermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.LDAP_ROLE_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.LDAP_ROLE_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -144,7 +144,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addGitLabProjectPermissionTicketEntry(
             WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabProjectPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.GITLAB_PROJECT_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.GITLAB_PROJECT_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(addTicketEntry.getDetail())
                 .map(GitLabPermissionModel.Permission::getRole)
                 .orElseThrow(() -> new WorkOrderTicketException("GitLab project permission role cannot be empty."));
@@ -159,7 +159,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addGitLabGroupPermissionTicketEntry(
             WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddGitLabGroupPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.GITLAB_GROUP_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.GITLAB_GROUP_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(addTicketEntry.getDetail())
                 .map(GitLabPermissionModel.Permission::getRole)
                 .orElseThrow(() -> new WorkOrderTicketException("GitLab group permission role cannot be empty."));
@@ -174,7 +174,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addAliyunDataWorksInstanceTicketEntry(
             WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunDataWorksInstanceTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_DATAWORKS_AK.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_DATAWORKS_AK, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -183,7 +183,15 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateAliyunRamUserTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_RAM_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_RAM_USER_PERMISSION, addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
+    public void addCreateAwsIamUserTicketEntry(WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry addTicketEntry) {
+        TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.AWS_IAM_USER_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -191,7 +199,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addResetAliyunRamUserTicketEntry(WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_RAM_USER_RESET.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_RAM_USER_RESET, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -199,7 +207,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addResetUserPasswordTicketEntry(WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetUserPasswordTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetUserPasswordTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.USER_RESET_PASSWORD.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.USER_RESET_PASSWORD, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -207,7 +215,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addResetAwsIamUserTicketEntry(WorkOrderTicketParam.AddResetAwsIamUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAwsIamUserTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.AWS_IAM_USER_RESET.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.AWS_IAM_USER_RESET, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -216,7 +224,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateAwsTransferSftpUserTicketEntry(
             WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.AWS_TRANSFER_SFTP_USER_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.AWS_TRANSFER_SFTP_USER_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -225,7 +233,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addAwsIamPolicyPermissionTicketEntry(
             WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAwsIamPolicyPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.AWS_IAM_POLICY_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.AWS_IAM_POLICY_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -234,7 +242,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addAliyunRamPolicyPermissionTicketEntry(
             WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_RAM_POLICY_PERMISSION.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_RAM_POLICY_PERMISSION, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -243,7 +251,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateFrontEndApplicationTicketEntry(
             WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_FRONTEND_CREATE.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_FRONTEND_CREATE, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -252,7 +260,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateAliyunKmsSecretTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunKmsSecretTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_KMS_SECRET_CREATE.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_KMS_SECRET_CREATE, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -261,7 +269,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addUpdateAliyunKmsSecretTicketEntry(
             WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddUpdateAliyunKmsSecretTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_KMS_SECRET_UPDATE.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_KMS_SECRET_UPDATE, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -270,7 +278,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationDeletePodTicketEntry(
             WorkOrderTicketParam.AddApplicationDeletePodTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationDeletePodTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_DELETE_POD.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_DELETE_POD, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -279,7 +287,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addApplicationRedeployTicketEntry(
             WorkOrderTicketParam.AddApplicationRedeployTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationRedeployTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddApplicationRedeployTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_REDEPLOY.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_REDEPLOY, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -287,7 +295,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addDeploymentRedeployTicketEntry(WorkOrderTicketParam.AddDeploymentRedeployTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentRedeployTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentRedeployTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_REDEPLOY.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_REDEPLOY, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -295,7 +303,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addDeploymentPodTicketEntry(WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentPodDeleteTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.APPLICATION_DELETE_POD.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.APPLICATION_DELETE_POD, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -303,7 +311,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addResetAlimailUserTicketEntry(WorkOrderTicketParam.AddResetAlimailUserTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddResetAlimailUserTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddResetAlimailUserTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIMAIL_USER_RESET.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIMAIL_USER_RESET, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -312,7 +320,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateAliyunOnsTopicTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsTopicTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_ONS_TOPIC.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_ONS_TOPIC, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -321,7 +329,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     public void addCreateAliyunOnsConsumerGroupTicketEntry(
             WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddCreateAliyunOnsConsumerGroupTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.ALIYUN_ONS_CONSUMER_GROUP.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.ALIYUN_ONS_CONSUMER_GROUP, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }
@@ -329,7 +337,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     @Override
     public void addRiskChangeTicketEntry(WorkOrderTicketParam.AddRiskChangeTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddRiskChangeTicketEntry>) TicketEntryProviderFactory.getProvider(
-                WorkOrderKeys.RISK_CHANGE.name(), addTicketEntry.getBusinessType());
+                WorkOrderKeys.RISK_CHANGE, addTicketEntry.getBusinessType());
         Optional.ofNullable(ticketEntryProvider)
                 .ifPresent(provider -> provider.addEntry(addTicketEntry));
     }

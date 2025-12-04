@@ -60,6 +60,8 @@ public interface WorkOrderTicketEntryFacade {
 
     void addCreateAliyunRamUserTicketEntry(WorkOrderTicketParam.AddCreateAliyunRamUserTicketEntry addTicketEntry);
 
+    void addCreateAwsIamUserTicketEntry(WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry addTicketEntry);
+
     void addResetAliyunRamUserTicketEntry(WorkOrderTicketParam.AddResetAliyunRamUserTicketEntry addTicketEntry);
 
     void addResetUserPasswordTicketEntry(WorkOrderTicketParam.AddResetUserPasswordTicketEntry addTicketEntry);

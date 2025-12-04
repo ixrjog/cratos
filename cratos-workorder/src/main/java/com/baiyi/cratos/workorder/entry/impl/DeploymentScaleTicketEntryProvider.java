@@ -66,7 +66,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_DEPLOYMENT_SCALE);
+        return MarkdownUtils.createTableHeader(APPLICATION_DEPLOYMENT_SCALE);
     }
 
     /**
@@ -77,7 +77,7 @@ public class DeploymentScaleTicketEntryProvider extends BaseTicketEntryProvider<
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         ApplicationDeploymentModel.DeploymentScale deploymentScale = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(), entry.getName(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getNamespace(), entry.getName(),
                 deploymentScale.getCurrentReplicas(), deploymentScale.getExpectedReplicas());
     }
 

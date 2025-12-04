@@ -18,6 +18,7 @@ public interface TableHeaderConstants {
     String AWS_IAM_POLICY_PERMISSION = "| AWS Instance | IAM Login Username | Policy Name | ARN |";
     String AWS_IAM_USER_RESET = "| Aws Instance | Account ID or alias | IAM Username | Login Link |";
     String AWS_TRANSFER_SFTP_USER_PERMISSION = "| Aws Instance | Transfer Username@Server | Key Fingerprint | Desc |";
+    String AWS_IAM_USER_PERMISSION = "| AWS Instance | Account ID | IAM Login Username | Login Link |";
     String APPLICATION_DELETE_POD = "| Application Name | Tags |";
     String APPLICATION_REDEPLOY = "| Application Name | Tags |";
     String DEPLOYMENT_DELETE_POD = "| Instance Name | Namespace | Deployment Name | Pod Name | Delete Operation Time |";

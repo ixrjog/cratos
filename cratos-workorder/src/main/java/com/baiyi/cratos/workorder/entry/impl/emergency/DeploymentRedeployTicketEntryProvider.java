@@ -47,7 +47,7 @@ public class DeploymentRedeployTicketEntryProvider extends BaseTicketEntryProvid
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.DEPLOYMENT_REDEPLOY);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.DEPLOYMENT_REDEPLOY);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class DeploymentRedeployTicketEntryProvider extends BaseTicketEntryProvid
         ApplicationDeploymentModel.RedeployDeployment redeployDeployment = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
         String instanceName = Objects.nonNull(instance) ? instance.getInstanceName() : "N/A";
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getNamespace(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getNamespace(),
                 redeployDeployment.getAsset()
                         .getName(), redeployDeployment.getRedeployOperationTime());
     }

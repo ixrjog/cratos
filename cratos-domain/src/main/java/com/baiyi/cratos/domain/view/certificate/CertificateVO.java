@@ -80,4 +80,16 @@ public class CertificateVO {
         private EdsAssetVO.Asset asset;
     }
 
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @Schema
+    public static class CertificateDistributionStatistics implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 8118707998521967281L;
+
+       // private Cloud cloud;
+
+    }
+
 }

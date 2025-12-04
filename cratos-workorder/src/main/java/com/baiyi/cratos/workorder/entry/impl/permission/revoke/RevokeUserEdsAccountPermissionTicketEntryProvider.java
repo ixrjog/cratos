@@ -113,14 +113,14 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.REVOKE_USER_ACCOUNT_PERMISSION);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.REVOKE_USER_ACCOUNT_PERMISSION);
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         EdsAssetVO.Asset asset = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(asset.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(
+        return MarkdownUtils.createTableRow(
                 instance.getInstanceName(), instance.getEdsType(),
                 entry.getSubType(), entry.getName()
         );

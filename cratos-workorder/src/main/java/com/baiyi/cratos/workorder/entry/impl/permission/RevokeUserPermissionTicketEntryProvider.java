@@ -83,7 +83,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(REVOKE_USER_PERMISSION);
+        return MarkdownUtils.createTableHeader(REVOKE_USER_PERMISSION);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class RevokeUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .map(e -> e.getTag()
                         .getTagKey())
                 .collect(Collectors.joining(","));
-        return MarkdownUtils.generateMarkdownTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
+        return MarkdownUtils.createTableRow(user.getUsername(), user.getName(), user.getDisplayName(),
                 user.getEmail(), tags);
     }
 

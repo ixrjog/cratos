@@ -135,6 +135,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add create aws iam user instance ticket entry")
+    @PostMapping(value = "/aws/iam/user/instance/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addCreateAwsIamUserTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry addTicketEntry) {
+        ticketEntryFacade.addCreateAwsIamUserTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add reset aliyun ram user ticket entry")
     @PostMapping(value = "/aliyun/ram/user/reset/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addResetAliyunRamUserTicketEntry(

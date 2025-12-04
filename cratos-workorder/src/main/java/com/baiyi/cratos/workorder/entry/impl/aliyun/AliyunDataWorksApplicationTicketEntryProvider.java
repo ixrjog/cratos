@@ -172,14 +172,14 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_DATAWORKS_AK);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_DATAWORKS_AK);
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunDataWorksModel.AliyunAccount aliyunAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), aliyunAccount.getAccount());
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), aliyunAccount.getAccount());
     }
 
     @Override

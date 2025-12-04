@@ -22,6 +22,7 @@ import java.util.List;
 public class AwsIamUserRepo {
 
     public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
+    public static final boolean CREATE_LOGIN_PROFILE = true;
 
     public User getUser(EdsAwsConfigModel.Aws aws, String userName) {
         GetUserRequest request = new GetUserRequest();
@@ -67,6 +68,37 @@ public class AwsIamUserRepo {
         }
         return result.getUser();
     }
+
+    public com.amazonaws.services.identitymanagement.model.User createUser(EdsAwsConfigModel.Aws aws,
+                                                                           String iamUsername,
+                                                                           String password,
+                                                                           boolean createLoginProfile) {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUserName(iamUsername);
+        CreateUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .createUser(request);
+        if (createLoginProfile) {
+            this.createLoginProfile(aws, iamUsername, password, NO_PASSWORD_RESET_REQUIRED);
+//            try {
+//                this.createLoginProfile(aws, user, NO_PASSWORD_RESET_REQUIRED);
+//            } catch (PasswordPolicyViolationException e) {
+//                throw new CreateUserException(e.getMessage());
+//            }
+        }
+        return result.getUser();
+    }
+
+    private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, String iamUsername,
+                                            String password, boolean passwordResetRequired) {
+        CreateLoginProfileRequest request = new CreateLoginProfileRequest();
+        request.setUserName(iamUsername);
+        request.setPassword(password);
+        request.setPasswordResetRequired(passwordResetRequired);
+        CreateLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
+                .createLoginProfile(request);
+        return result.getLoginProfile();
+    }
+
 
     private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, com.baiyi.cratos.domain.generator.User user,
                                             String password, boolean passwordResetRequired) {

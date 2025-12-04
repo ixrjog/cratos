@@ -185,7 +185,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.AWS_TRANSFER_SFTP_USER_PERMISSION);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.AWS_TRANSFER_SFTP_USER_PERMISSION);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         String endpoint = sftpUser.getTransferServerEndpoint();
         String transferLogin = Joiner.on("@")
                 .join(sftpUser.getUsername(), endpoint);
-        return MarkdownUtils.generateMarkdownTableRow(instanceName, transferLogin,
+        return MarkdownUtils.createTableRow(instanceName, transferLogin,
                 SshKeyUtils.calcFingerprint(sftpUser.getPublicKey()), sftpUser.getDescription());
     }
 

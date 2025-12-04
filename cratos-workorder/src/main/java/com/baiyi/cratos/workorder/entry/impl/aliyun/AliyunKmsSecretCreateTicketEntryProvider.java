@@ -228,14 +228,14 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_KMS_SECRET_CREATE);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_KMS_SECRET_CREATE);
     }
 
     @Override
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), createSecret.getSecretName(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), createSecret.getSecretName(),
                 createSecret.getVersionId(), createSecret.getEncryptionKeyId(), "KMS#" + createSecret.getSecretName(),
                 createSecret.getDuplicateSecrets(), createSecret.getDescription());
     }

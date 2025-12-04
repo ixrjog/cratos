@@ -191,7 +191,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(APPLICATION_FRONTEND_CREATE);
+        return MarkdownUtils.createTableHeader(APPLICATION_FRONTEND_CREATE);
     }
 
     /**
@@ -216,7 +216,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
                 .map(ApplicationModel.CreateFrontEndApplication::getMappingsPath)
                 .orElse("/");
         String webSite = WebSiteUtils.generateWebSite(createFrontEndApplication.getDomain(), mappingsPath);
-        return MarkdownUtils.generateMarkdownTableRow(createFrontEndApplication.getApplicationName(),
+        return MarkdownUtils.createTableRow(createFrontEndApplication.getApplicationName(),
                 FRONT_END.getKey(), level, sshUrl, webSite);
     }
 

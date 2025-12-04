@@ -61,7 +61,7 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.ALIYUN_ONS_CONSUMER_GROUP);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.ALIYUN_ONS_CONSUMER_GROUP);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunOnsV5Model.ConsumerGroup consumerGroup = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), consumerGroup.getOnsInstanceName(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), consumerGroup.getOnsInstanceName(),
                 consumerGroup.getConsumerGroupId(), consumerGroup.getDeliveryOrderType(), consumerGroup.getRemark());
     }
 

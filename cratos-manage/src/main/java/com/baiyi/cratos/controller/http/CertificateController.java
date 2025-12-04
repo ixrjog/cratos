@@ -84,4 +84,10 @@ public class CertificateController {
         return HttpResult.of(certificateFacade.getCertificateDeploymentDetails(getCertificateDeploymentDetails));
     }
 
+    @Operation(summary = "Get certificate distribution statistics")
+    @PostMapping(value = "/distribution/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<CertificateVO.CertificateDistributionStatistics> getCertificateDistribution() {
+        return HttpResult.of(certificateFacade.getCertificateDistribution());
+    }
+
 }

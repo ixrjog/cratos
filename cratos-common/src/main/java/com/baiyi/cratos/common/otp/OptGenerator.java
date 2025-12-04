@@ -1,6 +1,7 @@
 package com.baiyi.cratos.common.otp;
 
 import com.baiyi.cratos.common.exception.OtpException;
+import com.baiyi.cratos.common.otp.model.OTPAccessCode;
 import com.baiyi.cratos.common.util.Base32StringUtils;
 import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
 import lombok.NoArgsConstructor;
@@ -49,7 +50,8 @@ public class OptGenerator {
          *  for SHA-256, and 512 bits for SHA-512). Note that while Mac#getMacLength() returns a
          *  length in _bytes,_ KeyGenerator#init(int) takes a key length in _bits._
          */
-        final int macLengthInBytes = Mac.getInstance(totp.getAlgorithm()).getMacLength();
+        final int macLengthInBytes = Mac.getInstance(totp.getAlgorithm())
+                .getMacLength();
         keyGenerator.init(macLengthInBytes * 8);
         return keyGenerator.generateKey();
     }
@@ -58,6 +60,24 @@ public class OptGenerator {
         final TimeBasedOneTimePasswordGenerator totp = new TimeBasedOneTimePasswordGenerator(DURATION);
         final Instant now = Instant.now();
         return totp.generateOneTimePasswordString(key, now);
+    }
+
+    /**
+     * 绑定MFA专用，生成2组AccessCode
+     *
+     * @param key
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     */
+    public static OTPAccessCode.AccessCode generateOtpAccessCode(Key key) throws InvalidKeyException {
+        final TimeBasedOneTimePasswordGenerator totp = new TimeBasedOneTimePasswordGenerator(DURATION);
+        final Instant now = Instant.now();
+        final Instant later = now.plus(totp.getTimeStep());
+        return OTPAccessCode.AccessCode.builder()
+                .currentPassword(totp.generateOneTimePasswordString(key, now))
+                .futurePassword(totp.generateOneTimePasswordString(key, later))
+                .build();
     }
 
     /**
@@ -83,7 +103,8 @@ public class OptGenerator {
      * @return otpauth://totp/客户端显示的账户信息?secret=secretBase32
      */
     public static String toQRCode(String account, String otpSk) {
-        return MessageFormatter.format(QR_CODE, account, otpSk).getMessage();
+        return MessageFormatter.format(QR_CODE, account, otpSk)
+                .getMessage();
     }
 
 }

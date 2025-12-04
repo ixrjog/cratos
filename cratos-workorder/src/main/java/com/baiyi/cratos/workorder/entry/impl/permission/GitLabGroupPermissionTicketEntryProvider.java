@@ -65,7 +65,7 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(GITLAB_GROUP_PERMISSION);
+        return MarkdownUtils.createTableHeader(GITLAB_GROUP_PERMISSION);
     }
 
     /**
@@ -80,7 +80,7 @@ public class GitLabGroupPermissionTicketEntryProvider extends BaseGitLabPermissi
                         .getId(), REPO_WEB_URL))
                 .map(EdsAssetIndex::getValue)
                 .orElse("-");
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getName(), webUrl,
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getName(), webUrl,
                 groupPermission.getRole());
     }
 

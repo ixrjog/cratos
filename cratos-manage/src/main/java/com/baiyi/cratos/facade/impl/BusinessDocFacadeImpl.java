@@ -51,7 +51,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
                 .map(e -> BusinessDocVO.BusinessTextDoc.builder()
                         .id(e.getId())
                         .name(e.getName())
-                        .text(MarkdownUtils.removeMarkdownTags(e.getContent()))
+                        .text(MarkdownUtils.toPlainText(e.getContent()))
                         .build())
                 .collect(Collectors.toList());
     }

@@ -65,7 +65,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(GITLAB_PROJECT_PERMISSION);
+        return MarkdownUtils.createTableHeader(GITLAB_PROJECT_PERMISSION);
     }
 
     /**
@@ -76,7 +76,7 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         GitLabPermissionModel.Permission projectPermission = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.generateMarkdownTableRow(instance.getInstanceName(), entry.getName(),
+        return MarkdownUtils.createTableRow(instance.getInstanceName(), entry.getName(),
                 projectPermission.getRole());
     }
 

@@ -48,7 +48,7 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
 
     @Override
     public String getTableTitle(WorkOrderTicketEntry entry) {
-        return MarkdownUtils.generateMarkdownTableHeader(TableHeaderConstants.APPLICATION_REDEPLOY);
+        return MarkdownUtils.createTableHeader(TableHeaderConstants.APPLICATION_REDEPLOY);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ApplicationRedeployTicketEntryProvider extends BaseTicketEntryProvi
                 .map(tag -> StringFormatter.arrayFormat("{}:{}", tag.getTag()
                         .getTagKey(), tag.getTagValue()))
                 .collect(Collectors.joining(","));
-        return MarkdownUtils.generateMarkdownTableRow(application.getApplicationName(), tags);
+        return MarkdownUtils.createTableRow(application.getApplicationName(), tags);
     }
 
     @Override
