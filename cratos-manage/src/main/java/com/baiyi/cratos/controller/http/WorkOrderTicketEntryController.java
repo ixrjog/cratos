@@ -223,6 +223,14 @@ public class WorkOrderTicketEntryController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Add application deployment jvm spec ticket entry")
+    @PostMapping(value = "/application/deployment/jvm/spec/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> addApplicationDeploymentJvmSpecTicketEntry(
+            @RequestBody @Valid WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry) {
+        ticketEntryFacade.addApplicationDeploymentJvmSpecTicketEntry(addTicketEntry);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Add computer permission ticket entry")
     @PostMapping(value = "/computer/permission/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addComputerPermissionTicketEntry(

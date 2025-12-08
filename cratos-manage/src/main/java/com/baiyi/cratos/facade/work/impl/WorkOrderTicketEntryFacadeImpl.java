@@ -116,6 +116,14 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
     }
 
     @Override
+    public  void addApplicationDeploymentJvmSpecTicketEntry(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry){
+        TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry>) TicketEntryProviderFactory.getProvider(
+                WorkOrderKeys.APPLICATION_DEPLOYMENT_JVM_SPEC, addTicketEntry.getBusinessType());
+        Optional.ofNullable(ticketEntryProvider)
+                .ifPresent(provider -> provider.addEntry(addTicketEntry));
+    }
+
+    @Override
     public void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry) {
         TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry> ticketEntryProvider = (TicketEntryProvider<?, WorkOrderTicketParam.AddComputerPermissionTicketEntry>) TicketEntryProviderFactory.getProvider(
                 WorkOrderKeys.COMPUTER_PERMISSION, addTicketEntry.getBusinessType());

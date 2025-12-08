@@ -44,6 +44,8 @@ public interface WorkOrderTicketEntryFacade {
     void addApplicationDeploymentElasticScalingTicketEntry(
             WorkOrderTicketParam.AddApplicationDeploymentScaleTicketEntry addTicketEntry);
 
+    void addApplicationDeploymentJvmSpecTicketEntry(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry addTicketEntry);
+
     void addComputerPermissionTicketEntry(WorkOrderTicketParam.AddComputerPermissionTicketEntry addTicketEntry);
 
     void addRevokeUserPermissionTicketEntry(WorkOrderTicketParam.AddRevokeUserPermissionTicketEntry addTicketEntry);
