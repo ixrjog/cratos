@@ -14,12 +14,14 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.work.WorkOrderService;
@@ -41,11 +43,13 @@ import io.fabric8.kubernetes.api.model.Quantity;
 import io.fabric8.kubernetes.api.model.ResourceRequirements;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_NAMESPACE;
 import static java.util.Map.entry;
 
 /**
@@ -63,6 +67,8 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+    private final EdsAssetIndexFacade edsAssetIndexFacade;
+    private final EdsAssetIndexService edsAssetIndexService;
 
     public ApplicationDeploymentJvmSpecTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                            WorkOrderTicketService workOrderTicketService,
@@ -71,13 +77,17 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                                                            ApplicationService applicationService,
                                                            EdsAssetService edsAssetService,
                                                            EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                                                           KubernetesDeploymentRepo kubernetesDeploymentRepo) {
+                                                           KubernetesDeploymentRepo kubernetesDeploymentRepo,
+                                                           EdsAssetIndexFacade edsAssetIndexFacade,
+                                                           EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
         this.applicationService = applicationService;
         this.edsAssetService = edsAssetService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
+        this.edsAssetIndexFacade = edsAssetIndexFacade;
+        this.edsAssetIndexService = edsAssetIndexService;
     }
 
     @Override
@@ -152,13 +162,23 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
         ApplicationDeploymentModel.ResourceRequirements resourceRequirements = JvmSpecUtils.getResourceRequirements(
                 jvmSpecType);
         Map<String, Quantity> requests = Map.ofEntries(
-                entry("cpu", new Quantity(resourceRequirements.getRequests().get("cpu"))),
-                entry("memory", new Quantity(resourceRequirements.getRequests().get("memory")))
+                entry(
+                        "cpu", new Quantity(resourceRequirements.getRequests()
+                                                    .get("cpu"))
+                ), entry(
+                        "memory", new Quantity(resourceRequirements.getRequests()
+                                                       .get("memory"))
+                )
         );
         resource.setRequests(requests);
         Map<String, Quantity> limits = Map.ofEntries(
-                entry("cpu", new Quantity(resourceRequirements.getLimits().get("cpu"))),
-                entry("memory", new Quantity(resourceRequirements.getLimits().get("memory")))
+                entry(
+                        "cpu", new Quantity(resourceRequirements.getLimits()
+                                                    .get("cpu"))
+                ), entry(
+                        "memory", new Quantity(resourceRequirements.getLimits()
+                                                       .get("memory"))
+                )
         );
         resource.setLimits(limits);
     }
@@ -190,6 +210,12 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                     StringFormatter.format("Asset type {} is not kubernetes deployment", asset.getAssetType()));
         }
         deploymentJvmSpec.setDeployment(BeanCopierUtils.copyProperties(asset, EdsAssetVO.Asset.class));
+        // namespace
+        EdsAssetIndex index = edsAssetIndexService.getByAssetIdAndName(asset.getId(), KUBERNETES_NAMESPACE);
+        if (index == null || !StringUtils.hasText(index.getValue())) {
+            WorkOrderTicketException.runtime("Eds Kubernetes deployment namespace does not exist.");
+        }
+        deploymentJvmSpec.setNamespace(index.getValue());
         // eds instance
         EdsInstance edsInstance = edsInstanceService.getById(asset.getInstanceId());
         if (Objects.isNull(edsInstance)) {

@@ -24,7 +24,6 @@ import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
-import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
@@ -55,7 +54,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final BusinessTagFacade businessTagFacade;
-    private final BusinessTagService businessTagService;
+
     private final TagService tagService;
 
     public EdsKubernetesDeploymentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
@@ -66,13 +65,11 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
                                                 EdsInstanceProviderHolderBuilder holderBuilder,
                                                 KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                                 KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                BusinessTagFacade businessTagFacade,
-                                                BusinessTagService businessTagService, TagService tagService) {
+                                                BusinessTagFacade businessTagFacade, TagService tagService) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.businessTagFacade = businessTagFacade;
-        this.businessTagService = businessTagService;
         this.tagService = tagService;
     }
 
