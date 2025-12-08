@@ -423,6 +423,19 @@ public class WorkOrderTicketParam {
     @AllArgsConstructor
     @NoArgsConstructor
     @Schema
+    public static class AddDeploymentJvmSpecTicketEntry extends TicketEntry<ApplicationDeploymentModel.DeploymentJvmSpec> implements BaseBusiness.HasBusinessType, Serializable {
+        @Serial
+        private static final long serialVersionUID = -1244962359720286901L;
+        private final String businessType = BusinessTypeEnum.EDS_ASSET.name();
+        private ApplicationDeploymentModel.DeploymentJvmSpec detail;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema
     public static class AddApplicationRedeployTicketEntry extends TicketEntry<ApplicationVO.Application> implements BaseBusiness.HasBusinessType, Serializable {
         @Serial
         private static final long serialVersionUID = -8342340561313113489L;

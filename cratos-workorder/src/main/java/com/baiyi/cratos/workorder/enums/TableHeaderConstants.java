@@ -35,5 +35,6 @@ public interface TableHeaderConstants {
     String APPLICATION_FRONTEND_CREATE = "| Application Name | Type | Level | Repository SSH URL | Web Site |";
     String APPLICATION_DEPLOYMENT_SCALE = "| Instance Name | Namespace | Deployment | Current Replicas | Expected Replicas |";
     String RISK_CHANGE = "| Applicant | Title |";
+    String APPLICATION_DEPLOYMENT_JVM_SPEC = "| Application Name | Instance Name | Namespace | Deployment | Spec | New Java Opts |";
 
 }
