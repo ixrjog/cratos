@@ -63,7 +63,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
                                   CloudflareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
-        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
+        return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(key)
                 .kindOf(entity.getType())

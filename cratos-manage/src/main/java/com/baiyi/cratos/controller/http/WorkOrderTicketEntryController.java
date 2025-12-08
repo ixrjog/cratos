@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
+import com.baiyi.cratos.workorder.enums.DeploymentJvmSpecTypes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -312,6 +313,12 @@ public class WorkOrderTicketEntryController {
     }
 
     // other
+
+    @Operation(summary = "Get application deployment jvm spec type options")
+    @GetMapping(value = "/application/deployment/jvm/spec/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<OptionsVO.Options> getApplicationDeploymentJvmSpecTypeOptions() {
+        return HttpResult.of(DeploymentJvmSpecTypes.toOptions());
+    }
 
     @Operation(summary = "Update ticket entry valid")
     @PutMapping(value = "/valid/set", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
