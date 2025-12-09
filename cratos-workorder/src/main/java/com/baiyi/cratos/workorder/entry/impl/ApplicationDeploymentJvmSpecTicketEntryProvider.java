@@ -135,19 +135,30 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
         DeploymentJvmSpecTypes jvmSpecType = DeploymentJvmSpecTypes.valueOf(deploymentJvmSpec.getJvmSpecType());
         envVar.setValue(JvmSpecUtils.toCommandLine(JvmSpecUtils.parse(jvmSpecType, envVar.getValue())));
         modifyResources(jvmSpecType, container.getResources());
+        holder.importAsset(kubernetesDeploymentRepo.update(kubernetes, deployment));
     }
 
     private void modifyResources(DeploymentJvmSpecTypes jvmSpecType, ResourceRequirements resource) {
         ApplicationDeploymentModel.ResourceRequirements resourceRequirements = JvmSpecUtils.getResourceRequirements(
                 jvmSpecType);
         Map<String, Quantity> requests = Map.ofEntries(
-                entry("cpu", new Quantity(resourceRequirements.getRequests().get("cpu"))),
-                entry("memory", new Quantity(resourceRequirements.getRequests().get("memory")))
+                entry(
+                        "cpu", new Quantity(resourceRequirements.getRequests()
+                                                    .get("cpu"))
+                ), entry(
+                        "memory", new Quantity(resourceRequirements.getRequests()
+                                                       .get("memory"))
+                )
         );
         resource.setRequests(requests);
         Map<String, Quantity> limits = Map.ofEntries(
-                entry("cpu", new Quantity(resourceRequirements.getLimits().get("cpu"))),
-                entry("memory", new Quantity(resourceRequirements.getLimits().get("memory")))
+                entry(
+                        "cpu", new Quantity(resourceRequirements.getLimits()
+                                                    .get("cpu"))
+                ), entry(
+                        "memory", new Quantity(resourceRequirements.getLimits()
+                                                       .get("memory"))
+                )
         );
         resource.setLimits(limits);
     }
