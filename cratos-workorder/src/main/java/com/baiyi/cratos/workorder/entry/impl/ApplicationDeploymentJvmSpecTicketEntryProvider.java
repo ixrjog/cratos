@@ -14,12 +14,10 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
-import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
-import com.baiyi.cratos.exception.DaoServiceException;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -32,7 +30,6 @@ import com.baiyi.cratos.workorder.builder.entry.ApplicationDeploymentJvmSpecTick
 import com.baiyi.cratos.workorder.entry.base.BaseTicketEntryProvider;
 import com.baiyi.cratos.workorder.enums.DeploymentJvmSpecTypes;
 import com.baiyi.cratos.workorder.enums.TableHeaderConstants;
-import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.WorkOrderKeys;
 import com.baiyi.cratos.workorder.exception.WorkOrderTicketException;
 import com.baiyi.cratos.workorder.model.TicketEntryModel;
@@ -67,7 +64,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
-    private final EdsAssetIndexFacade edsAssetIndexFacade;
     private final EdsAssetIndexService edsAssetIndexService;
 
     public ApplicationDeploymentJvmSpecTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
@@ -78,7 +74,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                                                            EdsAssetService edsAssetService,
                                                            EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                                            KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                           EdsAssetIndexFacade edsAssetIndexFacade,
                                                            EdsAssetIndexService edsAssetIndexService) {
         super(workOrderTicketEntryService, workOrderTicketService, workOrderService);
         this.edsInstanceService = edsInstanceService;
@@ -86,7 +81,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
         this.edsAssetService = edsAssetService;
         this.edsInstanceProviderHolderBuilder = edsInstanceProviderHolderBuilder;
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
-        this.edsAssetIndexFacade = edsAssetIndexFacade;
         this.edsAssetIndexService = edsAssetIndexService;
     }
 
@@ -118,21 +112,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                 .build();
     }
 
-    @Override
-    public WorkOrderTicketEntry addEntry(WorkOrderTicketParam.AddDeploymentJvmSpecTicketEntry param) {
-        WorkOrderTicketEntry entry = paramToEntry(param);
-        WorkOrderTicket ticket = workOrderTicketService.getById(entry.getTicketId());
-        if (!TicketState.COMPLETED.equals(TicketState.valueOf(ticket.getTicketState()))) {
-            WorkOrderTicketException.runtime("Only when the work order is completed can the configuration be added.");
-        }
-        try {
-            workOrderTicketEntryService.add(entry);
-            return entry;
-        } catch (DaoServiceException daoServiceException) {
-            throw new WorkOrderTicketException("Repeat adding entries.");
-        }
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
@@ -143,7 +122,7 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                 .getEdsConfigModel();
         Deployment deployment = kubernetesDeploymentRepo.get(
                 kubernetes, deploymentJvmSpec.getNamespace(), deploymentJvmSpec.getDeployment()
-                        .getAssetKey()
+                        .getName()
         );
         Container container = KubeUtils.findAppContainerOf(deployment)
                 .orElseThrow(() -> new WorkOrderTicketException("Kubernetes application container not found."));
@@ -171,7 +150,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                 entry("memory", new Quantity(resourceRequirements.getLimits().get("memory")))
         );
         resource.setLimits(limits);
-        Quantity.parse()
     }
 
     @Override
