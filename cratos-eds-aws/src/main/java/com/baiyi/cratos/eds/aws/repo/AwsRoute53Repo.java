@@ -1,8 +1,7 @@
 package com.baiyi.cratos.eds.aws.repo;
 
-import com.amazonaws.services.route53.model.HostedZone;
-import com.amazonaws.services.route53.model.ListHostedZonesRequest;
-import com.amazonaws.services.route53.model.ListHostedZonesResult;
+import com.amazonaws.services.route53.AmazonRoute53;
+import com.amazonaws.services.route53.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonRoute53Service;
 import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
@@ -24,7 +23,7 @@ public class AwsRoute53Repo {
     public static List<HostedZone> listHostedZones(EdsAwsConfigModel.Aws aws) {
         ListHostedZonesRequest request = new ListHostedZonesRequest();
         List<HostedZone> hostedZones = Lists.newArrayList();
-        var route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
+        AmazonRoute53 route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
         String nextMarker = null;
         do {
             if (nextMarker != null) {
@@ -35,6 +34,24 @@ public class AwsRoute53Repo {
             nextMarker = result.getNextMarker();
         } while (StringUtils.hasText(nextMarker));
         return hostedZones;
+    }
+
+    public static List<ResourceRecordSet> listResourceRecordSets(EdsAwsConfigModel.Aws aws, String hostedZoneId) {
+        ListResourceRecordSetsRequest request = new ListResourceRecordSetsRequest();
+        request.setHostedZoneId(hostedZoneId);
+        request.setStartRecordType("TXT");
+        List<ResourceRecordSet> resourceRecordSets = Lists.newArrayList();
+        AmazonRoute53 route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
+        do {
+            ListResourceRecordSetsResult result = route53.listResourceRecordSets(request);
+            resourceRecordSets.addAll(result.getResourceRecordSets());
+            if (!result.isTruncated()) {
+                break;
+            }
+            request.setStartRecordName(result.getNextRecordName());
+            request.setStartRecordType(result.getNextRecordType());
+        } while (true);
+        return resourceRecordSets;
     }
 
 }

@@ -171,7 +171,6 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
                 entry("memory", new Quantity(resourceRequirements.getLimits().get("memory")))
         );
         resource.setLimits(limits);
-        Quantity.parse()
     }
 
     @Override
