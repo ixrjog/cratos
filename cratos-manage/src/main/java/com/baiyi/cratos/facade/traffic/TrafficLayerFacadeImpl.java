@@ -10,7 +10,7 @@ import com.baiyi.cratos.facade.TrafficLayerFacade;
 import com.baiyi.cratos.facade.proxy.TrafficLayerProxy;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
-import com.baiyi.cratos.wrapper.TrafficLayerRecordWrapper;
+import com.baiyi.cratos.wrapper.traffic.TrafficLayerRecordWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

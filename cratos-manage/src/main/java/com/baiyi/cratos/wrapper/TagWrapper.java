@@ -28,11 +28,11 @@ public class TagWrapper extends BaseDataTableConverter<TagVO.Tag, Tag> implement
     }
 
     @Override
-    public void businessWrap(TagVO.HasTag iTag) {
-        Tag tag = tagService.getById(iTag.getTagId());
+    public void decorateBusiness(TagVO.HasTag biz) {
+        Tag tag = tagService.getById(biz.getTagId());
         TagVO.Tag t = convert(tag);
         delegateWrap(t);
-        iTag.setTag(t);
+        biz.setTag(t);
     }
 
 }

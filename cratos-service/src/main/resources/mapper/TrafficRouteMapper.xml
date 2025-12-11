@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.TrafficRouteMapper">
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.TrafficRoute">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="domain_id" jdbcType="INTEGER" property="domainId"/>
+        <result column="domain_record_id" jdbcType="INTEGER" property="domainRecordId"/>
+        <result column="domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="domain_record" jdbcType="VARCHAR" property="domainRecord"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="dns_resolver_instance_id" jdbcType="INTEGER" property="dnsResolverInstanceId"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam$RoutePageQueryParam"
+            resultMap="BaseResultMap">
+        select * from traffic_route
+        <where>
+            <if test="idList != null and idList.size() > 0">
+                id in
+                <foreach open="(" item="id" separator="," close=")" collection="idList">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="queryName != null and queryName != ''">
+                and `domain` like "%" #{queryName} "%"
+                order by replace(`domain`, #{queryName}, '')
+            </if>
+        </where>
+    </select>
+
+</mapper>

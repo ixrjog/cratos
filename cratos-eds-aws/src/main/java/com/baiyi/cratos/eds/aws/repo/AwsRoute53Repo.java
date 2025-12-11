@@ -39,7 +39,6 @@ public class AwsRoute53Repo {
     public static List<ResourceRecordSet> listResourceRecordSets(EdsAwsConfigModel.Aws aws, String hostedZoneId) {
         ListResourceRecordSetsRequest request = new ListResourceRecordSetsRequest();
         request.setHostedZoneId(hostedZoneId);
-        request.setStartRecordType("TXT");
         List<ResourceRecordSet> resourceRecordSets = Lists.newArrayList();
         AmazonRoute53 route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
         do {

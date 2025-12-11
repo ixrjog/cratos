@@ -44,11 +44,11 @@ public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConver
     }
 
     @Override
-    public void businessWrap(KubernetesResourceTemplateVO.HasTemplateMembers hasTemplateMembers) {
-        IdentityUtils.validIdentityRun(hasTemplateMembers.getTemplateId())
+    public void decorateBusiness(KubernetesResourceTemplateVO.HasTemplateMembers biz) {
+        IdentityUtils.validIdentityRun(biz.getTemplateId())
                 .withTrue(() -> {
                     List<KubernetesResourceTemplateVO.Member> members = kubernetesResourceTemplateMemberService.queryMemberByTemplateId(
-                                    hasTemplateMembers.getTemplateId())
+                                    biz.getTemplateId())
                             .stream()
                             .map(e -> {
                                 KubernetesResourceTemplateVO.Member vo = convert(e);
@@ -57,7 +57,7 @@ public class KubernetesResourceTemplateMemberWrapper extends BaseDataTableConver
                             })
                             .sorted(Comparator.comparingInt(KubernetesResourceTemplateVO.Member::getSeq))
                             .toList();
-                    hasTemplateMembers.setMembers(toMemberMap(members));
+                    biz.setMembers(toMemberMap(members));
                 });
     }
 

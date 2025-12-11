@@ -11,7 +11,7 @@ import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
 import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
-import com.baiyi.cratos.wrapper.TrafficLayerDomainWrapper;
+import com.baiyi.cratos.wrapper.traffic.TrafficLayerDomainWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -60,7 +60,6 @@ public class TrafficLayerDomainServiceImpl implements TrafficLayerDomainService 
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
     }
 
 }

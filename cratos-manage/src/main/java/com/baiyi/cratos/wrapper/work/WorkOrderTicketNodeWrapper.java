@@ -66,11 +66,11 @@ public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrder
     }
 
     @Override
-    public void businessWrap(WorkOrderTicketVO.HasTicketNodes hasTicketNodes) {
-        if (!StringUtils.hasText(hasTicketNodes.getTicketNo())) {
+    public void decorateBusiness(WorkOrderTicketVO.HasTicketNodes biz) {
+        if (!StringUtils.hasText(biz.getTicketNo())) {
             return;
         }
-        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(hasTicketNodes.getTicketNo());
+        WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(biz.getTicketNo());
         if (Objects.isNull(ticket)) {
             return;
         }
@@ -78,13 +78,13 @@ public class WorkOrderTicketNodeWrapper extends BaseDataTableConverter<WorkOrder
                 .stream()
                 .map(this::wrapToTarget)
                 .collect(Collectors.toMap(WorkOrderTicketVO.TicketNode::getNodeName, Function.identity()));
-        hasTicketNodes.setNodes(nodes);
+        biz.setNodes(nodes);
         nodes.values()
                 .stream()
                 .filter(value -> value.getId()
                         .equals(ticket.getNodeId()))
                 .findFirst()
-                .ifPresent(value -> hasTicketNodes.setCurrentNode(value.getNodeName()));
+                .ifPresent(value -> biz.setCurrentNode(value.getNodeName()));
     }
 
 }

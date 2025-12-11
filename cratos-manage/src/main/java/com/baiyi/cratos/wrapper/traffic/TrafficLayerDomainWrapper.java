@@ -1,4 +1,4 @@
-package com.baiyi.cratos.wrapper;
+package com.baiyi.cratos.wrapper.traffic;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.util.IdentityUtils;
@@ -98,13 +98,13 @@ public class TrafficLayerDomainWrapper extends BaseDataTableConverter<TrafficLay
     }
 
     @Override
-    public void businessWrap(TrafficLayerDomainVO.HasDomain hasDomain) {
-        IdentityUtils.validIdentityRun(hasDomain.getDomainId())
+    public void decorateBusiness(TrafficLayerDomainVO.HasDomain biz) {
+        IdentityUtils.validIdentityRun(biz.getDomainId())
                 .withTrue(() -> {
-                    TrafficLayerDomain trafficLayerDomain = domainService.getById(hasDomain.getDomainId());
+                    TrafficLayerDomain trafficLayerDomain = domainService.getById(biz.getDomainId());
                     TrafficLayerDomainVO.Domain domain = this.convert(trafficLayerDomain);
                     delegateWrap(domain);
-                    hasDomain.setDomain(domain);
+                    biz.setDomain(domain);
                 });
     }
 

@@ -34,8 +34,8 @@ public class BusinessDocWrapper extends BaseDataTableConverter<BusinessDocVO.Bus
     }
 
     @Override
-    public void businessWrap(BusinessDocVO.HasBusinessDocs businessDocs) {
-        businessDocs.setBusinessDocs(businessDocService.selectByBusiness(businessDocs)
+    public void decorateBusiness(BusinessDocVO.HasBusinessDocs biz) {
+        biz.setBusinessDocs(businessDocService.selectByBusiness(biz)
                 .stream()
                 .map(bizDoc -> {
                     BusinessDocVO.BusinessDoc businessDoc = this.convert(bizDoc);

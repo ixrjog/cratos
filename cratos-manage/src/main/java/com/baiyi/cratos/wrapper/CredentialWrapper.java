@@ -41,17 +41,17 @@ public class CredentialWrapper extends BaseDataTableConverter<CredentialVO.Crede
     }
 
     @Override
-    public void businessWrap(CredentialVO.HasCredential cred) {
-        IdentityUtils.validIdentityRun(cred.getCredentialId())
+    public void decorateBusiness(CredentialVO.HasCredential biz) {
+        IdentityUtils.validIdentityRun(biz.getCredentialId())
                 .withTrue(() -> {
-                    Credential credential = credentialService.getById(cred.getCredentialId());
+                    Credential credential = credentialService.getById(biz.getCredentialId());
                     if (credential == null) {
                         return;
                     }
                     CredentialVO.Credential credentialVO = this.convert(credential);
                     // 重入切面
                     delegateWrap(credentialVO);
-                    cred.setCredential(credentialVO);
+                    biz.setCredential(credentialVO);
                 });
     }
 

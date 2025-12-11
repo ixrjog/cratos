@@ -59,11 +59,11 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
     }
 
     @Override
-    public void businessWrap(RbacRoleVO.IRbacRoles rbacRoles) {
-        if (StringUtils.isEmpty(rbacRoles.getUsername())) {
+    public void decorateBusiness(RbacRoleVO.IRbacRoles biz) {
+        if (StringUtils.isEmpty(biz.getUsername())) {
             return;
         }
-        List<RbacRoleVO.Role> roles = rbacUserRoleService.queryByUsername(rbacRoles.getUsername())
+        List<RbacRoleVO.Role> roles = rbacUserRoleService.queryByUsername(biz.getUsername())
                 .stream()
                 .map(e -> {
                     RbacRole role = rbacRoleService.getById(e.getRoleId());
@@ -73,7 +73,7 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
                     return roleVO;
                 })
                 .toList();
-        rbacRoles.setRbacRoles(roles);
+        biz.setRbacRoles(roles);
     }
 
 }

@@ -157,7 +157,7 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
                     UserPermissionVO.Permission permission = BeanCopierUtils.copyProperties(e,
                             UserPermissionVO.Permission.class);
                     LifeCycleVO.invoke(permission);
-                    envWrapper.businessWrap(permission);
+                    envWrapper.decorateBusiness(permission);
                     return permission;
                 })
                 .toList();

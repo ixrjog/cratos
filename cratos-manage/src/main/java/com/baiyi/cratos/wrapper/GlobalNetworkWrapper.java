@@ -31,15 +31,15 @@ public class GlobalNetworkWrapper extends BaseDataTableConverter<GlobalNetworkVO
     }
 
     @Override
-    public void businessWrap(GlobalNetworkVO.HasNetwork hasNetwork) {
-        if (hasNetwork.getNetworkId() <= 0) {
+    public void decorateBusiness(GlobalNetworkVO.HasNetwork biz) {
+        if (biz.getNetworkId() <= 0) {
             return;
         }
-        GlobalNetwork globalNetwork = globalNetworkService.getById(hasNetwork.getNetworkId());
+        GlobalNetwork globalNetwork = globalNetworkService.getById(biz.getNetworkId());
         if (globalNetwork == null) {
             return;
         }
-        hasNetwork.setNetwork(this.wrapToTarget(globalNetwork));
+        biz.setNetwork(this.wrapToTarget(globalNetwork));
     }
 
 }

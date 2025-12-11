@@ -1,4 +1,4 @@
-package com.baiyi.cratos.wrapper;
+package com.baiyi.cratos.wrapper.traffic;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;

@@ -42,10 +42,10 @@ public class GlobalNetworkPlanningWrapper extends BaseDataTableConverter<GlobalN
     }
 
     @Override
-    public void businessWrap(GlobalNetworkVO.HasPlannings hasPlannings) {
+    public void decorateBusiness(GlobalNetworkVO.HasPlannings biz) {
         List<GlobalNetworkPlanning> globalNetworkPlannings = globalNetworkPlanningService.queryByNetworkId(
-                hasPlannings.getNetworkId());
-        hasPlannings.setPlannings(globalNetworkPlannings.stream()
+                biz.getNetworkId());
+        biz.setPlannings(globalNetworkPlannings.stream()
                 .map(this::convert)
                 .toList());
     }

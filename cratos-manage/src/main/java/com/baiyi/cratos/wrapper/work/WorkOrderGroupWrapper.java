@@ -36,10 +36,10 @@ public class WorkOrderGroupWrapper extends BaseDataTableConverter<WorkOrderVO.Gr
     }
 
     @Override
-    public void businessWrap(WorkOrderVO.HasWorkOrderGroup hasWorkOrderGroup) {
-        WorkOrderGroup group = workOrderGroupService.getById(hasWorkOrderGroup.getGroupId());
+    public void decorateBusiness(WorkOrderVO.HasWorkOrderGroup biz) {
+        WorkOrderGroup group = workOrderGroupService.getById(biz.getGroupId());
         if (Objects.nonNull(group)) {
-            hasWorkOrderGroup.setWorkOrderGroup(wrapToTarget(group));
+            biz.setWorkOrderGroup(wrapToTarget(group));
         }
     }
 

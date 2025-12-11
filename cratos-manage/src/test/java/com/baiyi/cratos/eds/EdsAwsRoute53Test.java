@@ -17,7 +17,8 @@ public class EdsAwsRoute53Test extends BaseEdsTest<EdsAwsConfigModel.Aws> {
     @Test
     void test1() {
         EdsAwsConfigModel.Aws aws = getConfig(3);
-        List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(aws, "Z0431589J8HGO76CEFDW");
+        List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(
+                aws, "Z0431589J8HGO76CEFDW");
         System.out.println(resourceRecordSets);
     }
 

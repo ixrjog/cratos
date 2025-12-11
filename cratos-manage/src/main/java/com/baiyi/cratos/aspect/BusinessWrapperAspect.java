@@ -42,7 +42,7 @@ public class BusinessWrapperAspect {
                     log.debug("BusinessWrapper: {}", businessTypeEnum.name());
                     BaseBusinessWrapper businessWrapperBean = BusinessWrapperFactory.getWrapper(businessTypeEnum.name());
                     if (businessWrapperBean != null) {
-                        businessWrapperBean.businessWrap(business);
+                        businessWrapperBean.decorateBusiness(business);
                     }
                 });
     }

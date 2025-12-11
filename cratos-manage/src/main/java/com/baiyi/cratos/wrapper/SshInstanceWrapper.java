@@ -47,12 +47,12 @@ public class SshInstanceWrapper extends BaseDataTableConverter<SshInstanceVO.Ins
     }
 
     @Override
-    public void businessWrap(SshInstanceVO.HasSessionInstances hasSessionInstances) {
-        List<SshSessionInstance> instances = instanceService.queryBySessionId(hasSessionInstances.getSessionId());
+    public void decorateBusiness(SshInstanceVO.HasSessionInstances biz) {
+        List<SshSessionInstance> instances = instanceService.queryBySessionId(biz.getSessionId());
         if (CollectionUtils.isEmpty(instances)) {
             return;
         }
-        hasSessionInstances.setSessionInstances(instances.stream()
+        biz.setSessionInstances(instances.stream()
                 .map(this::wrapToTarget)
                 .toList());
     }

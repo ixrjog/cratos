@@ -46,9 +46,9 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
     }
 
     @Override
-    public void businessWrap(RiskEventVO.IRiskEventImpacts iRiskEventImpacts) {
-        if (IdentityUtils.hasIdentity(iRiskEventImpacts.getEventId())) {
-            List<RiskEventImpact> impactList = impactService.queryByEventId(iRiskEventImpacts.getEventId());
+    public void decorateBusiness(RiskEventVO.IRiskEventImpacts biz) {
+        if (IdentityUtils.hasIdentity(biz.getEventId())) {
+            List<RiskEventImpact> impactList = impactService.queryByEventId(biz.getEventId());
             if (CollectionUtils.isEmpty(impactList)) {
                 return;
             }
@@ -62,12 +62,12 @@ public class RiskEventImpactWrapper extends BaseDataTableConverter<RiskEventVO.I
                     })
                     .sorted(Comparator.comparingLong(RiskEventVO.Impact::getSeq))
                     .collect(Collectors.toList());
-            iRiskEventImpacts.setImpacts(impacts);
+            biz.setImpacts(impacts);
             RiskEventVO.CostDetail totalCost = RiskEventVO.CostDetail.builder()
                     .cost(sumCost.get())
                     .costDesc(TimeUtils.convertSecondsToHMS(sumCost.get()))
                     .build();
-            iRiskEventImpacts.setTotalCost(totalCost);
+            biz.setTotalCost(totalCost);
         }
     }
 

@@ -146,6 +146,12 @@
             <artifactId>alibabacloud-schedulerx220190430</artifactId>
             <version>2.0.8</version>
         </dependency>
+        <!-- Async SDK -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibabacloud-alidns20150109</artifactId>
+            <version>4.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

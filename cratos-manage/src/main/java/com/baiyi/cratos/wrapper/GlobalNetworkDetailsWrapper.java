@@ -31,7 +31,7 @@ public class GlobalNetworkDetailsWrapper {
     public final static String[] SUBNET_TABLE_FIELD_NAME = {"Main Name", "Main Type", "Name", "Subnet KmsKey", "Region", "Zone", "CIDR Block", "Resource", "Comment"};
 
     public void wrap(GlobalNetworkVO.NetworkDetails networkDetails) {
-        globalNetworkWrapper.businessWrap(networkDetails);
+        globalNetworkWrapper.decorateBusiness(networkDetails);
         List<GlobalNetworkPlanning> plannings = globalNetworkPlanningService.queryByNetworkId(
                 networkDetails.getNetworkId());
         if (CollectionUtils.isEmpty(plannings)) {
