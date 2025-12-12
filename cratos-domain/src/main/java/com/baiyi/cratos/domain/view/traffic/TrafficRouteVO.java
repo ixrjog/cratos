@@ -1,11 +1,14 @@
 package com.baiyi.cratos.domain.view.traffic;
 
 import com.baiyi.cratos.domain.BaseBusiness;
+import com.baiyi.cratos.domain.HasEdsInstance;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +39,7 @@ public class TrafficRouteVO {
     @NoArgsConstructor
     @Schema
     @BusinessType(type = BusinessTypeEnum.TRAFFIC_ROUTE)
-    public static class Route extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, EnvVO.HasEnv, HasRecordTargets, Serializable {
+    public static class Route extends BaseVO implements HasResourceCount, BaseBusiness.IBusinessAnnotate, BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, EnvVO.HasEnv, HasRecordTargets, HasEdsInstance, Serializable {
         @Serial
         private static final long serialVersionUID = 7924531542599490285L;
         private Integer id;
@@ -48,6 +51,8 @@ public class TrafficRouteVO {
         private Integer dnsResolverInstanceId;
         private Boolean valid;
         private String comment;
+
+        private TrafficRoute trafficRoute;
 
         @Override
         public Integer getBusinessId() {
@@ -68,6 +73,18 @@ public class TrafficRouteVO {
         }
 
         private List<RecordTarget> recordTargets;
+        private EdsInstanceVO.EdsInstance dnsResolverInstance;
+
+        @Override
+        public void setEdsInstance(EdsInstanceVO.EdsInstance edsInstance) {
+            this.dnsResolverInstance = edsInstance;
+        }
+
+        @Override
+        public Integer getInstanceId() {
+            return dnsResolverInstanceId;
+        }
+
     }
 
     @EqualsAndHashCode(callSuper = true)

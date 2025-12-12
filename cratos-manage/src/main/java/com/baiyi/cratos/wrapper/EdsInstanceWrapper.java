@@ -2,6 +2,9 @@ package com.baiyi.cratos.wrapper;
 
 import com.baiyi.cratos.annotation.BusinessWrapper;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
+import com.baiyi.cratos.common.util.IdentityUtils;
+import com.baiyi.cratos.domain.HasEdsInstance;
+import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.eds.EdsAssetTypeVO;
@@ -11,8 +14,9 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolderBuilder;
+import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.wrapper.base.BaseBusinessWrapper;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
-import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -31,8 +35,10 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements BaseWrapper<EdsInstanceVO.EdsInstance> {
+@BusinessType(type = BusinessTypeEnum.EDS_INSTANCE)
+public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.EdsInstance, EdsInstance> implements BaseBusinessWrapper<HasEdsInstance, EdsInstanceVO.EdsInstance> {
 
+    private final EdsInstanceService edsInstanceService;
     private final EdsConfigWrapper edsConfigWrapper;
     private final EdsInstanceVersionProviderHolderBuilder versionHolderBuilder;
 
@@ -78,6 +84,18 @@ public class EdsInstanceWrapper extends BaseDataTableConverter<EdsInstanceVO.Eds
                 .displayName(type.getDisplayName())
                 .seq(type.getSeq())
                 .build();
+    }
+
+    @Override
+    public void decorateBusiness(HasEdsInstance biz) {
+        if (!IdentityUtils.hasIdentity(biz.getInstanceId())) {
+            return;
+        }
+        EdsInstance edsInstance = edsInstanceService.getById(biz.getInstanceId());
+        if (edsInstance == null) {
+            return;
+        }
+        biz.setEdsInstance(wrapToTarget(edsInstance));
     }
 
 }

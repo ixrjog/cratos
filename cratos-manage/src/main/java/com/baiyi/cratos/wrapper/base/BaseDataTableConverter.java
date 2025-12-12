@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
  * @Version 1.0
  */
 @Slf4j
-public abstract class BaseDataTableConverter<T, S> implements BaseWrapper<T>, Converter<S, T> {
+public abstract class BaseDataTableConverter<VO, DO> implements BaseWrapper<VO>, Converter<DO, VO> {
 
-    public DataTable<T> wrapToTarget(DataTable<S> dataTable) {
+    public DataTable<VO> wrapToTarget(DataTable<DO> dataTable) {
         return new DataTable<>(dataTable.getData()
                 .stream()
                 .map(this::wrapToTarget)
@@ -26,16 +26,16 @@ public abstract class BaseDataTableConverter<T, S> implements BaseWrapper<T>, Co
      * @param s
      * @return
      */
-    public T wrapToTarget(S s) {
-        T t = convert(s);
+    public VO wrapToTarget(DO s) {
+        VO t = convert(s);
         delegateWrap(t);
         return t;
     }
 
     @SuppressWarnings("unchecked")
-    protected void delegateWrap(T t) {
-        // BaseDataTableConverter<T, S> bean = (BaseDataTableConverter<T, S>) AopContext.currentProxy();
-        BaseWrapper<T> bean = SpringContextUtils.getBean(this.getClass());
+    protected void delegateWrap(VO t) {
+        // BaseDataTableConverter<VO, DO> bean = (BaseDataTableConverter<VO, DO>) AopContext.currentProxy();
+        BaseWrapper<VO> bean = SpringContextUtils.getBean(this.getClass());
         bean.wrap(t);
     }
 

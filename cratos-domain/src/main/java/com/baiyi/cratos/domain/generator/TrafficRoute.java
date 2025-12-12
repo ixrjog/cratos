@@ -49,6 +49,9 @@ public class TrafficRoute implements HasValid, HasIntegerPrimaryKey {
     @Column(name = "dns_resolver_instance_id")
     private Integer dnsResolverInstanceId;
 
+    @Column(name = "record_type")
+    private String recordType;
+
     private Boolean valid;
 
     /**
