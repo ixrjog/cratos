@@ -31,8 +31,8 @@
                 </foreach>
             </if>
             <if test="queryName != null and queryName != ''">
-                and `domain` like "%" #{queryName} "%"
-                order by replace(`domain`, #{queryName}, '')
+                and `domain_record` like "%" #{queryName} "%"
+                order by replace(`domain_record`, #{queryName}, '')
             </if>
         </where>
     </select>
