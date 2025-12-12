@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.HasEdsInstance;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.view.BaseVO;
 import com.baiyi.cratos.domain.view.HasResourceCount;
 import com.baiyi.cratos.domain.view.doc.BusinessDocVO;
@@ -49,15 +50,31 @@ public class TrafficRouteVO {
         private String domainRecord;
         private String name;
         private Integer dnsResolverInstanceId;
+        private String recordType;
         private Boolean valid;
         private String comment;
 
-        private TrafficRoute trafficRoute;
+        public TrafficRoute toTrafficRoute() {
+            return TrafficRoute.builder()
+                    .id(id)
+                    .domainId(domainId)
+                    .domainRecordId(domainRecordId)
+                    .domain(domain)
+                    .domainRecord(domainRecord)
+                    .name(name)
+                    .dnsResolverInstanceId(dnsResolverInstanceId)
+                    .recordType(recordType)
+                    .valid(valid)
+                    .comment(comment)
+                    .build();
+        }
 
         @Override
         public Integer getBusinessId() {
             return id;
         }
+
+        private DNS.ResourceRecordSet dnsResourceRecordSet;
 
         private String envName;
         private EnvVO.Env env;
@@ -119,6 +136,16 @@ public class TrafficRouteVO {
         private List<BusinessTagVO.BusinessTag> businessTags;
         @Schema(description = "Business Docs")
         private List<BusinessDocVO.BusinessDoc> businessDocs;
+
+        @Schema(description = "DNS指向当前目标")
+        @Builder.Default
+        private boolean isActive = false;
+        private DNS.ResourceRecord dnsResourceRecord;
+
+        public void setDnsResourceRecord(DNS.ResourceRecord dnsResourceRecord) {
+            this.dnsResourceRecord = dnsResourceRecord;
+            this.isActive = true;
+        }
     }
 
 }

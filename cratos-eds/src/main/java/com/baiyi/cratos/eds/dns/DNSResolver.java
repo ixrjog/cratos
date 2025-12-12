@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.dns;
 
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.eds.core.EdsInstanceTypeOfAnnotate;
-import com.baiyi.cratos.eds.dns.model.DNS;
+import com.baiyi.cratos.domain.model.DNS;
 import org.springframework.beans.factory.InitializingBean;
 
 /**

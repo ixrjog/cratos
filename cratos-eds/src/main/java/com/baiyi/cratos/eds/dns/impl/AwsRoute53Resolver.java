@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
-import com.baiyi.cratos.eds.dns.model.DNS;
+import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.service.EdsAssetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS)
-public class AwsRoute53DNSResolver extends BaseDNSResolver {
+public class AwsRoute53Resolver extends BaseDNSResolver {
 
     private final EdsAssetService edsAssetService;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
@@ -81,12 +81,12 @@ public class AwsRoute53DNSResolver extends BaseDNSResolver {
                 .type(record.getType())
                 .name(record.getName()
                               .replaceAll("\\.$", "")) // 移除末尾的点
-                .tTL(record.getTTL())
-                .weight(record.getWeight())
                 .resourceRecords(record.getResourceRecords()
                                          .stream()
                                          .map(r -> DNS.ResourceRecord.builder()
                                                  .value(r.getValue())
+                                                 .tTL(record.getTTL())
+                                                 .weight(record.getWeight())
                                                  .build())
                                          .toList())
                 .build();

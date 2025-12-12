@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 import com.baiyi.cratos.eds.dns.DNSResolver;
 import com.baiyi.cratos.eds.dns.DNSResolverFactory;
+import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
@@ -32,15 +33,20 @@ public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.R
         if (dnsResolver == null) {
             return;
         }
-        dnsResolver.getDNSResourceRecordSet(vo.getTrafficRoute());
-
-    }
-
-    @Override
-    public TrafficRouteVO.Route wrapToTarget(TrafficRoute s) {
-        TrafficRouteVO.Route vo = super.wrapToTarget(s);
-        vo.setTrafficRoute(s);
-        return vo;
+        DNS.ResourceRecordSet resourceRecordSet = dnsResolver.getDNSResourceRecordSet(vo.toTrafficRoute());
+        // No data
+        if (resourceRecordSet.isNoData()) {
+            return;
+        }
+        vo.setDnsResourceRecordSet(resourceRecordSet);
+        vo.getRecordTargets()
+                .forEach(recordTarget -> resourceRecordSet.getResourceRecords()
+                        .forEach(dnsResourceRecord -> {
+                            if (dnsResourceRecord.getValue()
+                                    .equals(recordTarget.getRecordValue())) {
+                                recordTarget.setDnsResourceRecord(dnsResourceRecord);
+                            }
+                        }));
     }
 
 }
