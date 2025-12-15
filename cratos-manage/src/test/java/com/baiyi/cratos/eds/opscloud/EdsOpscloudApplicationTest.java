@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
 import com.baiyi.cratos.facade.application.OcApplicationFacade;
@@ -22,7 +22,7 @@ import java.util.List;
  * &#064;Date  2024/12/2 13:46
  * &#064;Version 1.0
  */
-public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud> {
+public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsConfigs.Opscloud> {
 
     @Resource
     private ApplicationService applicationService;
@@ -36,7 +36,7 @@ public class EdsOpscloudApplicationTest extends BaseEdsTest<EdsOpscloudConfigMod
 
     @Test
     void importOcApplicationTest() {
-        EdsOpscloudConfigModel.Opscloud cfg = getConfig(32);
+        EdsConfigs.Opscloud cfg = getConfig(32);
         List<OcApplicationVO.Application> ocApps = OcApplicationRepo.listApplication(cfg);
         if (CollectionUtils.isEmpty(ocApps)) {
             return;

@@ -1,22 +1,22 @@
 package com.baiyi.cratos.eds.opscloud;
 
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserPermissionRepo;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
-import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.google.common.collect.Lists;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * &#064;Date  2025/3/12 14:04
  * &#064;Version 1.0
  */
-public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opscloud> {
+public class EdsOpscloudUserTest extends BaseEdsTest<EdsConfigs.Opscloud> {
 
     @Resource
     private UserService userService;
@@ -46,7 +46,7 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
 
     @Test
     void importOcUserTest() {
-        EdsOpscloudConfigModel.Opscloud cfg = getConfig(32);
+        EdsConfigs.Opscloud cfg = getConfig(32);
         List<OcUserVO.User> ocUsers = OcUserRepo.listUser(cfg);
         if (CollectionUtils.isEmpty(ocUsers)) {
             return;
@@ -119,7 +119,7 @@ public class EdsOpscloudUserTest extends BaseEdsTest<EdsOpscloudConfigModel.Opsc
 
     @Test
     void test() {
-        EdsOpscloudConfigModel.Opscloud cfg = getConfig(32);
+        EdsConfigs.Opscloud cfg = getConfig(32);
         List<OcApplicationVO.Application> permissionApps = OcUserPermissionRepo.queryUserApplicationPermission(cfg, 1);
         System.out.println(permissionApps.size());
     }

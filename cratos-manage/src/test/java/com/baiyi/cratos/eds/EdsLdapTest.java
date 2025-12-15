@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds;
 
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
