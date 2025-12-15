@@ -1,8 +1,10 @@
 package com.baiyi.cratos.facade;
 
+
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
+
 
 /**
  * &#064;Author  baiyi
@@ -12,5 +14,11 @@ import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 public interface TrafficRouteFacade {
 
     DataTable<TrafficRouteVO.Route> queryRoutePage(TrafficRouteParam.RoutePageQuery pageQuery);
+
+    void addTrafficRoute(TrafficRouteParam.AddRoute addRoute);
+
+    void updateTrafficRoute(TrafficRouteParam.UpdateRoute updateRoute);
+
+    void addTrafficRecordTarget(TrafficRouteParam.AddRecordTarget addRouteTarget);
 
 }

@@ -1,8 +1,14 @@
 package com.baiyi.cratos.domain.param.http.traffic;
 
+import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
+import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.param.IToTarget;
 import com.baiyi.cratos.domain.param.PageParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -47,5 +53,78 @@ public class TrafficRouteParam {
         private String queryName;
         private List<Integer> idList;
     }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class AddRoute implements IToTarget<TrafficRoute> {
+        @Null(message = "ID must be null")
+        private Integer id;
+        @NotNull(message = "Domain ID cannot be null")
+        private Integer domainId;
+        @NotNull(message = "Domain record ID cannot be null")
+        private Integer domainRecordId;
+        @NotBlank(message = "Domain cannot be blank")
+        private String domain;
+        @NotBlank(message = "Domain record cannot be blank")
+        private String domainRecord;
+        private String name;
+        @NotNull(message = "DNS resolver instance ID cannot be null")
+        private Integer dnsResolverInstanceId;
+        @NotBlank(message = "Record type cannot be blank")
+        private String recordType;
+        @NotNull(message = "Valid status cannot be null")
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateRoute implements IToTarget<TrafficRoute> {
+        @NotNull
+        private Integer id;
+        @NotNull(message = "Domain ID cannot be null")
+        private Integer domainId;
+        @NotNull(message = "Domain record ID cannot be null")
+        private Integer domainRecordId;
+        @NotBlank(message = "Domain cannot be blank")
+        private String domain;
+        @NotBlank(message = "Domain record cannot be blank")
+        private String domainRecord;
+        private String name;
+        @NotNull(message = "DNS resolver instance ID cannot be null")
+        private Integer dnsResolverInstanceId;
+        @NotBlank(message = "Record type cannot be blank")
+        private String recordType;
+        @NotNull(message = "Valid status cannot be null")
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class AddRecordTarget implements IToTarget<TrafficRecordTarget> {
+        @NotNull
+        private Integer id;
+        @NotNull(message = "Domain ID cannot be null")
+        private Integer domainId;
+        @NotNull(message = "Domain record ID cannot be null")
+        private Integer domainRecordId;
+        @NotBlank(message = "Domain cannot be blank")
+        private String domain;
+        @NotBlank(message = "Domain record cannot be blank")
+        private String domainRecord;
+        private String name;
+        @NotNull(message = "DNS resolver instance ID cannot be null")
+        private Integer dnsResolverInstanceId;
+        @NotBlank(message = "Record type cannot be blank")
+        private String recordType;
+        @NotNull(message = "Valid status cannot be null")
+        private Boolean valid;
+        private String comment;
+    }
+
 
 }

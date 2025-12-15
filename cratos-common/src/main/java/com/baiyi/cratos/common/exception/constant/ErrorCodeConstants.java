@@ -71,4 +71,6 @@ public interface ErrorCodeConstants {
 
     int ENABLE_VIRTUAL_MFA_ERROR = 62000;
 
+    int TRAFFIC_ROUTE_ERROR = 63000;
+
 }
