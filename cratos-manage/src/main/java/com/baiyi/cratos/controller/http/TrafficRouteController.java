@@ -28,27 +28,27 @@ public class TrafficRouteController {
     private final TrafficRouteFacade trafficRouteFacade;
 
     @Operation(summary = "Pagination query traffic route")
-    @PostMapping(value = "/route/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DataTable<TrafficRouteVO.Route>> queryTrafficRoutePage(
             @RequestBody @Valid TrafficRouteParam.RoutePageQuery pageQuery) {
         return HttpResult.of(trafficRouteFacade.queryRoutePage(pageQuery));
     }
 
     @Operation(summary = "Add traffic route")
-    @PostMapping(value = "/route/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addTrafficRoute(@RequestBody @Valid TrafficRouteParam.AddRoute addRoute) {
         trafficRouteFacade.addTrafficRoute(addRoute);
         return HttpResult.SUCCESS;
     }
 
     @Operation(summary = "Get traffic record target type options")
-    @GetMapping(value = "/route/record/target/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/record/target/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getTrafficRecordTargetTypeOptions() {
         return HttpResult.of(TrafficRecordTargetTypes.toOptions());
     }
 
     @Operation(summary = "Add traffic record target")
-    @PostMapping(value = "/route/record/target/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/record/target/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> addTrafficRecordTarget(
             @RequestBody @Valid TrafficRouteParam.AddRecordTarget addRecordTarget) {
         trafficRouteFacade.addTrafficRecordTarget(addRecordTarget);
