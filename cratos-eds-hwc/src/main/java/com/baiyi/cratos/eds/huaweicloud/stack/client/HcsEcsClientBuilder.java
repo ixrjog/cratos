@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.stack.client;
 
-import com.baiyi.cratos.eds.core.config.EdsHcsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHcsConfigModel;
 import com.huaweicloud.sdk.core.HttpListener;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;

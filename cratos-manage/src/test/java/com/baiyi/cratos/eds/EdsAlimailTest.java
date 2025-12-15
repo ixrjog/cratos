@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.repo.AlimailDepartmentRepo;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;

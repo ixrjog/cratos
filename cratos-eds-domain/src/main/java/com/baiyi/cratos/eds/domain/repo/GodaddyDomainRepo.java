@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.domain.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGodaddyConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGodaddyConfigModel;
 import com.baiyi.cratos.eds.domain.model.GodaddyDomain;
 import com.baiyi.cratos.eds.domain.service.GodaddyDomainService;
 import lombok.RequiredArgsConstructor;

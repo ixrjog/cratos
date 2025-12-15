@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;

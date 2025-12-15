@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.alimail.service;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.baiyi.cratos.eds.alimail.auth.AlimailTokenHolder;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import io.netty.channel.ChannelOption;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

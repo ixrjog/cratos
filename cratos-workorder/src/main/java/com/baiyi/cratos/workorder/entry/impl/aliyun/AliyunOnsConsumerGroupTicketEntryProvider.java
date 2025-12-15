@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

@@ -20,7 +20,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.aws.model.AwsTransferServer;
 import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

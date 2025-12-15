@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.kubernetes.invoker;
 
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.ssh.core.model.KubernetesSession;
 import com.baiyi.cratos.ssh.core.model.KubernetesSessionPool;

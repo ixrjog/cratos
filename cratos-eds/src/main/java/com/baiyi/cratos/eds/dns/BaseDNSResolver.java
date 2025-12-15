@@ -1,11 +1,53 @@
 package com.baiyi.cratos.eds.dns;
 
+import com.baiyi.cratos.common.exception.TrafficRouteException;
+import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
+import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.TrafficRecordTargetService;
+import com.baiyi.cratos.service.TrafficRouteService;
+import lombok.RequiredArgsConstructor;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/12/11 16:11
  * &#064;Version 1.0
  */
-public abstract class BaseDNSResolver implements DNSResolver {
+@RequiredArgsConstructor
+public abstract class BaseDNSResolver<Config extends IEdsConfigModel> implements DNSResolver {
+
+    protected final EdsAssetService edsAssetService;
+    protected final TrafficRouteService trafficRouteService;
+    protected final TrafficRecordTargetService trafficRecordTargetService;
+    protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+
+    protected TrafficRecordTarget getTrafficRecordTargetById(int trafficRecordTargetId) {
+        TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(trafficRecordTargetId);
+        if (trafficRecordTarget == null) {
+            TrafficRouteException.runtime("TrafficRecordTarget 不存在, recordTargetId: {}", trafficRecordTargetId);
+        }
+        return trafficRecordTarget;
+    }
+
+    protected TrafficRoute getTrafficRouteById(int trafficRouteId) {
+        TrafficRoute trafficRoute = trafficRouteService.getById(trafficRouteId);
+        if (trafficRoute == null) {
+            TrafficRouteException.runtime("TrafficRoute 不存在, trafficRouteId: {}", trafficRouteId);
+        }
+        return trafficRoute;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected Config getEdsConfig(TrafficRoute trafficRoute, EdsAssetTypeEnum assetTypeEnum) {
+        EdsInstanceProviderHolder<Config, ?> holder = (EdsInstanceProviderHolder<Config, ?>) edsInstanceProviderHolderBuilder.newHolder(
+                trafficRoute.getDnsResolverInstanceId(), assetTypeEnum.name());
+        return holder.getInstance()
+                .getConfig();
+    }
 
     protected String toFQDN(String domainName) {
         if (domainName == null || domainName.isEmpty()) {

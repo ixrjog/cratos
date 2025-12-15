@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds;
 
-import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcCcmRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcEcsRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcIamRepo;

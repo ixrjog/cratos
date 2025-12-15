@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;

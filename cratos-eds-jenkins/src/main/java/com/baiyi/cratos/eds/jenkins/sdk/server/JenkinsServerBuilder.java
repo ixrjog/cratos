@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.jenkins.sdk.server;
 
 
 
-import com.baiyi.cratos.eds.core.config.EdsJenkinsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsJenkinsConfigModel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

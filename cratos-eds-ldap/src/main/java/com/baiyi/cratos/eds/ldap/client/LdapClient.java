@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.ldap.client;
 
 import com.baiyi.cratos.common.cred.Authorization;
-import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.ldap.factory.LdapFactory;
 import com.baiyi.cratos.eds.ldap.mapper.GroupAttributesMapper;
 import com.baiyi.cratos.eds.ldap.mapper.PersonAttributesMapper;

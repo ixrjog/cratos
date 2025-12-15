@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.zabbix.service.factory;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.util.SpringContextUtils;
-import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
 import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import io.netty.channel.ChannelOption;

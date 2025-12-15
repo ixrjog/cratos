@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.client.provider;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.service.CredentialService;

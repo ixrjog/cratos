@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.kms20160120.AsyncClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

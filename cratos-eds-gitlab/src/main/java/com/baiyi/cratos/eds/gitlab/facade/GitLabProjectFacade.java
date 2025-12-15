@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabProjectRepo;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.AccessLevel;

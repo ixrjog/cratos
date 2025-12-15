@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.EagleCloudEventParam;
-import com.baiyi.cratos.eds.core.config.EdsEagleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsEagleCloudConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

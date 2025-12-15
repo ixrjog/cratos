@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.harbor.service;
 
 import com.baiyi.cratos.domain.constant.Global;
-import com.baiyi.cratos.eds.core.config.EdsHarborConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHarborConfigModel;
 import io.netty.channel.ChannelOption;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

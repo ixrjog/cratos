@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;

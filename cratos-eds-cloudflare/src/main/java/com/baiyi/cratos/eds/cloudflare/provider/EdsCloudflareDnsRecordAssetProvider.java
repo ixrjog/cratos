@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;

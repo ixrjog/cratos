@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.cloudflare.configuration;
 
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
-import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

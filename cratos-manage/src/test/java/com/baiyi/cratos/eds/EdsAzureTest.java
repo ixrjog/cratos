@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.azure.graph.model.GraphDirectoryModel;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.azure.repo.GraphDirectoryRepo;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
-import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import org.junit.jupiter.api.Test;
 

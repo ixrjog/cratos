@@ -6,7 +6,7 @@ import com.aliyuncs.ecs.model.v20140526.DescribeVpcsRequest;
 import com.aliyuncs.ecs.model.v20140526.DescribeVpcsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

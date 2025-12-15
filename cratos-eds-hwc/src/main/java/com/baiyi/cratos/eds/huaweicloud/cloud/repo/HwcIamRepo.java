@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcIamClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.iam.v3.IamClient;

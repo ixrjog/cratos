@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.context;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.ssh.core.model.PodAssetModel;
 
 import java.util.Map;

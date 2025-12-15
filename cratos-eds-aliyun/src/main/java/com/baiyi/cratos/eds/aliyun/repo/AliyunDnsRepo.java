@@ -5,7 +5,7 @@ import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsRequest
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponse;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDnsClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

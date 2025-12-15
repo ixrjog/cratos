@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsElbRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;

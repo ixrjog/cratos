@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.management;
 
 import com.amazonaws.services.ec2.model.*;
 import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

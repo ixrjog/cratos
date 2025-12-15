@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;

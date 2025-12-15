@@ -6,7 +6,7 @@ import com.amazonaws.services.ec2.model.DescribeVolumesResult;
 import com.amazonaws.services.ec2.model.Volume;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
 import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

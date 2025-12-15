@@ -4,7 +4,7 @@ import com.aliyun.dds20151201.models.DescribeDBInstancesRequest;
 import com.aliyun.dds20151201.models.DescribeDBInstancesResponse;
 import com.aliyun.dds20151201.models.DescribeDBInstancesResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDdsClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

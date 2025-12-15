@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
 import com.baiyi.cratos.service.UserService;
 import lombok.AllArgsConstructor;

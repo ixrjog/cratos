@@ -5,7 +5,7 @@ import com.aliyun.sdk.service.domain20180129.models.QueryDomainListRequest;
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListResponse;
 import com.aliyun.sdk.service.domain20180129.models.QueryDomainListResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDomainAsyncClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;

@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.ldap.factory;
 
-import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
 import lombok.NoArgsConstructor;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;

@@ -4,7 +4,7 @@ import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
-import com.baiyi.cratos.eds.core.config.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 

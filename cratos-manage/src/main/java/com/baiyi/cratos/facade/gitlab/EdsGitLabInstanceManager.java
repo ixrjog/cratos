@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.gitlab;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsGitLabConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import lombok.AllArgsConstructor;

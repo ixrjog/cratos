@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.base;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import lombok.extern.slf4j.Slf4j;
 

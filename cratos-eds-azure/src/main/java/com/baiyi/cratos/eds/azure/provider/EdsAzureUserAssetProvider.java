@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;

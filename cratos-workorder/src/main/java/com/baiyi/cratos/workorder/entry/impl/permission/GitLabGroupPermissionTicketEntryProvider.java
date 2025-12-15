@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

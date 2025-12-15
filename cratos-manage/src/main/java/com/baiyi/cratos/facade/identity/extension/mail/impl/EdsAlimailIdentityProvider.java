@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

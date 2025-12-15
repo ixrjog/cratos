@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.config.loader;
 
 import com.baiyi.cratos.eds.core.BaseEdsConfigLoader;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.service.CredentialService;

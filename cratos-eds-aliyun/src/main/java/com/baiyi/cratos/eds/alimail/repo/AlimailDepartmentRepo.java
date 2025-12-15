@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.alimail.repo;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

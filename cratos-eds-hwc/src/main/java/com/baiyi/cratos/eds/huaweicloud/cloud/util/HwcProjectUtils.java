@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.util;
 
-import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;

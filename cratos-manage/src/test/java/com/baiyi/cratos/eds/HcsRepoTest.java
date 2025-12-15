@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds;
 
-import com.baiyi.cratos.eds.core.config.EdsHcsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHcsConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.stack.repo.HcsEcsRepo;
 import org.junit.jupiter.api.Test;
 

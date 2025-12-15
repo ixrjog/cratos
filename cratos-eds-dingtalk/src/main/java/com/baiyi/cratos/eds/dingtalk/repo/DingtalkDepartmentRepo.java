@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.dingtalk.repo;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkDepartmentParam;

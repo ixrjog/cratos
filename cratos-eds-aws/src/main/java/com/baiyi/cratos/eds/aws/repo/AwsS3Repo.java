@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.s3.model.Bucket;
 import com.baiyi.cratos.eds.aws.service.AmazonS3Service;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.NoArgsConstructor;
 
 import java.util.List;

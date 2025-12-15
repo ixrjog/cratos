@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;

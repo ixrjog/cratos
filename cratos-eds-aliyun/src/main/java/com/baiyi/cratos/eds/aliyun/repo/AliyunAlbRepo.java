@@ -4,7 +4,7 @@ import com.aliyun.alb20200616.models.ListLoadBalancersRequest;
 import com.aliyun.alb20200616.models.ListLoadBalancersResponse;
 import com.aliyun.alb20200616.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunAlbClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;

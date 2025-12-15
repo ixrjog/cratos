@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;

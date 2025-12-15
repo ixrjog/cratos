@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.azure.graph.client;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

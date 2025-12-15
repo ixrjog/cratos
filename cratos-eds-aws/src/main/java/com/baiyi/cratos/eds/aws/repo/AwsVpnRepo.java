@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.DescribeVpnConnectionsRequest;
 import com.amazonaws.services.ec2.model.DescribeVpnConnectionsResult;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.NoArgsConstructor;
 

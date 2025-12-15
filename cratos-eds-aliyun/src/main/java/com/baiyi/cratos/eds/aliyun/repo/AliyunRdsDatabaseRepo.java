@@ -4,7 +4,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.rds.model.v20140815.DescribeDatabasesRequest;
 import com.aliyuncs.rds.model.v20140815.DescribeDatabasesResponse;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

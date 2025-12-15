@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.googlecloud.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;

@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;

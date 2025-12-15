@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.EdsCratosConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsCratosConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.azure.repo;
 
 import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
-import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostResponse;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;

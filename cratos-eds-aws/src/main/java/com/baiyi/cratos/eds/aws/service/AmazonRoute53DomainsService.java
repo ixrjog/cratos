@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.route53domains.AmazonRoute53Domains;
 import com.amazonaws.services.route53domains.AmazonRoute53DomainsAsyncClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;

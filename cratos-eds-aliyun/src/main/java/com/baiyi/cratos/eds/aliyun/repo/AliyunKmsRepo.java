@@ -4,7 +4,7 @@ import com.aliyun.sdk.service.kms20160120.AsyncClient;
 import com.aliyun.sdk.service.kms20160120.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunKmsClient;
 import com.baiyi.cratos.eds.aliyun.util.AliyunTagUtils;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

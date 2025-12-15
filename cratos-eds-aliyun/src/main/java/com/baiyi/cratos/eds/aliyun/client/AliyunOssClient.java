@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.gitlab.provider.version;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;

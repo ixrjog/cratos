@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpIAMSettingsBuilder;
 import com.google.cloud.iam.admin.v1.IAMClient;
 import com.google.cloud.iam.admin.v1.IAMSettings;

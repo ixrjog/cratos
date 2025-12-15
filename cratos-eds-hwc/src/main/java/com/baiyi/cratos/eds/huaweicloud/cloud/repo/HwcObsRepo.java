@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcObsClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.obs.v1.ObsClient;

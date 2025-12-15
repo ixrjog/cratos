@@ -2,7 +2,7 @@ package com.baiyi.cratos.arms;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.apps.Deployment;

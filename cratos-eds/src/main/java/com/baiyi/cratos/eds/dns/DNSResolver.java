@@ -1,8 +1,9 @@
 package com.baiyi.cratos.eds.dns;
 
 import com.baiyi.cratos.domain.generator.TrafficRoute;
-import com.baiyi.cratos.eds.core.EdsInstanceTypeOfAnnotate;
 import com.baiyi.cratos.domain.model.DNS;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.eds.core.EdsInstanceTypeOfAnnotate;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.InitializingBean;
 public interface DNSResolver extends EdsInstanceTypeOfAnnotate, InitializingBean {
 
     DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute);
+
+    void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
 
     @Override
     default void afterPropertiesSet() {

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.resource;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.StatusDetails;

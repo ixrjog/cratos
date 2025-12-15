@@ -4,7 +4,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyun.rocketmq20220801.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOnsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

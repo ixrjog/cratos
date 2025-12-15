@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.util;
 
-import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;

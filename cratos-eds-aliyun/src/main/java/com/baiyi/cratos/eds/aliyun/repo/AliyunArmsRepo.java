@@ -5,7 +5,7 @@ import com.aliyun.sdk.service.arms20190808.models.ListTraceAppsRequest;
 import com.aliyun.sdk.service.arms20190808.models.ListTraceAppsResponse;
 import com.aliyun.sdk.service.arms20190808.models.ListTraceAppsResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunArmsClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

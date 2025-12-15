@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.ecr.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonEcrService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;

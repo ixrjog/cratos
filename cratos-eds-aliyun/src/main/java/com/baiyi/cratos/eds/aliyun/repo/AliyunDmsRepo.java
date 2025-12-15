@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDmsClient;
 import com.baiyi.cratos.eds.aliyun.client.MyDmsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunDms;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsRepoException;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;

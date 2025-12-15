@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.client;
 
-import com.baiyi.cratos.eds.core.config.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.cred.HuaweicloudCredentialsBuilder;
 import com.huaweicloud.sdk.ccm.v1.CcmClient;
 import com.huaweicloud.sdk.ccm.v1.region.CcmRegion;

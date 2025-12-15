@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.harbor.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsHarborConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsHarborConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;

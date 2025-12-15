@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds;
 
 import com.amazonaws.services.cloudwatch.model.*;
 import com.baiyi.cratos.eds.aws.repo.AwsCloudWatchRepo;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 

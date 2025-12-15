@@ -19,8 +19,8 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

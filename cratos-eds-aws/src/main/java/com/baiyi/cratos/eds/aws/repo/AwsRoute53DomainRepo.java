@@ -4,7 +4,7 @@ import com.amazonaws.services.route53domains.model.DomainSummary;
 import com.amazonaws.services.route53domains.model.ListDomainsRequest;
 import com.amazonaws.services.route53domains.model.ListDomainsResult;
 import com.baiyi.cratos.eds.aws.service.AmazonRoute53DomainsService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;

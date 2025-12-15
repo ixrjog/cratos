@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;

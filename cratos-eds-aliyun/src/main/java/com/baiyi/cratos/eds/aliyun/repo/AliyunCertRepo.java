@@ -4,7 +4,7 @@ import com.aliyun.cas20200407.Client;
 import com.aliyun.cas20200407.models.*;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOpenapiClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.query.EdsRepoData;
 import com.baiyi.cratos.eds.core.query.EdsRepoPageQuery;
 import com.google.common.collect.Lists;

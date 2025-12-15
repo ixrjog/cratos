@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.istio;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import io.fabric8.istio.client.IstioClient;
 import lombok.NoArgsConstructor;
 

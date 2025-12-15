@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.azure.repo;
 
 import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
 import com.baiyi.cratos.eds.azure.graph.model.GraphDirectoryModel;
-import com.baiyi.cratos.eds.core.config.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.microsoft.graph.models.DirectoryRole;
 import com.microsoft.graph.models.DirectoryRoleCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;

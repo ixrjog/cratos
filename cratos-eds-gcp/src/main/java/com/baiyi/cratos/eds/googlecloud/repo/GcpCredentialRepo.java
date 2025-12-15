@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpCertificateManagerSettingsBuilder;
 import com.google.api.client.util.Lists;
 import com.google.cloud.certificatemanager.v1.*;

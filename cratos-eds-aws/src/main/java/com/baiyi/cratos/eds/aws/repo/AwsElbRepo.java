@@ -5,7 +5,7 @@ import com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancers
 import com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancersResult;
 import com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer;
 import com.baiyi.cratos.eds.aws.service.AmazonElbService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;

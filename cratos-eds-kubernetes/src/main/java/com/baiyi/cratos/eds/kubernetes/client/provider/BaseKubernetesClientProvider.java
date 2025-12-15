@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.provider;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientProviderFactory;
 import io.fabric8.kubernetes.client.KubernetesClient;

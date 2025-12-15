@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.domain.repo;
 
-import com.baiyi.cratos.eds.core.config.EdsGandiConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGandiConfigModel;
 import com.baiyi.cratos.eds.domain.model.GandiDomain;
 import com.baiyi.cratos.eds.domain.service.GandiDomainService;
 import lombok.RequiredArgsConstructor;

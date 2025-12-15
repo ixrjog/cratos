@@ -16,8 +16,8 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesPara
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;

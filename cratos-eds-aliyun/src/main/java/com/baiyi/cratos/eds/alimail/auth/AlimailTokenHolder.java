@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.alimail.auth;
 
 import com.baiyi.cratos.eds.alimail.model.AlimailToken;
-import com.baiyi.cratos.eds.core.config.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;

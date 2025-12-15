@@ -6,7 +6,7 @@ import com.aliyuncs.rds.model.v20140815.DescribeDBInstanceAttributeResponse;
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstancesRequest;
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstancesResponse;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.certificatemanager.AWSCertificateManager;
 import com.amazonaws.services.certificatemanager.AWSCertificateManagerClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;

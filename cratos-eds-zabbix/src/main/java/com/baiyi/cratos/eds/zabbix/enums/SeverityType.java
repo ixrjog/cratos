@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.enums;
 
-import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.opscloud.service;
 
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import io.netty.channel.ChannelOption;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;

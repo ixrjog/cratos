@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;

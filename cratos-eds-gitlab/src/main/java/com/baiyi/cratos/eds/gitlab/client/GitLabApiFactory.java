@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.client;
 
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import lombok.NoArgsConstructor;
 import org.gitlab4j.api.GitLabApi;
 

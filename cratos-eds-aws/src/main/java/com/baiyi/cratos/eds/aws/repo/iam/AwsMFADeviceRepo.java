@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo.iam;
 
 import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.RetryException;

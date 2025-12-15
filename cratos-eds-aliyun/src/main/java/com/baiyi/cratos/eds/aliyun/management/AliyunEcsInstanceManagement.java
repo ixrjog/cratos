@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.management;
 import com.aliyuncs.ecs.model.v20140526.*;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

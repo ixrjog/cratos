@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 

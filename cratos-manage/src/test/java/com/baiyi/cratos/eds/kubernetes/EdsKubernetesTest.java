@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;

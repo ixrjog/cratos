@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;

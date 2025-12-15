@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;

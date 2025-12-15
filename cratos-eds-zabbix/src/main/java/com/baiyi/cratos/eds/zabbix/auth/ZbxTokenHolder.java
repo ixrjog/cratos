@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.auth;
 
-import com.baiyi.cratos.eds.core.config.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import com.baiyi.cratos.eds.zabbix.request.ZbxAuthRequest;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
 import com.baiyi.cratos.eds.zabbix.service.ZbxAuthService;

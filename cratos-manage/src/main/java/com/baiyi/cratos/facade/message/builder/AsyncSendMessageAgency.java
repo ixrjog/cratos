@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.message.builder;
 
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.config.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkMessageParam;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
 import lombok.extern.slf4j.Slf4j;

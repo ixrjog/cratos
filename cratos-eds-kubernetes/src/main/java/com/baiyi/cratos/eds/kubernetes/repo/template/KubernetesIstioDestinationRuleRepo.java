@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.template;
 
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.istio.IstioClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import io.fabric8.istio.api.networking.v1alpha3.DestinationRule;

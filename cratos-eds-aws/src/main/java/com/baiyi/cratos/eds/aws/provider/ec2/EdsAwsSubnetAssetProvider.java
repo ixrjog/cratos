@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsVpcRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;

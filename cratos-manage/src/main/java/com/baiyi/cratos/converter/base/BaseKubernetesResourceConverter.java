@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.converter.KubernetesResourceConverter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;

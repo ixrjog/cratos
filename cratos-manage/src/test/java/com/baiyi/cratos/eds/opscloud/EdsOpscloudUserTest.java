@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserPermissionRepo;

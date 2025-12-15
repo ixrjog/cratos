@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
-import com.baiyi.cratos.eds.core.config.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabGroupRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;

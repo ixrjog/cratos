@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.jenkins.sdk.util;
 
 
 import com.baiyi.cratos.common.cred.Authorization;
-import com.baiyi.cratos.eds.core.config.EdsJenkinsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsJenkinsConfigModel;
 
 /**
  * @Author baiyi

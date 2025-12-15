@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.model.AwsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -4,7 +4,7 @@ import com.amazonaws.services.certificatemanager.model.CertificateSummary;
 import com.amazonaws.services.certificatemanager.model.ListCertificatesRequest;
 import com.amazonaws.services.certificatemanager.model.ListCertificatesResult;
 import com.baiyi.cratos.eds.aws.service.AmazonAcmService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;

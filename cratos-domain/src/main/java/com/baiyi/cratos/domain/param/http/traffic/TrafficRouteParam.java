@@ -126,5 +126,14 @@ public class TrafficRouteParam {
         private String comment;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class SwitchRecordTarget {
+        @NotNull
+        private Integer recordTargetId;
+        @NotBlank(message = "RoutingOptions cannot be blank")
+        private String routingOptions;
+    }
 
 }

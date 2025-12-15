@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds;
 
 import com.amazonaws.services.route53.model.ResourceRecordSet;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.facade.EdsFacade;

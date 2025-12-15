@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.ldap.util;
 
-import com.baiyi.cratos.eds.core.config.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
 import com.baiyi.cratos.eds.ldap.model.LdapGroup;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.google.common.base.Joiner;

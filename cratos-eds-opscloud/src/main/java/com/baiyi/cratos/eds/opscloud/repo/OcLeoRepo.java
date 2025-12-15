@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.opscloud.repo;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.eds.core.config.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.model.OcLeoVO;
 import com.baiyi.cratos.eds.opscloud.param.OcLeoParam;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudService;

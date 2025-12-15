@@ -1,20 +1,20 @@
 package com.baiyi.cratos.eds.dns.impl;
 
-import com.amazonaws.services.route53.model.HostedZone;
 import com.amazonaws.services.route53.model.ResourceRecordSet;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.model.DNS;
+import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
-import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.service.EdsAssetService;
-import lombok.RequiredArgsConstructor;
+import com.baiyi.cratos.service.TrafficRecordTargetService;
+import com.baiyi.cratos.service.TrafficRouteService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -26,12 +26,14 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
-@RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS)
-public class AwsRoute53Resolver extends BaseDNSResolver {
+public class AwsRoute53Resolver extends BaseDNSResolver<EdsAwsConfigModel.Aws> {
 
-    private final EdsAssetService edsAssetService;
-    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+    public AwsRoute53Resolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
+                              TrafficRecordTargetService trafficRecordTargetService,
+                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+        super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsInstanceProviderHolderBuilder);
+    }
 
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
@@ -41,11 +43,16 @@ public class AwsRoute53Resolver extends BaseDNSResolver {
             return DNS.ResourceRecordSet.NO_DATA;
         }
         // 获取 AWS 配置
-        EdsAwsConfigModel.Aws config = getAwsConfig(trafficRoute);
+        EdsAwsConfigModel.Aws config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.AWS_HOSTED_ZONE);
         // 查询 DNS 记录
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
         // 查找匹配的记录
         return findMatchingRecord(resourceRecordSets, trafficRoute);
+    }
+
+    @Override
+    public void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
+
     }
 
     private String getHostedZoneId(TrafficRoute trafficRoute) {
@@ -54,14 +61,6 @@ public class AwsRoute53Resolver extends BaseDNSResolver {
                 trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.AWS_HOSTED_ZONE.name(), domainFqdn, false);
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();
-    }
-
-    @SuppressWarnings("unchecked")
-    private EdsAwsConfigModel.Aws getAwsConfig(TrafficRoute trafficRoute) {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, HostedZone> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, HostedZone>) edsInstanceProviderHolderBuilder.newHolder(
-                trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.AWS_HOSTED_ZONE.name());
-        return holder.getInstance()
-                .getConfig();
     }
 
     private DNS.ResourceRecordSet findMatchingRecord(List<ResourceRecordSet> resourceRecordSets,

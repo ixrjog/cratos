@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.eaglecloud;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsEagleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsEagleCloudConfigModel;
 import com.baiyi.cratos.eds.core.config.loader.EagleCloudSaseConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import lombok.AllArgsConstructor;

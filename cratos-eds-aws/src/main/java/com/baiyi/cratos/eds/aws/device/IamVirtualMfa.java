@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.device;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
