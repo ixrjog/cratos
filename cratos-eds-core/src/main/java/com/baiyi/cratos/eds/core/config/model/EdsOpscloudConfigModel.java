@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.core.config;
+package com.baiyi.cratos.eds.core.config.model;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
@@ -10,22 +10,20 @@ import static lombok.AccessLevel.PRIVATE;
 
 /**
  * &#064;Author  baiyi
- * &#064;Date  2024/12/12 11:27
+ * &#064;Date  2024/12/2 10:38
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class EdsJenkinsConfigModel {
+public class EdsOpscloudConfigModel {
 
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Jenkins implements IEdsConfigModel {
-        private String version;
+    public static class Opscloud implements IEdsConfigModel {
+        private final String version = "4";
         private String url;
-        private String ip;
+        @Schema(description = "凭据")
         private Cred cred;
-        private Security security;
-        private String name;
         private EdsInstance edsInstance;
     }
 
@@ -33,15 +31,7 @@ public class EdsJenkinsConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Cred {
-        private String username;
-        private String token;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Security {
-        private Boolean crumbFlag;
+        private String accessToken;
     }
 
 }

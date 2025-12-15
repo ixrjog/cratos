@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.core.config;
+package com.baiyi.cratos.eds.core.config.model;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
