@@ -23,7 +23,7 @@ import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.AssetUtils;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.core.util.ConfigUtils;
+import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -294,7 +294,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     protected C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsInstanceAssetProvider.class, 0);
-        return ConfigUtils.loadAs(configContent, clazz);
+        return EdsConfigUtils.loadAs(configContent, clazz);
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.core.util.ConfigUtils;
+import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -61,7 +61,7 @@ public abstract class BaseEdsConfigLoader<C extends HasEdsConfig> {
     private C configLoadAs(String configContent) {
         // Get the entity type of generic `C`
         Class<C> clazz = Generics.find(this.getClass(), BaseEdsConfigLoader.class, 0);
-        return ConfigUtils.loadAs(configContent, clazz);
+        return EdsConfigUtils.loadAs(configContent, clazz);
     }
 
     private C wrapConfig(EdsConfig edsConfig, C config) {

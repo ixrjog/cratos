@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.core.util.ConfigUtils;
+import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -108,7 +108,7 @@ public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Com
     protected Config configLoadAs(String configContent) {
         // Get the entity type of generic `Config`
         Class<Config> clazz = Generics.find(this.getClass(), BaseCloudComputerOperator.class, 0);
-        return ConfigUtils.loadAs(configContent, clazz);
+        return EdsConfigUtils.loadAs(configContent, clazz);
     }
 
 }
