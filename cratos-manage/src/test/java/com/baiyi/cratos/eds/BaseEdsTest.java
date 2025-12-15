@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.ConfigUtils;
@@ -22,7 +22,7 @@ import jakarta.annotation.Resource;
  * @Date 2024/3/4 10:24
  * @Version 1.0
  */
-public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
+public class BaseEdsTest<C extends HasEdsConfig> extends BaseUnit {
 
     @Resource
     private EdsInstanceProviderHolderBuilder holderBuilder;

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.core.builder;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.config.base.HasRegionId;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 
 import java.time.OffsetDateTime;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * @Date 2024/2/28 10:15
  * @Version 1.0
  */
-public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
+public class EdsAssetBuilder<C extends HasEdsConfig, A> {
 
     private final EdsAsset edsAsset;
 
@@ -29,7 +29,7 @@ public class EdsAssetBuilder<C extends IEdsConfigModel, A> {
                 .build();
     }
 
-    public static <C extends IEdsConfigModel, A> EdsAssetBuilder<C, A> newBuilder(
+    public static <C extends HasEdsConfig, A> EdsAssetBuilder<C, A> newBuilder(
             ExternalDataSourceInstance<C> instance, A entity) {
         return new EdsAssetBuilder<>(instance, entity);
     }

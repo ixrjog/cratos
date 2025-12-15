@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.ConfigUtils;
 import com.baiyi.cratos.service.CredentialService;
@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("All")
 @RequiredArgsConstructor
-public abstract class BaseCloudComputerOperator<Config extends IEdsConfigModel, Computer> implements HasCloudComputerOperator<Config, Computer> {
+public abstract class BaseCloudComputerOperator<Config extends HasEdsConfig, Computer> implements HasCloudComputerOperator<Config, Computer> {
 
     private final EdsInstanceService edsInstanceService;
     private final EdsConfigService edsConfigService;

@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.base.HasDnsNameServers;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.config.model.*;
 import com.google.common.base.Joiner;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +30,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Aliyun implements HasRegionsModel, IEdsConfigModel {
+    public static class Aliyun implements HasRegionsModel, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -55,7 +55,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Alimail implements IEdsConfigModel {
+    public static class Alimail implements HasEdsConfig {
         private String version;
         @Schema(description = "凭据")
         private EdsAlimailConfigModel.Cred cred;
@@ -67,7 +67,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Aws implements HasRegionsModel, IEdsConfigModel {
+    public static class Aws implements HasRegionsModel, HasEdsConfig {
         private EdsAwsConfigModel.Cred cred;
         private String regionId;
         private Set<String> regionIds;
@@ -79,7 +79,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Azure implements IEdsConfigModel {
+    public static class Azure implements HasEdsConfig {
         private EdsAzureConfigModel.Cred cred;
         private EdsAzureConfigModel.Login login;
         private EdsInstance edsInstance;
@@ -88,7 +88,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Cloudflare implements IEdsConfigModel {
+    public static class Cloudflare implements HasEdsConfig {
         @Schema(description = "凭据")
         private EdsCloudflareConfigModel.Cred cred;
         private EdsInstance edsInstance;
@@ -97,7 +97,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Cratos implements  IEdsConfigModel {
+    public static class Cratos implements HasEdsConfig {
         private String version;
         private EdsInstance edsInstance;
     }
@@ -105,7 +105,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Dingtalk implements IEdsConfigModel {
+    public static class Dingtalk implements HasEdsConfig {
         private String version;
         private String url;
         private String company;
@@ -117,7 +117,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Robot implements IEdsConfigModel {
+    public static class Robot implements HasEdsConfig {
         private String token;
         private String desc;
         private EdsInstance edsInstance;
@@ -126,7 +126,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema(description = "gandi.net")
-    public static class Gandi implements HasDnsNameServers, IEdsConfigModel {
+    public static class Gandi implements HasDnsNameServers, HasEdsConfig {
         @Schema(description = "凭据")
         private EdsGandiConfigModel.Cred cred;
         private List<String> nameServers;
@@ -135,7 +135,7 @@ public class EdsConfigs {
 
     @Data
     @NoArgsConstructor
-    public static class Gcp implements IEdsConfigModel {
+    public static class Gcp implements HasEdsConfig {
         private EdsGcpConfigModel.Project project;
         private EdsInstance edsInstance;
         private EdsGcpConfigModel.Certificate certificate;
@@ -144,7 +144,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class GitLab implements IEdsConfigModel {
+    public static class GitLab implements HasEdsConfig {
         private EdsGitLabConfigModel.Api api;
         private EdsGitLabConfigModel.SystemHooks systemHooks;
         private EdsGitLabConfigModel.GitFlow gitFlow;
@@ -156,7 +156,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema(description = "godaddy.com")
-    public static class Godaddy implements HasDnsNameServers, IEdsConfigModel {
+    public static class Godaddy implements HasDnsNameServers, HasEdsConfig {
         @Schema(description = "凭据")
         private EdsGodaddyConfigModel.Cred cred;
         private String customerId;
@@ -167,7 +167,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Harbor implements IEdsConfigModel {
+    public static class Harbor implements HasEdsConfig {
         private String version;
         private String url;
         @Schema(description = "凭据")
@@ -186,7 +186,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Hcs implements HasRegionsModel, IEdsConfigModel {
+    public static class Hcs implements HasRegionsModel, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -201,7 +201,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Hwc implements HasRegionsModel, IEdsConfigModel {
+    public static class Hwc implements HasRegionsModel, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -216,7 +216,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Jenkins implements IEdsConfigModel {
+    public static class Jenkins implements HasEdsConfig {
         private String version;
         private String url;
         private String ip;
@@ -229,7 +229,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Kubernetes implements IEdsConfigModel {
+    public static class Kubernetes implements HasEdsConfig {
         private String version;
         private String provider;
         @Schema(description = "Amazon EKS cred")
@@ -242,7 +242,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Ldap implements IEdsConfigModel {
+    public static class Ldap implements HasEdsConfig {
         private String url;
         private String base;
         private EdsLdapConfigModel.LdapManage manager; // 管理员账户
@@ -266,7 +266,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Opscloud implements IEdsConfigModel {
+    public static class Opscloud implements HasEdsConfig {
         private final String version = "4";
         private String url;
         @Schema(description = "凭据")
@@ -277,7 +277,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Zabbix implements IEdsConfigModel {
+    public static class Zabbix implements HasEdsConfig {
         private String version;
         private String url;
         @Schema(description = "凭据")
@@ -294,7 +294,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Sase implements IEdsConfigModel {
+    public static class Sase implements HasEdsConfig {
         private EdsEagleCloudConfigModel.Cred cred;
         // 安全管理员
         private List<EdsEagleCloudConfigModel.SecurityAdministrator> securityAdministrators;

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.support;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ExternalDataSourceInstance<Config extends IEdsConfigModel> {
+public class ExternalDataSourceInstance<Config extends HasEdsConfig> {
 
     EdsInstance edsInstance;
 

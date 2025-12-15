@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core;
 
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -19,7 +19,7 @@ import java.util.Set;
  * &#064;Date  2024/6/3 下午2:07
  * &#064;Version 1.0
  */
-public abstract class BaseHasNamespaceEdsAssetProvider<C extends IEdsConfigModel, A> extends BaseMultipleSourcesEdsAssetProvider<C, A> {
+public abstract class BaseHasNamespaceEdsAssetProvider<C extends HasEdsConfig, A> extends BaseMultipleSourcesEdsAssetProvider<C, A> {
 
     public BaseHasNamespaceEdsAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,

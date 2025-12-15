@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.util;
 
 import com.baiyi.cratos.domain.YamlUtils;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.gson.JsonSyntaxException;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public final class ConfigUtils {
      * @param <C>
      * @return
      */
-    public static <C extends IEdsConfigModel> C loadAs(String yaml, Class<C> targetClass) {
+    public static <C extends HasEdsConfig> C loadAs(String yaml, Class<C> targetClass) {
         if (StringUtils.isEmpty(yaml)) {
             throw new EdsConfigException("The eds config file is empty.");
         }

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.util.Generics;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
  * &#064;Version 1.0
  */
 @AllArgsConstructor
-public abstract class BaseEdsConfigLoader<C extends IEdsConfigModel> {
+public abstract class BaseEdsConfigLoader<C extends HasEdsConfig> {
 
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final EdsInstanceService edsInstanceService;

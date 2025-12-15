@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.core.version;
 
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceVersionProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceVersionProviderHolder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
@@ -22,7 +22,7 @@ public class EdsInstanceVersionProviderFactory {
 
     private static final Map<String, IEdsInstanceVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends IEdsConfigModel> void register(IEdsInstanceVersionProvider<Config> providerBean) {
+    public static <Config extends HasEdsConfig> void register(IEdsInstanceVersionProvider<Config> providerBean) {
         log.info("EdsInstanceVersionProviderFactory Registered: instanceType={}", providerBean.getInstanceType());
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
@@ -32,13 +32,13 @@ public class EdsInstanceVersionProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends IEdsConfigModel> IEdsInstanceVersionProvider<Config> getVersionProvider(
+    public static <Config extends HasEdsConfig> IEdsInstanceVersionProvider<Config> getVersionProvider(
             String instanceType) {
         return (IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends IEdsConfigModel> EdsInstanceVersionProviderHolder<Config> buildHolder(
+    public static <Config extends HasEdsConfig> EdsInstanceVersionProviderHolder<Config> buildHolder(
             ExternalDataSourceInstance<Config> instance) throws EdsInstanceVersionProviderException {
         String instanceType = instance.getEdsInstance()
                 .getEdsType();

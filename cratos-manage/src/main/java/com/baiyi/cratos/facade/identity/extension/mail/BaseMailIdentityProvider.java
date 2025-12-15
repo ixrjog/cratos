@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -32,7 +32,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseMailIdentityProvider<Config extends IEdsConfigModel, Account> implements MailIdentityProvider, InitializingBean {
+public abstract class BaseMailIdentityProvider<Config extends HasEdsConfig, Account> implements MailIdentityProvider, InitializingBean {
 
     private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;

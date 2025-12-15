@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.util.Generics;
 import com.baiyi.cratos.eds.core.annotation.EdsTaskLock;
 import com.baiyi.cratos.eds.core.builder.EdsAssetBuilder;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
 import com.baiyi.cratos.eds.core.exception.EdsAssetException;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 @Slf4j
 @AllArgsConstructor
-public abstract class BaseEdsInstanceAssetProvider<C extends IEdsConfigModel, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
+public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> implements EdsInstanceAssetProvider<C, A>, InitializingBean {
 
     private final EdsAssetService edsAssetService;
     private final SimpleEdsFacade simpleEdsFacade;

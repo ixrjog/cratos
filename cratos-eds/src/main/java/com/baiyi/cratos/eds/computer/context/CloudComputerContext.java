@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.computer.context;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class CloudComputerContext<Config extends IEdsConfigModel> {
+public class CloudComputerContext<Config extends HasEdsConfig> {
 
     private EdsAsset asset;
     private EdsInstance edsInstance;

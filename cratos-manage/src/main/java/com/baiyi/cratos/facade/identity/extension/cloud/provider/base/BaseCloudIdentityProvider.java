@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.facade.identity.extension.cloud.CloudIdentityFactory;
@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, Account> implements CloudIdentityProvider, InitializingBean {
+public abstract class BaseCloudIdentityProvider<Config extends HasEdsConfig, Account> implements CloudIdentityProvider, InitializingBean {
 
     private final EdsInstanceService edsInstanceService;
     protected final EdsAssetService edsAssetService;

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.core;
 
 import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.core.exception.EdsInstanceProviderException;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -31,18 +31,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EdsInstanceProviderFactory {
 
-    private static final Map<String, Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends IEdsConfigModel, Asset> void register(
+    public static <Config extends HasEdsConfig, Asset> void register(
             EdsInstanceAssetProvider<Config, Asset> providerBean) {
         log.info("EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(),
                 providerBean.getAssetType());
         if (CONTEXT.containsKey(providerBean.getInstanceType())) {
-            Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = CONTEXT.get(
+            Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = CONTEXT.get(
                     providerBean.getInstanceType());
             providerMap.put(providerBean.getAssetType(), providerBean);
         } else {
-            Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = Maps.newHashMap();
+            Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = Maps.newHashMap();
             providerMap.put(providerBean.getAssetType(), providerBean);
             CONTEXT.put(providerBean.getInstanceType(), providerMap);
         }
@@ -54,8 +54,8 @@ public class EdsInstanceProviderFactory {
                 .assetLoadAs(asset.getOriginalModel());
     }
 
-    public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, String assetType,
-                                                                        EdsConfig edsConfig) {
+    public static <Config extends HasEdsConfig> Config produceConfig(String instanceType, String assetType,
+                                                                     EdsConfig edsConfig) {
         return (Config) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .configLoadAs(edsConfig);
@@ -68,14 +68,14 @@ public class EdsInstanceProviderFactory {
      * @return
      */
     public static Set<String> getInstanceAssetTypes(String instanceType) {
-        Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
+        Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
                 instanceType);
         return pMap != null ? pMap.keySet() : Sets.newHashSet();
     }
 
-    public static <Config extends IEdsConfigModel> Config produceConfig(String instanceType, EdsConfig edsConfig) {
+    public static <Config extends HasEdsConfig> Config produceConfig(String instanceType, EdsConfig edsConfig) {
         try {
-            Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
+            Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> pMap = EdsInstanceProviderFactory.CONTEXT.get(
                     instanceType);
             for (String assetType : pMap.keySet()) {
                 return (Config) pMap.get(assetType)
@@ -91,7 +91,7 @@ public class EdsInstanceProviderFactory {
         if (!EdsInstanceProviderFactory.CONTEXT.containsKey(instanceType)) {
             return;
         }
-        Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = EdsInstanceProviderFactory.CONTEXT.get(
+        Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = EdsInstanceProviderFactory.CONTEXT.get(
                 instanceType);
         providerMap.keySet()
                 .stream()
@@ -109,14 +109,14 @@ public class EdsInstanceProviderFactory {
      * @param <Asset>
      * @return
      */
-    public static <Config extends IEdsConfigModel, Asset> EdsInstanceProviderHolder<Config, Asset> buildHolder(
+    public static <Config extends HasEdsConfig, Asset> EdsInstanceProviderHolder<Config, Asset> buildHolder(
             ExternalDataSourceInstance<Config> instance, String assetType) {
         final String instanceType = instance.getEdsInstance()
                 .getEdsType();
         if (!CONTEXT.containsKey(instanceType)) {
             EdsInstanceProviderException.runtime("No available provider: instanceType={}.", instanceType);
         }
-        Map<String, EdsInstanceAssetProvider<? extends IEdsConfigModel, ?>> providerMap = CONTEXT.get(instanceType);
+        Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = CONTEXT.get(instanceType);
         if (!providerMap.containsKey(assetType)) {
             EdsInstanceProviderException.runtime("No available provider: instanceType={}, assetType={}.", instanceType,
                     assetType);

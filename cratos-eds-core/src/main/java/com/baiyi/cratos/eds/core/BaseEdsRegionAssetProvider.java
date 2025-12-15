@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.core;
 
 import com.baiyi.cratos.eds.core.config.base.HasRegionId;
 import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -26,7 +26,7 @@ import java.util.Set;
  * &#064;Version 1.0
  */
 @Slf4j
-public abstract class BaseEdsRegionAssetProvider<Config extends HasRegionsModel & IEdsConfigModel, Asset extends HasRegionId> extends BaseEdsInstanceAssetProvider<Config, Asset> {
+public abstract class BaseEdsRegionAssetProvider<Config extends HasRegionsModel & HasEdsConfig, Asset extends HasRegionId> extends BaseEdsInstanceAssetProvider<Config, Asset> {
     
     public BaseEdsRegionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.dns;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
+import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseDNSResolver<Config extends IEdsConfigModel> implements DNSResolver {
+public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DNSResolver {
 
     protected final EdsAssetService edsAssetService;
     protected final TrafficRouteService trafficRouteService;
