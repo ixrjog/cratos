@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.zabbix.provider.version;
 
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX)
-public class EdsZbxInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsZabbixConfigModel.Zabbix> {
+public class EdsZbxInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsConfigs.Zabbix> {
 
     @Override
-    public String getVersion(ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) {
-        return ZbxInfoUtils.getVersion(instance.getEdsConfigModel());
+    public String getVersion(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance) {
+        return ZbxInfoUtils.getVersion(instance.getConfig());
     }
 
 }

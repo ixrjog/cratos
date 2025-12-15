@@ -17,14 +17,14 @@ import java.util.Optional;
  * &#064;Date  2025/7/25 13:38
  * &#064;Version 1.0
  */
-public class EdsAliyunTest extends BaseEdsTest<EdsAliyunConfigModel.Aliyun> {
+public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
 
     @Resource
     private AliyunTagRepo aliyunTagRepo;
 
     @Test
     void test2() {
-        EdsAliyunConfigModel.Aliyun aliyun = getConfig(2);
+        EdsConfigs.Aliyun aliyun = getConfig(2);
         Optional<GetSecretValueResponseBody> opt = AliyunKmsRepo.getSecretValue(
                 "kms.eu-central-1.aliyuncs.com", aliyun,
                 "acs:kms:eu-central-1:1859120988191686:secret/daily_finance-switch-channel_selcom_palmpay_secretKey"
@@ -34,7 +34,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsAliyunConfigModel.Aliyun> {
 
     @Test
     void test3() {
-        EdsAliyunConfigModel.Aliyun aliyun = getConfig(2);
+        EdsConfigs.Aliyun aliyun = getConfig(2);
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
                 aliyun, "palmpay-inc.com");
         System.out.println(records);

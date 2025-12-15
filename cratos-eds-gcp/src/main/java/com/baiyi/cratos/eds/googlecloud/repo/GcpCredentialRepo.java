@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpCertificateManagerSettingsBuilder;
 import com.google.api.client.util.Lists;
 import com.google.cloud.certificatemanager.v1.*;
@@ -24,7 +24,7 @@ public class GcpCredentialRepo {
     private static final int PAGE_SIZE = 10;
 
     public List<Certificate> listCertificates(String location,
-                                              EdsGcpConfigModel.Gcp googleCloud) throws IOException {
+                                              EdsConfigs.Gcp googleCloud) throws IOException {
         CertificateManagerSettings settings = googleCredentialsBuilder.buildCertificateManagerSettings(googleCloud);
         LocationName locationName = LocationName.of(googleCloud.getProject()
                 .getId(), location);

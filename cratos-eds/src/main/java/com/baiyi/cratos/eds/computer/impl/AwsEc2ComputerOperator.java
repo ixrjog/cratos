@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_EC2)
-public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsAwsConfigModel.Aws, com.amazonaws.services.ec2.model.Instance> {
+public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsConfigs.Aws, com.amazonaws.services.ec2.model.Instance> {
 
     private final AwsEc2Repo awsEc2Repo;
 
@@ -42,7 +42,7 @@ public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsAwsConf
      */
     @Override
     protected String rebootInstance(
-            CloudComputerContext<EdsAwsConfigModel.Aws> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aws> context) throws CloudComputerOperationException {
         return awsEc2Repo.rebootInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
 
@@ -55,7 +55,7 @@ public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsAwsConf
      */
     @Override
     protected String startInstance(
-            CloudComputerContext<EdsAwsConfigModel.Aws> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aws> context) throws CloudComputerOperationException {
         return awsEc2Repo.startInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
 
@@ -68,7 +68,7 @@ public class AwsEc2ComputerOperator extends BaseCloudComputerOperator<EdsAwsConf
      */
     @Override
     protected String stopInstance(
-            CloudComputerContext<EdsAwsConfigModel.Aws> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aws> context) throws CloudComputerOperationException {
         return awsEc2Repo.stopInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
 

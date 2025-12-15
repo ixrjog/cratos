@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.Namespace;
@@ -27,7 +28,7 @@ public class KubernetesNamespaceRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public List<Namespace> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public List<Namespace> list(EdsConfigs.Kubernetes kubernetes) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             NamespaceList namespaceList = kc.namespaces()
                     .list();
@@ -41,7 +42,7 @@ public class KubernetesNamespaceRepo {
         }
     }
 
-    public Namespace get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+    public Namespace get(EdsConfigs.Kubernetes kubernetes, String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.namespaces()
                     .withName(namespace)
@@ -52,9 +53,9 @@ public class KubernetesNamespaceRepo {
         }
     }
 
-    private boolean filter(EdsKubernetesConfigModel.Kubernetes kubernetes, Namespace namespace) {
+    private boolean filter(EdsConfigs.Kubernetes kubernetes, Namespace namespace) {
         List<String> namespaceExclude = Optional.of(kubernetes)
-                .map(EdsKubernetesConfigModel.Kubernetes::getFilter)
+                .map(EdsConfigs.Kubernetes::getFilter)
                 .map(EdsKubernetesConfigModel.Filter::getNamespace)
                 .map(EdsKubernetesConfigModel.Namespace::getExclude)
                 .orElse(Collections.emptyList());

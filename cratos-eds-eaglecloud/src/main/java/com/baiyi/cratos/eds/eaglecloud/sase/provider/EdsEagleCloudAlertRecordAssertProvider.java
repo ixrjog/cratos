@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.eaglecloud.sase.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsEagleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.EAGLECLOUD_SASE, assetTypeOf = EdsAssetTypeEnum.EAGLECLOUD_SASE_DATA_SECURITY_ALERT_RECORD)
-public class EdsEagleCloudAlertRecordAssertProvider extends BaseEdsInstanceAssetProvider<EdsEagleCloudConfigModel.Sase, EagleCloudModel.AlertRecord> {
+public class EdsEagleCloudAlertRecordAssertProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Sase, EagleCloudModel.AlertRecord> {
 
     public EdsEagleCloudAlertRecordAssertProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                   CredentialService credentialService,
@@ -41,12 +41,12 @@ public class EdsEagleCloudAlertRecordAssertProvider extends BaseEdsInstanceAsset
 
     @Override
     protected List<EagleCloudModel.AlertRecord> listEntities(
-            ExternalDataSourceInstance<EdsEagleCloudConfigModel.Sase> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Sase> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported.");
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsEagleCloudConfigModel.Sase> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
                                          EagleCloudModel.AlertRecord entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getEventId())
                 .nameOf(entity.getName())

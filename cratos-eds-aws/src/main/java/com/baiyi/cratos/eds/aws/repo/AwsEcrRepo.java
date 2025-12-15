@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.ecr.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonEcrService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -23,7 +23,7 @@ public class AwsEcrRepo {
 
     private static final int MAX_RESULTS = 1000;
 
-    public static List<Repository> describeRepositories(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<Repository> describeRepositories(String regionId, EdsConfigs.Aws aws) {
         DescribeRepositoriesRequest request = new DescribeRepositoriesRequest().withMaxResults(MAX_RESULTS);
         List<Repository> repositories = Lists.newArrayList();
         String nextToken = null;
@@ -39,7 +39,7 @@ public class AwsEcrRepo {
         return repositories;
     }
 
-    public static Repository describeRepository(String regionId, EdsAwsConfigModel.Aws aws, String repositoryName) {
+    public static Repository describeRepository(String regionId, EdsConfigs.Aws aws, String repositoryName) {
         List<Repository> repositories = describeRepositories(regionId, aws, Lists.newArrayList(repositoryName));
         if (CollectionUtils.isEmpty(repositories)) return null;
         return repositories.getFirst();
@@ -53,7 +53,7 @@ public class AwsEcrRepo {
      * @param repositoryNames
      * @return
      */
-    public static List<Repository> describeRepositories(String regionId, EdsAwsConfigModel.Aws aws,
+    public static List<Repository> describeRepositories(String regionId, EdsConfigs.Aws aws,
                                                         List<String> repositoryNames) {
         DescribeRepositoriesRequest request = new DescribeRepositoriesRequest().withRepositoryNames(repositoryNames);
         List<Repository> repositories = Lists.newArrayList();
@@ -70,7 +70,7 @@ public class AwsEcrRepo {
         return repositories;
     }
 
-    public static Repository createRepository(String regionId, EdsAwsConfigModel.Aws aws, String repositoryName) {
+    public static Repository createRepository(String regionId, EdsConfigs.Aws aws, String repositoryName) {
         CreateRepositoryRequest request = new CreateRepositoryRequest();
         request.setRepositoryName(repositoryName);
         CreateRepositoryResult result = AmazonEcrService.buildAmazonECR(regionId, aws)
@@ -78,7 +78,7 @@ public class AwsEcrRepo {
         return result.getRepository();
     }
 
-    public static void deleteRepository(String regionId, EdsAwsConfigModel.Aws aws, String registryId,
+    public static void deleteRepository(String regionId, EdsConfigs.Aws aws, String registryId,
                                         @NonNull String repositoryName) {
         DeleteRepositoryRequest request = new DeleteRepositoryRequest().withForce(true)
                 .withRegistryId(registryId)

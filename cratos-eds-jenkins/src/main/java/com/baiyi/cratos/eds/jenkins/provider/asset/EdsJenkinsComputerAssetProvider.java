@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.jenkins.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsJenkinsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
@@ -37,7 +37,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.JENKINS, assetTypeOf = EdsAssetTypeEnum.JENKINS_COMPUTER)
-public class EdsJenkinsComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsJenkinsConfigModel.Jenkins, JenkinsComputerModel.Computer> {
+public class EdsJenkinsComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Jenkins, JenkinsComputerModel.Computer> {
 
     public EdsJenkinsComputerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -50,8 +50,8 @@ public class EdsJenkinsComputerAssetProvider extends BaseEdsInstanceAssetProvide
 
     @Override
     protected List<JenkinsComputerModel.Computer> listEntities(
-            ExternalDataSourceInstance<EdsJenkinsConfigModel.Jenkins> instance) throws EdsQueryEntitiesException {
-        try (JenkinsServer jenkinsServer = JenkinsServerBuilder.build(instance.getEdsConfigModel())) {
+            ExternalDataSourceInstance<EdsConfigs.Jenkins> instance) throws EdsQueryEntitiesException {
+        try (JenkinsServer jenkinsServer = JenkinsServerBuilder.build(instance.getConfig())) {
             Map<String, Computer> computerMap = jenkinsServer.getComputers();
             if (CollectionUtils.isEmpty(computerMap)) {
                 return List.of();
@@ -96,7 +96,7 @@ public class EdsJenkinsComputerAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsJenkinsConfigModel.Jenkins> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Jenkins> instance,
                                   JenkinsComputerModel.Computer entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity)
                 // ARN

@@ -17,7 +17,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
@@ -96,10 +96,10 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunModel.ResetAliyunAccount resetAliyunAccount) throws WorkOrderTicketException {
         // 创建Aliyun RAM
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         String ramUsername = resetAliyunAccount.getAccountLogin()
                 .getUsername();
         String ramLoginUsername = resetAliyunAccount.getAccountLogin()
@@ -133,7 +133,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
     }
 
-    private boolean existLoginProfile(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+    private boolean existLoginProfile(EdsConfigs.Aliyun aliyun, String ramUsername) {
         try {
             return aliyunRamUserRepo.getLoginProfile(aliyun.getRegionId(), aliyun, ramUsername) != null;
         } catch (ClientException clientException) {
@@ -141,7 +141,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
     }
 
-    private void resetRAMUserPassword(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String newPassword) {
+    private void resetRAMUserPassword(EdsConfigs.Aliyun aliyun, String ramUsername, String newPassword) {
         try {
             aliyunRamUserRepo.updateLoginProfile(aliyun, ramUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
         } catch (ClientException clientException) {
@@ -150,7 +150,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void createRAMUserLoginProfile(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String password,
+    private void createRAMUserLoginProfile(EdsConfigs.Aliyun aliyun, String ramUsername, String password,
                                            boolean enableMFA) {
         try {
             aliyunRamUserRepo.createLoginProfile(aliyun.getRegionId(), aliyun, ramUsername, password,
@@ -160,7 +160,7 @@ public class AliyunRamUserResetTicketEntryProvider extends BaseTicketEntryProvid
         }
     }
 
-    private void unbindMFA(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+    private void unbindMFA(EdsConfigs.Aliyun aliyun, String ramUsername) {
         try {
             GetUserMFAInfoResponse.MFADevice mfaDevice = aliyunRamUserRepo.getUserMFAInfo(aliyun, ramUsername);
             String serialNumber = Optional.ofNullable(mfaDevice)

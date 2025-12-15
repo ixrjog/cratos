@@ -1,7 +1,8 @@
 package com.baiyi.cratos.eds.dingtalk.sender;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkMessageModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkMessageParam;
@@ -21,7 +22,7 @@ public class DingtalkMessageSender extends BaseDingtalkToken {
         super(redisUtil, dingtalkService);
     }
 
-    public DingtalkMessageModel.AsyncSendResult asyncSend(EdsDingtalkConfigModel.Dingtalk dingtalk,
+    public DingtalkMessageModel.AsyncSendResult asyncSend(EdsConfigs.Dingtalk dingtalk,
                                                           DingtalkMessageParam.AsyncSendMessage asyncSendMessage) {
         DingtalkTokenModel.TokenResult tokenResult = getToken(dingtalk);
         asyncSendMessage.setAgentId(Long.valueOf(dingtalk.getApp()

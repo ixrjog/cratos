@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class GitLabUserRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<User> findUsers(EdsGitLabConfigModel.GitLab gitLab, String emailOrUsername) throws GitLabApiException {
+    public static List<User> findUsers(EdsConfigs.GitLab gitLab, String emailOrUsername) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .findUsers(emailOrUsername);
@@ -49,7 +49,7 @@ public class GitLabUserRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static User getUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+    public static User getUser(EdsConfigs.GitLab gitLab, Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getUser(userId);
@@ -66,7 +66,7 @@ public class GitLabUserRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<User> getUsers(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+    public static List<User> getUsers(EdsConfigs.GitLab gitLab) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getUsers();
@@ -76,7 +76,7 @@ public class GitLabUserRepo {
         }
     }
 
-    public static List<Membership> getUserMemberships(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+    public static List<Membership> getUserMemberships(EdsConfigs.GitLab gitLab, Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getMemberships(userId);
@@ -94,7 +94,7 @@ public class GitLabUserRepo {
      * @param avatarFile
      * @throws GitLabApiException
      */
-    public static void updateUser(EdsGitLabConfigModel.GitLab gitLab, Long userId, File avatarFile) throws GitLabApiException {
+    public static void updateUser(EdsConfigs.GitLab gitLab, Long userId, File avatarFile) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .setUserAvatar(userId, avatarFile);
@@ -111,7 +111,7 @@ public class GitLabUserRepo {
      * @param userId
      * @throws GitLabApiException
      */
-    public static void blockUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+    public static void blockUser(EdsConfigs.GitLab gitLab, Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .blockUser(userId);
@@ -128,7 +128,7 @@ public class GitLabUserRepo {
      * @param userId
      * @throws GitLabApiException
      */
-    public static void unblockUser(EdsGitLabConfigModel.GitLab gitLab, Long userId) throws GitLabApiException {
+    public static void unblockUser(EdsConfigs.GitLab gitLab, Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getUserApi()
                     .unblockUser(userId);
@@ -138,7 +138,7 @@ public class GitLabUserRepo {
         }
     }
 
-    public static User createUser(EdsGitLabConfigModel.GitLab gitLab, User user, String password) throws GitLabApiException {
+    public static User createUser(EdsConfigs.GitLab gitLab, User user, String password) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .createUser(user, password, false);

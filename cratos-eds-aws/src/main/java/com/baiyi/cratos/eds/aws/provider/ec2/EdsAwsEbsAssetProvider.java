@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsEbsRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_EBS)
-public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, Volume> {
+public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, Volume> {
 
     private final AwsEbsRepo ebsRepo;
 
@@ -46,12 +46,12 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<Volume> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<Volume> listEntities(String regionId, EdsConfigs.Aws aws) {
         return ebsRepo.listVolumes(regionId, aws);
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Volume entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Volume entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVolumeId())
                 .nameOf(AmazonEc2Util.getName(entity.getTags()))
                 .kindOf(entity.getVolumeType())
@@ -62,7 +62,7 @@ public class EdsAwsEbsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                             EdsAsset edsAsset, Volume entity) {
         return entity.getAttachments()
                 .stream()

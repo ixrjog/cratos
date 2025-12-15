@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -116,10 +116,10 @@ public class ApplicationDeploymentJvmSpecTicketEntryProvider extends BaseTicketE
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 ApplicationDeploymentModel.DeploymentJvmSpec deploymentJvmSpec) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Kubernetes kubernetes = holder.getInstance()
+                .getConfig();
         Deployment deployment = kubernetesDeploymentRepo.get(
                 kubernetes, deploymentJvmSpec.getNamespace(), deploymentJvmSpec.getDeployment()
                         .getName()

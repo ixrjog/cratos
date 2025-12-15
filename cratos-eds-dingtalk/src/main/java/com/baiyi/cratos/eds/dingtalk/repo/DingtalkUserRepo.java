@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.dingtalk.repo;
 
 import com.baiyi.cratos.common.RedisUtil;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkTokenModel;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkUserModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkUserParam;
@@ -27,13 +27,13 @@ public class DingtalkUserRepo extends BaseDingtalkToken {
         super(redisUtil, dingtalkService);
     }
 
-    public DingtalkUserModel.UserResult list(EdsDingtalkConfigModel.Dingtalk dingtalk,
+    public DingtalkUserModel.UserResult list(EdsConfigs.Dingtalk dingtalk,
                                              DingtalkUserParam.QueryUserPage queryUserPage) {
         DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
         return dingtalkService.list(tokenResponse.getAccessToken(), queryUserPage);
     }
 
-    public List<DingtalkUserModel.User> queryUserByDeptId(EdsDingtalkConfigModel.Dingtalk dingtalk, Long deptId) {
+    public List<DingtalkUserModel.User> queryUserByDeptId(EdsConfigs.Dingtalk dingtalk, Long deptId) {
         List<DingtalkUserModel.User> users = Lists.newArrayList();
         DingtalkUserParam.QueryUserPage queryUserPage = DingtalkUserParam.QueryUserPage.builder()
                 .deptId(deptId)
@@ -57,7 +57,7 @@ public class DingtalkUserRepo extends BaseDingtalkToken {
         return users;
     }
 
-    public DingtalkUserModel.GetUser getUser(EdsDingtalkConfigModel.Dingtalk dingtalk, String userId) {
+    public DingtalkUserModel.GetUser getUser(EdsConfigs.Dingtalk dingtalk, String userId) {
         DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
         DingtalkUserParam.GetUser param = DingtalkUserParam.GetUser.builder()
                 .userId(userId)
@@ -66,7 +66,7 @@ public class DingtalkUserRepo extends BaseDingtalkToken {
         return getUserResult.getResult();
     }
 
-    public String getUserTest(EdsDingtalkConfigModel.Dingtalk dingtalk, String userId) {
+    public String getUserTest(EdsConfigs.Dingtalk dingtalk, String userId) {
         DingtalkTokenModel.TokenResult tokenResponse = getToken(dingtalk);
         DingtalkUserParam.GetUser param = DingtalkUserParam.GetUser.builder()
                 .userId(userId)

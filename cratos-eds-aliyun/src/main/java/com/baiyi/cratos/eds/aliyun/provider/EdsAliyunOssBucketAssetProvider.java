@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOssRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -32,7 +33,7 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_OSS_BUCKET)
-public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, Bucket> {
+public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, Bucket> {
 
     public EdsAliyunOssBucketAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -45,22 +46,22 @@ public class EdsAliyunOssBucketAssetProvider extends BaseHasEndpointsEdsAssetPro
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getOss)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getOss)
                 .map(EdsAliyunConfigModel.OSS::getEndpoints)
                 .orElse(List.of()));
     }
 
     @Override
     protected List<Bucket> listEntities(String endpoint,
-                                        ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-        return AliyunOssRepo.listBuckets(endpoint, instance.getEdsConfigModel());
+                                        ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
+        return AliyunOssRepo.listBuckets(endpoint, instance.getConfig());
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, Bucket entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, Bucket entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .nameOf(entity.getName())
                 .assetKeyOf(Joiner.on(".")

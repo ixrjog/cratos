@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.cred.HuaweicloudCredentialsBuilder;
 import com.huaweicloud.sdk.ccm.v1.CcmClient;
 import com.huaweicloud.sdk.ccm.v1.region.CcmRegion;
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class HwcCcmClientBuilder {
 
-    public static CcmClient buildCcmClient(String regionId, EdsHwcConfigModel.Hwc huaweicloud) {
+    public static CcmClient buildCcmClient(String regionId, EdsConfigs.Hwc huaweicloud) {
         // 配置客户端属性
         HttpConfig config = HttpConfig.getDefaultHttpConfig();
         config.withIgnoreSSLVerification(true);

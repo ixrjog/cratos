@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -90,7 +90,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
         }
         String newPassword = PasswordGenerator.generatePassword();
         for (EdsIdentityVO.LdapIdentity ldapIdentity : ldapIdentities) {
-            EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, LdapPerson.Person>) edsInstanceProviderHolderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, LdapPerson.Person>) edsInstanceProviderHolderBuilder.newHolder(
                     ldapIdentity.getInstance()
                             .getId(), EdsAssetTypeEnum.LDAP_PERSON.name());
             LdapPerson.Person person = LdapPerson.Person.builder()
@@ -99,7 +99,7 @@ public class UserResetPasswordTicketEntryProvider extends BaseTicketEntryProvide
                     .build();
             try {
                 ldapPersonRepo.update(holder.getInstance()
-                        .getEdsConfigModel(), person);
+                        .getConfig(), person);
             } catch (Exception e) {
                 WorkOrderTicketException.runtime("Ldap instance {} update user password failed: {}",
                         ldapIdentity.getInstance()

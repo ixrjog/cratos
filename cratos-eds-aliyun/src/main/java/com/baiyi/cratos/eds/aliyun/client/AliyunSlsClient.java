@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
 import com.aliyun.openservices.log.Client;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AliyunSlsClient {
 
-    public static Client createClient(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static Client createClient(String endpoint, EdsConfigs.Aliyun aliyun) {
         return new Client(endpoint, aliyun.getCred()
                 .getAccessKeyId(), aliyun.getCred()
                 .getAccessKeySecret());

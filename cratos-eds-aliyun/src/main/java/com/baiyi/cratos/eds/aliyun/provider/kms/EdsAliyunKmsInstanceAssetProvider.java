@@ -7,6 +7,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -36,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_KMS_INSTANCE)
-public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsInstance> {
+public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, AliyunKms.KmsInstance> {
 
     public EdsAliyunKmsInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -49,26 +50,26 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getKms)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getKms)
                 .map(EdsAliyunConfigModel.KMS::getEndpoints)
                 .orElse(List.of()));
     }
 
     @Override
     protected List<AliyunKms.KmsInstance> listEntities(String endpoint,
-                                                       ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                                       ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListKmsInstancesResponseBody.KmsInstance> instances = AliyunKmsRepo.listInstances(endpoint,
-                instance.getEdsConfigModel());
+                instance.getConfig());
         if (CollectionUtils.isEmpty(instances)) {
             return List.of();
         }
-        return toKmsInstance(endpoint, instance.getEdsConfigModel(), instances);
+        return toKmsInstance(endpoint, instance.getConfig(), instances);
     }
 
-    private List<AliyunKms.KmsInstance> toKmsInstance(String endpoint, EdsAliyunConfigModel.Aliyun configModel,
+    private List<AliyunKms.KmsInstance> toKmsInstance(String endpoint, EdsConfigs.Aliyun configModel,
                                                       List<ListKmsInstancesResponseBody.KmsInstance> instances) {
         return instances.stream()
                 .map(e -> AliyunKms.KmsInstance.builder()
@@ -82,7 +83,7 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunKms.KmsInstance entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstance()
                         .getKmsInstanceId())
@@ -92,7 +93,7 @@ public class EdsAliyunKmsInstanceAssetProvider extends BaseHasEndpointsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, AliyunKms.KmsInstance entity) {
         return List.of(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
     }

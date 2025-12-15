@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.kms20160120.AsyncClient;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.AccessLevel;
@@ -19,16 +20,16 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AliyunKmsClient {
 
-    public static AsyncClient buildKmsClient(EdsAliyunConfigModel.Aliyun aliyun) {
+    public static AsyncClient buildKmsClient(EdsConfigs.Aliyun aliyun) {
         String endpoint = Optional.of(aliyun)
-                .map(EdsAliyunConfigModel.Aliyun::getKms)
+                .map(EdsConfigs.Aliyun::getKms)
                 .map(EdsAliyunConfigModel.KMS::getEndpoints)
                 .map(List::getFirst)
                 .orElse("kms.eu-central-1.aliyuncs.com");
         return buildKmsClient(endpoint, aliyun);
     }
 
-    public static AsyncClient buildKmsClient(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static AsyncClient buildKmsClient(String endpoint, EdsConfigs.Aliyun aliyun) {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                 .accessKeyId(aliyun.getCred()
                         .getAccessKeyId())

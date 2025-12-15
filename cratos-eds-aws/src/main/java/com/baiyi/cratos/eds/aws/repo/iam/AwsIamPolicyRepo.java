@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo.iam;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AwsIamPolicyRepo {
 
-    public List<AttachedPolicy> listUserPolicies(EdsAwsConfigModel.Aws aws, String userName) {
+    public List<AttachedPolicy> listUserPolicies(EdsConfigs.Aws aws, String userName) {
         ListAttachedUserPoliciesRequest request = new ListAttachedUserPoliciesRequest().withUserName(userName);
         List<AttachedPolicy> attachedPolicies = Lists.newArrayList();
         AmazonIdentityManagement iamClient = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws);
@@ -34,7 +34,7 @@ public class AwsIamPolicyRepo {
         return attachedPolicies;
     }
 
-    public List<Policy> listPolicies(EdsAwsConfigModel.Aws aws) {
+    public List<Policy> listPolicies(EdsConfigs.Aws aws) {
         ListPoliciesRequest request = new ListPoliciesRequest();
         List<Policy> policies = Lists.newArrayList();
         AmazonIdentityManagement iamClient = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws);
@@ -54,7 +54,7 @@ public class AwsIamPolicyRepo {
      * @param userName
      * @param policyArn
      */
-    public void attachUserPolicy(EdsAwsConfigModel.Aws aws, String userName, String policyArn) {
+    public void attachUserPolicy(EdsConfigs.Aws aws, String userName, String policyArn) {
         AttachUserPolicyRequest request = new AttachUserPolicyRequest();
         request.setUserName(userName);
         request.setPolicyArn(policyArn);
@@ -69,7 +69,7 @@ public class AwsIamPolicyRepo {
      * @param userName
      * @param policyArn
      */
-    public void detachUserPolicy(EdsAwsConfigModel.Aws aws, String userName, String policyArn) {
+    public void detachUserPolicy(EdsConfigs.Aws aws, String userName, String policyArn) {
         DetachUserPolicyRequest request = new DetachUserPolicyRequest();
         request.setUserName(userName);
         request.setPolicyArn(policyArn);

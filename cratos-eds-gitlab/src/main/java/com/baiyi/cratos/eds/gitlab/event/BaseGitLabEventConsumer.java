@@ -4,7 +4,7 @@ package com.baiyi.cratos.eds.gitlab.event;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -52,7 +52,7 @@ public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer,
     @Async
     @SuppressWarnings("unchecked")
     public void consumeEventV4(EdsInstance instance, GitLabEventParam.SystemHook systemHook) {
-        EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, GitLabEventParam.SystemHook> holder = (EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, GitLabEventParam.SystemHook>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, GitLabEventParam.SystemHook>) holderBuilder.newHolder(
                 instance.getId(), EdsAssetTypeEnum.GITLAB_SYSTEM_HOOK.name());
         // 导入资产
         EdsAsset asset = holder.importAsset(systemHook);
@@ -62,8 +62,8 @@ public abstract class BaseGitLabEventConsumer<T> implements GitLabEventConsumer,
     abstract protected void postProcess(EdsInstance instance, EdsAsset asset, GitLabEventParam.SystemHook systemHook);
 
     @SuppressWarnings("unchecked")
-    protected EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, T> getHolder(EdsInstance instance) {
-        return (EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, T>) holderBuilder.newHolder(
+    protected EdsInstanceProviderHolder<EdsConfigs.GitLab, T> getHolder(EdsInstance instance) {
+        return (EdsInstanceProviderHolder<EdsConfigs.GitLab, T>) holderBuilder.newHolder(
                 instance.getId(), getAssetType());
     }
 

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsVpnRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_STS_VPN)
-public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, VpnConnection> {
+public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, VpnConnection> {
 
     public EdsAwsVpnAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -41,12 +41,12 @@ public class EdsAwsVpnAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<VpnConnection> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<VpnConnection> listEntities(String regionId, EdsConfigs.Aws aws) {
         return AwsVpnRepo.describeVpnConnections(regionId, aws);
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, VpnConnection entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, VpnConnection entity) {
         // https://docs.aws.amazon.com/acm/latest/APIReference/API_ListCertificates.html
         Optional<Tag> optionalTag = entity.getTags()
                 .stream()

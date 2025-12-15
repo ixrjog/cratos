@@ -17,7 +17,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -43,7 +43,7 @@ import java.util.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
-public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunEcs.Ecs> {
+public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, AliyunEcs.Ecs> {
 
     private final AliyunEcsRepo aliyunEcsRepo;
     private final AliyunTagRepo aliyunTagRepo;
@@ -77,7 +77,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<AliyunEcs.Ecs> listEntities(String regionId, EdsAliyunConfigModel.Aliyun configModel) {
+    protected List<AliyunEcs.Ecs> listEntities(String regionId, EdsConfigs.Aliyun configModel) {
         List<DescribeInstancesResponse.Instance> instances = aliyunEcsRepo.listInstances(regionId, configModel);
         if (!CollectionUtils.isEmpty(instances)) {
             return toEcs(regionId, configModel, instances);
@@ -85,7 +85,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
         return Collections.emptyList();
     }
 
-    private List<AliyunEcs.Ecs> toEcs(String regionId, EdsAliyunConfigModel.Aliyun configModel,
+    private List<AliyunEcs.Ecs> toEcs(String regionId, EdsConfigs.Aliyun configModel,
                                       List<DescribeInstancesResponse.Instance> instances) {
         return instances.stream()
                 .map(e -> {
@@ -103,7 +103,7 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunEcs.Ecs entity) {
         final String privateIp = entity.getInstance()
                 .getInstanceNetworkType()
@@ -151,12 +151,12 @@ public class EdsAliyunEcsAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunEcs.Ecs entity) {
         EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源
         List<ListTagResourcesResponse.TagResource> tagResources = aliyunTagRepo.listTagResources(entity.getRegionId(),
-                        instance.getEdsConfigModel(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
+                                                                                                 instance.getConfig(), AliyunTagRepo.ResourceTypes.INSTANCE, entity.getInstance()
                                 .getInstanceId())
                 .stream()
                 .filter(tagResource -> Arrays.stream(COMPUTER_TAGS)

@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -37,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DINGTAL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_DEPARTMENT)
-public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkDepartmentModel.Department> {
+public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Dingtalk, DingtalkDepartmentModel.Department> {
 
     private final DingtalkDepartmentRepo dingtalkDepartmentRepo;
 
@@ -56,9 +57,9 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<DingtalkDepartmentModel.Department> listEntities(
-            ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance) throws EdsQueryEntitiesException {
         List<DingtalkDepartmentModel.Department> results = Lists.newArrayList();
-        EdsDingtalkConfigModel.Dingtalk dingtalk = instance.getEdsConfigModel();
+        EdsConfigs.Dingtalk dingtalk = instance.getConfig();
         try {
             Set<Long> deptIdSet = queryDeptSubIds(instance);
             List<DingtalkDepartmentModel.Department> entities = Lists.newArrayList();
@@ -78,11 +79,11 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
         }
     }
 
-    private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) {
-        EdsDingtalkConfigModel.Dingtalk dingtalk = instance.getEdsConfigModel();
+    private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance) {
+        EdsConfigs.Dingtalk dingtalk = instance.getConfig();
         // 遍历参数
         Set<Long> queryDeptIdSet = Optional.ofNullable(dingtalk)
-                .map(EdsDingtalkConfigModel.Dingtalk::getApp)
+                .map(EdsConfigs.Dingtalk::getApp)
                 .map(EdsDingtalkConfigModel.DingtalkApp::getDepartment)
                 .map(EdsDingtalkConfigModel.Department::getDeptIds)
                 .orElse(Sets.newHashSet(DEPT_ROOT_ID));
@@ -110,7 +111,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkDepartmentModel.Department entity) {
         if (entity.getParentId() == null) {
             return Lists.newArrayList();
@@ -119,7 +120,7 @@ public class EdsDingtalkDepartmentAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
                                   DingtalkDepartmentModel.Department entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDeptId())
                 .nameOf(entity.getName())

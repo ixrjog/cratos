@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AZURE_D
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AZURE, assetTypeOf = EdsAssetTypeEnum.AZURE_USER)
-public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsAzureConfigModel.Azure, GraphUserModel.User> {
+public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Azure, GraphUserModel.User> {
 
     public AzureIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                  EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
@@ -48,7 +48,7 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsAzureCon
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsAzureConfigModel.Azure config, EdsInstance instance,
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Azure config, EdsInstance instance,
                                                        User user, String password) {
         throw new CloudIdentityException("Operation not supported.");
     }
@@ -70,12 +70,12 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsAzureCon
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsAzureConfigModel.Azure config = (EdsAzureConfigModel.Azure) holderBuilder.newHolder(
+        EdsConfigs.Azure config = (EdsConfigs.Azure) holderBuilder.newHolder(
                         asset.getInstanceId(),
                         getAccountAssetType()
                 )
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .accountId(asset.getAssetId())
                 .username(username)
@@ -88,10 +88,10 @@ public class AzureIdentityProvider extends BaseCloudIdentityProvider<EdsAzureCon
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsAzureConfigModel.Azure config = (EdsAzureConfigModel.Azure) holderBuilder.newHolder(
+        EdsConfigs.Azure config = (EdsConfigs.Azure) holderBuilder.newHolder(
                         blockCloudAccount.getInstanceId(), getAccountAssetType())
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         try {
             GraphUserRepo.blockUserById(config, blockCloudAccount.getAccountId());
         } catch (Exception e) {

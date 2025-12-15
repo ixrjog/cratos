@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.azure.repo;
 
 import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
 import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
-import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostResponse;
 import com.microsoft.graph.models.User;
 import com.microsoft.graph.models.UserCollectionResponse;
@@ -29,7 +29,7 @@ public class GraphUserRepo {
      * @param azure
      * @return
      */
-    public static List<GraphUserModel.User> listUsers(EdsAzureConfigModel.Azure azure) {
+    public static List<GraphUserModel.User> listUsers(EdsConfigs.Azure azure) {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         UserCollectionResponse result = graphClient.users()
                 .get();
@@ -49,7 +49,7 @@ public class GraphUserRepo {
                 .toList();
     }
 
-    public static GraphUserModel.User getUserById(EdsAzureConfigModel.Azure azure, String userId) {
+    public static GraphUserModel.User getUserById(EdsConfigs.Azure azure, String userId) {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         User result = graphClient.users()
                 .byUserId(userId)
@@ -62,7 +62,7 @@ public class GraphUserRepo {
                 .build();
     }
 
-    public static void blockUserById(EdsAzureConfigModel.Azure azure, String userId) {
+    public static void blockUserById(EdsConfigs.Azure azure, String userId) {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         User user = new User();
         user.setAccountEnabled(false);
@@ -71,7 +71,7 @@ public class GraphUserRepo {
                 .patch(user);
     }
 
-    public static List<String> getUserDirectoryRoleIds(EdsAzureConfigModel.Azure azure, String userId) {
+    public static List<String> getUserDirectoryRoleIds(EdsConfigs.Azure azure, String userId) {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody getMemberObjectsPostRequestBody = new com.microsoft.graph.directoryobjects.item.getmemberobjects.GetMemberObjectsPostRequestBody();
         getMemberObjectsPostRequestBody.setSecurityEnabledOnly(true);

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
  * &#064;Date  2025/11/18 11:51
  * &#064;Version 1.0
  */
-public class EdsLdapTest extends BaseEdsTest<EdsLdapConfigModel.Ldap> {
+public class EdsLdapTest extends BaseEdsTest<EdsConfigs.Ldap> {
 
     @Resource
     private LdapClient ldapClient;
@@ -18,7 +18,7 @@ public class EdsLdapTest extends BaseEdsTest<EdsLdapConfigModel.Ldap> {
 
     @Test
     void test1() {
-        EdsLdapConfigModel.Ldap ldap = getConfig(7);
+        EdsConfigs.Ldap ldap = getConfig(7);
         ldapClient.hasPersonInLdap(ldap, "xxdgdsgsd");
     }
 

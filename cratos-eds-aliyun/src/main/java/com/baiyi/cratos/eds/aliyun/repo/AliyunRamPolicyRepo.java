@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.*;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,7 @@ public class AliyunRamPolicyRepo {
     private final AliyunClient aliyunClient;
     public static final int PAGE_SIZE = 50;
 
-    public List<ListPoliciesResponse.Policy> listPolicies(EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+    public List<ListPoliciesResponse.Policy> listPolicies(EdsConfigs.Aliyun aliyun) throws ClientException {
         List<ListPoliciesResponse.Policy> policies = Lists.newArrayList();
         String marker;
         ListPoliciesRequest request = new ListPoliciesRequest();
@@ -38,7 +38,7 @@ public class AliyunRamPolicyRepo {
         return policies;
     }
 
-    public GetPolicyResponse.Policy getPolicy(EdsAliyunConfigModel.Aliyun aliyun,
+    public GetPolicyResponse.Policy getPolicy(EdsConfigs.Aliyun aliyun,
                                               ListPoliciesResponse.Policy policy) throws ClientException {
         GetPolicyRequest request = new GetPolicyRequest();
         request.setPolicyName(policy.getPolicyName());
@@ -47,7 +47,7 @@ public class AliyunRamPolicyRepo {
         return response.getPolicy();
     }
 
-    public List<ListPoliciesForUserResponse.Policy> listPoliciesForUser(EdsAliyunConfigModel.Aliyun aliyun,
+    public List<ListPoliciesForUserResponse.Policy> listPoliciesForUser(EdsConfigs.Aliyun aliyun,
                                                                         String username) throws ClientException {
         ListPoliciesForUserRequest request = new ListPoliciesForUserRequest();
         request.setUserName(username);
@@ -55,7 +55,7 @@ public class AliyunRamPolicyRepo {
         return response == null ? Collections.emptyList() : response.getPolicies();
     }
 
-    public void attachPolicyToUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String policyName ,String policyType) throws ClientException {
+    public void attachPolicyToUser(String regionId, EdsConfigs.Aliyun aliyun, String ramUsername, String policyName ,String policyType) throws ClientException {
         AttachPolicyToUserRequest request = new AttachPolicyToUserRequest();
         request.setUserName(ramUsername);
         request.setPolicyName(policyName);
@@ -63,7 +63,7 @@ public class AliyunRamPolicyRepo {
         AttachPolicyToUserResponse response = aliyunClient.getAcsResponse(regionId, aliyun, request);
     }
 
-    public void detachPolicyFromUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,String policyName ,String policyType) throws ClientException {
+    public void detachPolicyFromUser(String regionId, EdsConfigs.Aliyun aliyun, String ramUsername,String policyName ,String policyType) throws ClientException {
         DetachPolicyFromUserRequest request = new DetachPolicyFromUserRequest();
         request.setUserName(ramUsername);
         request.setPolicyName(policyName);

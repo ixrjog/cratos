@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.param.AlimailUserParam;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AlimailUserRepo {
 
-    public static List<AlimailUser.User> listUsersOfDepartment(EdsAlimailConfigModel.Alimail alimail, String deptId) {
+    public static List<AlimailUser.User> listUsersOfDepartment(EdsConfigs.Alimail alimail, String deptId) {
         AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         List<AlimailUser.User> users = Lists.newArrayList();
         int offset = 0;
@@ -39,7 +39,7 @@ public class AlimailUserRepo {
         return users;
     }
 
-    public static void freezeUser(EdsAlimailConfigModel.Alimail alimail, String userId) {
+    public static void freezeUser(EdsConfigs.Alimail alimail, String userId) {
         AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         try {
             alimailService.freezeUser(userId, AlimailUserParam.UpdateUser.FREEZE_USER);
@@ -52,7 +52,7 @@ public class AlimailUserRepo {
         }
     }
 
-    public static AlimailUser.ResetPasswordResult resetPassword(EdsAlimailConfigModel.Alimail alimail, String userId,
+    public static AlimailUser.ResetPasswordResult resetPassword(EdsConfigs.Alimail alimail, String userId,
                                                          String newPassword) {
         AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         AlimailUserParam.ResetPassword resetPassword = AlimailUserParam.ResetPassword.builder()

@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.arms20190808.AsyncClient;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,7 @@ public class AliyunArmsClient {
      * @param arms
      * @return
      */
-    public static AsyncClient buildAsyncClient(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static AsyncClient buildAsyncClient(String regionId, EdsConfigs.Aliyun aliyun) {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                 .accessKeyId(aliyun.getCred()
                         .getAccessKeyId())
@@ -51,7 +52,7 @@ public class AliyunArmsClient {
         final String region = StringUtils.isNotBlank(regionId) ? regionId : REGION;
 
         final String endpoint = Optional.of(aliyun)
-                .map(EdsAliyunConfigModel.Aliyun::getArms)
+                .map(EdsConfigs.Aliyun::getArms)
                 .map(EdsAliyunConfigModel.ARMS::getEndpoint)
                 .orElse(ENDPOINT);
 

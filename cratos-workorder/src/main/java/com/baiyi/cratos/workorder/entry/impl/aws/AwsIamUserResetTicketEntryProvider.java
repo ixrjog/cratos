@@ -17,7 +17,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
@@ -86,10 +86,10 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.ResetAwsAccount resetAwsAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         final String newPassword = PasswordGenerator.generatePassword();
         resetIAMUserPassword(aws, resetAwsAccount.getAccountLogin()
                 .getLoginUsername(), newPassword);
@@ -99,7 +99,7 @@ public class AwsIamUserResetTicketEntryProvider extends BaseTicketEntryProvider<
                 .getLoginUrl());
     }
 
-    private void resetIAMUserPassword(EdsAwsConfigModel.Aws aws, String iamUsername, String newPassword) {
+    private void resetIAMUserPassword(EdsConfigs.Aws aws, String iamUsername, String newPassword) {
         try {
             awsIamUserRepo.updateLoginProfile(aws, iamUsername, newPassword, NO_PASSWORD_RESET_REQUIRED);
             log.info("Reset AWS IAM user password successfully: {}", iamUsername);

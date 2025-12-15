@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -28,7 +28,7 @@ import java.util.List;
 @Component
 
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN)
-public class AliyunDnsResolver extends BaseDNSResolver<EdsAliyunConfigModel.Aliyun> {
+public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun> {
 
     public AliyunDnsResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                              TrafficRecordTargetService trafficRecordTargetService,
@@ -39,7 +39,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsAliyunConfigModel.Aliy
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
         // 获取阿里云配置
-        EdsAliyunConfigModel.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        EdsConfigs.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
         // 查询 DNS 记录
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
                 aliyun, trafficRoute.getDomain());
@@ -52,7 +52,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsAliyunConfigModel.Aliy
         TrafficRecordTarget trafficRecordTarget = getTrafficRecordTargetById(switchRecordTarget.getRecordTargetId());
         TrafficRoute trafficRoute = getTrafficRouteById(trafficRecordTarget.getTrafficRouteId());
         // 获取阿里云配置
-        EdsAliyunConfigModel.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        EdsConfigs.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
     }
 
     private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {

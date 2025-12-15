@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -39,7 +40,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_REPOSITORY)
-public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListRepositoryResponse.RepositoriesItem> {
+public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, ListRepositoryResponse.RepositoriesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
 
@@ -57,7 +58,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
 
     @Override
     protected List<ListRepositoryResponse.RepositoriesItem> listEntities(String regionId,
-                                                                         EdsAliyunConfigModel.Aliyun configModel) throws EdsQueryEntitiesException {
+                                                                         EdsConfigs.Aliyun configModel) throws EdsQueryEntitiesException {
         try {
             List<ListInstanceResponse.InstancesItem> instancesItems = aliyunAcrRepo.listInstance(regionId, configModel);
             if (CollectionUtils.isEmpty(instancesItems)) {
@@ -82,7 +83,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   ListRepositoryResponse.RepositoriesItem entity) {
         final String key = Joiner.on(":")
                 .join(entity.getInstanceId(), entity.getRepoId());
@@ -96,7 +97,7 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset,
                                             ListRepositoryResponse.RepositoriesItem entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
@@ -109,9 +110,9 @@ public class EdsAliyunAcrRepositoryAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected Set<String> getRegionSet(EdsAliyunConfigModel.Aliyun configModel) {
+    protected Set<String> getRegionSet(EdsConfigs.Aliyun configModel) {
         return Sets.newHashSet(Optional.of(configModel)
-                .map(EdsAliyunConfigModel.Aliyun::getAcr)
+                .map(EdsConfigs.Aliyun::getAcr)
                 .map(EdsAliyunConfigModel.ACR::getRegionIds)
                 .orElse(Collections.emptyList()));
     }

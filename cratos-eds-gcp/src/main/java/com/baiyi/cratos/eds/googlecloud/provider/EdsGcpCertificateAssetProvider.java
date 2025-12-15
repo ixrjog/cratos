@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.googlecloud.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -32,7 +33,7 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_CERTIFICATE)
-public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsGcpConfigModel.Gcp, GoogleCertificateModel.Certificate> {
+public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsConfigs.Gcp, GoogleCertificateModel.Certificate> {
 
     private final GcpCredentialRepo googleCloudCredentialRepo;
 
@@ -48,7 +49,7 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gcp> instance,
                                   GoogleCertificateModel.Certificate entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getKey())
                 .assetKeyOf(entity.getKey())
@@ -61,11 +62,11 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
 
     @Override
     protected Set<String> getSources(
-            ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Gcp> instance) throws EdsQueryEntitiesException {
         try {
             return Sets.newHashSet(Optional.of(instance)
-                    .map(ExternalDataSourceInstance::getEdsConfigModel)
-                    .map(EdsGcpConfigModel.Gcp::getCertificate)
+                    .map(ExternalDataSourceInstance::getConfig)
+                    .map(EdsConfigs.Gcp::getCertificate)
                     .map(EdsGcpConfigModel.Certificate::getLocations)
                     .orElse(List.of()));
         } catch (Exception e) {
@@ -75,9 +76,9 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
 
     @Override
     protected List<GoogleCertificateModel.Certificate> listEntities(String namespace,
-                                                                    ExternalDataSourceInstance<EdsGcpConfigModel.Gcp> instance) throws EdsQueryEntitiesException {
+                                                                    ExternalDataSourceInstance<EdsConfigs.Gcp> instance) throws EdsQueryEntitiesException {
         try {
-            return googleCloudCredentialRepo.listCertificates(namespace, instance.getEdsConfigModel())
+            return googleCloudCredentialRepo.listCertificates(namespace, instance.getConfig())
                     .stream()
                     .map(GoogleCertificateModel::toCertificate)
                     .toList();

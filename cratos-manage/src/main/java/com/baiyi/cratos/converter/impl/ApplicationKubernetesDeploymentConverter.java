@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.common.KubernetesCommonVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
@@ -57,7 +57,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
 
     @Override
     public List<KubernetesDeploymentVO.Deployment> toResourceVO(List<ApplicationResource> resources) {
-        Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
+        Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
         return resources.stream()
                 .map(resource -> to(edsInstanceConfigMap, resource))
                 .filter(Objects::nonNull)
@@ -66,7 +66,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .toList();
     }
 
-    private KubernetesDeploymentVO.Deployment to(Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap,
+    private KubernetesDeploymentVO.Deployment to(Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap,
                                                  ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
@@ -74,7 +74,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
             return null;
         }
         EdsInstance edsInstance = edsInstanceService.getById(edsAsset.getInstanceId());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
+        EdsConfigs.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();
         Deployment deployment = kubernetesDeploymentRepo.get(kubernetes, namespace, resource.getName());
         if (Objects.isNull(deployment)) {
@@ -111,7 +111,7 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     public void wrap(KubernetesDeploymentVO.Deployment vo) {
     }
 
-    private List<Pod> getPods(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    private List<Pod> getPods(EdsConfigs.Kubernetes kubernetes, Deployment deployment) {
         return kubernetesPodRepo.listByReplicaSet(kubernetes, deployment);
     }
 

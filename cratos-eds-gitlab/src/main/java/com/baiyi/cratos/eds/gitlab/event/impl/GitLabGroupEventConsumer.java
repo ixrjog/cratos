@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.gitlab.event.BaseGitLabEventConsumer;
@@ -65,9 +65,9 @@ public class GitLabGroupEventConsumer extends BaseGitLabEventConsumer<Group> {
             edsAssetService.deleteById(groupAsset.getId());
         }
         try {
-            EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, Group> holder = getHolder(instance);
+            EdsInstanceProviderHolder<EdsConfigs.GitLab, Group> holder = getHolder(instance);
             Group group = GitLabGroupRepo.getGroup(holder.getInstance()
-                    .getEdsConfigModel(), Long.valueOf(groupIdIndex.getValue()));
+                    .getConfig(), Long.valueOf(groupIdIndex.getValue()));
             if (Objects.nonNull(group)) {
                 holder.importAsset(group);
             }

@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.alimail.model.AlimailUser;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_USER)
-public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAlimailConfigModel.Alimail, AlimailUser.User> {
+public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Alimail, AlimailUser.User> {
 
     public EdsAlimailUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -48,7 +48,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<AlimailUser.User> listEntities(
-            ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Alimail> instance) throws EdsQueryEntitiesException {
         try {
             List<EdsAsset> departments = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIMAIL_DEPARTMENT);
             if (CollectionUtils.isEmpty(departments)) {
@@ -56,7 +56,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
             }
             List<AlimailUser.User> entities = Lists.newArrayList();
             departments.forEach(department -> {
-                List<AlimailUser.User> users = AlimailUserRepo.listUsersOfDepartment(instance.getEdsConfigModel(),
+                List<AlimailUser.User> users = AlimailUserRepo.listUsersOfDepartment(instance.getConfig(),
                         department.getAssetId());
                 if (!CollectionUtils.isEmpty(users)) {
                     entities.addAll(users);
@@ -71,7 +71,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
                                   AlimailUser.User entity) {
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
@@ -82,7 +82,7 @@ public class EdsAlimailUserAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
             AlimailUser.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(entity.getDepartmentIds())) {

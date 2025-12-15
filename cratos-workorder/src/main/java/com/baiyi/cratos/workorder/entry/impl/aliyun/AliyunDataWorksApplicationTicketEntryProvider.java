@@ -16,7 +16,7 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamAccessKeyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -85,10 +85,10 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunDataWorksModel.AliyunAccount aliyunAccount) throws WorkOrderTicketException {
         // 创建Aliyun RAM
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         String ramUsername = aliyunAccount.getAccount();
         String username = aliyunAccount.getUsername();
         CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername);
@@ -121,7 +121,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         }
     }
 
-    private GetUserResponse.User getRamUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+    private GetUserResponse.User getRamUser(EdsConfigs.Aliyun aliyun, String ramUsername) {
         try {
             return aliyunRamUserRepo.getUser(aliyun, ramUsername);
         } catch (ClientException clientException) {
@@ -129,7 +129,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         }
     }
 
-    private CreateUserResponse.User createRAMUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+    private CreateUserResponse.User createRAMUser(EdsConfigs.Aliyun aliyun, String ramUsername) {
         try {
             return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, ramUsername);
         } catch (ClientException clientException) {
@@ -138,7 +138,7 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         }
     }
 
-    private CreateAccessKeyResponse.AccessKey createAccessKey(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) {
+    private CreateAccessKeyResponse.AccessKey createAccessKey(EdsConfigs.Aliyun aliyun, String ramUsername) {
         try {
             return aliyunRamAccessKeyRepo.createAccessKey(aliyun, ramUsername);
         } catch (ClientException clientException) {

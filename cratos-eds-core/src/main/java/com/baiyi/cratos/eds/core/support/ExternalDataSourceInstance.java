@@ -16,10 +16,10 @@ public class ExternalDataSourceInstance<Config extends IEdsConfigModel> {
 
     EdsInstance edsInstance;
 
-    Config edsConfigModel;
+    Config config;
 
     public Config getConfig() {
-        return edsConfigModel;
+        return config;
     }
 
 }

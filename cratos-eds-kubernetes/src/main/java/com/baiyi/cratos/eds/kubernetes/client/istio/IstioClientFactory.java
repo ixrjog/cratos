@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.istio;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientProviderFactory;
 import com.baiyi.cratos.eds.kubernetes.client.provider.BaseKubernetesClientProvider;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
@@ -19,12 +19,12 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class IstioClientFactory {
 
-    public static IstioClient newClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public static IstioClient newClient(EdsConfigs.Kubernetes kubernetes) {
         io.fabric8.kubernetes.client.Config cfg = buildConfig(kubernetes);
         return new DefaultIstioClient(cfg);
     }
 
-    public static io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public static io.fabric8.kubernetes.client.Config buildConfig(EdsConfigs.Kubernetes kubernetes) {
         if (StringUtils.isNotBlank(kubernetes.getProvider())) {
             BaseKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
             if (kubernetesClientProvider == null) {

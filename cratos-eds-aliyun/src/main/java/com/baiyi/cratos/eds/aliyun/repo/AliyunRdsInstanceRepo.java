@@ -6,7 +6,7 @@ import com.aliyuncs.rds.model.v20140815.DescribeDBInstanceAttributeResponse;
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstancesRequest;
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstancesResponse;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class AliyunRdsInstanceRepo {
      * @return
      */
     public List<DescribeDBInstanceAttributeResponse.DBInstanceAttribute> listDbInstance(String regionId,
-                                                                                        EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+                                                                                        EdsConfigs.Aliyun aliyun) throws ClientException {
         return listDbInstance(regionId, aliyun, QUERY_ALL_INSTANCE);
     }
 
@@ -54,7 +54,7 @@ public class AliyunRdsInstanceRepo {
      * @return
      */
     public List<DescribeDBInstanceAttributeResponse.DBInstanceAttribute> listDbInstance(String regionId,
-                                                                                        EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                        EdsConfigs.Aliyun aliyun,
                                                                                         String dbInstanceId) throws ClientException {
         List<DescribeDBInstanceAttributeResponse.DBInstanceAttribute> instances = Lists.newArrayList();
         DescribeDBInstancesRequest describe = new DescribeDBInstancesRequest();
@@ -78,7 +78,7 @@ public class AliyunRdsInstanceRepo {
     }
 
     private List<DescribeDBInstanceAttributeResponse.DBInstanceAttribute> getDbInstance(String regionId,
-                                                                                        EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                        EdsConfigs.Aliyun aliyun,
                                                                                         List<DescribeDBInstancesResponse.DBInstance> instances) throws ClientException {
         Iterator<DescribeDBInstancesResponse.DBInstance> iter = instances.iterator();
         List<String> ids = instances.stream()

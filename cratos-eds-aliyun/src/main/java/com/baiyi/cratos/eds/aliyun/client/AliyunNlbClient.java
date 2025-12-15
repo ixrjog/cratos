@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -21,7 +21,7 @@ public class AliyunNlbClient {
      * @throws Exception
      */
     public static com.aliyun.nlb20220430.Client createClient(String endpoint,
-                                                             EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+                                                             EdsConfigs.Aliyun aliyun) throws Exception {
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()
                 .setAccessKeyId(aliyun.getCred()
                         .getAccessKeyId())

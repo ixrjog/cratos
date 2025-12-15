@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -74,10 +74,10 @@ public class LdapRolePermissionTicketEntryProvider extends BaseTicketEntryProvid
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 LdapUserGroupModel.Role role) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsLdapConfigModel.Ldap, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Ldap, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Ldap, ?>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.LDAP_GROUP.name());
-        EdsLdapConfigModel.Ldap ldap = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Ldap ldap = holder.getInstance()
+                .getConfig();
         ldapGroupRepo.addGroupMember(ldap, role.getGroup(), workOrderTicket.getUsername());
     }
 

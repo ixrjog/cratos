@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.gitlab.event.BaseGitLabEventConsumer;
@@ -60,9 +60,9 @@ public class GitLabKeyEventConsumer extends BaseGitLabEventConsumer<SshKey> {
         } else {
             // 用户创建新Key
             try {
-                EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, SshKey> holder = getHolder(instance);
+                EdsInstanceProviderHolder<EdsConfigs.GitLab, SshKey> holder = getHolder(instance);
                 SshKey sshKey = GitLabSshKeyRepo.getSshKey(holder.getInstance()
-                        .getEdsConfigModel(), keyId);
+                        .getConfig(), keyId);
                 if (Objects.nonNull(sshKey)) {
                     holder.importAsset(sshKey);
                 }

@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.route53.AmazonRoute53;
 import com.amazonaws.services.route53.AmazonRoute53ClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AmazonRoute53Service {
 
-    public static AmazonRoute53 buildAmazonRoute53(EdsAwsConfigModel.Aws aws) {
+    public static AmazonRoute53 buildAmazonRoute53(EdsConfigs.Aws aws) {
         AWSCredentials credentials = AwsCredentialsManager.buildAWSCredentials(aws);
         return AmazonRoute53ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

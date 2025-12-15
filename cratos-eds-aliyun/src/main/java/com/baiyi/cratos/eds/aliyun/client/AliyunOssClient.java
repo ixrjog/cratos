@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -22,7 +22,7 @@ public class AliyunOssClient {
      * @return
      * @throws Exception
      */
-    public static OSS createClient(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static OSS createClient(String endpoint, EdsConfigs.Aliyun aliyun) {
         return new OSSClientBuilder().build(endpoint, aliyun.getCred()
                 .getAccessKeyId(), aliyun.getCred()
                 .getAccessKeySecret());

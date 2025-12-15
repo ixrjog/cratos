@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 import org.gitlab4j.api.GitLabApi;
 
@@ -14,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class GitLabApiBuilder {
 
-    public static GitLabApi build(EdsGitLabConfigModel.GitLab gitlab) {
+    public static GitLabApi build(EdsConfigs.GitLab gitlab) {
         return GitLabApiFactory.buildGitLabApi(gitlab);
     }
 

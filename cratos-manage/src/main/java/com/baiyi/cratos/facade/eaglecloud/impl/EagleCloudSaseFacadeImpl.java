@@ -4,6 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.event.EagleCloudEventParam;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsEagleCloudConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -55,7 +56,7 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
             return;
         }
         // 录入事件
-        EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudEventParam.SaseHook> eventHolder = (EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudEventParam.SaseHook>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudEventParam.SaseHook> eventHolder = (EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudEventParam.SaseHook>) holderBuilder.newHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.EAGLECLOUD_SASE_DATA_SECURITY_EVENT.name());
         if (eventHolder != null) {
             eventHolder.importAsset(saseHook);
@@ -73,11 +74,11 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
         EdsAsset dingtalkUser = dingtalkUsers.getFirst();
         // 查询主管
         List<EdsAsset> dingtalkManagers = queryDingtalkManagers(eventHolder.getInstance()
-                .getEdsConfigModel(), dingtalkUser);
+                .getConfig(), dingtalkUser);
         sendAlert(edsInstance, saseHook, content, dingtalkManagers);
     }
 
-    private List<EdsAsset> queryDingtalkManagers(EdsEagleCloudConfigModel.Sase sase, EdsAsset dingtalkUser) {
+    private List<EdsAsset> queryDingtalkManagers(EdsConfigs.Sase sase, EdsAsset dingtalkUser) {
         EdsAssetIndex dingtalkManagerUserIdIndex = edsAssetIndexService.getByAssetIdAndName(dingtalkUser.getId(),
                 DINGTALK_MANAGER_USER_ID);
         // 没有主管
@@ -87,7 +88,7 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
         }
         // 从数据源配置中获取安全管理员
         List<EdsEagleCloudConfigModel.SecurityAdministrator> securityAdministrators = Optional.of(sase)
-                .map(EdsEagleCloudConfigModel.Sase::getSecurityAdministrators)
+                .map(EdsConfigs.Sase::getSecurityAdministrators)
                 .orElse(List.of());
         if (CollectionUtils.isEmpty(securityAdministrators)) {
             return List.of();
@@ -129,7 +130,7 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
         // 发送告警
         sendAlert(edsInstance, dingtalkManager, alert);
         // 录入告警
-        EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudEventParam.Alert> alertHolder = (EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudEventParam.Alert>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudEventParam.Alert> alertHolder = (EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudEventParam.Alert>) holderBuilder.newHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.EAGLECLOUD_SASE_DATA_SECURITY_ALERT_NOTIFICATION.name());
         if (alertHolder != null) {
             alertHolder.importAsset(alert);
@@ -140,7 +141,7 @@ public class EagleCloudSaseFacadeImpl implements EagleCloudSaseFacade {
         try {
             EagleCloudModel.AlertRecord alertRecord = dataSecurityAlertSender.sendMsgToManager(dingtalkManager, alert);
             if (alertRecord != null) {
-                EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudModel.AlertRecord> alertRecordHolder = (EdsInstanceProviderHolder<EdsEagleCloudConfigModel.Sase, EagleCloudModel.AlertRecord>) holderBuilder.newHolder(
+                EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudModel.AlertRecord> alertRecordHolder = (EdsInstanceProviderHolder<EdsConfigs.Sase, EagleCloudModel.AlertRecord>) holderBuilder.newHolder(
                         edsInstance.getId(), EdsAssetTypeEnum.EAGLECLOUD_SASE_DATA_SECURITY_ALERT_RECORD.name());
                 if (alertRecordHolder != null) {
                     alertRecordHolder.importAsset(alertRecord);

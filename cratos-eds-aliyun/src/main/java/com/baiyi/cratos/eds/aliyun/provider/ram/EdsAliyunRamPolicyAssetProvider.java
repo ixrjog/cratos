@@ -1,6 +1,8 @@
 package com.baiyi.cratos.eds.aliyun.provider.ram;
 
-import com.aliyuncs.ram.model.v20150501.*;
+import com.aliyuncs.ram.model.v20150501.GetPolicyResponse;
+import com.aliyuncs.ram.model.v20150501.ListEntitiesForPolicyResponse;
+import com.aliyuncs.ram.model.v20150501.ListPoliciesResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -9,7 +11,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamPolicyRepo;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -38,7 +40,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_POLICY)
-public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetPolicyResponse.Policy> {
+public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, GetPolicyResponse.Policy> {
 
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
     private final AliyunRamUserRepo aliyunRamUserRepo;
@@ -58,15 +60,15 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
 
     @Override
     protected List<GetPolicyResponse.Policy> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<ListPoliciesResponse.Policy> policies = aliyunRamPolicyRepo.listPolicies(instance.getEdsConfigModel());
+            List<ListPoliciesResponse.Policy> policies = aliyunRamPolicyRepo.listPolicies(instance.getConfig());
             if (CollectionUtils.isEmpty(policies)) {
                 return Collections.emptyList();
             } else {
                 List<GetPolicyResponse.Policy> entities = Lists.newArrayList();
                 for (ListPoliciesResponse.Policy policy : policies) {
-                    entities.add(aliyunRamPolicyRepo.getPolicy(instance.getEdsConfigModel(), policy));
+                    entities.add(aliyunRamPolicyRepo.getPolicy(instance.getConfig(), policy));
                 }
                 return entities;
             }
@@ -76,7 +78,7 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   GetPolicyResponse.Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyName())
                 .nameOf(entity.getPolicyName())
@@ -87,12 +89,12 @@ public class EdsAliyunRamPolicyAssetProvider extends BaseEdsInstanceAssetProvide
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, GetPolicyResponse.Policy entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListEntitiesForPolicyResponse.User> users = aliyunRamUserRepo.listUsersForPolicy(
-                    instance.getEdsConfigModel(), entity.getPolicyName(), entity.getPolicyType());
+                    instance.getConfig(), entity.getPolicyName(), entity.getPolicyType());
             if (!CollectionUtils.isEmpty(users)) {
                 final String policyName = Joiner.on(INDEX_VALUE_DIVISION_SYMBOL)
                         .join(users.stream()

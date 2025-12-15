@@ -5,7 +5,7 @@ import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -84,10 +84,10 @@ public class GitLabProjectPermissionTicketEntryProvider extends BaseGitLabPermis
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 GitLabPermissionModel.Permission projectPermission) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, ?> holder = (EdsInstanceProviderHolder<EdsGitLabConfigModel.GitLab, ?>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.GitLab, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.GitLab, ?>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.GITLAB_PROJECT.name());
-        EdsGitLabConfigModel.GitLab gitLab = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.GitLab gitLab = holder.getInstance()
+                .getConfig();
         String role = projectPermission.getRole();
         org.gitlab4j.api.models.User gitLabUser = getOrCreateUser(gitLab, workOrderTicket.getUsername());
         Long gitLabUserId = gitLabUser.getId();

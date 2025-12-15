@@ -1,11 +1,11 @@
 package com.baiyi.cratos.workorder.builder.entry;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.YamlUtils;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketEntry;
 import com.baiyi.cratos.domain.model.AliyunModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class AliyunRamPolicyPermissionTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddAliyunRamPolicyPermissionTicketEntry param;
     private String username;
-    private EdsAliyunConfigModel.Aliyun aliyun;
+    private EdsConfigs.Aliyun aliyun;
 
     public static AliyunRamPolicyPermissionTicketEntryBuilder newBuilder() {
         return new AliyunRamPolicyPermissionTicketEntryBuilder();
@@ -37,7 +37,7 @@ public class AliyunRamPolicyPermissionTicketEntryBuilder {
         return this;
     }
 
-    public AliyunRamPolicyPermissionTicketEntryBuilder withAliyun(EdsAliyunConfigModel.Aliyun aliyun) {
+    public AliyunRamPolicyPermissionTicketEntryBuilder withAliyun(EdsConfigs.Aliyun aliyun) {
         this.aliyun = aliyun;
         return this;
     }

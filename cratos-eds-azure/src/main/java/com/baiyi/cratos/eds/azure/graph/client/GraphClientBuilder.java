@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.azure.graph.client;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import lombok.AccessLevel;
@@ -22,9 +23,9 @@ public class GraphClientBuilder {
      * @param azure
      * @return
      */
-    public static GraphServiceClient create(EdsAzureConfigModel.Azure azure) {
+    public static GraphServiceClient create(EdsConfigs.Azure azure) {
         EdsAzureConfigModel.Cred cred = Optional.of(azure)
-                .map(EdsAzureConfigModel.Azure::getCred)
+                .map(EdsConfigs.Azure::getCred)
                 .orElseThrow();
         final ClientSecretCredential credential = new ClientSecretCredentialBuilder().clientId(cred.getClientId())
                 .tenantId(cred.getTenantId())

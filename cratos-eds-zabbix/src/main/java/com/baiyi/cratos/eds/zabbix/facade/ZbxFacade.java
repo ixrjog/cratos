@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.facade;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.enums.SeverityType;
 import com.baiyi.cratos.eds.zabbix.repo.ZbxEventRepo;
 import com.baiyi.cratos.eds.zabbix.repo.ZbxProblemRepo;
@@ -21,7 +21,7 @@ import static java.util.Map.entry;
 @SuppressWarnings("ALL")
 public class ZbxFacade {
 
-    public static List<ZbxProblemResult.Problem> listProblem(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxProblemResult.Problem> listProblem(EdsConfigs.Zabbix zbx) {
         List<Integer> severities = SeverityType.of(zbx);
         Map<String, Object> params = Map.ofEntries(entry("output", "extend"),
                                                    // 排除被抑制的问题
@@ -32,7 +32,7 @@ public class ZbxFacade {
         return ZbxProblemRepo.listProblem(zbx, params);
     }
 
-    public static List<ZbxEventResult.Event> listEvent(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxEventResult.Event> listEvent(EdsConfigs.Zabbix zbx) {
         List<ZbxProblemResult.Problem> problems = listProblem(zbx);
         if (CollectionUtils.isEmpty(problems)) {
             return List.of();

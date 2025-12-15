@@ -16,7 +16,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -88,10 +88,10 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                                     WorkOrderTicketEntry entry) {
         AliyunKmsModel.CreateSecret createSecret = param.getDetail();
         // 校验Secret是否存在
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         Optional<DescribeSecretResponseBody> optionalDescribeSecretResponseBody = AliyunKmsRepo.describeSecret(
                 createSecret.getEndpoint(), aliyun, createSecret.getSecretName());
         // 校验secretName是否合规
@@ -115,10 +115,10 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
                 .build();
         // 再次验证，避免重复申请
         this.verifyEntryParam(param, entry);
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_KMS_SECRET.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         Map<String, String> tags = buildTags(workOrderTicket, entry);
         // 解密 Secret 数据
         String secretData = stringEncryptor.decrypt(createSecret.getSecretData());
@@ -156,7 +156,7 @@ public class AliyunKmsSecretCreateTicketEntryProvider extends BaseTicketEntryPro
      * @param createSecret
      * @param describeSecretResponseBody
      */
-    private void importAsset(EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> holder,
+    private void importAsset(EdsInstanceProviderHolder<EdsConfigs.Aliyun, AliyunKms.KmsSecret> holder,
                              AliyunKmsModel.CreateSecret createSecret,
                              DescribeSecretResponseBody describeSecretResponseBody, Map<String, String> tags) {
         try {

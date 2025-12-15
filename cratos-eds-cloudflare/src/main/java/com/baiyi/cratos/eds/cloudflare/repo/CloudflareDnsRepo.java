@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
-import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class CloudflareDnsRepo {
 
     private final CloudflareService cloudflareService;
 
-    public List<CloudflareDns.DnsRecord> listDnsRecords(EdsCloudflareConfigModel.Cloudflare cloudflare, String zoneId) {
+    public List<CloudflareDns.DnsRecord> listDnsRecords(EdsConfigs.Cloudflare cloudflare, String zoneId) {
         List<CloudflareDns.DnsRecord> results = Lists.newArrayList();
         int page = 1;
         int total = Integer.MAX_VALUE;

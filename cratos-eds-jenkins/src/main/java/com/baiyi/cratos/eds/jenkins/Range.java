@@ -4,7 +4,7 @@
  * Distributed under the MIT license: http://opensource.org/licenses/MIT
  */
 
-package com.baiyi.cratos.eds.jenkins.helper;
+package com.baiyi.cratos.eds.jenkins;
 
 /**
  * The range class will handle the following situations:

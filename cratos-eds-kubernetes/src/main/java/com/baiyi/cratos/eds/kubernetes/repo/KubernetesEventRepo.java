@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.Event;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -22,7 +22,7 @@ public class KubernetesEventRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public List<Event> listEvent(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+    public List<Event> listEvent(EdsConfigs.Kubernetes kubernetes, String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.v1()
                     .events()

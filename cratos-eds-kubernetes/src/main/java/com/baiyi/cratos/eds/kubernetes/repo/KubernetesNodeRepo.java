@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.model.KubernetesUsageModel;
 import io.fabric8.kubernetes.api.model.Node;
@@ -28,7 +28,7 @@ public class KubernetesNodeRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public List<Node> list(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public List<Node> list(EdsConfigs.Kubernetes kubernetes) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             NodeList nodeList = kc.nodes()
                     .list();
@@ -39,7 +39,7 @@ public class KubernetesNodeRepo {
         }
     }
 
-    public Map<String, KubernetesNodeVO.NodeUsage> queryNodeUsageMap(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public Map<String, KubernetesNodeVO.NodeUsage> queryNodeUsageMap(EdsConfigs.Kubernetes kubernetes) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Map<String, Node> nodeMap = kc.nodes()
                     .list()

@@ -4,7 +4,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyun.rocketmq20220801.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOnsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class AliyunOnsV5Repo {
 
     public static List<ListInstancesResponseBody.ListInstancesResponseBodyDataList> listInstances(
-            @NonNull String endpoint, @NonNull EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+            @NonNull String endpoint, @NonNull EdsConfigs.Aliyun aliyun) throws Exception {
         ListInstancesRequest request = new ListInstancesRequest().setPageNumber(1)
                 .setPageSize(200);
         List<ListInstancesResponseBody.ListInstancesResponseBodyDataList> instanceList = Lists.newArrayList();
@@ -53,7 +53,7 @@ public class AliyunOnsV5Repo {
         }
     }
 
-    public static GetInstanceResponse getInstance(@NonNull String regionId, @NonNull EdsAliyunConfigModel.Aliyun aliyun,
+    public static GetInstanceResponse getInstance(@NonNull String regionId, @NonNull EdsConfigs.Aliyun aliyun,
                                                   @NonNull String instanceId) throws Exception {
         String endpoint = getEndpoint(regionId);
         com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
@@ -61,7 +61,7 @@ public class AliyunOnsV5Repo {
     }
 
     public static List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> listTopics(@NonNull String endpoint,
-                                                                                         @NonNull EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                         @NonNull EdsConfigs.Aliyun aliyun,
                                                                                          @NonNull String instanceId) throws Exception {
         ListTopicsRequest request = new ListTopicsRequest().setPageNumber(1)
                 .setPageSize(100);
@@ -92,7 +92,7 @@ public class AliyunOnsV5Repo {
     }
 
     public static List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> listConsumerGroups(
-            @NonNull String endpoint, @NonNull EdsAliyunConfigModel.Aliyun aliyun,
+            @NonNull String endpoint, @NonNull EdsConfigs.Aliyun aliyun,
             @NonNull String instanceId) throws Exception {
         ListConsumerGroupsRequest request = new ListConsumerGroupsRequest().setPageNumber(1)
                 .setPageSize(100);
@@ -123,7 +123,7 @@ public class AliyunOnsV5Repo {
     }
 
     public static List<ListConsumerGroupSubscriptionsResponseBody.ListConsumerGroupSubscriptionsResponseBodyData> listConsumerGroupSubscriptions(
-            @NonNull String endpoint, @NonNull EdsAliyunConfigModel.Aliyun aliyun, @NonNull String instanceId,
+            @NonNull String endpoint, @NonNull EdsConfigs.Aliyun aliyun, @NonNull String instanceId,
             @NonNull String consumerGroupId) throws Exception {
         com.aliyun.rocketmq20220801.Client client = AliyunOnsClient.createV5Client(endpoint, aliyun);
         ListConsumerGroupSubscriptionsResponse response = client.listConsumerGroupSubscriptions(instanceId,
@@ -136,7 +136,7 @@ public class AliyunOnsV5Repo {
 
 
     public static GetConsumerGroupResponseBody.GetConsumerGroupResponseBodyData getConsumerGroup(String regionId,
-                                                                                                 EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                                 EdsConfigs.Aliyun aliyun,
                                                                                                  String instanceId,
                                                                                                  String consumerGroupId) throws Exception {
         String endpoint = getEndpoint(regionId);
@@ -146,7 +146,7 @@ public class AliyunOnsV5Repo {
 
     }
 
-    public static void createConsumerGroup(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+    public static void createConsumerGroup(String regionId, EdsConfigs.Aliyun aliyun, String instanceId,
                                            AliyunOnsV5.CreateConsumerGroup createConsumerGroup) throws Exception {
         CreateConsumerGroupRequest.CreateConsumerGroupRequestConsumeRetryPolicy policy = new CreateConsumerGroupRequest.CreateConsumerGroupRequestConsumeRetryPolicy()
                 .setRetryPolicy(createConsumerGroup.getConsumeRetryPolicy().getRetryPolicy())
@@ -162,7 +162,7 @@ public class AliyunOnsV5Repo {
     }
 
     public static GetTopicResponseBody.GetTopicResponseBodyData getTopic(String regionId,
-                                                                         EdsAliyunConfigModel.Aliyun aliyun,
+                                                                         EdsConfigs.Aliyun aliyun,
                                                                          String instanceId,
                                                                          String topicName) throws Exception {
         String endpoint = getEndpoint(regionId);
@@ -171,7 +171,7 @@ public class AliyunOnsV5Repo {
         return response.getBody().getData();
     }
 
-    public static void createTopic(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+    public static void createTopic(String regionId, EdsConfigs.Aliyun aliyun, String instanceId,
                                    AliyunOnsV5.CreateTopic createTopic) throws Exception {
         CreateTopicRequest request = new CreateTopicRequest()
                 .setMessageType(createTopic.getMessageType())

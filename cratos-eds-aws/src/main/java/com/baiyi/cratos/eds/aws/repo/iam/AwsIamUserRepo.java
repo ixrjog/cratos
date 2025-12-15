@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo.iam;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class AwsIamUserRepo {
     public static final boolean NO_PASSWORD_RESET_REQUIRED = false;
     public static final boolean CREATE_LOGIN_PROFILE = true;
 
-    public User getUser(EdsAwsConfigModel.Aws aws, String userName) {
+    public User getUser(EdsConfigs.Aws aws, String userName) {
         GetUserRequest request = new GetUserRequest();
         request.setUserName(userName);
         GetUserResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
@@ -32,7 +32,7 @@ public class AwsIamUserRepo {
         return result.getUser();
     }
 
-    public List<User> listUsers(EdsAwsConfigModel.Aws aws) {
+    public List<User> listUsers(EdsConfigs.Aws aws) {
         ListUsersRequest request = new ListUsersRequest();
         List<User> users = Lists.newArrayList();
         AmazonIdentityManagement iamClient = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws);
@@ -50,7 +50,7 @@ public class AwsIamUserRepo {
      *
      * @param aws
      */
-    public com.amazonaws.services.identitymanagement.model.User createUser(EdsAwsConfigModel.Aws aws,
+    public com.amazonaws.services.identitymanagement.model.User createUser(EdsConfigs.Aws aws,
                                                                            com.baiyi.cratos.domain.generator.User user,
                                                                            String password,
                                                                            boolean createLoginProfile) {
@@ -69,7 +69,7 @@ public class AwsIamUserRepo {
         return result.getUser();
     }
 
-    public com.amazonaws.services.identitymanagement.model.User createUser(EdsAwsConfigModel.Aws aws,
+    public com.amazonaws.services.identitymanagement.model.User createUser(EdsConfigs.Aws aws,
                                                                            String iamUsername,
                                                                            String password,
                                                                            boolean createLoginProfile) {
@@ -88,7 +88,7 @@ public class AwsIamUserRepo {
         return result.getUser();
     }
 
-    private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, String iamUsername,
+    private LoginProfile createLoginProfile(EdsConfigs.Aws aws, String iamUsername,
                                             String password, boolean passwordResetRequired) {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(iamUsername);
@@ -100,7 +100,7 @@ public class AwsIamUserRepo {
     }
 
 
-    private LoginProfile createLoginProfile(EdsAwsConfigModel.Aws aws, com.baiyi.cratos.domain.generator.User user,
+    private LoginProfile createLoginProfile(EdsConfigs.Aws aws, com.baiyi.cratos.domain.generator.User user,
                                             String password, boolean passwordResetRequired) {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(user.getUsername());
@@ -111,7 +111,7 @@ public class AwsIamUserRepo {
         return result.getLoginProfile();
     }
 
-    public LoginProfile getLoginProfile(EdsAwsConfigModel.Aws aws, String userName) {
+    public LoginProfile getLoginProfile(EdsConfigs.Aws aws, String userName) {
         GetLoginProfileRequest request = new GetLoginProfileRequest();
         request.setUserName(userName);
         GetLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
@@ -119,7 +119,7 @@ public class AwsIamUserRepo {
         return result.getLoginProfile();
     }
 
-    public void deleteLoginProfile(EdsAwsConfigModel.Aws aws, String userName) {
+    public void deleteLoginProfile(EdsConfigs.Aws aws, String userName) {
         DeleteLoginProfileRequest request = new DeleteLoginProfileRequest();
         request.setUserName(userName);
         DeleteLoginProfileResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
@@ -134,7 +134,7 @@ public class AwsIamUserRepo {
      * @param password
      * @param passwordResetRequired
      */
-    public void updateLoginProfile(EdsAwsConfigModel.Aws aws, String iamUsername, String password,
+    public void updateLoginProfile(EdsConfigs.Aws aws, String iamUsername, String password,
                                    boolean passwordResetRequired) {
         UpdateLoginProfileRequest request = new UpdateLoginProfileRequest();
         request.setUserName(iamUsername);

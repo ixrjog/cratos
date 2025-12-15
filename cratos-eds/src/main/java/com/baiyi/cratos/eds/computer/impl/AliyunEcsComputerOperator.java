@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunEcsRepo;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ECS)
-public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsAliyunConfigModel.Aliyun, DescribeInstancesResponse.Instance> {
+public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsConfigs.Aliyun, DescribeInstancesResponse.Instance> {
 
     private final AliyunEcsRepo aliyunEcsRepo;
 
@@ -43,7 +43,7 @@ public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsAliy
      */
     @Override
     protected String rebootInstance(
-            CloudComputerContext<EdsAliyunConfigModel.Aliyun> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aliyun> context) throws CloudComputerOperationException {
         return aliyunEcsRepo.rebootInstance(
                 context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
@@ -57,7 +57,7 @@ public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsAliy
      */
     @Override
     protected String startInstance(
-            CloudComputerContext<EdsAliyunConfigModel.Aliyun> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aliyun> context) throws CloudComputerOperationException {
         return aliyunEcsRepo.startInstance(
                 context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }
@@ -71,7 +71,7 @@ public class AliyunEcsComputerOperator extends BaseCloudComputerOperator<EdsAliy
      */
     @Override
     protected String stopInstance(
-            CloudComputerContext<EdsAliyunConfigModel.Aliyun> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Aliyun> context) throws CloudComputerOperationException {
         return aliyunEcsRepo.stopInstance(
                 context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
     }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.ldap.factory;
 
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.LdapContextSource;
@@ -16,13 +16,13 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class LdapFactory {
 
-    public static LdapTemplate buildLdapTemplate(EdsLdapConfigModel.Ldap ldapConfig) {
+    public static LdapTemplate buildLdapTemplate(EdsConfigs.Ldap ldapConfig) {
         LdapContextSource contextSource = buildLdapContextSource(ldapConfig);
         TransactionAwareContextSourceProxy sourceProxy = buildTransactionAwareContextSourceProxy(contextSource);
         return new LdapTemplate(sourceProxy);
     }
 
-    private static LdapContextSource buildLdapContextSource(EdsLdapConfigModel.Ldap config) {
+    private static LdapContextSource buildLdapContextSource(EdsConfigs.Ldap config) {
         LdapContextSource contextSource = new LdapContextSource();
         contextSource.setUrl(config.getUrl());
         contextSource.setBase(config.getBase());

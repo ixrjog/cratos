@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds;
 
 import com.amazonaws.services.cloudwatch.model.*;
 import com.baiyi.cratos.eds.aws.repo.AwsCloudWatchRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +15,11 @@ import java.util.List;
  * @Date 2024/4/1 14:47
  * @Version 1.0
  */
-public class EdsAwsCloudWatchTest extends BaseEdsTest<EdsAwsConfigModel.Aws> {
+public class EdsAwsCloudWatchTest extends BaseEdsTest<EdsConfigs.Aws> {
 
     @Test
     void getMetricDataTest() {
-        EdsAwsConfigModel.Aws aws = getConfig(3);
+        EdsConfigs.Aws aws = getConfig(3);
         GetMetricDataRequest request = new GetMetricDataRequest();
 
         MetricDataQuery metricDataQuery = new MetricDataQuery();
@@ -59,7 +59,7 @@ public class EdsAwsCloudWatchTest extends BaseEdsTest<EdsAwsConfigModel.Aws> {
 
     @Test
     void listMetricsTest() {
-        EdsAwsConfigModel.Aws aws = getConfig(3);
+        EdsConfigs.Aws aws = getConfig(3);
         // ApplicationELB  VPN
         List<Metric> metrics = AwsCloudWatchRepo.listMetrics(aws.getRegionId(), aws, "AWS/VPN");
         System.out.println(metrics);

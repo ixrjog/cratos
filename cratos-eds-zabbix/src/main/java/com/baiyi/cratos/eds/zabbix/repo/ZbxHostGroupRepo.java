@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.request.ZbxHostGroupRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostGroupResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxHostGroupRepo {
 
-    public static List<ZbxHostGroupResult.HostGroup> listHostGroup(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxHostGroupResult.HostGroup> listHostGroup(EdsConfigs.Zabbix zbx) {
         ZbxHostGroupService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxHostGroupService.class);
         ZbxHostGroupRequest.GetHostGroup request = ZbxHostGroupRequest.GetHostGroup.builder()
                 .build();

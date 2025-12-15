@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class GitLabGroupRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByGroupId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Member> getMembersByGroupId(EdsConfigs.GitLab gitLab,
                                                    Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getGroupApi()
@@ -54,7 +54,7 @@ public class GitLabGroupRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Project> getProjectsByGroupId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Project> getProjectsByGroupId(EdsConfigs.GitLab gitLab,
                                                      Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Project> projectPager = gitLabApi.getGroupApi()
@@ -75,7 +75,7 @@ public class GitLabGroupRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+    public static void updateMember(EdsConfigs.GitLab gitLab, Long groupId, Long userId,
                                     AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getGroupApi()
@@ -95,7 +95,7 @@ public class GitLabGroupRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+    public static void addMember(EdsConfigs.GitLab gitLab, Long groupId, Long userId,
                                  AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getGroupApi()
@@ -113,7 +113,7 @@ public class GitLabGroupRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Group> getGroups(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+    public static List<Group> getGroups(EdsConfigs.GitLab gitLab) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getGroupApi()
                     .getGroups();
@@ -123,7 +123,7 @@ public class GitLabGroupRepo {
         }
     }
 
-    public static Group getGroup(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+    public static Group getGroup(EdsConfigs.GitLab gitLab, Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getGroupApi()
                     .getGroup(groupId);
@@ -133,7 +133,7 @@ public class GitLabGroupRepo {
         }
     }
 
-    public static List<Member> getMembersWithGroupId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Member> getMembersWithGroupId(EdsConfigs.GitLab gitLab,
                                                      Long groupId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getGroupApi()

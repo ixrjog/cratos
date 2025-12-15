@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.alidns20150109.AsyncClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import darabonba.core.client.ClientOverrideConfiguration;
 
 /**
@@ -14,7 +14,7 @@ import darabonba.core.client.ClientOverrideConfiguration;
 public class AliyunDnsClient {
 
     public static com.aliyun.sdk.service.alidns20150109.AsyncClient createClient(
-            EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+            EdsConfigs.Aliyun aliyun) throws Exception {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                                                                                     .accessKeyId(aliyun.getCred()
                                                                                                          .getAccessKeyId())

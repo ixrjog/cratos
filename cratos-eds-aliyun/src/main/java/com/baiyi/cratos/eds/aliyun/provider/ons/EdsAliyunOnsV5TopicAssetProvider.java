@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -40,7 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC)
-public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> {
+public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> {
 
     public EdsAliyunOnsV5TopicAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -53,10 +54,10 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getOns)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getOns)
                 .map(EdsAliyunConfigModel.ONS::getV5)
                 .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
                 .orElse(Collections.emptyList()));
@@ -64,7 +65,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
 
     @Override
     protected List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> listEntities(String endpoint,
-                                                                                       ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                                                                       ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> results = Lists.newArrayList();
         try {
             List<EdsAsset> edsAssetsOnsInstances = queryAssetsByInstanceAndType(instance,
@@ -74,7 +75,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
             } else {
                 for (EdsAsset edsAssetsOnsInstance : edsAssetsOnsInstances) {
                     List<ListTopicsResponseBody.ListTopicsResponseBodyDataList> topics = AliyunOnsV5Repo.listTopics(
-                            endpoint, instance.getEdsConfigModel(), edsAssetsOnsInstance.getAssetId());
+                            endpoint, instance.getConfig(), edsAssetsOnsInstance.getAssetId());
                     if (!CollectionUtils.isEmpty(topics)) {
                         results.addAll(topics);
                     }
@@ -87,7 +88,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
@@ -107,7 +108,7 @@ public class EdsAliyunOnsV5TopicAssetProvider extends BaseHasEndpointsEdsAssetPr
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset,
                                             ListTopicsResponseBody.ListTopicsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

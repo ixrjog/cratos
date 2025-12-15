@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.jenkins.helper.FunctionalHelper.SET_CLIENT;
+import static com.baiyi.cratos.eds.jenkins.FunctionalHelper.SET_CLIENT;
 
 public class FolderJob extends Job {
 

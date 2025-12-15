@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_TRANSFER_SERVER)
-public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> {
+public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, AwsTransferServer.TransferServer> {
 
     public EdsAwsTransferServerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -44,7 +44,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected List<AwsTransferServer.TransferServer> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsTransferServer.TransferServer> listEntities(String regionId, EdsConfigs.Aws aws) {
         List<ListedServer> servers = AwsTransferRepo.listServers(regionId, aws);
         if (!CollectionUtils.isEmpty(servers)) {
             return toTransferServer(regionId, aws, servers);
@@ -52,7 +52,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
         return Collections.emptyList();
     }
 
-    private List<AwsTransferServer.TransferServer> toTransferServer(String regionId, EdsAwsConfigModel.Aws aws,
+    private List<AwsTransferServer.TransferServer> toTransferServer(String regionId, EdsConfigs.Aws aws,
                                                                     List<ListedServer> servers) {
         return servers.stream()
                 .map(e -> {
@@ -67,7 +67,7 @@ public class EdsAwsTransferServerAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                   AwsTransferServer.TransferServer entity) {
         return newEdsAssetBuilder(instance, entity)
                 .assetIdOf(entity.getServer()

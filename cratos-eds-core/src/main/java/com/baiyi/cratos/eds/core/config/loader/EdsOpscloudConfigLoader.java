@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.core.config.loader;
 
 import com.baiyi.cratos.eds.core.BaseEdsConfigLoader;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.service.CredentialService;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * &#064;Version 1.0
  */
 @Component
-public class EdsOpscloudConfigLoader extends BaseEdsConfigLoader<EdsOpscloudConfigModel.Opscloud> {
+public class EdsOpscloudConfigLoader extends BaseEdsConfigLoader<EdsConfigs.Opscloud> {
 
     public EdsOpscloudConfigLoader(EdsInstanceProviderHolderBuilder holderBuilder,
                                    EdsInstanceService edsInstanceService, EdsConfigService edsConfigService,

@@ -44,7 +44,7 @@ public class EdsInstanceProviderHolderBuilder {
         }
         ExternalDataSourceInstance<?> extDataSourceInstance = ExternalDataSourceInstance.builder()
                 .edsInstance(edsInstance)
-                .edsConfigModel(edsConfigModel)
+                .config(edsConfigModel)
                 .build();
         return EdsInstanceProviderFactory.buildHolder(extDataSourceInstance, assetType);
     }

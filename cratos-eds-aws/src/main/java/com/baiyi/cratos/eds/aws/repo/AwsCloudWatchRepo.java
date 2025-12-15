@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.cloudwatch.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonCloudWatchService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsCloudWatchRepo {
 
-    public static List<MessageData> getMetricData(String regionId, EdsAwsConfigModel.Aws aws, GetMetricDataRequest request) {
+    public static List<MessageData> getMetricData(String regionId, EdsConfigs.Aws aws, GetMetricDataRequest request) {
         request.setNextToken(null);
         List<MessageData> messageDataList = Lists.newArrayList();
         while (true) {
@@ -34,7 +34,7 @@ public class AwsCloudWatchRepo {
         }
     }
 
-    public static List<Metric> listMetrics(String regionId, EdsAwsConfigModel.Aws aws, String namespace) {
+    public static List<Metric> listMetrics(String regionId, EdsConfigs.Aws aws, String namespace) {
         ListMetricsRequest request = new ListMetricsRequest();
         request.setIncludeLinkedAccounts(true);
         request.setNextToken(null);

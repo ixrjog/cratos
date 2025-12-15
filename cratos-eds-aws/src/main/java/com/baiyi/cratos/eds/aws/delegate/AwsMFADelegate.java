@@ -5,7 +5,7 @@ import com.amazonaws.services.identitymanagement.model.VirtualMFADevice;
 import com.baiyi.cratos.common.otp.OptGenerator;
 import com.baiyi.cratos.common.otp.model.OTPAccessCode;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsMFADeviceRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.RetryException;
@@ -30,7 +30,7 @@ public class AwsMFADelegate {
 
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Retryable(retryFor = RetryException.class, maxAttempts = 5, backoff = @Backoff(delay = 3000))
-    public void enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername,
+    public void enableMFADevice(EdsConfigs.Aws aws, String iamUsername,
                                 VirtualMFADevice vMFADevice) throws RetryException {
         try {
             TimeUnit.SECONDS.sleep(15L);

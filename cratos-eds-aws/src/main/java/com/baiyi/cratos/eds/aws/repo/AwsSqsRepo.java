@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo;
 import com.amazonaws.services.sqs.model.*;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.eds.aws.service.AmazonSqsService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +24,7 @@ import java.util.Map;
 @Component
 public class AwsSqsRepo {
 
-    public List<String> listQueues(String regionId, EdsAwsConfigModel.Aws aws) {
+    public List<String> listQueues(String regionId, EdsConfigs.Aws aws) {
         ListQueuesRequest request = new ListQueuesRequest().withMaxResults(1000);
         List<String> queues = Lists.newArrayList();
         String nextToken = null;
@@ -48,7 +48,7 @@ public class AwsSqsRepo {
      * @param queueName
      * @return
      */
-    public String getQueue(String regionId, EdsAwsConfigModel.Aws aws, String queueName) {
+    public String getQueue(String regionId, EdsConfigs.Aws aws, String queueName) {
         try {
             GetQueueUrlRequest request = new GetQueueUrlRequest();
             request.setQueueName(queueName);
@@ -69,7 +69,7 @@ public class AwsSqsRepo {
      * @return
      */
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl", unless = "#result == null")
-    public Map<String, String> getQueueAttributes(String regionId, EdsAwsConfigModel.Aws aws, String queueUrl) {
+    public Map<String, String> getQueueAttributes(String regionId, EdsConfigs.Aws aws, String queueUrl) {
         GetQueueAttributesRequest request = new GetQueueAttributesRequest();
         request.setAttributeNames(Lists.newArrayList("All"));
         request.setQueueUrl(queueUrl);
@@ -79,10 +79,10 @@ public class AwsSqsRepo {
     }
 
     @CacheEvict(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SQS:QUEUE:URL:' + #queueUrl")
-    public void evictQueueAttributes(String regionId, EdsAwsConfigModel.Aws aws, String queueUrl) {
+    public void evictQueueAttributes(String regionId, EdsConfigs.Aws aws, String queueUrl) {
     }
 
-    public void setQueueAttributes(String regionId, EdsAwsConfigModel.Aws aws, String queueUrl,
+    public void setQueueAttributes(String regionId, EdsConfigs.Aws aws, String queueUrl,
                                    Map<String, String> attributes) {
         SetQueueAttributesRequest request = new SetQueueAttributesRequest();
         request.setQueueUrl(queueUrl);

@@ -4,7 +4,7 @@ import com.amazonaws.services.certificatemanager.model.CertificateSummary;
 import com.amazonaws.services.certificatemanager.model.ListCertificatesRequest;
 import com.amazonaws.services.certificatemanager.model.ListCertificatesResult;
 import com.baiyi.cratos.eds.aws.service.AmazonAcmService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsCertRepo {
 
-    public static List<CertificateSummary> listCert(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<CertificateSummary> listCert(String regionId, EdsConfigs.Aws aws) {
         ListCertificatesRequest request = new ListCertificatesRequest();
         List<CertificateSummary> certificateSummaryList = Lists.newArrayList();
         var acm = AmazonAcmService.buildAWSCertificateManager(regionId, aws);

@@ -5,7 +5,7 @@ import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsRequest
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponse;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDnsClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class AliyunDnsRepo {
     private static final long PAGE_SIZE = 500L;
 
     public static List<DescribeDomainRecordsResponseBody.Record> describeDomainRecords(
-            EdsAliyunConfigModel.Aliyun aliyun, String domainName) {
+            EdsConfigs.Aliyun aliyun, String domainName) {
         long pageNumber = 1L;
         List<DescribeDomainRecordsResponseBody.Record> allRecords = Lists.newArrayList();
         try (com.aliyun.sdk.service.alidns20150109.AsyncClient client = AliyunDnsClient.createClient(aliyun)) {

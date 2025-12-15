@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo.iam;
 
 import com.amazonaws.services.identitymanagement.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.RetryException;
@@ -25,7 +25,7 @@ public class AwsMFADeviceRepo {
     public static final String SERIAL_NUMBER_TPL = "arn:aws:iam::{}:mfa/{}";
 
     @Retryable(retryFor = RetryException.class, maxAttempts = 2, backoff = @Backoff(delay = 5000))
-    public VirtualMFADevice createVirtualMFADevice(EdsAwsConfigModel.Aws aws,
+    public VirtualMFADevice createVirtualMFADevice(EdsConfigs.Aws aws,
                                                    String iamUsername) throws RetryException {
         try {
             CreateVirtualMFADeviceRequest request = new CreateVirtualMFADeviceRequest();
@@ -39,7 +39,7 @@ public class AwsMFADeviceRepo {
         }
     }
 
-    public void deactivateMFADevice(EdsAwsConfigModel.Aws aws, String serialNumber, String iamUsername) {
+    public void deactivateMFADevice(EdsConfigs.Aws aws, String serialNumber, String iamUsername) {
         DeactivateMFADeviceRequest request = new DeactivateMFADeviceRequest();
         request.setUserName(iamUsername);
         request.setSerialNumber(serialNumber);
@@ -47,14 +47,14 @@ public class AwsMFADeviceRepo {
                 .deactivateMFADevice(request);
     }
 
-    public void deleteVirtualMFADevice(EdsAwsConfigModel.Aws aws, String serialNumber) {
+    public void deleteVirtualMFADevice(EdsConfigs.Aws aws, String serialNumber) {
         DeleteVirtualMFADeviceRequest request = new DeleteVirtualMFADeviceRequest();
         request.setSerialNumber(serialNumber);
         DeleteVirtualMFADeviceResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
                 .deleteVirtualMFADevice(request);
     }
 
-    public List<MFADevice> listMFADevices(EdsAwsConfigModel.Aws aws, String iamUsername) {
+    public List<MFADevice> listMFADevices(EdsConfigs.Aws aws, String iamUsername) {
         ListMFADevicesRequest request = new ListMFADevicesRequest();
         request.setUserName(iamUsername);
         ListMFADevicesResult result = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws)
@@ -62,7 +62,7 @@ public class AwsMFADeviceRepo {
         return result.getMFADevices();
     }
 
-    public EnableMFADeviceResult enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername, String serialNumber, String authenticationCode1, String authenticationCode2) {
+    public EnableMFADeviceResult enableMFADevice(EdsConfigs.Aws aws, String iamUsername, String serialNumber, String authenticationCode1, String authenticationCode2) {
         EnableMFADeviceRequest request = new EnableMFADeviceRequest();
         request.setUserName(iamUsername);
         request.setSerialNumber(serialNumber);

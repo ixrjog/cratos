@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AmazonSnsService {
 
-    public static AmazonSNS buildAmazonSNS(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static AmazonSNS buildAmazonSNS(String regionId, EdsConfigs.Aws aws) {
         AWSCredentials credentials = AwsCredentialsManager.buildAWSCredentials(aws);
         return AmazonSNSClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

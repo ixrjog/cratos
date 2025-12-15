@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.opscloud.repo;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.opscloud.model.OcUserVO;
 import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudService;
@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OcUserRepo {
 
-    public static List<OcUserVO.User> listUser(EdsOpscloudConfigModel.Opscloud opscloud) {
+    public static List<OcUserVO.User> listUser(EdsConfigs.Opscloud opscloud) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
         int page = 1;
         int length = 10;
@@ -51,7 +51,7 @@ public class OcUserRepo {
         return result;
     }
 
-    public static OcUserVO.User addUser(EdsOpscloudConfigModel.Opscloud opscloud, OcUserParam.AddUser addUser) {
+    public static OcUserVO.User addUser(EdsConfigs.Opscloud opscloud, OcUserParam.AddUser addUser) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
         HttpResult<OcUserVO.User> httpResult = opscloudService.addUser(opscloud.getCred()
                 .getAccessToken(), addUser);

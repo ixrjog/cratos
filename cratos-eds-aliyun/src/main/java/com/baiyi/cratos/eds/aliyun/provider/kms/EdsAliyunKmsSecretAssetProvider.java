@@ -17,6 +17,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -47,7 +48,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CONTENT
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_KMS_SECRET)
-public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunKms.KmsSecret> {
+public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, AliyunKms.KmsSecret> {
 
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
@@ -68,26 +69,26 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getKms)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getKms)
                 .map(EdsAliyunConfigModel.KMS::getEndpoints)
                 .orElse(List.of()));
     }
 
     @Override
     protected List<AliyunKms.KmsSecret> listEntities(String endpoint,
-                                                     ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                                     ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListSecretsResponseBody.Secret> secrets = AliyunKmsRepo.listSecrets(endpoint,
-                instance.getEdsConfigModel());
+                instance.getConfig());
         if (CollectionUtils.isEmpty(secrets)) {
             return List.of();
         }
-        return toKmsSecret(endpoint, instance.getEdsConfigModel(), secrets);
+        return toKmsSecret(endpoint, instance.getConfig(), secrets);
     }
 
-    private List<AliyunKms.KmsSecret> toKmsSecret(String endpoint, EdsAliyunConfigModel.Aliyun configModel,
+    private List<AliyunKms.KmsSecret> toKmsSecret(String endpoint, EdsConfigs.Aliyun configModel,
                                                   List<ListSecretsResponseBody.Secret> secrets) {
         return secrets.stream()
                 .map(e -> AliyunKmsRepo.describeSecret(endpoint, configModel, e.getSecretName())
@@ -107,7 +108,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunKms.KmsSecret entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSecret()
                         .getSecretName())
@@ -130,12 +131,12 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance, EdsAsset edsAsset,
             AliyunKms.KmsSecret entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, ALIYUN_KMS_ENDPOINT, entity.getEndpoint()));
         Optional<GetSecretValueResponseBody> optionalGetSecretValueResponseBody = AliyunKmsRepo.getSecretValue(
-                entity.getEndpoint(), instance.getEdsConfigModel(), entity.getSecret()
+                entity.getEndpoint(), instance.getConfig(), entity.getSecret()
                         .getSecretName());
         if (optionalGetSecretValueResponseBody.isPresent()) {
             String contentHash = InfoSummaryUtils.toContentHash(InfoSummaryUtils.SHA256, InfoSummaryUtils.toSHA256(
@@ -147,7 +148,7 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunKms.KmsSecret entity) {
         EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         // 获取符合条件的标签资源

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.socket.HasSocketRequest;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -40,17 +40,17 @@ public abstract class BaseKubernetesWebShChannelHandler<T extends HasSocketReque
     private final ApplicationService applicationService;
 
     @SuppressWarnings("unchecked")
-    protected EdsKubernetesConfigModel.Kubernetes getKubernetes(
-            Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap, int edsInstanceId) {
+    protected EdsConfigs.Kubernetes getKubernetes(
+            Map<Integer, EdsConfigs.Kubernetes> kubernetesMap, int edsInstanceId) {
         if (kubernetesMap.containsKey(edsInstanceId)) {
             return kubernetesMap.get(edsInstanceId);
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 edsInstanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         kubernetesMap.put(edsInstanceId, holder.getInstance()
-                .getEdsConfigModel());
+                .getConfig());
         return holder.getInstance()
-                .getEdsConfigModel();
+                .getConfig();
     }
 
     @SuppressWarnings("rawtypes")

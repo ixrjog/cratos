@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsDingtalkMessageFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -50,11 +50,11 @@ public class EdsDingtalkMessageFacadeImpl implements EdsDingtalkMessageFacade {
     @SuppressWarnings("unchecked")
     private void sendToDingtalkUser(EdsIdentityVO.DingtalkIdentity dingtalkIdentity,
                                     NotificationTemplate notificationTemplate, String msgText) {
-        EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsDingtalkConfigModel.Dingtalk, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Dingtalk, ?>) holderBuilder.newHolder(
                 dingtalkIdentity.getInstance()
                         .getId(), EdsAssetTypeEnum.DINGTALK_USER.name());
-        EdsDingtalkConfigModel.Dingtalk dingtalk = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Dingtalk dingtalk = holder.getInstance()
+                .getConfig();
         AsyncSendMessageAgency.newBuilder()
                 .withMsgText(msgText)
                 .withNotificationTemplate(notificationTemplate)

@@ -5,7 +5,7 @@ import com.amazonaws.ResponseMetadata;
 import com.amazonaws.services.ec2.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
 import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class AwsEc2Repo {
 
     private final Ec2InstancesService ec2InstancesService;
 
-    public List<Instance> listInstances(String regionId, EdsAwsConfigModel.Aws aws) {
+    public List<Instance> listInstances(String regionId, EdsConfigs.Aws aws) {
         DescribeInstancesRequest request = new DescribeInstancesRequest();
         List<Instance> instanceList = Lists.newArrayList();
         String nextToken = null;
@@ -41,7 +41,7 @@ public class AwsEc2Repo {
         return instanceList;
     }
 
-    public String rebootInstance(String regionId, EdsAwsConfigModel.Aws aws, String instanceId) {
+    public String rebootInstance(String regionId, EdsConfigs.Aws aws, String instanceId) {
         RebootInstancesRequest request = new RebootInstancesRequest();
         request.setInstanceIds(List.of(instanceId));
         RebootInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws)
@@ -52,7 +52,7 @@ public class AwsEc2Repo {
                 .orElse(null);
     }
 
-    public String startInstance(String regionId, EdsAwsConfigModel.Aws aws, String instanceId) {
+    public String startInstance(String regionId, EdsConfigs.Aws aws, String instanceId) {
         StartInstancesRequest request = new StartInstancesRequest();
         request.setInstanceIds(List.of(instanceId));
         StartInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws)
@@ -63,7 +63,7 @@ public class AwsEc2Repo {
                 .orElse(null);
     }
 
-    public String stopInstance(String regionId, EdsAwsConfigModel.Aws aws, String instanceId) {
+    public String stopInstance(String regionId, EdsConfigs.Aws aws, String instanceId) {
         StopInstancesRequest request = new StopInstancesRequest();
         request.setInstanceIds(List.of(instanceId));
         StopInstancesResult response = AmazonEc2Service.buildAmazonEC2(regionId, aws)

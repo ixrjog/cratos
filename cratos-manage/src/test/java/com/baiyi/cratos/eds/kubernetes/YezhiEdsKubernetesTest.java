@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.google.common.collect.Maps;
@@ -22,7 +22,7 @@ import java.util.Optional;
  * &#064;Date  2024/5/13 下午4:23
  * &#064;Version 1.0
  */
-public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
     public static final int ACK_DEV_INSTANCE_ID = 104;
 
@@ -31,7 +31,7 @@ public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel
 
     @Test
     void test() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(ACK_DEV_INSTANCE_ID,
+        EdsConfigs.Kubernetes cfg = getConfig(ACK_DEV_INSTANCE_ID,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "dev");
         for (Deployment deployment : deploymentList) {
@@ -55,7 +55,7 @@ public class YezhiEdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel
 
     @Test
     void test2() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(ACK_DEV_INSTANCE_ID,
+        EdsConfigs.Kubernetes cfg = getConfig(ACK_DEV_INSTANCE_ID,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         // 获取 account-dev deployment
         Deployment deployment = kubernetesDeploymentRepo.get(cfg, "dev", "account-dev");

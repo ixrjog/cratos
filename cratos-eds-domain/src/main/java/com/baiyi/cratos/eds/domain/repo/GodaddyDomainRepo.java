@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.domain.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGodaddyConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.domain.model.GodaddyDomain;
 import com.baiyi.cratos.eds.domain.service.GodaddyDomainService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class GodaddyDomainRepo {
 
     private final GodaddyDomainService godaddyDomainService;
 
-    public GodaddyDomain.Domain getDomain(EdsGodaddyConfigModel.Godaddy godaddy, String domain) {
+    public GodaddyDomain.Domain getDomain(EdsConfigs.Godaddy godaddy, String domain) {
         String authorization = godaddy.getCred()
                 .toSsoKey();
         return godaddyDomainService.getDomain(authorization, godaddy.getCustomerId(), domain);
     }
 
-    public List<GodaddyDomain.Domain> queryDomains(EdsGodaddyConfigModel.Godaddy godaddy) {
+    public List<GodaddyDomain.Domain> queryDomains(EdsConfigs.Godaddy godaddy) {
         String authorization = godaddy.getCred()
                 .toSsoKey();
         return godaddyDomainService.queryDomains(authorization, godaddy.getCustomerId());

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyuncs.cr.model.v20181201.*;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,7 +30,7 @@ public class AliyunAcrRepo {
     // Region
 
     public List<ListInstanceRegionResponse.RegionsItem> listRegion(
-            EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+            EdsConfigs.Aliyun aliyun) throws ClientException {
         ListInstanceRegionRequest request = new ListInstanceRegionRequest();
         ListInstanceRegionResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
         return response.getRegions();
@@ -54,7 +54,7 @@ public class AliyunAcrRepo {
      * @return
      * @throws ClientException
      */
-    public List<ListNamespaceResponse.NamespacesItem> listNamespace(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public List<ListNamespaceResponse.NamespacesItem> listNamespace(String regionId, EdsConfigs.Aliyun aliyun,
                                                                     String instanceId) throws ClientException {
         ListNamespaceRequest request = new ListNamespaceRequest();
         request.setSysRegionId(regionId);
@@ -88,7 +88,7 @@ public class AliyunAcrRepo {
      * @throws ClientException
      */
     public List<ListInstanceResponse.InstancesItem> listInstance(String regionId,
-                                                                 EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+                                                                 EdsConfigs.Aliyun aliyun) throws ClientException {
         ListInstanceRequest request = new ListInstanceRequest();
         request.setSysRegionId(regionId);
         request.setPageSize(Query.PAGE_SIZE);
@@ -110,7 +110,7 @@ public class AliyunAcrRepo {
         return instancesItems;
     }
 
-    public GetInstanceResponse getInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public GetInstanceResponse getInstance(String regionId, EdsConfigs.Aliyun aliyun,
                                            String instanceId) throws ClientException {
         GetInstanceRequest request = new GetInstanceRequest();
         request.setSysRegionId(regionId);
@@ -119,7 +119,7 @@ public class AliyunAcrRepo {
     }
 
     public List<GetInstanceEndpointResponse.Endpoints> getInstanceEndpoint(String regionId,
-                                                                           EdsAliyunConfigModel.Aliyun aliyun,
+                                                                           EdsConfigs.Aliyun aliyun,
                                                                            String instanceId) throws ClientException {
         GetInstanceEndpointRequest request = new GetInstanceEndpointRequest();
         request.setEndpointType("internet");
@@ -131,7 +131,7 @@ public class AliyunAcrRepo {
 
     // Repository
     public List<ListRepositoryResponse.RepositoriesItem> listRepository(String regionId,
-                                                                        EdsAliyunConfigModel.Aliyun aliyun,
+                                                                        EdsConfigs.Aliyun aliyun,
                                                                         String instanceId) throws ClientException {
         ListRepositoryRequest request = new ListRepositoryRequest();
         request.setSysRegionId(regionId);
@@ -159,7 +159,7 @@ public class AliyunAcrRepo {
         return repositoriesItems;
     }
 
-    public String getRepositoryId(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+    public String getRepositoryId(String regionId, EdsConfigs.Aliyun aliyun, String instanceId,
                                   String repoNamespaceName, String repoName) throws ClientException {
         GetRepositoryRequest request = new GetRepositoryRequest();
         request.setSysRegionId(regionId);
@@ -182,7 +182,7 @@ public class AliyunAcrRepo {
      * @return
      * @throws ClientException
      */
-    public List<ListRepoTagResponse.ImagesItem> listImage(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public List<ListRepoTagResponse.ImagesItem> listImage(String regionId, EdsConfigs.Aliyun aliyun,
                                                           String instanceId, String repoId) throws ClientException {
         ListRepoTagRequest request = new ListRepoTagRequest();
         request.setSysRegionId(regionId);
@@ -221,7 +221,7 @@ public class AliyunAcrRepo {
      * @return
      * @throws ClientException
      */
-    public List<ListRepoTagResponse.ImagesItem> listImage(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public List<ListRepoTagResponse.ImagesItem> listImage(String regionId, EdsConfigs.Aliyun aliyun,
                                                           String instanceId, String repoId,
                                                           int size) throws ClientException {
         ListRepoTagRequest request = new ListRepoTagRequest();
@@ -233,7 +233,7 @@ public class AliyunAcrRepo {
         return response.getImages();
     }
 
-    public GetRepoTagResponse getImage(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId,
+    public GetRepoTagResponse getImage(String regionId, EdsConfigs.Aliyun aliyun, String instanceId,
                                        String repoId, String tag) throws ClientException {
         GetRepoTagRequest request = new GetRepoTagRequest();
         request.setSysRegionId(regionId);

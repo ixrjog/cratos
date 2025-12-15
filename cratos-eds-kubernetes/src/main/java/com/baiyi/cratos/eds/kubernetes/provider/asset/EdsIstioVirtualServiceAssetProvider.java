@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -52,13 +52,13 @@ public class EdsIstioVirtualServiceAssetProvider extends BaseEdsKubernetesAssetP
 
     @Override
     protected List<VirtualService> listEntities(String namespace,
-                                                ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesIstioVirtualServiceRepo.list(instance.getEdsConfigModel(), namespace);
+                                                ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesIstioVirtualServiceRepo.list(instance.getConfig(), namespace);
     }
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             VirtualService entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));

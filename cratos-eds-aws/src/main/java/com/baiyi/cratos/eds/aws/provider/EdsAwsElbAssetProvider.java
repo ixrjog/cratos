@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.aws.repo.AwsElbRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ELB)
-public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAwsConfigModel.Aws, LoadBalancer> {
+public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aws, LoadBalancer> {
 
     public EdsAwsElbAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -40,12 +40,12 @@ public class EdsAwsElbAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAw
     }
 
     @Override
-    protected List<LoadBalancer> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<LoadBalancer> listEntities(String regionId, EdsConfigs.Aws aws) {
         return AwsElbRepo.listLoadBalancer(regionId, aws);
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, LoadBalancer entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, LoadBalancer entity) {
         // https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html
         return newEdsAssetBuilder(instance, entity)
                 // ARN

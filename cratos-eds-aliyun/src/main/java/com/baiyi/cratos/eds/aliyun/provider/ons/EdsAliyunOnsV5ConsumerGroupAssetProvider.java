@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -40,7 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP)
-public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> {
+public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> {
 
     public EdsAliyunOnsV5ConsumerGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                     CredentialService credentialService,
@@ -54,10 +55,10 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getOns)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getOns)
                 .map(EdsAliyunConfigModel.ONS::getV5)
                 .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
                 .orElse(Collections.emptyList()));
@@ -65,7 +66,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
 
     @Override
     protected List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> listEntities(String endpoint,
-                                                                                                       ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                                                                                       ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> results = Lists.newArrayList();
         try {
             List<EdsAsset> edsAssetsOnsInstances = queryAssetsByInstanceAndType(instance,
@@ -75,7 +76,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
             } else {
                 for (EdsAsset edsAssetsOnsInstance : edsAssetsOnsInstances) {
                     List<ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> consumerGroups = AliyunOnsV5Repo.listConsumerGroups(
-                            endpoint, instance.getEdsConfigModel(), edsAssetsOnsInstance.getAssetId());
+                            endpoint, instance.getConfig(), edsAssetsOnsInstance.getAssetId());
                     if (!CollectionUtils.isEmpty(consumerGroups)) {
                         results.addAll(consumerGroups);
                     }
@@ -88,7 +89,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         try {
             final String key = Joiner.on(":")
@@ -107,7 +108,7 @@ public class EdsAliyunOnsV5ConsumerGroupAssetProvider extends BaseHasEndpointsEd
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset,
                                             ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

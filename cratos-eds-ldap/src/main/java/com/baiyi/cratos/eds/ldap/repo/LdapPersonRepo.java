@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.ldap.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.eds.ldap.model.LdapPerson;
 import com.baiyi.cratos.eds.ldap.util.LdapUtils;
@@ -23,12 +23,12 @@ public class LdapPersonRepo {
 
     private final LdapClient ldapClient;
 
-    public LdapPerson.Person findPerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+    public LdapPerson.Person findPerson(EdsConfigs.Ldap ldap, LdapPerson.Person person) {
         String userDN = LdapUtils.toUserDN(ldap, person);
         return ldapClient.findPersonByDn(ldap, userDN);
     }
 
-    public List<LdapPerson.Person> queryGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName) {
+    public List<LdapPerson.Person> queryGroupMember(EdsConfigs.Ldap ldap, String groupName) {
         List<String> usernames = ldapClient.queryGroupMember(ldap, groupName);
         List<LdapPerson.Person> people = Lists.newArrayList();
         usernames.forEach(username -> {
@@ -46,11 +46,11 @@ public class LdapPersonRepo {
      *
      * @return
      */
-    public List<String> getAllPersonNames(EdsLdapConfigModel.Ldap ldap) {
+    public List<String> getAllPersonNames(EdsConfigs.Ldap ldap) {
         return ldapClient.queryPersonNameList(ldap);
     }
 
-    public List<LdapPerson.Person> queryPerson(EdsLdapConfigModel.Ldap ldap) {
+    public List<LdapPerson.Person> queryPerson(EdsConfigs.Ldap ldap) {
         return ldapClient.queryPersonList(ldap);
     }
 
@@ -60,27 +60,27 @@ public class LdapPersonRepo {
      * @param dn
      * @return
      */
-    public LdapPerson.Person findPersonWithDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+    public LdapPerson.Person findPersonWithDn(EdsConfigs.Ldap ldap, String dn) {
         return ldapClient.findPersonByDn(ldap, dn);
     }
 
-    public void create(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+    public void create(EdsConfigs.Ldap ldap, LdapPerson.Person person) {
         ldapClient.bindPerson(ldap, person);
     }
 
-    public void update(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+    public void update(EdsConfigs.Ldap ldap, LdapPerson.Person person) {
         ldapClient.updatePerson(ldap, person);
     }
 
-    public void delete(EdsLdapConfigModel.Ldap ldap, String username) {
+    public void delete(EdsConfigs.Ldap ldap, String username) {
         ldapClient.unbind(ldap, ldap.buildUserDn(username));
     }
 
-    public Boolean checkPersonInLdap(EdsLdapConfigModel.Ldap ldap, String username) {
+    public Boolean checkPersonInLdap(EdsConfigs.Ldap ldap, String username) {
         return ldapClient.hasPersonInLdap(ldap, username);
     }
 
-    public List<String> searchUserGroupByUsername(EdsLdapConfigModel.Ldap ldap, String username) {
+    public List<String> searchUserGroupByUsername(EdsConfigs.Ldap ldap, String username) {
         return ldapClient.searchLdapGroup(ldap, username);
     }
 

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.management;
 import com.aliyuncs.ecs.model.v20140526.*;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class AliyunEcsInstanceManagement {
 
     private final AliyunClient aliyunClient;
 
-    public void startInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public void startInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         StartInstanceRequest request = new StartInstanceRequest();
         request.setSysRegionId(regionId);
         request.setInstanceId(instanceId);
@@ -31,7 +31,7 @@ public class AliyunEcsInstanceManagement {
         }
     }
 
-    public void stopInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public void stopInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         StopInstanceRequest request = new StopInstanceRequest();
         request.setSysRegionId(regionId);
         request.setInstanceId(instanceId);
@@ -42,7 +42,7 @@ public class AliyunEcsInstanceManagement {
         }
     }
 
-    public void rebootInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public void rebootInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         RebootInstanceRequest request = new RebootInstanceRequest();
         request.setSysRegionId(regionId);
         request.setInstanceId(instanceId);

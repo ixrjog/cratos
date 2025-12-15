@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -47,8 +47,8 @@ public class EdsKubernetesConfigMapAssetProvider extends BaseEdsKubernetesAssetP
 
     @Override
     protected List<ConfigMap> listEntities(String namespace,
-                                           ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesConfigMapRepo.list(instance.getEdsConfigModel(), namespace);
+                                           ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesConfigMapRepo.list(instance.getConfig(), namespace);
     }
 
 }

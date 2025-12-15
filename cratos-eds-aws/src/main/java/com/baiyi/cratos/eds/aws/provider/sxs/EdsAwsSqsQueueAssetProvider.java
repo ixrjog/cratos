@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.aws.model.AwsSqs;
 import com.baiyi.cratos.eds.aws.repo.AwsSqsRepo;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SQS_QUEUE)
-public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsSqs.Queue> {
+public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsSqs.Queue> {
 
     private final AwsSqsRepo awsSqsRepo;
 
@@ -47,7 +47,7 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsA
     }
 
     @Override
-    protected List<AwsSqs.Queue> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsSqs.Queue> listEntities(String regionId, EdsConfigs.Aws aws) {
         List<String> queues = awsSqsRepo.listQueues(regionId, aws);
         if (!CollectionUtils.isEmpty(queues)) {
             return toQueues(regionId, aws, queues);
@@ -55,7 +55,7 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsA
         return Collections.emptyList();
     }
 
-    private List<AwsSqs.Queue> toQueues(String regionId, EdsAwsConfigModel.Aws aws, List<String> queues) {
+    private List<AwsSqs.Queue> toQueues(String regionId, EdsConfigs.Aws aws, List<String> queues) {
         return queues.stream()
                 .map(e -> {
                     Map<String, String> attributes = awsSqsRepo.getQueueAttributes(regionId, aws, e);
@@ -69,7 +69,7 @@ public class EdsAwsSqsQueueAssetProvider extends BaseEdsRegionAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsSqs.Queue entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsSqs.Queue entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getAttributes()

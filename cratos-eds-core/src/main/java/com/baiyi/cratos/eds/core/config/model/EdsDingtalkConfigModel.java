@@ -1,7 +1,5 @@
 package com.baiyi.cratos.eds.core.config.model;
 
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,27 +15,6 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @NoArgsConstructor(access = PRIVATE)
 public class EdsDingtalkConfigModel {
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Dingtalk implements IEdsConfigModel {
-        private String version;
-        private String url;
-        private String company;
-        private String corpId;
-        private DingtalkApp app;
-        private EdsInstance edsInstance;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Robot implements IEdsConfigModel {
-        private String token;
-        private String desc;
-        private EdsInstance edsInstance;
-    }
 
     @Data
     @NoArgsConstructor

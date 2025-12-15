@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aws.model.AwsEcr;
 import com.baiyi.cratos.eds.aws.repo.AwsEcrRepo;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_ECR_REPOSITORY)
-public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEcr.RegionRepository> {
+public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEcr.RegionRepository> {
 
     public EdsAwsEcrRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -42,7 +42,7 @@ public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider
 
     @Override
     protected List<AwsEcr.RegionRepository> listEntities(String regionId,
-                                                         EdsAwsConfigModel.Aws configModel) throws EdsQueryEntitiesException {
+                                                         EdsConfigs.Aws configModel) throws EdsQueryEntitiesException {
         try {
             return toRegionRepositories(regionId, AwsEcrRepo.describeRepositories(regionId, configModel));
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class EdsAwsEcrRepositoryAssetProvider extends BaseEdsRegionAssetProvider
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                   AwsEcr.RegionRepository entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getRepository()
                         .getRegistryId())

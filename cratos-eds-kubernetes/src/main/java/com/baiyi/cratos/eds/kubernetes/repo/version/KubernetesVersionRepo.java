@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.version;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.VersionInfo;
@@ -20,7 +20,7 @@ public class KubernetesVersionRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public VersionInfo getVersion(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public VersionInfo getVersion(EdsConfigs.Kubernetes kubernetes) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.getKubernetesVersion();
         } catch (Exception e) {

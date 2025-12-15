@@ -1,7 +1,8 @@
 package com.baiyi.cratos.eds.alimail.auth;
 
 import com.baiyi.cratos.eds.alimail.model.AlimailToken;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
@@ -29,7 +30,7 @@ public class AlimailTokenHolder {
      * @return
      */
     @Cacheable(cacheNames = SHORT_TERM, key = "'ALIMAIL:V0:TOKEN:APPID:'+ #alimail.cred.id", unless = "#result == null")
-    public AlimailToken.Token getToken(EdsAlimailConfigModel.Alimail alimail) {
+    public AlimailToken.Token getToken(EdsConfigs.Alimail alimail) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "client_credentials");
         formData.add("client_id", alimail.getCred()
@@ -47,7 +48,7 @@ public class AlimailTokenHolder {
     }
 
     @Cacheable(cacheNames = SHORT_TERM, key = "'ALIMAIL:V0:BEARER:APPID:'+ #alimail.cred.id", unless = "#result == null")
-    public String getBearer(EdsAlimailConfigModel.Alimail alimail) {
+    public String getBearer(EdsConfigs.Alimail alimail) {
         return getToken(alimail).toBearer();
     }
 

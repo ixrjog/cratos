@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -20,7 +20,7 @@ public class AliyunOnsClient {
     }
 
     public static com.aliyun.rocketmq20220801.Client createV5Client(@NonNull String endpoint,
-                                                                    @NonNull EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+                                                                    @NonNull EdsConfigs.Aliyun aliyun) throws Exception {
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config().setAccessKeyId(
                         aliyun.getCred()
                                 .getAccessKeyId())

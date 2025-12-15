@@ -16,7 +16,7 @@ import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
@@ -79,10 +79,10 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.AwsPolicy awsPolicy) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, Policy> policyHolder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, Policy>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, Policy> policyHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, Policy>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_POLICY.name());
-        EdsAwsConfigModel.Aws aws = policyHolder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = policyHolder.getInstance()
+                .getConfig();
         String iamUsername = awsPolicy.getCloudAccount()
                 .getUsername();
         try {
@@ -98,7 +98,7 @@ public class AwsIamPolicyPermissionTicketEntryProvider extends BaseTicketEntryPr
             // 在最后一条entry执行同步资产
             if (isLastEntry(entry)) {
                 User iamUser = awsIamUserRepo.getUser(aws, iamUsername);
-                EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, User> iamUserHolder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, User>) edsInstanceProviderHolderBuilder.newHolder(
+                EdsInstanceProviderHolder<EdsConfigs.Aws, User> iamUserHolder = (EdsInstanceProviderHolder<EdsConfigs.Aws, User>) edsInstanceProviderHolderBuilder.newHolder(
                         entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
                 iamUserHolder.importAsset(iamUser);
             }

@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancing;
 import com.amazonaws.services.elasticloadbalancingv2.AmazonElasticLoadBalancingClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -18,11 +18,11 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AmazonElbService {
 
-    public static AmazonElasticLoadBalancing buildAmazonELB(EdsAwsConfigModel.Aws aws) {
+    public static AmazonElasticLoadBalancing buildAmazonELB(EdsConfigs.Aws aws) {
         return buildAmazonELB(aws.getRegionId(), aws);
     }
 
-    public static AmazonElasticLoadBalancing buildAmazonELB(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static AmazonElasticLoadBalancing buildAmazonELB(String regionId, EdsConfigs.Aws aws) {
         AWSCredentials credentials = AwsCredentialsManager.buildAWSCredentials(aws);
         return AmazonElasticLoadBalancingClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

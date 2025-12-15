@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.harbor.service;
 
 import com.baiyi.cratos.domain.constant.Global;
-import com.baiyi.cratos.eds.core.config.model.EdsHarborConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import io.netty.channel.ChannelOption;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import reactor.netty.http.client.HttpClient;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HarborServiceFactory {
 
-    public static HarborService createHarborService(EdsHarborConfigModel.Harbor harbor) {
+    public static HarborService createHarborService(EdsConfigs.Harbor harbor) {
         if (harbor == null) {
             throw new IllegalArgumentException("harbor must not be null");
         }

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcVpcClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
@@ -19,7 +19,7 @@ public class HwcVpcRepo {
     private static final int LIMIT = 2000;
 
     public static List<Vpc> listVpcs(String regionId,
-                                    EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
+                                    EdsConfigs.Hwc huaweicloud) throws ServiceResponseException {
         List<Vpc> vpcs = Lists.newArrayList();
         VpcClient client = HwcVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
         ListVpcsRequest request = new ListVpcsRequest();
@@ -37,7 +37,7 @@ public class HwcVpcRepo {
     }
 
     public static List<Subnet> listSubnets(String regionId,
-                                     EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
+                                     EdsConfigs.Hwc huaweicloud) throws ServiceResponseException {
         List<Subnet> subnets = Lists.newArrayList();
         VpcClient client = HwcVpcClientBuilder.buildVpcClient(regionId, huaweicloud);
         ListSubnetsRequest request = new ListSubnetsRequest();

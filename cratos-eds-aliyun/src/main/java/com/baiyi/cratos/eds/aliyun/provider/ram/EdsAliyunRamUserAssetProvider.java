@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -44,7 +44,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RAM_USER)
-public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, GetUserResponse.User> {
+public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, GetUserResponse.User> {
 
     private final AliyunRamUserRepo aliyunRamUserRepo;
     private final AliyunRamPolicyRepo aliyunRamPolicyRepo;
@@ -66,15 +66,15 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
 
     @Override
     protected List<GetUserResponse.User> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            List<ListUsersResponse.User> users = aliyunRamUserRepo.listUsers(instance.getEdsConfigModel());
+            List<ListUsersResponse.User> users = aliyunRamUserRepo.listUsers(instance.getConfig());
             if (CollectionUtils.isEmpty(users)) {
                 return Collections.emptyList();
             } else {
                 List<GetUserResponse.User> entities = Lists.newArrayList();
                 for (ListUsersResponse.User user : users) {
-                    entities.add(aliyunRamUserRepo.getUser(instance.getEdsConfigModel(), user.getUserName()));
+                    entities.add(aliyunRamUserRepo.getUser(instance.getConfig(), user.getUserName()));
                 }
                 return entities;
             }
@@ -84,7 +84,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   GetUserResponse.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getDisplayName())
@@ -95,12 +95,12 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, GetUserResponse.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             List<ListPoliciesForUserResponse.Policy> policies = aliyunRamPolicyRepo.listPoliciesForUser(
-                    instance.getEdsConfigModel(), entity.getUserName());
+                    instance.getConfig(), entity.getUserName());
             if (!CollectionUtils.isEmpty(policies)) {
                 String policyName = policies.stream()
                         .map(ListPoliciesForUserResponse.Policy::getPolicyName)
@@ -113,7 +113,7 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
         // accessKeys
         try {
             List<ListAccessKeysResponse.AccessKey> accessKeys = aliyunRamAccessKeyRepo.listAccessKeys(
-                    instance.getEdsConfigModel(), entity.getUserName());
+                    instance.getConfig(), entity.getUserName());
             if (!CollectionUtils.isEmpty(accessKeys)) {
                 final String accessKeyIds = accessKeys.stream()
                         .map(ListAccessKeysResponse.AccessKey::getAccessKeyId)
@@ -125,8 +125,8 @@ public class EdsAliyunRamUserAssetProvider extends BaseEdsInstanceAssetProvider<
         // loginProfile
         try {
             GetLoginProfileResponse.LoginProfile loginProfile = aliyunRamUserRepo.getLoginProfile(
-                    instance.getEdsConfigModel()
-                            .getRegionId(), instance.getEdsConfigModel(), entity.getUserName());
+                    instance.getConfig()
+                            .getRegionId(), instance.getConfig(), entity.getUserName());
             if (Objects.nonNull(loginProfile)) {
                 indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));
             }

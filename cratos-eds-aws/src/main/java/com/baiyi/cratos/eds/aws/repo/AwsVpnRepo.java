@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.DescribeVpnConnectionsRequest;
 import com.amazonaws.services.ec2.model.DescribeVpnConnectionsResult;
 import com.amazonaws.services.ec2.model.VpnConnection;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsVpnRepo {
 
-    public static List<VpnConnection> describeVpnConnections(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<VpnConnection> describeVpnConnections(String regionId, EdsConfigs.Aws aws) {
         DescribeVpnConnectionsRequest request = new DescribeVpnConnectionsRequest();
         DescribeVpnConnectionsResult result = AmazonEc2Service.buildAmazonEC2(regionId, aws)
                 .describeVpnConnections(request);

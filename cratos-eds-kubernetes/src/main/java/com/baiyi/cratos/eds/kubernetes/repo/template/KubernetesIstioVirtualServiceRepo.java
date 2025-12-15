@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.template;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.istio.IstioClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import io.fabric8.istio.api.networking.v1alpha3.VirtualService;
@@ -23,7 +23,7 @@ import java.util.List;
 public class KubernetesIstioVirtualServiceRepo extends BaseKubernetesResourceRepo<IstioClient, VirtualService> {
 
     @Override
-    protected IstioClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    protected IstioClient buildClient(EdsConfigs.Kubernetes kubernetes) {
         return IstioClientBuilder.build(kubernetes);
     }
 

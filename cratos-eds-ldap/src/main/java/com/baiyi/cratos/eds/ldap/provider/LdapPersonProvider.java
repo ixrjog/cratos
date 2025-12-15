@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -36,7 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_US
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_PERSON)
-public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfigModel.Ldap, LdapPerson.Person> {
+public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Ldap, LdapPerson.Person> {
 
     private final LdapPersonRepo ldapPersonRepo;
     private final LdapGroupRepo ldapGroupRepo;
@@ -55,12 +55,12 @@ public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConf
 
     @Override
     protected List<LdapPerson.Person> listEntities(
-            ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance) throws EdsQueryEntitiesException {
-        return ldapPersonRepo.queryPerson(instance.getEdsConfigModel());
+            ExternalDataSourceInstance<EdsConfigs.Ldap> instance) throws EdsQueryEntitiesException {
+        return ldapPersonRepo.queryPerson(instance.getConfig());
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
                                   LdapPerson.Person entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUsername())
                 .nameOf(entity.getDisplayName())
@@ -68,16 +68,16 @@ public class LdapPersonProvider extends BaseEdsInstanceAssetProvider<EdsLdapConf
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
                                             EdsAsset edsAsset, LdapPerson.Person entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, LDAP_USER_DN, Joiner.on(",")
                 .skipNulls()
-                .join(instance.getEdsConfigModel()
+                .join(instance.getConfig()
                         .getUser()
-                        .getDn(), instance.getEdsConfigModel()
+                        .getDn(), instance.getConfig()
                         .getBase())));
-        List<LdapGroup.Group> groups = ldapGroupRepo.searchGroupByUsername(instance.getEdsConfigModel(),
+        List<LdapGroup.Group> groups = ldapGroupRepo.searchGroupByUsername(instance.getConfig(),
                 entity.getUsername());
         indices.add(createEdsAssetIndex(edsAsset, LDAP_USER_GROUPS, Joiner.on(";")
                 .join(groups.stream()

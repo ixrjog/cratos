@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.base;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes.client.Client, T extends HasMetadata> implements IKubernetesResourceRepo<C, T> {
 
-    abstract protected C buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes);
+    abstract protected C buildClient(EdsConfigs.Kubernetes kubernetes);
 
     abstract protected T create(C client, T resource);
 
@@ -27,7 +27,7 @@ public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes
     abstract protected List<T> list(C client, String namespace);
 
     @Override
-    public T create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+    public T create(EdsConfigs.Kubernetes kubernetes, String content) {
         try (final C client = buildClient(kubernetes)) {
             T resource = loadAs(client, content);
             return create(client, resource);
@@ -38,7 +38,7 @@ public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes
     }
 
     @Override
-    public T get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
+    public T get(EdsConfigs.Kubernetes kubernetes, String namespace, String name) {
         try (final C client = buildClient(kubernetes)) {
             return get(client, namespace, name);
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes
     }
 
     @Override
-    public T find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+    public T find(EdsConfigs.Kubernetes kubernetes, String content) {
         try (final C client = buildClient(kubernetes)) {
             T resource = loadAs(client, content);
             return find(client, resource);
@@ -59,7 +59,7 @@ public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes
     }
 
     @Override
-    public void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, T resource) {
+    public void delete(EdsConfigs.Kubernetes kubernetes, T resource) {
         try (final C client = buildClient(kubernetes)) {
             delete(client, resource);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public abstract class BaseKubernetesResourceRepo<C extends io.fabric8.kubernetes
     }
 
     @Override
-    public List<T> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+    public List<T> list(EdsConfigs.Kubernetes kubernetes, String namespace) {
         try (final C client = buildClient(kubernetes)) {
             return list(client, namespace);
         } catch (Exception e) {

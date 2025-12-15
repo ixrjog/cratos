@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcCcmRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcEcsRepo;
 import com.baiyi.cratos.eds.huaweicloud.cloud.repo.HwcIamRepo;
@@ -18,25 +18,25 @@ import java.util.List;
  * &#064;Date  2024/10/16 09:50
  * &#064;Version 1.0
  */
-public class EdsHuaweicloudTest extends BaseEdsTest<EdsHwcConfigModel.Hwc> {
+public class EdsHuaweicloudTest extends BaseEdsTest<EdsConfigs.Hwc> {
 
     @Test
     void ecsTest() {
-        EdsHwcConfigModel.Hwc cfg = getConfig(27);
+        EdsConfigs.Hwc cfg = getConfig(27);
         List<ServerDetail> serverDetails = HwcEcsRepo.listServers("eu-west-101", cfg);
         System.out.println(serverDetails);
     }
 
     @Test
     void iamTest() {
-        EdsHwcConfigModel.Hwc cfg = getConfig(27);
+        EdsConfigs.Hwc cfg = getConfig(27);
         List<KeystoneListUsersResult> usersResults = HwcIamRepo.listUsers(cfg);
         System.out.println(usersResults);
     }
 
     @Test
     void certTest() {
-        EdsHwcConfigModel.Hwc cfg = getConfig(27);
+        EdsConfigs.Hwc cfg = getConfig(27);
         List<Certificates> certificates = HwcCcmRepo.listCertificates("eu-west-101", cfg);
         System.out.println(certificates);
     }
@@ -46,7 +46,7 @@ public class EdsHuaweicloudTest extends BaseEdsTest<EdsHwcConfigModel.Hwc> {
 
     @Test
     void scmTest() {
-        EdsHwcConfigModel.Hwc cfg = getConfig(27);
+        EdsConfigs.Hwc cfg = getConfig(27);
         List<com.huaweicloud.sdk.scm.v3.model.CertificateDetail> certificates = HwcScmRepo.listCertificates("eu-west-101", cfg);
         System.out.println(certificates);
     }

@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.opscloud.service;
 
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import io.netty.channel.ChannelOption;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -15,7 +16,7 @@ import reactor.netty.http.client.HttpClient;
  */
 public class OpscloudServiceFactory {
 
-    public static OpscloudService createOpscloudService(EdsOpscloudConfigModel.Opscloud opscloud) {
+    public static OpscloudService createOpscloudService(EdsConfigs.Opscloud opscloud) {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         WebClient webClient = WebClient.builder()

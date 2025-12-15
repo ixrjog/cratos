@@ -1,8 +1,7 @@
 package com.baiyi.cratos.eds.jenkins.sdk.server;
 
 
-
-import com.baiyi.cratos.eds.core.config.model.EdsJenkinsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +16,7 @@ import java.net.URISyntaxException;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JenkinsServerBuilder {
 
-    public static JenkinsServer build(EdsJenkinsConfigModel.Jenkins jenkins) throws URISyntaxException {
+    public static JenkinsServer build(EdsConfigs.Jenkins jenkins) throws URISyntaxException {
         return new JenkinsServer(new URI(jenkins.getUrl()),
                 jenkins.getCred().getUsername(), jenkins.getCred().getToken());
     }

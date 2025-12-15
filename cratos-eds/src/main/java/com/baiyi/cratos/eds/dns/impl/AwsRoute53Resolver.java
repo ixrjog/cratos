@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS)
-public class AwsRoute53Resolver extends BaseDNSResolver<EdsAwsConfigModel.Aws> {
+public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws> {
 
     public AwsRoute53Resolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                               TrafficRecordTargetService trafficRecordTargetService,
@@ -43,7 +43,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsAwsConfigModel.Aws> {
             return DNS.ResourceRecordSet.NO_DATA;
         }
         // 获取 AWS 配置
-        EdsAwsConfigModel.Aws config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.AWS_HOSTED_ZONE);
+        EdsConfigs.Aws config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.AWS_HOSTED_ZONE);
         // 查询 DNS 记录
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
         // 查找匹配的记录

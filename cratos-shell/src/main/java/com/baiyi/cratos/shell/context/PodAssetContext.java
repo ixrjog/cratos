@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.context;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.ssh.core.model.PodAssetModel;
 
 import java.util.Map;
@@ -14,9 +14,9 @@ public class PodAssetContext {
 
     private static final ThreadLocal<Map<Integer, PodAssetModel>> POD_CONTEXT = new ThreadLocal<>();
 
-    private static final ThreadLocal<EdsKubernetesConfigModel.Kubernetes> EDS_INSTANCE_CONFIG_CONTEXT = new ThreadLocal<>();
+    private static final ThreadLocal<EdsConfigs.Kubernetes> EDS_INSTANCE_CONFIG_CONTEXT = new ThreadLocal<>();
 
-    public static void setContext(Map<Integer, PodAssetModel> podContext, EdsKubernetesConfigModel.Kubernetes configContext) {
+    public static void setContext(Map<Integer, PodAssetModel> podContext, EdsConfigs.Kubernetes configContext) {
         POD_CONTEXT.set(podContext);
         EDS_INSTANCE_CONFIG_CONTEXT.set(configContext);
     }
@@ -25,7 +25,7 @@ public class PodAssetContext {
         return POD_CONTEXT.get();
     }
 
-    public static EdsKubernetesConfigModel.Kubernetes getConfigContext() {
+    public static EdsConfigs.Kubernetes getConfigContext() {
         return EDS_INSTANCE_CONFIG_CONTEXT.get();
     }
 

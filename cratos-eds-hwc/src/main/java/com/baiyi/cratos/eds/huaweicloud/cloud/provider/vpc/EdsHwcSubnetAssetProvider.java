@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_ID;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SUBNET)
-public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHwcConfigModel.Hwc, HwcSubnet.Subnet> {
+public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Hwc, HwcSubnet.Subnet> {
 
     public EdsHwcSubnetAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -50,7 +50,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
 
     @Override
     protected List<HwcSubnet.Subnet> listEntities(String regionId,
-                                                  EdsHwcConfigModel.Hwc configModel) throws EdsQueryEntitiesException {
+                                                  EdsConfigs.Hwc configModel) throws EdsQueryEntitiesException {
         List<Subnet> subnets = HwcVpcRepo.listSubnets(regionId, configModel);
         if (CollectionUtils.isEmpty(subnets)) {
             return Collections.emptyList();
@@ -59,7 +59,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     private List<HwcSubnet.Subnet> toEntities(String regionId,
-                                              EdsHwcConfigModel.Hwc configModel,
+                                              EdsConfigs.Hwc configModel,
                                               List<Subnet> subnets) {
         return subnets.stream()
                 .map(e -> HwcSubnet.toSubnet(regionId,
@@ -68,7 +68,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                   HwcSubnet.Subnet entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
                         .getId())
@@ -86,7 +86,7 @@ public class EdsHwcSubnetAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                             EdsAsset edsAsset, HwcSubnet.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK , entity.getSubnet().getCidr()));

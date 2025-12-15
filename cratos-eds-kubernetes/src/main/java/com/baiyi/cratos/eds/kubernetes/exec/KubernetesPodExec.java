@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.exec;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -29,7 +29,7 @@ public class KubernetesPodExec {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+    public void exec(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName,
                      PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)
@@ -61,7 +61,7 @@ public class KubernetesPodExec {
         }
     }
 
-    public void exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+    public void exec(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName,
                      String containerName, PodExecContext execContext, CountDownLatch execLatch) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes); ExecWatch execWatch = kc.pods()
                 .inNamespace(namespace)

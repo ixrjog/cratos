@@ -46,7 +46,7 @@ public abstract class BaseHasRegionsEdsAssetProvider<Config extends HasRegionsMo
      */
     @Override
     protected List<Asset> listEntities(ExternalDataSourceInstance<Config> instance) throws EdsQueryEntitiesException {
-        Config configModel = instance.getEdsConfigModel();
+        Config configModel = instance.getConfig();
         List<Asset> entities = Lists.newArrayList();
         for (String regionId : getRegionSet(configModel)) {
             try {

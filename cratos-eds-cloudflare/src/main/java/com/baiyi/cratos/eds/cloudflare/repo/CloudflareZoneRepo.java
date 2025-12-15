@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
-import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class CloudflareZoneRepo {
 
     private final CloudflareService cloudflareService;
 
-    public List<CloudflareZone.Zone> listZones(EdsCloudflareConfigModel.Cloudflare cloudflare) {
+    public List<CloudflareZone.Zone> listZones(EdsConfigs.Cloudflare cloudflare) {
         List<CloudflareZone.Zone> results = Lists.newArrayList();
         int page = 1;
         while (true) {

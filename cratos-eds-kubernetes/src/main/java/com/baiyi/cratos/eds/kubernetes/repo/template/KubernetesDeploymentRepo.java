@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.template;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesDeploymentException;
 import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
@@ -41,7 +41,7 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
      * @param kubernetes
      * @param deployment
      */
-    public void redeploy(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    public void redeploy(EdsConfigs.Kubernetes kubernetes, Deployment deployment) {
         if (deployment == null) {
             return;
         }
@@ -67,7 +67,7 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         update(kubernetes, deployment);
     }
 
-    public Deployment scale(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name,
+    public Deployment scale(EdsConfigs.Kubernetes kubernetes, String namespace, String name,
                       int replicas) throws KubernetesDeploymentException {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
            return client.apps()
@@ -81,7 +81,7 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         }
     }
 
-    public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+    public Deployment update(EdsConfigs.Kubernetes kubernetes, String content) {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
             Deployment deployment = loadAs(client, content);
             return client.apps()
@@ -96,7 +96,7 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
         }
     }
 
-    public Deployment update(EdsKubernetesConfigModel.Kubernetes kubernetes, Deployment deployment) {
+    public Deployment update(EdsConfigs.Kubernetes kubernetes, Deployment deployment) {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
             return client.apps()
                     .deployments()
@@ -130,7 +130,7 @@ public class KubernetesDeploymentRepo extends BaseKubernetesResourceRepo<Kuberne
     }
 
     @Override
-    protected KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    protected KubernetesClient buildClient(EdsConfigs.Kubernetes kubernetes) {
         return kubernetesClientBuilder.build(kubernetes);
     }
 

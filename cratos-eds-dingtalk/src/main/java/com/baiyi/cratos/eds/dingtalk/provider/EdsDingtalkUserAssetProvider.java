@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -45,7 +45,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_APP, assetTypeOf = EdsAssetTypeEnum.DINGTALK_USER)
-public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Dingtalk, DingtalkUserModel.User> {
+public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Dingtalk, DingtalkUserModel.User> {
 
     private static final long DEPT_ROOT_ID = 1L;
 
@@ -64,10 +64,10 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     @Override
     protected List<DingtalkUserModel.User> listEntities(
-            ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance) throws EdsQueryEntitiesException {
         List<DingtalkDepartmentModel.Department> results = Lists.newArrayList();
         Map<String, DingtalkUserModel.User> userMap = Maps.newHashMap();
-        EdsDingtalkConfigModel.Dingtalk dingtalk = instance.getEdsConfigModel();
+        EdsConfigs.Dingtalk dingtalk = instance.getConfig();
         try {
             Set<Long> deptIdSet = queryDeptSubIds(instance);
             List<DingtalkDepartmentModel.Department> entities = Lists.newArrayList();
@@ -89,7 +89,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
      * @param instance
      * @return
      */
-    private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance) {
+    private Set<Long> queryDeptSubIds(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance) {
         List<EdsAsset> deptAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.DINGTALK_DEPARTMENT);
         return deptAssets.stream()
                 .map(e -> Long.valueOf(e.getAssetId()))
@@ -98,7 +98,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance, EdsAsset edsAsset,
             DingtalkUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, DINGTALK_USER_USERNAME, entity.getUsername()));
@@ -122,7 +122,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
         }
         // Manager
         try {
-            DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getEdsConfigModel(),
+            DingtalkUserModel.GetUser getUser = dingtalkUserRepo.getUser(instance.getConfig(),
                     entity.getUserid());
             if (StringUtils.hasText(getUser.getManagerUserid())) {
                 indices.add(createEdsAssetIndex(edsAsset, DINGTALK_MANAGER_USER_ID, getUser.getManagerUserid()));
@@ -134,7 +134,7 @@ public class EdsDingtalkUserAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Dingtalk> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Dingtalk> instance,
                                          DingtalkUserModel.User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserid())
                 .assetKeyOf(entity.getUnionid())

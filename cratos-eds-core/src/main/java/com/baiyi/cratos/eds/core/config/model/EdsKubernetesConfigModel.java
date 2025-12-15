@@ -1,7 +1,5 @@
 package com.baiyi.cratos.eds.core.config.model;
 
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,19 +15,6 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @NoArgsConstructor(access = PRIVATE)
 public class EdsKubernetesConfigModel {
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Kubernetes implements IEdsConfigModel {
-        private String version;
-        private String provider;
-        @Schema(description = "Amazon EKS cred")
-        private AmazonEks amazonEks;
-        private Kubeconfig kubeconfig;
-        private Filter filter;
-        private EdsInstance edsInstance;
-    }
 
     @Data
     @NoArgsConstructor

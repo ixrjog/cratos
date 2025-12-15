@@ -5,15 +5,15 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.opscloud.param.OcUserParam;
 import com.baiyi.cratos.eds.opscloud.repo.OcUserRepo;
+import com.baiyi.cratos.processor.BasePostImportAssetProcessor;
 import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +61,7 @@ public class UserToOcPostImportProcessor implements BasePostImportAssetProcessor
         final String password = context.containsKey("PASSWORD") ? context.get("PASSWORD")
                 .toString() : PasswordGenerator.generatePassword();
         opscloudInstances.forEach(opscloudInstance -> {
-            EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
+            EdsConfigs.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
                     opscloudInstance.getConfigId());
             OcUserParam.AddUser addUser = OcUserParam.AddUser.builder()
                     .email(user.getEmail())

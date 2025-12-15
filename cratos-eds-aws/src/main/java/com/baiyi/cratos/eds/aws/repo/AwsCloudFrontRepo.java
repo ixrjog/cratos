@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.cloudfront.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonCloudFrontService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -19,11 +19,11 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsCloudFrontRepo {
 
-    public static List<DistributionSummary> listDistributions(EdsAwsConfigModel.Aws aws) {
+    public static List<DistributionSummary> listDistributions(EdsConfigs.Aws aws) {
         return listDistributions(aws.getRegionId(), aws);
     }
 
-    public static List<DistributionSummary> listDistributions(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<DistributionSummary> listDistributions(String regionId, EdsConfigs.Aws aws) {
         ListDistributionsRequest request = new ListDistributionsRequest();
         List<DistributionSummary> distributionSummaryList = Lists.newArrayList();
         String nextMarker = null;
@@ -43,11 +43,11 @@ public class AwsCloudFrontRepo {
         return distributionSummaryList;
     }
 
-    public static List<ConflictingAlias> listConflictingAliases(EdsAwsConfigModel.Aws aws, String distributionId) {
+    public static List<ConflictingAlias> listConflictingAliases(EdsConfigs.Aws aws, String distributionId) {
         return listConflictingAliases(aws.getRegionId(), aws, distributionId);
     }
 
-    public static List<ConflictingAlias> listConflictingAliases(String regionId, EdsAwsConfigModel.Aws aws,
+    public static List<ConflictingAlias> listConflictingAliases(String regionId, EdsConfigs.Aws aws,
                                                                 String distributionId) {
         ListConflictingAliasesRequest request = new ListConflictingAliasesRequest().withDistributionId(distributionId);
         List<ConflictingAlias> conflictingAliasList = Lists.newArrayList();

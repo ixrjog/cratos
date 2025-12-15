@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagement;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -18,11 +18,11 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AmazonIdentityManagementService {
 
-    public static AmazonIdentityManagement buildAmazonIdentityManagement(EdsAwsConfigModel.Aws aws) {
+    public static AmazonIdentityManagement buildAmazonIdentityManagement(EdsConfigs.Aws aws) {
         return buildAmazonIdentityManagement(aws.getRegionId(), aws);
     }
 
-    public static AmazonIdentityManagement buildAmazonIdentityManagement(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static AmazonIdentityManagement buildAmazonIdentityManagement(String regionId, EdsConfigs.Aws aws) {
         AWSCredentials credentials = AwsCredentialsManager.buildAWSCredentials(aws);
         return AmazonIdentityManagementClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

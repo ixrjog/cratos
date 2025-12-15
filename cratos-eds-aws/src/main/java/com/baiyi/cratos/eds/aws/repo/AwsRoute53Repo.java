@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo;
 import com.amazonaws.services.route53.AmazonRoute53;
 import com.amazonaws.services.route53.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonRoute53Service;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsRoute53Repo {
 
-    public static List<HostedZone> listHostedZones(EdsAwsConfigModel.Aws aws) {
+    public static List<HostedZone> listHostedZones(EdsConfigs.Aws aws) {
         ListHostedZonesRequest request = new ListHostedZonesRequest();
         List<HostedZone> hostedZones = Lists.newArrayList();
         AmazonRoute53 route53 = AmazonRoute53Service.buildAmazonRoute53(aws);
@@ -36,7 +36,7 @@ public class AwsRoute53Repo {
         return hostedZones;
     }
 
-    public static List<ResourceRecordSet> listResourceRecordSets(EdsAwsConfigModel.Aws aws, String hostedZoneId) {
+    public static List<ResourceRecordSet> listResourceRecordSets(EdsConfigs.Aws aws, String hostedZoneId) {
         ListResourceRecordSetsRequest request = new ListResourceRecordSetsRequest();
         request.setHostedZoneId(hostedZoneId);
         List<ResourceRecordSet> resourceRecordSets = Lists.newArrayList();

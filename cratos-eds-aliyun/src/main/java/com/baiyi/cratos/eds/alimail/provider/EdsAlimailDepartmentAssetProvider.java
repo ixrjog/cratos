@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.repo.AlimailDepartmentRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIMAIL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIMAIL, assetTypeOf = EdsAssetTypeEnum.ALIMAIL_DEPARTMENT)
-public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsAlimailConfigModel.Alimail, AlimailDepartment.Department> {
+public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Alimail, AlimailDepartment.Department> {
 
     public EdsAlimailDepartmentAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -45,22 +45,22 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvi
 
     @Override
     protected List<AlimailDepartment.Department> listEntities(
-            ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Alimail> instance) throws EdsQueryEntitiesException {
         try {
             List<AlimailDepartment.Department> departments = AlimailDepartmentRepo.listSubDepartments(
-                    instance.getEdsConfigModel(), AlimailDepartmentRepo.ROOT);
+                    instance.getConfig(), AlimailDepartmentRepo.ROOT);
             if (CollectionUtils.isEmpty(departments)) {
                 return List.of();
             }
             // 递归查询
-            return AlimailDepartmentRepo.listSubDepartments(instance.getEdsConfigModel(), departments);
+            return AlimailDepartmentRepo.listSubDepartments(instance.getConfig(), departments);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Alimail> instance,
                                   AlimailDepartment.Department entity) {
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
@@ -71,7 +71,7 @@ public class EdsAlimailDepartmentAssetProvider extends BaseEdsInstanceAssetProvi
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsAlimailConfigModel.Alimail> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Alimail> instance, EdsAsset edsAsset,
             AlimailDepartment.Department entity) {
         return List.of(createEdsAssetIndex(edsAsset, ALIMAIL_DEPARTMENT_PARENT_ID, entity.getParentId()));
     }

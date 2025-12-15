@@ -3,7 +3,8 @@ package com.baiyi.cratos.eds.alimail.service;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.util.SpringContextUtils;
 import com.baiyi.cratos.eds.alimail.auth.AlimailTokenHolder;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import io.netty.channel.ChannelOption;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class AlimailServiceFactory {
 
     private static final int MAX_IN_MEMORY_SIZE = 10 * 1024 * 1024;
 
-    private static AlimailService createAlimailService(EdsAlimailConfigModel.Alimail alimail) {
+    private static AlimailService createAlimailService(EdsConfigs.Alimail alimail) {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         WebClient webClient = WebClient.builder()
@@ -39,7 +40,7 @@ public class AlimailServiceFactory {
         return factory.createClient(AlimailService.class);
     }
 
-    public static AlimailService createAuthenticatedService(EdsAlimailConfigModel.Alimail alimail) {
+    public static AlimailService createAuthenticatedService(EdsConfigs.Alimail alimail) {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         // 预先获取一次 Bean，避免在每次请求中过度查找

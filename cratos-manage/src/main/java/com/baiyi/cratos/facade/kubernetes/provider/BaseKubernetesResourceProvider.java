@@ -7,7 +7,7 @@ import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.KubernetesResourceTemplateMember;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -35,7 +35,7 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
 
     abstract protected R getRepo();
 
-    protected A create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+    protected A create(EdsConfigs.Kubernetes kubernetes, String content) {
         A resource = null;
         try {
             resource = getRepo().find(kubernetes, content);
@@ -47,13 +47,13 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
     protected EdsAsset produce(KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance,
                                KubernetesResourceTemplateMember member,
                                KubernetesResourceTemplateCustom.Custom custom) {
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(kubernetesInstance);
+        EdsConfigs.Kubernetes kubernetes = getEdsConfig(kubernetesInstance);
         try {
             String content = BeetlUtil.renderTemplateV2(member.getContent(), custom.getData());
             A asset = create(kubernetes, content);
             // 导入资产
             EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
-            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, A> holder = getEdsInstanceProvider(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, A> holder = getEdsInstanceProvider(
                     edsInstance.getId());
             return holder.getProvider()
                     .importAsset(holder.getInstance(), asset);
@@ -102,25 +102,25 @@ public abstract class BaseKubernetesResourceProvider<P, R extends BaseKubernetes
         throw new KubernetesResourceTemplateException("kubernetesInstance is invalid.");
     }
 
-    protected EdsKubernetesConfigModel.Kubernetes getEdsConfig(
+    protected EdsConfigs.Kubernetes getEdsConfig(
             KubernetesResourceTemplateCustom.KubernetesInstance kubernetesInstance) {
         EdsInstance edsInstance = getEdsInstance(kubernetesInstance);
         if (edsInstance != null && IdentityUtils.hasIdentity(edsInstance.getConfigId())) {
             return getEdsInstanceProvider(edsInstance.getId()).getInstance()
-                    .getEdsConfigModel();
+                    .getConfig();
         }
         throw new KubernetesResourceTemplateException("kubernetesInstance is invalid.");
     }
 
-    protected EdsInstanceAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> getEdsConfig2(int instanceId) {
+    protected EdsInstanceAssetProvider<EdsConfigs.Kubernetes, A> getEdsConfig2(int instanceId) {
         return getEdsInstanceProvider(instanceId).getProvider();
     }
 
     @SuppressWarnings("unchecked")
-    private EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, A> getEdsInstanceProvider(int instanceId) {
+    private EdsInstanceProviderHolder<EdsConfigs.Kubernetes, A> getEdsInstanceProvider(int instanceId) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsAssetTypeEnum edsAssetTypeEnum = getAssetTypeEnum();
-        return (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, A>) holderBuilder.newHolder(instanceId,
+        return (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, A>) holderBuilder.newHolder(instanceId,
                 edsAssetTypeEnum.name());
     }
 

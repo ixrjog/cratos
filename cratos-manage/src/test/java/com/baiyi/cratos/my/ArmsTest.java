@@ -4,7 +4,7 @@ import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -76,7 +76,7 @@ public class ArmsTest extends BaseUnit {
     void test2() {
         List<EdsAsset> deployments = edsAssetService.queryInstanceAssets(103,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 103, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
 
         for (EdsAsset deploymentAsset : deployments) {
@@ -90,7 +90,7 @@ public class ArmsTest extends BaseUnit {
                 continue;
             }
             Deployment deployment = kubernetesDeploymentRepo.get(holder.getInstance()
-                    .getEdsConfigModel(), "daily", deploymentAsset.getName());
+                    .getConfig(), "daily", deploymentAsset.getName());
             if (Objects.isNull(deployment)) {
                 log.warn("Deployment not found: {}", deploymentAsset.getName());
                 continue;
@@ -113,7 +113,7 @@ public class ArmsTest extends BaseUnit {
                     log.info("armsPilotCreateAppName updated: {} -> {}", labelsArmsPilotCreateAppName,
                             armsPilotCreateAppName);
                     kubernetesDeploymentRepo.update(holder.getInstance()
-                            .getEdsConfigModel(), deployment);
+                            .getConfig(), deployment);
                 }
             } else {
                 log.warn("ArmsPilotCreateAppName not found: {}", deploymentAsset.getName());

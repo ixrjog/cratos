@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.harbor.repo;
 
 import com.baiyi.cratos.common.builder.DictBuilder;
-import com.baiyi.cratos.eds.core.config.model.EdsHarborConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.harbor.model.HarborProject;
 import com.baiyi.cratos.eds.harbor.service.HarborService;
 import com.baiyi.cratos.eds.harbor.service.HarborServiceFactory;
@@ -21,7 +21,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HarborProjectRepo {
 
-    public static List<HarborProject.Project> listProjects(EdsHarborConfigModel.Harbor harbor) {
+    public static List<HarborProject.Project> listProjects(EdsConfigs.Harbor harbor) {
         HarborService harborService = HarborServiceFactory.createHarborService(harbor);
         int page = 1;
         int size = 10;

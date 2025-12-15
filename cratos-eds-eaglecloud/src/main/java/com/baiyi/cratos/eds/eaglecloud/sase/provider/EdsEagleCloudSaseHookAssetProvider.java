@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.event.EagleCloudEventParam;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsEagleCloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.EAGLECLOUD_SASE, assetTypeOf = EdsAssetTypeEnum.EAGLECLOUD_SASE_DATA_SECURITY_EVENT)
-public class EdsEagleCloudSaseHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsEagleCloudConfigModel.Sase, EagleCloudEventParam.SaseHook> {
+public class EdsEagleCloudSaseHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Sase, EagleCloudEventParam.SaseHook> {
 
     public EdsEagleCloudSaseHookAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                               CredentialService credentialService,
@@ -41,12 +41,12 @@ public class EdsEagleCloudSaseHookAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<EagleCloudEventParam.SaseHook> listEntities(
-            ExternalDataSourceInstance<EdsEagleCloudConfigModel.Sase> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Sase> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported.");
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsEagleCloudConfigModel.Sase> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Sase> instance,
                                          EagleCloudEventParam.SaseHook entity) {
         EagleCloudEventParam.Content content = EagleCloudEventParam.Content.parse(entity);
         return newEdsAssetBuilder(instance, entity).assetIdOf(content.getEventId())

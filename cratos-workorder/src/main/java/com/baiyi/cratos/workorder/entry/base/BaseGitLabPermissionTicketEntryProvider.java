@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.model.GitLabPermissionModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabGroupFacade;
 import com.baiyi.cratos.eds.gitlab.facade.GitLabProjectFacade;
@@ -61,7 +61,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
         this.edsAssetService = edsAssetService;
     }
 
-    protected org.gitlab4j.api.models.User getOrCreateUser(EdsGitLabConfigModel.GitLab gitLab,
+    protected org.gitlab4j.api.models.User getOrCreateUser(EdsConfigs.GitLab gitLab,
                                                            String username) throws WorkOrderTicketException {
         try {
             List<org.gitlab4j.api.models.User> gitLabUsers = gitLabUserFacade.findUsers(gitLab, username);
@@ -75,7 +75,7 @@ public abstract class BaseGitLabPermissionTicketEntryProvider<EntryParam extends
         }
     }
 
-    protected User createGitLabUser(EdsGitLabConfigModel.GitLab gitLab,
+    protected User createGitLabUser(EdsConfigs.GitLab gitLab,
                                     String username) throws WorkOrderTicketException {
         try {
             return gitLabUserFacade.createUser(gitLab, username);

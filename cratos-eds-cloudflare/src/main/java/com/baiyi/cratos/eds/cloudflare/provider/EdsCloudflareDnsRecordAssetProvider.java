@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
@@ -39,7 +39,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUDFL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD)
-public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsCloudflareConfigModel.Cloudflare, CloudflareDns.DnsRecord> {
+public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> {
 
     private final CloudflareZoneRepo cloudflareZoneRepo;
     private final CloudflareDnsRepo cloudflareDnsRepo;
@@ -59,7 +59,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
                                   CloudflareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
@@ -73,8 +73,8 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
 
     @Override
     protected Set<String> listNamespace(
-            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return cloudflareZoneRepo.listZones(instance.getEdsConfigModel())
+            ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
+        return cloudflareZoneRepo.listZones(instance.getConfig())
                 .stream()
                 .map(CloudflareZone.Zone::getId)
                 .collect(Collectors.toSet());
@@ -82,8 +82,8 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
 
     @Override
     protected List<CloudflareDns.DnsRecord> listEntities(String zoneId,
-                                                         ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return cloudflareDnsRepo.listDnsRecords(instance.getEdsConfigModel(), zoneId)
+                                                         ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
+        return cloudflareDnsRepo.listDnsRecords(instance.getConfig(), zoneId)
                 .stream()
                 .peek(e -> e.setZoneId(zoneId))
                 .toList();
@@ -91,7 +91,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsCloudflareConfigModel.Cloudflare> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance, EdsAsset edsAsset,
             CloudflareDns.DnsRecord entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_PROXIED, entity.getProxied()));

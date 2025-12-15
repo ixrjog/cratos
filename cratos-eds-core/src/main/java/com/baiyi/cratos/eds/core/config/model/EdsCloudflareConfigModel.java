@@ -1,7 +1,5 @@
 package com.baiyi.cratos.eds.core.config.model;
 
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.config.base.ToAuthorization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -21,15 +19,6 @@ public class EdsCloudflareConfigModel {
      * https://developers.cloudflare.com/api/
      */
     public static final String CLIENT_API = "https://api.cloudflare.com/client/v4";
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Cloudflare implements IEdsConfigModel {
-        @Schema(description = "凭据")
-        private Cred cred;
-        private EdsInstance edsInstance;
-    }
 
     @Data
     @NoArgsConstructor

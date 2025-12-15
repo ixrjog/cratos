@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.repo.version;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class GitLabVersionRepo {
 
-    public static Version getVersion(EdsGitLabConfigModel.GitLab gitlab) throws GitLabApiException {
+    public static Version getVersion(EdsConfigs.GitLab gitlab) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitlab)) {
             return gitLabApi.getVersion();
         } catch (GitLabApiException e) {

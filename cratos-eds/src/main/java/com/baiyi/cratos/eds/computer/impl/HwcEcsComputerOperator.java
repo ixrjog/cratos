@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.exception.CloudComputerOperationException;
 import com.baiyi.cratos.eds.computer.BaseCloudComputerOperator;
 import com.baiyi.cratos.eds.computer.context.CloudComputerContext;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ECS)
-public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsHwcConfigModel.Hwc, ServerDetail> {
+public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsConfigs.Hwc, ServerDetail> {
 
     public HwcEcsComputerOperator(EdsInstanceService edsInstanceService, EdsConfigService edsConfigService,
                                   EdsAssetService edsAssetService, CredentialService credentialService,
@@ -41,7 +41,7 @@ public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsHwcConf
      */
     @Override
     protected String rebootInstance(
-            CloudComputerContext<EdsHwcConfigModel.Hwc> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Hwc> context) throws CloudComputerOperationException {
         try {
             return HwcEcsRepo.rebootInstance(
                     context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
@@ -59,7 +59,7 @@ public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsHwcConf
      */
     @Override
     protected String startInstance(
-            CloudComputerContext<EdsHwcConfigModel.Hwc> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Hwc> context) throws CloudComputerOperationException {
         try {
             return HwcEcsRepo.startInstance(
                     context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
@@ -77,7 +77,7 @@ public class HwcEcsComputerOperator extends BaseCloudComputerOperator<EdsHwcConf
      */
     @Override
     protected String stopInstance(
-            CloudComputerContext<EdsHwcConfigModel.Hwc> context) throws CloudComputerOperationException {
+            CloudComputerContext<EdsConfigs.Hwc> context) throws CloudComputerOperationException {
         try {
             return HwcEcsRepo.stopInstance(context.getRegionId(), context.getConfig(), context.getComputerInstanceId());
         } catch (ServiceResponseException serviceResponseException) {

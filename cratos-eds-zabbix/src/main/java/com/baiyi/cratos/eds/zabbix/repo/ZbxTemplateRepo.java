@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.request.ZbxTemplateRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxTemplateResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxTemplateRepo {
 
-    public static List<ZbxTemplateResult.Template> listTemplate(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxTemplateResult.Template> listTemplate(EdsConfigs.Zabbix zbx) {
         ZbxTemplateService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxTemplateService.class);
         ZbxTemplateRequest.GetTemplate request = ZbxTemplateRequest.GetTemplate.builder()
                 .build();

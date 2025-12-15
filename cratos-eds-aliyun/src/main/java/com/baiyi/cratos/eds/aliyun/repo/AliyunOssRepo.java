@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyun.oss.model.Bucket;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOssClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AliyunOssRepo {
 
-    public static List<Bucket> listBuckets(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static List<Bucket> listBuckets(String endpoint, EdsConfigs.Aliyun aliyun) {
         return AliyunOssClient.createClient(endpoint, aliyun)
                 .listBuckets();
     }

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.channel.MessageResponse;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.param.http.eds.EdsKubernetesNodeParam;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesNodeVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -53,10 +53,10 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
             EdsKubernetesNodeParam.QueryEdsKubernetesNodeDetails queryEdsKubernetesNodeDetails) {
         try {
             EdsInstance kubernetesInstance = getEdsInstanceByName(queryEdsKubernetesNodeDetails.getInstanceName());
-            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Node>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Node>) holderBuilder.newHolder(
                     kubernetesInstance.getId(), EdsAssetTypeEnum.KUBERNETES_NODE.name());
-            EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
-                    .getEdsConfigModel();
+            EdsConfigs.Kubernetes kubernetes = holder.getInstance()
+                    .getConfig();
             return KubernetesNodeVO.KubernetesNodeDetails.builder()
                     .kubernetesInstance(edsInstanceWrapper.wrapToTarget(kubernetesInstance))
                     .nodes(makeNodes(kubernetes))
@@ -66,7 +66,7 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
         }
     }
 
-    private Map<String, List<KubernetesNodeVO.Node>> makeNodes(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    private Map<String, List<KubernetesNodeVO.Node>> makeNodes(EdsConfigs.Kubernetes kubernetes) {
         List<Node> nodeList = kubernetesNodeRepo.list(kubernetes);
         if (CollectionUtils.isEmpty(nodeList)) {
             return Map.of();
@@ -79,7 +79,7 @@ public class KubernetesNodeDetailsFacadeImpl implements KubernetesNodeDetailsFac
                 .collect(Collectors.groupingBy(KubernetesNodeVO.Node::getZone));
     }
 
-    private Map<String, KubernetesNodeVO.NodeUsage> makeNodeUsage(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    private Map<String, KubernetesNodeVO.NodeUsage> makeNodeUsage(EdsConfigs.Kubernetes kubernetes) {
         return kubernetesNodeRepo.queryNodeUsageMap(kubernetes);
     }
 

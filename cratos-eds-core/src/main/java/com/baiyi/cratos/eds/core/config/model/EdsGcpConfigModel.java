@@ -1,7 +1,5 @@
 package com.baiyi.cratos.eds.core.config.model;
 
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.iam.admin.v1.ProjectName;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,14 +18,6 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @NoArgsConstructor(access = PRIVATE)
 public class EdsGcpConfigModel {
-
-    @Data
-    @NoArgsConstructor
-    public static class Gcp implements IEdsConfigModel {
-        private Project project;
-        private EdsInstance edsInstance;
-        private Certificate certificate;
-    }
 
     @Data
     @NoArgsConstructor

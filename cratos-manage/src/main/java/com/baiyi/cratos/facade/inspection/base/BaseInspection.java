@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -75,13 +75,13 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                                                                    .getEdsInstance()
                                                                    .getConfigId());
-            EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
+            EdsConfigs.Robot robot = providerHolder.getProvider()
                     .configLoadAs(edsConfig);
             try {
                 DingtalkRobotModel.Msg message = DingtalkRobotModel.loadAs(getMsg());

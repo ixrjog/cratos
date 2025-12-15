@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcElbClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
@@ -30,7 +30,7 @@ public class HwcElbRepo {
     private static final int MAX_LIMIT = 2000;
 
     public static List<CertificateInfo> listCertificates(String regionId,
-                                                         EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
+                                                         EdsConfigs.Hwc huaweicloud) throws ServiceResponseException {
         List<CertificateInfo> certificatesList = Lists.newArrayList();
         ElbClient client = HwcElbClientBuilder.buildElbClient(regionId, huaweicloud);
         ListCertificatesRequest request = new ListCertificatesRequest().withLimit(MAX_LIMIT);

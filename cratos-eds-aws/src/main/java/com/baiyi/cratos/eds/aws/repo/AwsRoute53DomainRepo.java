@@ -4,7 +4,7 @@ import com.amazonaws.services.route53domains.model.DomainSummary;
 import com.amazonaws.services.route53domains.model.ListDomainsRequest;
 import com.amazonaws.services.route53domains.model.ListDomainsResult;
 import com.baiyi.cratos.eds.aws.service.AmazonRoute53DomainsService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsRoute53DomainRepo {
 
-    public static List<DomainSummary> listDomains(EdsAwsConfigModel.Aws aws) {
+    public static List<DomainSummary> listDomains(EdsConfigs.Aws aws) {
         ListDomainsRequest request = new ListDomainsRequest();
         List<DomainSummary> domainSummaries = Lists.newArrayList();
         var client = AmazonRoute53DomainsService.buildAmazonRoute53Domains(aws);

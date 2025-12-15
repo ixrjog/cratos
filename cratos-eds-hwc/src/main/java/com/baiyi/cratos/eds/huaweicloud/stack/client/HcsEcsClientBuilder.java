@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.stack.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHcsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.huaweicloud.sdk.core.HttpListener;
 import com.huaweicloud.sdk.core.auth.BasicCredentials;
 import com.huaweicloud.sdk.core.http.HttpConfig;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class HcsEcsClientBuilder {
 
-    public static EcsClient buildEcsClient(EdsHcsConfigModel.Hcs hcStack) {
+    public static EcsClient buildEcsClient(EdsConfigs.Hcs hcStack) {
         // 注册监听器后打印原始请求信息,请勿用于生产环境
         HttpListener requestListener = HttpListener.forRequestListener(listener ->
                 System.out.printf("> Request %s %s\n> Headers:\n%s\n> Body: %s\n",

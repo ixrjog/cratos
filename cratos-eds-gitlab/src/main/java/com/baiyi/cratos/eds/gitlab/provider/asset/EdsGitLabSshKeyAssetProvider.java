@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.SshKeyUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -37,7 +37,7 @@ import java.util.stream.Stream;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_SSHKEY)
-public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, SshKeyData> {
+public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.GitLab, SshKeyData> {
 
     public EdsGitLabSshKeyAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -50,7 +50,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     @Override
     protected List<SshKeyData> listEntities(
-            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.GitLab> instance) throws EdsQueryEntitiesException {
         try {
             List<EdsAsset> edsUserAssets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.GITLAB_USER);
             if (!CollectionUtils.isEmpty(edsUserAssets)) {
@@ -64,12 +64,12 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     // 从EdsAsset中查询用户
     private List<SshKeyData> listSshKeyWithEdsUserAssets(
-            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+            ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
             List<EdsAsset> edsUserAssets) throws GitLabApiException {
         return edsUserAssets.stream()
                 .flatMap(edsUserAsset -> {
                     try {
-                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(),
+                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getConfig(),
                                         Long.parseLong(edsUserAsset.getAssetId()))
                                 .stream()
                                 .map(key -> SshKeyData.builder()
@@ -84,15 +84,15 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     private List<SshKeyData> listSshKeyFromRepo(
-            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws GitLabApiException {
-        List<User> users = GitLabUserRepo.getUsers(instance.getEdsConfigModel());
+            ExternalDataSourceInstance<EdsConfigs.GitLab> instance) throws GitLabApiException {
+        List<User> users = GitLabUserRepo.getUsers(instance.getConfig());
         if (CollectionUtils.isEmpty(users)) {
             return Collections.emptyList();
         }
         return users.stream()
                 .flatMap(user -> {
                     try {
-                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getEdsConfigModel(), user.getId())
+                        return GitLabSshKeyRepo.getSshKeysByUserId(instance.getConfig(), user.getId())
                                 .stream()
                                 .map(key -> SshKeyData.builder()
                                         .sshKey(key)
@@ -106,7 +106,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
                                          SshKeyData entity) {
         SshKey sshKey = entity.getSshKey();
         return newEdsAssetBuilder(instance, entity).assetIdOf(sshKey.getId())

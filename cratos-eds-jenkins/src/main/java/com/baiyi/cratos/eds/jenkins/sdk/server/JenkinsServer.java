@@ -11,7 +11,7 @@ import com.baiyi.cratos.eds.jenkins.sdk.client.JenkinsHttpClient;
 import com.baiyi.cratos.eds.jenkins.sdk.client.JenkinsHttpConnection;
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.EncodingUtils;
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.UrlUtils;
-import com.baiyi.cratos.eds.jenkins.helper.JenkinsVersion;
+import com.baiyi.cratos.eds.jenkins.JenkinsVersion;
 import com.baiyi.cratos.eds.jenkins.sdk.model.*;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.baiyi.cratos.eds.jenkins.helper.FunctionalHelper.SET_CLIENT;
+import static com.baiyi.cratos.eds.jenkins.FunctionalHelper.SET_CLIENT;
 import static java.util.stream.Collectors.toMap;
 
 /**

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.aliyun.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -21,7 +21,7 @@ public class AliyunAlbClient {
      * @throws Exception
      */
     public static com.aliyun.alb20200616.Client createClient(String endpoint,
-                                                             EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+                                                             EdsConfigs.Aliyun aliyun) throws Exception {
         // 工程代码泄露可能会导致 AccessKey 泄露，并威胁账号下所有资源的安全性。以下代码示例仅供参考。
         // 建议使用更安全的 STS 方式，更多鉴权访问方式请参见：https://help.aliyun.com/document_detail/378657.html。
         com.aliyun.teaopenapi.models.Config config = new com.aliyun.teaopenapi.models.Config()

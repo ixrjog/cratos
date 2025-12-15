@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.request.ZbxUserRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxUserResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
@@ -22,7 +22,7 @@ import static java.util.Map.entry;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxUserRepo {
 
-    public static List<ZbxUserResult.User> listUser(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxUserResult.User> listUser(EdsConfigs.Zabbix zbx) {
         ZbxUserService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxUserService.class);
         Map<String, Object> params = Map.ofEntries(entry("output", "extend"));
         ZbxUserRequest.GetUser request = ZbxUserRequest.GetUser.builder()

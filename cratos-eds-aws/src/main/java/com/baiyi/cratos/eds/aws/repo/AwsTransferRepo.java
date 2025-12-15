@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.transfer.model.*;
 import com.baiyi.cratos.eds.aws.service.AwsTransferService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +30,7 @@ public class AwsTransferRepo {
      * @param aws
      * @return
      */
-    public static List<ListedServer> listServers(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<ListedServer> listServers(String regionId, EdsConfigs.Aws aws) {
         ListServersRequest request = new ListServersRequest().withMaxResults(1000);
         List<ListedServer> servers = Lists.newArrayList();
         String nextToken = null;
@@ -49,7 +49,7 @@ public class AwsTransferRepo {
     }
 
 
-    public static List<ListedUser> listUsers(String regionId, EdsAwsConfigModel.Aws aws, String serverId) {
+    public static List<ListedUser> listUsers(String regionId, EdsConfigs.Aws aws, String serverId) {
         ListUsersRequest request = new ListUsersRequest().withMaxResults(1000)
                 .withServerId(serverId);
         List<ListedUser> users = Lists.newArrayList();
@@ -68,14 +68,14 @@ public class AwsTransferRepo {
         return users;
     }
 
-    public static CreateUserResult createUser(String regionId, EdsAwsConfigModel.Aws aws,
+    public static CreateUserResult createUser(String regionId, EdsConfigs.Aws aws,
                                               Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName,
                                               String role, String serverId, String sshPublicKey) {
         return createUser(regionId, aws, HOME_DIRECTORY_TYPE_LOGICAL, homeDirectoryMappings, userName, role, serverId,
                 sshPublicKey);
     }
 
-    public static CreateUserResult createUser(String regionId, EdsAwsConfigModel.Aws aws, String homeDirectoryType,
+    public static CreateUserResult createUser(String regionId, EdsConfigs.Aws aws, String homeDirectoryType,
                                               Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName,
                                               String role, String serverId, String sshPublicKey) {
         CreateUserRequest request = new CreateUserRequest();

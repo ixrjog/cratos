@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcEcsClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
@@ -26,7 +26,7 @@ public class HwcEcsRepo {
     private static final int LIMIT = 100;
 
     public static List<ServerDetail> listServers(String regionId,
-                                                 EdsHwcConfigModel.Hwc huaweicloud) throws ServiceResponseException {
+                                                 EdsConfigs.Hwc huaweicloud) throws ServiceResponseException {
         List<ServerDetail> serverDetails = Lists.newArrayList();
         EcsClient client = HwcEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
         ListServersDetailsRequest request = new ListServersDetailsRequest();
@@ -43,7 +43,7 @@ public class HwcEcsRepo {
         return serverDetails;
     }
 
-    public static String rebootInstance(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
+    public static String rebootInstance(String regionId, EdsConfigs.Hwc huaweicloud,
                                         String instanceId) throws ServiceResponseException {
         EcsClient client = HwcEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
 
@@ -63,7 +63,7 @@ public class HwcEcsRepo {
                 .orElse(null);
     }
 
-    public static String startInstance(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
+    public static String startInstance(String regionId, EdsConfigs.Hwc huaweicloud,
                                        String instanceId) throws ServiceResponseException {
         EcsClient client = HwcEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
 
@@ -81,7 +81,7 @@ public class HwcEcsRepo {
                 .orElse(null);
     }
 
-    public static String stopInstance(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
+    public static String stopInstance(String regionId, EdsConfigs.Hwc huaweicloud,
                                       String instanceId) throws ServiceResponseException {
         EcsClient client = HwcEcsClientBuilder.buildEcsClient(regionId, huaweicloud);
 

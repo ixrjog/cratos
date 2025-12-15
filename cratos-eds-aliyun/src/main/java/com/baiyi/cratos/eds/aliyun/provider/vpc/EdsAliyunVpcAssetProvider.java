@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunVpcRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VPC)
-public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeVpcsResponse.Vpc> {
+public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, DescribeVpcsResponse.Vpc> {
 
     private final AliyunVpcRepo aliyunVpcRepo;
 
@@ -47,7 +47,7 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<DescribeVpcsResponse.Vpc> listEntities(String regionId, EdsAliyunConfigModel.Aliyun configModel) {
+    protected List<DescribeVpcsResponse.Vpc> listEntities(String regionId, EdsConfigs.Aliyun configModel) {
         try {
             return aliyunVpcRepo.listVpc(regionId, configModel);
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   DescribeVpcsResponse.Vpc entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getVpcId())
                 .nameOf(entity.getVpcName())
@@ -66,7 +66,7 @@ public class EdsAliyunVpcAssetProvider extends BaseHasRegionsEdsAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, DescribeVpcsResponse.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getCidrBlock()));

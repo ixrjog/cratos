@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabUserRepo;
 import com.baiyi.cratos.service.UserService;
 import lombok.AllArgsConstructor;
@@ -25,12 +25,12 @@ public class GitLabUserFacade {
     private final UserService userService;
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public List<User> findUsers(EdsGitLabConfigModel.GitLab gitlab, String emailOrUsername) throws GitLabApiException {
+    public List<User> findUsers(EdsConfigs.GitLab gitlab, String emailOrUsername) throws GitLabApiException {
         return GitLabUserRepo.findUsers(gitlab, emailOrUsername);
     }
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public User createUser(EdsGitLabConfigModel.GitLab gitlab, String username) throws GitLabApiException {
+    public User createUser(EdsConfigs.GitLab gitlab, String username) throws GitLabApiException {
         com.baiyi.cratos.domain.generator.User localUser = userService.getByUsername(username);
         User user = new User().withUsername(username)
                 .withName(localUser.getDisplayName())

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyuncs.ecs.model.v20140526.*;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class AliyunEcsRepo {
 
     private static final int PAGE_SIZE = 50;
 
-    public List<DescribeInstancesResponse.Instance> listInstances(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
+    public List<DescribeInstancesResponse.Instance> listInstances(String regionId, EdsConfigs.Aliyun aliyun) {
         List<DescribeInstancesResponse.Instance> instanceList = Lists.newArrayList();
         String nextToken;
         DescribeInstancesRequest describe = new DescribeInstancesRequest();
@@ -53,7 +53,7 @@ public class AliyunEcsRepo {
      * @param aliyun
      * @return
      */
-    public List<DescribeImagesResponse.Image> listImages(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
+    public List<DescribeImagesResponse.Image> listImages(String regionId, EdsConfigs.Aliyun aliyun) {
         List<DescribeImagesResponse.Image> images = Lists.newArrayList();
         DescribeImagesRequest describe = new DescribeImagesRequest();
         describe.setSysRegionId(regionId);
@@ -92,7 +92,7 @@ public class AliyunEcsRepo {
      * @param instanceId
      * @return
      */
-    public List<DescribeDisksResponse.Disk> describeDisks(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public List<DescribeDisksResponse.Disk> describeDisks(String regionId, EdsConfigs.Aliyun aliyun,
                                                           String instanceId) {
         try {
             DescribeDisksRequest describe = new DescribeDisksRequest();
@@ -106,7 +106,7 @@ public class AliyunEcsRepo {
         }
     }
 
-    public String rebootInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public String rebootInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         try {
             RebootInstanceRequest request = new RebootInstanceRequest();
             request.setInstanceId(instanceId);
@@ -121,7 +121,7 @@ public class AliyunEcsRepo {
         }
     }
 
-    public String startInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public String startInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         try {
             StartInstanceRequest request = new StartInstanceRequest();
             request.setInstanceId(instanceId);
@@ -136,7 +136,7 @@ public class AliyunEcsRepo {
         }
     }
 
-    public String stopInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceId) {
+    public String stopInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceId) {
         try {
             StopInstanceRequest request = new StopInstanceRequest();
             request.setInstanceId(instanceId);

@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.gitlab.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class GitLabProjectRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
+    public static List<Member> getMembersByProjectId(EdsConfigs.GitLab gitLab, Long projectId,
                                                      int itemsPerPage) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getProjectApi()
@@ -54,7 +55,7 @@ public class GitLabProjectRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Member> getMembersByProjectId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Member> getMembersByProjectId(EdsConfigs.GitLab gitLab,
                                                      Long projectId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getProjectApi()
@@ -75,7 +76,7 @@ public class GitLabProjectRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
+    public static void updateMember(EdsConfigs.GitLab gitLab, Long projectId, Long userId,
                                     AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getProjectApi()
@@ -95,7 +96,7 @@ public class GitLabProjectRepo {
      * @param accessLevel
      * @throws GitLabApiException
      */
-    public static void addMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
+    public static void addMember(EdsConfigs.GitLab gitLab, Long projectId, Long userId,
                                  AccessLevel accessLevel) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             gitLabApi.getProjectApi()
@@ -113,7 +114,7 @@ public class GitLabProjectRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<Project> getProjects(EdsGitLabConfigModel.GitLab gitLab) throws GitLabApiException {
+    public static List<Project> getProjects(EdsConfigs.GitLab gitLab) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getProjectApi()
                     .getProjects();
@@ -123,7 +124,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Project getProject(EdsGitLabConfigModel.GitLab gitLab, Long projectId) throws GitLabApiException {
+    public static Project getProject(EdsConfigs.GitLab gitLab, Long projectId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getProjectApi()
                     .getProject(projectId);
@@ -133,7 +134,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static List<Tag> getTagsByProjectId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Tag> getTagsByProjectId(EdsConfigs.GitLab gitLab,
                                                Long projectId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getTagsApi()
@@ -144,7 +145,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Optional<Tag> getTagByProjectIdAndTagName(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
+    public static Optional<Tag> getTagByProjectIdAndTagName(EdsConfigs.GitLab gitLab, Long projectId,
                                                             String tagName) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getTagsApi()
@@ -155,7 +156,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static List<Branch> getBranchesByProjectId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<Branch> getBranchesByProjectId(EdsConfigs.GitLab gitLab,
                                                       Long projectId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
@@ -166,7 +167,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Optional<Branch> getBranchByProjectIdAndBranchName(EdsGitLabConfigModel.GitLab gitLab, Long projectId,
+    public static Optional<Branch> getBranchByProjectIdAndBranchName(EdsConfigs.GitLab gitLab, Long projectId,
                                                                      String branchName) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
@@ -177,7 +178,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static Branch createBranch(EdsGitLabConfigModel.GitLab gitLab, Long projectId, String branchName,
+    public static Branch createBranch(EdsConfigs.GitLab gitLab, Long projectId, String branchName,
                                       String ref) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getRepositoryApi()
@@ -188,7 +189,7 @@ public class GitLabProjectRepo {
         }
     }
 
-    public static List<Member> getMembersWithProjectId(EdsGitLabConfigModel.GitLab gitLab, Long projectId) throws GitLabApiException {
+    public static List<Member> getMembersWithProjectId(EdsConfigs.GitLab gitLab, Long projectId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             Pager<Member> memberPager = gitLabApi.getProjectApi().getMembers(projectId, ITEMS_PER_PAGE);
             return memberPager.all();

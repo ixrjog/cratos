@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesEventRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
@@ -34,7 +34,7 @@ import java.util.Optional;
  * &#064;Date  2024/10/8 17:24
  * &#064;Version 1.0
  */
-public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+public class EdsTest extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
     public static final int CONFIG_ACK_DAILY = 11;
 
@@ -59,7 +59,7 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
 
     @Test
     void eventTest() {
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes kubernetes = getConfig(CONFIG_ACK_DAILY);
         List<Event> events = kubernetesEventRepo.listEvent(kubernetes, "daily");
         for (Event event : events) {
             System.out.println(event.toString());
@@ -151,7 +151,7 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         // config_ack-channel-prod 29
 
         Map<String, ApplicationView> viewMap = Maps.newHashMap();
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
+        EdsConfigs.Kubernetes kubernetes = getConfig(13);
         kubernetesDeploymentRepo.list(kubernetes, "pre")
                 .forEach(d -> {
                     List<Container> containers = Optional.of(d)
@@ -179,7 +179,7 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         // config_ack-channel-prod 29
 
         Map<String, ApplicationView> viewMap = Maps.newHashMap();
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
+        EdsConfigs.Kubernetes kubernetes = getConfig(13);
         kubernetesDeploymentRepo.list(kubernetes, "pre")
                 .forEach(d -> {
                     List<Container> containers = Optional.of(d)
@@ -204,7 +204,7 @@ public class EdsTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
         // config_ack-channel-prod 29
 
         Map<String, ApplicationView> viewMap = Maps.newHashMap();
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(13);
+        EdsConfigs.Kubernetes kubernetes = getConfig(13);
         kubernetesDeploymentRepo.list(kubernetes, "pre")
                 .forEach(d -> {
                     Optional<Container> optionalContainer = Optional.of(d)

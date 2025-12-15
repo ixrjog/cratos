@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.ApplicationService;
 import com.baiyi.cratos.service.EdsInstanceService;
@@ -57,7 +57,7 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
         SocketActionRequestEnum action = SocketActionRequestEnum.valueOf(message.getAction());
         switch (action) {
             case SocketActionRequestEnum.WATCH -> {
-                Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
+                Map<Integer, EdsConfigs.Kubernetes> kubernetesMap = Maps.newHashMap();
                 Optional.of(message)
                         .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                         .ifPresent(deployments -> deployments.forEach(
@@ -82,17 +82,17 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
     }
 
     private void run(String sessionId, ApplicationKubernetesParam.DeploymentRequest deployment,
-                     Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap) {
+                     Map<Integer, EdsConfigs.Kubernetes> kubernetesMap) {
         EdsInstance edsInstance = edsInstanceService.getByName(deployment.getKubernetesClusterName());
         if (edsInstance == null) {
             return;
         }
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
+        EdsConfigs.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
         deployment.getPods()
                 .forEach(pod -> run(sessionId, kubernetes, pod));
     }
 
-    private void run(String sessionId, EdsKubernetesConfigModel.Kubernetes kubernetes,
+    private void run(String sessionId, EdsConfigs.Kubernetes kubernetes,
                      ApplicationKubernetesParam.PodRequest pod) {
         final String sshSessionInstanceId = pod.getInstanceId();
         final String auditPath = sshAuditProperties.generateAuditLogFilePath(sessionId, sshSessionInstanceId);

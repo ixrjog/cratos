@@ -8,7 +8,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.GCP_MEM
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GCP, assetTypeOf = EdsAssetTypeEnum.GCP_MEMBER)
-public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsGcpConfigModel.Gcp, GoogleMemberModel.Member> {
+public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Gcp, GoogleMemberModel.Member> {
 
     public GcpIdentityProvider(EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
                                EdsAssetWrapper edsAssetWrapper, EdsAssetIndexService edsAssetIndexService,
@@ -51,7 +51,7 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsGcpConfigM
     private static final String GCP_LOGIN_URL = "https://console.cloud.google.com/";
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsGcpConfigModel.Gcp aws, EdsInstance instance,
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Gcp aws, EdsInstance instance,
                                                        com.baiyi.cratos.domain.generator.User user, String password) {
         throw new CloudIdentityException("Operation not supported");
     }
@@ -93,10 +93,10 @@ public class GcpIdentityProvider extends BaseCloudIdentityProvider<EdsGcpConfigM
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsGcpConfigModel.Gcp gcp = (EdsGcpConfigModel.Gcp) holderBuilder.newHolder(asset.getInstanceId(),
+        EdsConfigs.Gcp gcp = (EdsConfigs.Gcp) holderBuilder.newHolder(asset.getInstanceId(),
                         getAccountAssetType())
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(asset.getName())
                 .name(asset.getName())

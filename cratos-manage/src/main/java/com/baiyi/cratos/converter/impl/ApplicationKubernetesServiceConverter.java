@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesServiceRepo;
@@ -43,14 +43,14 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
 
     @Override
     public List<KubernetesServiceVO.Service> toResourceVO(List<ApplicationResource> resources) {
-        Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
+        Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap = Maps.newHashMap();
         return resources.stream()
                 .map(e -> to(edsInstanceConfigMap, e))
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private KubernetesServiceVO.Service to(Map<Integer, EdsKubernetesConfigModel.Kubernetes> edsInstanceConfigMap,
+    private KubernetesServiceVO.Service to(Map<Integer, EdsConfigs.Kubernetes> edsInstanceConfigMap,
                                            ApplicationResource resource) {
         int assetId = resource.getBusinessId();
         EdsAsset edsAsset = edsAssetService.getById(assetId);
@@ -58,7 +58,7 @@ public class ApplicationKubernetesServiceConverter extends BaseKubernetesResourc
             return null;
         }
         EdsInstance edsInstance = edsInstanceService.getById(edsAsset.getInstanceId());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
+        EdsConfigs.Kubernetes kubernetes = getEdsConfig(edsInstanceConfigMap, edsInstance);
         final String namespace = resource.getNamespace();
         Service service = kubernetesServiceRepo.get(kubernetes, namespace, resource.getName());
         return KubernetesServiceBuilder.newBuilder()

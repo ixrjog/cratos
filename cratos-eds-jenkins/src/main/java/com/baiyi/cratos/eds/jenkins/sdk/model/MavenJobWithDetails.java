@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.jenkins.sdk.model;
 
 import com.baiyi.cratos.eds.jenkins.sdk.client.util.EncodingUtils;
-import com.baiyi.cratos.eds.jenkins.helper.Range;
+import com.baiyi.cratos.eds.jenkins.Range;
 import lombok.Getter;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpResponseException;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.baiyi.cratos.eds.jenkins.helper.FunctionalHelper.SET_CLIENT;
+import static com.baiyi.cratos.eds.jenkins.FunctionalHelper.SET_CLIENT;
 import static java.util.stream.Collectors.toList;
 
 public class MavenJobWithDetails extends MavenJob {

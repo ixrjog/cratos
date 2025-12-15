@@ -16,8 +16,8 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesPara
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -114,7 +114,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     }
                     return;
                 }
-                Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap = Maps.newHashMap();
+                Map<Integer, EdsConfigs.Kubernetes> kubernetesMap = Maps.newHashMap();
                 Optional.of(message)
                         .map(KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest::getDeployments)
                         .ifPresent(deployments -> deployments.forEach(
@@ -137,12 +137,12 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     }
 
     private void run(String sessionId, String username, ApplicationKubernetesParam.DeploymentRequest deployment,
-                     Map<Integer, EdsKubernetesConfigModel.Kubernetes> kubernetesMap) {
+                     Map<Integer, EdsConfigs.Kubernetes> kubernetesMap) {
         EdsInstance edsInstance = edsInstanceService.getByName(deployment.getKubernetesClusterName());
         if (edsInstance == null) {
             return;
         }
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
+        EdsConfigs.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
         deployment.getPods()
                 .forEach(pod -> {
                     final String instanceId = pod.getInstanceId();
@@ -266,13 +266,13 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
             log.warn("No available robots to send inspection notifications.");
             return;
         }
-        List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
+        List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>> holders = (List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                 edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
         holders.forEach(providerHolder -> {
             EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                                                                    .getEdsInstance()
                                                                    .getConfigId());
-            EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
+            EdsConfigs.Robot robot = providerHolder.getProvider()
                     .configLoadAs(edsConfig);
             dingtalkService.send(robot.getToken(), message);
             providerHolder.importAsset(message);

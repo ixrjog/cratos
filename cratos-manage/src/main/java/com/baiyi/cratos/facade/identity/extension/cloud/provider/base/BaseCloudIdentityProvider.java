@@ -64,7 +64,7 @@ public abstract class BaseCloudIdentityProvider<Config extends IEdsConfigModel, 
         }
         final String password = generatePassword(createCloudAccount);
         cloudAccount = createAccount(holder.getInstance()
-                .getEdsConfigModel(), instance, user, password);
+                .getConfig(), instance, user, password);
         cloudAccount.setPassword(password);
         return cloudAccount;
     }

@@ -9,6 +9,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunArms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunArmsRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -44,7 +45,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ENV;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ARMS_TRACE_APPS)
-public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunArms.TraceApps> {
+public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, AliyunArms.TraceApps> {
 
     private final EnvFacade envFacade;
 
@@ -61,9 +62,9 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<AliyunArms.TraceApps> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunArmsRepo.listTraceApps(instance.getEdsConfigModel())
+            return AliyunArmsRepo.listTraceApps(instance.getConfig())
                     .stream()
                     .map(e -> {
                         List<AliyunArms.Tags> tags = CollectionUtils.isEmpty(e.getTags()) ? List.of() :
@@ -98,7 +99,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunArms.TraceApps entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getAppId())
                 .nameOf(entity.getAppName())
@@ -109,7 +110,7 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, AliyunArms.TraceApps entity) {
         String name = entity.getAppName();
         Map<String, Env> envMap = envFacade.getEnvMap();
@@ -120,8 +121,8 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
             String appName = StringFormatter.eraseLastStr(name, "-" + env);
             indices.add(createEdsAssetIndex(edsAsset, APP_NAME, appName));
             Optional.of(instance)
-                    .map(ExternalDataSourceInstance::getEdsConfigModel)
-                    .map(EdsAliyunConfigModel.Aliyun::getArms)
+                    .map(ExternalDataSourceInstance::getConfig)
+                    .map(EdsConfigs.Aliyun::getArms)
                     .map(EdsAliyunConfigModel.ARMS::getAppOverview)
                     .ifPresent(home -> {
                         String appHome = StringFormatter.arrayFormat(home, entity.getRegionId(),

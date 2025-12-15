@@ -5,7 +5,7 @@ import com.amazonaws.services.identitymanagement.model.AccessKeyMetadata;
 import com.amazonaws.services.identitymanagement.model.ListAccessKeysRequest;
 import com.amazonaws.services.identitymanagement.model.ListAccessKeysResult;
 import com.baiyi.cratos.eds.aws.service.AmazonIdentityManagementService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AwsIamAccessKeyRepo {
 
-    public static List<AccessKeyMetadata> listAccessKeys(EdsAwsConfigModel.Aws aws, String userName) {
+    public static List<AccessKeyMetadata> listAccessKeys(EdsConfigs.Aws aws, String userName) {
         ListAccessKeysRequest request = new ListAccessKeysRequest().withUserName(userName);
         List<AccessKeyMetadata> keyMetadata = Lists.newArrayList();
         AmazonIdentityManagement iamClient = AmazonIdentityManagementService.buildAmazonIdentityManagement(aws);

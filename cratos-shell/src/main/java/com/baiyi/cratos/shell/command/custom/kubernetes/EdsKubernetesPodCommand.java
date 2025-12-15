@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.SshSessionInstance;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -131,10 +131,10 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> edsInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 edsInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = edsInstanceProviderHolder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Kubernetes kubernetes = edsInstanceProviderHolder.getInstance()
+                .getConfig();
         List<Pod> pods = kubernetesPodRepo.listByReplicaSet(kubernetes, namespace, name);
 
         Map<Integer, PodAssetModel> podContext = Maps.newHashMap();
@@ -171,7 +171,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
         Terminal terminal = sshContext.getTerminal();
         Map<Integer, PodAssetModel> podContext = PodAssetContext.getPodContext();
         PodAssetModel podAssetModel = podContext.get(id);
-        EdsKubernetesConfigModel.Kubernetes kubernetes = PodAssetContext.getConfigContext();
+        EdsConfigs.Kubernetes kubernetes = PodAssetContext.getConfigContext();
         if (StringUtils.hasText(container)) {
             final String findContainer = container;
             if (podAssetModel.getPod()
@@ -290,7 +290,7 @@ public class EdsKubernetesPodCommand extends AbstractCommand {
                     .getFirst()
                     .getName();
         }
-        EdsKubernetesConfigModel.Kubernetes kubernetes = PodAssetContext.getConfigContext();
+        EdsConfigs.Kubernetes kubernetes = PodAssetContext.getConfigContext();
         ServerSession serverSession = helper.getSshSession();
         final String sessionId = SshSessionIdMapper.getSessionId(serverSession.getIoSession());
         String sshSessionInstanceId = generateInstanceId(podAssetModel, container);

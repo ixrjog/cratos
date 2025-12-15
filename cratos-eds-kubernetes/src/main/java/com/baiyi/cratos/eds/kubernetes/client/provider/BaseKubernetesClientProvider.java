@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.provider;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientProviderFactory;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -24,11 +24,11 @@ public interface BaseKubernetesClientProvider extends InitializingBean {
 
     String getName();
 
-    io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes);
+    io.fabric8.kubernetes.client.Config buildConfig(EdsConfigs.Kubernetes kubernetes);
 
-    KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes);
+    KubernetesClient buildClient(EdsConfigs.Kubernetes kubernetes);
 
-    default void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    default void setProperties(EdsConfigs.Kubernetes kubernetes) {
         System.setProperty(KUBERNETES_REQUEST_TIMEOUT_SYSTEM_PROPERTY,
                 String.valueOf(KubernetesClientBuilder.Values.REQUEST_TIMEOUT));
         System.setProperty(KUBERNETES_WEBSOCKET_TIMEOUT_SYSTEM_PROPERTY,

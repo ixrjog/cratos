@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.util;
 
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,9 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxAlertUtils {
 
-    public static boolean matchRule(EdsZabbixConfigModel.Zabbix zbx, String name) {
+    public static boolean matchRule(EdsConfigs.Zabbix zbx, String name) {
         List<String> rules = Optional.of(zbx)
-                .map(EdsZabbixConfigModel.Zabbix::getAlert)
+                .map(EdsConfigs.Zabbix::getAlert)
                 .map(EdsZabbixConfigModel.Alert::getSilencing)
                 .map(EdsZabbixConfigModel.Silencing::getRules)
                 .orElse(List.of());

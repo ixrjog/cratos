@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabProjectRepo;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.AccessLevel;
@@ -20,19 +20,19 @@ import java.util.List;
 public class GitLabProjectFacade {
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public void addProjectMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
+    public void addProjectMember(EdsConfigs.GitLab gitLab, Long projectId, Long userId,
                                  AccessLevel accessLevel) throws GitLabApiException {
         GitLabProjectRepo.addMember(gitLab, projectId, userId, accessLevel);
     }
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public List<Member> getProjectMembers(EdsGitLabConfigModel.GitLab gitLab,
+    public List<Member> getProjectMembers(EdsConfigs.GitLab gitLab,
                                           Long projectId) throws GitLabApiException {
         return GitLabProjectRepo.getMembersWithProjectId(gitLab, projectId);
     }
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public void updateProjectMember(EdsGitLabConfigModel.GitLab gitLab, Long projectId, Long userId,
+    public void updateProjectMember(EdsConfigs.GitLab gitLab, Long projectId, Long userId,
                                     AccessLevel accessLevel) throws GitLabApiException {
         GitLabProjectRepo.updateMember(gitLab, projectId, userId, accessLevel);
     }

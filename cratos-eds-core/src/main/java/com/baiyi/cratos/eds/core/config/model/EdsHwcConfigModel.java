@@ -1,15 +1,9 @@
 package com.baiyi.cratos.eds.core.config.model;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
-import com.baiyi.cratos.eds.core.config.base.IEdsConfigModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -20,21 +14,6 @@ import static lombok.AccessLevel.PRIVATE;
  */
 @NoArgsConstructor(access = PRIVATE)
 public class EdsHwcConfigModel {
-
-    @Data
-    @NoArgsConstructor
-    @Schema
-    public static class Hwc implements HasRegionsModel, IEdsConfigModel {
-        private String version;
-        // default
-        private String regionId;
-        private Set<String> regionIds;
-        @Schema(description = "凭据")
-        private Cred cred;
-        private List<Project> projects;
-        private EdsInstance edsInstance;
-        private IAM iam;
-    }
 
     @Data
     @NoArgsConstructor

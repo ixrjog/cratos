@@ -3,13 +3,13 @@
  *
  * Distributed under the MIT license: http://opensource.org/licenses/MIT
  */
-package com.baiyi.cratos.eds.jenkins.helper;
+package com.baiyi.cratos.eds.jenkins;
 
 /**
  * @author Karl Heinz Marbaise
  */
 public class JenkinsVersion implements Comparable<JenkinsVersion> {
-    private final ComparableVersion cv;
+    private final com.baiyi.cratos.eds.jenkins.helper.ComparableVersion cv;
     private String literalVersion;
 
     public static JenkinsVersion create(String version) {
@@ -17,12 +17,12 @@ public class JenkinsVersion implements Comparable<JenkinsVersion> {
     }
 
     public JenkinsVersion() {
-        this.cv = new ComparableVersion("0");
+        this.cv = new com.baiyi.cratos.eds.jenkins.helper.ComparableVersion("0");
     }
 
     public JenkinsVersion(String version) {
         this.literalVersion = version;
-        this.cv = new ComparableVersion(version);
+        this.cv = new com.baiyi.cratos.eds.jenkins.helper.ComparableVersion(version);
     }
 
     /**

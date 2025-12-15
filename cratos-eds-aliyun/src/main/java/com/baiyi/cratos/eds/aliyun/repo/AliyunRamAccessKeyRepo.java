@@ -6,7 +6,7 @@ import com.aliyuncs.ram.model.v20150501.CreateAccessKeyResponse;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysRequest;
 import com.aliyuncs.ram.model.v20150501.ListAccessKeysResponse;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class AliyunRamAccessKeyRepo {
 
     private final AliyunClient aliyunClient;
 
-    public List<ListAccessKeysResponse.AccessKey> listAccessKeys(EdsAliyunConfigModel.Aliyun aliyun, String username) {
+    public List<ListAccessKeysResponse.AccessKey> listAccessKeys(EdsConfigs.Aliyun aliyun, String username) {
         try {
             ListAccessKeysRequest request = new ListAccessKeysRequest();
             request.setUserName(username);
@@ -37,7 +37,7 @@ public class AliyunRamAccessKeyRepo {
         return List.of();
     }
 
-    public CreateAccessKeyResponse.AccessKey createAccessKey(EdsAliyunConfigModel.Aliyun aliyun,
+    public CreateAccessKeyResponse.AccessKey createAccessKey(EdsConfigs.Aliyun aliyun,
                                                              String username) throws ClientException {
         CreateAccessKeyRequest request = new CreateAccessKeyRequest();
         request.setUserName(username);

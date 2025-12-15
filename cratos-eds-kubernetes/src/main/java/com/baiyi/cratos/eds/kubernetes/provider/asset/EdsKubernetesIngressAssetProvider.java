@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -79,13 +79,13 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
 
     @Override
     protected List<Ingress> listEntities(String namespace,
-                                         ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesIngressRepo.list(instance.getEdsConfigModel(), namespace);
+                                         ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesIngressRepo.list(instance.getConfig(), namespace);
     }
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Optional<List<IngressRule>> optionalIngressRules = Optional.of(entity)
@@ -108,7 +108,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     private EdsAssetIndex getEdsAssetIndexSourceIP(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         Map<String, String> annotations = entity.getMetadata()
                 .getAnnotations();
@@ -116,7 +116,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
             return null;
         }
         boolean isEksProvider = KubernetesProvidersEnum.AMAZON_EKS.getDisplayName()
-                .equals(instance.getEdsConfigModel()
+                .equals(instance.getConfig()
                         .getProvider());
         return annotations.entrySet()
                 .stream()
@@ -131,7 +131,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     private EdsAssetIndex getEdsAssetIndexOrder(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         Map<String, String> annotations = entity.getMetadata()
                 .getAnnotations();
@@ -147,7 +147,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
 
     // 适用于ACK
     private EdsAssetIndex getEdsAssetIndexTrafficLimitQps(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             Ingress entity) {
         return Optional.ofNullable(entity.getMetadata())
                 .map(ObjectMeta::getAnnotations)
@@ -188,7 +188,7 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
     }
 
     @Override
-    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+    protected EdsAsset saveEntityAsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
                                          Ingress entity) {
         EdsAsset asset = super.saveEntityAsAsset(instance, entity);
         Optional.ofNullable(edsAssetIndexService.getByAssetIdAndName(asset.getId(), KUBERNETES_INGRESS_ORDER))

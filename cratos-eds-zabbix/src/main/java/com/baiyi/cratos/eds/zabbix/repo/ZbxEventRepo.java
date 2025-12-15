@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.enums.SeverityType;
 import com.baiyi.cratos.eds.zabbix.request.ZbxEventRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxEventResult;
@@ -21,7 +21,7 @@ import static java.util.Map.entry;
  */
 public class ZbxEventRepo {
 
-    public static List<ZbxEventResult.Event> listEvent(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxEventResult.Event> listEvent(EdsConfigs.Zabbix zbx) {
         ZbxEventService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxEventService.class);
         Map<String, Object> params = Map.ofEntries(
                 entry("output", "extend"),
@@ -38,7 +38,7 @@ public class ZbxEventRepo {
         return response.getResult();
     }
 
-    public static List<ZbxEventResult.Event> listEvent(EdsZabbixConfigModel.Zabbix zbx, Map<String, Object> params) {
+    public static List<ZbxEventResult.Event> listEvent(EdsConfigs.Zabbix zbx, Map<String, Object> params) {
         ZbxEventService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxEventService.class);
         ZbxEventRequest.GetEvent request = ZbxEventRequest.GetEvent.builder()
                 .params(params)
@@ -47,7 +47,7 @@ public class ZbxEventRepo {
         return response.getResult();
     }
 
-    public static List<ZbxEventResult.Event> listEvent(EdsZabbixConfigModel.Zabbix zbx, Set<SeverityType> severityTypes, Set<String> eventIds) {
+    public static List<ZbxEventResult.Event> listEvent(EdsConfigs.Zabbix zbx, Set<SeverityType> severityTypes, Set<String> eventIds) {
         ZbxEventService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxEventService.class);
         Map<String, Object> params = Map.ofEntries(
                 entry("output", "extend"),

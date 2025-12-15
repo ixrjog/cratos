@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.template;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.repo.base.BaseKubernetesResourceRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
@@ -35,7 +35,7 @@ public class KubernetesIngressRepo extends BaseKubernetesResourceRepo<Kubernetes
                 .load(is);
     }
 
-    public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, String content) {
+    public Ingress update(EdsConfigs.Kubernetes kubernetes, String content) {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
             Ingress ingress = loadAs(client, content);
             return client.network()
@@ -51,7 +51,7 @@ public class KubernetesIngressRepo extends BaseKubernetesResourceRepo<Kubernetes
         }
     }
 
-    public Ingress update(EdsKubernetesConfigModel.Kubernetes kubernetes, Ingress ingress) {
+    public Ingress update(EdsConfigs.Kubernetes kubernetes, Ingress ingress) {
         try (final KubernetesClient client = kubernetesClientBuilder.build(kubernetes)) {
             return client.network()
                     .v1()
@@ -67,7 +67,7 @@ public class KubernetesIngressRepo extends BaseKubernetesResourceRepo<Kubernetes
     }
 
     @Override
-    protected KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    protected KubernetesClient buildClient(EdsConfigs.Kubernetes kubernetes) {
         return kubernetesClientBuilder.build(kubernetes);
     }
 

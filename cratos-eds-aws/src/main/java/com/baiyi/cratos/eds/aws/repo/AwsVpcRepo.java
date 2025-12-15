@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.model.*;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsVpcRepo {
 
-    public static List<Vpc> describeVpcs(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<Vpc> describeVpcs(String regionId, EdsConfigs.Aws aws) {
         DescribeVpcsRequest request = new DescribeVpcsRequest();
         List<Vpc> vpcList = Lists.newArrayList();
         AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
@@ -37,7 +37,7 @@ public class AwsVpcRepo {
         return vpcList;
     }
 
-    public static List<Subnet> describeSubnets(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<Subnet> describeSubnets(String regionId, EdsConfigs.Aws aws) {
         DescribeSubnetsRequest request = new DescribeSubnetsRequest();
         List<Subnet> subnetList = Lists.newArrayList();
         AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
@@ -54,7 +54,7 @@ public class AwsVpcRepo {
         return subnetList;
     }
 
-    private static AmazonEC2 buildAmazonEC2(EdsAwsConfigModel.Aws aws, String regionId) {
+    private static AmazonEC2 buildAmazonEC2(EdsConfigs.Aws aws, String regionId) {
         return AmazonEc2Service.buildAmazonEC2(regionId, aws);
     }
 

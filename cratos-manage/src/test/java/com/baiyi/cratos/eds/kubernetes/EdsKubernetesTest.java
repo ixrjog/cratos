@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * @Version 1.0
  */
 @Slf4j
-public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+public class EdsKubernetesTest extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
     public static final int CONFIG_ACK_FE = 9;
     public static final int CONFIG_ACK_DEV = 10;
@@ -59,7 +59,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void execTest() {
-//        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+//        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
 //        CountDownLatch execContext = PodExecContext.builder()
 //               // .command(List.of("curl", "-I", "https://www.baidu.com"))
 //                .command("curl -I \n" +
@@ -75,26 +75,26 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test1() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         kubernetesTest.test1(cfg, null);
     }
 
     @Test
     void test12() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         kubernetesTest.test2(cfg);
     }
 
     @Test
     void test13() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         List<Pod> pods = kubernetesPodRepo.list(cfg, "daily", "kili");
         System.out.println(pods);
     }
 
     @Test
     void test14() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         List<Pod> pods = kubernetesPodRepo.listByReplicaSet(cfg, "daily", "account-daily");
         System.out.println(pods);
     }
@@ -126,7 +126,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
      * @param namespace
      */
     private void updateIngress(int configId, String namespace) {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(configId);
+        EdsConfigs.Kubernetes cfg = getConfig(configId);
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, namespace);
         for (Ingress ingress : ingressList) {
             if (!ingress.getMetadata()
@@ -145,7 +145,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(104, EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        EdsConfigs.Kubernetes cfg = getConfig(104, EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, "dev");
         for (Ingress ingress : ingressList) {
             // 打印Ingress注解配置
@@ -160,7 +160,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     void test2() {
         // ACK-PROD 101
         // EKS-PROD 105
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsConfigs.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "prod");
         if (CollectionUtils.isEmpty(deploymentList)) {
             return;
@@ -188,7 +188,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void UpdateDefaultReplicas() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(99, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsConfigs.Kubernetes cfg = getConfig(99, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "daily");
         deploymentList.forEach(deployment -> {
             Optional<Container> optionalContainer = KubeUtils.findAppContainerOf(deployment);
@@ -210,7 +210,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     void test3() {
         // ACK-PROD 101
         // EKS-PROD 105
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsConfigs.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "prod");
         if (CollectionUtils.isEmpty(deploymentList)) {
             return;
@@ -237,7 +237,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
 
     @Test
     void test111() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsConfigs.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         try (final KubernetesClient kc = kubernetesClientBuilder.build(cfg)) {
             kc.v1()
                     .events()
@@ -263,7 +263,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     void test4() {
         // ACK-PROD 101
         // EKS-PROD 105
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        EdsConfigs.Kubernetes cfg = getConfig(101, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         List<Deployment> deploymentList = kubernetesDeploymentRepo.list(cfg, "prod");
         if (CollectionUtils.isEmpty(deploymentList)) {
             return;
@@ -292,7 +292,7 @@ public class EdsKubernetesTest extends BaseEdsTest<EdsKubernetesConfigModel.Kube
     @Test
     void test11() {
         long terminationGracePeriodSeconds = 60L;
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
+        EdsConfigs.Kubernetes cfg = getConfig(CONFIG_ACK_DAILY);
         List<Deployment> deployments = kubernetesDeploymentRepo.list(cfg, "daily");
         for (Deployment deployment : deployments) {
             long s = Optional.ofNullable(deployment)

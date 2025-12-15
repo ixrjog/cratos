@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -38,7 +38,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.HUAWEIC
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
-public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> {
+public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Hwc, KeystoneListUsersResult> {
 
     public final static boolean ENABLE_MFA = true;
 
@@ -51,12 +51,12 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsHwcConfigModel.Hwc config, EdsInstance instance, User user,
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Hwc config, EdsInstance instance, User user,
                                                        String password) {
         try {
             KeystoneCreateUserResult createUserResult = HwcIamRepo.createUser(config.getRegionId(), config, user,
                     password);
-            EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsHwcConfigModel.Hwc, KeystoneListUsersResult>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult> holder = (EdsInstanceProviderHolder<EdsConfigs.Hwc, KeystoneListUsersResult>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             KeystoneListUsersResult iamUser = HwcUserConvertor.to(createUserResult);
             postImportAccountAsset(holder, iamUser);
@@ -83,10 +83,10 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(asset.getInstanceId(),
+        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) holderBuilder.newHolder(asset.getInstanceId(),
                         getAccountAssetType())
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(username)
                 .name(asset.getName())
@@ -99,10 +99,10 @@ public class HwcIdentityProvider extends BaseCloudIdentityProvider<EdsHwcConfigM
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsHwcConfigModel.Hwc hwc = (EdsHwcConfigModel.Hwc) holderBuilder.newHolder(blockCloudAccount.getInstanceId(),
+        EdsConfigs.Hwc hwc = (EdsConfigs.Hwc) holderBuilder.newHolder(blockCloudAccount.getInstanceId(),
                         getAccountAssetType())
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         HwcIamRepo.blockUser(hwc.getRegionId(), hwc, blockCloudAccount.getAccountId());
     }
 

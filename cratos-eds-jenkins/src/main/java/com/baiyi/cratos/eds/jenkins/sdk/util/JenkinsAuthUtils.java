@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.jenkins.sdk.util;
 
 
 import com.baiyi.cratos.common.cred.Authorization;
-import com.baiyi.cratos.eds.core.config.model.EdsJenkinsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 
 /**
  * @Author baiyi
@@ -14,7 +14,7 @@ public class JenkinsAuthUtils {
     private JenkinsAuthUtils() {
     }
 
-    public static Authorization.Credential buildAuthentication(EdsJenkinsConfigModel.Jenkins jenkins) {
+    public static Authorization.Credential buildAuthentication(EdsConfigs.Jenkins jenkins) {
         return Authorization.Credential.builder()
                 .username(jenkins.getCred()
                         .getUsername())

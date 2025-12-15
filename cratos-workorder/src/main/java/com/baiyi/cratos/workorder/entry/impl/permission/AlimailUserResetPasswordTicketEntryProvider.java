@@ -12,7 +12,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.alimail.repo.AlimailUserRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -80,10 +80,10 @@ public class AlimailUserResetPasswordTicketEntryProvider extends BaseTicketEntry
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 EdsIdentityVO.MailAccount mailAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAlimailConfigModel.Alimail, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsAlimailConfigModel.Alimail, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Alimail, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIMAIL_USER.name());
-        EdsAlimailConfigModel.Alimail alimail = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Alimail alimail = holder.getInstance()
+                .getConfig();
         String newPassword = PasswordGenerator.generateMailPassword();
         try {
             final String mailUserId = mailAccount.getAccount()

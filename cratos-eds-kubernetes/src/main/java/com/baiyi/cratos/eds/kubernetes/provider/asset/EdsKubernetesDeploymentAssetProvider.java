@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -75,13 +75,13 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     @Override
     protected List<Deployment> listEntities(String namespace,
-                                            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesDeploymentRepo.list(instance.getEdsConfigModel(), namespace);
+                                            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesDeploymentRepo.list(instance.getConfig(), namespace);
     }
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset,
             Deployment entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, KUBERNETES_NAMESPACE, getNamespace(entity)));
@@ -124,7 +124,7 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     @Override
     protected void processingAssetTags(EdsAsset asset,
-                                       ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+                                       ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
                                        Deployment entity, List<EdsAssetIndex> indices) {
         if (CollectionUtils.isEmpty(indices)) {
             return;
@@ -149,12 +149,12 @@ public class EdsKubernetesDeploymentAssetProvider extends BaseEdsKubernetesAsset
 
     @Override
     public Deployment getAsset(EdsAsset edsAsset) {
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
                 edsAsset.getInstanceId());
         Deployment local = holder.getProvider()
                 .assetLoadAs(edsAsset.getOriginalModel());
         return kubernetesDeploymentRepo.get(holder.getInstance()
-                .getEdsConfigModel(), local.getMetadata()
+                .getConfig(), local.getMetadata()
                 .getNamespace(), local.getMetadata()
                 .getName());
     }

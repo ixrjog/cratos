@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.azure.repo;
 
 import com.baiyi.cratos.eds.azure.graph.client.GraphClientBuilder;
 import com.baiyi.cratos.eds.azure.graph.model.GraphDirectoryModel;
-import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.microsoft.graph.models.DirectoryRole;
 import com.microsoft.graph.models.DirectoryRoleCollectionResponse;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GraphDirectoryRepo {
 
-    public static List<GraphDirectoryModel.Role> listRoles(EdsAzureConfigModel.Azure azure) {
+    public static List<GraphDirectoryModel.Role> listRoles(EdsConfigs.Azure azure) {
         final GraphServiceClient graphClient = GraphClientBuilder.create(azure);
         DirectoryRoleCollectionResponse result = graphClient.directoryRoles()
                 .get();

@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -36,7 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUD_A
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_IAM_USER)
-public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsHwcConfigModel.Hwc, KeystoneListUsersResult> {
+public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Hwc, KeystoneListUsersResult> {
 
     public EdsHwcIamUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -49,8 +49,8 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
 
     @Override
     protected List<KeystoneListUsersResult> listEntities(
-            ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance) throws EdsQueryEntitiesException {
-        EdsHwcConfigModel.Hwc huaweicloud = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Hwc> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Hwc huaweicloud = instance.getConfig();
         try {
             return HwcIamRepo.listUsers(huaweicloud);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                   KeystoneListUsersResult entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -69,14 +69,14 @@ public class EdsHwcIamUserAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                             EdsAsset edsAsset, KeystoneListUsersResult entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CLOUD_ACCOUNT_USERNAME, entity.getName()));
         // accessKeys
         try {
-            List<Credentials> accessKeys = HwcIamRepo.listAccessKeys(instance.getEdsConfigModel()
-                    .getRegionId(), instance.getEdsConfigModel(), entity.getId());
+            List<Credentials> accessKeys = HwcIamRepo.listAccessKeys(instance.getConfig()
+                    .getRegionId(), instance.getConfig(), entity.getId());
             if (!CollectionUtils.isEmpty(accessKeys)) {
                 final String accessKeyIds = accessKeys.stream()
                         .map(Credentials::getAccess)

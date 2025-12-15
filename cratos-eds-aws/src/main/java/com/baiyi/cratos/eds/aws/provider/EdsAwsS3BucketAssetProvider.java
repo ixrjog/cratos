@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsS3Repo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_S3_BUCKET)
-public class EdsAwsS3BucketAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, Bucket> {
+public class EdsAwsS3BucketAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, Bucket> {
 
     public EdsAwsS3BucketAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -42,8 +42,8 @@ public class EdsAwsS3BucketAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<Bucket> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             return AwsS3Repo.listBuckets(aws);
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class EdsAwsS3BucketAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Bucket entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Bucket entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getName())
                 .nameOf(entity.getName())
                 .createdTimeOf(entity.getCreationDate())

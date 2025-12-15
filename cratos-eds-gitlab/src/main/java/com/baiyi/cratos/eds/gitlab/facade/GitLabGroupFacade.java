@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.facade;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.repo.GitLabGroupRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;
@@ -22,19 +22,19 @@ import java.util.List;
 public class GitLabGroupFacade {
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public void addMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+    public void addMember(EdsConfigs.GitLab gitLab, Long groupId, Long userId,
                           AccessLevel accessLevel) throws GitLabApiException {
         GitLabGroupRepo.addMember(gitLab, groupId, userId, accessLevel);
     }
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public void updateMember(EdsGitLabConfigModel.GitLab gitLab, Long groupId, Long userId,
+    public void updateMember(EdsConfigs.GitLab gitLab, Long groupId, Long userId,
                              AccessLevel accessLevel) throws GitLabApiException {
         GitLabGroupRepo.updateMember(gitLab, groupId, userId, accessLevel);
     }
 
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
-    public List<Member> getMembers(EdsGitLabConfigModel.GitLab gitLab, Long groupId) throws GitLabApiException {
+    public List<Member> getMembers(EdsConfigs.GitLab gitLab, Long groupId) throws GitLabApiException {
         return GitLabGroupRepo.getMembersWithGroupId(gitLab, groupId);
     }
 

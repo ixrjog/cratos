@@ -20,7 +20,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.eds.aws.model.AwsTransferServer;
 import com.baiyi.cratos.eds.aws.repo.AwsTransferRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -92,14 +92,14 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsTransferModel.SFTPUser sftpUser) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         Map<String, String> configMapData = getConfigMapData(sftpUser);
         final String target = StringFormatter.format(configMapData.get(TARGET), sftpUser.getUsername());
         Collection<HomeDirectoryMapEntry> homeDirectoryMappings = AwsTransferRepo.generateHomeDirectoryMappings(target);
-        // createUser(String regionId, EdsAwsConfigModel.Aws aws, Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName, String role, String serverId, String sshPublicKey)
+        // createUser(String regionId, EdsConfigs.Aws aws, Collection<HomeDirectoryMapEntry> homeDirectoryMappings, String userName, String role, String serverId, String sshPublicKey)
         String regionId = sftpUser.getAsset()
                 .getRegion();
         AwsTransferRepo.createUser(regionId, aws, homeDirectoryMappings, sftpUser.getUsername(),
@@ -148,10 +148,10 @@ public class AwsTransferSftpUserPermissionTicketEntryProvider extends BaseTicket
         AwsTransferModel.SFTPUser sftpUser = Optional.of(param)
                 .map(WorkOrderTicketParam.AddCreateAwsTransferSftpUserTicketEntry::getDetail)
                 .orElseThrow(() -> new WorkOrderTicketException("SFTP user detail is null"));
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, AwsTransferServer.TransferServer>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_TRANSFER_SERVER.name());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         List<ListedUser> transferUsers = AwsTransferRepo.listUsers(sftpUser.getAsset()
                 .getRegion(), aws, sftpUser.getAsset()
                 .getAssetId());

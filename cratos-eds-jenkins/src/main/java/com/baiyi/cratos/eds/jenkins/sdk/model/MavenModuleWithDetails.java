@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import static com.baiyi.cratos.eds.jenkins.helper.FunctionalHelper.SET_CLIENT;
+import static com.baiyi.cratos.eds.jenkins.FunctionalHelper.SET_CLIENT;
 import static java.util.stream.Collectors.toList;
 
 /**

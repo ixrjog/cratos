@@ -6,7 +6,7 @@ import com.aliyuncs.ecs.model.v20140526.DescribeVpcsRequest;
 import com.aliyuncs.ecs.model.v20140526.DescribeVpcsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class AliyunVpcRepo {
 
     private static final int PAGE_SIZE = 50;
 
-    public List<DescribeVpcsResponse.Vpc> listVpc(String regionId, EdsAliyunConfigModel.Aliyun aliyun) {
+    public List<DescribeVpcsResponse.Vpc> listVpc(String regionId, EdsConfigs.Aliyun aliyun) {
         List<DescribeVpcsResponse.Vpc> vpcs = Lists.newArrayList();
         try {
             DescribeVpcsRequest describe = new DescribeVpcsRequest();
@@ -50,7 +50,7 @@ public class AliyunVpcRepo {
         return vpcs;
     }
 
-    public List<DescribeVSwitchesResponse.VSwitch> listSwitch(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public List<DescribeVSwitchesResponse.VSwitch> listSwitch(String regionId, EdsConfigs.Aliyun aliyun,
                                                                  String vpcId) {
         List<DescribeVSwitchesResponse.VSwitch> switches = Lists.newArrayList();
         try {

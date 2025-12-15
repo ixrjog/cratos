@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.command.custom.kubernetes;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -87,10 +87,10 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> fromInstanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> fromInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 sourceInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         Deployment sourceDeployment = kubernetesDeploymentRepo.get(fromInstanceProviderHolder.getInstance()
-                .getEdsConfigModel(), copyParam.getFromNamespace(), copyParam.getFromDeploymentName());
+                .getConfig(), copyParam.getFromNamespace(), copyParam.getFromDeploymentName());
         Optional<Container> optionalFromContainer = Optional.ofNullable(sourceDeployment)
                 .map(Deployment::getSpec)
                 .map(DeploymentSpec::getTemplate)
@@ -115,10 +115,10 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> toInstanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> toInstanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 toInstance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         Deployment targetDeployment = kubernetesDeploymentRepo.get(toInstanceProviderHolder.getInstance()
-                .getEdsConfigModel(), copyParam.getToNamespace(), copyParam.getToDeploymentName());
+                .getConfig(), copyParam.getToNamespace(), copyParam.getToDeploymentName());
         if (targetDeployment == null) {
             helper.printError("Target deployment not found.");
             return;
@@ -136,7 +136,7 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
                 .getContainers()
                 .add(optionalFromContainer.get());
         kubernetesDeploymentRepo.update(toInstanceProviderHolder.getInstance()
-                .getEdsConfigModel(), targetDeployment);
+                .getConfig(), targetDeployment);
         helper.print("Sidecar container copied successfully.", PromptColor.GREEN);
     }
 
@@ -160,10 +160,10 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
             helper.printError("Eds instance incorrect type.");
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> instanceProviderHolder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> instanceProviderHolder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) edsInstanceProviderHolderBuilder.newHolder(
                 instance.getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         Deployment deployment = kubernetesDeploymentRepo.get(instanceProviderHolder.getInstance()
-                .getEdsConfigModel(), removeParam.getNamespace(), removeParam.getDeploymentName());
+                .getConfig(), removeParam.getNamespace(), removeParam.getDeploymentName());
         Optional<Container> optionalContainer = Optional.ofNullable(deployment)
                 .map(Deployment::getSpec)
                 .map(DeploymentSpec::getTemplate)
@@ -183,7 +183,7 @@ public class EdsKubernetesDeploymentSidecarCommand extends AbstractCommand {
                 .getContainers()
                 .remove(optionalContainer.get());
         kubernetesDeploymentRepo.update(instanceProviderHolder.getInstance()
-                .getEdsConfigModel(), deployment);
+                .getConfig(), deployment);
         helper.print("Sidecar container was successfully removed.", PromptColor.GREEN);
     }
 

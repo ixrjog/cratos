@@ -4,7 +4,7 @@ import com.aliyuncs.ecs.model.v20140526.ListTagResourcesRequest;
 import com.aliyuncs.ecs.model.v20140526.ListTagResourcesResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class AliyunTagRepo {
     }
 
     public List<ListTagResourcesResponse.TagResource> listTagResources(String regionId,
-                                                                       EdsAliyunConfigModel.Aliyun aliyun,
+                                                                       EdsConfigs.Aliyun aliyun,
                                                                        ResourceTypes resourceType, String resourceId) {
         ListTagResourcesRequest request = new ListTagResourcesRequest();
         request.setResourceType(resourceType.name()

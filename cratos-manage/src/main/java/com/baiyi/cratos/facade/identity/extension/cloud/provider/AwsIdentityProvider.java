@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -39,7 +39,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.AWS_IAM
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_IAM_USER)
-public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> {
+public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> {
 
     private final AwsIamUserRepo iamUserRepo;
     private final AwsIamPolicyRepo iamPolicyRepo;
@@ -56,7 +56,7 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
     }
 
     @Override
-    protected EdsIdentityVO.CloudAccount createAccount(EdsAwsConfigModel.Aws aws, EdsInstance instance, User user,
+    protected EdsIdentityVO.CloudAccount createAccount(EdsConfigs.Aws aws, EdsInstance instance, User user,
                                                        String password) {
         iamUserRepo.createUser(aws, user, password, CREATE_LOGIN_PROFILE);
         return this.getAccount(instance, user, user.getUsername());
@@ -65,10 +65,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
     @Override
     public EdsIdentityVO.CloudAccount getAccount(EdsInstance instance, User user, String username) {
         try {
-            EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                     instance.getId(), getAccountAssetType());
             com.amazonaws.services.identitymanagement.model.User iamUser = iamUserRepo.getUser(holder.getInstance()
-                    .getEdsConfigModel(), username);
+                    .getConfig(), username);
             if (Objects.isNull(iamUser)) {
                 return EdsIdentityVO.CloudAccount.NO_ACCOUNT;
             }
@@ -80,10 +80,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     public void blockCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         LoginProfile loginProfile = iamUserRepo.getLoginProfile(aws, blockCloudAccount.getAccount());
         if (Objects.nonNull(loginProfile)) {
             iamUserRepo.deleteLoginProfile(aws, blockCloudAccount.getAccount());
@@ -92,10 +92,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     public void importCloudAccount(EdsInstance instance, EdsIdentityParam.BlockCloudAccount blockCloudAccount) {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         com.amazonaws.services.identitymanagement.model.User user = iamUserRepo.getUser(aws,
                 blockCloudAccount.getAccount());
         holder.importAsset(user);
@@ -103,10 +103,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     protected void grantPermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         final String iamUserName = account.getName();
         final String iamPolicyArn = permission.getAssetKey();
         try {
@@ -120,10 +120,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     protected void revokePermission(EdsInstance instance, EdsAsset account, EdsAsset permission) {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) holderBuilder.newHolder(
                 instance.getId(), getAccountAssetType());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         final String iamUserName = account.getName();
         final String iamPolicyArn = permission.getAssetKey();
         try {
@@ -142,10 +142,10 @@ public class AwsIdentityProvider extends BaseCloudIdentityProvider<EdsAwsConfigM
 
     @Override
     public EdsIdentityVO.AccountLoginDetails toAccountLoginDetails(EdsAsset asset, String username) {
-        EdsAwsConfigModel.Aws aws = (EdsAwsConfigModel.Aws) holderBuilder.newHolder(asset.getInstanceId(),
+        EdsConfigs.Aws aws = (EdsConfigs.Aws) holderBuilder.newHolder(asset.getInstanceId(),
                         getAccountAssetType())
                 .getInstance()
-                .getEdsConfigModel();
+                .getConfig();
         return EdsIdentityVO.AccountLoginDetails.builder()
                 .username(username)
                 .name(asset.getName())

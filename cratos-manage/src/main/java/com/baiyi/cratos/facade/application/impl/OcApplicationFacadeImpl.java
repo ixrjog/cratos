@@ -5,13 +5,13 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.opscloud.model.OcApplicationVO;
 import com.baiyi.cratos.eds.opscloud.repo.OcApplicationRepo;
-import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.ApplicationFacade;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.OcApplicationFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.service.ApplicationService;
@@ -107,7 +107,7 @@ public class OcApplicationFacadeImpl implements OcApplicationFacade {
     public void importAllApplication() {
         edsFacade.queryValidEdsInstanceByType(EdsInstanceTypeEnum.OPSCLOUD.name())
                 .forEach(instance -> {
-                    EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
+                    EdsConfigs.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
                             instance.getConfigId());
                     List<OcApplicationVO.Application> ocApps = OcApplicationRepo.listApplication(opscloud);
                     importAllApplication(ocApps);

@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsRoute53DomainRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_DOMAIN)
-public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, DomainSummary> {
+public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, DomainSummary> {
 
     public EdsAwsRoute53DomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -42,8 +42,8 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvid
 
     @Override
     protected List<DomainSummary> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             return AwsRoute53DomainRepo.listDomains(aws);
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, DomainSummary entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, DomainSummary entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
         return newEdsAssetBuilder(instance, entity)
                 // ARN
@@ -68,7 +68,7 @@ public class EdsAwsRoute53DomainAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
 //    @Override
-//    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+//    protected EdsAssetIndex convertToEdsAssetIndex(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
 //                                            EdsAsset edsAsset, DomainSummary entity) {
 //        return createEdsAssetIndex(edsAsset, DOMAIN_NAME, entity.getDomainName());
 //    }

@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -83,10 +83,10 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunOnsV5Model.Topic topic) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListTopicsResponseBody.ListTopicsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_ONS_V5_TOPIC.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         createTopic(aliyun, topic);
         // 导入资产
         GetTopicResponseBody.GetTopicResponseBodyData newTopic = getTopic(aliyun, topic);
@@ -102,7 +102,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
         EdsAsset asset = holder.importAsset(data);
     }
 
-    private GetTopicResponseBody.GetTopicResponseBodyData getTopic(EdsAliyunConfigModel.Aliyun aliyun,
+    private GetTopicResponseBody.GetTopicResponseBodyData getTopic(EdsConfigs.Aliyun aliyun,
                                                                    AliyunOnsV5Model.Topic topic) {
         try {
             return AliyunOnsV5Repo.getTopic(topic.getRegionId(), aliyun, topic.getOnsInstanceId(),
@@ -112,7 +112,7 @@ public class AliyunOnsTopicTicketEntryProvider extends BaseTicketEntryProvider<A
         }
     }
 
-    private void createTopic(EdsAliyunConfigModel.Aliyun aliyun, AliyunOnsV5Model.Topic topic) {
+    private void createTopic(EdsConfigs.Aliyun aliyun, AliyunOnsV5Model.Topic topic) {
         try {
             AliyunOnsV5.CreateTopic createTopic = AliyunOnsV5.CreateTopic.builder()
                     .topicName(topic.getTopicName())

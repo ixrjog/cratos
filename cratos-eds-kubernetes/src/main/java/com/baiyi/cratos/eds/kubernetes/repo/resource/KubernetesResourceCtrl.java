@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.resource;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.api.model.StatusDetails;
@@ -25,7 +25,7 @@ public class KubernetesResourceCtrl {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public List<HasMetadata> createResources(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace,
+    public List<HasMetadata> createResources(EdsConfigs.Kubernetes kubernetes, String namespace,
                                              String resourceContent) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
@@ -35,7 +35,7 @@ public class KubernetesResourceCtrl {
         }
     }
 
-    public List<HasMetadata> createResources(EdsKubernetesConfigModel.Kubernetes kubernetes, String resourceContent) {
+    public List<HasMetadata> createResources(EdsConfigs.Kubernetes kubernetes, String resourceContent) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
             return kc.load(is)
@@ -43,7 +43,7 @@ public class KubernetesResourceCtrl {
         }
     }
 
-    public List<StatusDetails> deleteResources(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace,
+    public List<StatusDetails> deleteResources(EdsConfigs.Kubernetes kubernetes, String namespace,
                                                String resourceContent) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
@@ -53,7 +53,7 @@ public class KubernetesResourceCtrl {
         }
     }
 
-    public List<StatusDetails> deleteResources(EdsKubernetesConfigModel.Kubernetes kubernetes, String resourceContent) {
+    public List<StatusDetails> deleteResources(EdsConfigs.Kubernetes kubernetes, String resourceContent) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             InputStream is = new ByteArrayInputStream(resourceContent.getBytes());
             return kc.load(is)

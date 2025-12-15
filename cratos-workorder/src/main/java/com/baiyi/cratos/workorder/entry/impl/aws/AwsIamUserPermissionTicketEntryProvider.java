@@ -18,7 +18,7 @@ import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aws.delegate.AwsMFADelegate;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.aws.repo.iam.AwsMFADeviceRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -99,10 +99,10 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AwsModel.AwsAccount awsAccount) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.AWS_IAM_USER.name());
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         String iamUsername = awsAccount.getIamUsername();
         String username = awsAccount.getUsername();
         final String password = PasswordGenerator.generatePassword();
@@ -128,7 +128,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
      * @param iamUsername
      * @param password
      */
-    private void sendMsg(WorkOrderTicket workOrderTicket, EdsAwsConfigModel.Aws aws, String username,
+    private void sendMsg(WorkOrderTicket workOrderTicket, EdsConfigs.Aws aws, String username,
                          String iamUsername, String password, String secretKey) {
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
@@ -144,7 +144,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         }
     }
 
-    private com.amazonaws.services.identitymanagement.model.User getIamUser(EdsAwsConfigModel.Aws aws,
+    private com.amazonaws.services.identitymanagement.model.User getIamUser(EdsConfigs.Aws aws,
                                                                             String iamUsername) {
         try {
             return awsIamUserRepo.getUser(aws, iamUsername);
@@ -153,7 +153,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         }
     }
 
-    private com.amazonaws.services.identitymanagement.model.User createIamUser(EdsAwsConfigModel.Aws aws,
+    private com.amazonaws.services.identitymanagement.model.User createIamUser(EdsConfigs.Aws aws,
                                                                                String iamUsername, String password) {
         try {
             return awsIamUserRepo.createUser(aws, iamUsername, password, CREATE_LOGIN_PROFILE);
@@ -162,7 +162,7 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
         }
     }
 
-    private VirtualMFADevice enableMFADevice(EdsAwsConfigModel.Aws aws, String iamUsername) {
+    private VirtualMFADevice enableMFADevice(EdsConfigs.Aws aws, String iamUsername) {
         final String serialNumber = StringFormatter.arrayFormat(
                 SERIAL_NUMBER_TPL, aws.getCred()
                         .getId(), iamUsername
@@ -207,13 +207,13 @@ public class AwsIamUserPermissionTicketEntryProvider extends BaseTicketEntryProv
                 .map(AwsModel.AwsAccount::getEdsInstance)
                 .map(EdsInstanceVO.EdsInstance::getId)
                 .orElseThrow(() -> new WorkOrderTicketException("Eds instanceId is null"));
-        EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsAwsConfigModel.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aws, com.amazonaws.services.identitymanagement.model.User>) edsInstanceProviderHolderBuilder.newHolder(
                 param.getDetail()
                         .getEdsInstance()
                         .getId(), EdsAssetTypeEnum.AWS_IAM_USER.name()
         );
-        EdsAwsConfigModel.Aws aws = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aws aws = holder.getInstance()
+                .getConfig();
         return CreateAwsIamUserTicketEntryBuilder.newBuilder()
                 .withParam(param)
                 .withUsername(SessionUtils.getUsername())

@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.azure.graph.model.GraphDirectoryModel;
 import com.baiyi.cratos.eds.azure.repo.GraphDirectoryRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AZURE, assetTypeOf = EdsAssetTypeEnum.AZURE_DIRECTORY_ROLE)
-public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsInstanceAssetProvider<EdsAzureConfigModel.Azure, GraphDirectoryModel.Role> {
+public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Azure, GraphDirectoryModel.Role> {
 
     public EdsAzureDirectoryRoleAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                               CredentialService credentialService,
@@ -46,12 +46,12 @@ public class EdsAzureDirectoryRoleAssetProvider extends BaseEdsInstanceAssetProv
 
     @Override
     protected List<GraphDirectoryModel.Role> listEntities(
-            ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Azure> instance) throws EdsQueryEntitiesException {
         return GraphDirectoryRepo.listRoles(instance.getConfig());
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
                                          GraphDirectoryModel.Role entity) throws EdsAssetConversionException {
         final String key = Joiner.on("|")
                 .skipNulls()

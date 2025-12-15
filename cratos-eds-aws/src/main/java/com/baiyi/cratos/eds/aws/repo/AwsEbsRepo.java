@@ -6,7 +6,7 @@ import com.amazonaws.services.ec2.model.DescribeVolumesResult;
 import com.amazonaws.services.ec2.model.Volume;
 import com.baiyi.cratos.eds.aws.service.AmazonEc2Service;
 import com.baiyi.cratos.eds.aws.service.Ec2InstancesService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class AwsEbsRepo {
 
     private final Ec2InstancesService ec2InstancesService;
 
-    public List<Volume> listVolumes(String regionId, EdsAwsConfigModel.Aws aws) {
+    public List<Volume> listVolumes(String regionId, EdsConfigs.Aws aws) {
         DescribeVolumesRequest request = new DescribeVolumesRequest();
         List<Volume> volumeList = Lists.newArrayList();
         AmazonEC2 ec2 = buildAmazonEC2(aws, regionId);
@@ -40,7 +40,7 @@ public class AwsEbsRepo {
         return volumeList;
     }
 
-    private AmazonEC2 buildAmazonEC2(EdsAwsConfigModel.Aws aws, String regionId) {
+    private AmazonEC2 buildAmazonEC2(EdsConfigs.Aws aws, String regionId) {
         return AmazonEc2Service.buildAmazonEC2(regionId, aws);
     }
 

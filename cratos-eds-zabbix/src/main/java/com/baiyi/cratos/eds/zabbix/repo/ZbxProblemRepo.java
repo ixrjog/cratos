@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.constant.ZbxParamConstants;
 import com.baiyi.cratos.eds.zabbix.enums.SeverityType;
 import com.baiyi.cratos.eds.zabbix.request.ZbxProblemRequest;
@@ -26,7 +26,7 @@ import static java.util.Map.entry;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxProblemRepo {
 
-    public static List<ZbxProblemResult.Problem> listProblem(EdsZabbixConfigModel.Zabbix zbx,
+    public static List<ZbxProblemResult.Problem> listProblem(EdsConfigs.Zabbix zbx,
                                                              Set<SeverityType> severityTypes) {
         ZbxProblemService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxProblemService.class);
         Map<String, Object> params = Map.ofEntries(entry("output", "extend"), entry("selectAcknowledges", "extend"),
@@ -48,7 +48,7 @@ public class ZbxProblemRepo {
      * @param hostIds
      * @return
      */
-    public static List<ZbxProblemResult.Problem> listProblem(EdsZabbixConfigModel.Zabbix zbx,
+    public static List<ZbxProblemResult.Problem> listProblem(EdsConfigs.Zabbix zbx,
                                                              Set<SeverityType> severityTypes, Set<String> hostIds) {
         ZbxProblemService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxProblemService.class);
 
@@ -69,7 +69,7 @@ public class ZbxProblemRepo {
         return response.getResult();
     }
 
-    public static List<ZbxProblemResult.Problem> listProblem(EdsZabbixConfigModel.Zabbix zbx,
+    public static List<ZbxProblemResult.Problem> listProblem(EdsConfigs.Zabbix zbx,
                                                              Map<String, Object> params) {
         ZbxProblemService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxProblemService.class);
         ZbxProblemRequest.GetProblem request = ZbxProblemRequest.GetProblem.builder()
@@ -79,7 +79,7 @@ public class ZbxProblemRepo {
         return response.getResult();
     }
 
-    public static String listProblemTest(EdsZabbixConfigModel.Zabbix zbx, Set<SeverityType> severityTypes) {
+    public static String listProblemTest(EdsConfigs.Zabbix zbx, Set<SeverityType> severityTypes) {
         ZbxProblemService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxProblemService.class);
         Map<String, Object> params = Map.ofEntries(entry("output", "extend"),
                 entry("severities", SeverityType.of(severityTypes)), entry("recent", true));

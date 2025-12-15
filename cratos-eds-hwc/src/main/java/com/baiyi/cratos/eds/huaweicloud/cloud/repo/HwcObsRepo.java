@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcObsClientBuilder;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.obs.v1.ObsClient;
@@ -19,7 +19,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class HwcObsRepo {
 
-    public static void createBucket(String regionId, EdsHwcConfigModel.Hwc huaweicloud,
+    public static void createBucket(String regionId, EdsConfigs.Hwc huaweicloud,
                                     String bucketName) throws ServiceResponseException {
         ObsClient client = HwcObsClientBuilder.buildObsClient(regionId, huaweicloud);
         CreateBucketRequest request = new CreateBucketRequest();

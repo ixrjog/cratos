@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.message.builder;
 
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkMessageParam;
 import com.baiyi.cratos.eds.dingtalk.sender.DingtalkMessageSender;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class AsyncSendMessageAgency {
     private String msgText;
     private String userId;
     private DingtalkMessageSender dingtalkMessageSender;
-    private EdsDingtalkConfigModel.Dingtalk dingtalk;
+    private EdsConfigs.Dingtalk dingtalk;
 
     public static AsyncSendMessageAgency newBuilder() {
         return new AsyncSendMessageAgency();
@@ -44,7 +44,7 @@ public class AsyncSendMessageAgency {
         return this;
     }
 
-    public AsyncSendMessageAgency withDingtalk(EdsDingtalkConfigModel.Dingtalk dingtalk) {
+    public AsyncSendMessageAgency withDingtalk(EdsConfigs.Dingtalk dingtalk) {
         this.dingtalk = dingtalk;
         return this;
     }

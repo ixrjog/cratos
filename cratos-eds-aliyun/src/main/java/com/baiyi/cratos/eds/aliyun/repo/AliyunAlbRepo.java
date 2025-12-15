@@ -4,7 +4,7 @@ import com.aliyun.alb20200616.models.ListLoadBalancersRequest;
 import com.aliyun.alb20200616.models.ListLoadBalancersResponse;
 import com.aliyun.alb20200616.models.ListLoadBalancersResponseBody;
 import com.baiyi.cratos.eds.aliyun.client.AliyunAlbClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
@@ -25,7 +25,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class AliyunAlbRepo {
 
     public static List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> listLoadBalancers(
-            String endpoint, EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+            String endpoint, EdsConfigs.Aliyun aliyun) throws Exception {
         ListLoadBalancersRequest request = new ListLoadBalancersRequest();
         List<ListLoadBalancersResponseBody.ListLoadBalancersResponseBodyLoadBalancers> albList = Lists.newArrayList();
         com.aliyun.alb20200616.Client client = AliyunAlbClient.createClient(endpoint, aliyun);

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.Application;
 import com.baiyi.cratos.domain.generator.ApplicationResource;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -67,10 +67,10 @@ public class ApplicationKubernetesDeploymentFacadeImpl implements ApplicationKub
 
     @SuppressWarnings("unchecked")
     private Deployment getDeployment(String namespace, EdsAsset edsAsset) {
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) holderBuilder.newHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         return kubernetesDeploymentRepo.get(holder.getInstance()
-                .getEdsConfigModel(), namespace, edsAsset.getName());
+                .getConfig(), namespace, edsAsset.getName());
     }
 
 }

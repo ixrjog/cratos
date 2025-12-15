@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.builder.DictBuilder;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
-import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class CloudflareCertRepo {
 
     private final CloudflareService cloudflareService;
 
-    public List<CloudflareCert.Result> listCertificatePacks(EdsCloudflareConfigModel.Cloudflare cloudflare,
+    public List<CloudflareCert.Result> listCertificatePacks(EdsConfigs.Cloudflare cloudflare,
                                                             String zoneId) {
         List<CloudflareCert.Result> results = Lists.newArrayList();
         int page = 1;

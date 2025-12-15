@@ -1,14 +1,14 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRedisRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_REDIS)
-public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance> {
+public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance> {
 
     private final AliyunRedisRepo aliyunRedisRepo;
 
@@ -56,7 +56,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
 
     @Override
     protected List<com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance> listEntities(
-            String regionId, EdsAliyunConfigModel.Aliyun configModel) {
+            String regionId, EdsConfigs.Aliyun configModel) {
         try {
             return aliyunRedisRepo.listInstance(regionId, configModel);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                 .nameOf(entity.getInstanceName())
@@ -79,7 +79,7 @@ public class EdsAliyunRedisAssetProvider extends BaseHasRegionsEdsAssetProvider<
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset,
                                             com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse.KVStoreInstance entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();

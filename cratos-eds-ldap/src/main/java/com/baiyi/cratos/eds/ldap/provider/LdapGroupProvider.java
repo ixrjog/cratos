@@ -1,11 +1,11 @@
 package com.baiyi.cratos.eds.ldap.provider;
 
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -25,7 +25,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_GROUP_DN;
+import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.LDAP_GROUP_MEMBERS;
 
 /**
  * @Author baiyi
@@ -34,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.LDAP, assetTypeOf = EdsAssetTypeEnum.LDAP_GROUP)
-public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfigModel.Ldap, LdapGroup.Group> {
+public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Ldap, LdapGroup.Group> {
 
     private final LdapGroupRepo ldapGroupRepo;
     private static final String USER_DN_TPL = "{}={},{},{}";
@@ -51,12 +52,12 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
 
     @Override
     protected List<LdapGroup.Group> listEntities(
-            ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance) throws EdsQueryEntitiesException {
-        return ldapGroupRepo.queryGroup(instance.getEdsConfigModel());
+            ExternalDataSourceInstance<EdsConfigs.Ldap> instance) throws EdsQueryEntitiesException {
+        return ldapGroupRepo.queryGroup(instance.getConfig());
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
                                   LdapGroup.Group entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getGroupName())
                 .nameOf(entity.getGroupName())
@@ -64,23 +65,23 @@ public class LdapGroupProvider extends BaseEdsInstanceAssetProvider<EdsLdapConfi
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsLdapConfigModel.Ldap> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Ldap> instance,
                                             EdsAsset edsAsset, LdapGroup.Group entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, LDAP_GROUP_DN, Joiner.on(",")
                 .skipNulls()
-                .join(instance.getEdsConfigModel()
+                .join(instance.getConfig()
                         .getGroup()
-                        .getDn(), instance.getEdsConfigModel()
+                        .getDn(), instance.getConfig()
                         .getBase())));
-        List<String> members = ldapGroupRepo.queryGroupMember(instance.getEdsConfigModel(), entity.getGroupName());
+        List<String> members = ldapGroupRepo.queryGroupMember(instance.getConfig(), entity.getGroupName());
         indices.add(createEdsAssetIndex(edsAsset, LDAP_GROUP_MEMBERS, Joiner.on(";")
                 .join(members.stream()
-                        .map(e -> StringFormatter.arrayFormat(USER_DN_TPL, instance.getEdsConfigModel()
+                        .map(e -> StringFormatter.arrayFormat(USER_DN_TPL, instance.getConfig()
                                 .getUser()
-                                .getId(), e, instance.getEdsConfigModel()
+                                .getId(), e, instance.getConfig()
                                 .getUser()
-                                .getDn(), instance.getEdsConfigModel()
+                                .getDn(), instance.getConfig()
                                 .getBase()))
                         .toList())));
         return indices;

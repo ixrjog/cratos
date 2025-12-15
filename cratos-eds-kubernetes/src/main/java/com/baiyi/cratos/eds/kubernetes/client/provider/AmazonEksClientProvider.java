@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client.provider;
 
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.kubernetes.client.provider.generator.AmazonEksTokenGenerator;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
@@ -31,18 +32,18 @@ public class AmazonEksClientProvider implements BaseKubernetesClientProvider {
      * @param kubernetes
      * @return
      */
-    public KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public KubernetesClient buildClient(EdsConfigs.Kubernetes kubernetes) {
         setProperties(kubernetes);
         io.fabric8.kubernetes.client.Config config = buildConfig(kubernetes);
         return new io.fabric8.kubernetes.client.KubernetesClientBuilder().withConfig(config)
                 .build();
     }
 
-    public io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public io.fabric8.kubernetes.client.Config buildConfig(EdsConfigs.Kubernetes kubernetes) {
         try {
             String token = amazonEksGenerator.generateEksToken(kubernetes.getAmazonEks());
             String masterUrl = Optional.of(kubernetes)
-                    .map(EdsKubernetesConfigModel.Kubernetes::getAmazonEks)
+                    .map(EdsConfigs.Kubernetes::getAmazonEks)
                     .map(EdsKubernetesConfigModel.AmazonEks::getUrl)
                     .orElseThrow(() -> new KubernetesException("Not configured: AmazonEks -> url"));
             return new ConfigBuilder().withMasterUrl(masterUrl)

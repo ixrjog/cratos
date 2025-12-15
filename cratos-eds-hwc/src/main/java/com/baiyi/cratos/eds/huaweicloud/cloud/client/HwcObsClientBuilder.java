@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.huaweicloud.cloud.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.huaweicloud.sdk.core.http.HttpConfig;
 import com.huaweicloud.sdk.core.region.Region;
 import com.huaweicloud.sdk.obs.v1.ObsClient;
@@ -17,7 +17,7 @@ public class HwcObsClientBuilder {
     public static final Region AF_SOUTH_1_LOS1A = new Region("af-south-1-los1a",
             "https://obs.af-south-1-los1a.myhuaweicloud.com");
 
-    public static ObsClient buildObsClient(String regionId, EdsHwcConfigModel.Hwc huaweicloud) {
+    public static ObsClient buildObsClient(String regionId, EdsConfigs.Hwc huaweicloud) {
         // 配置客户端属性
         HttpConfig config = HttpConfig.getDefaultHttpConfig();
         config.withIgnoreSSLVerification(true);

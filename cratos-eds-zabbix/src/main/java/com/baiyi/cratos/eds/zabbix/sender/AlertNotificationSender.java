@@ -8,8 +8,8 @@ import com.baiyi.cratos.domain.generator.EdsConfig;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -52,9 +52,9 @@ public class AlertNotificationSender {
     protected String language;
 
     public void sendAlertNotice(EdsAsset asset) {
-        EdsInstanceProviderHolder<EdsZabbixConfigModel.Zabbix, ZbxEventResult.Event> zbxEventHolder = (EdsInstanceProviderHolder<EdsZabbixConfigModel.Zabbix, ZbxEventResult.Event>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event> zbxEventHolder = (EdsInstanceProviderHolder<EdsConfigs.Zabbix, ZbxEventResult.Event>) holderBuilder.newHolder(
                 asset.getInstanceId(), EdsAssetTypeEnum.ZBX_EVENT.name());
-        EdsZabbixConfigModel.Zabbix zbx = zbxEventHolder.getInstance()
+        EdsConfigs.Zabbix zbx = zbxEventHolder.getInstance()
                 .getConfig();
         if (ZbxAlertUtils.matchRule(zbx, asset.getName())) {
             // 静默告警
@@ -67,13 +67,13 @@ public class AlertNotificationSender {
         }
         try {
             DingtalkRobotModel.Msg message = getMsg(asset);
-            List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>> dingtalkRobotHolders = (List<? extends EdsInstanceProviderHolder<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
+            List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>> dingtalkRobotHolders = (List<? extends EdsInstanceProviderHolder<EdsConfigs.Robot, DingtalkRobotModel.Msg>>) edsInstanceQueryHelper.buildHolder(
                     edsInstanceList, EdsAssetTypeEnum.DINGTALK_ROBOT_MSG.name());
             dingtalkRobotHolders.forEach(providerHolder -> {
                 EdsConfig edsConfig = edsConfigService.getById(providerHolder.getInstance()
                                                                        .getEdsInstance()
                                                                        .getConfigId());
-                EdsDingtalkConfigModel.Robot robot = providerHolder.getProvider()
+                EdsConfigs.Robot robot = providerHolder.getProvider()
                         .configLoadAs(edsConfig);
                 dingtalkService.send(robot.getToken(), message);
                 providerHolder.importAsset(message);

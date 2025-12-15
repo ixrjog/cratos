@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aliyun.model.AliyunVirtualSwitch;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunVpcRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_VIRTUAL_SWITCH)
-public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunVirtualSwitch.Switch> {
+public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, AliyunVirtualSwitch.Switch> {
 
     private final AliyunVpcRepo aliyunVpcRepo;
 
@@ -54,7 +54,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<AliyunVirtualSwitch.Switch> listEntities(String regionId, EdsAliyunConfigModel.Aliyun configModel) {
+    protected List<AliyunVirtualSwitch.Switch> listEntities(String regionId, EdsConfigs.Aliyun configModel) {
         try {
             List<DescribeVpcsResponse.Vpc> vpcs = aliyunVpcRepo.listVpc(regionId, configModel);
             if (CollectionUtils.isEmpty(vpcs)) {
@@ -78,7 +78,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunVirtualSwitch.Switch entity) {
         final String key = Joiner.on(":")
                 .join(entity.getVirtualSwitch()
@@ -99,7 +99,7 @@ public class EdsAliyunVirtualSwitchAssetProvider extends BaseHasRegionsEdsAssetP
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                             EdsAsset edsAsset, AliyunVirtualSwitch.Switch entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VIRTUAL_SWITCH_CIDR_BLOCK, entity.getVirtualSwitch()

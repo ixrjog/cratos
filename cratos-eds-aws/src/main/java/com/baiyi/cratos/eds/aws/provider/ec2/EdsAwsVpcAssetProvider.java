@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsVpcRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -35,7 +35,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.VPC_CID
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_VPC)
-public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Vpc> {
+public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEc2.Vpc> {
 
     public EdsAwsVpcAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -47,7 +47,7 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected List<AwsEc2.Vpc> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsEc2.Vpc> listEntities(String regionId, EdsConfigs.Aws aws) {
         try {
             return AwsVpcRepo.describeVpcs(regionId, aws)
                     .stream()
@@ -66,7 +66,7 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsEc2.Vpc entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Vpc entity) {
         final String tagName = AmazonEc2Util.getName(entity.getVpc()
                 .getTags());
         return newEdsAssetBuilder(instance, entity)
@@ -78,7 +78,7 @@ public class EdsAwsVpcAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                             EdsAsset edsAsset, AwsEc2.Vpc entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, VPC_CIDR_BLOCK, entity.getVpc()

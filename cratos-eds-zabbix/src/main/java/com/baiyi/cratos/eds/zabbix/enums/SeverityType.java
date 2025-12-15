@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.enums;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
@@ -57,9 +57,9 @@ public enum SeverityType {
                 .orElse(null);
     }
 
-    public static List<Integer> of(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<Integer> of(EdsConfigs.Zabbix zbx) {
         List<String> severityTypes = Optional.ofNullable(zbx)
-                .map(EdsZabbixConfigModel.Zabbix::getSeverityTypes)
+                .map(EdsConfigs.Zabbix::getSeverityTypes)
                 .orElse(List.of());
         if (CollectionUtils.isEmpty(severityTypes)) {
             severityTypes = Arrays.stream(SeverityType.values())

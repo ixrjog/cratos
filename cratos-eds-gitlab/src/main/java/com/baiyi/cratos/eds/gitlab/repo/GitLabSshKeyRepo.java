@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.gitlab.client.GitLabApiBuilder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class GitLabSshKeyRepo {
      * @return
      * @throws GitLabApiException
      */
-    public static List<SshKey> getSshKeysByUserId(EdsGitLabConfigModel.GitLab gitLab,
+    public static List<SshKey> getSshKeysByUserId(EdsConfigs.GitLab gitLab,
                                                   Long userId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
@@ -40,7 +40,7 @@ public class GitLabSshKeyRepo {
         }
     }
 
-    public static SshKey getSshKey(EdsGitLabConfigModel.GitLab gitLab, Long keyId) throws GitLabApiException {
+    public static SshKey getSshKey(EdsConfigs.GitLab gitLab, Long keyId) throws GitLabApiException {
         try (GitLabApi gitLabApi = GitLabApiBuilder.build(gitLab)) {
             return gitLabApi.getUserApi()
                     .getSshKey(keyId);

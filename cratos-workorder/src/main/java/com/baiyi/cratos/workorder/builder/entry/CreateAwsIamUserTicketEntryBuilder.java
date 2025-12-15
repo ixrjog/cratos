@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.model.AwsModel;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class CreateAwsIamUserTicketEntryBuilder {
 
     private WorkOrderTicketParam.AddCreateAwsIamUserTicketEntry param;
     private String username;
-    private EdsAwsConfigModel.Aws aws;
+    private EdsConfigs.Aws aws;
 
     public static CreateAwsIamUserTicketEntryBuilder newBuilder() {
         return new CreateAwsIamUserTicketEntryBuilder();
@@ -38,7 +38,7 @@ public class CreateAwsIamUserTicketEntryBuilder {
         return this;
     }
 
-    public CreateAwsIamUserTicketEntryBuilder withAws(EdsAwsConfigModel.Aws aws) {
+    public CreateAwsIamUserTicketEntryBuilder withAws(EdsConfigs.Aws aws) {
         this.aws = aws;
         return this;
     }

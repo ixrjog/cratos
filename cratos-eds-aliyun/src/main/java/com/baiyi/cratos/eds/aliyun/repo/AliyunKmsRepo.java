@@ -4,7 +4,7 @@ import com.aliyun.sdk.service.kms20160120.AsyncClient;
 import com.aliyun.sdk.service.kms20160120.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunKmsClient;
 import com.baiyi.cratos.eds.aliyun.util.AliyunTagUtils;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutionException;
 public class AliyunKmsRepo {
 
     public static List<ListKmsInstancesResponseBody.KmsInstance> listInstances(String endpoint,
-                                                                               EdsAliyunConfigModel.Aliyun aliyun) {
+                                                                               EdsConfigs.Aliyun aliyun) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             ListKmsInstancesRequest listKmsInstancesRequest = ListKmsInstancesRequest.builder()
                     .build();
@@ -44,7 +44,7 @@ public class AliyunKmsRepo {
     }
 
     // Key
-    public static List<ListKeysResponseBody.Key> listKeys(String endpoint, EdsAliyunConfigModel.Aliyun aliyun) {
+    public static List<ListKeysResponseBody.Key> listKeys(String endpoint, EdsConfigs.Aliyun aliyun) {
         List<ListKeysResponseBody.Key> result = Lists.newArrayList();
         int pageNumber = 1;
         int pageSize = 100;
@@ -84,7 +84,7 @@ public class AliyunKmsRepo {
      * @return
      */
     public static Optional<DescribeKeyResponseBody.KeyMetadata> describeKey(String endpoint,
-                                                                            EdsAliyunConfigModel.Aliyun aliyun,
+                                                                            EdsConfigs.Aliyun aliyun,
                                                                             String keyId) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             DescribeKeyRequest request = DescribeKeyRequest.builder()
@@ -102,7 +102,7 @@ public class AliyunKmsRepo {
     }
 
     public static List<ListSecretsResponseBody.Secret> listSecrets(String endpoint,
-                                                                   EdsAliyunConfigModel.Aliyun aliyun) {
+                                                                   EdsConfigs.Aliyun aliyun) {
         List<ListSecretsResponseBody.Secret> result = Lists.newArrayList();
         int pageNumber = 1;
         int pageSize = 100;
@@ -134,7 +134,7 @@ public class AliyunKmsRepo {
     }
 
     public static Optional<DescribeSecretResponseBody> describeSecret(String endpoint,
-                                                                      EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      EdsConfigs.Aliyun aliyun,
                                                                       String secretName) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             DescribeSecretRequest request = DescribeSecretRequest.builder()
@@ -153,7 +153,7 @@ public class AliyunKmsRepo {
 
 
     public static List<ListSecretVersionIdsResponseBody.VersionId> listSecretVersionIds(String endpoint,
-                                                                                        EdsAliyunConfigModel.Aliyun aliyun,
+                                                                                        EdsConfigs.Aliyun aliyun,
                                                                                         String secretName) {
         List<ListSecretVersionIdsResponseBody.VersionId> result = Lists.newArrayList();
         int pageNumber = 1;
@@ -200,7 +200,7 @@ public class AliyunKmsRepo {
      * @param description
      * @return
      */
-    public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
+    public static Optional<CreateSecretResponseBody> createSecret(String endpoint, EdsConfigs.Aliyun aliyun,
                                                                   String kmsInstanceId, String secretName,
                                                                   String versionId, String encryptionKeyId,
                                                                   String secretData, Map<String, String> tags,
@@ -225,7 +225,7 @@ public class AliyunKmsRepo {
     }
 
     public static Optional<PutSecretValueResponseBody> putSecretValue(String endpoint,
-                                                                      EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      EdsConfigs.Aliyun aliyun,
                                                                       String secretName, String versionId,
                                                                       String secretData) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
@@ -245,7 +245,7 @@ public class AliyunKmsRepo {
     }
 
     public static Optional<GetSecretValueResponseBody> getSecretValue(String endpoint,
-                                                                      EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      EdsConfigs.Aliyun aliyun,
                                                                       String secretName) {
         try (AsyncClient client = AliyunKmsClient.buildKmsClient(endpoint, aliyun)) {
             GetSecretValueRequest request = GetSecretValueRequest.builder()

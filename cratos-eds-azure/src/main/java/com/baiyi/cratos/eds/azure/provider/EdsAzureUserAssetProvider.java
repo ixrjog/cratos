@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.azure.graph.model.GraphUserModel;
 import com.baiyi.cratos.eds.azure.repo.GraphUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAzureConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
@@ -37,7 +37,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AZURE, assetTypeOf = EdsAssetTypeEnum.AZURE_USER)
-public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsAzureConfigModel.Azure, GraphUserModel.User> {
+public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Azure, GraphUserModel.User> {
 
     public EdsAzureUserAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -52,14 +52,14 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
 
     @Override
     protected List<GraphUserModel.User> listEntities(
-            ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Azure> instance) throws EdsQueryEntitiesException {
         return GraphUserRepo.listUsers(instance.getConfig())
                 .stream()
                 .peek(e -> wrapUser(instance.getConfig(), e))
                 .toList();
     }
 
-    private void wrapUser(EdsAzureConfigModel.Azure azure, GraphUserModel.User user) {
+    private void wrapUser(EdsConfigs.Azure azure, GraphUserModel.User user) {
         GraphUserModel.User base = GraphUserRepo.getUserById(azure, user.getId());
         user.setAccountEnabled(base.getAccountEnabled());
         List<String> roleIds = GraphUserRepo.getUserDirectoryRoleIds(azure, user.getId());
@@ -67,7 +67,7 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Azure> instance,
                                          GraphUserModel.User entity) throws EdsAssetConversionException {
         String name = Joiner.on("|")
                 .skipNulls()
@@ -80,7 +80,7 @@ public class EdsAzureUserAssetProvider extends BaseEdsInstanceAssetProvider<EdsA
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsAzureConfigModel.Azure> instance, EdsAsset edsAsset,
+            ExternalDataSourceInstance<EdsConfigs.Azure> instance, EdsAsset edsAsset,
             GraphUserModel.User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         String username = StringUtils.substringBefore(entity.getUserPrincipalName(), "@");

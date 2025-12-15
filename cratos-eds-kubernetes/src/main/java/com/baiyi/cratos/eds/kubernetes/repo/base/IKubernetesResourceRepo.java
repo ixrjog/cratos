@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo.base;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import io.fabric8.kubernetes.api.model.HasMetadata;
 import io.fabric8.kubernetes.client.dsl.Resource;
 
@@ -13,15 +13,15 @@ import java.util.List;
  */
 public interface IKubernetesResourceRepo<C extends io.fabric8.kubernetes.client.Client, T extends HasMetadata> {
 
-    T create(EdsKubernetesConfigModel.Kubernetes kubernetes, String content);
+    T create(EdsConfigs.Kubernetes kubernetes, String content);
 
-    T find(EdsKubernetesConfigModel.Kubernetes kubernetes, String content);
+    T find(EdsConfigs.Kubernetes kubernetes, String content);
 
-    void delete(EdsKubernetesConfigModel.Kubernetes kubernetes, T resource);
+    void delete(EdsConfigs.Kubernetes kubernetes, T resource);
 
-    T get(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name);
+    T get(EdsConfigs.Kubernetes kubernetes, String namespace, String name);
 
-    List<T> list(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace);
+    List<T> list(EdsConfigs.Kubernetes kubernetes, String namespace);
 
     Resource<T> loadResource(C client, String resourceContent);
 

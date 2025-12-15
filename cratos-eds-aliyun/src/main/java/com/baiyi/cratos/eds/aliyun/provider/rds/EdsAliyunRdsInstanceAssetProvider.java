@@ -2,13 +2,13 @@ package com.baiyi.cratos.eds.aliyun.provider.rds;
 
 import com.aliyuncs.rds.model.v20140815.DescribeDBInstanceAttributeResponse;
 import com.baiyi.cratos.common.enums.TimeZoneEnum;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRdsInstanceRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE)
-public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeDBInstanceAttributeResponse.DBInstanceAttribute> {
+public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, DescribeDBInstanceAttributeResponse.DBInstanceAttribute> {
 
     private final AliyunRdsInstanceRepo aliyunRdsInstanceRepo;
 
@@ -49,7 +49,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     @Override
     protected List<DescribeDBInstanceAttributeResponse.DBInstanceAttribute> listEntities(String regionId,
-                                                                                         EdsAliyunConfigModel.Aliyun configModel) throws EdsQueryEntitiesException {
+                                                                                         EdsConfigs.Aliyun configModel) throws EdsQueryEntitiesException {
         try {
             return aliyunRdsInstanceRepo.listDbInstance(regionId, configModel);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class EdsAliyunRdsInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   DescribeDBInstanceAttributeResponse.DBInstanceAttribute entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())
                 .nameOf(entity.getDBInstanceDescription())

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.zabbix.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_TEMPLATE)
-public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxTemplateResult.Template> {
+public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Zabbix, ZbxTemplateResult.Template> {
 
     public EdsZbxTemplateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -41,7 +41,7 @@ public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<ZbxTemplateResult.Template> listEntities(
-            ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
             return ZbxTemplateRepo.listTemplate(instance.getConfig());
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class EdsZbxTemplateAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
                                          ZbxTemplateResult.Template entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getTemplateid())
                 .assetKeyOf(entity.getHost())

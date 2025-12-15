@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -34,7 +34,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.DOMAIN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_HOSTED_ZONE)
-public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, HostedZone> {
+public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, HostedZone> {
 
     public EdsAwsRoute53HostedZoneAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                 CredentialService credentialService,
@@ -48,8 +48,8 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
 
     @Override
     protected List<HostedZone> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             return AwsRoute53Repo.listHostedZones(aws);
         } catch (Exception e) {
@@ -58,7 +58,7 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, HostedZone entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, HostedZone entity) {
         // https://docs.aws.amazon.com/Route53/latest/APIReference/API_domains_ListDomains.html
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
@@ -75,7 +75,7 @@ public class EdsAwsRoute53HostedZoneAssetProvider extends BaseEdsInstanceAssetPr
     }
 
     @Override
-    protected EdsAssetIndex toIndex(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAssetIndex toIndex(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                     EdsAsset edsAsset, HostedZone entity) {
         String name = edsAsset.getName();
         String domainName = name != null && name.endsWith(".") ? org.apache.commons.lang3.StringUtils.removeEnd(name,

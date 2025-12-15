@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aws.repo.iam.AwsIamPolicyRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_IAM_POLICY)
-public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, Policy> {
+public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, Policy> {
 
     private final AwsIamPolicyRepo awsIamPolicyRepo;
 
@@ -47,8 +47,8 @@ public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsAws
 
     @Override
     protected List<Policy> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             return awsIamPolicyRepo.listPolicies(aws);
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class EdsAwsIamPolicyProvider extends BaseEdsInstanceAssetProvider<EdsAws
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, Policy entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, Policy entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getPolicyId())
                 .nameOf(entity.getPolicyName())
                 .assetKeyOf(entity.getArn())

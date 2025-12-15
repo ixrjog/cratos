@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunDomainRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
-public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunDomain> {
+public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, AliyunDomain> {
 
     public EdsAliyunDomainProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                    CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -45,10 +45,10 @@ public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAli
 
     @Override
     protected List<AliyunDomain> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
             List<QueryDomainListResponseBody.Domain> entities = AliyunDomainRepo.listDomain(
-                    instance.getEdsConfigModel());
+                    instance.getConfig());
             return BeanCopierUtils.copyListProperties(entities, AliyunDomain.class);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
@@ -56,7 +56,7 @@ public class EdsAliyunDomainProvider extends BaseEdsInstanceAssetProvider<EdsAli
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   AliyunDomain entity) {
         // 域名过期状态。取值：1：域名未过期。 2：域名已过期。
         boolean valid = entity.getExpirationDateStatus()

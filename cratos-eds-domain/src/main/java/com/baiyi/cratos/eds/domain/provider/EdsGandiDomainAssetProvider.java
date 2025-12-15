@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsGandiConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GANDI, assetTypeOf = EdsAssetTypeEnum.GANDI_DOMAIN)
-public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsGandiConfigModel.Gandi, GandiDomain.Domain> {
+public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Gandi, GandiDomain.Domain> {
 
     private final GandiDomainRepo gandiDomainRepo;
 
@@ -46,16 +46,16 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<GandiDomain.Domain> listEntities(
-            ExternalDataSourceInstance<EdsGandiConfigModel.Gandi> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Gandi> instance) throws EdsQueryEntitiesException {
         try {
-            return gandiDomainRepo.queryDomains(instance.getEdsConfigModel());
+            return gandiDomainRepo.queryDomains(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGandiConfigModel.Gandi> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Gandi> instance,
                                   GandiDomain.Domain entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFqdn())

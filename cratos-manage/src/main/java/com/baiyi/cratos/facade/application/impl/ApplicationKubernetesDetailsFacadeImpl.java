@@ -19,8 +19,7 @@ import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesDeploymentV
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesServiceVO;
 import com.baiyi.cratos.domain.view.application.kubernetes.KubernetesVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
-import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.loader.EdsOpscloudConfigLoader;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -174,7 +173,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .stream()
                 .findFirst()
                 .map(instance -> {
-                    EdsOpscloudConfigModel.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
+                    EdsConfigs.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
                             instance.getConfigId());
                     OcLeoParam.QueryBuildImageVersion queryParam = OcLeoParam.QueryBuildImageVersion.builder()
                             .image(queryKubernetesDeploymentImageVersion.getImage())
@@ -214,11 +213,11 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             if (Objects.isNull(deploymentAsset)) {
                 return;
             }
-            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
             try {
                 Pod pod = kubernetesPodRepo.get(holder.getInstance()
-                        .getEdsConfigModel(), param.getNamespace(), param.getPodName());
+                        .getConfig(), param.getNamespace(), param.getPodName());
                 if (Objects.isNull(pod)) {
                     return;
                 }
@@ -235,7 +234,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                             .build();
                     try {
                         kubernetesPodRepo.delete(holder.getInstance()
-                                .getEdsConfigModel(), param.getNamespace(), param.getPodName());
+                                .getConfig(), param.getNamespace(), param.getPodName());
                     } catch (Exception e) {
                         detail.setSuccess(false);
                         detail.setResult("Operation failed err: " + e.getMessage());
@@ -273,7 +272,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             if (Objects.isNull(deploymentAsset)) {
                 return;
             }
-            EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
+            EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
 
             ApplicationDeploymentModel.RedeployDeployment detail = ApplicationDeploymentModel.RedeployDeployment.builder()
@@ -284,10 +283,10 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                     .build();
             try {
                 Deployment deployment = kubernetesDeploymentRepo.get(holder.getInstance()
-                        .getEdsConfigModel(), param.getNamespace(), resource.getName());
+                        .getConfig(), param.getNamespace(), resource.getName());
                 if (Objects.nonNull(deployment)) {
                     kubernetesDeploymentRepo.redeploy(holder.getInstance()
-                            .getEdsConfigModel(), deployment);
+                            .getConfig(), deployment);
                 } else {
                     detail.setSuccess(false);
                     detail.setResult("Deployment does not exist");

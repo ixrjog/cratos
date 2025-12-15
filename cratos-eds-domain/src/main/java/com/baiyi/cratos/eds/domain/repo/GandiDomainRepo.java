@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.domain.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGandiConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.domain.model.GandiDomain;
 import com.baiyi.cratos.eds.domain.service.GandiDomainService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class GandiDomainRepo {
 
     private final GandiDomainService gandiDomainService;
 
-    public List<GandiDomain.Domain> queryDomains(EdsGandiConfigModel.Gandi gandi) {
+    public List<GandiDomain.Domain> queryDomains(EdsConfigs.Gandi gandi) {
         String authorization = "";
         if (gandi.getCred()
                 .hasToken()) {

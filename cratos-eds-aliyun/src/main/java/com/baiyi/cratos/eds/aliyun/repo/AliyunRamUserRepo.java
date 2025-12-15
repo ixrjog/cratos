@@ -5,7 +5,7 @@ import com.aliyuncs.ram.model.v20150501.*;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class AliyunRamUserRepo {
     public static final boolean CREATE_LOGIN_PROFILE = true;
     public static final boolean ENABLE_MFA = true;
 
-    public List<ListUsersResponse.User> listUsers(EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+    public List<ListUsersResponse.User> listUsers(EdsConfigs.Aliyun aliyun) throws ClientException {
         List<ListUsersResponse.User> userList = Lists.newArrayList();
         String marker;
         ListUsersRequest request = new ListUsersRequest();
@@ -48,14 +48,14 @@ public class AliyunRamUserRepo {
         return userList;
     }
 
-    public GetUserResponse.User getUser(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername) throws ClientException {
+    public GetUserResponse.User getUser(EdsConfigs.Aliyun aliyun, String ramUsername) throws ClientException {
         GetUserRequest request = new GetUserRequest();
         request.setUserName(ramUsername);
         GetUserResponse response = aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);
         return response.getUser();
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, User user,
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, User user,
                                               String password, boolean createLoginProfile,
                                               boolean enableMFA) throws ClientException {
         CreateUserResponse.User createUser = createUser(regionId, aliyun, user);
@@ -65,7 +65,7 @@ public class AliyunRamUserRepo {
         return createUser;
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String ramUsername,
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, String ramUsername,
                                               String password, boolean createLoginProfile,
                                               boolean enableMFA) throws ClientException {
         CreateUserResponse.User createUser = createUser(regionId, aliyun, ramUsername);
@@ -75,7 +75,7 @@ public class AliyunRamUserRepo {
         return createUser;
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun,
                                               String username) throws ClientException {
         CreateUserRequest request = new CreateUserRequest();
         request.setUserName(username);
@@ -96,7 +96,7 @@ public class AliyunRamUserRepo {
      * @throws ClientException
      */
     private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
-                                                                       EdsAliyunConfigModel.Aliyun aliyun, User user,
+                                                                       EdsConfigs.Aliyun aliyun, User user,
                                                                        String password, boolean passwordResetRequired,
                                                                        boolean mFABindRequired) throws ClientException {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
@@ -109,7 +109,7 @@ public class AliyunRamUserRepo {
     }
 
     public CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
-                                                                       EdsAliyunConfigModel.Aliyun aliyun,
+                                                                      EdsConfigs.Aliyun aliyun,
                                                                        String ramUsername, String password,
                                                                        boolean passwordResetRequired,
                                                                        boolean mFABindRequired) throws ClientException {
@@ -122,7 +122,7 @@ public class AliyunRamUserRepo {
                 .getLoginProfile();
     }
 
-    public String updateLoginProfile(EdsAliyunConfigModel.Aliyun aliyun, String ramUsername, String password,
+    public String updateLoginProfile(EdsConfigs.Aliyun aliyun, String ramUsername, String password,
                                      boolean passwordResetRequired) throws ClientException {
         UpdateLoginProfileRequest request = new UpdateLoginProfileRequest();
         request.setUserName(ramUsername);
@@ -132,7 +132,7 @@ public class AliyunRamUserRepo {
         return response.getRequestId();
     }
 
-    private CreateUserResponse.User createUser(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    private CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun,
                                                User user) throws ClientException {
         CreateUserRequest request = new CreateUserRequest();
         request.setUserName(user.getUsername());
@@ -148,7 +148,7 @@ public class AliyunRamUserRepo {
                 .getUser();
     }
 
-    public List<ListEntitiesForPolicyResponse.User> listUsersForPolicy(EdsAliyunConfigModel.Aliyun aliyun,
+    public List<ListEntitiesForPolicyResponse.User> listUsersForPolicy(EdsConfigs.Aliyun aliyun,
                                                                        String policyName,
                                                                        String policyType) throws ClientException {
         ListEntitiesForPolicyRequest request = new ListEntitiesForPolicyRequest();
@@ -158,7 +158,7 @@ public class AliyunRamUserRepo {
         return response == null ? Collections.emptyList() : response.getUsers();
     }
 
-    public GetLoginProfileResponse.LoginProfile getLoginProfile(String regionId, EdsAliyunConfigModel.Aliyun aliyun,
+    public GetLoginProfileResponse.LoginProfile getLoginProfile(String regionId, EdsConfigs.Aliyun aliyun,
                                                                 String username) throws ClientException {
         GetLoginProfileRequest request = new GetLoginProfileRequest();
         request.setUserName(username);
@@ -166,7 +166,7 @@ public class AliyunRamUserRepo {
         return response.getLoginProfile();
     }
 
-    public boolean deleteLoginProfile(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String username) {
+    public boolean deleteLoginProfile(String regionId, EdsConfigs.Aliyun aliyun, String username) {
         DeleteLoginProfileRequest request = new DeleteLoginProfileRequest();
         request.setUserName(username);
         try {
@@ -180,7 +180,7 @@ public class AliyunRamUserRepo {
         return false;
     }
 
-    public GetUserMFAInfoResponse.MFADevice getUserMFAInfo(EdsAliyunConfigModel.Aliyun aliyun,
+    public GetUserMFAInfoResponse.MFADevice getUserMFAInfo(EdsConfigs.Aliyun aliyun,
                                                            String ramUsername) throws ClientException {
         GetUserMFAInfoRequest request = new GetUserMFAInfoRequest();
         request.setUserName(ramUsername);
@@ -195,7 +195,7 @@ public class AliyunRamUserRepo {
      * @return
      * @throws ClientException
      */
-    public UnbindMFADeviceResponse.MFADevice unbindVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun,
+    public UnbindMFADeviceResponse.MFADevice unbindVirtualMFADevice(EdsConfigs.Aliyun aliyun,
                                                                     String ramUsername) throws ClientException {
         UnbindMFADeviceRequest request = new UnbindMFADeviceRequest();
         request.setUserName(ramUsername);
@@ -203,7 +203,7 @@ public class AliyunRamUserRepo {
         return response.getMFADevice();
     }
 
-    public void deleteVirtualMFADevice(EdsAliyunConfigModel.Aliyun aliyun, String serialNumber) throws ClientException {
+    public void deleteVirtualMFADevice(EdsConfigs.Aliyun aliyun, String serialNumber) throws ClientException {
         DeleteVirtualMFADeviceRequest request = new DeleteVirtualMFADeviceRequest();
         request.setSerialNumber(serialNumber);
         aliyunClient.getAcsResponse(aliyun.getRegionId(), aliyun, request);

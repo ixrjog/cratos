@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.dingtalk;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkDepartmentModel;
 import com.baiyi.cratos.eds.dingtalk.param.DingtalkDepartmentParam;
 import com.baiyi.cratos.eds.dingtalk.repo.DingtalkDepartmentRepo;
@@ -22,7 +22,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.USER_MA
  * &#064;Date  2025/8/12 18:04
  * &#064;Version 1.0
  */
-public class MyEdsDingtalkTest extends BaseEdsTest<EdsDingtalkConfigModel.Dingtalk> {
+public class MyEdsDingtalkTest extends BaseEdsTest<EdsConfigs.Dingtalk> {
 
     @Resource
     private DingtalkDepartmentRepo dingtalkDepartmentRepo;
@@ -711,7 +711,7 @@ public class MyEdsDingtalkTest extends BaseEdsTest<EdsDingtalkConfigModel.Dingta
 
     @Test
     void test1() {
-        EdsDingtalkConfigModel.Dingtalk dingtalk = getConfig(43);
+        EdsConfigs.Dingtalk dingtalk = getConfig(43);
         DingtalkDepartmentModel.GetDepartmentResult result = dingtalkDepartmentRepo.get(dingtalk,
                 DingtalkDepartmentParam.GetDepartment.builder()
                         .build());

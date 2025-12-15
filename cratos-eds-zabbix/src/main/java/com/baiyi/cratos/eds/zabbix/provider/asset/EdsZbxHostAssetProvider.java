@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.zabbix.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import java.util.Optional;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_HOST)
-public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxHostResult.Host> {
+public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Zabbix, ZbxHostResult.Host> {
 
     public EdsZbxHostAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                    CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -45,13 +45,13 @@ public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZab
 
     @Override
     protected List<ZbxHostResult.Host> listEntities(
-            ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            List<ZbxHostResult.Host> hosts = ZbxHostRepo.listHost(instance.getEdsConfigModel());
+            List<ZbxHostResult.Host> hosts = ZbxHostRepo.listHost(instance.getConfig());
             if (CollectionUtils.isEmpty(hosts)) {
                 return List.of();
             } else {
-                enrichHosts(instance.getEdsConfigModel(), hosts);
+                enrichHosts(instance.getConfig(), hosts);
                 return hosts;
             }
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZab
         }
     }
 
-    private void enrichHosts(EdsZabbixConfigModel.Zabbix zbx, List<ZbxHostResult.Host> hosts) {
+    private void enrichHosts(EdsConfigs.Zabbix zbx, List<ZbxHostResult.Host> hosts) {
         for (ZbxHostResult.Host host : hosts) {
             try {
                 ZbxHostResult.HostExtend hostExtend = ZbxHostRepo.getHostExtend(zbx, host.getHostid());
@@ -70,7 +70,7 @@ public class EdsZbxHostAssetProvider extends BaseEdsInstanceAssetProvider<EdsZab
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
                                          ZbxHostResult.Host entity) {
         String assetKey = Optional.ofNullable(entity)
                 .map(ZbxHostResult.Host::getHostExtend)

@@ -12,7 +12,7 @@ import com.baiyi.cratos.eds.aws.repo.iam.AwsIamUserRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -43,7 +43,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_IAM_USER)
-public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, User> {
+public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, User> {
 
     private final AwsIamUserRepo awsIamUserRepo;
     private final AwsIamPolicyRepo awsIamPolicyRepo;
@@ -62,8 +62,8 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
 
     @Override
     protected List<User> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             return awsIamUserRepo.listUsers(aws);
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, User entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, User entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getUserId())
                 .nameOf(entity.getUserName())
                 .assetKeyOf(entity.getArn())
@@ -81,11 +81,11 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                             EdsAsset edsAsset, User entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
-            List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(instance.getEdsConfigModel(),
+            List<AttachedPolicy> policies = awsIamPolicyRepo.listUserPolicies(instance.getConfig(),
                     entity.getUserName());
             if (!CollectionUtils.isEmpty(policies)) {
                 String policyName = policies.stream()
@@ -98,7 +98,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
         }
         // accessKeys
         try {
-            List<AccessKeyMetadata> accessKeys = AwsIamAccessKeyRepo.listAccessKeys(instance.getEdsConfigModel(),
+            List<AccessKeyMetadata> accessKeys = AwsIamAccessKeyRepo.listAccessKeys(instance.getConfig(),
                     entity.getUserName());
             if (!CollectionUtils.isEmpty(accessKeys)) {
                 final String accessKeyIds = accessKeys.stream()
@@ -110,7 +110,7 @@ public class EdsAwsIamUserProvider extends BaseEdsInstanceAssetProvider<EdsAwsCo
         }
         // loginProfile
         try {
-            LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getEdsConfigModel(),
+            LoginProfile loginProfile = awsIamUserRepo.getLoginProfile(instance.getConfig(),
                     entity.getUserName());
             if (Objects.nonNull(loginProfile)) {
                 indices.add(createEdsAssetIndex(edsAsset, CLOUD_LOGIN_PROFILE, "Enabled"));

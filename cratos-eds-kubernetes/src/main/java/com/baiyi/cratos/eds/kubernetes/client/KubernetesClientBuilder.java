@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.client;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.provider.BaseKubernetesClientProvider;
 import com.baiyi.cratos.eds.kubernetes.exception.KubernetesException;
 import io.fabric8.kubernetes.client.KubernetesClient;
@@ -23,7 +23,7 @@ public class KubernetesClientBuilder {
         int WEBSOCKET_TIMEOUT = 60 * 1000;
     }
 
-    public KubernetesClient build(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public KubernetesClient build(EdsConfigs.Kubernetes kubernetes) {
         if (StringUtils.isNotBlank(kubernetes.getProvider())) {
             BaseKubernetesClientProvider kubernetesClientProvider = KubernetesClientProviderFactory.getProvider(kubernetes.getProvider());
             if (kubernetesClientProvider == null) {

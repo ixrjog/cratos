@@ -9,7 +9,7 @@ import com.baiyi.cratos.eds.aws.repo.Ec2InstancesRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_EC2)
-public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Ec2> {
+public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEc2.Ec2> {
 
     private final Ec2InstancesRepo ec2InstancesRepo;
     private final AwsEc2Repo awsEc2Repo;
@@ -52,7 +52,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected List<AwsEc2.Ec2> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsEc2.Ec2> listEntities(String regionId, EdsConfigs.Aws aws) {
         Map<String, InstanceModel.EC2InstanceType> instanceTypeMap;
         try {
             instanceTypeMap = ec2InstancesRepo.getInstances();
@@ -66,7 +66,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
         return Collections.emptyList();
     }
 
-    private List<AwsEc2.Ec2> toEC2(String regionId, EdsAwsConfigModel.Aws aws,
+    private List<AwsEc2.Ec2> toEC2(String regionId, EdsConfigs.Aws aws,
                                    Map<String, InstanceModel.EC2InstanceType> instanceTypeMap,
                                    List<Instance> instances) {
         return instances.stream()
@@ -79,7 +79,7 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsAwsCon
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsEc2.Ec2 entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Ec2 entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getInstance()

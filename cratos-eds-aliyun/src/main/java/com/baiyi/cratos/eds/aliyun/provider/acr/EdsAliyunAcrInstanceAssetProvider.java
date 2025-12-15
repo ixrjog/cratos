@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunAcrRepo;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -31,7 +32,7 @@ import java.util.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ACR_INSTANCE)
-public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListInstanceResponse.InstancesItem> {
+public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Aliyun, ListInstanceResponse.InstancesItem> {
 
     private final AliyunAcrRepo aliyunAcrRepo;
 
@@ -48,7 +49,7 @@ public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
 
     @Override
     protected List<ListInstanceResponse.InstancesItem> listEntities(String regionId,
-                                                                    EdsAliyunConfigModel.Aliyun configModel) throws EdsQueryEntitiesException {
+                                                                    EdsConfigs.Aliyun configModel) throws EdsQueryEntitiesException {
         try {
             return aliyunAcrRepo.listInstance(regionId, configModel);
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   ListInstanceResponse.InstancesItem entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
                 .nameOf(entity.getInstanceName())
@@ -72,9 +73,9 @@ public class EdsAliyunAcrInstanceAssetProvider extends BaseHasRegionsEdsAssetPro
     }
 
     @Override
-    protected Set<String> getRegionSet(EdsAliyunConfigModel.Aliyun configModel) {
+    protected Set<String> getRegionSet(EdsConfigs.Aliyun configModel) {
         return Sets.newHashSet(Optional.of(configModel)
-                .map(EdsAliyunConfigModel.Aliyun::getAcr)
+                .map(EdsConfigs.Aliyun::getAcr)
                 .map(EdsAliyunConfigModel.ACR::getRegionIds)
                 .orElse(Collections.emptyList()));
     }

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.aws.repo;
 
 import com.amazonaws.services.s3.model.Bucket;
 import com.baiyi.cratos.eds.aws.service.AmazonS3Service;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsS3Repo {
 
-    public static List<Bucket> listBuckets(EdsAwsConfigModel.Aws aws) {
+    public static List<Bucket> listBuckets(EdsConfigs.Aws aws) {
         return AmazonS3Service.buildAmazonS3(aws)
                 .listBuckets();
     }

@@ -6,7 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.param.http.event.GitLabEventParam;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -33,7 +33,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_SYSTEM_HOOK)
-public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, GitLabEventParam.SystemHook> {
+public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.GitLab, GitLabEventParam.SystemHook> {
 
     public EdsGitLabSystemHookAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -46,12 +46,12 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
 
     @Override
     protected List<GitLabEventParam.SystemHook> listEntities(
-            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.GitLab> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported.");
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
                                   GitLabEventParam.SystemHook entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.hashCode())
                 .nameOf(entity.getEventName())
@@ -60,7 +60,7 @@ public class EdsGitLabSystemHookAssetProvider extends BaseEdsInstanceAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
                                             EdsAsset edsAsset, GitLabEventParam.SystemHook entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         Optional.ofNullable(entity.getUserId())

@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.client;
 import com.aliyun.auth.credentials.Credential;
 import com.aliyun.auth.credentials.provider.StaticCredentialProvider;
 import com.aliyun.sdk.service.domain20180129.AsyncClient;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import darabonba.core.client.ClientOverrideConfiguration;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class AliyunDomainAsyncClient {
 
     private static final String ENDPOINT_OVERRIDE = "domain.aliyuncs.com";
 
-    public static AsyncClient createClient(EdsAliyunConfigModel.Aliyun aliyun) {
+    public static AsyncClient createClient(EdsConfigs.Aliyun aliyun) {
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                 .accessKeyId(aliyun.getCred()
                         .getAccessKeyId())
@@ -30,7 +31,7 @@ public class AliyunDomainAsyncClient {
                         .getAccessKeySecret())
                 .build());
         final String endpoint = Optional.of(aliyun)
-                .map(EdsAliyunConfigModel.Aliyun::getDomain)
+                .map(EdsConfigs.Aliyun::getDomain)
                 .map(EdsAliyunConfigModel.Domain::getEndpoint)
                 .orElse(ENDPOINT_OVERRIDE);
         return AsyncClient.builder()

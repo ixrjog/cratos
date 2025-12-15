@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.eds.aws.repo.AwsEcrRepo;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.service.EdsAssetService;
 import jakarta.annotation.Resource;
@@ -18,14 +18,14 @@ import java.util.List;
  * &#064;Date  2024/11/27 14:38
  * &#064;Version 1.0
  */
-public class EcrRepoTest extends BaseEdsTest<EdsAwsConfigModel.Aws> {
+public class EcrRepoTest extends BaseEdsTest<EdsConfigs.Aws> {
 
     @Resource
     private EdsAssetService edsAssetService;
 
     @Test
     void test1() {
-        EdsAwsConfigModel.Aws aws = getConfig(3);
+        EdsConfigs.Aws aws = getConfig(3);
         List<Repository> list = AwsEcrRepo.describeRepositories("ap-east-1", aws);
 
         for (Repository repository : list) {
@@ -42,7 +42,7 @@ public class EcrRepoTest extends BaseEdsTest<EdsAwsConfigModel.Aws> {
 
     @Test
     void test2() {
-        EdsAwsConfigModel.Aws aws = getConfig(3);
+        EdsConfigs.Aws aws = getConfig(3);
         EdsInstanceParam.AssetPageQuery pageQuery = EdsInstanceParam.AssetPageQuery.builder()
                 // AWS PalmPay
                 .instanceId(94)

@@ -11,7 +11,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.application.ApplicationResourceBaselineParam;
 import com.baiyi.cratos.domain.view.application.ApplicationResourceBaselineVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -71,7 +71,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     public void scanAll() {
         Tag frameworkTag = tagService.getByTagKey(SysTagKeys.FRAMEWORK);
         List<Application> applications = applicationService.selectAll();
-        Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders = Maps.newHashMap();
+        Map<Integer, EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>> holders = Maps.newHashMap();
         applications.forEach(application -> {
             boolean hasFramework = businessTagFacade.containsTag(BusinessTypeEnum.APPLICATION.name(),
                     application.getId(), SysTagKeys.FRAMEWORK.getKey());
@@ -100,14 +100,14 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (CollectionUtils.isEmpty(baselineMembers)) {
             return null;
         }
-        Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders = Maps.newHashMap();
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+        Map<Integer, EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>> holders = Maps.newHashMap();
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
                 edsAsset.getInstanceId(), holders);
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
             BaselineMemberProcessorFactory.mergeToBaseline(baseline, baselineMembers, deployment);
             Deployment updated = kubernetesDeploymentRepo.update(holder.getInstance()
-                    .getEdsConfigModel(), deployment);
+                    .getConfig(), deployment);
             // 写入资产
             holder.getProvider()
                     .importAsset(holder.getInstance(), updated);
@@ -140,7 +140,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (edsAsset == null) {
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
                 edsAsset.getInstanceId());
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
@@ -214,12 +214,12 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (edsAsset == null) {
             ApplicationResourceBaselineException.runtime("Asset does not exist.");
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
                 edsAsset.getInstanceId());
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
             kubernetesDeploymentRepo.redeploy(holder.getInstance()
-                    .getEdsConfigModel(), deployment);
+                    .getConfig(), deployment);
             deploymentRedeployFacade.deploying(baselineId);
         } catch (Exception ex) {
             ApplicationResourceBaselineException.runtime(ex.getMessage());
@@ -227,7 +227,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
     }
 
     private void saveBaseline(Application application, ApplicationResource resource, Tag frameworkTag,
-                              Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders) {
+                              Map<Integer, EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>> holders) {
         if (!BusinessTypeEnum.EDS_ASSET.name()
                 .equals(resource.getBusinessType())) {
             return;
@@ -236,7 +236,7 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         if (edsAsset == null) {
             return;
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = getHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = getHolder(
                 edsAsset.getInstanceId(), holders);
         try {
             Deployment deployment = getKubernetesDeployment(holder, edsAsset);
@@ -308,16 +308,16 @@ public class ApplicationResourceBaselineFacadeImpl implements ApplicationResourc
         return recode.getId();
     }
 
-    private EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> getHolder(int instanceId) {
+    private EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> getHolder(int instanceId) {
         return getHolder(instanceId, Maps.newHashMap());
     }
 
-    private EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> getHolder(int instanceId,
-                                                                                                 Map<Integer, EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>> holders) {
+    private EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> getHolder(int instanceId,
+                                                                                                 Map<Integer, EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>> holders) {
         if (holders.containsKey(instanceId)) {
             return holders.get(instanceId);
         }
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Deployment>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
                 instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         holders.put(instanceId, holder);
         return holder;

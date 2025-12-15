@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.opscloud.repo;
 
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.domain.DataTable;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsOpscloudConfigModel;
 import com.baiyi.cratos.eds.opscloud.param.OcApplicationParam;
 import com.baiyi.cratos.eds.opscloud.service.OpscloudService;
@@ -22,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OcApplicationRepo {
 
-    public static List<OcApplicationVO.Application> listApplication(EdsOpscloudConfigModel.Opscloud opscloud) {
+    public static List<OcApplicationVO.Application> listApplication(EdsConfigs.Opscloud opscloud) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
         int page = 1;
         int length = 10;

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.jenkins.sdk.model;
 
-import com.baiyi.cratos.eds.jenkins.helper.BuildConsoleStreamListener;
+import com.baiyi.cratos.eds.jenkins.BuildConsoleStreamListener;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;

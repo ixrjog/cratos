@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_SCM_CERT)
-public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHwcConfigModel.Hwc, CertificateDetail> {
+public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Hwc, CertificateDetail> {
 
     private final static String DATE_FORMAT = "yyyy-MM-dd' 'HH:mm:ss.S";
 
@@ -47,7 +47,7 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
 
     @Override
     protected List<CertificateDetail> listEntities(String regionId,
-                                                   EdsHwcConfigModel.Hwc configModel) throws EdsQueryEntitiesException {
+                                                   EdsConfigs.Hwc configModel) throws EdsQueryEntitiesException {
         List<CertificateDetail> certificateDetails = HwcScmRepo.listCertificates(regionId, configModel);
         if (CollectionUtils.isEmpty(certificateDetails)) {
             return Collections.emptyList();
@@ -56,7 +56,7 @@ public class EdsHwcScmCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                   CertificateDetail entity) {
         //  https://support.huaweicloud.com/intl/en-us/api-ccm/ListCertificates.html
         try {

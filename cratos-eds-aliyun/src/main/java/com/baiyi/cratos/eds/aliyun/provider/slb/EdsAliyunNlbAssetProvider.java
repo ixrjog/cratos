@@ -8,6 +8,7 @@ import com.baiyi.cratos.eds.aliyun.repo.AliyunNlbRepo;
 import com.baiyi.cratos.eds.aliyun.util.AliyunRegionUtils;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -35,7 +36,7 @@ import java.util.Set;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_NLB)
-public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsAliyunConfigModel.Aliyun, AliyunNlb.Nlb> {
+public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Aliyun, AliyunNlb.Nlb> {
     
     private static final String DEFAULT_ENDPOINT = "nlb.cn-hangzhou.aliyuncs.com";
 
@@ -50,9 +51,9 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
 
     @Override
     protected Set<String> listNamespace(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
-        List<String> endpoints = Optional.of(instance.getEdsConfigModel())
-                .map(EdsAliyunConfigModel.Aliyun::getNlb)
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
+        List<String> endpoints = Optional.of(instance.getConfig())
+                .map(EdsConfigs.Aliyun::getNlb)
                 .map(EdsAliyunConfigModel.NLB::getEndpoints)
                 .orElse(Lists.newArrayList(DEFAULT_ENDPOINT));
         return new HashSet<>(endpoints);
@@ -60,9 +61,9 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
 
     @Override
     protected List<AliyunNlb.Nlb> listEntities(String namespace,
-                                               ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                               ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunNlbRepo.listLoadBalancers(namespace, instance.getEdsConfigModel())
+            return AliyunNlbRepo.listLoadBalancers(namespace, instance.getConfig())
                     .stream()
                     .map(e -> toNlb(namespace, e))
                     .toList();
@@ -80,7 +81,7 @@ public class EdsAliyunNlbAssetProvider extends BaseHasNamespaceEdsAssetProvider<
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          AliyunNlb.Nlb entity) {
         // https://help.aliyun.com/zh/slb/application-load-balancer/developer-reference/api-alb-2020-06-16-listloadbalancers?spm=a2c4g.11186623.0.i4
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getLoadBalancers()

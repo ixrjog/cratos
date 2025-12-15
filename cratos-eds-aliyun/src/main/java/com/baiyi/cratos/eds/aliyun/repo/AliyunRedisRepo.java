@@ -4,7 +4,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesRequest;
 import com.aliyuncs.r_kvstore.model.v20150101.DescribeInstancesResponse;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -26,11 +26,11 @@ public class AliyunRedisRepo {
     public static final String QUERY_ALL_INSTANCE = null;
     private static final int PAGE_SIZE = 50;
 
-    public List<DescribeInstancesResponse.KVStoreInstance> listInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun) throws ClientException {
+    public List<DescribeInstancesResponse.KVStoreInstance> listInstance(String regionId, EdsConfigs.Aliyun aliyun) throws ClientException {
         return listInstance(regionId, aliyun, QUERY_ALL_INSTANCE);
     }
 
-    public List<DescribeInstancesResponse.KVStoreInstance> listInstance(String regionId, EdsAliyunConfigModel.Aliyun aliyun, String instanceIds) throws ClientException {
+    public List<DescribeInstancesResponse.KVStoreInstance> listInstance(String regionId, EdsConfigs.Aliyun aliyun, String instanceIds) throws ClientException {
         List<DescribeInstancesResponse.KVStoreInstance> instances = Lists.newArrayList();
         DescribeInstancesRequest request = new  DescribeInstancesRequest();
         if (!StringUtils.isEmpty(instanceIds)) {

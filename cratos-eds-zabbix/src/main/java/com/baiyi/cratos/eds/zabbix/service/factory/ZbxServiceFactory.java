@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.zabbix.service.factory;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.util.SpringContextUtils;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.auth.ZbxTokenHolder;
 import com.baiyi.cratos.eds.zabbix.service.base.BaseZbxService;
 import io.netty.channel.ChannelOption;
@@ -26,11 +26,11 @@ public class ZbxServiceFactory {
 
     private static final int MAX_IN_MEMORY_SIZE = 10 * 1024 * 1024;
 
-    public static <T extends BaseZbxService> T createService(EdsZabbixConfigModel.Zabbix zbx, Class<T> serviceClass) {
+    public static <T extends BaseZbxService> T createService(EdsConfigs.Zabbix zbx, Class<T> serviceClass) {
         return buildFactory(zbx, null).createClient(serviceClass);
     }
 
-    private static HttpServiceProxyFactory buildFactory(EdsZabbixConfigModel.Zabbix zbx,
+    private static HttpServiceProxyFactory buildFactory(EdsConfigs.Zabbix zbx,
                                                         java.util.function.Consumer<WebClient.Builder> customizer) {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
@@ -48,7 +48,7 @@ public class ZbxServiceFactory {
                 .build();
     }
 
-    public static <T extends BaseZbxService> T createAuthenticatedService(EdsZabbixConfigModel.Zabbix zbx,
+    public static <T extends BaseZbxService> T createAuthenticatedService(EdsConfigs.Zabbix zbx,
                                                                           Class<T> serviceClass) {
         HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);

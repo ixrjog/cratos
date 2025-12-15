@@ -13,7 +13,7 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.command.CommandExecParam;
 import com.baiyi.cratos.domain.view.command.CommandExecVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -242,15 +242,15 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         CommandExecModel.ExecTarget execTarget = CommandExecModel.loadAs(commandExec);
         String namespace = execTarget.getInstance()
                 .getNamespace();
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, ?>) holderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) holderBuilder.newHolder(
                 execTarget.getInstance()
                         .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         PodExecContext execContext = PodExecContext.builder()
                 .maxWaitingTime(maxWaitingTime)
                 .command(commandExec.getCommand())
                 .build();
-        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Kubernetes kubernetes = holder.getInstance()
+                .getConfig();
         // 查询当前实例下打标签的资产
         List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
                 SysTagKeys.COMMAND_EXEC.getKey());

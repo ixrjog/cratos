@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.param.http.eds.cratos.CratosAssetParam;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsCratosConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsAssetConversionException;
@@ -34,7 +34,7 @@ import java.util.List;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CRATOS, assetTypeOf = EdsAssetTypeEnum.CRATOS_COMPUTER)
-public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsCratosConfigModel.Cratos, CratosAssetParam.CratosAsset> {
+public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Cratos, CratosAssetParam.CratosAsset> {
 
     public EdsCratosComputerAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -47,12 +47,12 @@ public class EdsCratosComputerAssetProvider extends BaseEdsInstanceAssetProvider
 
     @Override
     protected List<CratosAssetParam.CratosAsset> listEntities(
-            ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Cratos> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Query not supported");
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsCratosConfigModel.Cratos> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cratos> instance,
                                          CratosAssetParam.CratosAsset entity) throws EdsAssetConversionException {
         String assetId = StringUtils.hasText(entity.getAssetId()) ? entity.getAssetId() : IdentityUtils.randomUUID();
         if (!IpUtils.isIP(entity.getAssetKey())) {

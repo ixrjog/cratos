@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AliyunSlsRepo {
 
-//    public static List<Bucket> listBuckets(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
+//    public static List<Bucket> listBuckets(String endpoint, EdsConfigs.Aliyun aliyun,
 //                                           String project) throws LogException {
 //        ListProjectCnameResponse response = AliyunSlsClient.createClient(endpoint, aliyun)
 //                .listProjectCname(project);
@@ -21,7 +21,7 @@ public class AliyunSlsRepo {
 //    }
 //
 //
-//    public static List<Bucket> listBuckets(String endpoint, EdsAliyunConfigModel.Aliyun aliyun,
+//    public static List<Bucket> listBuckets(String endpoint, EdsConfigs.Aliyun aliyun,
 //                                           String project) throws LogException {
 //        ListProjectCnameResponse response = AliyunSlsClient.createClient(endpoint, aliyun)
 //                .listLo

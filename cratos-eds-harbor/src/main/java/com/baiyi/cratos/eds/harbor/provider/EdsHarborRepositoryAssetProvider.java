@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.harbor.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHarborConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HARBOR, assetTypeOf = EdsAssetTypeEnum.HARBOR_REPOSITORY)
-public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsHarborConfigModel.Harbor, HarborRepository.Repository> {
+public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAssetProvider<EdsConfigs.Harbor, HarborRepository.Repository> {
 
     public EdsHarborRepositoryAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -46,9 +46,9 @@ public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAsse
 
     @Override
     protected Set<String> getSources(
-            ExternalDataSourceInstance<EdsHarborConfigModel.Harbor> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Harbor> instance) throws EdsQueryEntitiesException {
         try {
-            return HarborProjectRepo.listProjects(instance.getEdsConfigModel())
+            return HarborProjectRepo.listProjects(instance.getConfig())
                     .stream()
                     .map(HarborProject.Project::getName)
                     .collect(Collectors.toSet());
@@ -59,16 +59,16 @@ public class EdsHarborRepositoryAssetProvider extends BaseMultipleSourcesEdsAsse
 
     @Override
     protected List<HarborRepository.Repository> listEntities(@Schema(description = "Project") String namespace,
-                                                             ExternalDataSourceInstance<EdsHarborConfigModel.Harbor> instance) throws EdsQueryEntitiesException {
+                                                             ExternalDataSourceInstance<EdsConfigs.Harbor> instance) throws EdsQueryEntitiesException {
         try {
-            return HarborRepositoryRepo.listRepositories(instance.getEdsConfigModel(), namespace);
+            return HarborRepositoryRepo.listRepositories(instance.getConfig(), namespace);
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHarborConfigModel.Harbor> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Harbor> instance,
                                   HarborRepository.Repository entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getProjectId())
                 .nameOf(entity.getName())

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.model.KubernetesUsageModel;
 import io.fabric8.kubernetes.api.model.Node;
@@ -27,7 +27,7 @@ public class KubernetesTest {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public void test1(EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace) {
+    public void test1(EdsConfigs.Kubernetes kubernetes, String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             VersionInfo versionInfo = kc.getKubernetesVersion();
             System.out.println(versionInfo);
@@ -37,7 +37,7 @@ public class KubernetesTest {
         }
     }
 
-    public void test2(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public void test2(EdsConfigs.Kubernetes kubernetes) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Map<String, Node> nodeMap = kc.nodes().list().getItems()
                     .stream()

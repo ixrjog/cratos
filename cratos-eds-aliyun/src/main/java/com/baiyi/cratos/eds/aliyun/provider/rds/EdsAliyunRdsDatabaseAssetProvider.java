@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunRdsDatabaseRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_RDS_DATABASE)
-public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeDatabasesResponse.Database> {
+public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, DescribeDatabasesResponse.Database> {
 
     private final AliyunRdsDatabaseRepo aliyunRdsDatabaseRepo;
 
@@ -48,7 +48,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvi
 
     @Override
     protected List<DescribeDatabasesResponse.Database> listEntities(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
             List<EdsAsset> assets = queryAssetsByInstanceAndType(instance, EdsAssetTypeEnum.ALIYUN_RDS_INSTANCE);
             if (CollectionUtils.isEmpty(assets)) {
@@ -57,7 +57,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvi
             List<DescribeDatabasesResponse.Database> entities = Lists.newArrayList();
             for (EdsAsset asset : assets) {
                 List<DescribeDatabasesResponse.Database> dbs = aliyunRdsDatabaseRepo.listDatabase(asset.getRegion(),
-                        instance.getEdsConfigModel(), asset.getAssetId());
+                                                                                                  instance.getConfig(), asset.getAssetId());
                 if (!CollectionUtils.isEmpty(dbs)) {
                     entities.addAll(dbs);
                 }
@@ -69,7 +69,7 @@ public class EdsAliyunRdsDatabaseAssetProvider extends BaseEdsInstanceAssetProvi
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   DescribeDatabasesResponse.Database entity) {
         final String key = Joiner.on(":")
                 .join(entity.getDBInstanceId(), entity.getDBName());

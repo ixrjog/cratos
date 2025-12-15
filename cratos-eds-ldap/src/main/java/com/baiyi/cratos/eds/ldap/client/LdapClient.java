@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.ldap.client;
 
 import com.baiyi.cratos.common.cred.Authorization;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.ldap.factory.LdapFactory;
 import com.baiyi.cratos.eds.ldap.mapper.GroupAttributesMapper;
 import com.baiyi.cratos.eds.ldap.mapper.PersonAttributesMapper;
@@ -45,7 +45,7 @@ public class LdapClient {
         String OBJECTCLASS = "objectclass";
     }
 
-    private LdapTemplate buildLdapTemplate(EdsLdapConfigModel.Ldap ldap) {
+    private LdapTemplate buildLdapTemplate(EdsConfigs.Ldap ldap) {
         return LdapFactory.buildLdapTemplate(ldap);
     }
 
@@ -54,7 +54,7 @@ public class LdapClient {
      *
      * @return
      */
-    public List<LdapPerson.Person> queryPersonList(EdsLdapConfigModel.Ldap ldap) {
+    public List<LdapPerson.Person> queryPersonList(EdsConfigs.Ldap ldap) {
         return buildLdapTemplate(ldap).search(
                 query().where(OBJECTCLASS)
                         .is(ldap.getUser()
@@ -67,7 +67,7 @@ public class LdapClient {
      *
      * @return
      */
-    public List<String> queryPersonNameList(EdsLdapConfigModel.Ldap ldap) {
+    public List<String> queryPersonNameList(EdsConfigs.Ldap ldap) {
         return buildLdapTemplate(ldap).search(
                 query().where(OBJECTCLASS)
                         .is(ldap.getUser()
@@ -84,7 +84,7 @@ public class LdapClient {
      * @param dn
      * @return
      */
-    public LdapPerson.Person findPersonByDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+    public LdapPerson.Person findPersonByDn(EdsConfigs.Ldap ldap, String dn) {
         return buildLdapTemplate(ldap).lookup(dn, new PersonAttributesMapper());
     }
 
@@ -94,7 +94,7 @@ public class LdapClient {
      * @param dn
      * @return
      */
-    public LdapGroup.Group findGroupByDn(EdsLdapConfigModel.Ldap ldap, String dn) {
+    public LdapGroup.Group findGroupByDn(EdsConfigs.Ldap ldap, String dn) {
         LdapGroup.Group group = buildLdapTemplate(ldap).lookup(dn, new GroupAttributesMapper());
         group.setGroupDn(Joiner.on(",")
                                  .join(dn, ldap.getBase()));
@@ -107,7 +107,7 @@ public class LdapClient {
      * @param credential
      * @return
      */
-    public boolean verifyLogin(EdsLdapConfigModel.Ldap ldap, Authorization.Credential credential) {
+    public boolean verifyLogin(EdsConfigs.Ldap ldap, Authorization.Credential credential) {
         if (credential.isEmpty()) {
             return false;
         }
@@ -137,11 +137,11 @@ public class LdapClient {
      *
      * @param dn
      */
-    public void unbind(EdsLdapConfigModel.Ldap ldap, String dn) {
+    public void unbind(EdsConfigs.Ldap ldap, String dn) {
         buildLdapTemplate(ldap).unbind(dn);
     }
 
-    private void bind(EdsLdapConfigModel.Ldap ldap, String dn, Object obj, Attributes attrs) {
+    private void bind(EdsConfigs.Ldap ldap, String dn, Object obj, Attributes attrs) {
         buildLdapTemplate(ldap).bind(dn, obj, attrs);
     }
 
@@ -151,7 +151,7 @@ public class LdapClient {
      * @param person
      * @return
      */
-    public void bindPerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+    public void bindPerson(EdsConfigs.Ldap ldap, LdapPerson.Person person) {
         final String userId = ldap.getUser()
                 .getId();
         final String userBaseDN = ldap.getUser()
@@ -194,7 +194,7 @@ public class LdapClient {
      * @param group
      * @return
      */
-    public void bindGroup(EdsLdapConfigModel.Ldap ldap, LdapGroup.Group group) {
+    public void bindGroup(EdsConfigs.Ldap ldap, LdapGroup.Group group) {
         final String groupId = ldap.getGroup()
                 .getId();
         final String groupBaseDN = ldap.getGroup()
@@ -224,7 +224,7 @@ public class LdapClient {
         }
     }
 
-    public void updatePerson(EdsLdapConfigModel.Ldap ldap, LdapPerson.Person person) {
+    public void updatePerson(EdsConfigs.Ldap ldap, LdapPerson.Person person) {
         String dn = LdapUtils.toUserDN(ldap, person);
         LdapPerson.Person checkPerson = findPersonByDn(ldap, dn);
         if (checkPerson == null) {
@@ -256,7 +256,7 @@ public class LdapClient {
      *
      * @return
      */
-    public List<LdapGroup.Group> queryGroupList(EdsLdapConfigModel.Ldap ldap) {
+    public List<LdapGroup.Group> queryGroupList(EdsConfigs.Ldap ldap) {
         return buildLdapTemplate(ldap).search(
                 query().where(OBJECTCLASS)
                         .is(ldap.getGroup()
@@ -264,7 +264,7 @@ public class LdapClient {
         );
     }
 
-    public List<String> queryGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName) {
+    public List<String> queryGroupMember(EdsConfigs.Ldap ldap, String groupName) {
         try {
             DirContextAdapter adapter = (DirContextAdapter) buildLdapTemplate(ldap).lookup(
                     LdapUtils.toGroupDN(ldap, groupName));
@@ -281,15 +281,15 @@ public class LdapClient {
         return List.of();
     }
 
-    public void removeGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username) {
+    public void removeGroupMember(EdsConfigs.Ldap ldap, String groupName, String username) {
         modificationGroupMember(ldap, groupName, username, DirContext.REMOVE_ATTRIBUTE);
     }
 
-    public void addGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username) {
+    public void addGroupMember(EdsConfigs.Ldap ldap, String groupName, String username) {
         modificationGroupMember(ldap, groupName, username, DirContext.ADD_ATTRIBUTE);
     }
 
-    private void modificationGroupMember(EdsLdapConfigModel.Ldap ldap, String groupName, String username,
+    private void modificationGroupMember(EdsConfigs.Ldap ldap, String groupName, String username,
                                          int modificationType) {
         String userDn = LdapUtils.toUserDN(
                 ldap, LdapPerson.Person.builder()
@@ -313,7 +313,7 @@ public class LdapClient {
         }
     }
 
-    private void modifyAttributes(EdsLdapConfigModel.Ldap ldap, String dn, String attrId, String value) {
+    private void modifyAttributes(EdsConfigs.Ldap ldap, String dn, String attrId, String value) {
         buildLdapTemplate(ldap).modifyAttributes(
                 dn, new ModificationItem[]{new ModificationItem(
                         DirContext.REPLACE_ATTRIBUTE,
@@ -322,7 +322,7 @@ public class LdapClient {
         );
     }
 
-    public boolean hasPersonInLdap(EdsLdapConfigModel.Ldap ldap, String username) {
+    public boolean hasPersonInLdap(EdsConfigs.Ldap ldap, String username) {
         String userDn = LdapUtils.toUserDN(
                 ldap, LdapPerson.Person.builder()
                         .username(username)
@@ -345,7 +345,7 @@ public class LdapClient {
         return false;
     }
 
-    public List<String> searchLdapGroup(EdsLdapConfigModel.Ldap ldap, String username) {
+    public List<String> searchLdapGroup(EdsConfigs.Ldap ldap, String username) {
         List<String> groupList = Lists.newArrayList();
         try {
             String groupBaseDN = ldap.getGroup()

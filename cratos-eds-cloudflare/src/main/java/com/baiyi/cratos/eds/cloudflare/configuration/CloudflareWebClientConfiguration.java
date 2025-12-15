@@ -26,7 +26,6 @@ public class CloudflareWebClientConfiguration {
 //                .proxy(proxy ->
 //                    proxy.type(ProxyProvider.Proxy.SOCKS5).address(new InetSocketAddress("10.10.10.10", 80)))
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
-
         WebClient webClient = WebClient.builder()
                 .baseUrl(EdsCloudflareConfigModel.CLIENT_API)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))

@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -31,7 +31,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.REPO_WE
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB, assetTypeOf = EdsAssetTypeEnum.GITLAB_GROUP)
-public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsGitLabConfigModel.GitLab, Group> {
+public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.GitLab, Group> {
 
     public EdsGitLabGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -44,16 +44,16 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<Ed
 
     @Override
     protected List<Group> listEntities(
-            ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.GitLab> instance) throws EdsQueryEntitiesException {
         try {
-            return GitLabGroupRepo.getGroups(instance.getEdsConfigModel());
+            return GitLabGroupRepo.getGroups(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance, Group entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.GitLab> instance, Group entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getFullName())
                 .assetKeyOf(entity.getFullPath())
@@ -63,7 +63,7 @@ public class EdsGitLabGroupAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsGitLabConfigModel.GitLab> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
                                             EdsAsset edsAsset, Group entity) {
         return List.of(createEdsAssetIndex(edsAsset, REPO_WEB_URL, entity.getWebUrl()));
     }

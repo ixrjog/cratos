@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.jenkins.helper;
+package com.baiyi.cratos.eds.jenkins;
 
 /**
  * Listener interface used to obtain build console logs

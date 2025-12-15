@@ -8,7 +8,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsVpcRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -36,7 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.SUBNET_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SUBNET)
-public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsEc2.Subnet> {
+public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsEc2.Subnet> {
 
     public EdsAwsSubnetAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                      CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -48,7 +48,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected List<AwsEc2.Subnet> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsEc2.Subnet> listEntities(String regionId, EdsConfigs.Aws aws) {
         try {
             return AwsVpcRepo.describeSubnets(regionId, aws)
                     .stream()
@@ -67,7 +67,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsEc2.Subnet entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsEc2.Subnet entity) {
         final String tagName = AmazonEc2Util.getName(entity.getSubnet()
                 .getTags());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getSubnet()
@@ -83,7 +83,7 @@ public class EdsAwsSubnetAssetProvider extends BaseEdsRegionAssetProvider<EdsAws
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                             EdsAsset edsAsset, AwsEc2.Subnet entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, SUBNET_CIDR_BLOCK, entity.getSubnet()

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.googlecloud.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsGcpConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.googlecloud.builder.GcpProjectSettingsBuilder;
 import com.google.api.client.util.Lists;
 import com.google.api.client.util.Maps;
@@ -32,7 +32,7 @@ public class GcpProjectRepo {
 
     private final GcpProjectSettingsBuilder projectSettingsBuilder;
 
-    public Map<String, List<String>> listMembers(EdsGcpConfigModel.Gcp googleCloud) throws IOException {
+    public Map<String, List<String>> listMembers(EdsConfigs.Gcp googleCloud) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
         try (ProjectsClient client = ProjectsClient.create(settings)) {
             GetIamPolicyRequest request = GetIamPolicyRequest.newBuilder()
@@ -60,7 +60,7 @@ public class GcpProjectRepo {
      * @param username    user:user@example.com
      * @throws IOException
      */
-    public void removeMember(EdsGcpConfigModel.Gcp googleCloud, String username) throws IOException {
+    public void removeMember(EdsConfigs.Gcp googleCloud, String username) throws IOException {
         ProjectsSettings settings = projectSettingsBuilder.buildProjectSettings(googleCloud);
         String projectId = googleCloud.getProject()
                 .getId();

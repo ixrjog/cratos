@@ -50,7 +50,7 @@ public class BaseEdsTest<C extends IEdsConfigModel> extends BaseUnit {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId, assetType);
         return (C) providerHolder.getInstance()
-                .getEdsConfigModel();
+                .getConfig();
     }
 
     public C getConfig(int configId) {

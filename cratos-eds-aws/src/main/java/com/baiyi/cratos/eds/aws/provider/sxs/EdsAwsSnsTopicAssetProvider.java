@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.aws.model.AwsSns;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SNS_TOPIC)
-public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Topic> {
+public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsSns.Topic> {
 
     private final AwsSnsRepo awsSnsRepo;
 
@@ -47,7 +47,7 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsA
     }
 
     @Override
-    protected List<AwsSns.Topic> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsSns.Topic> listEntities(String regionId, EdsConfigs.Aws aws) {
         List<Topic> topics = awsSnsRepo.listTopics(regionId, aws);
         if (!CollectionUtils.isEmpty(topics)) {
             return toTopics(regionId, aws, topics);
@@ -55,7 +55,7 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsA
         return Collections.emptyList();
     }
 
-    private List<AwsSns.Topic> toTopics(String regionId, EdsAwsConfigModel.Aws aws, List<Topic> topics) {
+    private List<AwsSns.Topic> toTopics(String regionId, EdsConfigs.Aws aws, List<Topic> topics) {
         return topics.stream()
                 .map(e -> {
                     Map<String, String> attributes = awsSnsRepo.getTopicAttributes(regionId, aws, e.getTopicArn());
@@ -69,7 +69,7 @@ public class EdsAwsSnsTopicAssetProvider extends BaseEdsRegionAssetProvider<EdsA
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance, AwsSns.Topic entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance, AwsSns.Topic entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getTopic()

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.provider.version;
 
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES)
-public class EdsKubernetesInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsKubernetesConfigModel.Kubernetes> {
+public class EdsKubernetesInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsConfigs.Kubernetes> {
 
     private final KubernetesVersionRepo kubernetesVersionRepo;
 
     @Override
-    public String getVersion(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) {
-        VersionInfo versionInfo = kubernetesVersionRepo.getVersion(instance.getEdsConfigModel());
+    public String getVersion(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) {
+        VersionInfo versionInfo = kubernetesVersionRepo.getVersion(instance.getConfig());
         return versionInfo.getGitVersion();
     }
 

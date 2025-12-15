@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.aws.repo.AwsCloudFrontRepo;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_CLOUDFRONT_DISTRIBUTION)
-public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAssetProvider<EdsAwsConfigModel.Aws, AwsCloudFrontDistribution.Distribution> {
+public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aws, AwsCloudFrontDistribution.Distribution> {
 
     public EdsAwsCloudFrontDistributionAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                      CredentialService credentialService,
@@ -46,8 +46,8 @@ public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAs
 
     @Override
     protected List<AwsCloudFrontDistribution.Distribution> listEntities(
-            ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance) throws EdsQueryEntitiesException {
-        EdsAwsConfigModel.Aws aws = instance.getEdsConfigModel();
+            ExternalDataSourceInstance<EdsConfigs.Aws> instance) throws EdsQueryEntitiesException {
+        EdsConfigs.Aws aws = instance.getConfig();
         try {
             List<DistributionSummary> distributionSummaries = AwsCloudFrontRepo.listDistributions(aws);
             if (CollectionUtils.isEmpty(distributionSummaries)) {
@@ -73,7 +73,7 @@ public class EdsAwsCloudFrontDistributionAssetProvider extends BaseEdsInstanceAs
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                   AwsCloudFrontDistribution.Distribution entity) {
         // https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ListDistributions.html
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDistribution()

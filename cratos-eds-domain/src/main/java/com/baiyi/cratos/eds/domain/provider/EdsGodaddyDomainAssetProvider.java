@@ -4,7 +4,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsGodaddyConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GODADDY, assetTypeOf = EdsAssetTypeEnum.GODADDY_DOMAIN)
-public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsGodaddyConfigModel.Godaddy, GodaddyDomain.Domain> {
+public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Godaddy, GodaddyDomain.Domain> {
 
     private final GodaddyDomainRepo godaddyDomainRepo;
 
@@ -46,16 +46,16 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<
 
     @Override
     protected List<GodaddyDomain.Domain> listEntities(
-            ExternalDataSourceInstance<EdsGodaddyConfigModel.Godaddy> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Godaddy> instance) throws EdsQueryEntitiesException {
         try {
-            return godaddyDomainRepo.queryDomains(instance.getEdsConfigModel());
+            return godaddyDomainRepo.queryDomains(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsGodaddyConfigModel.Godaddy> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Godaddy> instance,
                                   GodaddyDomain.Domain entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDomainId())
                 .nameOf(entity.getDomain())

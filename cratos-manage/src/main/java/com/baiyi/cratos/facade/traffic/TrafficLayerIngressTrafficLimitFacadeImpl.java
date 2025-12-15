@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -159,10 +159,10 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
             TrafficLayerException.runtime("Commit message is blank.");
         }
         EdsAsset edsAsset = checkedGet(updateIngressTrafficLimit.getAssetId());
-        EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsKubernetesConfigModel.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Ingress> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Ingress>) edsInstanceProviderHolderBuilder.newHolder(
                 edsAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
-        EdsKubernetesConfigModel.Kubernetes kubernetes = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Kubernetes kubernetes = holder.getInstance()
+                .getConfig();
         final String ingressStr = edsAsset.getOriginalModel();
         Ingress originalIngress = holder.getProvider()
                 .assetLoadAs(ingressStr);

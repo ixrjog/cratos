@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.dingtalk.provider;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsDingtalkConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.DINGTALK_ROBOT, assetTypeOf = EdsAssetTypeEnum.DINGTALK_ROBOT_MSG)
-public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsDingtalkConfigModel.Robot, DingtalkRobotModel.Msg> {
+public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Robot, DingtalkRobotModel.Msg> {
 
     public EdsDingtalkRobotMsgAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                             CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -40,12 +40,12 @@ public class EdsDingtalkRobotMsgAssetProvider extends BaseEdsInstanceAssetProvid
 
     @Override
     protected List<DingtalkRobotModel.Msg> listEntities(
-            ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Robot> instance) throws EdsQueryEntitiesException {
         throw new EdsQueryEntitiesException("Unsupported.");
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsDingtalkConfigModel.Robot> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Robot> instance,
                                   DingtalkRobotModel.Msg entity) {
         return newEdsAssetBuilder(instance, entity).build();
     }

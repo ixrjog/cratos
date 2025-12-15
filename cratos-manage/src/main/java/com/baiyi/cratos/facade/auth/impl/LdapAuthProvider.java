@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
-import com.baiyi.cratos.eds.core.config.model.EdsLdapConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.ldap.client.LdapClient;
 import com.baiyi.cratos.facade.EdsFacade;
@@ -65,8 +65,8 @@ public class LdapAuthProvider extends BaseAuthProvider {
         for (EdsInstance edsLdapInstance : edsLdapInstances) {
             EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
             if (edsConfig != null) {
-                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
-                        edsConfig);
+                EdsConfigs.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
+                                                                                edsConfig);
                 boolean pass = ldapClient.verifyLogin(ldap, credential);
                 if (pass) {
                     UserToken userToken = revokeAndIssueNewToken(loginParam);
@@ -91,7 +91,7 @@ public class LdapAuthProvider extends BaseAuthProvider {
         for (EdsInstance edsLdapInstance : edsLdapInstances) {
             EdsConfig edsConfig = edsConfigService.getById(edsLdapInstance.getConfigId());
             if (edsConfig != null) {
-                EdsLdapConfigModel.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
+                EdsConfigs.Ldap ldap = EdsInstanceProviderFactory.produceConfig(EdsInstanceTypeEnum.LDAP.name(),
                         edsConfig);
                 boolean pass = ldapClient.verifyLogin(ldap, credential);
                 if (pass) {

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesAutoscalerRepo;
 import com.baiyi.cratos.eds.kubernetes.resource.AdvancedHorizontalPodAutoscaler;
@@ -17,7 +17,7 @@ import java.util.List;
  * &#064;Date  2024/7/22 下午2:34
  * &#064;Version 1.0
  */
-public class EdsKubernetesAutoscalerTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+public class EdsKubernetesAutoscalerTest extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
     public static final int ACK_PROD_INSTANCE_ID = 101;
 
@@ -26,7 +26,7 @@ public class EdsKubernetesAutoscalerTest extends BaseEdsTest<EdsKubernetesConfig
 
     @Test
     void createAutoscalerTest() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(ACK_PROD_INSTANCE_ID,
+        EdsConfigs.Kubernetes cfg = getConfig(ACK_PROD_INSTANCE_ID,
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         AdvancedHorizontalPodAutoscaler autoscaler = new AdvancedHorizontalPodAutoscaler();
         ObjectMeta metadata = new ObjectMeta();

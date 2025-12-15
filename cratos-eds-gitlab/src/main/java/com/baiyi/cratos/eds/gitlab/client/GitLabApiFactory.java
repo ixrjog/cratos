@@ -1,5 +1,6 @@
 package com.baiyi.cratos.eds.gitlab.client;
 
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import lombok.NoArgsConstructor;
 import org.gitlab4j.api.GitLabApi;
@@ -20,10 +21,10 @@ public class GitLabApiFactory {
     private static final int CONNECT_TIMEOUT = 1000;
     private static final int READ_TIMEOUT = 5000;
 
-    public static GitLabApi buildGitLabApi(EdsGitLabConfigModel.GitLab gitlab) {
+    public static GitLabApi buildGitLabApi(EdsConfigs.GitLab gitlab) {
         assert gitlab != null;
         final String version = Optional.of(gitlab)
-                .map(EdsGitLabConfigModel.GitLab::getApi)
+                .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getVersion)
                 .orElse("V4");
         GitLabApi.ApiVersion apiVersion = GitLabApi.ApiVersion.valueOf(version.toUpperCase());
@@ -31,11 +32,11 @@ public class GitLabApiFactory {
                 .getUrl(), gitlab.getCred()
                 .getToken());
         int connectTimeout = Optional.of(gitlab)
-                .map(EdsGitLabConfigModel.GitLab::getApi)
+                .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getConnectTimeout)
                 .orElse(CONNECT_TIMEOUT);
         int readTimeout = Optional.of(gitlab)
-                .map(EdsGitLabConfigModel.GitLab::getApi)
+                .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getReadTimeout)
                 .orElse(READ_TIMEOUT);
         gitLabApi.setRequestTimeout(connectTimeout, readTimeout);

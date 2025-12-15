@@ -5,7 +5,7 @@ import com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancers
 import com.amazonaws.services.elasticloadbalancingv2.model.DescribeLoadBalancersResult;
 import com.amazonaws.services.elasticloadbalancingv2.model.LoadBalancer;
 import com.baiyi.cratos.eds.aws.service.AmazonElbService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsElbRepo {
 
-    public static List<LoadBalancer> listLoadBalancer(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static List<LoadBalancer> listLoadBalancer(String regionId, EdsConfigs.Aws aws) {
         DescribeLoadBalancersRequest request = new DescribeLoadBalancersRequest();
         List<LoadBalancer> loadBalancers = Lists.newArrayList();
         String nextMarker = null;

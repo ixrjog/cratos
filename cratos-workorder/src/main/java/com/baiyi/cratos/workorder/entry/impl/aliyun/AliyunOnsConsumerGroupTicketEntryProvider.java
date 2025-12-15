@@ -15,7 +15,7 @@ import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
 import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.eds.aliyun.model.AliyunOnsV5;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
-import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -84,10 +84,10 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
     @Override
     protected void processEntry(WorkOrderTicket workOrderTicket, WorkOrderTicketEntry entry,
                                 AliyunOnsV5Model.ConsumerGroup consumerGroup) throws WorkOrderTicketException {
-        EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsAliyunConfigModel.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, ListConsumerGroupsResponseBody.ListConsumerGroupsResponseBodyDataList>) edsInstanceProviderHolderBuilder.newHolder(
                 entry.getInstanceId(), EdsAssetTypeEnum.ALIYUN_ONS_V5_CONSUMER_GROUP.name());
-        EdsAliyunConfigModel.Aliyun aliyun = holder.getInstance()
-                .getEdsConfigModel();
+        EdsConfigs.Aliyun aliyun = holder.getInstance()
+                .getConfig();
         createConsumerGroup(aliyun, consumerGroup);
         // 导入资产
         GetConsumerGroupResponseBody.GetConsumerGroupResponseBodyData newConsumerGroup = getConsumerGroup(aliyun,
@@ -104,7 +104,7 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
     }
 
     private GetConsumerGroupResponseBody.GetConsumerGroupResponseBodyData getConsumerGroup(
-            EdsAliyunConfigModel.Aliyun aliyun, AliyunOnsV5Model.ConsumerGroup consumerGroup) {
+            EdsConfigs.Aliyun aliyun, AliyunOnsV5Model.ConsumerGroup consumerGroup) {
         try {
             return AliyunOnsV5Repo.getConsumerGroup(consumerGroup.getRegionId(), aliyun,
                     consumerGroup.getOnsInstanceId(), consumerGroup.getConsumerGroupId());
@@ -113,7 +113,7 @@ public class AliyunOnsConsumerGroupTicketEntryProvider extends BaseTicketEntryPr
         }
     }
 
-    private void createConsumerGroup(EdsAliyunConfigModel.Aliyun aliyun, AliyunOnsV5Model.ConsumerGroup consumerGroup) {
+    private void createConsumerGroup(EdsConfigs.Aliyun aliyun, AliyunOnsV5Model.ConsumerGroup consumerGroup) {
         try {
 
             AliyunOnsV5.ConsumeRetryPolicy consumeRetryPolicy = AliyunOnsV5.ConsumeRetryPolicy.builder()

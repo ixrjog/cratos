@@ -1,7 +1,7 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.PodList;
@@ -40,7 +40,7 @@ public class KubernetesPodRepo {
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.TEMPORARY, key = "'EDS:KUBERNETES:INSTANCE_ID:' + #kubernetes.edsInstance.id + ':NAMESPACE:' + #deployment.metadata.namespace +':DEPLOYMENT_NAME:' + #deployment.metadata.name", unless = "#result == null")
-    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,
+    public List<Pod> listByReplicaSet(@NonNull EdsConfigs.Kubernetes kubernetes,
                                       @NonNull Deployment deployment) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             String ownerReferencesUID = deployment.getMetadata()
@@ -75,7 +75,7 @@ public class KubernetesPodRepo {
     }
 
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.TEMPORARY, key = "'EDS:KUBERNETES:INSTANCE_ID:' + #kubernetes.edsInstance.id + ':NAMESPACE:' + #namespace +':DEPLOYMENT_NAME:' + #deploymentName", unless = "#result == null")
-    public List<Pod> listByReplicaSet(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes,
+    public List<Pod> listByReplicaSet(@NonNull EdsConfigs.Kubernetes kubernetes,
                                       @NonNull String namespace, @NonNull String deploymentName) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Deployment deployment = Optional.ofNullable(kc.apps()
@@ -126,7 +126,7 @@ public class KubernetesPodRepo {
                                 .getUid()));
     }
 
-    public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
+    public List<Pod> list(@NonNull EdsConfigs.Kubernetes kubernetes, @NonNull String namespace,
                           @NonNull String deploymentName) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             Map<String, String> matchLabels = kc.apps()
@@ -153,7 +153,7 @@ public class KubernetesPodRepo {
         }
     }
 
-    public List<Pod> list(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, @NonNull String namespace,
+    public List<Pod> list(@NonNull EdsConfigs.Kubernetes kubernetes, @NonNull String namespace,
                           Map<String, String> labels) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             PodList podList = kc.pods()
@@ -170,7 +170,7 @@ public class KubernetesPodRepo {
         }
     }
 
-    public LogWatch watchLog(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+    public LogWatch watchLog(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName,
                              String containerName, Integer lines, OutputStream outputStream) {
         return kubernetesClientBuilder.build(kubernetes)
                 .pods()
@@ -181,7 +181,7 @@ public class KubernetesPodRepo {
                 .watchLog(outputStream);
     }
 
-    public ExecWatch exec(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String podName,
+    public ExecWatch exec(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String podName,
                           String containerName, SimpleListener listener, OutputStream out) {
         return kubernetesClientBuilder.build(kubernetes)
                 .pods()
@@ -200,7 +200,7 @@ public class KubernetesPodRepo {
                 .exec("env", "TERM=xterm", "sh");
     }
 
-    public Pod get(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
+    public Pod get(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String name) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             return kc.pods()
                     .inNamespace(namespace)
@@ -212,7 +212,7 @@ public class KubernetesPodRepo {
         }
     }
 
-    public void delete(@NonNull EdsKubernetesConfigModel.Kubernetes kubernetes, String namespace, String name) {
+    public void delete(@NonNull EdsConfigs.Kubernetes kubernetes, String namespace, String name) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             kc.pods()
                     .inNamespace(namespace)

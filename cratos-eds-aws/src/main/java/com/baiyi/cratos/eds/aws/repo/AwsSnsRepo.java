@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.aws.repo;
 import com.amazonaws.services.sns.model.*;
 import com.baiyi.cratos.common.configuration.CachingConfiguration;
 import com.baiyi.cratos.eds.aws.service.AmazonSnsService;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ import java.util.Map;
 @Component
 public class AwsSnsRepo {
 
-    public List<Topic> listTopics(String regionId, EdsAwsConfigModel.Aws aws) {
+    public List<Topic> listTopics(String regionId, EdsConfigs.Aws aws) {
         ListTopicsRequest request = new ListTopicsRequest();
         List<Topic> topics = Lists.newArrayList();
         String nextToken = null;
@@ -36,7 +36,7 @@ public class AwsSnsRepo {
         return topics;
     }
 
-    public List<Subscription> listSubscriptions(String regionId, EdsAwsConfigModel.Aws aws) {
+    public List<Subscription> listSubscriptions(String regionId, EdsConfigs.Aws aws) {
         ListSubscriptionsRequest request = new ListSubscriptionsRequest();
         List<Subscription> subscriptions = Lists.newArrayList();
         String nextToken = null;
@@ -59,7 +59,7 @@ public class AwsSnsRepo {
      * @return
      */
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:TOPIC:ARN:' + #topicArn", unless = "#result == null")
-    public Map<String, String> getTopicAttributes(String regionId, EdsAwsConfigModel.Aws aws, String topicArn) {
+    public Map<String, String> getTopicAttributes(String regionId, EdsConfigs.Aws aws, String topicArn) {
         GetTopicAttributesRequest request = new GetTopicAttributesRequest();
         request.setTopicArn(topicArn);
         GetTopicAttributesResult result = AmazonSnsService.buildAmazonSNS(regionId, aws)
@@ -68,7 +68,7 @@ public class AwsSnsRepo {
     }
 
     @Cacheable(cacheNames = CachingConfiguration.RepositoryName.SHORT_TERM, key = "'AWS:ACCOUNTID:' + #aws.cred.id + ':REGIONID:' + #regionId + ':SNS:SUBSCRIPTION:ARN:' + #subscriptionArn", unless = "#result == null")
-    public Map<String, String> getSubscriptionAttributes(String regionId, EdsAwsConfigModel.Aws aws,
+    public Map<String, String> getSubscriptionAttributes(String regionId, EdsConfigs.Aws aws,
                                                          String subscriptionArn) {
         GetSubscriptionAttributesRequest request = new GetSubscriptionAttributesRequest();
         request.setSubscriptionArn(subscriptionArn);

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.kubernetes.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder;
 import com.baiyi.cratos.eds.kubernetes.resource.AdvancedHorizontalPodAutoscaler;
 import com.baiyi.cratos.eds.kubernetes.resource.autoscaler.AdvancedHorizontalPodAutoscalerList;
@@ -25,7 +25,7 @@ public class KubernetesAutoscalerRepo {
 
     private final KubernetesClientBuilder kubernetesClientBuilder;
 
-    public AdvancedHorizontalPodAutoscaler create(EdsKubernetesConfigModel.Kubernetes kubernetes,
+    public AdvancedHorizontalPodAutoscaler create(EdsConfigs.Kubernetes kubernetes,
                                                   AdvancedHorizontalPodAutoscaler autoscaler) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             MixedOperation<AdvancedHorizontalPodAutoscaler, AdvancedHorizontalPodAutoscalerList, Resource<AdvancedHorizontalPodAutoscaler>> autoscalerClient = kc.resources(
@@ -40,7 +40,7 @@ public class KubernetesAutoscalerRepo {
         }
     }
 
-    public List<Resource<AdvancedHorizontalPodAutoscaler>> list(EdsKubernetesConfigModel.Kubernetes kubernetes,
+    public List<Resource<AdvancedHorizontalPodAutoscaler>> list(EdsConfigs.Kubernetes kubernetes,
                                                                 String namespace) {
         try (final KubernetesClient kc = kubernetesClientBuilder.build(kubernetes)) {
             MixedOperation<AdvancedHorizontalPodAutoscaler, AdvancedHorizontalPodAutoscalerList, Resource<AdvancedHorizontalPodAutoscaler>> autoscalerClient = kc.resources(

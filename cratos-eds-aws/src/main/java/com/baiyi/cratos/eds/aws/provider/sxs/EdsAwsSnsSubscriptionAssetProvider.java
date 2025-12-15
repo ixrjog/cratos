@@ -7,7 +7,7 @@ import com.baiyi.cratos.eds.aws.model.AwsSns;
 import com.baiyi.cratos.eds.aws.repo.AwsSnsRepo;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
@@ -36,7 +36,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS, assetTypeOf = EdsAssetTypeEnum.AWS_SNS_SUBSCRIPTION)
-public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvider<EdsAwsConfigModel.Aws, AwsSns.Subscription> {
+public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvider<EdsConfigs.Aws, AwsSns.Subscription> {
 
     private final AwsSnsRepo awsSnsRepo;
 
@@ -52,7 +52,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected List<AwsSns.Subscription> listEntities(String regionId, EdsAwsConfigModel.Aws aws) {
+    protected List<AwsSns.Subscription> listEntities(String regionId, EdsConfigs.Aws aws) {
         List<Subscription> subscriptions = awsSnsRepo.listSubscriptions(regionId, aws);
         if (!CollectionUtils.isEmpty(subscriptions)) {
             return toSubscriptions(regionId, aws, subscriptions);
@@ -60,7 +60,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
         return Collections.emptyList();
     }
 
-    private List<AwsSns.Subscription> toSubscriptions(String regionId, EdsAwsConfigModel.Aws aws,
+    private List<AwsSns.Subscription> toSubscriptions(String regionId, EdsConfigs.Aws aws,
                                                       List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .map(e -> {
@@ -76,7 +76,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                   AwsSns.Subscription entity) {
         return newEdsAssetBuilder(instance, entity)
                 // ID
@@ -91,7 +91,7 @@ public class EdsAwsSnsSubscriptionAssetProvider extends BaseEdsRegionAssetProvid
     }
 
     @Override
-    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsAwsConfigModel.Aws> instance,
+    protected List<EdsAssetIndex> toIndexes(ExternalDataSourceInstance<EdsConfigs.Aws> instance,
                                             EdsAsset edsAsset, AwsSns.Subscription entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, AWS_SNS_SUBSCRIPTION_ENDPOINT, entity.getSubscription()

@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -58,18 +58,18 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
 
     @Override
     protected List<Node> listEntities(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        return kubernetesNodeRepo.list(instance.getEdsConfigModel());
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        return kubernetesNodeRepo.list(instance.getConfig());
     }
 
     @Override
     protected List<Node> listEntities(String namespace,
-                                      ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
+                                      ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
         return List.of();
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance,
                                   Node entity) {
         EdsAsset edsAsset = super.convertToEdsAsset(instance, entity);
         Map<String, String> labels = Optional.of(entity)
@@ -91,7 +91,7 @@ public class EdsKubernetesNodeAssetProvider extends BaseEdsKubernetesAssetProvid
      */
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, EdsAsset edsAsset, Node entity) {
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, EdsAsset edsAsset, Node entity) {
         Optional<Map<String, Quantity>> optionalMap = Optional.of(entity)
                 .map(Node::getStatus)
                 .map(NodeStatus::getCapacity);

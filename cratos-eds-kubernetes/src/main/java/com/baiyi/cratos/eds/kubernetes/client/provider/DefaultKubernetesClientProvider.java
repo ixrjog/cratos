@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.kubernetes.client.provider;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.generator.Credential;
 import com.baiyi.cratos.domain.generator.EdsConfig;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
@@ -39,12 +40,12 @@ public class DefaultKubernetesClientProvider implements BaseKubernetesClientProv
      * @param kubernetes
      * @return
      */
-    public KubernetesClient buildClient(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public KubernetesClient buildClient(EdsConfigs.Kubernetes kubernetes) {
         return new io.fabric8.kubernetes.client.KubernetesClientBuilder().withConfig(buildConfig(kubernetes))
                 .build();
     }
 
-    public io.fabric8.kubernetes.client.Config buildConfig(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public io.fabric8.kubernetes.client.Config buildConfig(EdsConfigs.Kubernetes kubernetes) {
         int configId = kubernetes.getConfigId();
         EdsConfig edsConfig = edsConfigService.getById(configId);
         if (edsConfig == null) {
@@ -53,7 +54,7 @@ public class DefaultKubernetesClientProvider implements BaseKubernetesClientProv
         if (IdentityUtils.hasIdentity(edsConfig.getCredentialId())) {
             Credential kubeconfigCredential = credentialService.getById(edsConfig.getCredentialId());
             String contextName = Optional.of(kubernetes)
-                    .map(EdsKubernetesConfigModel.Kubernetes::getKubeconfig)
+                    .map(EdsConfigs.Kubernetes::getKubeconfig)
                     .map(EdsKubernetesConfigModel.Kubeconfig::getUseContext)
                     .orElse(null);
             io.fabric8.kubernetes.client.Config config;
@@ -74,7 +75,7 @@ public class DefaultKubernetesClientProvider implements BaseKubernetesClientProv
     }
 
     @Override
-    public void setProperties(EdsKubernetesConfigModel.Kubernetes kubernetes) {
+    public void setProperties(EdsConfigs.Kubernetes kubernetes) {
     }
 
     @Override

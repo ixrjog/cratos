@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.alimail.repo;
 import com.baiyi.cratos.eds.alimail.model.AlimailDepartment;
 import com.baiyi.cratos.eds.alimail.service.AlimailService;
 import com.baiyi.cratos.eds.alimail.service.AlimailServiceFactory;
-import com.baiyi.cratos.eds.core.config.model.EdsAlimailConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -28,7 +28,7 @@ public class AlimailDepartmentRepo {
      * @param id      部门ID
      * @return
      */
-    public static List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail, String id) {
+    public static List<AlimailDepartment.Department> listSubDepartments(EdsConfigs.Alimail alimail, String id) {
         AlimailService alimailService = AlimailServiceFactory.createAuthenticatedService(alimail);
         List<AlimailDepartment.Department> result = Lists.newArrayList();
         int offset = 0;
@@ -44,7 +44,7 @@ public class AlimailDepartmentRepo {
         return result;
     }
 
-    public static List<AlimailDepartment.Department> listSubDepartments(EdsAlimailConfigModel.Alimail alimail,
+    public static List<AlimailDepartment.Department> listSubDepartments(EdsConfigs.Alimail alimail,
                                                                  List<AlimailDepartment.Department> departments) {
         List<AlimailDepartment.Department> result = Lists.newArrayList();
         List<AlimailDepartment.Department> stack = Lists.newArrayList(departments); // 使用显式栈代替递归

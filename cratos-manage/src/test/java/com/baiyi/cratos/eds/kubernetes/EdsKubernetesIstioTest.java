@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.kubernetes;
 
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.BaseEdsTest;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
@@ -16,7 +16,7 @@ import java.util.List;
  * &#064;Date  2024/5/21 上午9:55
  * &#064;Version 1.0
  */
-public class EdsKubernetesIstioTest extends BaseEdsTest<EdsKubernetesConfigModel.Kubernetes> {
+public class EdsKubernetesIstioTest extends BaseEdsTest<EdsConfigs.Kubernetes> {
 
     public static final int CONFIG_ACK_DEV = 10;
 
@@ -58,7 +58,7 @@ public class EdsKubernetesIstioTest extends BaseEdsTest<EdsKubernetesConfigModel
      * @param namespace
      */
     private void updateIngress(int configId, String namespace) {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(configId);
+        EdsConfigs.Kubernetes cfg = getConfig(configId);
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, namespace);
         for (Ingress ingress : ingressList) {
             if (!ingress.getMetadata()
@@ -77,7 +77,7 @@ public class EdsKubernetesIstioTest extends BaseEdsTest<EdsKubernetesConfigModel
 
     @Test
     void test() {
-        EdsKubernetesConfigModel.Kubernetes cfg = getConfig(104 , EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
+        EdsConfigs.Kubernetes cfg = getConfig(104 , EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         List<Ingress> ingressList = kubernetesIngressRepo.list(cfg, "dev");
         for (Ingress ingress : ingressList) {
             // 打印Ingress注解配置

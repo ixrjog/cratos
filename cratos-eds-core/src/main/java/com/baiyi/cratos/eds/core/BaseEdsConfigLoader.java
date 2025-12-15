@@ -41,7 +41,7 @@ public abstract class BaseEdsConfigLoader<C extends IEdsConfigModel> {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId, assetType);
         return (C) providerHolder.getInstance()
-                .getEdsConfigModel();
+                .getConfig();
     }
 
     public C getConfig(int configId) {

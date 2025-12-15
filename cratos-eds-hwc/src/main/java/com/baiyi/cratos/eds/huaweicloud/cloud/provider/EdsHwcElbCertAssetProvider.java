@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.core.BaseHasRegionsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsHwcConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -37,7 +37,7 @@ import static com.baiyi.cratos.domain.constant.Global.ISO8601;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.HUAWEICLOUD, assetTypeOf = EdsAssetTypeEnum.HUAWEICLOUD_ELB_CERT)
-public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsHwcConfigModel.Hwc, HwcElb.Cert> {
+public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<EdsConfigs.Hwc, HwcElb.Cert> {
 
     public EdsHwcElbCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -52,7 +52,7 @@ public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
 
     @Override
     protected List<HwcElb.Cert> listEntities(String regionId,
-                                             EdsHwcConfigModel.Hwc configModel) throws EdsQueryEntitiesException {
+                                             EdsConfigs.Hwc configModel) throws EdsQueryEntitiesException {
         List<CertificateInfo> certificateInfos = HwcElbRepo.listCertificates(regionId, configModel);
         if (CollectionUtils.isEmpty(certificateInfos)) {
             return List.of();
@@ -71,7 +71,7 @@ public class EdsHwcElbCertAssetProvider extends BaseHasRegionsEdsAssetProvider<E
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsHwcConfigModel.Hwc> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Hwc> instance,
                                          HwcElb.Cert entity) {
         //  https://support.huaweicloud.com/intl/zh-cn/api-elb/ListCertificates.html
         try {

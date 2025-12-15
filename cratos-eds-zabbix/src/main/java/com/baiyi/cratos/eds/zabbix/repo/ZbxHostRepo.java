@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.zabbix.repo;
 
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.zabbix.request.ZbxHostRequest;
 import com.baiyi.cratos.eds.zabbix.result.ZbxHostResult;
 import com.baiyi.cratos.eds.zabbix.result.base.ZbxResponse;
@@ -25,7 +25,7 @@ import static java.util.Map.entry;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ZbxHostRepo {
 
-    public static List<ZbxHostResult.Host> listHost(EdsZabbixConfigModel.Zabbix zbx) {
+    public static List<ZbxHostResult.Host> listHost(EdsConfigs.Zabbix zbx) {
         ZbxHostService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxHostService.class);
         ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .build();
@@ -33,7 +33,7 @@ public class ZbxHostRepo {
         return response.getResult();
     }
 
-    public static List<String> listHostIds(EdsZabbixConfigModel.Zabbix zbx, Map<String, Object> params) {
+    public static List<String> listHostIds(EdsConfigs.Zabbix zbx, Map<String, Object> params) {
         ZbxHostService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxHostService.class);
         ZbxHostRequest.GetHost request = ZbxHostRequest.GetHost.builder()
                 .params(params)
@@ -49,7 +49,7 @@ public class ZbxHostRepo {
                 .collect(Collectors.toList());
     }
 
-    public static ZbxHostResult.HostExtend getHostExtend(EdsZabbixConfigModel.Zabbix zbx, String hostid) {
+    public static ZbxHostResult.HostExtend getHostExtend(EdsConfigs.Zabbix zbx, String hostid) {
         ZbxHostService zbxService = ZbxServiceFactory.createAuthenticatedService(zbx, ZbxHostService.class);
         Map<String, Object> params = Map.ofEntries(entry("output", "extend"),
                 entry("selectParentTemplates", List.of("templateid", "name")), entry("selectHostGroups", "extend"),

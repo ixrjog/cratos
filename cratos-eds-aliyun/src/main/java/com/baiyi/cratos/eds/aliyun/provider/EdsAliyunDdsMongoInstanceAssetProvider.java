@@ -6,6 +6,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDdsMongoRepo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -37,7 +38,7 @@ import static com.baiyi.cratos.domain.constant.Global.ISO8601_1;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DDS_MONGO_INSTANCE)
-public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance> {
+public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance> {
 
     public EdsAliyunDdsMongoInstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                   CredentialService credentialService,
@@ -51,10 +52,10 @@ public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsA
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getMongoDB)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getMongoDB)
                 .map(EdsAliyunConfigModel.MongoDB::getEndpoints)
                 .orElse(Collections.emptyList()));
     }
@@ -62,16 +63,16 @@ public class EdsAliyunDdsMongoInstanceAssetProvider extends BaseHasEndpointsEdsA
     @Override
     protected List<DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance> listEntities(
             String endpoint,
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunDdsMongoRepo.describeDBInstances(endpoint, instance.getEdsConfigModel());
+            return AliyunDdsMongoRepo.describeDBInstances(endpoint, instance.getConfig());
         } catch (Exception ex) {
             throw new EdsQueryEntitiesException(ex.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                   DescribeDBInstancesResponseBody.DescribeDBInstancesResponseBodyDBInstancesDBInstance entity) {
         try {
             return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getDBInstanceId())

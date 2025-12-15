@@ -4,7 +4,7 @@ import com.baiyi.cratos.common.enums.TimeZoneEnum;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * @Version 1.0
  */
 @Slf4j
-public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> extends BaseHasNamespaceEdsAssetProvider<EdsKubernetesConfigModel.Kubernetes, A> {
+public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Kubernetes, A> {
 
     private final KubernetesNamespaceRepo kubernetesNamespaceRepo;
 
@@ -49,8 +49,8 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
 
     @Override
     protected Set<String> listNamespace(
-            ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance) throws EdsQueryEntitiesException {
-        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getEdsConfigModel());
+            ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance) throws EdsQueryEntitiesException {
+        List<Namespace> namespaces = kubernetesNamespaceRepo.list(instance.getConfig());
         if (CollectionUtils.isEmpty(namespaces)) {
             return Sets.newHashSet();
         }
@@ -95,7 +95,7 @@ public abstract class BaseEdsKubernetesAssetProvider<A extends HasMetadata> exte
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsKubernetesConfigModel.Kubernetes> instance, A entity) {
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Kubernetes> instance, A entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(getAssetId(entity))
                 .nameOf(getName(entity))
                 .kindOf(entity.getKind())

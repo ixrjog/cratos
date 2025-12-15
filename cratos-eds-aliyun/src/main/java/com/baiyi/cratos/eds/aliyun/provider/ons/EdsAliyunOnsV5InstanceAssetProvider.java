@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunOnsV5Repo;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -40,7 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_ONS_V5_INSTANCE)
-public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsAliyunConfigModel.Aliyun, ListInstancesResponseBody.ListInstancesResponseBodyDataList> {
+public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAssetProvider<EdsConfigs.Aliyun, ListInstancesResponseBody.ListInstancesResponseBodyDataList> {
 
     public EdsAliyunOnsV5InstanceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
@@ -54,10 +55,10 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
 
     @Override
     protected Set<String> listEndpoints(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         return Sets.newHashSet(Optional.of(instance)
-                .map(ExternalDataSourceInstance::getEdsConfigModel)
-                .map(EdsAliyunConfigModel.Aliyun::getOns)
+                .map(ExternalDataSourceInstance::getConfig)
+                .map(EdsConfigs.Aliyun::getOns)
                 .map(EdsAliyunConfigModel.ONS::getV5)
                 .map(EdsAliyunConfigModel.RocketMQ::getEndpoints)
                 .orElse(Collections.emptyList()));
@@ -65,16 +66,16 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
 
     @Override
     protected List<ListInstancesResponseBody.ListInstancesResponseBodyDataList> listEntities(String endpoint,
-                                                                                             ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance) throws EdsQueryEntitiesException {
+                                                                                             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return AliyunOnsV5Repo.listInstances(endpoint, instance.getEdsConfigModel());
+            return AliyunOnsV5Repo.listInstances(endpoint, instance.getConfig());
         } catch (Exception ex) {
             throw new EdsQueryEntitiesException(ex.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         try {
             return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getInstanceId())
@@ -91,13 +92,13 @@ public class EdsAliyunOnsV5InstanceAssetProvider extends BaseHasEndpointsEdsAsse
 
     @Override
     protected List<EdsAssetIndex> toIndexes(
-            ExternalDataSourceInstance<EdsAliyunConfigModel.Aliyun> instance,
+            ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
             EdsAsset edsAsset,
             ListInstancesResponseBody.ListInstancesResponseBodyDataList entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         try {
             GetInstanceResponse instanceResponse = AliyunOnsV5Repo.getInstance(entity.getRegionId(),
-                    instance.getEdsConfigModel(), entity.getInstanceId());
+                                                                               instance.getConfig(), entity.getInstanceId());
             instanceResponse.getBody().getData().getNetworkInfo().endpoints.forEach(endpoint -> {
 
                 if ("TCP_VPC".equals(endpoint.getEndpointType())) {

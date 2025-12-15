@@ -3,8 +3,9 @@ package com.baiyi.cratos.facade.gitlab;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.loader.EdsGitLabConfigLoader;
+import com.baiyi.cratos.eds.core.config.model.EdsGitLabConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class EdsGitLabInstanceManager {
         return edsInstanceQueryHelper.queryInstance(INSTANCE_TYPES, SysTagKeys.EVENT.getKey())
                 .stream()
                 .filter(instance -> Optional.ofNullable(edsGitLabConfigLoader.getConfig(instance.getConfigId()))
-                        .map(EdsGitLabConfigModel.GitLab::getSystemHooks)
+                        .map(EdsConfigs.GitLab::getSystemHooks)
                         .map(EdsGitLabConfigModel.SystemHooks::getToken)
                         .filter(hookToken::equals)
                         .isPresent())

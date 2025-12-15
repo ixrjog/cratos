@@ -5,7 +5,7 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.transfer.AWSTransfer;
 import com.amazonaws.services.transfer.AWSTransferClientBuilder;
 import com.baiyi.cratos.eds.aws.core.AwsCredentialsManager;
-import com.baiyi.cratos.eds.core.config.model.EdsAwsConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AwsTransferService {
 
-    public static AWSTransfer buildAwsTransfer(String regionId, EdsAwsConfigModel.Aws aws) {
+    public static AWSTransfer buildAwsTransfer(String regionId, EdsConfigs.Aws aws) {
         AWSCredentials credentials = AwsCredentialsManager.buildAWSCredentials(aws);
         return AWSTransferClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))

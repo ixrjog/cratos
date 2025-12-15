@@ -5,6 +5,7 @@ import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.client.AliyunDmsClient;
 import com.baiyi.cratos.eds.aliyun.client.MyDmsClient;
 import com.baiyi.cratos.eds.aliyun.model.AliyunDms;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.exception.EdsRepoException;
 import com.google.common.collect.Lists;
@@ -24,7 +25,7 @@ public class AliyunDmsRepo {
 
     public static final int PAGE_SIZE = 50;
 
-    public static AliyunDms.Tenant getTenant(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    public static AliyunDms.Tenant getTenant(EdsConfigs.Aliyun aliyun) throws Exception {
         com.aliyun.dms_enterprise20181101.Client client = AliyunDmsClient.createClient(aliyun);
         GetUserActiveTenantRequest request = new GetUserActiveTenantRequest();
         GetUserActiveTenantResponse response = client.getUserActiveTenant(request);
@@ -34,9 +35,9 @@ public class AliyunDmsRepo {
                 .orElseThrow(() -> new EdsRepoException("DMS tenant does not exist")), AliyunDms.Tenant.class);
     }
 
-    public static List<AliyunDms.User> listUser(EdsAliyunConfigModel.Aliyun aliyun) throws Exception {
+    public static List<AliyunDms.User> listUser(EdsConfigs.Aliyun aliyun) throws Exception {
         long tid = Optional.of(aliyun)
-                .map(EdsAliyunConfigModel.Aliyun::getDms)
+                .map(EdsConfigs.Aliyun::getDms)
                 .map(EdsAliyunConfigModel.DMS::getTid)
                 .orElse(-1L);
         if (tid == -1L) {
@@ -45,7 +46,7 @@ public class AliyunDmsRepo {
         return listUser(aliyun, tid);
     }
 
-    public static List<AliyunDms.User> listUser(EdsAliyunConfigModel.Aliyun aliyun, Long tid) throws Exception {
+    public static List<AliyunDms.User> listUser(EdsConfigs.Aliyun aliyun, Long tid) throws Exception {
         com.aliyun.dms_enterprise20181101.Client client = AliyunDmsClient.createClient(aliyun);
         ListUsersRequest request = new ListUsersRequest().setPageSize(PAGE_SIZE)
                 .setTid(tid);
@@ -72,7 +73,7 @@ public class AliyunDmsRepo {
         return users;
     }
 
-    public static void registerUser(EdsAliyunConfigModel.Aliyun aliyun, Long tid,
+    public static void registerUser(EdsConfigs.Aliyun aliyun, Long tid,
                                     AliyunDms.User user) throws Exception {
         MyDmsClient myDmsClient = AliyunDmsClient.createMyClient(aliyun);
         // DINGTALK

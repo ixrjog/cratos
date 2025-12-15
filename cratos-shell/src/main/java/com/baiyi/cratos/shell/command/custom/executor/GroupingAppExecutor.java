@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.eds.core.config.model.EdsKubernetesConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
@@ -103,7 +103,7 @@ public class GroupingAppExecutor {
     }
 
     public void updateReplicas(EdsAsset edsAsset, AppGroupSpec.Group group, int newGroupReplicas) {
-        EdsKubernetesConfigModel.Kubernetes kubernetes = getConfig(edsAsset.getInstanceId(),
+        EdsConfigs.Kubernetes kubernetes = getConfig(edsAsset.getInstanceId(),
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         Deployment deployment = kubernetesDeploymentRepo.get(kubernetes, "prod", edsAsset.getName());
         if (deployment == null) {
@@ -127,12 +127,12 @@ public class GroupingAppExecutor {
         helper.printSuccess(msg);
     }
 
-    public EdsKubernetesConfigModel.Kubernetes getConfig(int instanceId, String assetType) {
+    public EdsConfigs.Kubernetes getConfig(int instanceId, String assetType) {
         EdsInstance edsInstance = edsInstanceService.getById(instanceId);
         EdsInstanceProviderHolder<?, ?> providerHolder = holderBuilder.newHolder(instanceId,
                 assetType);
-        return (EdsKubernetesConfigModel.Kubernetes) providerHolder.getInstance()
-                .getEdsConfigModel();
+        return (EdsConfigs.Kubernetes) providerHolder.getInstance()
+                .getConfig();
     }
 
 }

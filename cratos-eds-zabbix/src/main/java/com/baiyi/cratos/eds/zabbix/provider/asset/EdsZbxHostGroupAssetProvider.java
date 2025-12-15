@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.zabbix.provider.asset;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.model.EdsZabbixConfigModel;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ZABBIX, assetTypeOf = EdsAssetTypeEnum.ZBX_HOSTGROUP)
-public class EdsZbxHostGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsZabbixConfigModel.Zabbix, ZbxHostGroupResult.HostGroup> {
+public class EdsZbxHostGroupAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Zabbix, ZbxHostGroupResult.HostGroup> {
 
     public EdsZbxHostGroupAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                         CredentialService credentialService, ConfigCredTemplate configCredTemplate,
@@ -41,16 +41,16 @@ public class EdsZbxHostGroupAssetProvider extends BaseEdsInstanceAssetProvider<E
 
     @Override
     protected List<ZbxHostGroupResult.HostGroup> listEntities(
-            ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance) throws EdsQueryEntitiesException {
+            ExternalDataSourceInstance<EdsConfigs.Zabbix> instance) throws EdsQueryEntitiesException {
         try {
-            return ZbxHostGroupRepo.listHostGroup(instance.getEdsConfigModel());
+            return ZbxHostGroupRepo.listHostGroup(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
     }
 
     @Override
-    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsZabbixConfigModel.Zabbix> instance,
+    protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Zabbix> instance,
                                          ZbxHostGroupResult.HostGroup entity) {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getGroupid())
                 .assetKeyOf(entity.getName())

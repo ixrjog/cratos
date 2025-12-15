@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.jenkins.helper;
+package com.baiyi.cratos.eds.jenkins;
 
 import com.baiyi.cratos.eds.jenkins.sdk.client.JenkinsHttpConnection;
 import com.baiyi.cratos.eds.jenkins.sdk.model.BaseModel;
