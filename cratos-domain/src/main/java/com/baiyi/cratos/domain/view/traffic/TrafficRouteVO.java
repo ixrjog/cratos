@@ -53,6 +53,7 @@ public class TrafficRouteVO {
         private String recordType;
         private Boolean valid;
         private String comment;
+        private String zoneId;
 
         public TrafficRoute toTrafficRoute() {
             return TrafficRoute.builder()

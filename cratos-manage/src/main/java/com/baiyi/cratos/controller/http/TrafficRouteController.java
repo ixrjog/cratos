@@ -55,4 +55,12 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Switch to traffic record target")
+    @PutMapping(value = "/record/target/switch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> switchToTarget(
+            @RequestBody @Valid TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
+        trafficRouteFacade.switchToTarget(switchRecordTarget);
+        return HttpResult.SUCCESS;
+    }
+
 }

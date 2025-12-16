@@ -21,4 +21,6 @@ public interface TrafficRouteFacade {
 
     void addTrafficRecordTarget(TrafficRouteParam.AddRecordTarget addRouteTarget);
 
+    void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
+
 }

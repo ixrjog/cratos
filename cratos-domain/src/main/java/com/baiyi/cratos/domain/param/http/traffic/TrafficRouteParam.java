@@ -9,9 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -71,6 +69,8 @@ public class TrafficRouteParam {
         private String name;
         @NotNull(message = "DNS resolver instance ID cannot be null")
         private Integer dnsResolverInstanceId;
+        @Null(message = "ZoneID must be null")
+        private String zoneId;
         @NotBlank(message = "Record type cannot be blank")
         private String recordType;
         @NotNull(message = "Valid status cannot be null")
@@ -127,6 +127,8 @@ public class TrafficRouteParam {
     }
 
     @Data
+    @Builder
+    @AllArgsConstructor
     @NoArgsConstructor
     @Schema
     public static class SwitchRecordTarget {

@@ -12,6 +12,9 @@ import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -19,14 +22,14 @@ import org.apache.commons.lang3.StringUtils;
  * &#064;Version 1.0
  */
 @RequiredArgsConstructor
-public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DNSResolver {
+public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> implements DNSResolver {
 
     protected final EdsAssetService edsAssetService;
     protected final TrafficRouteService trafficRouteService;
     protected final TrafficRecordTargetService trafficRecordTargetService;
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
 
-    protected static final int MAX_LOAD_BALANCING = 2;
+    private static final int MAX_LOAD_BALANCING = 2;
 
     protected TrafficRecordTarget getTrafficRecordTargetById(int trafficRecordTargetId) {
         TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(trafficRecordTargetId);
@@ -53,7 +56,7 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DN
     }
 
     protected String getRR(TrafficRoute trafficRoute) {
-        return StringUtils.removeEnd(trafficRoute.getDomainRecord(), trafficRoute.getDomain());
+        return StringUtils.removeEnd(trafficRoute.getDomainRecord(), "." + trafficRoute.getDomain());
     }
 
     protected String toFQDN(String domainName) {
@@ -61,6 +64,22 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DN
             return domainName;
         }
         return domainName.endsWith(".") ? domainName : domainName + ".";
+    }
+
+    protected abstract List<Record> getTrafficRouteRecords(Config config, TrafficRoute trafficRoute);
+
+    protected void validateRecordCount(List<Record> matchedRecords) {
+        if (!CollectionUtils.isEmpty(matchedRecords) && matchedRecords.size() > MAX_LOAD_BALANCING) {
+            TrafficRouteException.runtime(
+                    "Current routing load balancing count exceeds maximum: max routing count {}, current routing count {}",
+                    MAX_LOAD_BALANCING, matchedRecords.size()
+            );
+        }
+    }
+
+    @Override
+    public String getZoneId(TrafficRoute trafficRoute) {
+       return trafficRoute.getDomainRecord();
     }
 
 }

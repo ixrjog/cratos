@@ -6,12 +6,16 @@ import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
+import com.baiyi.cratos.eds.dns.DNSResolver;
+import com.baiyi.cratos.eds.dns.DNSResolverFactory;
 import com.baiyi.cratos.facade.TrafficRouteFacade;
+import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import com.baiyi.cratos.wrapper.traffic.TrafficRouteWrapper;
@@ -34,12 +38,35 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     private final TrafficRouteService trafficRouteService;
     private final TrafficRecordTargetService trafficRecordTargetService;
     private final TrafficRouteWrapper routeWrapper;
+    private final EdsInstanceService edsInstanceService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.TRAFFIC_ROUTE)
     public DataTable<TrafficRouteVO.Route> queryRoutePage(TrafficRouteParam.RoutePageQuery pageQuery) {
         DataTable<TrafficRoute> table = trafficRouteService.queryPageByParam(pageQuery.toParam());
         return routeWrapper.wrapToTarget(table);
+    }
+
+    @Override
+    public void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
+        TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(
+                switchRecordTarget.getRecordTargetId());
+        if (trafficRecordTarget == null) {
+            TrafficRouteException.runtime("traffic record target id not found");
+        }
+        TrafficRoute trafficRoute = trafficRouteService.getById(trafficRecordTarget.getTrafficRouteId());
+        if (trafficRoute == null) {
+            TrafficRouteException.runtime("traffic route id not found");
+        }
+        EdsInstance edsInstance = edsInstanceService.getById(trafficRoute.getDnsResolverInstanceId());
+        if (edsInstance == null) {
+            TrafficRouteException.runtime("eds instance id not found");
+        }
+        DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
+        if(dnsResolver == null) {
+            TrafficRouteException.runtime("dnsResolver id not found");
+        }
+        dnsResolver.switchToRoute(switchRecordTarget);
     }
 
     @Override

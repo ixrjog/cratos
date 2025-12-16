@@ -13,6 +13,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="dns_resolver_instance_id" jdbcType="INTEGER" property="dnsResolverInstanceId"/>
         <result column="record_type" jdbcType="VARCHAR" property="recordType"/>
+        <result column="zone_id" jdbcType="VARCHAR" property="zoneId"/>
         <result column="valid" jdbcType="BIT" property="valid"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
