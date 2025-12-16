@@ -1,10 +1,13 @@
 package com.baiyi.cratos.eds.dns.impl;
 
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
+import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
+import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -15,18 +18,20 @@ import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author baiyi
  * @Date 2025/12/12 10:19
  * @Version 1.0
  */
+@Slf4j
 @Component
-
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN)
 public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun> {
 
@@ -39,10 +44,10 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun> {
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
         // 获取阿里云配置
-        EdsConfigs.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
         // 查询 DNS 记录
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
-                aliyun, trafficRoute.getDomain());
+                config, trafficRoute.getDomain());
         // 查找匹配的记录
         return findMatchedRecord(records, trafficRoute);
     }
@@ -51,8 +56,114 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun> {
     public void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
         TrafficRecordTarget trafficRecordTarget = getTrafficRecordTargetById(switchRecordTarget.getRecordTargetId());
         TrafficRoute trafficRoute = getTrafficRouteById(trafficRecordTarget.getTrafficRouteId());
-        // 获取阿里云配置
-        EdsConfigs.Aliyun aliyun = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        List<DescribeDomainRecordsResponseBody.Record> matchedRecords = getMatchedRecords(config, trafficRoute);
+        validateRecordCount(matchedRecords);
+        TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
+        if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
+            handleSingleTargetRouting(config, trafficRoute, trafficRecordTarget, matchedRecords);
+        } else {
+            TrafficRouteException.runtime("Current operation not implemented");
+        }
+    }
+
+    private List<DescribeDomainRecordsResponseBody.Record> getMatchedRecords(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute) {
+        List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
+                aliyun, trafficRoute.getDomain());
+        String recordType = trafficRoute.getRecordType();
+        String domainRecord = trafficRoute.getDomainRecord();
+        return records.stream()
+                .filter(record -> recordType.equals(record.getType()) && domainRecord.equals(
+                        buildFullRecordName(record)))
+                .toList();
+    }
+
+    private void validateRecordCount(List<DescribeDomainRecordsResponseBody.Record> matchedRecords) {
+        if (!CollectionUtils.isEmpty(matchedRecords) && matchedRecords.size() > MAX_LOAD_BALANCING) {
+            TrafficRouteException.runtime(
+                    "Current routing load balancing count exceeds maximum: max routing count {}, current routing count {}", 
+                    MAX_LOAD_BALANCING, matchedRecords.size()
+            );
+        }
+    }
+
+    private void handleSingleTargetRouting(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute, 
+                                         TrafficRecordTarget trafficRecordTarget,
+                                         List<DescribeDomainRecordsResponseBody.Record> matchedRecords) {
+        DnsTypes dnsType = DnsTypes.valueOf(trafficRecordTarget.getRecordType());
+        
+        if (CollectionUtils.isEmpty(matchedRecords)) {
+            addNewRecord(aliyun, trafficRoute, trafficRecordTarget, dnsType);
+        } else if (matchedRecords.size() == 1) {
+            updateSingleRecord(aliyun, trafficRoute, trafficRecordTarget, matchedRecords.getFirst(), dnsType);
+        } else {
+            handleMultipleRecords(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsType);
+        }
+    }
+
+    private void addNewRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute, 
+                            TrafficRecordTarget trafficRecordTarget, DnsTypes dnsType) {
+        AliyunDnsRepo.addDomainRecord(
+                aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
+                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+        );
+    }
+
+    private void updateSingleRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
+                                  TrafficRecordTarget trafficRecordTarget,
+                                  DescribeDomainRecordsResponseBody.Record record, DnsTypes dnsType) {
+        String recordType = trafficRecordTarget.getRecordType();
+        if (!recordType.equals(record.getType()) || !record.getValue().equals(trafficRecordTarget.getRecordValue())) {
+            AliyunDnsRepo.updateDomainRecord(
+                    aliyun, record.getRecordId(), getRR(trafficRoute),
+                    dnsType.name(), trafficRecordTarget.getRecordValue(),
+                    trafficRecordTarget.getTtl()
+            );
+        } else {
+            TrafficRouteException.runtime("DNS record already exists, no operation performed");
+        }
+    }
+
+    private void handleMultipleRecords(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
+                                     TrafficRecordTarget trafficRecordTarget,
+                                     List<DescribeDomainRecordsResponseBody.Record> matchedRecords, DnsTypes dnsType) {
+        Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = matchedRecords.stream()
+                .filter(e -> e.getValue().equals(trafficRecordTarget.getRecordValue()))
+                .findFirst();
+                
+        if (optionalRecord.isPresent()) {
+            updateAndDeleteOthers(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, optionalRecord.get(), dnsType);
+        } else {
+            addAndDeleteAll(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsType);
+        }
+    }
+
+    private void updateAndDeleteOthers(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
+                                     TrafficRecordTarget trafficRecordTarget,
+                                     List<DescribeDomainRecordsResponseBody.Record> matchedRecords,
+                                     DescribeDomainRecordsResponseBody.Record targetRecord, DnsTypes dnsType) {
+        final String recordId = targetRecord.getRecordId();
+        AliyunDnsRepo.updateDomainRecord(
+                aliyun, recordId, getRR(trafficRoute), dnsType.name(),
+                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+        );
+        
+        matchedRecords.forEach(record -> {
+            if (!record.getRecordId().equals(recordId)) {
+                AliyunDnsRepo.deleteDomainRecord(aliyun, record.getRecordId());
+            }
+        });
+    }
+
+    private void addAndDeleteAll(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
+                               TrafficRecordTarget trafficRecordTarget,
+                               List<DescribeDomainRecordsResponseBody.Record> matchedRecords, DnsTypes dnsType) {
+        AliyunDnsRepo.addDomainRecord(
+                aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
+                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+        );
+        
+        matchedRecords.forEach(record -> AliyunDnsRepo.deleteDomainRecord(aliyun, record.getRecordId()));
     }
 
     private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {

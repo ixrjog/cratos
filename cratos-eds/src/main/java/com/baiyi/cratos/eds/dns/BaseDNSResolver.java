@@ -11,6 +11,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * &#064;Author  baiyi
@@ -24,6 +25,8 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DN
     protected final TrafficRouteService trafficRouteService;
     protected final TrafficRecordTargetService trafficRecordTargetService;
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
+
+    protected static final int MAX_LOAD_BALANCING = 2;
 
     protected TrafficRecordTarget getTrafficRecordTargetById(int trafficRecordTargetId) {
         TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(trafficRecordTargetId);
@@ -47,6 +50,10 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig> implements DN
                 trafficRoute.getDnsResolverInstanceId(), assetTypeEnum.name());
         return holder.getInstance()
                 .getConfig();
+    }
+
+    protected String getRR(TrafficRoute trafficRoute) {
+        return StringUtils.removeEnd(trafficRoute.getDomainRecord(), trafficRoute.getDomain());
     }
 
     protected String toFQDN(String domainName) {
