@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -83,7 +83,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     private void handleSingleTargetRouting(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                            TrafficRecordTarget trafficRecordTarget,
                                            List<DescribeDomainRecordsResponseBody.Record> matchedRecords) {
-        DnsTypes dnsType = DnsTypes.valueOf(trafficRecordTarget.getRecordType());
+        DnsRRType dnsType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
 
         if (CollectionUtils.isEmpty(matchedRecords)) {
             addNewRecord(aliyun, trafficRoute, trafficRecordTarget, dnsType);
@@ -95,7 +95,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     }
 
     private void addNewRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                              TrafficRecordTarget trafficRecordTarget, DnsTypes dnsType) {
+                              TrafficRecordTarget trafficRecordTarget, DnsRRType dnsType) {
         AliyunDnsRepo.addDomainRecord(
                 aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
                 trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
@@ -104,7 +104,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private void updateSingleRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                     TrafficRecordTarget trafficRecordTarget,
-                                    DescribeDomainRecordsResponseBody.Record record, DnsTypes dnsType) {
+                                    DescribeDomainRecordsResponseBody.Record record, DnsRRType dnsType) {
         String recordType = trafficRecordTarget.getRecordType();
         if (!recordType.equals(record.getType()) || !record.getValue()
                 .equals(trafficRecordTarget.getRecordValue())) {
@@ -120,7 +120,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     private void handleMultipleRecords(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                        TrafficRecordTarget trafficRecordTarget,
                                        List<DescribeDomainRecordsResponseBody.Record> matchedRecords,
-                                       DnsTypes dnsType) {
+                                       DnsRRType dnsType) {
         Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = matchedRecords.stream()
                 .filter(e -> e.getValue()
                         .equals(trafficRecordTarget.getRecordValue()))
@@ -137,7 +137,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     private void updateAndDeleteOthers(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                        TrafficRecordTarget trafficRecordTarget,
                                        List<DescribeDomainRecordsResponseBody.Record> matchedRecords,
-                                       DescribeDomainRecordsResponseBody.Record targetRecord, DnsTypes dnsType) {
+                                       DescribeDomainRecordsResponseBody.Record targetRecord, DnsRRType dnsType) {
         final String recordId = targetRecord.getRecordId();
         AliyunDnsRepo.updateDomainRecord(
                 aliyun, recordId, getRR(trafficRoute), dnsType.name(),
@@ -154,7 +154,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private void addAndDeleteAll(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                  TrafficRecordTarget trafficRecordTarget,
-                                 List<DescribeDomainRecordsResponseBody.Record> matchedRecords, DnsTypes dnsType) {
+                                 List<DescribeDomainRecordsResponseBody.Record> matchedRecords, DnsRRType dnsType) {
         AliyunDnsRepo.addDomainRecord(
                 aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
                 trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()

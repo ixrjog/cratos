@@ -20,7 +20,6 @@ import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.EdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.AssetUtils;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.core.util.EdsConfigUtils;
@@ -55,7 +54,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     protected final CredentialService credentialService;
     private final ConfigCredTemplate configCredTemplate;
     protected final EdsAssetIndexFacade edsAssetIndexFacade;
-    private final UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler;
+    private final AssetToBusinessObjectUpdater assetToBusinessObjectUpdater;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
 
     public static final String INDEX_VALUE_DIVISION_SYMBOL = ",";
@@ -218,7 +217,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
             if (!equals(edsAsset, newEdsAsset)) {
                 edsAssetService.updateByPrimaryKey(newEdsAsset);
                 // 更新绑定的资产
-                updateBusinessFromAssetHandler.update(newEdsAsset);
+                assetToBusinessObjectUpdater.update(newEdsAsset);
             }
         }
         return newEdsAsset;
@@ -244,7 +243,6 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     protected void afterAssetCreated(EdsAsset asset) {
         // 执行后续处理逻辑
     }
-
 
     /**
      * 重写

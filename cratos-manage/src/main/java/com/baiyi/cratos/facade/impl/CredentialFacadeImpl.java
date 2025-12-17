@@ -54,8 +54,6 @@ public class CredentialFacadeImpl implements CredentialFacade {
         return credentialWrapper.wrapToTarget(table);
     }
 
-    // 查询用户有效的凭据
-
     @Override
     public void revokeCredentialById(int id) {
         Credential credential = Credential.builder()

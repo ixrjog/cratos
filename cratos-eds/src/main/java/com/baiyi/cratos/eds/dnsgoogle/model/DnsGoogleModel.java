@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.util.dnsgoogle.model;
+package com.baiyi.cratos.eds.dnsgoogle.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;

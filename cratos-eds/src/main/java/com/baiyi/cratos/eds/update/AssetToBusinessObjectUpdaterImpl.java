@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.update;
 
 import com.baiyi.cratos.domain.generator.BusinessAssetBound;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.eds.core.UpdateBusinessFromAssetHandler;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UpdateBusinessFromAssetHandlerImpl implements UpdateBusinessFromAssetHandler {
+public class AssetToBusinessObjectUpdaterImpl implements AssetToBusinessObjectUpdater {
 
     private final BusinessAssetBoundService businessAssetBoundService;
 

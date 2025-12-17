@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.aliyun.provider;
 import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -12,7 +13,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -35,7 +35,7 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
     public EdsAliyunCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                       CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                       EdsAssetIndexFacade edsAssetIndexFacade,
-                                      UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                      AssetToBusinessObjectUpdater updateBusinessFromAssetHandler,
                                       EdsInstanceProviderHolderBuilder holderBuilder, AliyunCertRepo aliyunCertRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 updateBusinessFromAssetHandler, holderBuilder);

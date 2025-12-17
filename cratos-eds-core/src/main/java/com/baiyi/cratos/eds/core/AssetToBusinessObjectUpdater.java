@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.EdsAsset;
  * &#064;Date  2025/12/17 11:00
  * &#064;Version 1.0
  */
-public interface UpdateBusinessFromAssetHandler {
+public interface AssetToBusinessObjectUpdater {
 
     void update(EdsAsset asset);
 

@@ -1,9 +1,9 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.domain.util.dnsgoogle.DnsGoogleUtils;
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
-import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
+import com.baiyi.cratos.eds.dnsgoogle.DnsGoogleUtils;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.eds.dnsgoogle.model.DnsGoogleModel;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +19,7 @@ public class DnsGoogleUtilsTest extends BaseUnit {
 
     @Test
     void test() {
-        DnsGoogleModel.DnsResolve dnsResolve = dnsGoogleUtils.resolve("h5.palmpay.app", DnsTypes.CNAME);
+        DnsGoogleModel.DnsResolve dnsResolve = dnsGoogleUtils.resolve("h5.palmpay.app", DnsRRType.CNAME);
         System.out.println(dnsResolve);
     }
 

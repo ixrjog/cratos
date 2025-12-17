@@ -1,8 +1,8 @@
-package com.baiyi.cratos.domain.util.dnsgoogle;
+package com.baiyi.cratos.eds.dnsgoogle;
 
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
-import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
-import com.baiyi.cratos.domain.util.dnsgoogle.service.DnsGoogleService;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.eds.dnsgoogle.model.DnsGoogleModel;
+import com.baiyi.cratos.eds.dnsgoogle.service.DnsGoogleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +21,10 @@ public class DnsGoogleUtils {
 
     @Deprecated
     public DnsGoogleModel.DnsResolve resolve(String name) {
-        return resolve(name, DnsTypes.CNAME);
+        return resolve(name, DnsRRType.CNAME);
     }
 
-    public DnsGoogleModel.DnsResolve resolve(String name, DnsTypes type) {
+    public DnsGoogleModel.DnsResolve resolve(String name, DnsRRType type) {
         Map<String, String> param = Map.of("name", name, "type", type.name());
         return dnsGoogleService.resolve(param);
     }

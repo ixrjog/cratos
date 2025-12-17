@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 import com.baiyi.cratos.eds.dns.DNSResolver;
 import com.baiyi.cratos.eds.dns.DNSResolverFactory;
@@ -88,8 +88,8 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
 
     private void validateRecordType(String recordType) {
         try {
-            DnsTypes dnsType = DnsTypes.valueOf(recordType);
-            if (!Set.of(DnsTypes.CNAME, DnsTypes.A)
+            DnsRRType dnsType = DnsRRType.valueOf(recordType);
+            if (!Set.of(DnsRRType.CNAME, DnsRRType.A)
                     .contains(dnsType)) {
                 throw new TrafficRouteException("Invalid DNS record type");
             }
@@ -114,11 +114,11 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
         }
         trafficRecordTarget.setResourceRecord(trafficRoute.getDomainRecord());
         validateRecordType(trafficRecordTarget.getRecordType());
-        if (DnsTypes.CNAME.name()
+        if (DnsRRType.CNAME.name()
                 .equals(trafficRecordTarget.getRecordType())) {
             // 校验 recordValue 是否是域名
         }
-        if (DnsTypes.A.name()
+        if (DnsRRType.A.name()
                 .equals(trafficRecordTarget.getRecordType())) {
             if (!IpUtils.isIP(trafficRecordTarget.getRecordValue())) {
                 TrafficRouteException.runtime("Invalid IP address.");

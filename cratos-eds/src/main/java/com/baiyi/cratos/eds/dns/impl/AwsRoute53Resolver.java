@@ -8,10 +8,11 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aws.enums.Route53RoutingPolicyEnum;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.annotation.ToFQDN;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -32,6 +33,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Component
+@ToFQDN
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS)
 public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, ResourceRecordSet> {
 
@@ -60,10 +62,10 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     protected List<ResourceRecordSet> getTrafficRouteRecords(EdsConfigs.Aws config, TrafficRoute trafficRoute) {
         String hostedZoneId = getZoneId(trafficRoute);
         String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
-        DnsTypes dnsType = DnsTypes.valueOf(trafficRoute.getRecordType());
+        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
         return resourceRecordSets.stream()
-                .filter(record -> dnsType.name()
+                .filter(record -> dnsRRType.name()
                         .equals(record.getType()) && domainRecordFqdn.equals(record.getName()))
                 .toList();
     }
@@ -77,25 +79,25 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         if (!StringUtils.hasText(hostedZoneId)) {
             TrafficRouteException.runtime("未找到HostedZoneId");
         }
-        DnsTypes dnsType = DnsTypes.valueOf(trafficRoute.getRecordType());
+        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         List<ResourceRecordSet> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
         validateRecordCount(matchedRecords);
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
             // 删除老记录
-            deleteRecords(config, hostedZoneId, trafficRecordTarget, dnsType, matchedRecords);
+            deleteRecords(config, hostedZoneId, trafficRecordTarget, matchedRecords);
             // 新增简单路由记录
-            addSimpleRecord(config, hostedZoneId, trafficRecordTarget, dnsType);
+            addSimpleRecord(config, hostedZoneId, trafficRecordTarget, dnsRRType);
         } else {
             TrafficRouteException.runtime("Current operation not implemented");
         }
     }
 
     private void addSimpleRecord(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget,
-                                 DnsTypes dnsType) {
+                                 DnsRRType dnsRRType) {
         ResourceRecordSet rrs = new ResourceRecordSet(
-                toFQDN(trafficRecordTarget.getResourceRecord()), RRType.valueOf(dnsType.name()));
+                toFQDN(trafficRecordTarget.getResourceRecord()), dnsRRType.toRRType());
         long ttl = trafficRecordTarget.getTtl() != null ? trafficRecordTarget.getTtl() : 300L;
         rrs.setTTL(ttl);
         rrs.setResourceRecords(List.of(new ResourceRecord(trafficRecordTarget.getRecordValue())));
@@ -104,8 +106,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     }
 
     // 前置删除解析
-    private void deleteRecords(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget,
-                               DnsTypes dnsType, List<ResourceRecordSet> matchedRecords) {
+    private void deleteRecords(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget, List<ResourceRecordSet> matchedRecords) {
         // 没有记录
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return;

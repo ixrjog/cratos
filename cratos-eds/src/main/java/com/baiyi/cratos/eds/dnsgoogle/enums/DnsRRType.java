@@ -1,5 +1,6 @@
-package com.baiyi.cratos.domain.util.dnsgoogle.enums;
+package com.baiyi.cratos.eds.dnsgoogle.enums;
 
+import com.amazonaws.services.route53.model.RRType;
 import lombok.Getter;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Getter;
  * @Version 1.0
  */
 @Getter
-public enum DnsTypes {
+public enum DnsRRType {
 
     A(1),
     NS(2),
@@ -31,8 +32,12 @@ public enum DnsTypes {
 
     private final int type;
 
-    DnsTypes(int type) {
+    DnsRRType(int type) {
         this.type = type;
+    }
+
+    public RRType toRRType() {
+        return RRType.valueOf(this.name());
     }
 
 }

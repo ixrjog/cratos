@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.googlecloud.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseMultipleSourcesEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -12,7 +13,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.googlecloud.model.GoogleCertificateModel;
 import com.baiyi.cratos.eds.googlecloud.repo.GcpCredentialRepo;
@@ -40,11 +40,11 @@ public class EdsGcpCertificateAssetProvider extends BaseMultipleSourcesEdsAssetP
     public EdsGcpCertificateAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
-                                          UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                           EdsInstanceProviderHolderBuilder holderBuilder,
                                           GcpCredentialRepo googleCloudCredentialRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder);
+                assetToBusinessObjectUpdater, holderBuilder);
         this.googleCloudCredentialRepo = googleCloudCredentialRepo;
     }
 

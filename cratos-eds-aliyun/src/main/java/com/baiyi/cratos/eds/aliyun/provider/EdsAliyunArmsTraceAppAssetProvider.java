@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.model.AliyunArms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunArmsRepo;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -17,7 +18,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
@@ -53,10 +53,10 @@ public class EdsAliyunArmsTraceAppAssetProvider extends BaseEdsInstanceAssetProv
                                               CredentialService credentialService,
                                               ConfigCredTemplate configCredTemplate,
                                               EdsAssetIndexFacade edsAssetIndexFacade,
-                                              UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                              AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                               EdsInstanceProviderHolderBuilder holderBuilder, EnvFacade envFacade) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder);
+                assetToBusinessObjectUpdater, holderBuilder);
         this.envFacade = envFacade;
     }
 

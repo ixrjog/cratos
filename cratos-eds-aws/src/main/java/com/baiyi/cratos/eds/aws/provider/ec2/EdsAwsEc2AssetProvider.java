@@ -7,6 +7,7 @@ import com.baiyi.cratos.eds.aws.model.InstanceModel;
 import com.baiyi.cratos.eds.aws.repo.AwsEc2Repo;
 import com.baiyi.cratos.eds.aws.repo.Ec2InstancesRepo;
 import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -16,7 +17,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -43,10 +43,10 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
     public EdsAwsEc2AssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                   EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
-                                  AwsEc2Repo awsEc2Repo, UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                  AwsEc2Repo awsEc2Repo, AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                   EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder);
+                assetToBusinessObjectUpdater, holderBuilder);
         this.ec2InstancesRepo = ec2InstancesRepo;
         this.awsEc2Repo = awsEc2Repo;
     }

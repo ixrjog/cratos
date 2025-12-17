@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.core.update;
+package com.baiyi.cratos.eds.update;
 
 import lombok.extern.slf4j.Slf4j;
 

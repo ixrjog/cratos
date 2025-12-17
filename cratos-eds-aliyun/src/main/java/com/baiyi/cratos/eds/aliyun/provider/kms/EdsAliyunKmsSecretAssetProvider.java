@@ -15,6 +15,7 @@ import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.eds.aliyun.model.AliyunKms;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasEndpointsEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -25,7 +26,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
@@ -56,11 +56,11 @@ public class EdsAliyunKmsSecretAssetProvider extends BaseHasEndpointsEdsAssetPro
     public EdsAliyunKmsSecretAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                            CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                            EdsAssetIndexFacade edsAssetIndexFacade,
-                                           UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                           AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                            EdsInstanceProviderHolderBuilder holderBuilder, TagService tagService,
                                            BusinessTagFacade businessTagFacade) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder);
+                assetToBusinessObjectUpdater, holderBuilder);
         this.tagService = tagService;
         this.businessTagFacade = businessTagFacade;
     }

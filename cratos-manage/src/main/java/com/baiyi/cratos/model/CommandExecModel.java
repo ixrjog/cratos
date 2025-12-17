@@ -15,22 +15,25 @@ import java.util.Objects;
 public class CommandExecModel {
 
     public static ExecTarget loadAs(CommandExec commandExec) {
-        if (Objects.isNull(commandExec) || !StringUtils.hasText(commandExec.getExecTargetContent())) {
+        if (Objects.isNull(commandExec)) {
             return ExecTarget.EMPTY;
         }
-        try {
-            return YamlUtils.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
-        } catch (JsonSyntaxException e) {
-            throw new CommandExecException("ExecTarget content format error: {}", e.getMessage());
-        }
+        return loadAs(commandExec.getExecTargetContent());
     }
 
     public static ExecTarget loadAs(CommandExecVO.CommandExec commandExec) {
-        if (Objects.isNull(commandExec) || !StringUtils.hasText(commandExec.getExecTargetContent())) {
+        if (Objects.isNull(commandExec)) {
+            return ExecTarget.EMPTY;
+        }
+        return loadAs(commandExec.getExecTargetContent());
+    }
+
+    private static ExecTarget loadAs(String content) {
+        if (!StringUtils.hasText(content)) {
             return ExecTarget.EMPTY;
         }
         try {
-            return YamlUtils.loadAs(commandExec.getExecTargetContent(), ExecTarget.class);
+            return YamlUtils.loadAs(content, ExecTarget.class);
         } catch (JsonSyntaxException e) {
             throw new CommandExecException("ExecTarget content format error: {}", e.getMessage());
         }
@@ -51,10 +54,10 @@ public class CommandExecModel {
         public CommandExecVO.ExecTarget toVO() {
             return CommandExecVO.ExecTarget.builder()
                     .instance(CommandExecVO.EdsInstance.builder()
-                            .id(this.instance.getId())
-                            .name(this.instance.getName())
-                            .namespace(this.instance.getNamespace())
-                            .build())
+                                      .id(this.instance.getId())
+                                      .name(this.instance.getName())
+                                      .namespace(this.instance.getNamespace())
+                                      .build())
                     .useDefaultExecContainer(this.useDefaultExecContainer)
                     .maxWaitingTime(this.maxWaitingTime)
                     .build();

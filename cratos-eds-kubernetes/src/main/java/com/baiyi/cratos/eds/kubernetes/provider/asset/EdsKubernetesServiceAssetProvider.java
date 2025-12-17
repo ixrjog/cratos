@@ -1,9 +1,10 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.common.util.AbstractUtils;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
+import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -12,7 +13,6 @@ import com.baiyi.cratos.eds.core.exception.EdsQueryEntitiesException;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.update.UpdateBusinessFromAssetHandler;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
 import com.baiyi.cratos.eds.kubernetes.provider.asset.base.BaseEdsKubernetesAssetProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesNamespaceRepo;
@@ -49,12 +49,12 @@ public class EdsKubernetesServiceAssetProvider extends BaseEdsKubernetesAssetPro
     public EdsKubernetesServiceAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                              CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                              EdsAssetIndexFacade edsAssetIndexFacade,
-                                             UpdateBusinessFromAssetHandler updateBusinessFromAssetHandler,
+                                             AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                              EdsInstanceProviderHolderBuilder holderBuilder,
                                              KubernetesNamespaceRepo kubernetesNamespaceRepo,
                                              KubernetesServiceRepo kubernetesServiceRepo) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder, kubernetesNamespaceRepo);
+                assetToBusinessObjectUpdater, holderBuilder, kubernetesNamespaceRepo);
         this.kubernetesServiceRepo = kubernetesServiceRepo;
     }
 

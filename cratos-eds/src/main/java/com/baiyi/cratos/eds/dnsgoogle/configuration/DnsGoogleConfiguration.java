@@ -1,6 +1,6 @@
-package com.baiyi.cratos.domain.util.dnsgoogle.configuration;
+package com.baiyi.cratos.eds.dnsgoogle.configuration;
 
-import com.baiyi.cratos.domain.util.dnsgoogle.service.DnsGoogleService;
+import com.baiyi.cratos.eds.dnsgoogle.service.DnsGoogleService;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

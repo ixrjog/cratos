@@ -1,9 +1,9 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
-import com.baiyi.cratos.domain.util.dnsgoogle.DnsGoogleUtils;
-import com.baiyi.cratos.domain.util.dnsgoogle.enums.DnsTypes;
-import com.baiyi.cratos.domain.util.dnsgoogle.model.DnsGoogleModel;
+import com.baiyi.cratos.eds.dnsgoogle.DnsGoogleUtils;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.eds.dnsgoogle.model.DnsGoogleModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CommonController {
     @Operation(summary = "Resolve DNS(CNAME)")
     @GetMapping(value = "/util/dns/google/resolve", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<DnsGoogleModel.DnsResolve> resolveDns(@RequestParam String name) {
-        return HttpResult.of(dnsGoogleUtils.resolve(name, DnsTypes.CNAME));
+        return HttpResult.of(dnsGoogleUtils.resolve(name, DnsRRType.CNAME));
     }
 
 }

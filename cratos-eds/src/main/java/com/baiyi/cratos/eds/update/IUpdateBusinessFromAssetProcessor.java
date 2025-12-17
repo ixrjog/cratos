@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.core.update;
+package com.baiyi.cratos.eds.update;
 
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.generator.BusinessAssetBound;
