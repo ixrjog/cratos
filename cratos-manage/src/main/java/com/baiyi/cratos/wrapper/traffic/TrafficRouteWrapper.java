@@ -12,6 +12,7 @@ import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
 
@@ -39,14 +40,16 @@ public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.R
             return;
         }
         vo.setDnsResourceRecordSet(resourceRecordSet);
-        vo.getRecordTargets()
-                .forEach(recordTarget -> resourceRecordSet.getResourceRecords()
-                        .forEach(dnsResourceRecord -> {
-                            if (dnsResourceRecord.getValue()
-                                    .equals(recordTarget.getRecordValue())) {
-                                recordTarget.setDnsResourceRecord(dnsResourceRecord);
-                            }
-                        }));
+        if (!CollectionUtils.isEmpty(vo.getRecordTargets())) {
+            vo.getRecordTargets()
+                    .forEach(recordTarget -> resourceRecordSet.getResourceRecords()
+                            .forEach(dnsResourceRecord -> {
+                                if (dnsResourceRecord.getValue()
+                                        .equals(recordTarget.getRecordValue())) {
+                                    recordTarget.setDnsResourceRecord(dnsResourceRecord);
+                                }
+                            }));
+        }
     }
 
 }
