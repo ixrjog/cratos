@@ -41,6 +41,12 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Get traffic route by id")
+    @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<TrafficRouteVO.Route> getTrafficRouteById(@RequestParam int id) {
+        return HttpResult.of(trafficRouteFacade.getTrafficRouteById(id));
+    }
+
     @Operation(summary = "Get traffic record target type options")
     @GetMapping(value = "/record/target/type/options/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<OptionsVO.Options> getTrafficRecordTargetTypeOptions() {

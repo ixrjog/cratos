@@ -63,13 +63,20 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
             TrafficRouteException.runtime("eds instance id not found");
         }
         DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
-        if(dnsResolver == null) {
+        if (dnsResolver == null) {
             TrafficRouteException.runtime("dnsResolver id not found");
         }
         dnsResolver.switchToRoute(switchRecordTarget);
     }
 
-
+    @Override
+    public TrafficRouteVO.Route getTrafficRouteById(int id) {
+        TrafficRoute trafficRoute = trafficRouteService.getById(id);
+        if (trafficRoute == null) {
+            TrafficRouteException.runtime("traffic route id not found");
+        }
+        return routeWrapper.wrapToTarget(trafficRoute);
+    }
 
     @Override
     public void addTrafficRoute(TrafficRouteParam.AddRoute addRoute) {

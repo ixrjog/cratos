@@ -23,4 +23,6 @@ public interface TrafficRouteFacade {
 
     void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
 
+    TrafficRouteVO.Route getTrafficRouteById(int id);
+
 }
