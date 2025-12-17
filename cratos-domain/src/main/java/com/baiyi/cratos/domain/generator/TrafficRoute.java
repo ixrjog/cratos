@@ -52,7 +52,7 @@ public class TrafficRoute implements HasValid, HasIntegerPrimaryKey {
     @Column(name = "record_type")
     private String recordType;
 
-    @Column(name = "zoneId")
+    @Column(name = "zone_id")
     private String zoneId;
 
     private Boolean valid;
