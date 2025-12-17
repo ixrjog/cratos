@@ -108,19 +108,17 @@ public class TrafficRouteParam {
     public static class AddRecordTarget implements IToTarget<TrafficRecordTarget> {
         @NotNull
         private Integer id;
-        @NotNull(message = "Domain ID cannot be null")
-        private Integer domainId;
-        @NotNull(message = "Domain record ID cannot be null")
-        private Integer domainRecordId;
-        @NotBlank(message = "Domain cannot be blank")
-        private String domain;
-        @NotBlank(message = "Domain record cannot be blank")
-        private String domainRecord;
-        private String name;
-        @NotNull(message = "DNS resolver instance ID cannot be null")
-        private Integer dnsResolverInstanceId;
+        @NotBlank(message = "Resource record cannot be blank")
+        private String resourceRecord;
+        @NotBlank(message = "Resource value cannot be blank")
+        private String recordValue;
         @NotBlank(message = "Record type cannot be blank")
         private String recordType;
+        @NotBlank(message = "Target type cannot be blank")
+        private String targetType;
+        private Boolean origin;
+        private Long ttl;
+        private Integer weight;
         @NotNull(message = "Valid status cannot be null")
         private Boolean valid;
         private String comment;

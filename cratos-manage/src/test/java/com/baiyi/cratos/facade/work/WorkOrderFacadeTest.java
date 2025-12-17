@@ -9,6 +9,7 @@ import com.baiyi.cratos.domain.model.LdapUserGroupModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.application.ApplicationVO;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.baiyi.cratos.workorder.enums.TicketState.COMPLETED;
 
 /**
  * &#064;Author  baiyi
@@ -63,26 +66,26 @@ public class WorkOrderFacadeTest extends BaseUnit {
     void test3() {
         List<UserPermissionBusinessParam.RoleMember> roleMembers = Lists.newArrayList();
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("dev")
-                .checked(false)
-                .build());
+                                .role("dev")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("daily")
-                .checked(false)
-                .build());
+                                .role("daily")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("sit")
-                .checked(false)
-                .build());
+                                .role("sit")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("pre")
-                .checked(false)
-                .build());
+                                .role("pre")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("prod")
-                .checked(false)
-                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
-                .build());
+                                .role("prod")
+                                .checked(false)
+                                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
+                                .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
                 .businessId(2)
                 .name("kili")
@@ -99,26 +102,26 @@ public class WorkOrderFacadeTest extends BaseUnit {
     void test31() {
         List<UserPermissionBusinessParam.RoleMember> roleMembers = Lists.newArrayList();
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("dev")
-                .checked(false)
-                .build());
+                                .role("dev")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("daily")
-                .checked(false)
-                .build());
+                                .role("daily")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("sit")
-                .checked(false)
-                .build());
+                                .role("sit")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("pre")
-                .checked(false)
-                .build());
+                                .role("pre")
+                                .checked(false)
+                                .build());
         roleMembers.add(UserPermissionBusinessParam.RoleMember.builder()
-                .role("prod")
-                .checked(false)
-                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
-                .build());
+                                .role("prod")
+                                .checked(false)
+                                .expiredTime(ExpiredUtils.generateExpirationTime(90, TimeUnit.DAYS))
+                                .build());
         UserPermissionBusinessParam.BusinessPermission detail = UserPermissionBusinessParam.BusinessPermission.builder()
                 .name("tms-newpos")
                 .roleMembers(roleMembers)
@@ -215,6 +218,32 @@ public class WorkOrderFacadeTest extends BaseUnit {
                 .build();
         List<LdapUserGroupModel.Role> list = workOrderTicketEntryFacade.queryLdapRolePermissionTicketEntry(query);
         System.out.println(list);
+    }
+
+    @Test
+    void test13() {
+        WorkOrderTicketParam.TicketPageQuery pageQuery = WorkOrderTicketParam.TicketPageQuery.builder()
+                .page(1)
+                .length(1000)
+                .ticketState(COMPLETED.name())
+                .build();
+        DataTable<WorkOrderTicketVO.Ticket> dataTable = workOrderTicketFacade.queryTicketPage(pageQuery);
+
+        dataTable.getData()
+                .forEach(e -> {
+                    System.out.println(StringFormatter.format("#### No: {}", e.getTicketNo()));
+                    System.out.println(StringFormatter.arrayFormat(
+                            "Name: {} Applicant: {} CompletedAt: {}" , e.getWorkOrder()
+                                    .getI18nData()
+                                    .getLangMap()
+                                    .get("zh-cn")
+                                    .getDisplayName(), e.getApplicant()
+                                    .getDisplayName(), e.getCompletedAt()
+                    ));
+                    System.out.println(e.getTicketAbstract()
+                                               .getMarkdown() + "\n");
+                });
+
     }
 
 }
