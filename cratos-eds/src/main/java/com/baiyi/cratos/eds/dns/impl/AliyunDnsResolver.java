@@ -181,7 +181,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         return DNS.ResourceRecordSet.builder()
                 .type(recordType)
                 .name(domainRecord)
-                .resourceRecords(toResourceRecords(records))
+                .resourceRecords(toResourceRecords(matchedRecords))
                 .build();
     }
 
