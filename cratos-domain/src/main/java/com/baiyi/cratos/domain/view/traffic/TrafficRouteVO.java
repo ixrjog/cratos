@@ -30,6 +30,10 @@ public class TrafficRouteVO {
     public interface HasRecordTargets {
         Integer getTrafficRouteId();
 
+        DNS.ResourceRecordSet getDnsResourceRecordSet();
+
+        TrafficRoute toTrafficRoute();
+
         void setRecordTargets(List<RecordTarget> recordTargets);
     }
 
