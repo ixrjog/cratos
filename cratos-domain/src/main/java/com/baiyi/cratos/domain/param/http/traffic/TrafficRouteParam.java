@@ -108,6 +108,8 @@ public class TrafficRouteParam {
     public static class AddRecordTarget implements IToTarget<TrafficRecordTarget> {
         @NotNull
         private Integer id;
+        @NotNull(message = "Traffic Route Id cannot be null")
+        private Integer trafficRouteId;
         @NotBlank(message = "Resource record cannot be blank")
         private String resourceRecord;
         @NotBlank(message = "Resource value cannot be blank")
