@@ -188,7 +188,7 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     private List<DNS.ResourceRecord> toResourceRecords(List<DescribeDomainRecordsResponseBody.Record> records) {
         return records.stream()
                 .map(record -> DNS.ResourceRecord.builder()
-                        .weight(Long.valueOf(record.getWeight()))
+                        .weight(record.getWeight() == null ? null : Long.valueOf(record.getWeight()))
                         .value(record.getValue())
                         .build())
                 .toList();

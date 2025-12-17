@@ -34,8 +34,12 @@ spring:
   codec:
       max-in-memory-size: 20MB
 
-# 开发环境配置
 server:
+  # HTTP 2.0支持
+  http2:
+    enabled: true
+    max-concurrent-streams: 128
+    initial-window-size: 65536
   # 服务端口
   port: 8081
   servlet:

@@ -2,6 +2,7 @@ package com.baiyi.cratos.facade.work;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.util.ExpiredUtils;
+import com.baiyi.cratos.common.util.IOUtils;
 import com.baiyi.cratos.common.util.SessionUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.model.ApplicationReplicasModel;
@@ -222,28 +223,44 @@ public class WorkOrderFacadeTest extends BaseUnit {
 
     @Test
     void test13() {
+        IOUtils.createFile("/Users/liangjian/", "workworder.txt", "");
         WorkOrderTicketParam.TicketPageQuery pageQuery = WorkOrderTicketParam.TicketPageQuery.builder()
                 .page(1)
-                .length(1000)
+                .length(10)
                 .ticketState(COMPLETED.name())
                 .build();
-        DataTable<WorkOrderTicketVO.Ticket> dataTable = workOrderTicketFacade.queryTicketPage(pageQuery);
-
-        dataTable.getData()
-                .forEach(e -> {
-                    System.out.println(StringFormatter.format("#### No: {}", e.getTicketNo()));
-                    System.out.println(StringFormatter.arrayFormat(
-                            "Name: {} Applicant: {} CompletedAt: {}" , e.getWorkOrder()
-                                    .getI18nData()
-                                    .getLangMap()
-                                    .get("zh-cn")
-                                    .getDisplayName(), e.getApplicant()
-                                    .getDisplayName(), e.getCompletedAt()
-                    ));
-                    System.out.println(e.getTicketAbstract()
-                                               .getMarkdown() + "\n");
-                });
-
+        int total = 3391;
+        int size = 0;
+        while (true) {
+            DataTable<WorkOrderTicketVO.Ticket> dataTable = workOrderTicketFacade.queryTicketPage(pageQuery);
+            for (WorkOrderTicketVO.Ticket e : dataTable.getData()) {
+                IOUtils.appendFile(
+                        StringFormatter.format("#### No: {}\n", e.getTicketNo()),
+                        "/Users/liangjian/workworder.txt"
+                );
+                IOUtils.appendFile(
+                        StringFormatter.arrayFormat(
+                                "Name: {} Applicant: {} CompletedAt: {}\n", e.getWorkOrder()
+                                        .getI18nData()
+                                        .getLangMap()
+                                        .get("zh-cn")
+                                        .getDisplayName(), e.getApplicant()
+                                        .getDisplayName(), e.getCompletedAt()
+                        ), "/Users/liangjian/workworder.txt"
+                );
+                IOUtils.appendFile(
+                        e.getTicketAbstract()
+                                .getMarkdown() + "\n\n", "/Users/liangjian/workworder.txt"
+                );
+            }
+            size = size + dataTable.getData()
+                    .size();
+            pageQuery.setPage(pageQuery.getPage() + 1);
+            System.out.println(size);
+            if (size >= total) {
+                break;
+            }
+        }
     }
 
 }
