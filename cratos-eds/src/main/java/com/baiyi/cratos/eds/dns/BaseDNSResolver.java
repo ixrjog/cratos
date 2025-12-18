@@ -66,6 +66,11 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
         return domainName.endsWith(".") ? domainName : domainName + ".";
     }
 
+    protected String removeFQDNRoot(String fQDNOrDomain) {
+        return fQDNOrDomain.replaceAll("\\.$", "");
+
+    }
+
     protected abstract List<Record> getTrafficRouteRecords(Config config, TrafficRoute trafficRoute);
 
     protected void validateRecordCount(List<Record> matchedRecords) {
@@ -79,7 +84,7 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
 
     @Override
     public String getZoneId(TrafficRoute trafficRoute) {
-       return trafficRoute.getDomainRecord();
+        return trafficRoute.getDomainRecord();
     }
 
 }

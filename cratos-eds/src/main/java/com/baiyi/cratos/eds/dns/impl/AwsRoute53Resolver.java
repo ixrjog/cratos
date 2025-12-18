@@ -46,7 +46,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
         // 获取托管区域
-        String hostedZoneId = getZoneId(trafficRoute);
+        final String hostedZoneId = getZoneId(trafficRoute);
         if (!StringUtils.hasText(hostedZoneId)) {
             return DNS.ResourceRecordSet.NO_DATA;
         }
@@ -60,8 +60,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
 
     @Override
     protected List<ResourceRecordSet> getTrafficRouteRecords(EdsConfigs.Aws config, TrafficRoute trafficRoute) {
-        String hostedZoneId = getZoneId(trafficRoute);
-        String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
+        final String hostedZoneId = getZoneId(trafficRoute);
+        final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
         return resourceRecordSets.stream()
@@ -77,7 +77,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         EdsConfigs.Aws config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.AWS_HOSTED_ZONE);
         String hostedZoneId = getZoneId(trafficRoute);
         if (!StringUtils.hasText(hostedZoneId)) {
-            TrafficRouteException.runtime("未找到HostedZoneId");
+            TrafficRouteException.runtime("HostedZoneId not found.");
         }
         DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
@@ -90,7 +90,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
             // 新增简单路由记录
             addSimpleRecord(config, hostedZoneId, trafficRecordTarget, dnsRRType);
         } else {
-            TrafficRouteException.runtime("Current operation not implemented");
+            TrafficRouteException.runtime("Current operation not implemented.");
         }
     }
 
@@ -106,7 +106,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     }
 
     // 前置删除解析
-    private void deleteRecords(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget, List<ResourceRecordSet> matchedRecords) {
+    private void deleteRecords(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget,
+                               List<ResourceRecordSet> matchedRecords) {
         // 没有记录
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return;
@@ -149,10 +150,11 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
 
     private DNS.ResourceRecordSet findMatchingRecord(List<ResourceRecordSet> resourceRecordSets,
                                                      TrafficRoute trafficRoute) {
-        String recordType = trafficRoute.getRecordType();
-        String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
+        final DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
+        final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         return resourceRecordSets.stream()
-                .filter(record -> recordType.equals(record.getType()) && domainRecordFqdn.equals(record.getName()))
+                .filter(record -> dnsRRType.name()
+                        .equals(record.getType()) && domainRecordFqdn.equals(record.getName()))
                 .map(this::convertToResourceRecordSet)
                 .findFirst()
                 .orElse(DNS.ResourceRecordSet.NO_DATA);
@@ -161,8 +163,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     private DNS.ResourceRecordSet convertToResourceRecordSet(ResourceRecordSet record) {
         return DNS.ResourceRecordSet.builder()
                 .type(record.getType())
-                .name(record.getName()
-                              .replaceAll("\\.$", "")) // 移除末尾的点
+                .name(removeFQDNRoot(record.getName())) // 移除末尾的点
                 .resourceRecords(record.getResourceRecords()
                                          .stream()
                                          .map(r -> DNS.ResourceRecord.builder()

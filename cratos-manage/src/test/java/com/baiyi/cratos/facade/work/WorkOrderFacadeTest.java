@@ -234,24 +234,28 @@ public class WorkOrderFacadeTest extends BaseUnit {
         while (true) {
             DataTable<WorkOrderTicketVO.Ticket> dataTable = workOrderTicketFacade.queryTicketPage(pageQuery);
             for (WorkOrderTicketVO.Ticket e : dataTable.getData()) {
-                IOUtils.appendFile(
-                        StringFormatter.format("#### No: {}\n", e.getTicketNo()),
-                        "/Users/liangjian/workworder.txt"
-                );
-                IOUtils.appendFile(
-                        StringFormatter.arrayFormat(
-                                "Name: {} Applicant: {} CompletedAt: {}\n", e.getWorkOrder()
-                                        .getI18nData()
-                                        .getLangMap()
-                                        .get("zh-cn")
-                                        .getDisplayName(), e.getApplicant()
-                                        .getDisplayName(), e.getCompletedAt()
-                        ), "/Users/liangjian/workworder.txt"
-                );
-                IOUtils.appendFile(
-                        e.getTicketAbstract()
-                                .getMarkdown() + "\n\n", "/Users/liangjian/workworder.txt"
-                );
+                try {
+                    IOUtils.appendFile(
+                            StringFormatter.format("#### No: {}\n", e.getTicketNo()),
+                            "/Users/liangjian/workworder.txt"
+                    );
+                    IOUtils.appendFile(
+                            StringFormatter.arrayFormat(
+                                    "Name: {} Applicant: {} CompletedAt: {}\n", e.getWorkOrder()
+                                            .getI18nData()
+                                            .getLangMap()
+                                            .get("zh-cn")
+                                            .getDisplayName(), e.getApplicant()
+                                            .getDisplayName(), e.getCompletedAt()
+                            ), "/Users/liangjian/workworder.txt"
+                    );
+                    IOUtils.appendFile(
+                            e.getTicketAbstract()
+                                    .getMarkdown() + "\n\n", "/Users/liangjian/workworder.txt"
+                    );
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             size = size + dataTable.getData()
                     .size();
