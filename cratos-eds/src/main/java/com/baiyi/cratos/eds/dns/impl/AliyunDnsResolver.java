@@ -83,14 +83,14 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     private void handleSingleTargetRouting(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
                                            TrafficRecordTarget trafficRecordTarget,
                                            List<DescribeDomainRecordsResponseBody.Record> matchedRecords) {
-        DnsRRType dnsType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
+        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
 
         if (CollectionUtils.isEmpty(matchedRecords)) {
-            addNewRecord(aliyun, trafficRoute, trafficRecordTarget, dnsType);
+            addNewRecord(aliyun, trafficRoute, trafficRecordTarget, dnsRRType);
         } else if (matchedRecords.size() == 1) {
-            updateSingleRecord(aliyun, trafficRoute, trafficRecordTarget, matchedRecords.getFirst(), dnsType);
+            updateSingleRecord(aliyun, trafficRoute, trafficRecordTarget, matchedRecords.getFirst(), dnsRRType);
         } else {
-            handleMultipleRecords(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsType);
+            handleMultipleRecords(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsRRType);
         }
     }
 
@@ -143,13 +143,10 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 aliyun, recordId, getRR(trafficRoute), dnsType.name(),
                 trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
         );
-
-        matchedRecords.forEach(record -> {
-            if (!record.getRecordId()
-                    .equals(recordId)) {
-                AliyunDnsRepo.deleteDomainRecord(aliyun, record.getRecordId());
-            }
-        });
+        matchedRecords.stream()
+                .map(DescribeDomainRecordsResponseBody.Record::getRecordId)
+                .filter(id -> !id.equals(recordId))
+                .forEach(id -> AliyunDnsRepo.deleteDomainRecord(aliyun, id));
     }
 
     private void addAndDeleteAll(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
@@ -169,17 +166,17 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private DNS.ResourceRecordSet findMatchedRecord(List<DescribeDomainRecordsResponseBody.Record> records,
                                                     TrafficRoute trafficRoute) {
-        String recordType = trafficRoute.getRecordType();
+        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecord = trafficRoute.getDomainRecord();
         List<DescribeDomainRecordsResponseBody.Record> matchedRecords = records.stream()
-                .filter(record -> recordType.equals(record.getType()) && domainRecord.equals(
+                .filter(record -> dnsRRType.name().equals(record.getType()) && domainRecord.equals(
                         buildFullRecordName(record)))
                 .toList();
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return DNS.ResourceRecordSet.NO_DATA;
         }
         return DNS.ResourceRecordSet.builder()
-                .type(recordType)
+                .type(dnsRRType.name())
                 .name(domainRecord)
                 .resourceRecords(toResourceRecords(matchedRecords))
                 .build();
