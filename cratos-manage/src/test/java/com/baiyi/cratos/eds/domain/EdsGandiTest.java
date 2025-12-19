@@ -3,7 +3,9 @@ package com.baiyi.cratos.eds.domain;
 import com.baiyi.cratos.eds.BaseEdsTest;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.domain.gandi.model.GandiDomain;
+import com.baiyi.cratos.eds.domain.gandi.model.GandiLiveDNS;
 import com.baiyi.cratos.eds.domain.gandi.repo.GandiDomainRepo;
+import com.baiyi.cratos.eds.domain.gandi.repo.GandiLiveDNSRepo;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,6 +21,12 @@ public class EdsGandiTest extends BaseEdsTest<EdsConfigs.Gandi> {
     void test1() {
         List<GandiDomain.Domain> domains = GandiDomainRepo.queryDomains(getConfig(20));
         System.out.println(domains);
+    }
+
+    @Test
+    void test2() {
+        List<GandiLiveDNS.Record> records = GandiLiveDNSRepo.queryRecords(getConfig(20), "easeid.ai");
+        System.out.println(records);
     }
 
 }

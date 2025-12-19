@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -35,6 +36,8 @@ import java.util.Optional;
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN)
 public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
+
+    private static final String CONSOLE_URL = "https://dnsnext.console.aliyun.com/authoritative/domains/{}?RRKeyWord={}";
 
     public AliyunDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                              TrafficRecordTargetService trafficRecordTargetService,
@@ -73,6 +76,12 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         } else {
             TrafficRouteException.runtime("Current operation not implemented");
         }
+    }
+
+    @Override
+    public String getConsoleURL(TrafficRoute trafficRoute) {
+        String rr = SwitchRecordTargetContext.getRR(trafficRoute.getDomain(), trafficRoute.getDomainRecord());
+        return StringFormatter.arrayFormat(CONSOLE_URL, trafficRoute.getDomain(), rr);
     }
 
     @Override

@@ -56,6 +56,10 @@ public class SwitchRecordTargetContext<Config extends HasEdsConfig, Record> {
         return StringUtils.removeEnd(trafficRoute.getDomainRecord(), "." + trafficRoute.getDomain());
     }
 
+    public static String getRR(String domain, String domainRecord) {
+        return StringUtils.removeEnd(domainRecord, "." + domain);
+    }
+
     public String getRecordValue() {
         return trafficRecordTarget.getRecordValue();
     }

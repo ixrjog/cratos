@@ -52,7 +52,6 @@ public class GodaddyDomain {
         private Renewal renewal;
     }
 
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

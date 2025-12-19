@@ -24,6 +24,7 @@ public class EdsCloudflareConfigModel {
     @NoArgsConstructor
     @Schema
     public static class Cred implements ToAuthorization.ToAuthorizationBearer {
+        private String accountId;
         @Schema(description = "Authorization: Bearer <API_TOKEN>")
         private String apiToken;
         @Override

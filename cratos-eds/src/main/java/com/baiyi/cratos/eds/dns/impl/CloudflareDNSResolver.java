@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -35,6 +36,8 @@ import java.util.Optional;
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE)
 public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> {
+
+    private static final String CONSOLE_URL = "https://dash.cloudflare.com/{}/{}/dns/records";
 
     public CloudflareDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                                  TrafficRecordTargetService trafficRecordTargetService,
@@ -187,6 +190,14 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         );
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();
+    }
+
+    @Override
+    public String getConsoleURL(TrafficRoute trafficRoute) {
+        EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.CLOUDFLARE_ZONE);
+        return StringFormatter.arrayFormat(CONSOLE_URL, config.getCred()
+                .getAccountId(), trafficRoute.getDomain()
+        );
     }
 
 }

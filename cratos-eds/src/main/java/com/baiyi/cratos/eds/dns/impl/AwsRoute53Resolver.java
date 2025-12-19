@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aws.enums.Route53RoutingPolicyEnum;
@@ -37,6 +38,8 @@ import java.util.List;
 @ToFQDN
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.AWS)
 public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, ResourceRecordSet> {
+
+    private static final String CONSOLE_URL = "https://us-east-1.console.aws.amazon.com/route53/v2/hostedzones?region=eu-west-1#ListRecordSets/{}";
 
     public AwsRoute53Resolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                               TrafficRecordTargetService trafficRecordTargetService,
@@ -111,7 +114,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
 
     private void addSimpleRecord(String hostedZoneId,
                                  SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context) {
-        ResourceRecordSet rrs = new ResourceRecordSet(toFQDN(context.getResourceRecord()), context.getDnsRRType()
+        ResourceRecordSet rrs = new ResourceRecordSet(
+                toFQDN(context.getResourceRecord()), context.getDnsRRType()
                 .toRRType()
         );
         rrs.setTTL(context.getTTL(300L));
@@ -164,6 +168,11 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
                 trafficRoute.getDnsResolverInstanceId(), EdsAssetTypeEnum.AWS_HOSTED_ZONE.name(), domainFqdn, false);
         return CollectionUtils.isEmpty(hostedZoneAssets) ? null : hostedZoneAssets.getFirst()
                 .getAssetId();
+    }
+
+    @Override
+    public String getConsoleURL(TrafficRoute trafficRoute) {
+        return StringFormatter.format(CONSOLE_URL, trafficRoute.getZoneId());
     }
 
     private DNS.ResourceRecordSet findMatchingRecord(List<ResourceRecordSet> resourceRecordSets,

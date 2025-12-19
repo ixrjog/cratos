@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.domain.gandi;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.domain.gandi.service.GandiDomainService;
+import com.baiyi.cratos.eds.domain.gandi.service.GandiLiveDNSService;
 import io.netty.channel.ChannelOption;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class GandiServiceFactory {
 
     public static GandiDomainService createDomainService(EdsConfigs.Gandi config) {
         return createAuthenticatedService(config, GandiDomainService.class);
+    }
+
+    public static GandiLiveDNSService createLiveDNSService(EdsConfigs.Gandi config) {
+        return createAuthenticatedService(config, GandiLiveDNSService.class);
     }
 
     private static <T extends GandiService> T createAuthenticatedService(EdsConfigs.Gandi config,

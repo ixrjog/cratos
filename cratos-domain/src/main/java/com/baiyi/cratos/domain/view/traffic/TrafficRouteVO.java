@@ -58,6 +58,8 @@ public class TrafficRouteVO {
         private Boolean valid;
         private String comment;
         private String zoneId;
+        // 控制台地址
+        private String consoleUrl;
 
         public TrafficRoute toTrafficRoute() {
             return TrafficRoute.builder()

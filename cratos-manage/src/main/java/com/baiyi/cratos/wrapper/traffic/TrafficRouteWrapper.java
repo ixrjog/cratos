@@ -11,6 +11,7 @@ import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.wrapper.base.BaseDataTableConverter;
 import com.baiyi.cratos.wrapper.base.BaseWrapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -21,6 +22,7 @@ import static com.baiyi.cratos.annotation.BusinessWrapper.InvokeAts.BEFORE;
  * &#064;Date  2025/12/11 10:27
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.Route, TrafficRoute> implements BaseWrapper<TrafficRouteVO.Route> {
@@ -33,6 +35,12 @@ public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.R
         DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
         if (dnsResolver == null) {
             return;
+        }
+        // Console URL
+        try {
+            vo.setConsoleUrl(dnsResolver.getConsoleURL(vo.toTrafficRoute()));
+        } catch (Exception e) {
+             log.error(e.getMessage(), e);
         }
         DNS.ResourceRecordSet resourceRecordSet = dnsResolver.getDNSResourceRecordSet(vo.toTrafficRoute());
         // No data

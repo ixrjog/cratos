@@ -19,6 +19,8 @@ public interface DNSResolver extends EdsInstanceTypeOfAnnotate, InitializingBean
 
     String getZoneId(TrafficRoute trafficRoute);
 
+    String getConsoleURL(TrafficRoute trafficRoute);
+
     @Override
     default void afterPropertiesSet() {
         DNSResolverFactory.register(this);

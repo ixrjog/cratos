@@ -9,6 +9,7 @@ import org.springframework.web.service.annotation.HttpExchange;
 import java.util.List;
 
 /**
+ * https://developer.godaddy.com/doc/endpoint/domains#/
  * &#064;Author  baiyi
  * &#064;Date  2024/6/5 下午3:06
  * &#064;Version 1.0
@@ -16,12 +17,6 @@ import java.util.List;
 @HttpExchange(accept = "application/json")
 public interface GodaddyDomainService extends GodaddyService {
 
-    /**
-     * https://developer.godaddy.com/doc/endpoint/domains#/
-     *
-     * @param authorization Example: Authorization: sso-key [API_KEY]:[API_SECRET]
-     * @return
-     */
     @GetExchange("v2/customers/{customerId}/domains/{domain}")
     GodaddyDomain.Domain getDomain(@PathVariable String customerId, @PathVariable String domain);
 

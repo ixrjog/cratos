@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.domain.provider;
+package com.baiyi.cratos.eds.domain.gandi.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
