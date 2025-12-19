@@ -136,7 +136,7 @@ public class TrafficRouteParam {
         private Integer recordTargetId;
         @NotBlank(message = "RoutingOptions cannot be blank")
         private String routingOptions;
-        // CloudFlare专用（启用禁用代理）
+        // CloudFlare Proxied or OnlyDNS
         private Boolean proxied;
     }
 
