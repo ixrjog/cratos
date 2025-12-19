@@ -3,6 +3,7 @@ package com.baiyi.cratos.eds.cloudflare.repo;
 import com.baiyi.cratos.eds.cloudflare.CloudflareServiceFactory;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.param.CloudflareDnsParam;
 import com.baiyi.cratos.eds.cloudflare.service.CloudflareDnsService;
 import com.baiyi.cratos.eds.cloudflare.util.PageParamUtils;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -11,9 +12,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
-
-import static java.util.Map.entry;
 
 /**
  * &#064;Author  baiyi
@@ -55,11 +53,15 @@ public class CloudflareDnsRepo {
                                                                                 String type, String content,
                                                                                 Boolean proxied, String comment) {
         CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
-        Map<String, Object> param = Map.ofEntries(
-                entry("name", name), entry("ttl", ttl), entry("type", type), entry("content", content),
-                entry("proxied", proxied), entry("comment", comment)
-        );
-        return cloudflareDnsService.createDnsRecord(zoneId, param);
+        CloudflareDnsParam.CreateDnsRecord createDnsRecord = CloudflareDnsParam.CreateDnsRecord.builder()
+                .name(name)
+                .ttl(ttl)
+                .type(type)
+                .content(content)
+                .comment(comment)
+                .proxied(proxied)
+                .build();
+        return cloudflareDnsService.createDnsRecord(zoneId, createDnsRecord);
     }
 
     public static CloudflareHttpResult<CloudflareDns.DnsRecord> updateDnsRecord(EdsConfigs.Cloudflare config,
@@ -68,11 +70,15 @@ public class CloudflareDnsRepo {
                                                                                 String content, Boolean proxied,
                                                                                 String comment) {
         CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
-        Map<String, Object> param = Map.ofEntries(
-                entry("name", name), entry("ttl", ttl), entry("type", type), entry("content", content),
-                entry("proxied", proxied), entry("comment", comment)
-        );
-        return cloudflareDnsService.updateDnsRecord(zoneId, dnsRecordId, param);
+        CloudflareDnsParam.UpdateDnsRecord updateDnsRecord = CloudflareDnsParam.UpdateDnsRecord.builder()
+                .name(name)
+                .ttl(ttl)
+                .type(type)
+                .content(content)
+                .comment(comment)
+                .proxied(proxied)
+                .build();
+        return cloudflareDnsService.updateDnsRecord(zoneId, dnsRecordId, updateDnsRecord);
     }
 
     public static CloudflareHttpResult<String> deleteDnsRecord(EdsConfigs.Cloudflare config, String zoneId,

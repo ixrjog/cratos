@@ -51,7 +51,7 @@ public class CloudflareServiceFactory {
                 .codecs(configurer -> configurer.defaultCodecs()
                         .maxInMemorySize(MAX_IN_MEMORY_SIZE))
                 .filter((request, next) -> {
-                    String bearer = config.getCred()
+                    final String bearer = config.getCred()
                             .toBearer();
                     if (StringUtils.hasText(bearer)) {
                         ClientRequest newRequest = ClientRequest.from(request)

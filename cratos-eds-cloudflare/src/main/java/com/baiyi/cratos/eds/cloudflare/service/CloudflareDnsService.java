@@ -2,8 +2,10 @@ package com.baiyi.cratos.eds.cloudflare.service;
 
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.param.CloudflareDnsParam;
 import com.baiyi.cratos.eds.cloudflare.service.base.CloudflareService;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.*;
 
@@ -15,7 +17,7 @@ import java.util.Map;
  * @Date 2024/3/4 14:38
  * @Version 1.0
  */
-@HttpExchange(accept = "application/json")
+@HttpExchange(accept = "application/json", contentType = "application/json")
 public interface CloudflareDnsService extends CloudflareService {
 
     @GetExchange("/zones/{zoneId}/dns_records")
@@ -24,12 +26,12 @@ public interface CloudflareDnsService extends CloudflareService {
 
     @PostExchange("/zones/{zoneId}/dns_records")
     CloudflareHttpResult<CloudflareDns.DnsRecord> createDnsRecord(@PathVariable String zoneId,
-                                                                  @RequestParam Map<String, Object> param);
+                                                                  @RequestBody CloudflareDnsParam.CreateDnsRecord createDnsRecord);
 
     @PatchExchange("/zones/{zoneId}/dns_records/{dnsRecordId}")
     CloudflareHttpResult<CloudflareDns.DnsRecord> updateDnsRecord(@PathVariable String zoneId,
                                                                   @PathVariable String dnsRecordId,
-                                                                  @RequestParam Map<String, Object> param);
+                                                                  @RequestBody CloudflareDnsParam.UpdateDnsRecord updateDnsRecord);
 
     @DeleteExchange("/zones/{zoneId}/dns_records/{dnsRecordId}")
     CloudflareHttpResult<String> deleteDnsRecord(@PathVariable String zoneId, @PathVariable String dnsRecordId);

@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.dns.impl.AliyunDNSResolver;
 import com.baiyi.cratos.eds.dns.impl.AwsRoute53Resolver;
+import com.baiyi.cratos.eds.dns.impl.CloudflareDNSResolver;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -21,11 +22,15 @@ public class DnsResolverTest extends BaseUnit {
     @Resource
     private AwsRoute53Resolver awsRoute53Resolver;
 
+    @Resource
+    private CloudflareDNSResolver cloudflareDnsResolver;
+
     @Test
     void test1() {
         TrafficRouteParam.SwitchRecordTarget switchRecordTarget = TrafficRouteParam.SwitchRecordTarget.builder()
                 .recordTargetId(3)
                 .routingOptions(TrafficRoutingOptions.SINGLE_TARGET.name())
+                .proxied(true)
                 .build();
         aliyunDnsResolver.switchToRoute(switchRecordTarget);
     }
@@ -55,6 +60,17 @@ public class DnsResolverTest extends BaseUnit {
                 .routingOptions(TrafficRoutingOptions.SINGLE_TARGET.name())
                 .build();
         awsRoute53Resolver.switchToRoute(switchRecordTarget);
+    }
+
+
+    @Test
+    void test9() {
+        TrafficRouteParam.SwitchRecordTarget switchRecordTarget = TrafficRouteParam.SwitchRecordTarget.builder()
+                .recordTargetId(9)
+                .routingOptions(TrafficRoutingOptions.SINGLE_TARGET.name())
+                .proxied(false)
+                .build();
+        cloudflareDnsResolver.switchToRoute(switchRecordTarget);
     }
 
 }
