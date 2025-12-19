@@ -1,11 +1,12 @@
 package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
+import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
 import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,24 +18,25 @@ import java.util.List;
  */
 public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
 
-    @Resource
-    private CloudflareZoneRepo cloudflareZoneRepo;
-
-    @Resource
-    private CloudflareCertRepo cloudflareCertRepo;
-
     @Test
     void zoneTest() {
         EdsConfigs.Cloudflare cf = getConfig(5);
-        List<CloudflareZone.Zone> rt = cloudflareZoneRepo.listZones(cf);
+        List<CloudflareZone.Zone> rt = CloudflareZoneRepo.listZones(cf);
         System.out.println(rt);
     }
 
     @Test
     void certTest() {
         EdsConfigs.Cloudflare cf = getConfig(5);
-        List<CloudflareCert.Result> rt = cloudflareCertRepo.listCertificatePacks(cf, "5243357f773b873952f7f99090841934");
+        List<CloudflareCert.Result> rt = CloudflareCertRepo.listCertificatePacks(cf, "5243357f773b873952f7f99090841934");
         System.out.println(rt);
+    }
+
+    @Test
+    void certTest2() {
+        EdsConfigs.Cloudflare cf = getConfig(5);
+        List<CloudflareDns.DnsRecord>  dnsRecords =   CloudflareDnsRepo.listDnsRecords(cf, "747ddd04b8081fc13b31ed2b112d9ea6");
+        System.out.println( dnsRecords );
     }
 
 }

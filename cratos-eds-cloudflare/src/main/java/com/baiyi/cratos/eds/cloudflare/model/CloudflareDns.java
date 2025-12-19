@@ -23,7 +23,7 @@ public class CloudflareDns {
         private Boolean proxied;
         private Boolean proxiable;
         private List<String> tags;
-        private Integer ttl;
+        private Long ttl;
         private String type;
     }
 

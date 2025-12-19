@@ -3,7 +3,7 @@ package com.baiyi.cratos.eds.dns;
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.eds.dns.impl.AliyunDnsResolver;
+import com.baiyi.cratos.eds.dns.impl.AliyunDNSResolver;
 import com.baiyi.cratos.eds.dns.impl.AwsRoute53Resolver;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 public class DnsResolverTest extends BaseUnit {
 
     @Resource
-    private AliyunDnsResolver aliyunDnsResolver;
+    private AliyunDNSResolver aliyunDnsResolver;
 
     @Resource
     private AwsRoute53Resolver awsRoute53Resolver;

@@ -8,6 +8,7 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
 import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aws.enums.Route53RoutingPolicyEnum;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
@@ -64,10 +65,22 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
+        if (CollectionUtils.isEmpty(resourceRecordSets)) {
+            return List.of();
+        }
         return resourceRecordSets.stream()
                 .filter(record -> dnsRRType.name()
                         .equals(record.getType()) && domainRecordFqdn.equals(record.getName()))
                 .toList();
+    }
+
+    @Override
+    protected void handleSingleTargetRouting(SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context) {
+        String hostedZoneId = getZoneId(context.getTrafficRoute());
+        // 删除老记录
+        deleteRecords(hostedZoneId, context);
+        // 新增简单路由记录
+        addSimpleRecord(hostedZoneId, context);
     }
 
     @Override
@@ -79,43 +92,47 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         if (!StringUtils.hasText(hostedZoneId)) {
             TrafficRouteException.runtime("HostedZoneId not found.");
         }
-        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
-        String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         List<ResourceRecordSet> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
         validateRecordCount(matchedRecords);
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
+        SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context = SwitchRecordTargetContext.<EdsConfigs.Aws, ResourceRecordSet>builder()
+                .switchRecordTarget(switchRecordTarget)
+                .trafficRecordTarget(trafficRecordTarget)
+                .trafficRoute(trafficRoute)
+                .matchedRecords(matchedRecords)
+                .config(config)
+                .build();
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
-            // 删除老记录
-            deleteRecords(config, hostedZoneId, trafficRecordTarget, matchedRecords);
-            // 新增简单路由记录
-            addSimpleRecord(config, hostedZoneId, trafficRecordTarget, dnsRRType);
+            handleSingleTargetRouting(context);
         } else {
             TrafficRouteException.runtime("Current operation not implemented.");
         }
     }
 
-    private void addSimpleRecord(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget,
-                                 DnsRRType dnsRRType) {
-        ResourceRecordSet rrs = new ResourceRecordSet(
-                toFQDN(trafficRecordTarget.getResourceRecord()), dnsRRType.toRRType());
-        long ttl = trafficRecordTarget.getTtl() != null ? trafficRecordTarget.getTtl() : 300L;
-        rrs.setTTL(ttl);
-        rrs.setResourceRecords(List.of(new ResourceRecord(trafficRecordTarget.getRecordValue())));
+    private void addSimpleRecord(String hostedZoneId,
+                                 SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context) {
+        ResourceRecordSet rrs = new ResourceRecordSet(toFQDN(context.getResourceRecord()), context.getDnsRRType()
+                .toRRType()
+        );
+        rrs.setTTL(context.getTTL(300L));
+        rrs.setResourceRecords(List.of(new ResourceRecord(context.getRecordValue())));
         Change upsertChange = new Change(ChangeAction.UPSERT, rrs);
-        AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, List.of(upsertChange));
+        AwsRoute53Repo.changeResourceRecordSets(context.getConfig(), hostedZoneId, List.of(upsertChange));
     }
 
     // 前置删除解析
-    private void deleteRecords(EdsConfigs.Aws config, String hostedZoneId, TrafficRecordTarget trafficRecordTarget,
-                               List<ResourceRecordSet> matchedRecords) {
+    private void deleteRecords(String hostedZoneId,
+                               SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context) {
         // 没有记录
-        if (CollectionUtils.isEmpty(matchedRecords)) {
+        if (CollectionUtils.isEmpty(context.getMatchedRecords())) {
             return;
         }
-        ResourceRecordSet rrs = matchedRecords.getFirst();
+        ResourceRecordSet rrs = context.getMatchedRecords()
+                .getFirst();
         Route53RoutingPolicyEnum routingPolicy = Route53RoutingPolicyEnum.getRoutingPolicy(rrs);
         // 单条记录
-        if (matchedRecords.size() == 1) {
+        if (context.getMatchedRecords()
+                .size() == 1) {
             // 简单路由 不需要操作
             if (Route53RoutingPolicyEnum.SIMPLE == routingPolicy) {
                 return;
@@ -123,10 +140,11 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         }
         // 删除加权路由
         if (Route53RoutingPolicyEnum.WEIGHTED == routingPolicy) {
-            List<Change> changes = matchedRecords.stream()
+            List<Change> changes = context.getMatchedRecords()
+                    .stream()
                     .map(e -> new Change(ChangeAction.DELETE, e))
                     .toList();
-            AwsRoute53Repo.changeResourceRecordSets(config, hostedZoneId, changes);
+            AwsRoute53Repo.changeResourceRecordSets(context.getConfig(), hostedZoneId, changes);
             return;
         }
         // 其它复杂路由

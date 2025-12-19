@@ -36,26 +36,19 @@ import java.util.stream.Collectors;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_CERT)
 public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Cloudflare, CloudflareCert.Certificate> {
 
-    private final CloudflareZoneRepo cloudflareZoneRepo;
-    private final CloudflareCertRepo cloudflareCertRepo;
-
     public EdsCloudflareCertAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
                                           AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsInstanceProviderHolderBuilder holderBuilder,
-                                          CloudflareZoneRepo cloudflareZoneRepo,
-                                          CloudflareCertRepo cloudflareCertRepo) {
+                                          EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder);
-        this.cloudflareZoneRepo = cloudflareZoneRepo;
-        this.cloudflareCertRepo = cloudflareCertRepo;
     }
 
     @Override
     protected Set<String> listNamespace(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return cloudflareZoneRepo.listZones(instance.getConfig())
+        return CloudflareZoneRepo.listZones(instance.getConfig())
                 .stream()
                 .map(CloudflareZone.Zone::getId)
                 .collect(Collectors.toSet());
@@ -64,7 +57,7 @@ public class EdsCloudflareCertAssetProvider extends BaseHasNamespaceEdsAssetProv
     @Override
     protected List<CloudflareCert.Certificate> listEntities(String namespace,
                                                             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return cloudflareCertRepo.listCertificatePacks(instance.getConfig(), namespace)
+        return CloudflareCertRepo.listCertificatePacks(instance.getConfig(), namespace)
                 .stream()
                 .filter(e -> !CollectionUtils.isEmpty(e.getCertificates()))
                 .flatMap(e -> e.getCertificates()

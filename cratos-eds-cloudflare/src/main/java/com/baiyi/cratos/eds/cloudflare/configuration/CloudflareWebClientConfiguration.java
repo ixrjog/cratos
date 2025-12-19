@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.cloudflare.configuration;
 
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareService;
+import com.baiyi.cratos.eds.cloudflare.service.CloudflareDnsService;
 import com.baiyi.cratos.eds.core.config.model.EdsCloudflareConfigModel;
 import io.netty.channel.ChannelOption;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ import reactor.netty.http.client.HttpClient;
 public class CloudflareWebClientConfiguration {
 
     @Bean
-    public CloudflareService cloudflareService() {
+    public CloudflareDnsService cloudflareService() {
         HttpClient httpClient = HttpClient.create()
                 // 走代理
 //                .proxy(proxy ->
@@ -34,7 +34,7 @@ public class CloudflareWebClientConfiguration {
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter)
                 .build();
-        return factory.createClient(CloudflareService.class);
+        return factory.createClient(CloudflareDnsService.class);
     }
 
 }

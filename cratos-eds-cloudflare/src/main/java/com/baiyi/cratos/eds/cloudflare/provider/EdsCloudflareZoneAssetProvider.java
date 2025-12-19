@@ -35,23 +35,19 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUDFL
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_ZONE)
 public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Cloudflare, CloudflareZone.Zone> {
 
-    private final CloudflareZoneRepo cloudflareZoneRepo;
-
     public EdsCloudflareZoneAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
                                           AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                          EdsInstanceProviderHolderBuilder holderBuilder,
-                                          CloudflareZoneRepo cloudflareZoneRepo) {
+                                          EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder);
-        this.cloudflareZoneRepo = cloudflareZoneRepo;
     }
 
     @Override
     protected List<CloudflareZone.Zone> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return cloudflareZoneRepo.listZones(instance.getConfig());
+        return CloudflareZoneRepo.listZones(instance.getConfig());
     }
 
     @Override

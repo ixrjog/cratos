@@ -7,7 +7,6 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -15,6 +14,8 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
+import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
@@ -33,9 +34,9 @@ import java.util.Optional;
 @Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN)
-public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
+public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
 
-    public AliyunDnsResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
+    public AliyunDNSResolver(EdsAssetService edsAssetService, TrafficRouteService trafficRouteService,
                              TrafficRecordTargetService trafficRecordTargetService,
                              EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
         super(edsAssetService, trafficRouteService, trafficRecordTargetService, edsInstanceProviderHolderBuilder);
@@ -61,17 +62,27 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         validateRecordCount(matchedRecords);
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
-            handleSingleTargetRouting(config, trafficRoute, trafficRecordTarget, matchedRecords);
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context = SwitchRecordTargetContext.<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record>builder()
+                    .switchRecordTarget(switchRecordTarget)
+                    .config(config)
+                    .trafficRoute(trafficRoute)
+                    .trafficRecordTarget(trafficRecordTarget)
+                    .matchedRecords(matchedRecords)
+                    .build();
+            handleSingleTargetRouting(context);
         } else {
             TrafficRouteException.runtime("Current operation not implemented");
         }
     }
 
     @Override
-    protected List<DescribeDomainRecordsResponseBody.Record> getTrafficRouteRecords(EdsConfigs.Aliyun aliyun,
+    protected List<DescribeDomainRecordsResponseBody.Record> getTrafficRouteRecords(EdsConfigs.Aliyun config,
                                                                                     TrafficRoute trafficRoute) {
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
-                aliyun, trafficRoute.getDomain());
+                config, trafficRoute.getDomain());
+        if (CollectionUtils.isEmpty(records)) {
+            return List.of();
+        }
         String recordType = trafficRoute.getRecordType();
         String domainRecord = trafficRoute.getDomainRecord();
         return records.stream()
@@ -80,84 +91,86 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 .toList();
     }
 
-    private void handleSingleTargetRouting(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                                           TrafficRecordTarget trafficRecordTarget,
-                                           List<DescribeDomainRecordsResponseBody.Record> matchedRecords) {
-        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
-
-        if (CollectionUtils.isEmpty(matchedRecords)) {
-            addNewRecord(aliyun, trafficRoute, trafficRecordTarget, dnsRRType);
-        } else if (matchedRecords.size() == 1) {
-            updateSingleRecord(aliyun, trafficRoute, trafficRecordTarget, matchedRecords.getFirst(), dnsRRType);
+    @Override
+    protected void handleSingleTargetRouting(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
+        if (CollectionUtils.isEmpty(context.getMatchedRecords())) {
+            addNewRecord(context);
+            return;
+        }
+        if (context.getMatchedRecords()
+                .size() == 1) {
+            updateSingleRecord(
+                    context, context.getMatchedRecords()
+                            .getFirst()
+            );
         } else {
-            handleMultipleRecords(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsRRType);
+            handleMultipleRecords(context);
         }
     }
 
-    private void addNewRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                              TrafficRecordTarget trafficRecordTarget, DnsRRType dnsType) {
+    private void addNewRecord(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
         AliyunDnsRepo.addDomainRecord(
-                aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
-                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+                context.getConfig(), context.getDomain(), context.getRR(), context.getDnsRRType()
+                        .name(), context.getRecordValue(), context.getTrafficRecordTarget()
+                        .getTtl()
         );
     }
 
-    private void updateSingleRecord(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                                    TrafficRecordTarget trafficRecordTarget,
-                                    DescribeDomainRecordsResponseBody.Record record, DnsRRType dnsType) {
-        String recordType = trafficRecordTarget.getRecordType();
-        if (!recordType.equals(record.getType()) || !record.getValue()
-                .equals(trafficRecordTarget.getRecordValue())) {
+    private void updateSingleRecord(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context,
+            DescribeDomainRecordsResponseBody.Record record) {
+        if (!context.getDnsRRType()
+                .name()
+                .equals(record.getType()) || !record.getValue()
+                .equals(context.getRecordValue())) {
             AliyunDnsRepo.updateDomainRecord(
-                    aliyun, record.getRecordId(), getRR(trafficRoute), dnsType.name(),
-                    trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+                    context.getConfig(), record.getRecordId(), context.getRR(), context.getDnsRRType()
+                            .name(), context.getRecordValue(), context.getTTL()
             );
         } else {
             TrafficRouteException.runtime("DNS record already exists, no operation performed");
         }
     }
 
-    private void handleMultipleRecords(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                                       TrafficRecordTarget trafficRecordTarget,
-                                       List<DescribeDomainRecordsResponseBody.Record> matchedRecords,
-                                       DnsRRType dnsType) {
-        Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = matchedRecords.stream()
+    private void handleMultipleRecords(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
+        Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = context.getMatchedRecords()
+                .stream()
                 .filter(e -> e.getValue()
-                        .equals(trafficRecordTarget.getRecordValue()))
+                        .equals(context.getRecordValue()))
                 .findFirst();
-
         if (optionalRecord.isPresent()) {
-            updateAndDeleteOthers(
-                    aliyun, trafficRoute, trafficRecordTarget, matchedRecords, optionalRecord.get(), dnsType);
+            updateAndDeleteOthers(context, optionalRecord.get());
         } else {
-            addAndDeleteAll(aliyun, trafficRoute, trafficRecordTarget, matchedRecords, dnsType);
+            addAndDeleteAll(context);
         }
     }
 
-    private void updateAndDeleteOthers(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                                       TrafficRecordTarget trafficRecordTarget,
-                                       List<DescribeDomainRecordsResponseBody.Record> matchedRecords,
-                                       DescribeDomainRecordsResponseBody.Record targetRecord, DnsRRType dnsType) {
+    private void updateAndDeleteOthers(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context,
+            DescribeDomainRecordsResponseBody.Record targetRecord) {
         final String recordId = targetRecord.getRecordId();
         AliyunDnsRepo.updateDomainRecord(
-                aliyun, recordId, getRR(trafficRoute), dnsType.name(),
-                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+                context.getConfig(), recordId, context.getRR(), context.getDnsRRType()
+                        .name(), context.getRecordValue(), context.getTTL()
         );
-        matchedRecords.stream()
+        context.getMatchedRecords()
+                .stream()
                 .map(DescribeDomainRecordsResponseBody.Record::getRecordId)
                 .filter(id -> !id.equals(recordId))
-                .forEach(id -> AliyunDnsRepo.deleteDomainRecord(aliyun, id));
+                .forEach(id -> AliyunDnsRepo.deleteDomainRecord(context.getConfig(), id));
     }
 
-    private void addAndDeleteAll(EdsConfigs.Aliyun aliyun, TrafficRoute trafficRoute,
-                                 TrafficRecordTarget trafficRecordTarget,
-                                 List<DescribeDomainRecordsResponseBody.Record> matchedRecords, DnsRRType dnsType) {
+    private void addAndDeleteAll(
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
         AliyunDnsRepo.addDomainRecord(
-                aliyun, trafficRoute.getDomain(), getRR(trafficRoute), dnsType.name(),
-                trafficRecordTarget.getRecordValue(), trafficRecordTarget.getTtl()
+                context.getConfig(), context.getDomain(), context.getRR(), context.getDnsRRType()
+                        .name(), context.getRecordValue(), context.getTTL()
         );
-
-        matchedRecords.forEach(record -> AliyunDnsRepo.deleteDomainRecord(aliyun, record.getRecordId()));
+        context.getMatchedRecords()
+                .forEach(record -> AliyunDnsRepo.deleteDomainRecord(context.getConfig(), record.getRecordId()));
     }
 
     private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {
@@ -169,8 +182,8 @@ public class AliyunDnsResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecord = trafficRoute.getDomainRecord();
         List<DescribeDomainRecordsResponseBody.Record> matchedRecords = records.stream()
-                .filter(record -> dnsRRType.name().equals(record.getType()) && domainRecord.equals(
-                        buildFullRecordName(record)))
+                .filter(record -> dnsRRType.name()
+                        .equals(record.getType()) && domainRecord.equals(buildFullRecordName(record)))
                 .toList();
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return DNS.ResourceRecordSet.NO_DATA;

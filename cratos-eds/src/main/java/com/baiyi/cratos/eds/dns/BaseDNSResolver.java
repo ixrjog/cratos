@@ -11,7 +11,6 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -55,9 +54,9 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
                 .getConfig();
     }
 
-    protected String getRR(TrafficRoute trafficRoute) {
-        return StringUtils.removeEnd(trafficRoute.getDomainRecord(), "." + trafficRoute.getDomain());
-    }
+//    protected String getRR(TrafficRoute trafficRoute) {
+//        return StringUtils.removeEnd(trafficRoute.getDomainRecord(), "." + trafficRoute.getDomain());
+//    }
 
     protected String toFQDN(String domainName) {
         if (domainName == null || domainName.isEmpty()) {
@@ -72,6 +71,8 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
     }
 
     protected abstract List<Record> getTrafficRouteRecords(Config config, TrafficRoute trafficRoute);
+
+    protected abstract void handleSingleTargetRouting(SwitchRecordTargetContext<Config, Record> context);
 
     protected void validateRecordCount(List<Record> matchedRecords) {
         if (!CollectionUtils.isEmpty(matchedRecords) && matchedRecords.size() > MAX_LOAD_BALANCING) {
