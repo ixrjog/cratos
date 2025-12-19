@@ -69,6 +69,7 @@ public class TrafficRouteVO {
                     .name(name)
                     .dnsResolverInstanceId(dnsResolverInstanceId)
                     .recordType(recordType)
+                    .zoneId(zoneId)
                     .valid(valid)
                     .comment(comment)
                     .build();
