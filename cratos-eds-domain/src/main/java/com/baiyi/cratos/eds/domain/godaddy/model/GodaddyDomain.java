@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.domain.model;
+package com.baiyi.cratos.eds.domain.godaddy.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

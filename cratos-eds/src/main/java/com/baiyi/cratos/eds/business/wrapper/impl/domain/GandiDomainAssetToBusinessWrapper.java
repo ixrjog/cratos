@@ -6,7 +6,7 @@ import com.baiyi.cratos.eds.business.wrapper.impl.domain.base.BaseDomainAssetToB
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
-import com.baiyi.cratos.eds.domain.model.GandiDomain;
+import com.baiyi.cratos.eds.domain.gandi.model.GandiDomain;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
-package com.baiyi.cratos.eds.domain.service;
+package com.baiyi.cratos.eds.domain.gandi.service;
 
-import com.baiyi.cratos.eds.domain.model.GandiDomain;
-import org.springframework.web.bind.annotation.RequestHeader;
+import com.baiyi.cratos.eds.domain.gandi.GandiService;
+import com.baiyi.cratos.eds.domain.gandi.model.GandiDomain;
 import org.springframework.web.service.annotation.GetExchange;
 
 import java.util.List;
@@ -12,14 +12,15 @@ import java.util.List;
  * &#064;Version 1.0
  */
 //@HttpExchange(accept = "application/json", contentType = "application/json;charset=utf-8")
-public interface GandiDomainService {
+public interface GandiDomainService extends GandiService {
 
     /**
      * https://api.gandi.net/docs/domains/
+     *
      * @param authorization Example: Apikey your-api-key
      * @return
      */
     @GetExchange("/v5/domain/domains")
-    List<GandiDomain.Domain> queryDomains(@RequestHeader("Authorization") String authorization);
+    List<GandiDomain.Domain> queryDomains();
 
 }

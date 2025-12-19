@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.domain.model;
+package com.baiyi.cratos.eds.domain.gandi.model;
 
 import com.baiyi.cratos.domain.constant.Global;
 import com.fasterxml.jackson.annotation.JsonFormat;

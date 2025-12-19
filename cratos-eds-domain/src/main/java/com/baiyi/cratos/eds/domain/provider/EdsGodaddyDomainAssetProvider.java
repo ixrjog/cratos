@@ -13,8 +13,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.domain.model.GodaddyDomain;
-import com.baiyi.cratos.eds.domain.repo.GodaddyDomainRepo;
+import com.baiyi.cratos.eds.domain.godaddy.model.GodaddyDomain;
+import com.baiyi.cratos.eds.domain.godaddy.repo.GodaddyDomainRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -31,24 +31,20 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GODADDY, assetTypeOf = EdsAssetTypeEnum.GODADDY_DOMAIN)
 public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Godaddy, GodaddyDomain.Domain> {
 
-    private final GodaddyDomainRepo godaddyDomainRepo;
-
     public EdsGodaddyDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                          CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                          EdsAssetIndexFacade edsAssetIndexFacade,
                                          AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                         EdsInstanceProviderHolderBuilder holderBuilder,
-                                         GodaddyDomainRepo godaddyDomainRepo) {
+                                         EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder);
-        this.godaddyDomainRepo = godaddyDomainRepo;
     }
 
     @Override
     protected List<GodaddyDomain.Domain> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Godaddy> instance) throws EdsQueryEntitiesException {
         try {
-            return godaddyDomainRepo.queryDomains(instance.getConfig());
+            return GodaddyDomainRepo.queryDomains(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }

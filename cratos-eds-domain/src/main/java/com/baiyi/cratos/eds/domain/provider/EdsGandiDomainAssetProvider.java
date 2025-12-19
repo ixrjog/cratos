@@ -13,8 +13,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
-import com.baiyi.cratos.eds.domain.model.GandiDomain;
-import com.baiyi.cratos.eds.domain.repo.GandiDomainRepo;
+import com.baiyi.cratos.eds.domain.gandi.model.GandiDomain;
+import com.baiyi.cratos.eds.domain.gandi.repo.GandiDomainRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -31,24 +31,20 @@ import java.util.List;
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GANDI, assetTypeOf = EdsAssetTypeEnum.GANDI_DOMAIN)
 public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Gandi, GandiDomain.Domain> {
 
-    private final GandiDomainRepo gandiDomainRepo;
-
     public EdsGandiDomainAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                        CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                        EdsAssetIndexFacade edsAssetIndexFacade,
                                        AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
-                                       EdsInstanceProviderHolderBuilder holderBuilder,
-                                       GandiDomainRepo gandiDomainRepo) {
+                                       EdsInstanceProviderHolderBuilder holderBuilder) {
         super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder);
-        this.gandiDomainRepo = gandiDomainRepo;
     }
 
     @Override
     protected List<GandiDomain.Domain> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Gandi> instance) throws EdsQueryEntitiesException {
         try {
-            return gandiDomainRepo.queryDomains(instance.getConfig());
+            return GandiDomainRepo.queryDomains(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
