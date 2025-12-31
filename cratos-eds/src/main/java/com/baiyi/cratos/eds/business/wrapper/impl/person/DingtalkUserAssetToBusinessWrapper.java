@@ -46,6 +46,17 @@ public class DingtalkUserAssetToBusinessWrapper extends BaseAssetToBusinessWrapp
                 .build();
     }
 
+    private String getMobilePhone(DingtalkUserModel.User model) {
+        if (StringUtils.hasText(model.getMobile())) {
+            if (StringUtils.hasText(model.getStateCode())) {
+                return model.getStateCode() + "-" + model.getMobile();
+            }
+        } else {
+            return model.getMobile();
+        }
+        return "0";
+    }
+
     private String getUsername(DingtalkUserModel.User model) {
         String email = Optional.of(model)
                 .map(DingtalkUserModel.User::getEmail)

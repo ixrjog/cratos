@@ -92,6 +92,19 @@ public class AliyunRamUserRepo {
                 .getUser();
     }
 
+    public UpdateUserResponse.User updateUser(String regionId, EdsConfigs.Aliyun aliyun, String username, String email,
+                                              String phone) throws ClientException {
+        UpdateUserRequest request = new UpdateUserRequest();
+        request.setUserName(username);
+        request.setNewUserName(username);
+        if (ValidationUtils.isEmail(email)) {
+            request.setNewEmail(email);
+        }
+        request.setNewMobilePhone(phone);
+        return aliyunClient.getAcsResponse(regionId, aliyun, request)
+                .getUser();
+    }
+
     /**
      * 开通控制台登录
      *

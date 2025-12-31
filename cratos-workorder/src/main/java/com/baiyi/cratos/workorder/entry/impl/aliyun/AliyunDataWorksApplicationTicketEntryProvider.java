@@ -91,7 +91,8 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
                 .getConfig();
         String ramUsername = aliyunAccount.getAccount();
         String username = aliyunAccount.getUsername();
-        CreateUserResponse.User createUser = createRAMUser(aliyun, ramUsername);
+        User user = userService.getByUsername(username);
+        CreateUserResponse.User createUser = createRAMUser(aliyun, user, ramUsername);
         CreateAccessKeyResponse.AccessKey accessKey = createAccessKey(aliyun, ramUsername);
         // 发送通知
         sendMsg(workOrderTicket, username, ramUsername, accessKey);
@@ -129,12 +130,14 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         }
     }
 
-    private CreateUserResponse.User createRAMUser(EdsConfigs.Aliyun aliyun, String ramUsername) {
+    private CreateUserResponse.User createRAMUser(EdsConfigs.Aliyun aliyun, User user, String ramUsername) {
         try {
-            return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, ramUsername);
+            return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, user, ramUsername);
         } catch (ClientException clientException) {
-            throw new WorkOrderTicketException("Failed to create Aliyun RAM user err: {}",
-                    clientException.getMessage());
+            throw new WorkOrderTicketException(
+                    "Failed to create Aliyun RAM user err: {}",
+                                               clientException.getMessage()
+            );
         }
     }
 
@@ -142,8 +145,10 @@ public class AliyunDataWorksApplicationTicketEntryProvider extends BaseTicketEnt
         try {
             return aliyunRamAccessKeyRepo.createAccessKey(aliyun, ramUsername);
         } catch (ClientException clientException) {
-            throw new WorkOrderTicketException("Failed to create Aliyun RAM user accessKey err: {}",
-                    clientException.getMessage());
+            throw new WorkOrderTicketException(
+                    "Failed to create Aliyun RAM user accessKey err: {}",
+                                               clientException.getMessage()
+            );
         }
     }
 
