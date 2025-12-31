@@ -3,7 +3,10 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
+
+import java.util.List;
 
 
 /**
@@ -24,5 +27,7 @@ public interface TrafficRouteFacade {
     void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
 
     TrafficRouteVO.Route getTrafficRouteById(int id);
+
+    List<EdsInstanceVO.EdsInstance> queryDnsResolverInstances();
 
 }

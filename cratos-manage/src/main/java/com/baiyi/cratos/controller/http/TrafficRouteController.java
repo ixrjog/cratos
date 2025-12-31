@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.enums.TrafficRecordTargetTypes;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 import com.baiyi.cratos.facade.TrafficRouteFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * &#064;Author  baiyi
@@ -26,6 +29,12 @@ import org.springframework.web.bind.annotation.*;
 public class TrafficRouteController {
 
     private final TrafficRouteFacade trafficRouteFacade;
+
+    @Operation(summary = "Query dns resolver eds instances")
+    @GetMapping(value = "/dns/resolver/instance/query", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<EdsInstanceVO.EdsInstance>> queryDnsResolverInstances() {
+        return HttpResult.of(trafficRouteFacade.queryDnsResolverInstances());
+    }
 
     @Operation(summary = "Pagination query traffic route")
     @PostMapping(value = "/page/query", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

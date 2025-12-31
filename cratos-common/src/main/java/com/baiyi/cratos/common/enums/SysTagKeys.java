@@ -40,8 +40,8 @@ public enum SysTagKeys {
     COUNTRY_CODE("CountryCode"),
     FIN_LOSSES("FinLosses"),
     INSPECTION_NOTIFICATION("InspectionNotification"),
-    ALERT_NOTIFICATION("AlertNotification")
-
+    ALERT_NOTIFICATION("AlertNotification"),
+    DNS_RESOLVER("DNSResolver")
     ;
 
     private final String key;

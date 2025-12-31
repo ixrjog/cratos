@@ -1,21 +1,28 @@
 package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.enums.TrafficRecordTargetTypes;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
+import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.domain.view.eds.EdsInstanceVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficRouteVO;
 import com.baiyi.cratos.eds.dns.DNSResolver;
 import com.baiyi.cratos.eds.dns.DNSResolverFactory;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.TrafficRouteFacade;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import com.baiyi.cratos.wrapper.traffic.TrafficRouteWrapper;
@@ -23,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -39,6 +48,8 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     private final TrafficRecordTargetService trafficRecordTargetService;
     private final TrafficRouteWrapper routeWrapper;
     private final EdsInstanceService edsInstanceService;
+    private final EdsFacade edsFacade;
+    private final TagService tagService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.TRAFFIC_ROUTE)
@@ -76,6 +87,25 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
             TrafficRouteException.runtime("traffic route id not found");
         }
         return routeWrapper.wrapToTarget(trafficRoute);
+    }
+
+    @Override
+    public List<EdsInstanceVO.EdsInstance> queryDnsResolverInstances() {
+        Tag tag = tagService.getByTagKey(SysTagKeys.DNS_RESOLVER);
+        if (Objects.isNull(tag)) {
+            return List.of();
+        }
+        BusinessTagParam.QueryByTag queryByTag = BusinessTagParam.QueryByTag.builder()
+                .tagId(tag.getId())
+                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                .build();
+        EdsInstanceParam.InstancePageQuery pageQuery = EdsInstanceParam.InstancePageQuery.builder()
+                .page(1)
+                .length(16)
+                .queryByTag(queryByTag)
+                .build();
+        DataTable<EdsInstanceVO.EdsInstance> table = edsFacade.queryEdsInstancePage(pageQuery);
+        return table.getData();
     }
 
     @Override
