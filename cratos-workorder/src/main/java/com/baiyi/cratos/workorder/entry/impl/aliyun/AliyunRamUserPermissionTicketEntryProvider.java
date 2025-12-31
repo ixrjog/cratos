@@ -98,11 +98,14 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         String ramUsername = aliyunAccount.getRamUsername();
         String ramLoginUsername = aliyunAccount.getRamLoginUsername();
         String username = aliyunAccount.getUsername();
+        User user = userService.getByUsername(username);
         final String password = PasswordGenerator.generatePassword();
-        CreateUserResponse.User createUser = createRamUser(aliyun, ramUsername, password);
+        CreateUserResponse.User createUser = createRamUser(aliyun, user, ramUsername, password);
         // 发送通知
-        sendMsg(workOrderTicket, username, ramLoginUsername, password, aliyun.getRam()
-                .toLoginUrl());
+        sendMsg(
+                workOrderTicket, username, ramLoginUsername, password, aliyun.getRam()
+                        .toLoginUrl()
+        );
         // 导入资产
         GetUserResponse.User getUser = getRamUser(aliyun, ramUsername);
         EdsAsset asset = holder.importAsset(getUser);
@@ -122,8 +125,10 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         try {
             WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
             User applicantUser = userService.getByUsername(username);
-            createAliyunRamUserNoticeSender.sendMsg(workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
-                    applicantUser);
+            createAliyunRamUserNoticeSender.sendMsg(
+                    workOrder, workOrderTicket, ramLoginUsername, password, loginLink,
+                    applicantUser
+            );
         } catch (Exception e) {
             throw new WorkOrderTicketException("Sending user notification failed err: {}", e.getMessage());
         }
@@ -137,14 +142,18 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         }
     }
 
-    private CreateUserResponse.User createRamUser(EdsConfigs.Aliyun aliyun, String ramUsername,
+    private CreateUserResponse.User createRamUser(EdsConfigs.Aliyun aliyun, User user, String ramUsername,
                                                   String password) {
         try {
-            return aliyunRamUserRepo.createUser(aliyun.getRegionId(), aliyun, ramUsername, password,
-                    CREATE_LOGIN_PROFILE, ENABLE_MFA);
+            return aliyunRamUserRepo.createUser(
+                    aliyun.getRegionId(), aliyun, user, ramUsername, password,
+                    CREATE_LOGIN_PROFILE, ENABLE_MFA
+            );
         } catch (ClientException clientException) {
-            throw new WorkOrderTicketException("Failed to create Aliyun RAM user err: {}",
-                    clientException.getMessage());
+            throw new WorkOrderTicketException(
+                    "Failed to create Aliyun RAM user err: {}",
+                                               clientException.getMessage()
+            );
         }
     }
 
@@ -174,7 +183,8 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
         EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User> holder = (EdsInstanceProviderHolder<EdsConfigs.Aliyun, GetUserResponse.User>) edsInstanceProviderHolderBuilder.newHolder(
                 param.getDetail()
                         .getEdsInstance()
-                        .getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
+                        .getId(), EdsAssetTypeEnum.ALIYUN_RAM_USER.name()
+        );
         EdsConfigs.Aliyun aliyun = holder.getInstance()
                 .getConfig();
         return CreateAliyunRamUserTicketEntryBuilder.newBuilder()
@@ -188,8 +198,10 @@ public class AliyunRamUserPermissionTicketEntryProvider extends BaseTicketEntryP
     public String getEntryTableRow(WorkOrderTicketEntry entry) {
         AliyunModel.AliyunAccount aliyunAccount = loadAs(entry);
         EdsInstance instance = edsInstanceService.getById(entry.getInstanceId());
-        return MarkdownUtils.createTableRow(instance.getInstanceName(), aliyunAccount.getAccount(),
-                aliyunAccount.getLoginLink());
+        return MarkdownUtils.createTableRow(
+                instance.getInstanceName(), aliyunAccount.getAccount(),
+                aliyunAccount.getLoginLink()
+        );
     }
 
     @Override

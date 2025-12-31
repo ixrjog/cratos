@@ -171,8 +171,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     }
 
     @Override
-    public String getConsoleURL(TrafficRoute trafficRoute) {
-        return StringFormatter.format(CONSOLE_URL, trafficRoute.getZoneId());
+    public String generateConsoleURL(TrafficRoute trafficRoute) {
+        return StringFormatter.format(CONSOLE_URL, getZoneId(trafficRoute));
     }
 
     private DNS.ResourceRecordSet findMatchingRecord(List<ResourceRecordSet> resourceRecordSets,

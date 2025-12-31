@@ -38,7 +38,7 @@ public class TrafficRouteWrapper extends BaseDataTableConverter<TrafficRouteVO.R
         }
         // Console URL
         try {
-            vo.setConsoleUrl(dnsResolver.getConsoleURL(vo.toTrafficRoute()));
+            vo.setConsoleUrl(dnsResolver.generateConsoleURL(vo.toTrafficRoute()));
         } catch (Exception e) {
              log.error(e.getMessage(), e);
         }

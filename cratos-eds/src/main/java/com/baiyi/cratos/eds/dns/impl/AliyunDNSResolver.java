@@ -79,7 +79,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     }
 
     @Override
-    public String getConsoleURL(TrafficRoute trafficRoute) {
+    public String generateConsoleURL(TrafficRoute trafficRoute) {
         String rr = SwitchRecordTargetContext.getRR(trafficRoute.getDomain(), trafficRoute.getDomainRecord());
         return StringFormatter.arrayFormat(CONSOLE_URL, trafficRoute.getDomain(), rr);
     }

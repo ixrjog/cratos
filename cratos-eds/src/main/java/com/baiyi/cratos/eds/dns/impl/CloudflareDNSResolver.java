@@ -75,6 +75,7 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         return records.stream()
                 .map(record -> DNS.ResourceRecord.builder()
                         .value(record.getContent())
+                        .proxied(record.getProxied())
                         .build())
                 .toList();
     }
@@ -193,7 +194,7 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     }
 
     @Override
-    public String getConsoleURL(TrafficRoute trafficRoute) {
+    public String generateConsoleURL(TrafficRoute trafficRoute) {
         EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.CLOUDFLARE_ZONE);
         return StringFormatter.arrayFormat(CONSOLE_URL, config.getCred()
                 .getAccountId(), trafficRoute.getDomain()

@@ -46,5 +46,8 @@ public class DNS {
         private String value;
         private Long weight;
         private Long tTL;
+        // proxied = false (Only DNS)
+        private Boolean proxied;
     }
+
 }

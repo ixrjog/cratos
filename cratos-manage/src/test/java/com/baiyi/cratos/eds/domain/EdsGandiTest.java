@@ -25,8 +25,22 @@ public class EdsGandiTest extends BaseEdsTest<EdsConfigs.Gandi> {
 
     @Test
     void test2() {
-        List<GandiLiveDNS.Record> records = GandiLiveDNSRepo.queryRecords(getConfig(20), "easeid.ai");
+        List<GandiLiveDNS.Record> records = GandiLiveDNSRepo.queryRecords(getConfig(20), "flexiglobal.vip");
         System.out.println(records);
+    }
+
+    @Test
+    void test3() {
+//        List<GandiLiveDNS.Record> records =  GandiServiceFactory.createLiveDNSService(getConfig(20))
+//                .queryRecordsByNameAndType("flexiglobal.vip","traffic-test","CNAME");
+//        System.out.println(records);
+    }
+
+    @Test
+    void test4() {
+//       String records =  GandiServiceFactory.createLiveDNSService(getConfig(20)).
+//                .queryRecordsByNameAndType2("flexiglobal.vip","traffic-test.flexiglobal.vip","CNAME");
+//        System.out.println(records);
     }
 
 }

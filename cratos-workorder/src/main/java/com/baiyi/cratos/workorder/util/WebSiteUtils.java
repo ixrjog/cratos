@@ -15,11 +15,10 @@ public class WebSiteUtils {
     public static String generateWebSite(String domain, String mappingsPath) {
         String path;
         if (mappingsPath.isEmpty() || mappingsPath.equals("/")) {
-            path = "/";
+            return StringFormatter.format("https://{}/", domain);
         } else {
-            path = processPath(mappingsPath);
+            return StringFormatter.arrayFormat("https://{}/{}", domain, processPath(mappingsPath));
         }
-        return StringFormatter.arrayFormat("https://{}/{}", domain, path);
     }
 
     private static String processPath(String mappingsPath) {

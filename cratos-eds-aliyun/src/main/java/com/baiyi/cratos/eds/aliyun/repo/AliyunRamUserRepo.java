@@ -2,6 +2,7 @@ package com.baiyi.cratos.eds.aliyun.repo;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.*;
+import com.baiyi.cratos.common.util.PhoneNumberUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
@@ -55,9 +56,8 @@ public class AliyunRamUserRepo {
         return response.getUser();
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, User user,
-                                              String password, boolean createLoginProfile,
-                                              boolean enableMFA) throws ClientException {
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, User user, String password,
+                                              boolean createLoginProfile, boolean enableMFA) throws ClientException {
         CreateUserResponse.User createUser = createUser(regionId, aliyun, user);
         if (createLoginProfile) {
             createLoginProfile(regionId, aliyun, user, password, NO_PASSWORD_RESET_REQUIRED, enableMFA);
@@ -65,21 +65,28 @@ public class AliyunRamUserRepo {
         return createUser;
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, String ramUsername,
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, User user, String ramUsername,
                                               String password, boolean createLoginProfile,
                                               boolean enableMFA) throws ClientException {
-        CreateUserResponse.User createUser = createUser(regionId, aliyun, ramUsername);
+        CreateUserResponse.User createUser = createUser(regionId, aliyun, user, ramUsername);
         if (createLoginProfile) {
             createLoginProfile(regionId, aliyun, ramUsername, password, NO_PASSWORD_RESET_REQUIRED, enableMFA);
         }
         return createUser;
     }
 
-    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun,
+    public CreateUserResponse.User createUser(String regionId, EdsConfigs.Aliyun aliyun, User user,
                                               String username) throws ClientException {
         CreateUserRequest request = new CreateUserRequest();
         request.setUserName(username);
         request.setDisplayName(username);
+        if (ValidationUtils.isEmail(user.getEmail())) {
+            request.setEmail(user.getEmail());
+        }
+        String phone = PhoneNumberUtils.convertPhoneNumber(user.getMobilePhone());
+        if (PhoneNumberUtils.isValidPhoneNumber(phone)) {
+            request.setMobilePhone(phone);
+        }
         request.setComments(CREATED_BY);
         return aliyunClient.getAcsResponse(regionId, aliyun, request)
                 .getUser();
@@ -95,9 +102,9 @@ public class AliyunRamUserRepo {
      * @return
      * @throws ClientException
      */
-    private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
-                                                                       EdsConfigs.Aliyun aliyun, User user,
-                                                                       String password, boolean passwordResetRequired,
+    private CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId, EdsConfigs.Aliyun aliyun,
+                                                                       User user, String password,
+                                                                       boolean passwordResetRequired,
                                                                        boolean mFABindRequired) throws ClientException {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(user.getUsername());
@@ -108,11 +115,10 @@ public class AliyunRamUserRepo {
                 .getLoginProfile();
     }
 
-    public CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId,
-                                                                      EdsConfigs.Aliyun aliyun,
-                                                                       String ramUsername, String password,
-                                                                       boolean passwordResetRequired,
-                                                                       boolean mFABindRequired) throws ClientException {
+    public CreateLoginProfileResponse.LoginProfile createLoginProfile(String regionId, EdsConfigs.Aliyun aliyun,
+                                                                      String ramUsername, String password,
+                                                                      boolean passwordResetRequired,
+                                                                      boolean mFABindRequired) throws ClientException {
         CreateLoginProfileRequest request = new CreateLoginProfileRequest();
         request.setUserName(ramUsername);
         request.setPassword(password);
@@ -148,8 +154,7 @@ public class AliyunRamUserRepo {
                 .getUser();
     }
 
-    public List<ListEntitiesForPolicyResponse.User> listUsersForPolicy(EdsConfigs.Aliyun aliyun,
-                                                                       String policyName,
+    public List<ListEntitiesForPolicyResponse.User> listUsersForPolicy(EdsConfigs.Aliyun aliyun, String policyName,
                                                                        String policyType) throws ClientException {
         ListEntitiesForPolicyRequest request = new ListEntitiesForPolicyRequest();
         request.setPolicyName(policyName);
@@ -190,6 +195,7 @@ public class AliyunRamUserRepo {
 
     /**
      * MFA 设备需要先解除绑定才能删除
+     *
      * @param aliyun
      * @param ramUsername
      * @return
