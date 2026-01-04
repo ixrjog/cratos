@@ -30,4 +30,8 @@ public interface TrafficRouteFacade {
 
     List<EdsInstanceVO.EdsInstance> queryDnsResolverInstances();
 
+    void deleteTrafficRouteById(int id);
+
+    void deleteTrafficRecordTargetById(int id);
+
 }

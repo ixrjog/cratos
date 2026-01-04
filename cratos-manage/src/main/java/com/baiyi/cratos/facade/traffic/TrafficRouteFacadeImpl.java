@@ -29,6 +29,7 @@ import com.baiyi.cratos.wrapper.traffic.TrafficRouteWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -167,6 +168,19 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
             throw new TrafficRouteException("Invalid target type.");
         }
         trafficRecordTargetService.add(trafficRecordTarget);
+    }
+
+    @Override
+    public void deleteTrafficRouteById(int id) {
+        if (!CollectionUtils.isEmpty(trafficRecordTargetService.queryByTrafficRouteId(id))) {
+            throw new TrafficRouteException("Please delete TrafficRecordTarget before executing route deletion.");
+        }
+        trafficRouteService.deleteById(id);
+    }
+
+    @Override
+    public void deleteTrafficRecordTargetById(int id) {
+        trafficRecordTargetService.deleteById(id);
     }
 
 }

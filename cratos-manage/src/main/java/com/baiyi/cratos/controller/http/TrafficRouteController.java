@@ -50,6 +50,13 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Delete traffic route by id")
+    @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTrafficRouteById(@RequestParam int id) {
+        trafficRouteFacade.deleteTrafficRouteById(id);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Get traffic route by id")
     @GetMapping(value = "/get", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<TrafficRouteVO.Route> getTrafficRouteById(@RequestParam int id) {
@@ -75,6 +82,13 @@ public class TrafficRouteController {
     public HttpResult<Boolean> switchToTarget(
             @RequestBody @Valid TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
         trafficRouteFacade.switchToTarget(switchRecordTarget);
+        return HttpResult.SUCCESS;
+    }
+
+    @Operation(summary = "Delete traffic record target by id")
+    @DeleteMapping(value = "/record/target/del", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> deleteTrafficRecordTargetById(@RequestParam int id) {
+        trafficRouteFacade.deleteTrafficRecordTargetById(id);
         return HttpResult.SUCCESS;
     }
 

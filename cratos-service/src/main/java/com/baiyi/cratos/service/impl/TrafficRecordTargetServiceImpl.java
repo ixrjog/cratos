@@ -1,5 +1,6 @@
 package com.baiyi.cratos.service.impl;
 
+import com.baiyi.cratos.annotation.DeleteBoundBusiness;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
@@ -37,6 +38,12 @@ public class TrafficRecordTargetServiceImpl implements TrafficRecordTargetServic
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("trafficRouteId", trafficRouteId);
         return trafficRecordTargetMapper.selectByExample(example);
+    }
+
+    @Override
+    @DeleteBoundBusiness(businessId = "#id", targetTypes = {BusinessTypeEnum.BUSINESS_TAG, BusinessTypeEnum.BUSINESS_DOC})
+    public void deleteById(int id) {
+        TrafficRecordTargetService.super.deleteById(id);
     }
 
 }
