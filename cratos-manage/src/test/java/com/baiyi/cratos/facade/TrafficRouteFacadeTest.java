@@ -27,4 +27,11 @@ public class TrafficRouteFacadeTest extends BaseUnit {
         System.out.println(dataTable.getData());
     }
 
+
+    @Test
+    void test2() {
+        TrafficRouteVO.Route route = trafficRouteFacade.getTrafficRouteById(10);
+        System.out.println(route);
+    }
+
 }

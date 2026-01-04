@@ -194,7 +194,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
                 .resourceRecords(record.getResourceRecords()
                                          .stream()
                                          .map(r -> DNS.ResourceRecord.builder()
-                                                 .value(r.getValue())
+                                                 // 擦除Root
+                                                 .value(removeFQDNRoot(r.getValue()))
                                                  .tTL(record.getTTL())
                                                  .weight(record.getWeight())
                                                  .build())
