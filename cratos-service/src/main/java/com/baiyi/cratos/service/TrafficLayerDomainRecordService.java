@@ -7,6 +7,8 @@ import com.baiyi.cratos.mapper.TrafficLayerDomainRecordMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 
+import java.util.List;
+
 /**
  * @Author baiyi
  * @Date 2024/3/29 10:40
@@ -15,6 +17,8 @@ import com.baiyi.cratos.service.base.BaseValidService;
 public interface TrafficLayerDomainRecordService extends BaseUniqueKeyService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper>, BaseValidService<TrafficLayerDomainRecord, TrafficLayerDomainRecordMapper> {
 
     DataTable<TrafficLayerDomainRecord> queryPageByParam(TrafficLayerRecordParam.RecordPageQuery pageQuery);
+
+    List<TrafficLayerDomainRecord> queryByRecordName(String recordName);
 
     int selectCountByDomainId(int domainId);
 

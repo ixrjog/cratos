@@ -58,6 +58,14 @@ public class TrafficLayerDomainRecordServiceImpl implements TrafficLayerDomainRe
     }
 
     @Override
+    public List<TrafficLayerDomainRecord> queryByRecordName(String recordName) {
+        Example example = new Example(TrafficLayerDomainRecord.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("recordName", recordName);
+        return trafficLayerDomainRecordMapper.selectByExample(example);
+    }
+
+    @Override
     public TrafficLayerDomainRecord getByUniqueKey(@NonNull TrafficLayerDomainRecord record) {
         Example example = new Example(TrafficLayerDomainRecord.class);
         Example.Criteria criteria = example.createCriteria();

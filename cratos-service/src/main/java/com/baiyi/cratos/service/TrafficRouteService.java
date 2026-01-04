@@ -7,6 +7,7 @@ import com.baiyi.cratos.mapper.TrafficRouteMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
 import com.baiyi.cratos.service.base.SupportBusinessService;
+import lombok.NonNull;
 
 /**
  * &#064;Author  baiyi
@@ -16,5 +17,7 @@ import com.baiyi.cratos.service.base.SupportBusinessService;
 public interface TrafficRouteService extends BaseUniqueKeyService<TrafficRoute, TrafficRouteMapper>, BaseValidService<TrafficRoute, TrafficRouteMapper>, SupportBusinessService {
 
     DataTable<TrafficRoute> queryPageByParam(TrafficRouteParam.RoutePageQueryParam pageQuery);
+
+    TrafficRoute getByDomainRecord(@NonNull String domainRecord);
 
 }

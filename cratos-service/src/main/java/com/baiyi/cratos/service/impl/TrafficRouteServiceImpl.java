@@ -47,8 +47,16 @@ public class TrafficRouteServiceImpl implements TrafficRouteService {
     public TrafficRoute getByUniqueKey(@NonNull TrafficRoute record) {
         Example example = new Example(TrafficRoute.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("domainRecordId", record.getDomainRecordId());
+        criteria.andEqualTo("domainRecord", record.getDomainRecord());
         return trafficRouteMapper.selectOneByExample(example);
     }
+
+    @Override
+    public TrafficRoute getByDomainRecord(@NonNull String domainRecord) {
+        return getByUniqueKey(TrafficRoute.builder()
+                                      .domainRecord(domainRecord)
+                                      .build());
+    }
+
 
 }
