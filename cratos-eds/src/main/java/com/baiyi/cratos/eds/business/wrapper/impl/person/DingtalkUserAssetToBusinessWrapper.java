@@ -40,7 +40,7 @@ public class DingtalkUserAssetToBusinessWrapper extends BaseAssetToBusinessWrapp
                 .name(model.getName())
                 .displayName(model.getName())
                 .email(model.getEmail())
-                .mobilePhone(model.getMobile())
+                .mobilePhone(getMobilePhone(model))
                 .valid(true)
                 .locked(false)
                 .build();
