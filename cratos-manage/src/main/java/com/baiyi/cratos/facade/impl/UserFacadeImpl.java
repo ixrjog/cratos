@@ -138,7 +138,7 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    @Transactional(rollbackFor = {Exception.class})
+    //@Transactional(rollbackFor = {Exception.class})
     public void resetUserPassword(UserParam.ResetPassword resetPassword) {
         final String username = SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -165,7 +165,6 @@ public class UserFacadeImpl implements UserFacade {
                     .username(username)
                     .password(resetPassword.getPassword())
                     .build();
-
             for (EdsIdentityVO.LdapIdentity ldapIdentity : ldapIdentities) {
                 resetLdapUserPassword.setInstanceId(ldapIdentity.getInstance()
                                                             .getId());

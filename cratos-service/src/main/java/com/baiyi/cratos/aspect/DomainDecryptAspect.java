@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
