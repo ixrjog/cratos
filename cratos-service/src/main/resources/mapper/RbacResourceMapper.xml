@@ -54,7 +54,6 @@
         <where>
             id not in
             ( select resource_id FROM rbac_role_resource WHERE role_id = #{roleId} GROUP BY resource_id )
-            and valid = 1
             <if test="groupId != null">
                 and group_id = #{groupId}
             </if>
