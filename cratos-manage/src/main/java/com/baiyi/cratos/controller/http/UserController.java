@@ -61,9 +61,9 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Update user")
+    @Operation(summary = "Update my profile")
     @PutMapping(value = "/my/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateMy(@RequestBody @Valid UserParam.UpdateMy updateMy) {
+    public HttpResult<Boolean> updateMyProfile(@RequestBody @Valid UserParam.UpdateMy updateMy) {
         userFacade.updateUser(updateMy);
         return HttpResult.SUCCESS;
     }
@@ -102,9 +102,16 @@ public class UserController {
         return HttpResult.SUCCESS;
     }
 
-    @Operation(summary = "Reset user password")
-    @PostMapping(value = "/password/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> resetUserPassword(@RequestBody @Valid UserParam.ResetPassword resetPassword) {
+//    @Operation(summary = "Reset user password")
+//    @PostMapping(value = "/password/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public HttpResult<Boolean> resetUserPassword(@RequestBody @Valid UserParam.ResetPassword resetPassword) {
+//        userFacade.resetUserPassword(resetPassword);
+//        return HttpResult.SUCCESS;
+//    }
+
+    @Operation(summary = "Reset my account password")
+    @PostMapping(value = "/my/password/reset", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> resetMyAccountPassword(@RequestBody @Valid UserParam.ResetPassword resetPassword) {
         userFacade.resetUserPassword(resetPassword);
         return HttpResult.SUCCESS;
     }

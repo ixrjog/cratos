@@ -14,12 +14,15 @@ import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.param.http.rbac.RbacUserRoleParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.user.UserExtParam;
 import com.baiyi.cratos.domain.param.http.user.UserParam;
 import com.baiyi.cratos.domain.view.credential.CredentialVO;
+import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.domain.view.user.UserVO;
+import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.facade.CredentialFacade;
 import com.baiyi.cratos.facade.UserFacade;
 import com.baiyi.cratos.service.*;
@@ -57,6 +60,7 @@ public class UserFacadeImpl implements UserFacade {
     private final TagService tagService;
     private final CratosConfiguration cratosConfiguration;
     private final RbacUserRoleFacade rbacUserRoleFacade;
+    private final EdsIdentityFacade edsIdentityFacade;
 
     private final static Long NEW_PASSWORD_VALIDITY_PERIOD_DAYS = 90L;
     private final RbacRoleService rbacRoleService;
@@ -139,7 +143,35 @@ public class UserFacadeImpl implements UserFacade {
         final String username = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
+        if (!StringUtils.hasText(username)) {
+            return;
+        }
+        if (!PasswordGenerator.isPasswordStrong(resetPassword.getPassword())) {
+            UserException.runtime("Password is too weak.");
+        }
+        // 修改本地密码
         resetUserPassword(username, resetPassword);
+        // 同步修改Ldap身份密码
+        // 查询我的Ldap身份
+        EdsIdentityParam.QueryLdapIdentityDetails queryLdapIdentityDetails = EdsIdentityParam.QueryLdapIdentityDetails.builder()
+                .username(username)
+                .build();
+        List<EdsIdentityVO.LdapIdentity> ldapIdentities = Optional.ofNullable(
+                        edsIdentityFacade.queryLdapIdentityDetails(queryLdapIdentityDetails))
+                .map(EdsIdentityVO.LdapIdentityDetails::getLdapIdentities)
+                .orElseGet(List::of);
+        if (!CollectionUtils.isEmpty(ldapIdentities)) {
+            EdsIdentityParam.ResetLdapUserPassword resetLdapUserPassword = EdsIdentityParam.ResetLdapUserPassword.builder()
+                    .username(username)
+                    .password(resetPassword.getPassword())
+                    .build();
+
+            for (EdsIdentityVO.LdapIdentity ldapIdentity : ldapIdentities) {
+                resetLdapUserPassword.setInstanceId(ldapIdentity.getInstance()
+                                                            .getId());
+                edsIdentityFacade.resetLdapUserPassword(resetLdapUserPassword);
+            }
+        }
     }
 
     @Override
