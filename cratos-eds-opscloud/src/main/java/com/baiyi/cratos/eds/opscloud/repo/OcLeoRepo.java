@@ -20,8 +20,7 @@ public class OcLeoRepo {
     public static HttpResult<OcLeoVO.BuildImage> queryBuildImageVersion(EdsConfigs.Opscloud opscloud,
                                                                         OcLeoParam.QueryBuildImageVersion queryBuildImageVersion) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
-        return opscloudService.queryBuildImageVersion(opscloud.getCred()
-                .getAccessToken(), queryBuildImageVersion);
+        return opscloudService.queryBuildImageVersion(queryBuildImageVersion);
     }
 
 }

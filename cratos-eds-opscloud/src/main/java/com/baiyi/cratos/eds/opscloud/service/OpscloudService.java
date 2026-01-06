@@ -23,24 +23,22 @@ public interface OpscloudService {
 
     @PostExchange("/api/application/page/query")
     HttpResult<DataTable<OcApplicationVO.Application>> queryApplicationPage(
-            @RequestHeader("AccessToken") String accessToken,
+
             @RequestBody OcApplicationParam.ApplicationPageQuery pageQuery);
 
     @PostExchange("/api/user/page/query")
-    HttpResult<DataTable<OcUserVO.User>> queryUserPage(@RequestHeader("AccessToken") String accessToken,
-                                                       @RequestBody OcUserParam.UserPageQuery pageQuery);
+    HttpResult<DataTable<OcUserVO.User>> queryUserPage(@RequestBody OcUserParam.UserPageQuery pageQuery);
 
     @PostExchange("/api/user/business/permission/query")
     HttpResult<DataTable<OcApplicationVO.Application>> queryUserApplicationPermissionPage(
-            @RequestHeader("AccessToken") String accessToken,
+
             @RequestBody OcUserParam.UserBusinessPermissionPageQuery pageQuery);
 
     @PostExchange("/api/leo/build/image/version/query")
-    HttpResult<OcLeoVO.BuildImage> queryBuildImageVersion(@RequestHeader("AccessToken") String accessToken,
-                                                          @RequestBody OcLeoParam.QueryBuildImageVersion queryBuildImageVersion);
+    HttpResult<OcLeoVO.BuildImage> queryBuildImageVersion(
+            @RequestBody OcLeoParam.QueryBuildImageVersion queryBuildImageVersion);
 
     @PostExchange("/api/user/add")
-    HttpResult<OcUserVO.User> addUser(@RequestHeader("AccessToken") String accessToken,
-                                                 @RequestBody OcUserParam.AddUser addUser);
+    HttpResult<OcUserVO.User> addUser(@RequestBody OcUserParam.AddUser addUser);
 
 }

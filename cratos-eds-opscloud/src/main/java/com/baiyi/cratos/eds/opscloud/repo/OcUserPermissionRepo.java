@@ -22,8 +22,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class OcUserPermissionRepo {
 
-    public static List<OcApplicationVO.Application> queryUserApplicationPermission(
-            EdsConfigs.Opscloud opscloud, int userId) {
+    public static List<OcApplicationVO.Application> queryUserApplicationPermission(EdsConfigs.Opscloud opscloud,
+                                                                                   int userId) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
         int page = 1;
         int length = 10;
@@ -38,17 +38,16 @@ public class OcUserPermissionRepo {
         List<OcApplicationVO.Application> result = Lists.newArrayList();
         while (true) {
             HttpResult<DataTable<OcApplicationVO.Application>> httpResult = opscloudService.queryUserApplicationPermissionPage(
-                    opscloud.getCred()
-                            .getAccessToken(), param);
+                    param);
             if (!httpResult.isSuccess()) {
                 break;
             }
             if (CollectionUtils.isEmpty(httpResult.getBody()
-                    .getData())) {
+                                                .getData())) {
                 break;
             }
             result.addAll(httpResult.getBody()
-                    .getData());
+                                  .getData());
 
             if (result.size() >= httpResult.getBody()
                     .getTotalNum()) {

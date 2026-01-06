@@ -33,19 +33,18 @@ public class OcUserRepo {
                 .build();
         List<OcUserVO.User> result = Lists.newArrayList();
         while (true) {
-            HttpResult<DataTable<OcUserVO.User>> httpResult = opscloudService.queryUserPage(opscloud.getCred()
-                    .getAccessToken(), param);
+            HttpResult<DataTable<OcUserVO.User>> httpResult = opscloudService.queryUserPage(param);
             if (!httpResult.isSuccess()) {
                 break;
             }
             if (CollectionUtils.isEmpty(httpResult.getBody()
-                    .getData()) || httpResult.getBody()
+                                                .getData()) || httpResult.getBody()
                     .getData()
                     .size() < length) {
                 break;
             }
             result.addAll(httpResult.getBody()
-                    .getData());
+                                  .getData());
             param.setPage(++page);
         }
         return result;
@@ -53,8 +52,7 @@ public class OcUserRepo {
 
     public static OcUserVO.User addUser(EdsConfigs.Opscloud opscloud, OcUserParam.AddUser addUser) {
         OpscloudService opscloudService = OpscloudServiceFactory.createOpscloudService(opscloud);
-        HttpResult<OcUserVO.User> httpResult = opscloudService.addUser(opscloud.getCred()
-                .getAccessToken(), addUser);
+        HttpResult<OcUserVO.User> httpResult = opscloudService.addUser(addUser);
         if (!httpResult.isSuccess()) {
             return null;
         }

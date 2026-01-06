@@ -34,18 +34,18 @@ public class OcApplicationRepo {
                 .build();
         List<OcApplicationVO.Application> applications = Lists.newArrayList();
         while (true) {
-            HttpResult<DataTable<OcApplicationVO.Application>> httpResult = opscloudService.queryApplicationPage(
-                    opscloud.getCred()
-                            .getAccessToken(), param);
+            HttpResult<DataTable<OcApplicationVO.Application>> httpResult = opscloudService.queryApplicationPage(param);
             if (!httpResult.isSuccess()) {
                 break;
             }
             if (CollectionUtils.isEmpty(httpResult.getBody()
-                    .getData())|| httpResult.getBody().getData().size() < length) {
+                                                .getData()) || httpResult.getBody()
+                    .getData()
+                    .size() < length) {
                 break;
             }
             applications.addAll(httpResult.getBody()
-                    .getData());
+                                        .getData());
             param.setPage(++page);
         }
         return applications;
