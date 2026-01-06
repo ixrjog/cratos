@@ -5,7 +5,7 @@ Start in sync with the world
 > A secure general development framework for operations and maintenance
 
 + OpenJDK 21
-+ [SpringBoot 3.5.8 (GA)](https://spring.io/projects/spring-boot#learn)
++ [SpringBoot 3.5.9 (GA)](https://spring.io/projects/spring-boot#learn)
 + MySql 8+
 
 #### 简介
