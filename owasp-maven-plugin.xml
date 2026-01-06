@@ -1,0 +1,28 @@
+# 在 pom.xml 中添加 OWASP Dependency Check Maven 插件
+
+<plugin>
+    <groupId>org.owasp</groupId>
+    <artifactId>dependency-check-maven</artifactId>
+    <version>10.0.4</version>
+    <configuration>
+        <format>ALL</format>
+        <outputDirectory>target/security-reports</outputDirectory>
+        <suppressionFiles>
+            <suppressionFile>owasp-suppressions.xml</suppressionFile>
+        </suppressionFiles>
+        <!-- 跳过测试依赖 -->
+        <skipTestScope>true</skipTestScope>
+        <!-- CVE 数据库更新 -->
+        <autoUpdate>true</autoUpdate>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>check</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+# 运行命令:
+# mvn org.owasp:dependency-check-maven:check

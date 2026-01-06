@@ -1,0 +1,544 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.baiyi.cratos:cratos-manage >-------------------
+[INFO] Building cratos-manage 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-service/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-common/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-domain/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-shell/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-ssh-core/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-aliyun/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/aliyun/tea/maven-metadata.xml
+Progress (1): 2.3 kBProgress (1): 2.7 kB                    Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/aliyun/tea/maven-metadata.xml (2.7 kB at 7.0 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-core/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-aws/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-cloudflare/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-kubernetes/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-ldap/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-gitlab/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-dingtalk/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-hwc/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-gcp/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-harbor/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-domain/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-jenkins/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-opscloud/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-cratos/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-remote-gateway/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-azure/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/microsoft/graph/microsoft-graph/maven-metadata.xml
+Progress (1): 934 BProgress (1): 6.3 kB                    Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/microsoft/graph/microsoft-graph/maven-metadata.xml (6.3 kB at 18 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/microsoft/graph/microsoft-graph-beta/maven-metadata.xml
+Progress (1): 2.1 kB                    Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/microsoft/graph/microsoft-graph-beta/maven-metadata.xml (2.1 kB at 6.1 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/azure/azure-identity/maven-metadata.xml
+Progress (1): 3.6 kBProgress (1): 4.5 kB                    Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/azure/azure-identity/maven-metadata.xml (4.5 kB at 13 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/nimbusds/lang-tag/maven-metadata.xml
+Progress (1): 667 B                   Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/nimbusds/lang-tag/maven-metadata.xml (667 B at 3.7 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/nimbusds/nimbus-jose-jwt/maven-metadata.xml
+Progress (1): 2.3 kBProgress (1): 7.9 kBProgress (1): 9.5 kB                    Downloaded from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/nimbusds/nimbus-jose-jwt/maven-metadata.xml (9.5 kB at 28 kB/s)
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-eaglecloud/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-eds-zabbix/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-ssh-crystal/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-ssh-kubernetes/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-workorder/1.0-SNAPSHOT/maven-metadata.xml
+Downloading from chuanyi-public: https://nexus.chuanyinet.com/repository/maven-public/com/baiyi/cratos/cratos-socks-server/1.0-SNAPSHOT/maven-metadata.xml
+[INFO] 
+[INFO] --- dependency:3.8.1:list (default-cli) @ cratos-manage ---
+[INFO] Can't extract module name from beetl-default-antlr4.9-support-3.19.1.RELEASE.jar: beetl.default.antlr4.9.support: Invalid module name: 'default' is not a Java identifier
+[INFO] 
+[INFO] The following files have been resolved:
+[INFO]    com.baiyi.cratos:cratos-service:jar:1.0-SNAPSHOT:compile -- module cratos.service (auto)
+[INFO]    tk.mybatis:mapper-spring-boot-starter:jar:4.3.0:compile -- module mapper.spring.boot.starter (auto)
+[INFO]    tk.mybatis:mapper-core:jar:4.3.0:compile -- module mapper.core (auto)
+[INFO]    javax.persistence:javax.persistence-api:jar:2.2:compile -- module java.persistence [auto]
+[INFO]    tk.mybatis:mapper-base:jar:4.3.0:compile -- module mapper.base (auto)
+[INFO]    tk.mybatis:mapper-weekend:jar:4.3.0:compile -- module mapper.weekend (auto)
+[INFO]    tk.mybatis:mapper-spring:jar:4.3.0:compile -- module mapper.spring (auto)
+[INFO]    tk.mybatis:mapper-extra:jar:4.3.0:compile -- module mapper.extra (auto)
+[INFO]    tk.mybatis:mapper-spring-boot-autoconfigure:jar:4.3.0:compile -- module mapper.spring.boot.autoconfigure (auto)
+[INFO]    org.mybatis.spring.boot:mybatis-spring-boot-starter:jar:3.0.1:compile -- module org.mybatis.spring.boot.starter [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-jdbc:jar:3.5.9:compile -- module spring.boot.starter.jdbc [auto]
+[INFO]    com.zaxxer:HikariCP:jar:6.3.3:compile -- module com.zaxxer.hikari
+[INFO]    org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:jar:3.0.1:compile -- module org.mybatis.spring.boot.autoconfigure [auto]
+[INFO]    org.mybatis:mybatis:jar:3.5.11:compile -- module org.mybatis [auto]
+[INFO]    org.mybatis:mybatis-spring:jar:3.0.1:compile -- module org.mybatis.spring [auto]
+[INFO]    com.github.pagehelper:pagehelper-spring-boot-starter:jar:1.4.6:compile -- module pagehelper.spring.boot.starter (auto)
+[INFO]    com.github.pagehelper:pagehelper-spring-boot-autoconfigure:jar:1.4.6:compile -- module pagehelper.spring.boot.autoconfigure (auto)
+[INFO]    com.github.pagehelper:pagehelper:jar:5.3.2:compile -- module pagehelper (auto)
+[INFO]    com.github.jsqlparser:jsqlparser:jar:4.5:compile -- module jsqlparser (auto)
+[INFO]    org.jasypt:jasypt:jar:1.9.3:compile -- module jasypt (auto)
+[INFO]    org.glassfish.jaxb:jaxb-runtime:jar:4.0.6:compile -- module org.glassfish.jaxb.runtime
+[INFO]    org.glassfish.jaxb:jaxb-core:jar:4.0.6:compile -- module org.glassfish.jaxb.core
+[INFO]    org.eclipse.angus:angus-activation:jar:2.0.3:runtime -- module org.eclipse.angus.activation
+[INFO]    org.glassfish.jaxb:txw2:jar:4.0.6:compile -- module com.sun.xml.txw2
+[INFO]    com.sun.istack:istack-commons-runtime:jar:4.1.2:compile -- module com.sun.istack.runtime
+[INFO]    com.baiyi.cratos:cratos-common:jar:1.0-SNAPSHOT:compile -- module cratos.common (auto)
+[INFO]    com.baiyi.cratos:cratos-domain:jar:1.0-SNAPSHOT:compile -- module cratos.domain (auto)
+[INFO]    javax.persistence:persistence-api:jar:1.0.2:compile -- module persistence.api (auto)
+[INFO]    org.apache.commons:commons-collections4:jar:4.5.0:compile -- module org.apache.commons.collections4
+[INFO]    org.apache.httpcomponents:httpclient:jar:4.5.14:compile -- module org.apache.httpcomponents.httpclient [auto]
+[INFO]    org.apache.httpcomponents:httpcore:jar:4.4.16:compile -- module org.apache.httpcomponents.httpcore [auto]
+[INFO]    commons-logging:commons-logging:jar:1.2:compile -- module commons.logging (auto)
+[INFO]    commons-codec:commons-codec:jar:1.18.0:compile -- module org.apache.commons.codec
+[INFO]    com.eatthepath:java-otp:jar:0.4.0:compile -- module com.eatthepath.otp [auto]
+[INFO]    commons-io:commons-io:jar:2.19.0:compile -- module org.apache.commons.io
+[INFO]    com.ibeetl:beetl:jar:3.19.1.RELEASE:compile -- module beetl (auto)
+[INFO]    org.antlr:antlr4-runtime:jar:4.9.3:compile -- module org.antlr.antlr4.runtime [auto]
+[INFO]    com.ibeetl:beetl-core:jar:3.19.1.RELEASE:compile -- module beetl.core (auto)
+[INFO]    com.ibeetl:beetl-default-antlr4.9-support:jar:3.19.1.RELEASE:compile
+[INFO]    com.ibeetl:beetl-ext:jar:3.19.1.RELEASE:compile -- module beetl.ext (auto)
+[INFO]    com.baiyi.cratos:cratos-shell:jar:1.0-SNAPSHOT:compile -- module cratos.shell (auto)
+[INFO]    net.i2p.crypto:eddsa:jar:0.3.0:compile -- module net.i2p.crypto.eddsa [auto]
+[INFO]    com.baiyi.cratos:cratos-ssh-core:jar:1.0-SNAPSHOT:compile -- module cratos.ssh.core (auto)
+[INFO]    org.apache.sshd:sshd-core:jar:2.14.0:compile -- module org.apache.sshd.core [auto]
+[INFO]    org.apache.sshd:sshd-common:jar:2.14.0:compile -- module org.apache.sshd.common [auto]
+[INFO]    org.slf4j:jcl-over-slf4j:jar:2.0.17:compile -- module org.apache.commons.logging
+[INFO]    org.springframework.shell:spring-shell-starter:jar:3.4.1:compile -- module spring.shell.starter [auto]
+[INFO]    org.springframework.shell:spring-shell-autoconfigure:jar:3.4.1:compile -- module spring.shell.autoconfigure [auto]
+[INFO]    org.springframework.shell:spring-shell-core:jar:3.4.1:compile -- module spring.shell.core [auto]
+[INFO]    org.jline:jline-console:jar:3.30.4:compile -- module org.jline.console [auto]
+[INFO]    org.jline:jline-builtins:jar:3.30.4:compile -- module org.jline.builtins [auto]
+[INFO]    org.jline:jline-reader:jar:3.30.4:compile -- module org.jline.reader [auto]
+[INFO]    org.jline:jline-style:jar:3.30.4:compile -- module org.jline.style [auto]
+[INFO]    org.jline:jline-terminal:jar:3.30.4:compile -- module org.jline.terminal [auto]
+[INFO]    org.jline:jline-native:jar:3.30.4:compile -- module org.jline.nativ [auto]
+[INFO]    org.antlr:ST4:jar:4.3.4:compile -- module ST4 (auto)
+[INFO]    org.antlr:antlr-runtime:jar:3.5.3:compile -- module antlr.runtime (auto)
+[INFO]    org.springframework.shell:spring-shell-standard:jar:3.4.1:compile -- module spring.shell.standard [auto]
+[INFO]    org.springframework.shell:spring-shell-standard-commands:jar:3.4.1:compile -- module spring.shell.standard.commands [auto]
+[INFO]    org.springframework.shell:spring-shell-table:jar:3.4.1:compile -- module spring.shell.table [auto]
+[INFO]    com.baiyi.cratos:cratos-eds:jar:1.0-SNAPSHOT:compile -- module cratos.eds (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-aliyun:jar:1.0-SNAPSHOT:compile -- module cratos.eds.aliyun (auto)
+[INFO]    com.aliyun:cas20200407:jar:2.0.1:compile -- module cas20200407 (auto)
+[INFO]    com.aliyun:tea-util:jar:0.2.23:compile -- module tea.util (auto)
+[INFO]    com.aliyun:endpoint-util:jar:0.0.7:compile -- module endpoint.util (auto)
+[INFO]    com.aliyun:tea:jar:1.3.0:compile -- module tea (auto)
+[INFO]    com.aliyun:openapiutil:jar:0.2.1:compile -- module openapiutil (auto)
+[INFO]    org.bouncycastle:bcpkix-jdk15on:jar:1.70:compile -- module org.bouncycastle.pkix
+[INFO]    org.bouncycastle:bcutil-jdk15on:jar:1.70:compile -- module org.bouncycastle.util
+[INFO]    com.aliyun:aliyun-java-sdk-core:jar:4.6.4:compile -- module aliyun.java.sdk.core (auto)
+[INFO]    javax.xml.bind:jaxb-api:jar:2.3.1:compile -- module java.xml.bind
+[INFO]    javax.activation:javax.activation-api:jar:1.2.0:compile -- module java.activation [auto]
+[INFO]    org.bouncycastle:bcprov-jdk15on:jar:1.70:compile -- module org.bouncycastle.provider
+[INFO]    org.jacoco:org.jacoco.agent:jar:runtime:0.8.10:compile -- module org.jacoco.agent.rt [auto]
+[INFO]    org.ini4j:ini4j:jar:0.5.4:compile -- module ini4j (auto)
+[INFO]    io.opentracing:opentracing-api:jar:0.33.0:compile -- module io.opentracing.api [auto]
+[INFO]    io.opentracing:opentracing-util:jar:0.33.0:compile -- module io.opentracing.util [auto]
+[INFO]    io.opentracing:opentracing-noop:jar:0.33.0:compile -- module io.opentracing.noop [auto]
+[INFO]    com.aliyun:tea-openapi:jar:0.3.5:compile -- module tea.openapi (auto)
+[INFO]    com.aliyun:alibabacloud-gateway-spi:jar:0.0.1:compile -- module alibabacloud.gateway.spi (auto)
+[INFO]    com.aliyun:tea-xml:jar:0.1.6:compile -- module tea.xml (auto)
+[INFO]    com.aliyun:credentials-java:jar:0.3.1:compile -- module credentials.java (auto)
+[INFO]    com.sun.xml.bind:jaxb-core:jar:4.0.6:compile -- module com.sun.xml.bind.core
+[INFO]    com.sun.xml.bind:jaxb-impl:jar:4.0.6:compile -- module com.sun.xml.bind
+[INFO]    com.aliyun:alb20200616:jar:1.2.8:compile -- module alb20200616 (auto)
+[INFO]    com.aliyun:nlb20220430:jar:3.1.0:compile -- module nlb20220430 (auto)
+[INFO]    com.aliyun:alibabacloud-domain20180129:jar:1.0.5:compile -- module alibabacloud.domain20180129 (auto)
+[INFO]    com.aliyun:aliyun-gateway-pop:jar:0.2.7-beta:compile -- module aliyun.gateway.pop (auto)
+[INFO]    com.aliyun:darabonba-java-core:jar:0.2.7-beta:compile -- module darabonba.java.core (auto)
+[INFO]    com.aliyun:aliyun-http-apache:jar:0.2.7-beta:compile -- module aliyun.http.apache (auto)
+[INFO]    org.apache.httpcomponents.client5:httpclient5:jar:5.5.1:compile -- module org.apache.httpcomponents.client5.httpclient5 [auto]
+[INFO]    org.apache.httpcomponents.core5:httpcore5:jar:5.3.6:compile -- module org.apache.httpcomponents.core5.httpcore5 [auto]
+[INFO]    org.apache.httpcomponents.core5:httpcore5-h2:jar:5.3.6:compile -- module org.apache.httpcomponents.core5.httpcore5.h2 [auto]
+[INFO]    org.jetbrains:annotations:jar:26.0.2-1:compile -- module org.jetbrains.annotations
+[INFO]    com.aliyun:aliyun-java-core:jar:0.2.7-beta:compile -- module aliyun.java.core (auto)
+[INFO]    com.aliyun:aliyun-java-auth:jar:0.2.7-beta:compile -- module aliyun.java.auth (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-ram:jar:3.3.2:compile -- module aliyun.java.sdk.ram (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-ecs:jar:5.11.7:compile -- module aliyun.java.sdk.ecs (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-core:jar:1.0-SNAPSHOT:compile -- module cratos.eds.core (auto)
+[INFO]    software.amazon.awssdk:sts:jar:2.29.21:compile -- module software.amazon.awssdk.services.sts [auto]
+[INFO]    software.amazon.awssdk:aws-query-protocol:jar:2.29.21:compile -- module software.amazon.awssdk.protocols.query [auto]
+[INFO]    software.amazon.awssdk:profiles:jar:2.29.21:compile -- module software.amazon.awssdk.profiles [auto]
+[INFO]    com.amazonaws:aws-java-sdk-sts:jar:1.12.786:compile -- module aws.java.sdk.sts (auto)
+[INFO]    com.amazonaws:aws-java-sdk-core:jar:1.12.786:compile -- module aws.java.sdk.core (auto)
+[INFO]    joda-time:joda-time:jar:2.12.7:compile -- module org.joda.time [auto]
+[INFO]    com.google.api.grpc:proto-google-iam-admin-v1:jar:3.47.0:compile -- module proto.google.iam.admin.v1 (auto)
+[INFO]    com.aliyun.oss:aliyun-sdk-oss:jar:3.17.4:compile -- module aliyun.sdk.oss (auto)
+[INFO]    org.jdom:jdom2:jar:2.0.6.1:compile -- module org.jdom2 [auto]
+[INFO]    org.codehaus.jettison:jettison:jar:1.5.4:compile -- module jettison (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-kms:jar:2.11.0:compile -- module aliyun.java.sdk.kms (auto)
+[INFO]    com.aliyun.openservices:aliyun-log:jar:0.6.112:compile -- module aliyun.log (auto)
+[INFO]    com.alibaba:fastjson:jar:1.2.83_noneautotype:compile -- module fastjson (auto)
+[INFO]    net.jpountz.lz4:lz4:jar:1.3.0:compile -- module lz4 (auto)
+[INFO]    com.github.luben:zstd-jni:jar:1.5.6-3:compile -- module com.github.luben.zstd_jni
+[INFO]    com.aliyun:alibabacloud-arms20190808:jar:4.0.22:compile -- module alibabacloud.arms20190808 (auto)
+[INFO]    com.aliyun:dds20151201:jar:7.0.0:compile -- module dds20151201 (auto)
+[INFO]    com.aliyun:rocketmq20220801:jar:1.3.2:compile -- module rocketmq20220801 (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-cr:jar:4.1.5:compile -- module aliyun.java.sdk.cr (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-r-kvstore:jar:2.20.19:compile -- module aliyun.java.sdk.r.kvstore (auto)
+[INFO]    com.aliyun:aliyun-java-sdk-rds:jar:2.7.53:compile -- module aliyun.java.sdk.rds (auto)
+[INFO]    com.aliyun:alibabacloud-kms20160120:jar:1.0.11:compile -- module alibabacloud.kms20160120 (auto)
+[INFO]    com.aliyun:dms_enterprise20181101:jar:1.71.1:compile -- module dms.enterprise20181101 (auto)
+[INFO]    com.aliyun:alibabacloud-gateway-pop:jar:0.0.6:compile -- module alibabacloud.gateway.pop (auto)
+[INFO]    com.aliyun:darabonba-encode-util:jar:0.0.2:compile -- module darabonba.encode.util (auto)
+[INFO]    com.aliyun:darabonba-signature-util:jar:0.0.4:compile -- module darabonba.signature.util (auto)
+[INFO]    com.aliyun:darabonba-string:jar:0.0.5:compile -- module darabonba.string (auto)
+[INFO]    com.aliyun:darabonba-map:jar:0.0.1:compile -- module darabonba.map (auto)
+[INFO]    com.aliyun:darabonba-array:jar:0.1.0:compile -- module darabonba.array (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-aws:jar:1.0-SNAPSHOT:compile -- module cratos.eds.aws (auto)
+[INFO]    com.amazonaws:aws-java-sdk-acm:jar:1.12.786:compile -- module aws.java.sdk.acm (auto)
+[INFO]    com.amazonaws:jmespath-java:jar:1.12.786:compile -- module jmespath.java (auto)
+[INFO]    com.amazonaws:aws-java-sdk-ec2:jar:1.12.786:compile -- module aws.java.sdk.ec2 (auto)
+[INFO]    com.amazonaws:aws-java-sdk-elasticloadbalancingv2:jar:1.12.786:compile -- module aws.java.sdk.elasticloadbalancingv2 (auto)
+[INFO]    com.amazonaws:aws-java-sdk-cloudwatch:jar:1.12.786:compile -- module aws.java.sdk.cloudwatch (auto)
+[INFO]    com.amazonaws:aws-java-sdk-route53:jar:1.12.786:compile -- module aws.java.sdk.route53 (auto)
+[INFO]    com.amazonaws:aws-java-sdk-sqs:jar:1.12.786:compile -- module aws.java.sdk.sqs (auto)
+[INFO]    com.amazonaws:aws-java-sdk-sns:jar:1.12.786:compile -- module aws.java.sdk.sns (auto)
+[INFO]    com.amazonaws:aws-java-sdk-transfer:jar:1.12.786:compile -- module aws.java.sdk.transfer (auto)
+[INFO]    com.amazonaws:aws-java-sdk-cloudfront:jar:1.12.786:compile -- module aws.java.sdk.cloudfront (auto)
+[INFO]    com.amazonaws:aws-java-sdk-s3:jar:1.12.786:compile -- module aws.java.sdk.s3 (auto)
+[INFO]    com.amazonaws:aws-java-sdk-kms:jar:1.12.786:compile -- module aws.java.sdk.kms (auto)
+[INFO]    com.amazonaws:aws-java-sdk-ecr:jar:1.12.786:compile -- module aws.java.sdk.ecr (auto)
+[INFO]    com.amazonaws:aws-java-sdk-iam:jar:1.12.786:compile -- module aws.java.sdk.iam (auto)
+[INFO]    software.amazon.awssdk:ecr:jar:2.29.21:compile -- module software.amazon.awssdk.services.ecr [auto]
+[INFO]    software.amazon.awssdk:aws-json-protocol:jar:2.29.21:compile -- module software.amazon.awssdk.protocols.json [auto]
+[INFO]    software.amazon.awssdk:third-party-jackson-core:jar:2.29.21:compile -- module software.amazon.awssdk.thirdparty.jackson.core [auto]
+[INFO]    software.amazon.awssdk:protocol-core:jar:2.29.21:compile -- module software.amazon.awssdk.protocols.core [auto]
+[INFO]    software.amazon.awssdk:http-auth-aws:jar:2.29.21:compile -- module software.amazon.awssdk.http.auth.aws [auto]
+[INFO]    software.amazon.awssdk:checksums-spi:jar:2.29.21:compile -- module software.amazon.awssdk.checksums.spi [auto]
+[INFO]    software.amazon.awssdk:checksums:jar:2.29.21:compile -- module software.amazon.awssdk.checksums [auto]
+[INFO]    software.amazon.awssdk:sdk-core:jar:2.29.21:compile -- module software.amazon.awssdk.core [auto]
+[INFO]    software.amazon.awssdk:retries:jar:2.29.21:compile -- module software.amazon.awssdk.retries [auto]
+[INFO]    software.amazon.awssdk:auth:jar:2.29.21:compile -- module software.amazon.awssdk.auth [auto]
+[INFO]    software.amazon.awssdk:http-auth-aws-eventstream:jar:2.29.21:compile -- module software.amazon.awssdk.http.auth.aws.eventstream [auto]
+[INFO]    software.amazon.eventstream:eventstream:jar:1.0.1:compile -- module software.amazon.eventstream [auto]
+[INFO]    software.amazon.awssdk:http-auth-spi:jar:2.29.21:compile -- module software.amazon.awssdk.http.auth.spi [auto]
+[INFO]    software.amazon.awssdk:http-auth:jar:2.29.21:compile -- module software.amazon.awssdk.http.auth [auto]
+[INFO]    software.amazon.awssdk:identity-spi:jar:2.29.21:compile -- module software.amazon.awssdk.identity.spi [auto]
+[INFO]    software.amazon.awssdk:http-client-spi:jar:2.29.21:compile -- module software.amazon.awssdk.http [auto]
+[INFO]    software.amazon.awssdk:regions:jar:2.29.21:compile -- module software.amazon.awssdk.regions [auto]
+[INFO]    software.amazon.awssdk:annotations:jar:2.29.21:compile -- module software.amazon.awssdk.annotations [auto]
+[INFO]    software.amazon.awssdk:utils:jar:2.29.21:compile -- module software.amazon.awssdk.utils [auto]
+[INFO]    software.amazon.awssdk:aws-core:jar:2.29.21:compile -- module software.amazon.awssdk.awscore [auto]
+[INFO]    software.amazon.awssdk:metrics-spi:jar:2.29.21:compile -- module software.amazon.awssdk.metrics [auto]
+[INFO]    software.amazon.awssdk:json-utils:jar:2.29.21:compile -- module software.amazon.awssdk.protocols.jsoncore [auto]
+[INFO]    software.amazon.awssdk:endpoints-spi:jar:2.29.21:compile -- module software.amazon.awssdk.endpoints [auto]
+[INFO]    software.amazon.awssdk:retries-spi:jar:2.29.21:compile -- module software.amazon.awssdk.retries.api [auto]
+[INFO]    software.amazon.awssdk:apache-client:jar:2.29.21:runtime -- module software.amazon.awssdk.http.apache [auto]
+[INFO]    software.amazon.awssdk:netty-nio-client:jar:2.29.21:runtime -- module software.amazon.awssdk.http.nio.netty [auto]
+[INFO]    io.netty:netty-transport-classes-epoll:jar:4.1.130.Final:compile -- module io.netty.transport.classes.epoll [auto]
+[INFO]    com.baiyi.cratos:cratos-eds-cloudflare:jar:1.0-SNAPSHOT:compile -- module cratos.eds.cloudflare (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-kubernetes:jar:1.0-SNAPSHOT:compile -- module cratos.eds.kubernetes (auto)
+[INFO]    io.fabric8:kubernetes-client:jar:7.4.0:compile -- module kubernetes.client (auto)
+[INFO]    io.fabric8:kubernetes-client-api:jar:7.4.0:compile -- module kubernetes.client.api (auto)
+[INFO]    io.fabric8:kubernetes-model-core:jar:7.4.0:compile -- module kubernetes.model.core (auto)
+[INFO]    io.fabric8:kubernetes-model-common:jar:7.4.0:compile -- module kubernetes.model.common (auto)
+[INFO]    io.fabric8:kubernetes-model-gatewayapi:jar:7.4.0:compile -- module kubernetes.model.gatewayapi (auto)
+[INFO]    io.fabric8:kubernetes-model-resource:jar:7.4.0:compile -- module kubernetes.model.resource (auto)
+[INFO]    io.fabric8:kubernetes-model-rbac:jar:7.4.0:compile -- module kubernetes.model.rbac (auto)
+[INFO]    io.fabric8:kubernetes-model-admissionregistration:jar:7.4.0:compile -- module kubernetes.model.admissionregistration (auto)
+[INFO]    io.fabric8:kubernetes-model-apps:jar:7.4.0:compile -- module kubernetes.model.apps (auto)
+[INFO]    io.fabric8:kubernetes-model-autoscaling:jar:7.4.0:compile -- module kubernetes.model.autoscaling (auto)
+[INFO]    io.fabric8:kubernetes-model-apiextensions:jar:7.4.0:compile -- module kubernetes.model.apiextensions (auto)
+[INFO]    io.fabric8:kubernetes-model-batch:jar:7.4.0:compile -- module kubernetes.model.batch (auto)
+[INFO]    io.fabric8:kubernetes-model-certificates:jar:7.4.0:compile -- module kubernetes.model.certificates (auto)
+[INFO]    io.fabric8:kubernetes-model-coordination:jar:7.4.0:compile -- module kubernetes.model.coordination (auto)
+[INFO]    io.fabric8:kubernetes-model-discovery:jar:7.4.0:compile -- module kubernetes.model.discovery (auto)
+[INFO]    io.fabric8:kubernetes-model-events:jar:7.4.0:compile -- module kubernetes.model.events (auto)
+[INFO]    io.fabric8:kubernetes-model-extensions:jar:7.4.0:compile -- module kubernetes.model.extensions (auto)
+[INFO]    io.fabric8:kubernetes-model-flowcontrol:jar:7.4.0:compile -- module kubernetes.model.flowcontrol (auto)
+[INFO]    io.fabric8:kubernetes-model-networking:jar:7.4.0:compile -- module kubernetes.model.networking (auto)
+[INFO]    io.fabric8:kubernetes-model-metrics:jar:7.4.0:compile -- module kubernetes.model.metrics (auto)
+[INFO]    io.fabric8:kubernetes-model-policy:jar:7.4.0:compile -- module kubernetes.model.policy (auto)
+[INFO]    io.fabric8:kubernetes-model-scheduling:jar:7.4.0:compile -- module kubernetes.model.scheduling (auto)
+[INFO]    io.fabric8:kubernetes-model-storageclass:jar:7.4.0:compile -- module kubernetes.model.storageclass (auto)
+[INFO]    io.fabric8:kubernetes-model-node:jar:7.4.0:compile -- module kubernetes.model.node (auto)
+[INFO]    org.snakeyaml:snakeyaml-engine:jar:2.10:compile -- module org.snakeyaml.engine.v2
+[INFO]    io.fabric8:kubernetes-httpclient-vertx:jar:7.4.0:runtime -- module kubernetes.httpclient.vertx (auto)
+[INFO]    io.vertx:vertx-core:jar:4.5.14:runtime -- module io.vertx.core [auto]
+[INFO]    io.vertx:vertx-web-client:jar:4.5.14:runtime -- module io.vertx.web.client [auto]
+[INFO]    io.vertx:vertx-web-common:jar:4.5.14:runtime -- module io.vertx.web.common [auto]
+[INFO]    io.vertx:vertx-auth-common:jar:4.5.14:runtime -- module io.vertx.auth.common [auto]
+[INFO]    io.fabric8:zjsonpatch:jar:7.4.0:compile -- module zjsonpatch (auto)
+[INFO]    io.fabric8:istio-client:jar:7.4.0:compile -- module istio.client (auto)
+[INFO]    io.fabric8:istio-model:jar:7.4.0:compile -- module istio.model (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-ldap:jar:1.0-SNAPSHOT:compile -- module cratos.eds.ldap (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-gitlab:jar:1.0-SNAPSHOT:compile -- module cratos.eds.gitlab (auto)
+[INFO]    org.gitlab4j:gitlab4j-api:jar:6.0.0-rc.4:compile -- module gitlab4j.api (auto)
+[INFO]    org.glassfish.jersey.inject:jersey-hk2:jar:3.1.11:compile -- module jersey.hk2 (auto)
+[INFO]    org.glassfish.jersey.core:jersey-common:jar:3.1.11:compile -- module jersey.common (auto)
+[INFO]    org.glassfish.hk2:osgi-resource-locator:jar:1.0.3:compile -- module osgi.resource.locator (auto)
+[INFO]    org.glassfish.hk2:hk2-locator:jar:3.0.6:compile -- module org.glassfish.hk2.locator [auto]
+[INFO]    org.glassfish.hk2.external:aopalliance-repackaged:jar:3.0.6:compile -- module org.aopalliance [auto]
+[INFO]    org.glassfish.hk2:hk2-api:jar:3.0.6:compile -- module org.glassfish.hk2.api [auto]
+[INFO]    org.glassfish.hk2:hk2-utils:jar:3.0.6:compile -- module org.glassfish.hk2.utilities [auto]
+[INFO]    org.javassist:javassist:jar:3.30.2-GA:compile -- module org.javassist [auto]
+[INFO]    org.glassfish.jersey.core:jersey-client:jar:3.1.11:compile -- module jersey.client (auto)
+[INFO]    jakarta.ws.rs:jakarta.ws.rs-api:jar:3.1.0:compile -- module jakarta.ws.rs
+[INFO]    jakarta.inject:jakarta.inject-api:jar:2.0.1:compile -- module jakarta.inject
+[INFO]    org.glassfish.jersey.connectors:jersey-apache-connector:jar:3.1.11:compile -- module jersey.apache.connector (auto)
+[INFO]    org.glassfish.jersey.media:jersey-media-multipart:jar:3.1.11:compile -- module jersey.media.multipart (auto)
+[INFO]    org.jvnet.mimepull:mimepull:jar:1.9.15:compile -- module org.jvnet.mimepull
+[INFO]    org.glassfish.jersey.media:jersey-media-json-jackson:jar:3.1.11:compile -- module jersey.media.json.jackson (auto)
+[INFO]    org.glassfish.jersey.ext:jersey-entity-filtering:jar:3.1.11:compile -- module jersey.entity.filtering (auto)
+[INFO]    com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:jar:2.19.4:compile -- module com.fasterxml.jackson.module.jakarta.xmlbind
+[INFO]    jakarta.servlet:jakarta.servlet-api:jar:6.0.0:compile -- module jakarta.servlet
+[INFO]    com.baiyi.cratos:cratos-eds-dingtalk:jar:1.0-SNAPSHOT:compile -- module cratos.eds.dingtalk (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-hwc:jar:1.0-SNAPSHOT:compile -- module cratos.eds.hwc (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-vpc:jar:3.1.139:compile -- module huaweicloud.sdk.vpc (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-core:jar:3.1.139:compile -- module huaweicloud.sdk.core (auto)
+[INFO]    org.openeuler:bgmprovider:jar:1.1.2:compile -- module bgmprovider (auto)
+[INFO]    org.openeuler:jca:jar:1.1.2:compile -- module jca (auto)
+[INFO]    org.bouncycastle:bcprov-jdk18on:jar:1.75:compile -- module org.bouncycastle.provider
+[INFO]    org.openeuler:jsse:jar:1.1.2:compile -- module jsse (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-ecs:jar:3.1.139:compile -- module huaweicloud.sdk.ecs (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-iam:jar:3.1.139:compile -- module huaweicloud.sdk.iam (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-ccm:jar:3.1.139:compile -- module huaweicloud.sdk.ccm (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-scm:jar:3.1.139:compile -- module huaweicloud.sdk.scm (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-obs:jar:3.1.139:compile -- module huaweicloud.sdk.obs (auto)
+[INFO]    com.huaweicloud.sdk:huaweicloud-sdk-core-xml:jar:3.1.139:compile -- module huaweicloud.sdk.core.xml (auto)
+[INFO]    com.fasterxml.jackson.dataformat:jackson-dataformat-xml:jar:2.19.4:compile -- module com.fasterxml.jackson.dataformat.xml
+[INFO]    org.codehaus.woodstox:stax2-api:jar:4.2.2:compile -- module org.codehaus.stax2
+[INFO]    com.fasterxml.woodstox:woodstox-core:jar:7.1.1:compile -- module com.ctc.wstx
+[INFO]    com.baiyi.cratos:cratos-eds-gcp:jar:1.0-SNAPSHOT:compile -- module cratos.eds.gcp (auto)
+[INFO]    com.google.protobuf:protobuf-java:jar:4.28.2:compile -- module com.google.protobuf [auto]
+[INFO]    com.google.auth:google-auth-library-oauth2-http:jar:1.23.0:compile -- module com.google.auth.oauth2 [auto]
+[INFO]    com.google.auto.value:auto-value-annotations:jar:1.10.4:compile -- module auto.value.annotations (auto)
+[INFO]    com.google.code.findbugs:jsr305:jar:3.0.2:compile -- module jsr305 (auto)
+[INFO]    com.google.auth:google-auth-library-credentials:jar:1.23.0:compile -- module com.google.auth [auto]
+[INFO]    com.google.http-client:google-http-client:jar:1.43.3:compile -- module com.google.api.client [auto]
+[INFO]    com.google.http-client:google-http-client-gson:jar:1.43.3:compile -- module com.google.api.client.json.gson [auto]
+[INFO]    com.google.cloud:google-iam-admin:jar:3.41.0:compile -- module google.iam.admin (auto)
+[INFO]    io.grpc:grpc-api:jar:1.62.2:compile -- module io.grpc [auto]
+[INFO]    io.grpc:grpc-stub:jar:1.62.2:compile -- module io.grpc.stub [auto]
+[INFO]    io.grpc:grpc-protobuf:jar:1.62.2:compile -- module io.grpc.protobuf [auto]
+[INFO]    io.grpc:grpc-protobuf-lite:jar:1.62.2:runtime -- module io.grpc.protobuf.lite [auto]
+[INFO]    com.google.api:api-common:jar:2.33.0:compile -- module com.google.api.apicommon [auto]
+[INFO]    javax.annotation:javax.annotation-api:jar:1.3.2:compile -- module java.annotation [auto]
+[INFO]    com.google.api.grpc:proto-google-common-protos:jar:2.41.0:compile -- module proto.google.common.protos (auto)
+[INFO]    com.google.api.grpc:proto-google-iam-v1:jar:1.36.0:compile -- module proto.google.iam.v1 (auto)
+[INFO]    org.checkerframework:checker-qual:jar:3.44.0:compile -- module org.checkerframework.checker.qual
+[INFO]    com.google.api:gax:jar:2.50.0:compile -- module gax (auto)
+[INFO]    io.opencensus:opencensus-api:jar:0.31.1:compile -- module opencensus.api (auto)
+[INFO]    io.grpc:grpc-context:jar:1.62.2:compile -- module grpc.context (auto)
+[INFO]    io.opencensus:opencensus-contrib-http-util:jar:0.31.1:compile -- module opencensus.contrib.http.util (auto)
+[INFO]    com.google.api:gax-grpc:jar:2.50.0:compile -- module gax.grpc (auto)
+[INFO]    io.grpc:grpc-inprocess:jar:1.62.2:compile -- module io.grpc.inprocess [auto]
+[INFO]    io.grpc:grpc-core:jar:1.62.2:compile -- module io.grpc.internal [auto]
+[INFO]    com.google.android:annotations:jar:4.1.1.4:runtime -- module annotations (auto)
+[INFO]    org.codehaus.mojo:animal-sniffer-annotations:jar:1.23:runtime -- module animal.sniffer.annotations (auto)
+[INFO]    io.grpc:grpc-alts:jar:1.62.2:compile -- module io.grpc.alts [auto]
+[INFO]    io.grpc:grpc-grpclb:jar:1.62.2:compile -- module io.grpc.grpclb [auto]
+[INFO]    com.google.protobuf:protobuf-java-util:jar:3.25.3:compile -- module protobuf.java.util (auto)
+[INFO]    org.conscrypt:conscrypt-openjdk-uber:jar:2.5.2:compile -- module org.conscrypt [auto]
+[INFO]    io.grpc:grpc-auth:jar:1.62.2:compile -- module io.grpc.auth [auto]
+[INFO]    io.grpc:grpc-netty-shaded:jar:1.62.2:compile -- module io.grpc.netty.shaded [auto]
+[INFO]    io.grpc:grpc-util:jar:1.62.2:runtime -- module io.grpc.util [auto]
+[INFO]    io.perfmark:perfmark-api:jar:0.27.0:runtime -- module io.perfmark [auto]
+[INFO]    io.grpc:grpc-googleapis:jar:1.62.2:runtime -- module io.grpc.googleapis [auto]
+[INFO]    io.grpc:grpc-xds:jar:1.62.2:runtime -- module io.grpc.xds [auto]
+[INFO]    io.opencensus:opencensus-proto:jar:0.2.0:runtime -- module opencensus.proto (auto)
+[INFO]    io.grpc:grpc-services:jar:1.62.2:runtime -- module io.grpc.services [auto]
+[INFO]    com.google.re2j:re2j:jar:1.7:runtime -- module re2j (auto)
+[INFO]    org.threeten:threetenbp:jar:1.6.9:compile -- module org.threeten.bp [auto]
+[INFO]    com.google.cloud:google-cloud-certificate-manager:jar:0.49.0:compile -- module google.cloud.certificate.manager (auto)
+[INFO]    com.google.api.grpc:grpc-google-common-protos:jar:2.41.0:compile -- module grpc.google.common.protos (auto)
+[INFO]    com.google.api.grpc:proto-google-cloud-certificate-manager-v1:jar:0.49.0:compile -- module proto.google.cloud.certificate.manager.v1 (auto)
+[INFO]    com.google.api:gax-httpjson:jar:2.50.0:compile -- module gax.httpjson (auto)
+[INFO]    com.google.cloud:google-cloud-resourcemanager:jar:1.48.0:compile -- module google.cloud.resourcemanager (auto)
+[INFO]    com.google.api.grpc:proto-google-cloud-resourcemanager-v3:jar:1.48.0:compile -- module proto.google.cloud.resourcemanager.v3 (auto)
+[INFO]    com.google.apis:google-api-services-cloudresourcemanager:jar:v1-rev20240310-2.0.0:compile -- module com.google.api.services.cloudresourcemanager [auto]
+[INFO]    com.google.api-client:google-api-client:jar:2.6.0:compile -- module google.api.client [auto]
+[INFO]    com.google.oauth-client:google-oauth-client:jar:1.36.0:compile -- module com.google.api.client.auth [auto]
+[INFO]    com.google.http-client:google-http-client-apache-v2:jar:1.44.2:compile -- module com.google.api.client.http.apache.v2 [auto]
+[INFO]    com.google.cloud:google-cloud-core:jar:2.40.0:compile -- module google.cloud.core (auto)
+[INFO]    com.google.cloud:google-cloud-core-http:jar:2.40.0:compile -- module google.cloud.core.http (auto)
+[INFO]    com.google.http-client:google-http-client-appengine:jar:1.44.2:compile -- module com.google.api.client.extensions.appengine [auto]
+[INFO]    com.baiyi.cratos:cratos-eds-harbor:jar:1.0-SNAPSHOT:compile -- module cratos.eds.harbor (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-domain:jar:1.0-SNAPSHOT:compile -- module cratos.eds.domain (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-jenkins:jar:1.0-SNAPSHOT:compile -- module cratos.eds.jenkins (auto)
+[INFO]    com.fasterxml.jackson.core:jackson-annotations:jar:2.19.4:compile -- module com.fasterxml.jackson.annotation
+[INFO]    com.fasterxml.jackson.core:jackson-core:jar:2.19.4:compile -- module com.fasterxml.jackson.core
+[INFO]    org.dom4j:dom4j:jar:2.1.4:compile -- module org.dom4j [auto]
+[INFO]    org.apache.httpcomponents:httpmime:jar:4.5.14:compile -- module org.apache.httpcomponents.httpmime [auto]
+[INFO]    jaxen:jaxen:jar:2.0.0:compile -- module org.jaxen [auto]
+[INFO]    com.baiyi.cratos:cratos-eds-opscloud:jar:1.0-SNAPSHOT:compile -- module cratos.eds.opscloud (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-cratos:jar:1.0-SNAPSHOT:compile -- module cratos.eds.cratos (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-remote-gateway:jar:1.0-SNAPSHOT:compile -- module cratos.eds.remote.gateway (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-azure:jar:1.0-SNAPSHOT:compile -- module cratos.eds.azure (auto)
+[INFO]    com.microsoft.graph:microsoft-graph:jar:6.59.0:compile -- module com.microsoft.graph [auto]
+[INFO]    com.microsoft.graph:microsoft-graph-core:jar:3.6.5:compile -- module com.microsoft.graph.core [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-abstractions:jar:1.8.10:compile -- module com.microsoft.kiota [auto]
+[INFO]    io.github.std-uritemplate:std-uritemplate:jar:2.0.0:runtime -- module std.uritemplate (auto)
+[INFO]    io.jsonwebtoken:jjwt-api:jar:0.13.0:runtime -- module jjwt.api (auto)
+[INFO]    com.auth0:jwks-rsa:jar:0.23.0:runtime -- module jwks.rsa (auto)
+[INFO]    io.jsonwebtoken:jjwt-impl:jar:0.13.0:runtime -- module jjwt.impl (auto)
+[INFO]    io.jsonwebtoken:jjwt-jackson:jar:0.13.0:runtime -- module jjwt.jackson (auto)
+[INFO]    com.squareup.okhttp3:okhttp:jar:4.12.0:compile -- module okhttp3 [auto]
+[INFO]    com.squareup.okio:okio:jar:3.6.0:compile -- module okio (auto)
+[INFO]    com.squareup.okio:okio-jvm:jar:3.6.0:compile -- module okio [auto]
+[INFO]    org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.9.25:compile -- module kotlin.stdlib.common (auto)
+[INFO]    org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.9.25:compile -- module kotlin.stdlib.jdk8
+[INFO]    org.jetbrains.kotlin:kotlin-stdlib:jar:1.9.25:compile -- module kotlin.stdlib
+[INFO]    org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.9.25:compile -- module kotlin.stdlib.jdk7
+[INFO]    com.microsoft.kiota:microsoft-kiota-authentication-azure:jar:1.9.0:compile -- module com.microsoft.kiota [auto]
+[INFO]    javax.xml.stream:stax-api:jar:1.0-2:compile -- module stax.api (auto)
+[INFO]    io.opentelemetry:opentelemetry-api:jar:1.49.0:runtime -- module io.opentelemetry.api [auto]
+[INFO]    io.opentelemetry:opentelemetry-context:jar:1.49.0:runtime -- module io.opentelemetry.context [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-http-okHttp:jar:1.9.0:runtime -- module com.microsoft.kiota [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-serialization-json:jar:1.9.0:runtime -- module com.microsoft.kiota [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-serialization-text:jar:1.9.0:runtime -- module com.microsoft.kiota [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-serialization-form:jar:1.9.0:runtime -- module com.microsoft.kiota [auto]
+[INFO]    com.microsoft.kiota:microsoft-kiota-serialization-multipart:jar:1.9.0:runtime -- module com.microsoft.kiota [auto]
+[INFO]    com.microsoft.graph:microsoft-graph-beta:jar:6.53.0:compile -- module com.microsoft.graph [auto]
+[INFO]    com.azure:azure-identity:jar:1.19.0-beta.1:compile -- module com.azure.identity
+[INFO]    com.azure:azure-core:jar:1.57.0:compile -- module com.azure.core
+[INFO]    com.azure:azure-xml:jar:1.2.0:compile -- module com.azure.xml
+[INFO]    com.azure:azure-core-http-netty:jar:1.16.2:compile -- module com.azure.http.netty
+[INFO]    io.netty:netty-handler-proxy:jar:4.1.130.Final:compile -- module io.netty.handler.proxy [auto]
+[INFO]    io.netty:netty-codec-socks:jar:4.1.130.Final:compile -- module io.netty.codec.socks [auto]
+[INFO]    io.netty:netty-transport-native-kqueue:jar:osx-x86_64:4.1.130.Final:compile -- module io.netty.transport.kqueue.osx.x86_64 [auto]
+[INFO]    io.netty:netty-transport-classes-kqueue:jar:4.1.130.Final:compile -- module io.netty.transport.classes.kqueue [auto]
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:2.0.74.Final:compile -- module io.netty.internal.tcnative
+[INFO]    io.netty:netty-tcnative-classes:jar:2.0.74.Final:compile -- module io.netty.tcnative.classes.openssl
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:linux-x86_64:2.0.74.Final:compile -- module io.netty.internal.tcnative.openssl.linux.x86_64
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:linux-aarch_64:2.0.74.Final:compile -- module io.netty.internal.tcnative.openssl.linux.aarch_64
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:osx-x86_64:2.0.74.Final:compile -- module io.netty.internal.tcnative.openssl.osx.x86_64
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:osx-aarch_64:2.0.74.Final:compile -- module io.netty.internal.tcnative.openssl.osx.aarch_64
+[INFO]    io.netty:netty-tcnative-boringssl-static:jar:windows-x86_64:2.0.74.Final:compile -- module io.netty.internal.tcnative.openssl.windows.x86_64
+[INFO]    com.azure:azure-json:jar:1.5.0:compile -- module com.azure.json
+[INFO]    com.microsoft.azure:msal4j:jar:1.23.1:compile -- module com.microsoft.aad.msal4j [auto]
+[INFO]    com.microsoft.azure:msal4j-persistence-extension:jar:1.3.0:compile -- module msal4j.persistence.extension (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-eaglecloud:jar:1.0-SNAPSHOT:compile -- module cratos.eds.eaglecloud (auto)
+[INFO]    com.baiyi.cratos:cratos-eds-zabbix:jar:1.0-SNAPSHOT:compile -- module cratos.eds.zabbix (auto)
+[INFO]    com.baiyi.cratos:cratos-ssh-crystal:jar:1.0-SNAPSHOT:compile -- module cratos.ssh.crystal (auto)
+[INFO]    com.baiyi.cratos:cratos-ssh-kubernetes:jar:1.0-SNAPSHOT:compile -- module cratos.ssh.kubernetes (auto)
+[INFO]    com.baiyi.cratos:cratos-workorder:jar:1.0-SNAPSHOT:compile -- module cratos.workorder (auto)
+[INFO]    com.baiyi.cratos:cratos-socks-server:jar:1.0-SNAPSHOT:compile -- module cratos.socks.server (auto)
+[INFO]    org.springframework.boot:spring-boot-starter-data-ldap:jar:3.5.9:compile -- module spring.boot.starter.data.ldap [auto]
+[INFO]    org.springframework.boot:spring-boot-starter:jar:3.5.9:compile -- module spring.boot.starter [auto]
+[INFO]    org.springframework.boot:spring-boot:jar:3.5.9:compile -- module spring.boot [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-logging:jar:3.5.9:compile -- module spring.boot.starter.logging [auto]
+[INFO]    ch.qos.logback:logback-classic:jar:1.5.22:compile -- module ch.qos.logback.classic
+[INFO]    ch.qos.logback:logback-core:jar:1.5.22:compile -- module ch.qos.logback.core
+[INFO]    org.apache.logging.log4j:log4j-to-slf4j:jar:2.24.3:compile -- module org.apache.logging.log4j.to.slf4j
+[INFO]    org.apache.logging.log4j:log4j-api:jar:2.24.3:compile -- module org.apache.logging.log4j
+[INFO]    org.slf4j:jul-to-slf4j:jar:2.0.17:compile -- module jul.to.slf4j
+[INFO]    jakarta.annotation:jakarta.annotation-api:jar:2.1.1:compile -- module jakarta.annotation
+[INFO]    org.springframework.data:spring-data-ldap:jar:3.5.7:compile -- module spring.data.ldap [auto]
+[INFO]    org.springframework.ldap:spring-ldap-core:jar:3.3.5:compile -- module spring.ldap.core [auto]
+[INFO]    io.micrometer:micrometer-core:jar:1.15.7:compile -- module micrometer.core [auto]
+[INFO]    org.hdrhistogram:HdrHistogram:jar:2.2.2:runtime -- module HdrHistogram (auto)
+[INFO]    org.latencyutils:LatencyUtils:jar:2.0.3:runtime -- module LatencyUtils (auto)
+[INFO]    org.springframework.data:spring-data-commons:jar:3.5.7:compile -- module spring.data.commons [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-data-redis:jar:3.5.9:compile -- module spring.boot.starter.data.redis [auto]
+[INFO]    io.lettuce:lettuce-core:jar:6.6.0.RELEASE:compile -- module lettuce.core [auto]
+[INFO]    redis.clients.authentication:redis-authx-core:jar:0.1.1-beta2:compile -- module redis.clients.authentication.core [auto]
+[INFO]    io.netty:netty-common:jar:4.1.130.Final:compile -- module io.netty.common [auto]
+[INFO]    io.netty:netty-handler:jar:4.1.130.Final:compile -- module io.netty.handler [auto]
+[INFO]    io.netty:netty-resolver:jar:4.1.130.Final:compile -- module io.netty.resolver [auto]
+[INFO]    io.netty:netty-buffer:jar:4.1.130.Final:compile -- module io.netty.buffer [auto]
+[INFO]    io.netty:netty-codec:jar:4.1.130.Final:compile -- module io.netty.codec [auto]
+[INFO]    io.netty:netty-transport:jar:4.1.130.Final:compile -- module io.netty.transport [auto]
+[INFO]    io.projectreactor:reactor-core:jar:3.7.14:compile -- module reactor.core [auto]
+[INFO]    org.reactivestreams:reactive-streams:jar:1.0.4:compile -- module org.reactivestreams [auto]
+[INFO]    org.springframework.data:spring-data-redis:jar:3.5.7:compile -- module spring.data.redis [auto]
+[INFO]    org.springframework.data:spring-data-keyvalue:jar:3.5.7:compile -- module spring.data.keyvalue [auto]
+[INFO]    org.springframework:spring-oxm:jar:6.2.15:compile -- module spring.oxm [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-web:jar:3.5.9:compile -- module spring.boot.starter.web [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-json:jar:3.5.9:compile -- module spring.boot.starter.json [auto]
+[INFO]    com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.19.4:compile -- module com.fasterxml.jackson.datatype.jdk8
+[INFO]    com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.19.4:compile -- module com.fasterxml.jackson.datatype.jsr310
+[INFO]    com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.19.4:compile -- module com.fasterxml.jackson.module.paramnames
+[INFO]    org.springframework.boot:spring-boot-starter-tomcat:jar:3.5.9:compile -- module spring.boot.starter.tomcat [auto]
+[INFO]    org.apache.tomcat.embed:tomcat-embed-core:jar:10.1.50:compile -- module org.apache.tomcat.embed.core
+[INFO]    org.apache.tomcat.embed:tomcat-embed-websocket:jar:10.1.50:compile -- module org.apache.tomcat.embed.websocket
+[INFO]    org.springframework:spring-web:jar:6.2.15:compile -- module spring.web [auto]
+[INFO]    org.springframework:spring-webmvc:jar:6.2.15:compile -- module spring.webmvc [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-webflux:jar:3.5.9:compile -- module spring.boot.starter.webflux [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-reactor-netty:jar:3.5.9:compile -- module spring.boot.starter.reactor.netty [auto]
+[INFO]    io.projectreactor.netty:reactor-netty-http:jar:1.2.13:compile -- module reactor.netty.http [auto]
+[INFO]    io.netty:netty-codec-http:jar:4.1.130.Final:compile -- module io.netty.codec.http [auto]
+[INFO]    io.netty:netty-codec-http2:jar:4.1.130.Final:compile -- module io.netty.codec.http2 [auto]
+[INFO]    io.netty:netty-resolver-dns-native-macos:jar:osx-x86_64:4.1.130.Final:compile -- module io.netty.resolver.dns.macos.osx.x86_64 [auto]
+[INFO]    io.netty:netty-transport-native-epoll:jar:linux-x86_64:4.1.130.Final:compile -- module io.netty.transport.epoll.linux.x86_64 [auto]
+[INFO]    io.projectreactor.netty:reactor-netty-core:jar:1.2.13:compile -- module reactor.netty.core [auto]
+[INFO]    org.springframework:spring-webflux:jar:6.2.15:compile -- module spring.webflux [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-websocket:jar:3.5.9:compile -- module spring.boot.starter.websocket [auto]
+[INFO]    org.springframework:spring-messaging:jar:6.2.15:compile -- module spring.messaging [auto]
+[INFO]    org.springframework:spring-websocket:jar:6.2.15:compile -- module spring.websocket [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-quartz:jar:3.5.9:compile -- module spring.boot.starter.quartz [auto]
+[INFO]    org.springframework:spring-context-support:jar:6.2.15:compile -- module spring.context.support [auto]
+[INFO]    org.springframework:spring-tx:jar:6.2.15:compile -- module spring.tx [auto]
+[INFO]    org.quartz-scheduler:quartz:jar:2.5.2:compile -- module org.quartz [auto]
+[INFO]    org.springframework.boot:spring-boot-starter-validation:jar:3.5.9:compile -- module spring.boot.starter.validation [auto]
+[INFO]    org.apache.tomcat.embed:tomcat-embed-el:jar:10.1.50:compile -- module org.apache.tomcat.embed.el
+[INFO]    org.hibernate.validator:hibernate-validator:jar:8.0.3.Final:compile -- module org.hibernate.validator [auto]
+[INFO]    jakarta.validation:jakarta.validation-api:jar:3.0.2:compile -- module jakarta.validation
+[INFO]    org.jboss.logging:jboss-logging:jar:3.6.1.Final:compile -- module org.jboss.logging
+[INFO]    com.fasterxml:classmate:jar:1.7.1:compile -- module com.fasterxml.classmate
+[INFO]    org.springframework.boot:spring-boot-starter-aop:jar:3.5.9:compile -- module spring.boot.starter.aop [auto]
+[INFO]    org.springframework:spring-aop:jar:6.2.15:compile -- module spring.aop [auto]
+[INFO]    org.aspectj:aspectjweaver:jar:1.9.25.1:compile -- module org.aspectj.weaver [auto]
+[INFO]    org.springframework.retry:spring-retry:jar:2.0.12:compile -- module spring.retry (auto)
+[INFO]    com.mysql:mysql-connector-j:jar:9.3.0:runtime -- module mysql.connector.j (auto)
+[INFO]    com.alibaba:druid-spring-boot-starter:jar:1.2.27:compile -- module druid.spring.boot.starter (auto)
+[INFO]    com.alibaba:druid:jar:1.2.27:compile -- module druid (auto)
+[INFO]    org.slf4j:slf4j-api:jar:2.0.17:compile -- module org.slf4j
+[INFO]    org.springframework.boot:spring-boot-autoconfigure:jar:3.5.9:compile -- module spring.boot.autoconfigure [auto]
+[INFO]    org.springframework.boot:spring-boot-configuration-processor:jar:3.5.9:compile (optional) -- module spring.boot.configuration.processor [auto]
+[INFO]    org.projectlombok:lombok:jar:1.18.42:compile (optional) -- module lombok
+[INFO]    net.javacrumbs.shedlock:shedlock-spring:jar:6.9.0:compile -- module net.javacrumbs.shedlock.spring [auto]
+[INFO]    net.javacrumbs.shedlock:shedlock-core:jar:6.9.0:compile -- module net.javacrumbs.shedlock.core [auto]
+[INFO]    org.springframework:spring-context:jar:6.2.15:compile -- module spring.context [auto]
+[INFO]    net.javacrumbs.shedlock:shedlock-provider-jdbc-template:jar:6.9.0:compile -- module net.javacrumbs.shedlock.provider.jdbctemplate [auto]
+[INFO]    org.springframework:spring-jdbc:jar:6.2.15:compile -- module spring.jdbc [auto]
+[INFO]    jakarta.xml.bind:jakarta.xml.bind-api:jar:4.0.4:compile -- module jakarta.xml.bind
+[INFO]    jakarta.activation:jakarta.activation-api:jar:2.1.4:compile -- module jakarta.activation
+[INFO]    org.springframework:spring-core:jar:6.2.15:compile -- module spring.core [auto]
+[INFO]    org.springframework:spring-jcl:jar:6.2.15:compile -- module spring.jcl [auto]
+[INFO]    com.unboundid:unboundid-ldapsdk:jar:6.0.11:runtime -- module unboundid.ldapsdk (auto)
+[INFO]    org.apache.commons:commons-text:jar:1.15.0:compile -- module org.apache.commons.text
+[INFO]    org.apache.commons:commons-lang3:jar:3.17.0:compile -- module org.apache.commons.lang3
+[INFO]    com.github.ulisesbocchio:jasypt-spring-boot-starter:jar:3.0.5:compile -- module jasypt.spring.boot.starter (auto)
+[INFO]    com.github.ulisesbocchio:jasypt-spring-boot:jar:3.0.5:compile -- module jasypt.spring.boot (auto)
+[INFO]    com.google.code.gson:gson:jar:2.11.0:compile -- module com.google.gson
+[INFO]    com.google.errorprone:error_prone_annotations:jar:2.27.0:compile -- module com.google.errorprone.annotations
+[INFO]    com.github.oshi:oshi-core:jar:6.4.0:compile -- module com.github.oshi [auto]
+[INFO]    net.java.dev.jna:jna:jar:5.12.1:compile -- module com.sun.jna [auto]
+[INFO]    net.java.dev.jna:jna-platform:jar:5.12.1:compile -- module com.sun.jna.platform [auto]
+[INFO]    com.google.guava:guava:jar:33.4.8-jre:compile -- module com.google.common
+[INFO]    com.google.guava:failureaccess:jar:1.0.3:compile -- module com.google.common.util.concurrent.internal
+[INFO]    com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile -- module listenablefuture (auto)
+[INFO]    org.jspecify:jspecify:jar:1.0.0:compile -- module org.jspecify
+[INFO]    com.google.j2objc:j2objc-annotations:jar:3.0.0:compile -- module com.google.j2objc.annotations
+[INFO]    com.webauthn4j:webauthn4j-core:jar:0.28.6.RELEASE:compile -- module com.webauthn4j.core
+[INFO]    com.webauthn4j:webauthn4j-util:jar:0.28.6.RELEASE:compile -- module com.webauthn4j.util
+[INFO]    com.fasterxml.jackson.core:jackson-databind:jar:2.19.4:compile -- module com.fasterxml.jackson.databind
+[INFO]    com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:jar:2.19.4:compile -- module com.fasterxml.jackson.dataformat.cbor
+[INFO]    org.springframework.security:spring-security-core:jar:6.4.6:compile -- module spring.security.core [auto]
+[INFO]    org.springframework.security:spring-security-crypto:jar:6.4.6:compile -- module spring.security.crypto [auto]
+[INFO]    org.springframework:spring-beans:jar:6.2.15:compile -- module spring.beans [auto]
+[INFO]    org.springframework:spring-expression:jar:6.2.15:compile -- module spring.expression [auto]
+[INFO]    io.micrometer:micrometer-observation:jar:1.15.7:compile -- module micrometer.observation [auto]
+[INFO]    io.micrometer:micrometer-commons:jar:1.15.7:compile -- module micrometer.commons [auto]
+[INFO]    org.springframework.security:spring-security-config:jar:6.4.6:compile -- module spring.security.config [auto]
+[INFO]    org.springframework.security:spring-security-web:jar:6.4.6:compile -- module spring.security.web [auto]
+[INFO]    org.springdoc:springdoc-openapi-starter-webmvc-ui:jar:2.7.0:compile -- module org.springdoc.openapi.ui [auto]
+[INFO]    org.webjars:swagger-ui:jar:5.18.2:compile -- module swagger.ui (auto)
+[INFO]    org.webjars:webjars-locator-lite:jar:1.1.2:compile -- module org.webjars.locator_lite [auto]
+[INFO]    org.springdoc:springdoc-openapi-starter-webmvc-api:jar:2.7.0:compile -- module org.springdoc.openapi.webmvc.core [auto]
+[INFO]    org.springdoc:springdoc-openapi-starter-common:jar:2.7.0:compile -- module org.springdoc.openapi.common [auto]
+[INFO]    io.swagger.core.v3:swagger-core-jakarta:jar:2.2.25:compile -- module io.swagger.v3.core [auto]
+[INFO]    io.swagger.core.v3:swagger-annotations-jakarta:jar:2.2.25:compile -- module io.swagger.v3.oas.annotations [auto]
+[INFO]    io.swagger.core.v3:swagger-models-jakarta:jar:2.2.25:compile -- module io.swagger.v3.oas.models [auto]
+[INFO]    com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.19.4:compile -- module com.fasterxml.jackson.dataformat.yaml
+[INFO]    org.yaml:snakeyaml:jar:2.0:compile -- module org.yaml.snakeyaml
+[INFO]    com.github.mwiede:jsch:jar:2.27.7:compile -- module com.jcraft.jsch
+[INFO]    io.netty:netty-resolver-dns-native-macos:jar:osx-aarch_64:4.1.109.Final:runtime -- module io.netty.resolver.dns.macos.osx.aarch_64 [auto]
+[INFO]    io.netty:netty-resolver-dns-classes-macos:jar:4.1.130.Final:compile -- module io.netty.resolver.dns.classes.macos [auto]
+[INFO]    io.netty:netty-resolver-dns:jar:4.1.130.Final:compile -- module io.netty.resolver.dns [auto]
+[INFO]    io.netty:netty-codec-dns:jar:4.1.130.Final:compile -- module io.netty.codec.dns [auto]
+[INFO]    io.netty:netty-transport-native-unix-common:jar:4.1.130.Final:compile -- module io.netty.transport.unix.common [auto]
+[INFO]    org.commonmark:commonmark:jar:0.24.0:compile -- module org.commonmark
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.331 s
+[INFO] Finished at: 2026-01-06T13:36:02+08:00
+[INFO] ------------------------------------------------------------------------
