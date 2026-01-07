@@ -3,7 +3,6 @@ package com.baiyi.cratos.eds.dns.impl;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
-import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
@@ -25,7 +24,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @Author baiyi
@@ -34,7 +35,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
 public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
 
     private static final String CONSOLE_URL = "https://dnsnext.console.aliyun.com/authoritative/domains/{}?RRKeyWord={}";
@@ -48,7 +49,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
         // 获取阿里云配置
-        EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
+        EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, getAssetTypeEnum());
         // 查询 DNS 记录
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
                 config, trafficRoute.getDomain());
@@ -57,21 +58,18 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     }
 
     @Override
+    protected Map<String, List<DescribeDomainRecordsResponseBody.Record>> toMatchedRecordMap(
+            List<DescribeDomainRecordsResponseBody.Record> records) {
+        return records.stream()
+                .collect(Collectors.groupingBy(DescribeDomainRecordsResponseBody.Record::getType));
+    }
+
+    @Override
     public void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
-        TrafficRecordTarget trafficRecordTarget = getTrafficRecordTargetById(switchRecordTarget.getRecordTargetId());
-        TrafficRoute trafficRoute = getTrafficRouteById(trafficRecordTarget.getTrafficRouteId());
-        EdsConfigs.Aliyun config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.ALIYUN_DOMAIN);
-        List<DescribeDomainRecordsResponseBody.Record> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
-        validateRecordCount(matchedRecords);
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
-            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context = SwitchRecordTargetContext.<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record>builder()
-                    .switchRecordTarget(switchRecordTarget)
-                    .config(config)
-                    .trafficRoute(trafficRoute)
-                    .trafficRecordTarget(trafficRecordTarget)
-                    .matchedRecords(matchedRecords)
-                    .build();
+            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context = buildSwitchContext(
+                    switchRecordTarget);
             handleSingleTargetRouting(context);
         } else {
             TrafficRouteException.runtime("Current operation not implemented");
@@ -92,10 +90,9 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         if (CollectionUtils.isEmpty(records)) {
             return List.of();
         }
-        String recordType = trafficRoute.getRecordType();
         String domainRecord = trafficRoute.getDomainRecord();
         return records.stream()
-                .filter(record -> recordType.equals(record.getType()) && domainRecord.equals(
+                .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(
                         buildFullRecordName(record)))
                 .toList();
     }
@@ -103,14 +100,30 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     @Override
     protected void handleSingleTargetRouting(
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
-        if (CollectionUtils.isEmpty(context.getMatchedRecords())) {
+        // 删除非当前路由类型的解析，当前是CNAME则删除所有A，当前是A则删除所有的CNAME
+        DnsRRType dnsRRType = DnsRRType.valueOf(context.getTrafficRecordTarget()
+                                                        .getRecordType());
+        DnsRRType conflictingDnsRRType = getConflictingDnsRRType(dnsRRType);
+        // 删除所有冲突解析
+        List<DescribeDomainRecordsResponseBody.Record> conflictingMatchedRecords = context.getMatchedRecordMap()
+                .get(conflictingDnsRRType.name());
+        if (!CollectionUtils.isEmpty(conflictingMatchedRecords)) {
+            for (DescribeDomainRecordsResponseBody.Record conflictingMatchedRecord : conflictingMatchedRecords) {
+                AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
+            }
+        }
+
+        if (CollectionUtils.isEmpty(context.getMatchedRecordMap()
+                                            .get(dnsRRType.name()))) {
             addNewRecord(context);
             return;
         }
-        if (context.getMatchedRecords()
+        if (context.getMatchedRecordMap()
+                .get(dnsRRType.name())
                 .size() == 1) {
             updateSingleRecord(
-                    context, context.getMatchedRecords()
+                    context, context.getMatchedRecordMap()
+                            .get(dnsRRType.name())
                             .getFirst()
             );
         } else {
@@ -188,17 +201,17 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private DNS.ResourceRecordSet findMatchedRecord(List<DescribeDomainRecordsResponseBody.Record> records,
                                                     TrafficRoute trafficRoute) {
-        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
+        //DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecord = trafficRoute.getDomainRecord();
         List<DescribeDomainRecordsResponseBody.Record> matchedRecords = records.stream()
-                .filter(record -> dnsRRType.name()
-                        .equals(record.getType()) && domainRecord.equals(buildFullRecordName(record)))
+                .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(
+                        buildFullRecordName(record)))
                 .toList();
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return DNS.ResourceRecordSet.NO_DATA;
         }
         return DNS.ResourceRecordSet.builder()
-                .type(dnsRRType.name())
+                //.type(dnsRRType.name())
                 .name(domainRecord)
                 .resourceRecords(toResourceRecords(matchedRecords))
                 .build();

@@ -171,6 +171,11 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     }
 
     @Override
+    public void updateTrafficRecordTarget(TrafficRouteParam.UpdateRecordTarget updateRecordTarget) {
+
+    }
+
+    @Override
     public void deleteTrafficRouteById(int id) {
         if (!CollectionUtils.isEmpty(trafficRecordTargetService.queryByTrafficRouteId(id))) {
             throw new TrafficRouteException("Please delete TrafficRecordTarget before executing route deletion.");

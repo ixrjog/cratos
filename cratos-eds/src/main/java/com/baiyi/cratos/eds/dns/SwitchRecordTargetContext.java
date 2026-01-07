@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo.PROXIED;
 
@@ -32,6 +33,8 @@ public class SwitchRecordTargetContext<Config extends HasEdsConfig, Record> {
     private TrafficRoute trafficRoute;
     private TrafficRecordTarget trafficRecordTarget;
     private List<Record> matchedRecords;
+
+    private Map<String, List<Record>> matchedRecordMap;
 
     public List<Record> getMatchedRecords() {
         if (matchedRecords == null) {

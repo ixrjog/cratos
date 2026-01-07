@@ -1,5 +1,7 @@
 package com.baiyi.cratos.eds.dns.impl;
 
+import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
+import com.amazonaws.services.route53.model.ResourceRecordSet;
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
@@ -26,7 +28,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
@@ -34,7 +38,7 @@ import java.util.Optional;
  * &#064;Version 1.0
  */
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE)
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_ZONE)
 public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> {
 
     private static final String CONSOLE_URL = "https://dash.cloudflare.com/{}/{}/dns/records";
@@ -48,24 +52,22 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     @Override
     public DNS.ResourceRecordSet getDNSResourceRecordSet(TrafficRoute trafficRoute) {
         // 获取阿里云配置
-        EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.CLOUDFLARE_ZONE);
+        EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, getAssetTypeEnum());
         // 查询 DNS 记录
         List<CloudflareDns.DnsRecord> records = CloudflareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
         return findMatchedRecord(records, trafficRoute);
     }
 
     private DNS.ResourceRecordSet findMatchedRecord(List<CloudflareDns.DnsRecord> records, TrafficRoute trafficRoute) {
-        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecord = trafficRoute.getDomainRecord();
         List<CloudflareDns.DnsRecord> matchedRecords = records.stream()
-                .filter(record -> dnsRRType.name()
-                        .equals(record.getType()) && domainRecord.equals(record.getName()))
+                .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(record.getName()))
                 .toList();
         if (CollectionUtils.isEmpty(matchedRecords)) {
             return DNS.ResourceRecordSet.NO_DATA;
         }
         return DNS.ResourceRecordSet.builder()
-                .type(dnsRRType.name())
+                //.type(dnsRRType.name())
                 .name(domainRecord)
                 .resourceRecords(toResourceRecords(matchedRecords))
                 .build();
@@ -82,24 +84,20 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
 
     @Override
     public void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
-        TrafficRecordTarget trafficRecordTarget = getTrafficRecordTargetById(switchRecordTarget.getRecordTargetId());
-        TrafficRoute trafficRoute = getTrafficRouteById(trafficRecordTarget.getTrafficRouteId());
-        EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.CLOUDFLARE_ZONE);
-        List<CloudflareDns.DnsRecord> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
-        validateRecordCount(matchedRecords);
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
-        SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context = SwitchRecordTargetContext.<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord>builder()
-                .switchRecordTarget(switchRecordTarget)
-                .trafficRecordTarget(trafficRecordTarget)
-                .trafficRoute(trafficRoute)
-                .matchedRecords(matchedRecords)
-                .config(config)
-                .build();
+        SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context = buildSwitchContext(
+                switchRecordTarget);
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
             handleSingleTargetRouting(context);
         } else {
             TrafficRouteException.runtime("Current operation not implemented");
         }
+    }
+
+    @Override
+    protected Map<String, List<CloudflareDns.DnsRecord>> toMatchedRecordMap(List<CloudflareDns.DnsRecord> records) {
+        return records.stream()
+                .collect(Collectors.groupingBy(CloudflareDns.DnsRecord::getType));
     }
 
     @Override
@@ -173,10 +171,9 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         if (CollectionUtils.isEmpty(records)) {
             return List.of();
         }
-        String recordType = trafficRoute.getRecordType();
         String domainRecord = trafficRoute.getDomainRecord();
         return records.stream()
-                .filter(record -> recordType.equals(record.getType()) && domainRecord.equals(record.getName()))
+                .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(record.getName()))
                 .toList();
     }
 
@@ -196,8 +193,9 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     @Override
     public String generateConsoleURL(TrafficRoute trafficRoute) {
         EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, EdsAssetTypeEnum.CLOUDFLARE_ZONE);
-        return StringFormatter.arrayFormat(CONSOLE_URL, config.getCred()
-                .getAccountId(), trafficRoute.getDomain()
+        return StringFormatter.arrayFormat(
+                CONSOLE_URL, config.getCred()
+                        .getAccountId(), trafficRoute.getDomain()
         );
     }
 

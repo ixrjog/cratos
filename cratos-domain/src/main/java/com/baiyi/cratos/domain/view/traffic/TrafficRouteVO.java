@@ -54,7 +54,7 @@ public class TrafficRouteVO {
         private String domainRecord;
         private String name;
         private Integer dnsResolverInstanceId;
-        private String recordType;
+       //private String recordType;
         private Boolean valid;
         private String comment;
         private String zoneId;
@@ -70,7 +70,6 @@ public class TrafficRouteVO {
                     .domainRecord(domainRecord)
                     .name(name)
                     .dnsResolverInstanceId(dnsResolverInstanceId)
-                    .recordType(recordType)
                     .zoneId(zoneId)
                     .valid(valid)
                     .comment(comment)

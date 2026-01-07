@@ -77,6 +77,14 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update traffic record target")
+    @PutMapping(value = "/record/target/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateTrafficRecordTarget(
+            @RequestBody @Valid TrafficRouteParam.UpdateRecordTarget updateRecordTarget) {
+        trafficRouteFacade.updateTrafficRecordTarget(updateRecordTarget);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Switch to traffic record target")
     @PutMapping(value = "/record/target/switch", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> switchToTarget(

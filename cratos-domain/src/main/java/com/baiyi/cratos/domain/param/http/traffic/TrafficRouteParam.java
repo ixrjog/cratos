@@ -127,6 +127,30 @@ public class TrafficRouteParam {
     }
 
     @Data
+    @NoArgsConstructor
+    @Schema
+    public static class UpdateRecordTarget implements IToTarget<TrafficRecordTarget> {
+        @Null(message = "ID must be null")
+        private Integer id;
+        @NotNull(message = "Traffic Route Id cannot be null")
+        private Integer trafficRouteId;
+        @NotBlank(message = "Resource record cannot be blank")
+        private String resourceRecord;
+        @NotBlank(message = "Resource value cannot be blank")
+        private String recordValue;
+        @NotBlank(message = "Record type cannot be blank")
+        private String recordType;
+        @NotBlank(message = "Target type cannot be blank")
+        private String targetType;
+        private Boolean origin;
+        private Long ttl;
+        private Integer weight;
+        @NotNull(message = "Valid status cannot be null")
+        private Boolean valid;
+        private String comment;
+    }
+
+    @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
