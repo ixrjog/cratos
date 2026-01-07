@@ -33,6 +33,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -145,11 +146,12 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     @Override
     public void addTrafficRecordTarget(TrafficRouteParam.AddRecordTarget addRouteTarget) {
         TrafficRecordTarget trafficRecordTarget = addRouteTarget.toTarget();
-        TrafficRoute trafficRoute = trafficRouteService.getById(trafficRecordTarget.getTrafficRouteId());
-        if (trafficRoute == null) {
-            TrafficRouteException.runtime(
-                    "TrafficRoute 配置不存在: trafficRouteId = {}", trafficRecordTarget.getTrafficRouteId());
-        }
+        TrafficRoute trafficRoute = Optional.ofNullable(
+                        trafficRouteService.getById(trafficRecordTarget.getTrafficRouteId()))
+                .orElseThrow(() -> new TrafficRouteException(
+                        "TrafficRoute 配置不存在: trafficRouteId = {}",
+                        trafficRecordTarget.getTrafficRouteId()
+                ));
         trafficRecordTarget.setResourceRecord(trafficRoute.getDomainRecord());
         validateRecordType(trafficRecordTarget.getRecordType());
         if (DnsRRType.CNAME.name()
@@ -172,7 +174,17 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
 
     @Override
     public void updateTrafficRecordTarget(TrafficRouteParam.UpdateRecordTarget updateRecordTarget) {
-
+        TrafficRecordTarget trafficRecordTarget = Optional.ofNullable(
+                        trafficRecordTargetService.getById(updateRecordTarget.getId()))
+                .orElseThrow(() -> new TrafficRouteException(
+                        "TrafficRecordTarget  配置不存在: id = {}",
+                        updateRecordTarget.getId()
+                ));
+        trafficRecordTarget.setRecordValue(updateRecordTarget.getRecordValue());
+        trafficRecordTarget.setTtl(updateRecordTarget.getTtl());
+        trafficRecordTarget.setRecordType(updateRecordTarget.getRecordType());
+        trafficRecordTarget.setWeight(updateRecordTarget.getWeight());
+        trafficRecordTargetService.updateByPrimaryKey(trafficRecordTarget);
     }
 
     @Override
