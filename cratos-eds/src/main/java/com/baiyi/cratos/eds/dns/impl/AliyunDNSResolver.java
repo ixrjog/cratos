@@ -22,6 +22,7 @@ import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -111,22 +112,13 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
             }
         }
+        // 没有记录则新增
         if (CollectionUtils.isEmpty(context.getMatchedRecordMap()
                                             .get(dnsRRType.name()))) {
             addNewRecord(context);
             return;
         }
-        if (context.getMatchedRecordMap()
-                .get(dnsRRType.name())
-                .size() == 1) {
-            updateSingleRecord(
-                    context, context.getMatchedRecordMap()
-                            .get(dnsRRType.name())
-                            .getFirst()
-            );
-        } else {
-            handleMultipleRecords(context);
-        }
+        handleMultipleRecords(context);
     }
 
     private void addNewRecord(
@@ -156,41 +148,24 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     private void handleMultipleRecords(
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
-        Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = context.getMatchedRecords()
-                .stream()
+        List<DescribeDomainRecordsResponseBody.Record> records = context.getMatchedRecordMap()
+                .get(context.getDnsRRType()
+                             .name());
+        Optional<DescribeDomainRecordsResponseBody.Record> optionalRecord = records.stream()
                 .filter(e -> e.getValue()
                         .equals(context.getRecordValue()))
                 .findFirst();
         if (optionalRecord.isPresent()) {
-            updateAndDeleteOthers(context, optionalRecord.get());
+            updateSingleRecord(context, optionalRecord.get());
         } else {
-            addAndDeleteAll(context);
+            addNewRecord(context);
         }
-    }
-
-    private void updateAndDeleteOthers(
-            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context,
-            DescribeDomainRecordsResponseBody.Record targetRecord) {
-        final String recordId = targetRecord.getRecordId();
-        AliyunDnsRepo.updateDomainRecord(
-                context.getConfig(), recordId, context.getRR(), context.getDnsRRType()
-                        .name(), context.getRecordValue(), context.getTTL()
-        );
         context.getMatchedRecords()
                 .stream()
                 .map(DescribeDomainRecordsResponseBody.Record::getRecordId)
-                .filter(id -> !id.equals(recordId))
+                .filter(id -> optionalRecord.isPresent() && !id.equals(optionalRecord.get()
+                                                                               .getRecordId()))
                 .forEach(id -> AliyunDnsRepo.deleteDomainRecord(context.getConfig(), id));
-    }
-
-    private void addAndDeleteAll(
-            SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
-        AliyunDnsRepo.addDomainRecord(
-                context.getConfig(), context.getDomain(), context.getRR(), context.getDnsRRType()
-                        .name(), context.getRecordValue(), context.getTTL()
-        );
-        context.getMatchedRecords()
-                .forEach(record -> AliyunDnsRepo.deleteDomainRecord(context.getConfig(), record.getRecordId()));
     }
 
     private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {
@@ -199,7 +174,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
 
     @Override
     protected DNS.ResourceRecordSet findMatchedRecord(List<DescribeDomainRecordsResponseBody.Record> records,
-                                                    TrafficRoute trafficRoute) {
+                                                      TrafficRoute trafficRoute) {
         String domainRecord = trafficRoute.getDomainRecord();
         List<DescribeDomainRecordsResponseBody.Record> matchedRecords = records.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(
