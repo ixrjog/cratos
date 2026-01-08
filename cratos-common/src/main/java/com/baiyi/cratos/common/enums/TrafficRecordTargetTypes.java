@@ -19,7 +19,8 @@ public enum TrafficRecordTargetTypes {
     ALIYUN_ALB("Aliyun ALB"),
     AWS_ELB("AWS ELB"),
     AWS_CLOUDFRONT("CloudFront"),
-    HWC_ELB("HUAWEI CLOUD ELB");
+    HWC_ELB("HUAWEI CLOUD ELB"),
+    IP("IP");
 
     private final String desc;
 

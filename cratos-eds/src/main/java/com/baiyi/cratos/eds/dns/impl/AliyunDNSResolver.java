@@ -72,7 +72,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                     switchRecordTarget);
             handleSingleTargetRouting(context);
         } else {
-            TrafficRouteException.runtime("Current operation not implemented");
+            TrafficRouteException.runtime("Current operation not implemented.");
         }
     }
 
@@ -101,9 +101,8 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     protected void handleSingleTargetRouting(
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
         // 删除非当前路由类型的解析，当前是CNAME则删除所有A，当前是A则删除所有的CNAME
-        DnsRRType dnsRRType = DnsRRType.valueOf(context.getTrafficRecordTarget()
-                                                        .getRecordType());
-        DnsRRType conflictingDnsRRType = getConflictingDnsRRType(dnsRRType);
+        DnsRRType dnsRRType = context.getDnsRRType();
+        DnsRRType conflictingDnsRRType = context.getConflictingDnsRRType();
         // 删除所有冲突解析
         List<DescribeDomainRecordsResponseBody.Record> conflictingMatchedRecords = context.getMatchedRecordMap()
                 .get(conflictingDnsRRType.name());
@@ -112,7 +111,6 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
             }
         }
-
         if (CollectionUtils.isEmpty(context.getMatchedRecordMap()
                                             .get(dnsRRType.name()))) {
             addNewRecord(context);
@@ -152,7 +150,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                             .name(), context.getRecordValue(), context.getTTL()
             );
         } else {
-            TrafficRouteException.runtime("DNS record already exists, no operation performed");
+            TrafficRouteException.runtime("DNS record already exists, no operation performed.");
         }
     }
 
@@ -199,9 +197,9 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         return record.getRr() + "." + record.getDomainName();
     }
 
-    private DNS.ResourceRecordSet findMatchedRecord(List<DescribeDomainRecordsResponseBody.Record> records,
+    @Override
+    protected DNS.ResourceRecordSet findMatchedRecord(List<DescribeDomainRecordsResponseBody.Record> records,
                                                     TrafficRoute trafficRoute) {
-        //DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         String domainRecord = trafficRoute.getDomainRecord();
         List<DescribeDomainRecordsResponseBody.Record> matchedRecords = records.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(

@@ -62,32 +62,24 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
 
     @Override
     public void switchToTarget(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
-        TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(
-                switchRecordTarget.getRecordTargetId());
-        if (trafficRecordTarget == null) {
-            TrafficRouteException.runtime("traffic record target id not found");
-        }
-        TrafficRoute trafficRoute = trafficRouteService.getById(trafficRecordTarget.getTrafficRouteId());
-        if (trafficRoute == null) {
-            TrafficRouteException.runtime("traffic route id not found");
-        }
-        EdsInstance edsInstance = edsInstanceService.getById(trafficRoute.getDnsResolverInstanceId());
-        if (edsInstance == null) {
-            TrafficRouteException.runtime("eds instance id not found");
-        }
-        DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
-        if (dnsResolver == null) {
-            TrafficRouteException.runtime("dnsResolver id not found");
-        }
+        TrafficRecordTarget trafficRecordTarget = Optional.ofNullable(
+                        trafficRecordTargetService.getById(switchRecordTarget.getRecordTargetId()))
+                .orElseThrow(() -> new TrafficRouteException("Traffic record target id not found"));
+        TrafficRoute trafficRoute = Optional.ofNullable(
+                        trafficRouteService.getById(trafficRecordTarget.getTrafficRouteId()))
+                .orElseThrow(() -> new TrafficRouteException("Traffic route id not found"));
+        EdsInstance edsInstance = Optional.ofNullable(
+                        edsInstanceService.getById(trafficRoute.getDnsResolverInstanceId()))
+                .orElseThrow(() -> new TrafficRouteException("Eds instance id not found"));
+        DNSResolver dnsResolver = Optional.ofNullable(DNSResolverFactory.getDNSResolver(edsInstance.getEdsType()))
+                .orElseThrow(() -> new TrafficRouteException("DNS resolver type not found"));
         dnsResolver.switchToRoute(switchRecordTarget);
     }
 
     @Override
     public TrafficRouteVO.Route getTrafficRouteById(int id) {
-        TrafficRoute trafficRoute = trafficRouteService.getById(id);
-        if (trafficRoute == null) {
-            TrafficRouteException.runtime("traffic route id not found");
-        }
+        TrafficRoute trafficRoute = Optional.ofNullable(trafficRouteService.getById(id))
+                .orElseThrow(() -> new TrafficRouteException("Traffic route id not found"));
         return routeWrapper.wrapToTarget(trafficRoute);
     }
 
@@ -114,11 +106,9 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
     public void addTrafficRoute(TrafficRouteParam.AddRoute addRoute) {
         validateRecordType(addRoute.getRecordType());
         TrafficRoute trafficRoute = addRoute.toTarget();
-
-        EdsInstance edsInstance = edsInstanceService.getById(trafficRoute.getDnsResolverInstanceId());
-        if (edsInstance == null) {
-            TrafficRouteException.runtime("eds instance id not found");
-        }
+        EdsInstance edsInstance = Optional.ofNullable(
+                        edsInstanceService.getById(trafficRoute.getDnsResolverInstanceId()))
+                .orElseThrow(() -> new TrafficRouteException("Eds instance id not found"));
         DNSResolver dnsResolver = DNSResolverFactory.getDNSResolver(edsInstance.getEdsType());
         String zoneId = dnsResolver.getZoneId(trafficRoute);
         trafficRoute.setZoneId(zoneId);

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,9 @@ public class SwitchRecordTargetContext<Config extends HasEdsConfig, Record> {
     private TrafficRoute trafficRoute;
     private TrafficRecordTarget trafficRecordTarget;
     private List<Record> matchedRecords;
+
+    private DnsRRType dnsRRType;
+    private DnsRRType conflictingDnsRRType;
 
     private Map<String, List<Record>> matchedRecordMap;
 

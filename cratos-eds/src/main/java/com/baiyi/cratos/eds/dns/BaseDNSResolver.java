@@ -1,13 +1,11 @@
 package com.baiyi.cratos.eds.dns;
 
-import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
+import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
-import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -22,7 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -40,19 +38,17 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
     private static final int MAX_LOAD_BALANCING = 3;
 
     protected TrafficRecordTarget getTrafficRecordTargetById(int trafficRecordTargetId) {
-        TrafficRecordTarget trafficRecordTarget = trafficRecordTargetService.getById(trafficRecordTargetId);
-        if (trafficRecordTarget == null) {
-            TrafficRouteException.runtime("TrafficRecordTarget 不存在, recordTargetId: {}", trafficRecordTargetId);
-        }
-        return trafficRecordTarget;
+        return Optional.ofNullable(trafficRecordTargetService.getById(trafficRecordTargetId))
+                .orElseThrow(() -> new TrafficRouteException(
+                        "TrafficRecordTarget 不存在, recordTargetId: {}",
+                        trafficRecordTargetId
+                ));
     }
 
     protected TrafficRoute getTrafficRouteById(int trafficRouteId) {
-        TrafficRoute trafficRoute = trafficRouteService.getById(trafficRouteId);
-        if (trafficRoute == null) {
-            TrafficRouteException.runtime("TrafficRoute 不存在, trafficRouteId: {}", trafficRouteId);
-        }
-        return trafficRoute;
+        return Optional.ofNullable(trafficRouteService.getById(trafficRouteId))
+                .orElseThrow(
+                        () -> new TrafficRouteException("TrafficRoute 不存在, trafficRouteId: {}", trafficRouteId));
     }
 
     protected EdsAssetTypeEnum getAssetTypeEnum() {
@@ -68,7 +64,10 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
         Config config = getEdsConfig(trafficRoute, getAssetTypeEnum());
         List<Record> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
         validateRecordCount(matchedRecords);
+        DnsRRType dnsRRType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
         return SwitchRecordTargetContext.<Config, Record>builder()
+                .dnsRRType(dnsRRType)
+                .conflictingDnsRRType(getConflictingDnsRRType(dnsRRType))
                 .switchRecordTarget(switchRecordTarget)
                 .trafficRecordTarget(trafficRecordTarget)
                 .trafficRoute(trafficRoute)
@@ -80,7 +79,9 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
 
     abstract protected Map<String, List<Record>> toMatchedRecordMap(List<Record> records);
 
-    protected DnsRRType getConflictingDnsRRType(DnsRRType dnsRRType) {
+    abstract protected DNS.ResourceRecordSet findMatchedRecord(List<Record> records, TrafficRoute trafficRoute);
+
+    private DnsRRType getConflictingDnsRRType(DnsRRType dnsRRType) {
         return dnsRRType.equals(DnsRRType.CNAME) ? DnsRRType.A : DnsRRType.CNAME;
     }
 

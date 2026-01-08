@@ -62,7 +62,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         // 查询 DNS 记录
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
         // 查找匹配的记录
-        return findMatchingRecord(resourceRecordSets, trafficRoute);
+        return findMatchedRecord(resourceRecordSets, trafficRoute);
     }
 
     /**
@@ -76,12 +76,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     protected List<ResourceRecordSet> getTrafficRouteRecords(EdsConfigs.Aws config, TrafficRoute trafficRoute) {
         final String hostedZoneId = getZoneId(trafficRoute);
         final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
-        // DnsRRType dnsRRType = DnsRRType.valueOf(trafficRoute.getRecordType());
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
-        if (CollectionUtils.isEmpty(resourceRecordSets)) {
-            return List.of();
-        }
-        return resourceRecordSets.stream()
+        return CollectionUtils.isEmpty(resourceRecordSets) ? List.of() : resourceRecordSets.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecordFqdn.equals(record.getName()))
                 .toList();
     }
@@ -133,9 +129,8 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
     // 前置删除解析
     private void deleteRecords(String hostedZoneId,
                                SwitchRecordTargetContext<EdsConfigs.Aws, ResourceRecordSet> context) {
-        DnsRRType dnsRRType = DnsRRType.valueOf(context.getTrafficRecordTarget()
-                                                        .getRecordType());
-        DnsRRType conflictingDnsRRType = getConflictingDnsRRType(dnsRRType);
+        DnsRRType dnsRRType = context.getDnsRRType();
+        DnsRRType conflictingDnsRRType = context.getConflictingDnsRRType();
         // 删除所有冲突解析
         List<ResourceRecordSet> conflictingMatchedRecords = context.getMatchedRecordMap()
                 .get(conflictingDnsRRType.name());
@@ -199,8 +194,9 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
         return StringFormatter.format(CONSOLE_URL, getZoneId(trafficRoute));
     }
 
-    private DNS.ResourceRecordSet findMatchingRecord(List<ResourceRecordSet> resourceRecordSets,
-                                                     TrafficRoute trafficRoute) {
+    @Override
+    protected DNS.ResourceRecordSet findMatchedRecord(List<ResourceRecordSet> resourceRecordSets,
+                                                      TrafficRoute trafficRoute) {
         final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         return resourceRecordSets.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecordFqdn.equals(record.getName()))

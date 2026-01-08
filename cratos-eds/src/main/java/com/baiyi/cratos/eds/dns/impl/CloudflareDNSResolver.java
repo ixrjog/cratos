@@ -1,11 +1,9 @@
 package com.baiyi.cratos.eds.dns.impl;
 
-import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
-import com.amazonaws.services.route53.model.ResourceRecordSet;
+
 import com.baiyi.cratos.common.enums.TrafficRoutingOptions;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
 import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
@@ -19,7 +17,6 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dns.BaseDNSResolver;
 import com.baiyi.cratos.eds.dns.SwitchRecordTargetContext;
-import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
@@ -58,7 +55,9 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         return findMatchedRecord(records, trafficRoute);
     }
 
-    private DNS.ResourceRecordSet findMatchedRecord(List<CloudflareDns.DnsRecord> records, TrafficRoute trafficRoute) {
+    @Override
+    protected DNS.ResourceRecordSet findMatchedRecord(List<CloudflareDns.DnsRecord> records,
+                                                      TrafficRoute trafficRoute) {
         String domainRecord = trafficRoute.getDomainRecord();
         List<CloudflareDns.DnsRecord> matchedRecords = records.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(record.getName()))
@@ -90,7 +89,7 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
             handleSingleTargetRouting(context);
         } else {
-            TrafficRouteException.runtime("Current operation not implemented");
+            TrafficRouteException.runtime("Current operation not implemented.");
         }
     }
 
