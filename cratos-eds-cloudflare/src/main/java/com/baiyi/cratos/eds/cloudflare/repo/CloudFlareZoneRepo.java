@@ -1,9 +1,9 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
-import com.baiyi.cratos.eds.cloudflare.CloudflareServiceFactory;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
-import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareZoneService;
+import com.baiyi.cratos.eds.cloudflare.CloudFlareServiceFactory;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudFlareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.service.CloudFlareZoneService;
 import com.baiyi.cratos.eds.cloudflare.util.PageParamUtils;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
@@ -18,14 +18,14 @@ import java.util.List;
  * @Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CloudflareZoneRepo {
+public class CloudFlareZoneRepo {
 
-    public static List<CloudflareZone.Zone> listZones(EdsConfigs.Cloudflare config) {
-        List<CloudflareZone.Zone> results = Lists.newArrayList();
+    public static List<CloudFlareZone.Zone> listZones(EdsConfigs.Cloudflare config) {
+        List<CloudFlareZone.Zone> results = Lists.newArrayList();
         int page = 1;
-        CloudflareZoneService cloudflareService = CloudflareServiceFactory.createZoneService(config);
+        CloudFlareZoneService cloudflareService = CloudFlareServiceFactory.createZoneService(config);
         while (true) {
-            CloudflareHttpResult<List<CloudflareZone.Zone>> rt = cloudflareService.listZones(
+            CloudFlareHttpResult<List<CloudFlareZone.Zone>> rt = cloudflareService.listZones(
                     PageParamUtils.newPage(page));
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()

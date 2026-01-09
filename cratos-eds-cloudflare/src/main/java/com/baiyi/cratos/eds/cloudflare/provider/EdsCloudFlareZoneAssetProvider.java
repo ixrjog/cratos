@@ -2,8 +2,8 @@ package com.baiyi.cratos.eds.cloudflare.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsInstanceAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -33,9 +33,9 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUDFL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_ZONE)
-public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Cloudflare, CloudflareZone.Zone> {
+public class EdsCloudFlareZoneAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Cloudflare, CloudFlareZone.Zone> {
 
-    public EdsCloudflareZoneAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsCloudFlareZoneAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                           CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                           EdsAssetIndexFacade edsAssetIndexFacade,
                                           AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
@@ -45,14 +45,14 @@ public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider
     }
 
     @Override
-    protected List<CloudflareZone.Zone> listEntities(
+    protected List<CloudFlareZone.Zone> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return CloudflareZoneRepo.listZones(instance.getConfig());
+        return CloudFlareZoneRepo.listZones(instance.getConfig());
     }
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
-                                  CloudflareZone.Zone entity) throws EdsAssetConversionException {
+                                  CloudFlareZone.Zone entity) throws EdsAssetConversionException {
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
                 .nameOf(entity.getName())
                 .assetKeyOf(entity.getId())
@@ -64,7 +64,7 @@ public class EdsCloudflareZoneAssetProvider extends BaseEdsInstanceAssetProvider
     @Override
     protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance, EdsAsset edsAsset,
-            CloudflareZone.Zone entity) {
+            CloudFlareZone.Zone entity) {
         if (StringUtils.hasText(entity.getCnameSuffix())) {
             return List.of(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_CNAME_SUFFIX, entity.getCnameSuffix()));
         }

@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class CloudflareZone {
+public class CloudFlareZone {
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

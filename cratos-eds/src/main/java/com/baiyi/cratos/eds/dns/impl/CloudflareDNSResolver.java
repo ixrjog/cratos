@@ -8,8 +8,8 @@ import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.domain.util.StringFormatter;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_ZONE)
-public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> {
+public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> {
 
     private static final String CONSOLE_URL = "https://dash.cloudflare.com/{}/{}/dns/records";
 
@@ -51,15 +51,15 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
         // 获取阿里云配置
         EdsConfigs.Cloudflare config = getEdsConfig(trafficRoute, getAssetTypeEnum());
         // 查询 DNS 记录
-        List<CloudflareDns.DnsRecord> records = CloudflareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
+        List<CloudFlareDns.DnsRecord> records = CloudFlareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
         return findMatchedRecord(records, trafficRoute);
     }
 
     @Override
-    protected DNS.ResourceRecordSet findMatchedRecord(List<CloudflareDns.DnsRecord> records,
+    protected DNS.ResourceRecordSet findMatchedRecord(List<CloudFlareDns.DnsRecord> records,
                                                       TrafficRoute trafficRoute) {
         String domainRecord = trafficRoute.getDomainRecord();
-        List<CloudflareDns.DnsRecord> matchedRecords = records.stream()
+        List<CloudFlareDns.DnsRecord> matchedRecords = records.stream()
                 .filter(record -> isCnameOrARecord(record.getType()) && domainRecord.equals(record.getName()))
                 .toList();
         if (CollectionUtils.isEmpty(matchedRecords)) {
@@ -72,7 +72,7 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
                 .build();
     }
 
-    private List<DNS.ResourceRecord> toResourceRecords(List<CloudflareDns.DnsRecord> records) {
+    private List<DNS.ResourceRecord> toResourceRecords(List<CloudFlareDns.DnsRecord> records) {
         return records.stream()
                 .map(record -> DNS.ResourceRecord.builder()
                         .value(record.getContent())
@@ -84,7 +84,7 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     @Override
     public void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
         TrafficRoutingOptions routingOptions = TrafficRoutingOptions.valueOf(switchRecordTarget.getRoutingOptions());
-        SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context = buildSwitchContext(
+        SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> context = buildSwitchContext(
                 switchRecordTarget);
         if (routingOptions.equals(TrafficRoutingOptions.SINGLE_TARGET)) {
             handleSingleTargetRouting(context);
@@ -94,24 +94,24 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     }
 
     @Override
-    protected Map<String, List<CloudflareDns.DnsRecord>> toMatchedRecordMap(List<CloudflareDns.DnsRecord> records) {
+    protected Map<String, List<CloudFlareDns.DnsRecord>> toMatchedRecordMap(List<CloudFlareDns.DnsRecord> records) {
         return records.stream()
-                .collect(Collectors.groupingBy(CloudflareDns.DnsRecord::getType));
+                .collect(Collectors.groupingBy(CloudFlareDns.DnsRecord::getType));
     }
 
     @Override
     protected void handleSingleTargetRouting(
-            SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context) {
+            SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> context) {
         final String zoneId = getZoneId(context.getTrafficRoute());
         if (context.isMatchedRecordsEmpty()) {
-            CloudflareDnsRepo.createDnsRecord(
+            CloudFlareDnsRepo.createDnsRecord(
                     context.getConfig(), zoneId, context.getResourceRecord(), context.getTTL(), context.getDnsRRType()
                             .name(), context.getRecordValue(), context.getProxied(), "Created by Cratos"
             );
             return;
         }
         if (context.getMatchedRecordsSize() == 1) {
-            CloudflareDnsRepo.updateDnsRecord(
+            CloudFlareDnsRepo.updateDnsRecord(
                     context.getConfig(), zoneId, context.getMatchedRecords()
                             .getFirst()
                             .getId(), context.getResourceRecord(), context.getTTL(), context.getDnsRRType()
@@ -123,8 +123,8 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     }
 
     private void handleMultipleRecords(String zoneId,
-                                       SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context) {
-        Optional<CloudflareDns.DnsRecord> optionalRecord = context.getMatchedRecords()
+                                       SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> context) {
+        Optional<CloudFlareDns.DnsRecord> optionalRecord = context.getMatchedRecords()
                 .stream()
                 .filter(e -> e.getContent()
                         .equals(context.getRecordValue()))
@@ -138,35 +138,35 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     }
 
     private void updateAndDeleteOthers(String zoneId,
-                                       SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context,
-                                       CloudflareDns.DnsRecord targetRecord) {
+                                       SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> context,
+                                       CloudFlareDns.DnsRecord targetRecord) {
         final String recordId = targetRecord.getId();
-        CloudflareDnsRepo.updateDnsRecord(
+        CloudFlareDnsRepo.updateDnsRecord(
                 context.getConfig(), zoneId, recordId, context.getResourceRecord(), context.getTTL(),
                 context.getDnsRRType()
                         .name(), context.getRecordValue(), context.getProxied(), "Updated by Cratos"
         );
         context.getMatchedRecords()
                 .stream()
-                .map(CloudflareDns.DnsRecord::getId)
+                .map(CloudFlareDns.DnsRecord::getId)
                 .filter(id -> !id.equals(recordId))
-                .forEach(id -> CloudflareDnsRepo.deleteDnsRecord(context.getConfig(), zoneId, id));
+                .forEach(id -> CloudFlareDnsRepo.deleteDnsRecord(context.getConfig(), zoneId, id));
     }
 
     private void addAndDeleteAll(String zoneId,
-                                 SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> context) {
-        CloudflareDnsRepo.createDnsRecord(
+                                 SwitchRecordTargetContext<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> context) {
+        CloudFlareDnsRepo.createDnsRecord(
                 context.getConfig(), zoneId, context.getResourceRecord(), context.getTTL(), context.getDnsRRType()
                         .name(), context.getRecordValue(), context.getProxied(), "Created by Cratos"
         );
         context.getMatchedRecords()
-                .forEach(record -> CloudflareDnsRepo.deleteDnsRecord(context.getConfig(), zoneId, record.getId()));
+                .forEach(record -> CloudFlareDnsRepo.deleteDnsRecord(context.getConfig(), zoneId, record.getId()));
     }
 
     @Override
-    protected List<CloudflareDns.DnsRecord> queryTrafficRouteRecords(EdsConfigs.Cloudflare config,
+    protected List<CloudFlareDns.DnsRecord> queryTrafficRouteRecords(EdsConfigs.Cloudflare config,
                                                                      TrafficRoute trafficRoute) {
-        List<CloudflareDns.DnsRecord> records = CloudflareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
+        List<CloudFlareDns.DnsRecord> records = CloudFlareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
         if (CollectionUtils.isEmpty(records)) {
             return List.of();
         }

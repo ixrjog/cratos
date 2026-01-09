@@ -2,10 +2,10 @@ package com.baiyi.cratos.eds.cloudflare.provider;
 
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseHasNamespaceEdsAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -39,9 +39,9 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.CLOUDFL
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.CLOUDFLARE, assetTypeOf = EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD)
-public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> {
+public class EdsCloudFlareDnsRecordAssetProvider extends BaseHasNamespaceEdsAssetProvider<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> {
 
-    public EdsCloudflareDnsRecordAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
+    public EdsCloudFlareDnsRecordAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                                CredentialService credentialService,
                                                ConfigCredTemplate configCredTemplate,
                                                EdsAssetIndexFacade edsAssetIndexFacade,
@@ -53,7 +53,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance,
-                                  CloudflareDns.DnsRecord entity) throws EdsAssetConversionException {
+                                  CloudFlareDns.DnsRecord entity) throws EdsAssetConversionException {
         String key = Joiner.on(":")
                 .join(entity.getZoneId(), entity.getName());
         return newEdsAssetBuilder(instance, entity).assetIdOf(entity.getId())
@@ -67,16 +67,16 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     @Override
     protected Set<String> listNamespace(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return CloudflareZoneRepo.listZones(instance.getConfig())
+        return CloudFlareZoneRepo.listZones(instance.getConfig())
                 .stream()
-                .map(CloudflareZone.Zone::getId)
+                .map(CloudFlareZone.Zone::getId)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    protected List<CloudflareDns.DnsRecord> listEntities(String zoneId,
+    protected List<CloudFlareDns.DnsRecord> listEntities(String zoneId,
                                                          ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance) throws EdsQueryEntitiesException {
-        return CloudflareDnsRepo.listDnsRecords(instance.getConfig(), zoneId)
+        return CloudFlareDnsRepo.listDnsRecords(instance.getConfig(), zoneId)
                 .stream()
                 .peek(e -> e.setZoneId(zoneId))
                 .toList();
@@ -85,7 +85,7 @@ public class EdsCloudflareDnsRecordAssetProvider extends BaseHasNamespaceEdsAsse
     @Override
     protected List<EdsAssetIndex> toIndexes(
             ExternalDataSourceInstance<EdsConfigs.Cloudflare> instance, EdsAsset edsAsset,
-            CloudflareDns.DnsRecord entity) {
+            CloudFlareDns.DnsRecord entity) {
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_PROXIED, entity.getProxied()));
         indices.add(createEdsAssetIndex(edsAsset, CLOUDFLARE_ZONE_DNS_RECORD_CONTENT, entity.getContent()));

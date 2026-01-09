@@ -12,11 +12,10 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import static com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo.PROXIED;
+import static com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo.PROXIED;
 
 /**
  * &#064;Author  baiyi

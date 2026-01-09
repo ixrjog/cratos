@@ -10,7 +10,7 @@ import java.util.List;
  * &#064;Date  2025/6/9 09:42
  * &#064;Version 1.0
  */
-public class CloudflareDns {
+public class CloudFlareDns {
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)

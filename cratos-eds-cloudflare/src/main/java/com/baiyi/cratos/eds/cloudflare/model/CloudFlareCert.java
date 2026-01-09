@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class CloudflareCert {
+public class CloudFlareCert {
 
     @Data
     public static class Result {

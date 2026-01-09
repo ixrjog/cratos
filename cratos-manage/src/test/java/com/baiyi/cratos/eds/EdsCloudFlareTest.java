@@ -1,12 +1,13 @@
 package com.baiyi.cratos.eds;
 
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareCertRepo;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareDnsRepo;
-import com.baiyi.cratos.eds.cloudflare.repo.CloudflareZoneRepo;
+import com.baiyi.cratos.eds.cloudflare.CloudFlareServiceFactory;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareCert;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareCertRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareDnsRepo;
+import com.baiyi.cratos.eds.cloudflare.repo.CloudFlareZoneRepo;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -24,7 +25,7 @@ import java.util.List;
  * @Date 2024/3/4 13:57
  * @Version 1.0
  */
-public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
+public class EdsCloudFlareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
 
     @Autowired
     private EdsAssetService edsAssetService;
@@ -47,14 +48,14 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
     @Test
     void zoneTest() {
         EdsConfigs.Cloudflare cf = getConfig(5);
-        List<CloudflareZone.Zone> rt = CloudflareZoneRepo.listZones(cf);
+        List<CloudFlareZone.Zone> rt = CloudFlareZoneRepo.listZones(cf);
         System.out.println(rt);
     }
 
     @Test
     void certTest() {
         EdsConfigs.Cloudflare cf = getConfig(5);
-        List<CloudflareCert.Result> rt = CloudflareCertRepo.listCertificatePacks(
+        List<CloudFlareCert.Result> rt = CloudFlareCertRepo.listCertificatePacks(
                 cf, "5243357f773b873952f7f99090841934");
         System.out.println(rt);
     }
@@ -62,10 +63,22 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
     @Test
     void certTest2() {
         EdsConfigs.Cloudflare cf = getConfig(5);
-        List<CloudflareDns.DnsRecord> dnsRecords = CloudflareDnsRepo.listDnsRecords(
+        List<CloudFlareDns.DnsRecord> dnsRecords = CloudFlareDnsRepo.listDnsRecords(
                 cf, "747ddd04b8081fc13b31ed2b112d9ea6");
         System.out.println(dnsRecords);
     }
+
+    @Test
+    void certTest3() {
+        List<String> ips4 = CloudFlareServiceFactory.createIPsService()
+                .getIpsV4();
+        System.out.println(ips4);
+
+        List<String> ips6 = CloudFlareServiceFactory.createIPsService()
+                .getIpsV6();
+        System.out.println(ips6);
+    }
+
 
     // Traffic Route
 
@@ -73,10 +86,10 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
     @Test
     void test3() {
         List<EdsAsset> assets = edsAssetService.queryInstanceAssets(95, EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD.name());
-        EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord> holder = (EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudflareDns.DnsRecord>) edsInstanceProviderHolderBuilder.newHolder(
+        EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord> holder = (EdsInstanceProviderHolder<EdsConfigs.Cloudflare, CloudFlareDns.DnsRecord>) edsInstanceProviderHolderBuilder.newHolder(
                 95, EdsAssetTypeEnum.CLOUDFLARE_DNS_RECORD.name());
         for (EdsAsset asset : assets) {
-            CloudflareDns.DnsRecord dnsRecord = holder.getProvider()
+            CloudFlareDns.DnsRecord dnsRecord = holder.getProvider()
                     .assetLoadAs(asset.getOriginalModel());
             if (!dnsRecord.getType()
                     .equals("CNAME")) {
@@ -111,19 +124,19 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
             String zoneId = "";
 
 
-
             List<EdsAsset> as1 = edsAssetService.queryInstanceAssetByTypeAndName(
                     94, EdsAssetTypeEnum.AWS_HOSTED_ZONE.name(), domain + ".", false);
             if (!CollectionUtils.isEmpty(as1)) {
                 dnsResolverInstanceId = 94;
 
-                zoneId = as1.getFirst().getAssetKey();
+                zoneId = as1.getFirst()
+                        .getAssetKey();
 
             } else {
                 List<EdsAsset> as2 = edsAssetService.queryInstanceAssetByTypeAndName(
                         93, EdsAssetTypeEnum.ALIYUN_DOMAIN.name(), domain, false);
                 if (!CollectionUtils.isEmpty(as2)) {
-                    dnsResolverInstanceId  = 93;
+                    dnsResolverInstanceId = 93;
                 }
             }
             if (dnsResolverInstanceId == 0) {
@@ -136,7 +149,7 @@ public class EdsCloudflareTest extends BaseEdsTest<EdsConfigs.Cloudflare> {
                     .domain(domain)
                     .domainRecord(trafficLayerDomainRecord.getRecordName())
                     .dnsResolverInstanceId(dnsResolverInstanceId)
-                    .recordType("CNAME")
+                    //.recordType("CNAME")
                     .zoneId(zoneId)
                     .valid(true)
                     .build();

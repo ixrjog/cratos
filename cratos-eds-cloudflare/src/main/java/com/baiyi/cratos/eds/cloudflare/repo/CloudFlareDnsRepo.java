@@ -1,10 +1,10 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
-import com.baiyi.cratos.eds.cloudflare.CloudflareServiceFactory;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareDns;
-import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.param.CloudflareDnsParam;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareDnsService;
+import com.baiyi.cratos.eds.cloudflare.CloudFlareServiceFactory;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareDns;
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudFlareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.param.CloudFlareDnsParam;
+import com.baiyi.cratos.eds.cloudflare.service.CloudFlareDnsService;
 import com.baiyi.cratos.eds.cloudflare.util.PageParamUtils;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
@@ -19,7 +19,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CloudflareDnsRepo {
+public class CloudFlareDnsRepo {
 
     // 代理
     public static final boolean PROXIED = true;
@@ -27,13 +27,13 @@ public class CloudflareDnsRepo {
     public static final boolean DIRECT = false;
 
 
-    public static List<CloudflareDns.DnsRecord> listDnsRecords(EdsConfigs.Cloudflare config, String zoneId) {
-        List<CloudflareDns.DnsRecord> results = Lists.newArrayList();
+    public static List<CloudFlareDns.DnsRecord> listDnsRecords(EdsConfigs.Cloudflare config, String zoneId) {
+        List<CloudFlareDns.DnsRecord> results = Lists.newArrayList();
         int page = 1;
         int total = Integer.MAX_VALUE;
-        CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
+        CloudFlareDnsService cloudflareDnsService = CloudFlareServiceFactory.createDnsService(config);
         do {
-            CloudflareHttpResult<List<CloudflareDns.DnsRecord>> rt = cloudflareDnsService.listDnsRecords(
+            CloudFlareHttpResult<List<CloudFlareDns.DnsRecord>> rt = cloudflareDnsService.listDnsRecords(
                     zoneId,
                     PageParamUtils.newPage(
                             page)
@@ -48,12 +48,12 @@ public class CloudflareDnsRepo {
         return results;
     }
 
-    public static CloudflareHttpResult<CloudflareDns.DnsRecord> createDnsRecord(EdsConfigs.Cloudflare config,
+    public static CloudFlareHttpResult<CloudFlareDns.DnsRecord> createDnsRecord(EdsConfigs.Cloudflare config,
                                                                                 String zoneId, String name, Long ttl,
                                                                                 String type, String content,
                                                                                 Boolean proxied, String comment) {
-        CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
-        CloudflareDnsParam.CreateDnsRecord createDnsRecord = CloudflareDnsParam.CreateDnsRecord.builder()
+        CloudFlareDnsService cloudflareDnsService = CloudFlareServiceFactory.createDnsService(config);
+        CloudFlareDnsParam.CreateDnsRecord createDnsRecord = CloudFlareDnsParam.CreateDnsRecord.builder()
                 .name(name)
                 .ttl(ttl)
                 .type(type)
@@ -64,13 +64,13 @@ public class CloudflareDnsRepo {
         return cloudflareDnsService.createDnsRecord(zoneId, createDnsRecord);
     }
 
-    public static CloudflareHttpResult<CloudflareDns.DnsRecord> updateDnsRecord(EdsConfigs.Cloudflare config,
+    public static CloudFlareHttpResult<CloudFlareDns.DnsRecord> updateDnsRecord(EdsConfigs.Cloudflare config,
                                                                                 String zoneId, String dnsRecordId,
                                                                                 String name, Long ttl, String type,
                                                                                 String content, Boolean proxied,
                                                                                 String comment) {
-        CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
-        CloudflareDnsParam.UpdateDnsRecord updateDnsRecord = CloudflareDnsParam.UpdateDnsRecord.builder()
+        CloudFlareDnsService cloudflareDnsService = CloudFlareServiceFactory.createDnsService(config);
+        CloudFlareDnsParam.UpdateDnsRecord updateDnsRecord = CloudFlareDnsParam.UpdateDnsRecord.builder()
                 .name(name)
                 .ttl(ttl)
                 .type(type)
@@ -81,9 +81,9 @@ public class CloudflareDnsRepo {
         return cloudflareDnsService.updateDnsRecord(zoneId, dnsRecordId, updateDnsRecord);
     }
 
-    public static CloudflareHttpResult<String> deleteDnsRecord(EdsConfigs.Cloudflare config, String zoneId,
+    public static CloudFlareHttpResult<String> deleteDnsRecord(EdsConfigs.Cloudflare config, String zoneId,
                                                                String dnsRecordId) {
-        CloudflareDnsService cloudflareDnsService = CloudflareServiceFactory.createDnsService(config);
+        CloudFlareDnsService cloudflareDnsService = CloudFlareServiceFactory.createDnsService(config);
         return cloudflareDnsService.deleteDnsRecord(zoneId, dnsRecordId);
     }
 

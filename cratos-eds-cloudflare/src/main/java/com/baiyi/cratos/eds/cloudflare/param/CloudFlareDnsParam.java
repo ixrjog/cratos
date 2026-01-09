@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * &#064;Date  2025/12/19 13:42
  * &#064;Version 1.0
  */
-public class CloudflareDnsParam {
+public class CloudFlareDnsParam {
 
     @Data
     @Builder

@@ -1,9 +1,9 @@
 package com.baiyi.cratos.eds.cloudflare.repo;
 
-import com.baiyi.cratos.eds.cloudflare.CloudflareServiceFactory;
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
-import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.CloudflareCertificateService;
+import com.baiyi.cratos.eds.cloudflare.CloudFlareServiceFactory;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareCert;
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudFlareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.service.CloudFlareCertificateService;
 import com.baiyi.cratos.eds.cloudflare.util.PageParamUtils;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.google.common.collect.Lists;
@@ -18,14 +18,14 @@ import java.util.List;
  * @Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CloudflareCertRepo {
+public class CloudFlareCertRepo {
 
-    public static List<CloudflareCert.Result> listCertificatePacks(EdsConfigs.Cloudflare config, String zoneId) {
-        List<CloudflareCert.Result> results = Lists.newArrayList();
+    public static List<CloudFlareCert.Result> listCertificatePacks(EdsConfigs.Cloudflare config, String zoneId) {
+        List<CloudFlareCert.Result> results = Lists.newArrayList();
         int page = 1;
-        CloudflareCertificateService cloudflareService = CloudflareServiceFactory.createCertificateService(config);
+        CloudFlareCertificateService cloudflareService = CloudFlareServiceFactory.createCertificateService(config);
         while (true) {
-            CloudflareHttpResult<List<CloudflareCert.Result>> rt = cloudflareService.listCertificatePacks(
+            CloudFlareHttpResult<List<CloudFlareCert.Result>> rt = cloudflareService.listCertificatePacks(
                     zoneId, PageParamUtils.newPage(page));
             results.addAll(rt.getResult());
             if (results.size() == rt.getResultInfo()

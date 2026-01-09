@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.cloudflare.service;
 
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareCert;
-import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.base.CloudflareService;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareCert;
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudFlareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.service.base.CloudFlareService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
@@ -17,10 +17,10 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @HttpExchange(accept = "application/json")
-public interface CloudflareCertificateService extends CloudflareService {
+public interface CloudFlareCertificateService extends CloudFlareService {
 
     @GetExchange("/zones/{zoneId}/ssl/certificate_packs")
-    CloudflareHttpResult<List<CloudflareCert.Result>> listCertificatePacks(@PathVariable String zoneId,
+    CloudFlareHttpResult<List<CloudFlareCert.Result>> listCertificatePacks(@PathVariable String zoneId,
                                                                            @RequestParam Map<String, String> param);
 
 }

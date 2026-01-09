@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CloudflareHttpResult<T> {
+public class CloudFlareHttpResult<T> {
 
     private T result;
 

@@ -1,8 +1,8 @@
 package com.baiyi.cratos.eds.cloudflare.service;
 
-import com.baiyi.cratos.eds.cloudflare.model.CloudflareZone;
-import com.baiyi.cratos.eds.cloudflare.model.base.CloudflareHttpResult;
-import com.baiyi.cratos.eds.cloudflare.service.base.CloudflareService;
+import com.baiyi.cratos.eds.cloudflare.model.CloudFlareZone;
+import com.baiyi.cratos.eds.cloudflare.model.base.CloudFlareHttpResult;
+import com.baiyi.cratos.eds.cloudflare.service.base.CloudFlareService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -16,9 +16,9 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @HttpExchange(accept = "application/json")
-public interface CloudflareZoneService extends CloudflareService {
+public interface CloudFlareZoneService extends CloudFlareService {
 
     @GetExchange("/zones")
-    CloudflareHttpResult<List<CloudflareZone.Zone>> listZones(@RequestParam Map<String, String> param);
+    CloudFlareHttpResult<List<CloudFlareZone.Zone>> listZones(@RequestParam Map<String, String> param);
 
 }
