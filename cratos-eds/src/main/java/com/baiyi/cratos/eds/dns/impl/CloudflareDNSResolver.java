@@ -164,8 +164,8 @@ public class CloudflareDNSResolver extends BaseDNSResolver<EdsConfigs.Cloudflare
     }
 
     @Override
-    protected List<CloudflareDns.DnsRecord> getTrafficRouteRecords(EdsConfigs.Cloudflare config,
-                                                                   TrafficRoute trafficRoute) {
+    protected List<CloudflareDns.DnsRecord> queryTrafficRouteRecords(EdsConfigs.Cloudflare config,
+                                                                     TrafficRoute trafficRoute) {
         List<CloudflareDns.DnsRecord> records = CloudflareDnsRepo.listDnsRecords(config, trafficRoute.getZoneId());
         if (CollectionUtils.isEmpty(records)) {
             return List.of();

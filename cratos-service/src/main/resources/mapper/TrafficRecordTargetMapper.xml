@@ -12,7 +12,7 @@
     <result column="record_value" jdbcType="VARCHAR" property="recordValue" />
     <result column="target_type" jdbcType="VARCHAR" property="targetType" />
     <result column="origin" jdbcType="BIT" property="origin" />
-    <result column=" original_value" jdbcType="VARCHAR" property="originalValue" />
+    <result column=" origin_server" jdbcType="VARCHAR" property="originServer" />
     <result column="ttl" jdbcType="BIGINT" property="ttl" />
     <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="valid" jdbcType="BIT" property="valid" />

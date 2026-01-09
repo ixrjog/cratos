@@ -93,6 +93,7 @@ public class TrafficRouteParam {
         @NotBlank(message = "Domain record cannot be blank")
         private String domainRecord;
         private String name;
+        private String zoneId;
         @NotNull(message = "DNS resolver instance ID cannot be null")
         private Integer dnsResolverInstanceId;
         @NotBlank(message = "Record type cannot be blank")
@@ -118,7 +119,7 @@ public class TrafficRouteParam {
         private String recordType;
         @NotBlank(message = "Target type cannot be blank")
         private String targetType;
-        private String originalValue;
+        private String originServer;
         private Boolean origin;
         private Long ttl;
         private Integer weight;
@@ -144,7 +145,7 @@ public class TrafficRouteParam {
         @NotBlank(message = "Target type cannot be blank")
         private String targetType;
         private Boolean origin;
-        private String originalValue;
+        private String originServer;
         private Long ttl;
         private Integer weight;
         @NotNull(message = "Valid status cannot be null")

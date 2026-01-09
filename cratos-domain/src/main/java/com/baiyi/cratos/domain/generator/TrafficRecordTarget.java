@@ -56,8 +56,8 @@ public class TrafficRecordTarget implements HasValid, HasIntegerPrimaryKey {
      */
     private Boolean origin;
 
-    @Column(name = "original_value")
-    private String originalValue;
+    @Column(name = "origin_server")
+    private String originServer;
 
     /**
      * TTL

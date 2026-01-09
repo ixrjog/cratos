@@ -129,7 +129,16 @@ public class TrafficRouteFacadeImpl implements TrafficRouteFacade {
 
     @Override
     public void updateTrafficRoute(TrafficRouteParam.UpdateRoute updateRoute) {
-        TrafficRoute trafficRoute = updateRoute.toTarget();
+        TrafficRoute trafficRoute = Optional.ofNullable(trafficRouteService.getById(updateRoute.getId()))
+                .orElseThrow(() -> new TrafficRouteException(
+                        "TrafficRoute 配置不存在: trafficRouteId = {}",
+                        updateRoute.getId()
+                ));
+        trafficRoute.setZoneId(updateRoute.getZoneId());
+        trafficRoute.setName(updateRoute.getName());
+        trafficRoute.setValid(updateRoute.getValid());
+        trafficRoute.setDnsResolverInstanceId(updateRoute.getDnsResolverInstanceId());
+        trafficRoute.setComment(updateRoute.getComment());
         trafficRouteService.updateByPrimaryKey(trafficRoute);
     }
 

@@ -129,6 +129,7 @@ public class TrafficRouteVO {
         private String recordValue;
         private String targetType;
         private Boolean origin;
+        private String originServer;
         private Long ttl;
         private Integer weight;
         private Boolean valid;

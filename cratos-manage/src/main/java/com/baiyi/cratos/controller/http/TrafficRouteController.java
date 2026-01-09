@@ -50,6 +50,13 @@ public class TrafficRouteController {
         return HttpResult.SUCCESS;
     }
 
+    @Operation(summary = "Update traffic route")
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<Boolean> updateTrafficRoute(@RequestBody @Valid TrafficRouteParam.UpdateRoute updateRoute) {
+        trafficRouteFacade.updateTrafficRoute(updateRoute);
+        return HttpResult.SUCCESS;
+    }
+
     @Operation(summary = "Delete traffic route by id")
     @DeleteMapping(value = "/del", produces = MediaType.APPLICATION_JSON_VALUE)
     public HttpResult<Boolean> deleteTrafficRouteById(@RequestParam int id) {

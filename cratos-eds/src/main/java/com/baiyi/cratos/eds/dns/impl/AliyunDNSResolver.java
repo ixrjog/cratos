@@ -22,7 +22,6 @@ import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -84,8 +83,8 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
     }
 
     @Override
-    protected List<DescribeDomainRecordsResponseBody.Record> getTrafficRouteRecords(EdsConfigs.Aliyun config,
-                                                                                    TrafficRoute trafficRoute) {
+    protected List<DescribeDomainRecordsResponseBody.Record> queryTrafficRouteRecords(EdsConfigs.Aliyun config,
+                                                                                      TrafficRoute trafficRoute) {
         List<DescribeDomainRecordsResponseBody.Record> records = AliyunDnsRepo.describeDomainRecords(
                 config, trafficRoute.getDomain());
         if (CollectionUtils.isEmpty(records)) {

@@ -5,7 +5,6 @@ import com.baiyi.cratos.domain.generator.TrafficRecordTarget;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
-import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -15,7 +14,6 @@ import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TrafficRecordTargetService;
 import com.baiyi.cratos.service.TrafficRouteService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -51,18 +49,12 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
                         () -> new TrafficRouteException("TrafficRoute 不存在, trafficRouteId: {}", trafficRouteId));
     }
 
-    protected EdsAssetTypeEnum getAssetTypeEnum() {
-        return AopUtils.getTargetClass(this)
-                .getAnnotation(EdsInstanceAssetType.class)
-                .assetTypeOf();
-    }
-
     protected SwitchRecordTargetContext<Config, Record> buildSwitchContext(
             TrafficRouteParam.SwitchRecordTarget switchRecordTarget) {
         TrafficRecordTarget trafficRecordTarget = getTrafficRecordTargetById(switchRecordTarget.getRecordTargetId());
         TrafficRoute trafficRoute = getTrafficRouteById(trafficRecordTarget.getTrafficRouteId());
         Config config = getEdsConfig(trafficRoute, getAssetTypeEnum());
-        List<Record> matchedRecords = getTrafficRouteRecords(config, trafficRoute);
+        List<Record> matchedRecords = queryTrafficRouteRecords(config, trafficRoute);
         validateRecordCount(matchedRecords);
         DnsRRType dnsRRType = DnsRRType.valueOf(trafficRecordTarget.getRecordType());
         return SwitchRecordTargetContext.<Config, Record>builder()
@@ -122,10 +114,14 @@ public abstract class BaseDNSResolver<Config extends HasEdsConfig, Record> imple
         return fQDNOrDomain.replaceAll("\\.$", "");
     }
 
-    protected abstract List<Record> getTrafficRouteRecords(Config config, TrafficRoute trafficRoute);
+    protected abstract List<Record> queryTrafficRouteRecords(Config config, TrafficRoute trafficRoute);
 
     protected abstract void handleSingleTargetRouting(SwitchRecordTargetContext<Config, Record> context);
 
+    /**
+     * 安全控制
+     * @param matchedRecords
+     */
     protected void validateRecordCount(List<Record> matchedRecords) {
         if (!CollectionUtils.isEmpty(matchedRecords) && matchedRecords.size() > MAX_LOAD_BALANCING) {
             TrafficRouteException.runtime(

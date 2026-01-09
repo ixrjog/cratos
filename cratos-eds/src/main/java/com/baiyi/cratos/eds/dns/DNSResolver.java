@@ -5,6 +5,9 @@ import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
 import com.baiyi.cratos.eds.core.EdsInstanceTypeOfAnnotate;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -21,6 +24,12 @@ public interface DNSResolver extends EdsInstanceTypeOfAnnotate, InitializingBean
     String getZoneId(TrafficRoute trafficRoute);
 
     String generateConsoleURL(TrafficRoute trafficRoute);
+
+    default EdsAssetTypeEnum getAssetTypeEnum() {
+        return AopUtils.getTargetClass(this)
+                .getAnnotation(EdsInstanceAssetType.class)
+                .assetTypeOf();
+    }
 
     @Override
     default void afterPropertiesSet() {

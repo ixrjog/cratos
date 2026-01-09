@@ -73,7 +73,7 @@ public class AwsRoute53Resolver extends BaseDNSResolver<EdsConfigs.Aws, Resource
      * @return
      */
     @Override
-    protected List<ResourceRecordSet> getTrafficRouteRecords(EdsConfigs.Aws config, TrafficRoute trafficRoute) {
+    protected List<ResourceRecordSet> queryTrafficRouteRecords(EdsConfigs.Aws config, TrafficRoute trafficRoute) {
         final String hostedZoneId = getZoneId(trafficRoute);
         final String domainRecordFqdn = toFQDN(trafficRoute.getDomainRecord());
         List<ResourceRecordSet> resourceRecordSets = AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId);
