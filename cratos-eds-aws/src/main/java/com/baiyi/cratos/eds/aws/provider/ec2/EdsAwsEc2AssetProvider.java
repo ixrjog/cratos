@@ -10,6 +10,7 @@ import com.baiyi.cratos.eds.aws.util.AmazonEc2Util;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.BaseEdsRegionAssetProvider;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.comparer.EdsAssetComparer;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -45,8 +46,10 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
                                   EdsAssetIndexFacade edsAssetIndexFacade, Ec2InstancesRepo ec2InstancesRepo,
                                   AwsEc2Repo awsEc2Repo, AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                   EdsInstanceProviderHolderBuilder holderBuilder) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                assetToBusinessObjectUpdater, holderBuilder);
+        super(
+                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                assetToBusinessObjectUpdater, holderBuilder
+        );
         this.ec2InstancesRepo = ec2InstancesRepo;
         this.awsEc2Repo = awsEc2Repo;
     }
@@ -61,13 +64,12 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
         }
         List<Instance> ec2Instances = awsEc2Repo.listInstances(regionId, aws);
         if (!CollectionUtils.isEmpty(ec2Instances)) {
-            return toEC2(regionId, aws, instanceTypeMap, ec2Instances);
+            return toEC2(regionId, instanceTypeMap, ec2Instances);
         }
         return Collections.emptyList();
     }
 
-    private List<AwsEc2.Ec2> toEC2(String regionId, EdsConfigs.Aws aws,
-                                   Map<String, InstanceModel.EC2InstanceType> instanceTypeMap,
+    private List<AwsEc2.Ec2> toEC2(String regionId, Map<String, InstanceModel.EC2InstanceType> instanceTypeMap,
                                    List<Instance> instances) {
         return instances.stream()
                 .map(e -> AwsEc2.Ec2.builder()
@@ -83,17 +85,29 @@ public class EdsAwsEc2AssetProvider extends BaseEdsRegionAssetProvider<EdsConfig
         return newEdsAssetBuilder(instance, entity)
                 // ARN
                 .assetIdOf(entity.getInstance()
-                        .getInstanceId())
+                                   .getInstanceId())
                 .nameOf(AmazonEc2Util.getName(entity.getInstance()
-                        .getTags()))
+                                                      .getTags()))
                 .assetKeyOf(entity.getInstance()
-                        .getPrivateIpAddress())
+                                    .getPrivateIpAddress())
                 .kindOf(entity.getInstance()
-                        .getInstanceType())
+                                .getInstanceType())
                 .regionOf(entity.getRegionId())
                 .createdTimeOf(entity.getInstance()
-                        .getLaunchTime())
+                                       .getLaunchTime())
                 .build();
+    }
+    @Override
+    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
+        return EdsAssetComparer.builder()
+                .comparisonName(true)
+                .comparisonKey(true)
+                .comparisonDescription(true)
+                .comparisonExpiredTime(true)
+                .comparisonOriginalModel(true)
+                .comparisonKind(true)
+                .build()
+                .compare(a1, a2);
     }
 
 }

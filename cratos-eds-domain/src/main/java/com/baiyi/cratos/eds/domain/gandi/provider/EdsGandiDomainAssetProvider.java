@@ -64,7 +64,7 @@ public class EdsGandiDomainAssetProvider extends BaseEdsInstanceAssetProvider<Ed
     }
 
     @Override
-    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -8,20 +8,19 @@ import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionBusinessParam;
 import com.baiyi.cratos.domain.param.http.user.UserPermissionParam;
+import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.domain.view.user.PermissionBusinessVO;
 import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.facade.EnvFacade;
-import com.baiyi.cratos.facade.SimpleEdsAccountFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
-import com.baiyi.cratos.domain.query.EdsAssetQuery;
 import com.baiyi.cratos.query.ServerAccountQuery;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.domain.facade.UserPermissionBusinessFacade;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,12 +46,11 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
     private final EnvFacade envFacade;
     private final EdsAssetService edsAssetService;
     private final TagGroupService tagGroupService;
-    private final SimpleEdsAccountFacade simpleEdsAccountFacade;
+
     private final TagService tagService;
     private final BusinessTagService businessTagService;
     private final ServerAccountService serverAccountService;
-    private static final List<EdsAssetTypeEnum> EFFECTIVE_ASSET_TYPES = List.of(EdsAssetTypeEnum.ALIYUN_ECS,
-            EdsAssetTypeEnum.AWS_EC2, EdsAssetTypeEnum.HUAWEICLOUD_ECS, EdsAssetTypeEnum.CRATOS_COMPUTER);
+
     private final Tag edsTagUniqueKey = Tag.builder()
             .tagKey(SysTagKeys.EDS.getKey())
             .build();
@@ -70,8 +68,11 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
             UserPermissionBusinessParam.UpdateUserPermissionBusiness updateUserPermissionBusiness) {
         Map<String, Env> envLifecycleMap = envFacade.getEnvMap();
         for (UserPermissionBusinessParam.BusinessPermission businessPermission : updateUserPermissionBusiness.getBusinessPermissions()) {
-            updateUserPermissionBusiness(updateUserPermissionBusiness.getUsername(),
-                    updateUserPermissionBusiness.getBusinessType(), businessPermission, envLifecycleMap);
+            updateUserPermissionBusiness(
+                    updateUserPermissionBusiness.getUsername(),
+                    updateUserPermissionBusiness.getBusinessType(), businessPermission,
+                    envLifecycleMap
+            );
         }
     }
 
@@ -84,7 +85,8 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         if (Objects.isNull(permissionBusiness)) {
             throw new UserPermissionBusinessException(
                     "The authorized business object does not exist. businessType={}, businessId={}", businessType,
-                    businessPermission.getBusinessId());
+                    businessPermission.getBusinessId()
+            );
         }
         SimpleBusiness hasBusiness = SimpleBusiness.builder()
                 .businessType(businessType)
@@ -94,11 +96,15 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         for (UserPermissionBusinessParam.RoleMember roleMember : businessPermission.getRoleMembers()) {
             if (roleMember.getChecked()) {
                 try {
-                    grantPermission(username, businessType, businessPermission, permissionBusiness, envLifecycleMap,
-                            userPermissionMap, roleMember);
+                    grantPermission(
+                            username, businessType, businessPermission, permissionBusiness, envLifecycleMap,
+                            userPermissionMap, roleMember
+                    );
                 } catch (Exception e) {
-                    log.error("Failed to grant user permission. username={}, businessType={}, businessId={}, role={}",
-                            username, businessType, businessPermission.getBusinessId(), roleMember.getRole());
+                    log.error(
+                            "Failed to grant user permission. username={}, businessType={}, businessId={}, role={}",
+                            username, businessType, businessPermission.getBusinessId(), roleMember.getRole()
+                    );
                     log.error(e.getMessage(), e);
                 }
             } else {
@@ -112,8 +118,10 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                                  PermissionBusinessVO.PermissionBusiness permissionBusiness,
                                  Map<String, Env> envLifecycleMap, Map<String, UserPermission> userPermissionMap,
                                  UserPermissionBusinessParam.RoleMember roleMember) {
-        Date expiredTime = EnvLifecycleUtils.generateExpiredTimeWithEnvLifecycle(roleMember.getExpiredTime(),
-                roleMember.getRole(), envLifecycleMap);
+        Date expiredTime = EnvLifecycleUtils.generateExpiredTimeWithEnvLifecycle(
+                roleMember.getExpiredTime(),
+                roleMember.getRole(), envLifecycleMap
+        );
         if (userPermissionMap.containsKey(roleMember.getRole())) {
             UserPermission userPermission = userPermissionMap.get(roleMember.getRole());
             userPermission.setValid(Boolean.TRUE);
@@ -140,7 +148,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
                                   UserPermissionBusinessParam.RoleMember roleMember) {
         if (userPermissionMap.containsKey(roleMember.getRole())) {
             userPermissionFacade.deleteUserPermissionById(userPermissionMap.get(roleMember.getRole())
-                    .getId());
+                                                                  .getId());
         }
     }
 
@@ -194,6 +202,7 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         if (tagGroup == null) {
             return DataTable.NO_DATA;
         }
+        // TODO 增加 Env & CountryCode 标签过滤
         List<Integer> businessIds = edsAssetService.queryUserPermissionBusinessIds(
                 EdsAssetQuery.QueryUserPermissionBusinessIdParam.builder()
                         .username(param.getUsername())
@@ -203,17 +212,19 @@ public class UserPermissionBusinessFacadeImpl implements UserPermissionBusinessF
         if (businessIds.isEmpty()) {
             return DataTable.NO_DATA;
         }
-        param.setEffectiveAssetTypes(EFFECTIVE_ASSET_TYPES.stream()
-                .map(Enum::name)
-                .toList());
+        param.setEffectiveAssetTypes(EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
+                                             .map(Enum::name)
+                                             .toList());
         param.setUserPermissionIds(businessIds);
         return edsAssetService.queryUserPermissionPage(param);
     }
 
     @Override
     public List<ServerAccount> queryUserPermissionServerAccounts(String username) {
-        List<Integer> userPermissionIds = userPermissionService.queryUserPermissionBusinessIds(username,
-                BusinessTypeEnum.SERVER_ACCOUNT.name());
+        List<Integer> userPermissionIds = userPermissionService.queryUserPermissionBusinessIds(
+                username,
+                BusinessTypeEnum.SERVER_ACCOUNT.name()
+        );
         if (CollectionUtils.isEmpty(userPermissionIds)) {
             return List.of();
         }

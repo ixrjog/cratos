@@ -45,11 +45,11 @@ public abstract class BaseEdsRegionAssetProvider<Config extends HasRegionsModel 
      */
     @Override
     protected List<Asset> listEntities(ExternalDataSourceInstance<Config> instance) throws EdsQueryEntitiesException {
-        Config configModel = instance.getConfig();
+        Config config = instance.getConfig();
         List<Asset> entities = Lists.newArrayList();
-        for (String regionId : getRegionSet(configModel)) {
+        for (String regionId : getRegionSet(config)) {
             try {
-                List<Asset> regionEntities = listEntities(regionId, configModel);
+                List<Asset> regionEntities = listEntities(regionId, config);
                 if (!CollectionUtils.isEmpty(regionEntities)) {
                     entities.addAll(regionEntities);
                 }

@@ -73,7 +73,7 @@ public class EdsGodaddyDomainAssetProvider extends BaseEdsInstanceAssetProvider<
     }
 
     @Override
-    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.DIFFERENT;
     }
 

@@ -214,7 +214,7 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
             }
         } else {
             newEdsAsset.setId(edsAsset.getId());
-            if (!equals(edsAsset, newEdsAsset)) {
+            if (!isAssetChanged(edsAsset, newEdsAsset)) {
                 edsAssetService.updateByPrimaryKey(newEdsAsset);
                 // 更新绑定的资产
                 assetToBusinessObjectUpdater.update(newEdsAsset);
@@ -247,11 +247,11 @@ public abstract class BaseEdsInstanceAssetProvider<C extends HasEdsConfig, A> im
     /**
      * 重写
      *
-     * @param a1
-     * @param a2
+     * @param a1 Entered Asset
+     * @param a2 New Asset
      * @return
      */
-    protected boolean equals(EdsAsset a1, EdsAsset a2) {
+    protected boolean isAssetChanged(EdsAsset a1, EdsAsset a2) {
         return EdsAssetComparer.SAME.compare(a1, a2);
     }
 
