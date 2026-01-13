@@ -111,10 +111,23 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 AliyunDnsRepo.deleteDomainRecord(context.getConfig(), conflictingMatchedRecord.getRecordId());
             }
         }
+
+        List<DescribeDomainRecordsResponseBody.Record> records = context.getMatchedRecordMap()
+                .get(context.getDnsRRType()
+                             .name());
         // 没有记录则新增
+        if (CollectionUtils.isEmpty(records)) {
+            addNewRecord(context);
+            return;
+        }
+
         if (CollectionUtils.isEmpty(context.getMatchedRecordMap()
                                             .get(dnsRRType.name()))) {
             addNewRecord(context);
+            return;
+        }
+        if (records.size() == 1) {
+            updateSingleRecord(context, records.getFirst());
             return;
         }
         handleMultipleRecords(context);
@@ -145,6 +158,11 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
         }
     }
 
+    /**
+     * 路由模式修改
+     *
+     * @param context
+     */
     private void handleMultipleRecords(
             SwitchRecordTargetContext<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> context) {
         List<DescribeDomainRecordsResponseBody.Record> records = context.getMatchedRecordMap()
@@ -154,9 +172,7 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
                 .filter(e -> e.getValue()
                         .equals(context.getRecordValue()))
                 .findFirst();
-        if (optionalRecord.isPresent()) {
-            updateSingleRecord(context, optionalRecord.get());
-        } else {
+        if (optionalRecord.isEmpty()) {
             addNewRecord(context);
         }
         context.getMatchedRecords()
