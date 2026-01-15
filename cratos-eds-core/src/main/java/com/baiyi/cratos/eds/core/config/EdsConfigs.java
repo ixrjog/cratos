@@ -304,7 +304,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Crt implements HasEdsConfig {
+    public static class CrtSh implements HasEdsConfig {
         private EdsInstance edsInstance;
         private String url;
     }

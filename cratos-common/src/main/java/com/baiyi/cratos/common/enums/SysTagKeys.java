@@ -41,7 +41,9 @@ public enum SysTagKeys {
     FIN_LOSSES("FinLosses"),
     INSPECTION_NOTIFICATION("InspectionNotification"),
     ALERT_NOTIFICATION("AlertNotification"),
-    DNS_RESOLVER("DNSResolver")
+    DNS_RESOLVER("DNSResolver"),
+    DOMAIN("Domain"),
+    CRT_ABUSE("CrtAbuse")
     ;
 
     private final String key;

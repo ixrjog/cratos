@@ -12,6 +12,7 @@ public interface EdsAssetIndexConstants {
     String DOMAIN_NAME = "domain.name";
     String DOMAIN_COMMON = "domain.common";
     String DOMAIN_MATCHING_IDENTITIES = "domain.matching.identities";
+    String CRT_DOMAIN_NAME = "crt.domain.name";
     String CRT_ISSUER_NAME = "crt.issuer.name";
 
     String CLOUD_ACCESS_KEY_IDS = "cloud.access.key.ids";
