@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.exception.EdsConfigException;
 import com.google.gson.JsonSyntaxException;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import static lombok.AccessLevel.PRIVATE;
 

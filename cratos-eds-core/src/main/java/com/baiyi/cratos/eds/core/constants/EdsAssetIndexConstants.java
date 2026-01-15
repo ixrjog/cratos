@@ -10,6 +10,9 @@ import com.baiyi.cratos.domain.constant.Global;
 public interface EdsAssetIndexConstants {
 
     String DOMAIN_NAME = "domain.name";
+    String DOMAIN_COMMON = "domain.common";
+    String DOMAIN_MATCHING_IDENTITIES = "domain.matching.identities";
+    String CRT_ISSUER_NAME = "crt.issuer.name";
 
     String CLOUD_ACCESS_KEY_IDS = "cloud.access.key.ids";
     String CLOUD_LOGIN_PROFILE = "cloud.login.profile";

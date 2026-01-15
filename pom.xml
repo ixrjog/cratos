@@ -41,6 +41,7 @@
         <module>cratos-eds-azure</module>
         <module>cratos-eds-eaglecloud</module>
         <module>cratos-eds-zabbix</module>
+        <module>cratos-eds-crt</module>
     </modules>
 
     <properties>

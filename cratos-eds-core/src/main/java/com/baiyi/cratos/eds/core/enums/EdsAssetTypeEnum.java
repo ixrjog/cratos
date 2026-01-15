@@ -125,6 +125,8 @@ public enum EdsAssetTypeEnum {
     @CloudIdentity AZURE_USER("User", 89),
     AZURE_DIRECTORY_ROLE("DirectoryRole", 90),
 
+    CRT_LOG("Certificate Log", 1),
+
     DEF("Default", 9999);
 
     private final String displayName;

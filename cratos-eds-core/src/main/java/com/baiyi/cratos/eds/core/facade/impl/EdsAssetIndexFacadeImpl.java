@@ -35,27 +35,31 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
                 saveAssetIndex(assetIndexMap, e);
             }
         });
-        assetIndexMap.keySet()
-                .forEach(key -> edsAssetIndexService.deleteById(assetIndexMap.get(key)
-                        .getId()));
+        // 删除未匹配的旧索引
+        assetIndexMap.values()
+                .stream()
+                .filter(index -> index != null)
+                .mapToInt(EdsAssetIndex::getId)
+                .forEach(edsAssetIndexService::deleteById);
     }
 
-    private void saveAssetIndex(Map<String, EdsAssetIndex> assetIndexMap, EdsAssetIndex e) {
-        if (assetIndexMap.containsKey(e.getName())) {
-            EdsAssetIndex edsAssetIndex = assetIndexMap.get(e.getName());
+    private void saveAssetIndex(Map<String, EdsAssetIndex> assetIndexMap, EdsAssetIndex assetIndex) {
+        if (assetIndexMap.containsKey(assetIndex.getName())) {
+            EdsAssetIndex edsAssetIndex = assetIndexMap.get(assetIndex.getName());
             if (!edsAssetIndex.getValue()
-                    .equals(e.getValue())) {
-                edsAssetIndex.setValue(e.getValue());
+                    .equals(assetIndex.getValue())) {
+                edsAssetIndex.setValue(assetIndex.getValue());
                 edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);
             }
-            assetIndexMap.remove(e.getName());
+            // 标记为已处理
+            assetIndexMap.put(assetIndex.getName(), null);
         } else {
             try {
-                edsAssetIndexService.add(e);
-                log.debug("Save asset index: assetId={}, name={}, value={}", e.getAssetId(), e.getName(), e.getValue());
+                edsAssetIndexService.add(assetIndex);
+                log.debug("Save asset index: assetId={}, name={}, value={}", assetIndex.getAssetId(), assetIndex.getName(), assetIndex.getValue());
             } catch (Exception exception) {
-                log.warn("Repeatedly saving asset index err: assetId={}, name={}, value={}", e.getAssetId(),
-                        e.getName(), e.getValue());
+                log.warn("Repeatedly saving asset index err: assetId={}, name={}, value={}", assetIndex.getAssetId(),
+                        assetIndex.getName(), assetIndex.getValue());
             }
         }
     }
