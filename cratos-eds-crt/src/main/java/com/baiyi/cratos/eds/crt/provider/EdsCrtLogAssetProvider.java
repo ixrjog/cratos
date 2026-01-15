@@ -115,7 +115,6 @@ public class EdsCrtLogAssetProvider extends BaseEdsInstanceAssetProvider<EdsConf
         List<EdsAssetIndex> indices = Lists.newArrayList();
         indices.add(createEdsAssetIndex(edsAsset, CRT_DOMAIN_NAME, entity.getDomainName()));
         indices.add(createEdsAssetIndex(edsAsset, DOMAIN_COMMON, entity.getCommonName()));
-        indices.add(createEdsAssetIndex(edsAsset, DOMAIN_COMMON, entity.getCommonName()));
         indices.add(createEdsAssetIndex(edsAsset, CRT_ISSUER_NAME, entity.getIssuerName()));
         if (StringUtils.hasText(entity.getNameValue())) {
             String matchingIdentities = entity.getNameValue()

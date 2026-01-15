@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -67,6 +68,7 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
     private Map<String, EdsAssetIndex> getEdsAssetIndexMap(int assetId) {
         return edsAssetIndexService.queryIndexByAssetId(assetId)
                 .stream()
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(EdsAssetIndex::getName, a -> a, (k1, k2) -> k1));
     }
 
