@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 public class CachingConfiguration {
 
     public interface RepositoryName {
-        String LONG_TERM = "CR30d:";
         String TEMPORARY = "CR5s:";
         String VERY_SHORT = "CR10m:";
         String SHORT_TERM = "CR1h:";
+        String LONG_TERM = "CR30d:";
     }
 
     @Builder

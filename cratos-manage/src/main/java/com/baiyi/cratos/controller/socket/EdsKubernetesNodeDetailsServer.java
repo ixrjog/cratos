@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.EOFException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -54,11 +55,21 @@ public class EdsKubernetesNodeDetailsServer extends BaseSocketAuthenticationServ
 
     @OnError
     public void onError(Session session, Throwable error) {
-        // TODO
+        if (error instanceof EOFException) {
+            log.info("Kubernetes node details webSocket connection closed by client: {}", session.getId());
+            // 清理资源
+            connectionTerminated(session);
+        } else {
+            log.error("Kubernetes node details webSocket error", error);
+        }
     }
 
     @OnClose
     public void onClose(Session session) {
+        connectionTerminated(session);
+    }
+
+    private void connectionTerminated(Session session) {
         EdsKubernetesNodeDetailsRequestSession.remove(sessionId);
     }
 

@@ -31,15 +31,13 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
             return;
         }
         Map<String, EdsAssetIndex> assetIndexMap = getEdsAssetIndexMap(assetId);
-        edsAssetIndexList.forEach(e -> {
-            if (e != null) {
-                saveAssetIndex(assetIndexMap, e);
-            }
-        });
+        edsAssetIndexList.stream()
+                .filter(Objects::nonNull)
+                .forEach(e -> saveAssetIndex(assetIndexMap, e));
         // 删除未匹配的旧索引
         assetIndexMap.values()
                 .stream()
-                .filter(index -> index != null)
+                .filter(Objects::nonNull)
                 .mapToInt(EdsAssetIndex::getId)
                 .forEach(edsAssetIndexService::deleteById);
     }
@@ -47,7 +45,7 @@ public class EdsAssetIndexFacadeImpl implements EdsAssetIndexFacade {
     private void saveAssetIndex(Map<String, EdsAssetIndex> assetIndexMap, EdsAssetIndex assetIndex) {
         if (assetIndexMap.containsKey(assetIndex.getName())) {
             EdsAssetIndex edsAssetIndex = assetIndexMap.get(assetIndex.getName());
-            if (!edsAssetIndex.getValue()
+            if (edsAssetIndex != null && !edsAssetIndex.getValue()
                     .equals(assetIndex.getValue())) {
                 edsAssetIndex.setValue(assetIndex.getValue());
                 edsAssetIndexService.updateByPrimaryKey(edsAssetIndex);

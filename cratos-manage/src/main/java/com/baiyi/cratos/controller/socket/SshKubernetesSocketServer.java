@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.EOFException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,10 +55,14 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
-            log.info("Kubernetes ssh session try to connect: sessionId={}, hostAddress={}", this.sessionId,
-                    host.getHostAddress());
-            SshSession sshSession = SshSessionBuilder.build(this.sessionId, username, host,
-                    SshSessionTypeEnum.WEB_KUBERNETES_SHELL);
+            log.info(
+                    "Kubernetes ssh session try to connect: sessionId={}, hostAddress={}", this.sessionId,
+                    host.getHostAddress()
+            );
+            SshSession sshSession = SshSessionBuilder.build(
+                    this.sessionId, username, host,
+                    SshSessionTypeEnum.WEB_KUBERNETES_SHELL
+            );
             SshKubernetesSocketServer.sshSessionService.add(sshSession);
             // this.sshSession = sshSession;
             Thread.ofVirtual()
@@ -82,14 +87,25 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
 
     @OnError
     public void onError(Session session, Throwable error) {
-        // TODO
-        log.error("Kubernetes ssh connection error: {}", error.getMessage(), error);
+        if (error instanceof EOFException) {
+            log.info("WebSocket connection closed by client: {}", session.getId());
+            // 清理资源
+            connectionTerminated(session);
+        } else {
+            log.error("WebSocket error", error);
+        }
     }
 
     @OnClose
     public void onClose(Session session) {
-        KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, this.username, session,
-                KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest.CLOSE);
+        connectionTerminated(session);
+    }
+
+    private void connectionTerminated(Session session) {
+        KubernetesSshChannelHandlerFactory.handleRequest(
+                this.sessionId, this.username, session,
+                KubernetesContainerTerminalParam.KubernetesContainerTerminalRequest.CLOSE
+        );
     }
 
 }

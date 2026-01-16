@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.EOFException;
 import java.util.UUID;
 
 import static com.baiyi.cratos.eds.kubernetes.client.KubernetesClientBuilder.Values.WEBSOCKET_TIMEOUT;
@@ -58,8 +59,10 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
         session.setMaxIdleTimeout(WEBSOCKET_TIMEOUT);
         try {
             CratosHostHolder.CratosHost host = CratosHostHolder.get();
-            log.info("Crystal ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
-                    host.getHostAddress());
+            log.info(
+                    "Crystal ssh session try to connect: sessionId={}, hostAddress={}", sessionId,
+                    host.getHostAddress()
+            );
             SshSession sshSession = SshSessionBuilder.build(sessionId, username, host, SshSessionTypeEnum.WEB_SHELL);
             sshSessionService.add(sshSession);
             this.sshSession = sshSession;
@@ -89,13 +92,23 @@ public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 
     @OnClose
     public void onClose(Session session) {
-        SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE_ALL.name())
-                .handle(this.username, JSONUtils.writeValueAsString(CLOSE_ALL), session, sshSession);
+        connectionTerminated(session);
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        // TODO
+        if (error instanceof EOFException) {
+            log.info("Ssh Crystal webSocket connection closed by client: {}", session.getId());
+            // 清理资源
+            connectionTerminated(session);
+        } else {
+            log.error("Ssh Crystal webSocket error", error);
+        }
+    }
+
+    private void connectionTerminated(Session session) {
+        SshCrystalMessageHandlerFactory.getByState(MessageState.CLOSE_ALL.name())
+                .handle(this.username, JSONUtils.writeValueAsString(CLOSE_ALL), session, sshSession);
     }
 
 }

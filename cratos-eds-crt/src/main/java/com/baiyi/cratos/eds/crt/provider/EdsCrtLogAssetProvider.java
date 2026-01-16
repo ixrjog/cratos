@@ -21,8 +21,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.crt.facade.CrtShFacade;
 import com.baiyi.cratos.eds.crt.model.CrtSh;
-import com.baiyi.cratos.eds.crt.repo.CrtShRepo;
 import com.baiyi.cratos.facade.SimpleEdsFacade;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.DomainService;
@@ -49,24 +49,24 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 public class EdsCrtLogAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.CrtSh, CrtSh.CertificateLog> {
 
     private final DomainService domainService;
-    private final CrtShRepo crtShRepo;
     private final TagService tagService;
     private final BusinessTagFacade businessTagFacade;
+    private final CrtShFacade crtShFacade;
 
     public EdsCrtLogAssetProvider(EdsAssetService edsAssetService, SimpleEdsFacade simpleEdsFacade,
                                   CredentialService credentialService, ConfigCredTemplate configCredTemplate,
                                   EdsAssetIndexFacade edsAssetIndexFacade,
                                   AssetToBusinessObjectUpdater assetToBusinessObjectUpdater,
                                   EdsInstanceProviderHolderBuilder holderBuilder, DomainService domainService,
-                                  CrtShRepo crtShRepo, TagService tagService, BusinessTagFacade businessTagFacade) {
+                                  TagService tagService, BusinessTagFacade businessTagFacade, CrtShFacade crtShFacade) {
         super(
                 edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
                 assetToBusinessObjectUpdater, holderBuilder
         );
         this.domainService = domainService;
-        this.crtShRepo = crtShRepo;
         this.tagService = tagService;
         this.businessTagFacade = businessTagFacade;
+        this.crtShFacade = crtShFacade;
     }
 
     @Override
@@ -81,10 +81,8 @@ public class EdsCrtLogAssetProvider extends BaseEdsInstanceAssetProvider<EdsConf
         }
         List<CrtSh.CertificateLog> entities = Lists.newArrayList();
         for (Domain domain : domains) {
-            List<CrtSh.CertificateLog> certificateLogs = crtShRepo.queryCertificateLogs(domain.getName());
+            List<CrtSh.CertificateLog> certificateLogs = crtShFacade.queryCertificateLogs(domain.getName());
             if (!CollectionUtils.isEmpty(certificateLogs)) {
-                // 设置归属域名
-                certificateLogs.forEach(e -> e.setDomainName(domain.getName()));
                 entities.addAll(certificateLogs);
             }
         }
@@ -165,7 +163,7 @@ public class EdsCrtLogAssetProvider extends BaseEdsInstanceAssetProvider<EdsConf
             }
         }
         if (isCertAbuse) {
-            Optional.ofNullable(tagService.getByTagKey(SysTagKeys.CRT_ABUSE))
+            Optional.ofNullable(tagService.getByTagKey(SysTagKeys.CERT_ABUSE))
                     .ifPresent(tag -> {
                         BusinessTagParam.SaveBusinessTag saveBusinessTag = BusinessTagParam.SaveBusinessTag.builder()
                                 .businessType(BusinessTypeEnum.EDS_ASSET.name())

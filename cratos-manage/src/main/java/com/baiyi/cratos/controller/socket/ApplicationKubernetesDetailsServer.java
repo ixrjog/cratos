@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.EOFException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -58,11 +59,21 @@ public class ApplicationKubernetesDetailsServer extends BaseSocketAuthentication
 
     @OnError
     public void onError(Session session, Throwable error) {
-        // TODO
+        if (error instanceof EOFException) {
+            log.info("Application kubernetes details webSocket connection closed by client: {}", session.getId());
+            // 清理资源
+            connectionTerminated(session);
+        } else {
+            log.error("Application kubernetes details webSocket error", error);
+        }
     }
 
     @OnClose
     public void onClose(Session session) {
+        connectionTerminated(session);
+    }
+
+    private void connectionTerminated(Session session) {
         KubernetesDetailsRequestSession.remove(sessionId);
     }
 
