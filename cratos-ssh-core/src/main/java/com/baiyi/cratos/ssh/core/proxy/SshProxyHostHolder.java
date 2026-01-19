@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +79,18 @@ public class SshProxyHostHolder {
         }
         ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
         Credential credential = credentialService.getById(serverAccount.getCredentialId());
-        return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
+
+        Optional<BusinessTag> sshLoginIPTagOptional = Optional.ofNullable(
+                businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_LOGIN_IP.getKey()));
+        if (sshLoginIPTagOptional.isPresent() && IpUtils.isIP(sshLoginIPTagOptional.get()
+                                                                      .getTagValue())) {
+            return HostSystemBuilder.buildHostSystem(
+                    sshLoginIPTagOptional.get()
+                            .getTagValue(), serverAccount, credential
+            );
+        } else {
+            return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
+        }
     }
 
     private List<EdsAsset> queryProxyServerByName(EdsAsset server, String proxyName) {

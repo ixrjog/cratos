@@ -19,8 +19,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/test/{username}", configurator = MyServerEndpointConfigConfig.class)
 @Component
+@ServerEndpoint(value = "/socket/test/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class MessageTestWebSocketServer {
 
     /**

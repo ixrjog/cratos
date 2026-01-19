@@ -77,7 +77,7 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
-            // 查询serverAccount
+            // 查询 serverAccount
             ServerAccount serverAccount = serverAccountService.getByName(
                     getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());

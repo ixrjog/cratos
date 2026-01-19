@@ -33,8 +33,8 @@ import static com.baiyi.cratos.ssh.core.message.SshCrystalMessage.CloseAll.CLOSE
  * &#064;Version 1.0
  */
 @Slf4j
-@ServerEndpoint(value = "/socket/ssh/crystal/{username}", configurator = MyServerEndpointConfigConfig.class)
 @Component
+@ServerEndpoint(value = "/socket/ssh/crystal/{username}", configurator = MyServerEndpointConfigConfig.class)
 public class SshCrystalSocketServer extends BaseSocketAuthenticationServer {
 
     private SshSession sshSession;

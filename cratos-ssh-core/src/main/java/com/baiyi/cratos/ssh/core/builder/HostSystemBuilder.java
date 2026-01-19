@@ -33,6 +33,14 @@ public class HostSystemBuilder {
                 .build();
     }
 
+    public static HostSystem buildHostSystem(String hostIP, ServerAccount serverAccount, Credential credential) {
+        return HostSystem.builder()
+                .host(hostIP)
+                .serverAccount(serverAccount)
+                .credential(credential)
+                .build();
+    }
+
     public static HostSystem buildHostSystem(String instanceId, EdsAsset server, ServerAccount serverAccount,
                                              Credential credential) throws SshException {
         return HostSystem.builder()

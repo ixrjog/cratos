@@ -4,7 +4,6 @@ import com.baiyi.cratos.eds.crt.model.CrtSh;
 import com.baiyi.cratos.eds.crt.repo.CrtShRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
