@@ -12,6 +12,8 @@ import com.baiyi.cratos.ssh.core.builder.SshSessionBuilder;
 import com.baiyi.cratos.ssh.core.enums.SshSessionTypeEnum;
 import com.baiyi.cratos.ssh.core.task.crystal.SentOutputTask;
 import com.google.gson.JsonSyntaxException;
+import io.fabric8.kubernetes.client.KubernetesClientException;
+import io.fabric8.kubernetes.client.http.WebSocketHandshakeException;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -81,6 +83,11 @@ public class SshKubernetesSocketServer extends BaseSocketAuthenticationServer {
                 KubernetesSshChannelHandlerFactory.handleRequest(this.sessionId, this.username, session, request);
             } catch (JsonSyntaxException ex) {
                 log.error(ex.getMessage(), ex);
+            } catch (KubernetesClientException e) {
+                if (e.getCause() instanceof WebSocketHandshakeException) {
+                    log.error("WebSocket handshake failed, pod may not be ready or API server issue", e);
+                }
+                connectionTerminated(session);
             }
         }
     }

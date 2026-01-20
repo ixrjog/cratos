@@ -22,7 +22,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,13 +54,10 @@ public class SshProxyHostHolder {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(targetComputer.getId())
                 .build();
-        BusinessTag sshProxyBusinessTag = businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_PROXY.getKey());
-        if (Objects.isNull(sshProxyBusinessTag)) {
-            return "";
-        }
-        // 搜索资产
-        String proxyValue = sshProxyBusinessTag.getTagValue();
-        return StringUtils.hasText(proxyValue) ? proxyValue : "";
+        return Optional.ofNullable(businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_PROXY.getKey()))
+                .map(BusinessTag::getTagValue)
+                .filter(StringUtils::hasText)
+                .orElse("");
     }
 
     private HostSystem getProxyHostSystem(List<EdsAsset> proxyServers) {
@@ -73,23 +69,25 @@ public class SshProxyHostHolder {
                 .businessType(BusinessTypeEnum.EDS_ASSET.name())
                 .businessId(proxyServer.getId())
                 .build();
-        BusinessTag serverAccountTag = businessTagFacade.getBusinessTag(business, SysTagKeys.SERVER_ACCOUNT.getKey());
-        if (!StringUtils.hasText(serverAccountTag.getTagValue())) {
+        String account = Optional.ofNullable(
+                        businessTagFacade.getBusinessTag(business, SysTagKeys.SERVER_ACCOUNT.getKey()))
+                .map(BusinessTag::getTagValue)
+                .filter(StringUtils::hasText)
+                .orElse(null);
+        if (account == null) {
             return HostSystem.NO_HOST;
         }
-        ServerAccount serverAccount = serverAccountService.getByName(serverAccountTag.getTagValue());
+        ServerAccount serverAccount = serverAccountService.getByName(account);
         Credential credential = credentialService.getById(serverAccount.getCredentialId());
-
-        Optional<BusinessTag> sshLoginIPTagOptional = Optional.ofNullable(
-                businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_LOGIN_IP.getKey()));
-        if (sshLoginIPTagOptional.isPresent() && IpUtils.isIP(sshLoginIPTagOptional.get()
-                                                                      .getTagValue())) {
-            return HostSystemBuilder.buildHostSystem(
-                    sshLoginIPTagOptional.get()
-                            .getTagValue(), serverAccount, credential
-            );
-        } else {
+        String sshLoginIP = Optional.ofNullable(
+                        businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_LOGIN_IP.getKey()))
+                .map(BusinessTag::getTagValue)
+                .filter(IpUtils::isIP)
+                .orElse(null);
+        if (sshLoginIP == null) {
             return HostSystemBuilder.buildHostSystem(proxyServer, serverAccount, credential);
+        } else {
+            return HostSystemBuilder.buildHostSystem(sshLoginIP, serverAccount, credential);
         }
     }
 
