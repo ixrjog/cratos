@@ -2,13 +2,11 @@ package com.baiyi.cratos.facade.fin.impl;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.table.PrettyTable;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.AppFinOpsModel;
 import com.baiyi.cratos.domain.param.http.finops.FinOpsParam;
-import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.finops.FinOpsVO;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.fin.FinOpsFacade;
@@ -24,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.SHORT_TERM;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
@@ -39,7 +38,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
 public class FinOpsFacadeImpl implements FinOpsFacade {
 
     private final BusinessTagService businessTagService;
-    private final BusinessTagFacade businessTagFacade;
     private final TagService tagService;
     private final ApplicationService applicationService;
     private final ApplicationResourceService applicationResourceService;
@@ -57,7 +55,8 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                     .forEach(category -> {
                         String name = StringUtils.hasText(category.getCurrencyCode()) ? StringFormatter.arrayFormat(
                                 "{} ({} {})", category.getName(), category.getCurrencyCode(),
-                                String.format("%,d", category.getAmount())) : category.getName();
+                                String.format("%,d", category.getAmount())
+                        ) : category.getName();
                         fieldNames.add(name);
                     });
             return calculateCost(queryAppCost.getAllocationCategories(), fieldNames.toArray(new String[0]));
@@ -86,7 +85,7 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
             // 按 totalReplicas 降序排序
             List<AppFinOpsModel.AppCost> sortedAppCosts = appCosts.stream()
                     .sorted(Comparator.comparingInt(AppFinOpsModel.AppCost::getTotalReplicas)
-                            .reversed())
+                                    .reversed())
                     .toList();
             int replicas = sortedAppCosts.stream()
                     .mapToInt(AppFinOpsModel.AppCost::getTotalReplicas)
@@ -97,11 +96,13 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
             rowData[0] = business;
             rowData[1] = replicas + "/" + totalReplicas;
             rowData[2] = ratio;
-            for (int i = 0; i < allocationCategories.size(); i++) {
-                double amount = allocationCategories.get(i)
-                        .getAmount();
-                rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format("%,.2f", amount * (ratioValue / 100.0));
-            }
+            IntStream.range(0, allocationCategories.size())
+                    .forEachOrdered(i -> {
+                        double amount = allocationCategories.get(i)
+                                .getAmount();
+                        rowData[3 + i] = ratioValue == 0 ? "0.00" : String.format(
+                                "%,.2f", amount * (ratioValue / 100.0));
+                    });
             costTable.addRow(rowData);
         });
         costTable.sortTable("%");
@@ -122,11 +123,6 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
         if (CollectionUtils.isEmpty(businessTags)) {
             return Map.of();
         }
-        BusinessTagParam.QueryByTag queryByValue = BusinessTagParam.QueryByTag.builder()
-                .businessType(BusinessTypeEnum.APPLICATION.name())
-                .tagId(finTag.getId())
-                .build();
-        List<String> finValues = businessTagFacade.queryBusinessTagValue(queryByValue);
         Map<String, List<AppFinOpsModel.AppCost>> finAppCostMap = Maps.newHashMap();
         businessTags.forEach(businessTag -> {
             Application application = applicationService.getById(businessTag.getBusinessId());
@@ -144,8 +140,10 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                     .applicationName(application.getName())
                     .build();
             resources.forEach(resource -> {
-                EdsAssetIndex index = assetIndexService.getByAssetIdAndName(resource.getBusinessId(),
-                        KUBERNETES_REPLICAS);
+                EdsAssetIndex index = assetIndexService.getByAssetIdAndName(
+                        resource.getBusinessId(),
+                        KUBERNETES_REPLICAS
+                );
                 if (Objects.nonNull(index)) {
                     AppFinOpsModel.AppResource appResource = AppFinOpsModel.AppResource.builder()
                             .resourceName(resource.getName())
@@ -182,8 +180,10 @@ public class FinOpsFacadeImpl implements FinOpsFacade {
                                     .append(") ");
                         });
                 String ratio = String.format("%.2f", appCost.getTotalReplicas() * 100.0 / totalReplicas);
-                costTable.addRow(business, appCost.getApplicationName(), resources.toString(),
-                        appCost.getTotalReplicas() + "/" + totalReplicas, ratio);
+                costTable.addRow(
+                        business, appCost.getApplicationName(), resources.toString(),
+                        appCost.getTotalReplicas() + "/" + totalReplicas, ratio
+                );
             }
         });
         return costTable.toString();

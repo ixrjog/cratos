@@ -1,22 +1,23 @@
 package com.baiyi.cratos.facade.impl;
 
+import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
 import com.baiyi.cratos.facade.AuthFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
-import com.baiyi.cratos.common.auth.IAuthProvider;
-import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.security.Principal;
 import java.util.Date;
 import java.util.Optional;
 
@@ -51,23 +52,22 @@ public class AuthFacadeImpl implements AuthFacade {
         }
         LoginVO.Login login = authProvider.login(loginParam, user);
         // 更新用户登录信息
-        User updateUser = User.builder()
+        User loginUser = User.builder()
                 .id(user.getId())
                 .lastLogin(new Date())
                 .build();
-        userService.updateByPrimaryKeySelective(updateUser);
+        userService.updateByPrimaryKeySelective(loginUser);
         login.setUsername(loginParam.getUsername());
         return login;
     }
 
     @Override
     public void logout() {
-        Authentication authentication = SecurityContextHolder.getContext()
-                .getAuthentication();
-        String username = authentication.getName();
-        if (StringUtils.hasText(username)) {
-            userTokenFacade.logout(username);
-        }
+        Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Principal::getName)
+                .filter(StringUtils::hasText)
+                .ifPresent(userTokenFacade::logout);
     }
 
 }
