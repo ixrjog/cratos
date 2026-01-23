@@ -15,7 +15,6 @@ import com.baiyi.cratos.facade.RbacRoleFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketFacade;
 import com.baiyi.cratos.service.work.WorkOrderService;
-import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.enums.TicketState;
 import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
@@ -47,7 +46,6 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     private final WorkOrderTicketWrapper workOrderTicketWrapper;
     private final WorkOrderTicketDetailsWrapper workOrderTicketDetailsWrapper;
     private final RbacRoleFacade rbacRoleFacade;
-    private final WorkOrderTicketEntryService workOrderTicketEntryService;
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
     private final WorkOrderTicketNodeFacade workOrderTicketNodeFacade;
     private final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;

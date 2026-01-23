@@ -31,14 +31,14 @@ public class TicketEntryProviderFactory {
         }
     }
 
-    @Deprecated
-    private static TicketEntryProvider<?, ?> getProvider(String key) {
-        return CONTEXT.get(key)
-                .values()
-                .stream()
-                .findFirst()
-                .orElse(null);
-    }
+//    @Deprecated
+//    private static TicketEntryProvider<?, ?> getProvider(String key) {
+//        return CONTEXT.get(key)
+//                .values()
+//                .stream()
+//                .findFirst()
+//                .orElse(null);
+//    }
 
     public static TicketEntryProvider<?, ?> getProvider(String key, String businessType) {
         if (!CONTEXT.containsKey(key)) {

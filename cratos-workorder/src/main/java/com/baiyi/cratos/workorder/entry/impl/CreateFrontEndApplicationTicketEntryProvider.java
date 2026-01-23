@@ -85,7 +85,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         // 创建应用
         Application application = applicationFacade.createApplication(createFrontEndApplication);
         addApplicationTags(application, createFrontEndApplication.getTags());
-        // 使用模板创建Kubernetes资源
+        // 使用模板创建 Kubernetes 资源
         kubernetesResourceFacade.createKubernetesResource(createFrontEndApplication);
         // 扫描应用资源
         ApplicationParam.ScanResource scanResource = ApplicationParam.ScanResource.builder()
@@ -129,7 +129,7 @@ public class CreateFrontEndApplicationTicketEntryProvider extends BaseTicketEntr
         if (applicationService.getByName(applicationName) != null) {
             WorkOrderTicketException.runtime("Application name already exists.");
         }
-        // 校验tags
+        // 校验 tags
         Map<String, String> tags = Optional.of(param)
                 .map(WorkOrderTicketParam.AddCreateFrontEndApplicationTicketEntry::getDetail)
                 .map(ApplicationModel.CreateFrontEndApplication::getTags)

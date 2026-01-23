@@ -1,7 +1,6 @@
 package com.baiyi.cratos.workorder.state.machine.impl;
 
 import com.baiyi.cratos.common.util.SessionUtils;
-import com.baiyi.cratos.domain.generator.WorkOrder;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
 import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -13,12 +12,12 @@ import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.workorder.annotation.TicketStates;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.TicketState;
+import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.event.TicketEvent;
 import com.baiyi.cratos.workorder.exception.TicketStateProcessorException;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketNodeFacade;
 import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
-import com.baiyi.cratos.workorder.enums.TicketStateChangeAction;
 import com.baiyi.cratos.workorder.state.machine.BaseTicketStateProcessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -98,7 +97,7 @@ public class TicketNewStateProcessor extends BaseTicketStateProcessor<WorkOrderT
         Map<String, String> nodeApprover = Optional.ofNullable(event.getBody())
                 .map(WorkOrderTicketParam.SubmitTicket::toApprovers)
                 .orElse(Map.of());
-        WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
+        // WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         workOrderTicketNodeService.queryByTicketId(ticket.getId())
                 .stream()
                 .filter(node -> ApprovalTypes.USER_SPECIFIED.equals(

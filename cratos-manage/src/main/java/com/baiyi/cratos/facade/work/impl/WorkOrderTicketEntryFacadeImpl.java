@@ -360,7 +360,7 @@ public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacad
         if (!TicketState.IN_APPROVAL.equals(TicketState.valueOf(workOrderTicket.getTicketState()))) {
             WorkOrderTicketException.runtime("Only the in approval status can be set as valid.");
         }
-        WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
+        //WorkOrder workOrder = workOrderService.getById(workOrderTicket.getWorkOrderId());
         WorkOrderTicketNode workOrderTicketNode = workOrderTicketNodeService.getById(workOrderTicket.getNodeId());
         if (!workflowFacade.isApprover(workOrderTicket, workOrderTicketNode.getNodeName(),
                 SessionUtils.getUsername())) {

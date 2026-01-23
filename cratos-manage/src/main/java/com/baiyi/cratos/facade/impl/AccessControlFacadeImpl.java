@@ -60,7 +60,7 @@ public class AccessControlFacadeImpl implements AccessControlFacade {
     public AccessControlVO.AccessControl generateAccessControl(String username, BaseBusiness.HasBusiness hasBusiness,
                                                                String namespace) {
         if (!StringUtils.hasText(username)) {
-            log.error("username is empty.");
+            log.error("Username is empty.");
             return AccessControlVO.AccessControl.unauthorized(hasBusiness.getBusinessType());
         }
         // 跳过鉴权

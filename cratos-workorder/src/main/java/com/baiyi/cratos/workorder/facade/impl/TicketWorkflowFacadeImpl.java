@@ -9,7 +9,6 @@ import com.baiyi.cratos.domain.view.work.WorkOrderTicketVO;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.facade.TicketWorkflowFacade;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
@@ -33,7 +32,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TicketWorkflowFacadeImpl implements TicketWorkflowFacade {
 
-    private final WorkOrderService workOrderService;
     private final TagService tagService;
     private final BusinessTagService businessTagService;
     private final UserService userService;

@@ -2,18 +2,19 @@ package com.baiyi.cratos.facade.work.impl;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.generator.WorkOrderTicket;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketNode;
+import com.baiyi.cratos.domain.generator.WorkOrderTicketSubscriber;
 import com.baiyi.cratos.domain.model.WorkflowModel;
-import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.TagService;
 import com.baiyi.cratos.service.UserService;
-import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
-import com.baiyi.cratos.service.work.WorkOrderTicketService;
 import com.baiyi.cratos.service.work.WorkOrderTicketSubscriberService;
 import com.baiyi.cratos.workorder.enums.ApprovalTypes;
 import com.baiyi.cratos.workorder.enums.SubscribeStatus;
+import com.baiyi.cratos.workorder.facade.WorkOrderTicketSubscriberFacade;
 import com.baiyi.cratos.workorder.util.WorkflowUtils;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubscriberFacade {
 
-    private final WorkOrderService workOrderService;
-    private final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
     private final WorkOrderTicketSubscriberService workOrderTicketSubscriberService;
     private final UserService userService;
@@ -60,7 +59,7 @@ public class WorkOrderTicketSubscriberFacadeImpl implements WorkOrderTicketSubsc
      */
     @Override
     public void publish(WorkOrderTicket ticket) {
-        WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
+        //WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         Map<String, WorkflowModel.Node> nodeMap = WorkflowUtils.toNodeMap(ticket);
         List<WorkOrderTicketNode> ticketNodes = workOrderTicketNodeService.queryByTicketId(ticket.getId());
         ticketNodes.forEach(n -> {

@@ -3,7 +3,6 @@ package com.baiyi.cratos.workorder.entry.impl.permission.revoke;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.generator.WorkOrderTicket;
@@ -50,7 +49,6 @@ public class RevokeUserEdsAccountPermissionTicketEntryProvider extends BaseTicke
     public RevokeUserEdsAccountPermissionTicketEntryProvider(WorkOrderTicketEntryService workOrderTicketEntryService,
                                                              WorkOrderTicketService workOrderTicketService,
                                                              WorkOrderService workOrderService,
-                                                             BusinessTagFacade businessTagFacade,
                                                              EdsInstanceService edsInstanceService,
                                                              EdsIdentityFacade edsIdentityFacade,
                                                              EdsAssetIndexService edsAssetIndexService) {

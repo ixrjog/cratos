@@ -97,7 +97,7 @@ public class ApplicationElasticScalingTicketEntryProvider extends BaseTicketEntr
 
     @Override
     public TicketEntryModel.EntryDesc getEntryDesc(WorkOrderTicketEntry entry) {
-        ApplicationReplicasModel.ApplicationConfigurationChange configurationChange = loadAs(entry);
+        //ApplicationReplicasModel.ApplicationConfigurationChange configurationChange = loadAs(entry);
         return TicketEntryModel.EntryDesc.builder()
                 .name(entry.getName())
                 .namespaces(entry.getNamespace())

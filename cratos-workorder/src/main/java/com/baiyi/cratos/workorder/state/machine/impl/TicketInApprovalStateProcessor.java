@@ -63,7 +63,7 @@ public class TicketInApprovalStateProcessor extends BaseTicketStateProcessor<Wor
         super.preChangeInspection(action, event);
         WorkOrderTicket ticket = workOrderTicketService.getByTicketNo(event.getBody()
                 .getTicketNo());
-        WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
+        // WorkOrder workOrder = workOrderService.getById(ticket.getWorkOrderId());
         // 工单无审批节点
         if (ticket.getNodeId() == 0) {
             return;
