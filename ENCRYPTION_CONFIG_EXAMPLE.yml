@@ -1,0 +1,51 @@
+# Body 解密配置示例
+# application.yml
+
+cratos:
+  encryption:
+    # 是否启用 Body 解密
+    enabled: false
+    
+    # 加密标识 Header 名称（可选，默认值）
+    encryption-header: X-Body-Encrypted
+    
+    # 密钥版本 Header 名称（可选，默认值）
+    key-version-header: X-Encryption-Key-Version
+    
+    # RSA 私钥 v1（PEM 格式）
+    # 注意：生产环境建议使用环境变量或密钥管理服务
+    private-key-v1: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEly6M6kN93mC1
+      zxa2n7Cg927oXCeUf53WQBf3oa4BPiaswyl9J+x0ChbJYsFhkIxlMf3nCs59/+1S
+      kOwD0n3chtViplEx4oQ2k2uX4D332x8PeKhfi1OZY4BSiFt2vIfKpyFC0TzgvdW3
+      yLv1730b/axff0P2etXezkSPDH9PXrZi6iH3bsvp157fR+gcQSSRB1Bjlfq1KPfP
+      ef6XzN+D3zxGvgJE9yNgBull01GRwXSY269uA/MHes8LkLfyz/fqv4Z1DWOcs9wC
+      7wAnL47KRHg4RsxTwTJrDLZnL/L3MUx4A5qvMsS2mi/pxT0JBWlhP/FKKbdrDFRW
+      L0AfYJgHAgMBAAECggEBAKn+zUsfPBN4m4o7tDlhZ1wZ+nbFUZiQrgzZyZ/h2FTM
+      yKa18IeAYXCKVN/6HJzgYPcUvqjuaFb+Wtr95Ij9mMZ8dcLjbOzFIm0LF4vyZcOR
+      YI+BV5+fHEBUkV9M+EJ5jrbHxPRBePIiVc+hrh9h436z4j2GEF/wIkaTeSd1uBUJ
+      nQ7uB4ixKHR8uniDoVr0VD1OupHRKTNz0ECmnlvLD4PmKE5CnyPNiWOUYf3Uwsxh
+      qfceobuWEOB7nx7QdGWOVQWpmXdZyJFGr3f8vb6TSiQPt6kgjTvGvp4VGVDLvyFZ
+      DjIAugjHrtwch1BFUFrhRgZMybYkXedjDNwGxPjVuikCgYEA9Rbw0YlZXj5tDJHj
+      lgpgTIqN3/G6KY2abTyEu8id/dgzis0KMoRTg7pXqmtyB1le+YjsdBrmUz9WYWFn
+      +GQmVBvJROrncjBuHEQDM02GAvl8ZeGqZ7pQSXNtVmcmsBSJFo+gUHohAQXO4SXS
+      yNmHE7hu0iwFeO2jbMOecoRti+0CgYEAzVeK0/Kvm5XF6DF02HBYdOPmKq59uLaQ
+      wrjWEaeZw5XmFT4dcBL6O6SFJrXLguzgO1ZwFqOAg8ttu4AWQgxryU+kvHgdMFuT
+      S04GFBv3kyVCnkV/l/IxTNUA1Ff+BcZfl64TCQr99AIy3pHyXqVqMUB9mwqLkEko
+      invwrakjvUMCgYAWfo+Fu8RvCO27TJyFxdgGzmStHCOI8s0sn3RTQ9t0U+aPI7h+
+      4HRFz9GB+7CQihxUbMO++EUReOu1rln7iz2VVKOJZsHtUhKZF4jvqXrWRQ2s0CRy
+      tr/treFoH7mGSaw3XOFK4Zqr3FubgHwzIPvrzG6nbZDnA3CPZ/jf69WeFQKBgE+d
+      e6RF2jSW0479bfJlTMa1fg5abUBq+KGnDMj3lLSyr+zYko1brk3lsgKaRffTY/Vd
+      xEPizPdMrpUeSoL9UeVRzeuNHrQbLXbrH4w4c7tHnRbEl34QV3EUvSeXnlQa4AFt
+      as/8xQ4QtCx7pd9wf0XtXUX5xrcAxok7GMwcYlEFAoGAZxxlS8xAxDW3nV6Onci8
+      IyxJkYx6ev1R0fKH4pMVQkG8qmUFWxm5Wif9ROOtUkt8qazmWAQutnACcZ6annR0
+      ILNTrOy0ODaeXBSUEHGTQlOIdW5phB7DmFEacw6mU+GM+QnDaK6WnTJxw9vD5d9H
+      FlphZmuq0qGRT0VD2hZ+9mw=
+      -----END PRIVATE KEY-----
+    
+    # RSA 私钥 v2（可选，用于密钥轮换）
+    # private-key-v2: |
+    #   -----BEGIN PRIVATE KEY-----
+    #   ...
+    #   -----END PRIVATE KEY-----
