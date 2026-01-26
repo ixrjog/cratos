@@ -46,7 +46,7 @@ public class SshCrystalCloseAllMessageHandler extends BaseSshCrystalMessageHandl
             } catch (Exception e) {
                 log.warn("关闭JSchSession错误: instanceId={}, {}", instanceId, e.getMessage());
             } finally {
-                // 清理JSchSessionHolder中的会话
+                // 清理 JSchSessionHolder 中的会话
                 JSchSessionHolder.closeSession(sshSession.getSessionId(), instanceId);
             }
         }

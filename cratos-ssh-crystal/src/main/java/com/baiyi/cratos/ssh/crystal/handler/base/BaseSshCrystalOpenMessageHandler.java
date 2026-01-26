@@ -2,9 +2,11 @@ package com.baiyi.cratos.ssh.crystal.handler.base;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.IpUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
+import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -15,6 +17,7 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
@@ -28,6 +31,9 @@ import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
 import com.google.common.base.Joiner;
+import io.fabric8.kubernetes.api.model.Node;
+import io.fabric8.kubernetes.api.model.NodeAddress;
+import io.fabric8.kubernetes.api.model.NodeStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +43,7 @@ import org.springframework.util.CollectionUtils;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.CRYSTAL_USER_LOGIN_SERVER_NOTICE;
 
@@ -64,6 +71,7 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
     protected final SshAuditProperties sshAuditProperties;
     protected final SimpleSshSessionFacade simpleSshSessionFacade;
     private final SshProxyHostHolder proxyHostHolder;
+    private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -146,6 +154,48 @@ public abstract class BaseSshCrystalOpenMessageHandler<T extends SshMessage.Base
             // 代理模式
             RemoteInvokeHandler.openSshCrystal(sshSession.getSessionId(), proxySystem, targetSystem);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected String getRemoteManagementIP(EdsAsset edsAsset) {
+        BaseBusiness.HasBusiness business = SimpleBusiness.builder()
+                .businessType(BusinessTypeEnum.EDS_ASSET.name())
+                .businessId(edsAsset.getId())
+                .build();
+        String sshLoginIP = Optional.ofNullable(
+                        businessTagFacade.getBusinessTag(business, SysTagKeys.SSH_LOGIN_IP.getKey()))
+                .map(BusinessTag::getTagValue)
+                .filter(IpUtils::isIP)
+                .orElse(null);
+        if (sshLoginIP != null) {
+            return sshLoginIP;
+        }
+        EdsAssetTypeEnum assetType = EdsAssetTypeEnum.valueOf(edsAsset.getAssetType());
+        if (EdsAssetTypeEnum.KUBERNETES_NODE.equals(assetType)) {
+            EdsInstanceProviderHolder<?, Node> edsInstanceProviderHolder = (EdsInstanceProviderHolder<?, Node>) edsInstanceProviderHolderBuilder.newHolder(
+                    edsAsset.getInstanceId(), edsAsset.getAssetType());
+            Node node = edsInstanceProviderHolder.getProvider()
+                    .assetLoadAs(edsAsset.getOriginalModel());
+            List<NodeAddress> nodeAddresses = Optional.ofNullable(node)
+                    .map(Node::getStatus)
+                    .map(NodeStatus::getAddresses)
+                    .orElse(List.of());
+            Optional<NodeAddress> nodeAddressOptional = nodeAddresses.stream()
+                    .filter(nodeAddress -> nodeAddress.getType()
+                            .equals("InternalIP"))
+                    .findFirst();
+            if (nodeAddressOptional.isPresent()) {
+                return nodeAddressOptional.get()
+                        .getAddress();
+            } else {
+                return "";
+            }
+        }
+        if (EdsAssetTypeEnum.CLOUD_COMPUTER_TYPES.stream()
+                .anyMatch(e -> e.equals(assetType))) {
+            return edsAsset.getAssetKey();
+        }
+        return "";
     }
 
 }

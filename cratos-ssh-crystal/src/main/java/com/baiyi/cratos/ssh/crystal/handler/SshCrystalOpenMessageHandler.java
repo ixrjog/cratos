@@ -7,6 +7,7 @@ import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
@@ -48,11 +49,12 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                                         EdsConfigService edsConfigService, DingtalkService dingtalkService,
                                         SshAuditProperties sshAuditProperties,
                                         SimpleSshSessionFacade simpleSshSessionFacade,
-                                        SshProxyHostHolder proxyHostHolder) {
+                                        SshProxyHostHolder proxyHostHolder,
+                                        EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
         super(
                 edsAssetService, serverAccountService, credentialService, serverAccessControlFacade, businessTagFacade,
                 userService, notificationTemplateService, edsInstanceQueryHelper, edsConfigService, dingtalkService,
-                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder
+                sshAuditProperties, simpleSshSessionFacade, proxyHostHolder, edsInstanceProviderHolderBuilder
         );
     }
 
@@ -77,12 +79,13 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                 return;
             }
             EdsAsset server = edsAssetService.getById(openMessage.getAssetId());
+            String sshLoginIP = getRemoteManagementIP(server);
             // 查询 serverAccount
             ServerAccount serverAccount = serverAccountService.getByName(
                     getServerAccountName(openMessage.getAssetId()));
             Credential credential = credentialService.getById(serverAccount.getCredentialId());
             HostSystem targetSystem = HostSystemBuilder.buildHostSystem(
-                    openMessage.getInstanceId(), server,
+                    openMessage.getInstanceId(), sshLoginIP,
                     serverAccount, credential
             );
             // 初始化 Terminal size
@@ -91,6 +94,9 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                             .getCols(), openMessage.getTerminal()
                             .getRows()
             ));
+
+
+
             targetSystem.setAuditPath(auditPath);
             HostSystem proxySystem = getProxyHost(server);
             // 记录 SSH 会话实例
