@@ -94,9 +94,6 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
                             .getCols(), openMessage.getTerminal()
                             .getRows()
             ));
-
-
-
             targetSystem.setAuditPath(auditPath);
             HostSystem proxySystem = getProxyHost(server);
             // 记录 SSH 会话实例

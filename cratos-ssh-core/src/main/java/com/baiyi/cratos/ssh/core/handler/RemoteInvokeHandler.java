@@ -118,7 +118,8 @@ public class RemoteInvokeHandler {
                     .inputToChannel(inputToChannel)
                     .channel(channel)
                     .hostSystem(targetHost)
-                    .proxySession(proxySession)  // 将代理Session存储到JSchSession中
+                    // 将代理 Session 存储到 JSchSession 中
+                    .proxySession(proxySession)
                     .build();
             jSchSession.setSessionOutput(sessionOutput);
             JSchSessionHolder.addSession(jSchSession);
