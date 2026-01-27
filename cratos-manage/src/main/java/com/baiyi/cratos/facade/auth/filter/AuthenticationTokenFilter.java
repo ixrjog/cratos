@@ -12,6 +12,7 @@ import com.baiyi.cratos.domain.generator.UserToken;
 import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.RobotFacade;
 import com.baiyi.cratos.facade.UserTokenFacade;
+import com.baiyi.cratos.facade.auth.service.KeyManagementService;
 import com.baiyi.cratos.facade.auth.util.BodyDecryptionUtil;
 import com.baiyi.cratos.facade.auth.wrapper.DecryptedRequestWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,42 +52,11 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     private final RbacFacade rbacFacade;
     private final CratosConfiguration cratosConfiguration;
     private final ObjectMapper objectMapper;
+    private final KeyManagementService keyManagementService;
 
     // Body 加密配置
     private static final String ENCRYPTION_HEADER = "X-Body-Encrypted";
     private static final String KEY_VERSION_HEADER = "X-Encryption-Key-Version";
-    
-    // RSA 私钥（从配置读取）
-    private static final String PRIVATE_KEY_V1 = """
-            -----BEGIN PRIVATE KEY-----
-            MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEly6M6kN93mC1
-            zxa2n7Cg927oXCeUf53WQBf3oa4BPiaswyl9J+x0ChbJYsFhkIxlMf3nCs59/+1S
-            kOwD0n3chtViplEx4oQ2k2uX4D332x8PeKhfi1OZY4BSiFt2vIfKpyFC0TzgvdW3
-            yLv1730b/axff0P2etXezkSPDH9PXrZi6iH3bsvp157fR+gcQSSRB1Bjlfq1KPfP
-            ef6XzN+D3zxGvgJE9yNgBull01GRwXSY269uA/MHes8LkLfyz/fqv4Z1DWOcs9wC
-            7wAnL47KRHg4RsxTwTJrDLZnL/L3MUx4A5qvMsS2mi/pxT0JBWlhP/FKKbdrDFRW
-            L0AfYJgHAgMBAAECggEBAKn+zUsfPBN4m4o7tDlhZ1wZ+nbFUZiQrgzZyZ/h2FTM
-            yKa18IeAYXCKVN/6HJzgYPcUvqjuaFb+Wtr95Ij9mMZ8dcLjbOzFIm0LF4vyZcOR
-            YI+BV5+fHEBUkV9M+EJ5jrbHxPRBePIiVc+hrh9h436z4j2GEF/wIkaTeSd1uBUJ
-            nQ7uB4ixKHR8uniDoVr0VD1OupHRKTNz0ECmnlvLD4PmKE5CnyPNiWOUYf3Uwsxh
-            qfceobuWEOB7nx7QdGWOVQWpmXdZyJFGr3f8vb6TSiQPt6kgjTvGvp4VGVDLvyFZ
-            DjIAugjHrtwch1BFUFrhRgZMybYkXedjDNwGxPjVuikCgYEA9Rbw0YlZXj5tDJHj
-            lgpgTIqN3/G6KY2abTyEu8id/dgzis0KMoRTg7pXqmtyB1le+YjsdBrmUz9WYWFn
-            +GQmVBvJROrncjBuHEQDM02GAvl8ZeGqZ7pQSXNtVmcmsBSJFo+gUHohAQXO4SXS
-            yNmHE7hu0iwFeO2jbMOecoRti+0CgYEAzVeK0/Kvm5XF6DF02HBYdOPmKq59uLaQ
-            wrjWEaeZw5XmFT4dcBL6O6SFJrXLguzgO1ZwFqOAg8ttu4AWQgxryU+kvHgdMFuT
-            S04GFBv3kyVCnkV/l/IxTNUA1Ff+BcZfl64TCQr99AIy3pHyXqVqMUB9mwqLkEko
-            invwrakjvUMCgYAWfo+Fu8RvCO27TJyFxdgGzmStHCOI8s0sn3RTQ9t0U+aPI7h+
-            4HRFz9GB+7CQihxUbMO++EUReOu1rln7iz2VVKOJZsHtUhKZF4jvqXrWRQ2s0CRy
-            tr/treFoH7mGSaw3XOFK4Zqr3FubgHwzIPvrzG6nbZDnA3CPZ/jf69WeFQKBgE+d
-            e6RF2jSW0479bfJlTMa1fg5abUBq+KGnDMj3lLSyr+zYko1brk3lsgKaRffTY/Vd
-            xEPizPdMrpUeSoL9UeVRzeuNHrQbLXbrH4w4c7tHnRbEl34QV3EUvSeXnlQa4AFt
-            as/8xQ4QtCx7pd9wf0XtXUX5xrcAxok7GMwcYlEFAoGAZxxlS8xAxDW3nV6Onci8
-            IyxJkYx6ev1R0fKH4pMVQkG8qmUFWxm5Wif9ROOtUkt8qazmWAQutnACcZ6annR0
-            ILNTrOy0ODaeXBSUEHGTQlOIdW5phB7DmFEacw6mU+GM+QnDaK6WnTJxw9vD5d9H
-            FlphZmuq0qGRT0VD2hZ+9mw=
-            -----END PRIVATE KEY-----
-            """;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -149,16 +119,15 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     private HttpServletRequest handleBodyDecryption(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String isEncrypted = request.getHeader(ENCRYPTION_HEADER);
         if (!"true".equalsIgnoreCase(isEncrypted)) {
-            return request; // 非加密请求，直接返回
+            return request;
         }
 
         String method = request.getMethod();
         if (!("POST".equals(method) || "PUT".equals(method) || "DELETE".equals(method))) {
-            return request; // 只处理有 Body 的请求
+            return request;
         }
 
         try {
-            // 读取加密的 Body
             String body = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
             JsonNode jsonNode = objectMapper.readTree(body);
             String encryptedBody = jsonNode.get("encryptedBody").asText();
@@ -167,11 +136,25 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             // 获取密钥版本
             String keyVersion = request.getHeader(KEY_VERSION_HEADER);
             if (keyVersion == null || keyVersion.isEmpty()) {
-                keyVersion = "v1";
+                keyVersion = keyManagementService.getDefaultVersion();
             }
 
+            // 验证版本是否存在
+            if (!keyManagementService.hasVersion(keyVersion)) {
+                log.error("Invalid key version: {}", keyVersion);
+                response.setContentType("application/json;charset=UTF-8");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().println(objectMapper.writeValueAsString(
+                        HttpResult.failed(new AuthenticationException(ErrorEnum.AUTHENTICATION_FAILED))
+                ));
+                return null;
+            }
+
+            // 获取对应版本的私钥
+            String privateKey = keyManagementService.getPrivateKey(keyVersion);
+
             // 解密
-            String decryptedBody = BodyDecryptionUtil.decryptBody(encryptedBody, encryptedKey, PRIVATE_KEY_V1);
+            String decryptedBody = BodyDecryptionUtil.decryptBody(encryptedBody, encryptedKey, privateKey);
             log.debug("Body decrypted successfully, keyVersion: {}", keyVersion);
 
             // 返回包装后的请求

@@ -55,7 +55,7 @@ public class EncryptorTest extends BaseUnit {
 
     @Test
     void decryptTest(){
-        log.error(stringEncryptor.decrypt("nM5dGT70+lk67XzXtjXFyq8g/yQSP4KB"));
+        log.error(stringEncryptor.decrypt(""));
     }
 
 }

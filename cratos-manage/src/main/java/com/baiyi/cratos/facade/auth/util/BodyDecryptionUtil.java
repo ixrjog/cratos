@@ -38,11 +38,34 @@ public class BodyDecryptionUtil {
     }
 
     private static byte[] decryptWithRSA(String encryptedKeyBase64, String privateKeyPem) throws Exception {
+        log.info("Encrypted key (Base64): {}", encryptedKeyBase64.substring(0, Math.min(50, encryptedKeyBase64.length())) + "...");
+        log.info("Private key PEM length: {}", privateKeyPem.length());
+        
         byte[] encryptedKey = Base64.getDecoder().decode(encryptedKeyBase64);
+        log.info("Encrypted key bytes length: {}", encryptedKey.length);
+        
         PrivateKey privateKey = loadPrivateKey(privateKeyPem);
-        Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return cipher.doFinal(encryptedKey);
+        log.info("Private key algorithm: {}, format: {}", privateKey.getAlgorithm(), privateKey.getFormat());
+        
+        // 使用标准的 RSA/ECB/OAEPPadding，然后手动指定参数
+        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPPadding");
+        
+        // 创建 OAEP 参数规范：SHA-256 for hash, MGF1 with SHA-256
+        java.security.spec.MGF1ParameterSpec mgf1Spec = new java.security.spec.MGF1ParameterSpec("SHA-256");
+        javax.crypto.spec.OAEPParameterSpec oaepSpec = new javax.crypto.spec.OAEPParameterSpec(
+            "SHA-256", "MGF1", mgf1Spec, javax.crypto.spec.PSource.PSpecified.DEFAULT
+        );
+        
+        cipher.init(Cipher.DECRYPT_MODE, privateKey, oaepSpec);
+        
+        try {
+            byte[] result = cipher.doFinal(encryptedKey);
+            log.info("Decryption successful, AES key length: {}", result.length);
+            return result;
+        } catch (Exception e) {
+            log.error("RSA decryption failed. Encrypted key length: {}", encryptedKey.length);
+            throw e;
+        }
     }
 
     private static String decryptWithAES(String encryptedText, byte[] aesKeyBytes) throws Exception {
