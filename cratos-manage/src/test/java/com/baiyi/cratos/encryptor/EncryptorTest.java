@@ -49,7 +49,7 @@ public class EncryptorTest extends BaseUnit {
     }
 
     @Test
-    void encryptPasswordTest(){
+    void encryptPasswordTest() {
         log.error(stringEncryptor.encrypt(""));
     }
 
