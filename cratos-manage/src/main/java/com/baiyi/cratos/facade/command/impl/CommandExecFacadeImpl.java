@@ -262,7 +262,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         if (CollectionUtils.isEmpty(pods)) {
             CommandExecException.runtime("No available execution pods.");
         }
-        // 只取Ready状态Pod
+        // 只取 Ready 状态 Pod
         Pod execPod = pods.stream()
                 .filter(KubeUtils::isReadyOf)
                 .findFirst()

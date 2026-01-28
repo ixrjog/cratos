@@ -8,7 +8,6 @@ import com.baiyi.cratos.domain.generator.TrafficLayerDomain;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficLayerDomainParam;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerDomainVO;
 import com.baiyi.cratos.facade.TrafficLayerDomainFacade;
-import com.baiyi.cratos.service.EnvService;
 import com.baiyi.cratos.service.TrafficLayerDomainRecordService;
 import com.baiyi.cratos.service.TrafficLayerDomainService;
 import com.baiyi.cratos.wrapper.traffic.TrafficLayerDomainWrapper;
@@ -31,7 +30,6 @@ public class TrafficLayerDomainFacadeImpl implements TrafficLayerDomainFacade {
     private final TrafficLayerDomainService domainService;
     private final TrafficLayerDomainRecordService recordService;
     private final TrafficLayerDomainWrapper domainWrapper;
-    private final EnvService envService;
 
     @Override
     @PageQueryByTag(typeOf = BusinessTypeEnum.TRAFFIC_LAYER_DOMAIN)

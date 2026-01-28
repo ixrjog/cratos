@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.application.impl;
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.AccessLevel;
+import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -13,12 +14,10 @@ import com.baiyi.cratos.domain.generator.Env;
 import com.baiyi.cratos.domain.param.http.application.ApplicationParam;
 import com.baiyi.cratos.domain.view.base.OptionsVO;
 import com.baiyi.cratos.facade.EnvFacade;
-import com.baiyi.cratos.facade.RbacFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.facade.application.ApplicationResourceFacade;
 import com.baiyi.cratos.facade.application.model.ApplicationConfigModel;
 import com.baiyi.cratos.facade.application.resource.scanner.ResourceScannerFactory;
-import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
 import com.baiyi.cratos.service.ApplicationResourceService;
 import com.baiyi.cratos.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,6 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     private final ApplicationService applicationService;
     private final ApplicationResourceService resourceService;
     private final UserPermissionFacade userPermissionFacade;
-    private final RbacFacade rbacFacade;
     private final RbacUserRoleFacade rbacUserRoleFacade;
     private final EnvFacade envFacade;
 

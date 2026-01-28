@@ -73,7 +73,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final ApplicationService applicationService;
     private final ApplicationWrapper applicationWrapper;
     private final AccessControlFacade accessControlFacade;
-    private final EdsInstanceService edsInstanceService;
     private final EdsFacade edsFacade;
     private final EdsOpscloudConfigLoader edsOpscloudConfigLoader;
     private final ApplicationDeletePodTokenHolder applicationDeletePodTokenHolder;
@@ -82,7 +81,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final EdsInstanceProviderHolderBuilder holderBuilder;
     private final KubernetesPodRepo kubernetesPodRepo;
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
-    private final EdsAssetIndexService edsAssetIndexService;
     private final EdsArmsFacade edsArmsFacade;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
 
@@ -302,7 +300,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                     .build();
             workOrderTicketEntryFacade.addDeploymentRedeployTicketEntry(addTicketEntry);
         });
-
     }
 
 }

@@ -16,7 +16,6 @@ import com.baiyi.cratos.domain.view.user.UserPermissionVO;
 import com.baiyi.cratos.facade.EnvFacade;
 import com.baiyi.cratos.facade.UserPermissionFacade;
 import com.baiyi.cratos.service.UserPermissionService;
-import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.wrapper.EnvWrapper;
 import com.baiyi.cratos.wrapper.UserPermissionWrapper;
 import com.google.common.collect.Maps;
@@ -41,7 +40,6 @@ public class UserPermissionFacadeImpl implements UserPermissionFacade {
 
     private final UserPermissionService userPermissionService;
     private final UserPermissionWrapper userPermissionWrapper;
-    private final UserService userService;
     private final EnvFacade envFacade;
     private final EnvWrapper envWrapper;
 

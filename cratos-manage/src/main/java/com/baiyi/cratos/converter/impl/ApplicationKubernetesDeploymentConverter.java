@@ -16,7 +16,6 @@ import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.facade.application.builder.KubernetesDeploymentBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsInstanceService;
-import com.baiyi.cratos.service.EnvService;
 import com.google.api.client.util.Maps;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.Pod;
@@ -44,13 +43,12 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
     private final KubernetesPodRepo kubernetesPodRepo;
 
-
     public ApplicationKubernetesDeploymentConverter(EdsInstanceService edsInstanceService,
                                                     EdsInstanceProviderHolderBuilder holderBuilder,
                                                     EdsAssetService edsAssetService,
                                                     KubernetesDeploymentRepo kubernetesDeploymentRepo,
-                                                    KubernetesPodRepo kubernetesPodRepo, EnvService envService) {
-        super(edsInstanceService, holderBuilder, edsAssetService, envService);
+                                                    KubernetesPodRepo kubernetesPodRepo) {
+        super(edsInstanceService, holderBuilder, edsAssetService);
         this.kubernetesDeploymentRepo = kubernetesDeploymentRepo;
         this.kubernetesPodRepo = kubernetesPodRepo;
     }
@@ -88,8 +86,10 @@ public class ApplicationKubernetesDeploymentConverter extends BaseKubernetesReso
                 .orElse(Map.of());
         List<Pod> pods;
         if (labels.containsKey("group")) {
-            pods = kubernetesPodRepo.list(kubernetes, namespace,
-                    Map.of("app", labels.get("app"), "group", labels.get("group")));
+            pods = kubernetesPodRepo.list(
+                    kubernetes, namespace,
+                    Map.of("app", labels.get("app"), "group", labels.get("group"))
+            );
         } else {
             pods = getPods(kubernetes, deployment);
         }

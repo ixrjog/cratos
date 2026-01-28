@@ -1,10 +1,10 @@
 package com.baiyi.cratos.facade.auth.config;
 
+import com.google.api.client.util.Lists;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
 public class EncryptionConfig {
 
     private boolean enabled = true;
-    private List<KeyConfig> keys = new ArrayList<>();
+    private List<KeyConfig> keys = Lists.newArrayList();
 
     @Data
     public static class KeyConfig {

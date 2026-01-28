@@ -22,7 +22,6 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.service.work.WorkOrderService;
 import com.baiyi.cratos.service.work.WorkOrderTicketEntryService;
 import com.baiyi.cratos.service.work.WorkOrderTicketNodeService;
 import com.baiyi.cratos.service.work.WorkOrderTicketService;
@@ -53,7 +52,6 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.ALIYUN_
 @RequiredArgsConstructor
 public class WorkOrderTicketEntryFacadeImpl implements WorkOrderTicketEntryFacade {
 
-    private final WorkOrderService workOrderService;
     private final WorkOrderTicketService workOrderTicketService;
     private final WorkOrderTicketNodeService workOrderTicketNodeService;
     private final WorkOrderTicketEntryService workOrderTicketEntryService;
