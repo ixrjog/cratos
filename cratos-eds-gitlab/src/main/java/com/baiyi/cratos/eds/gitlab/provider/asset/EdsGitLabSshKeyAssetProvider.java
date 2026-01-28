@@ -62,7 +62,7 @@ public class EdsGitLabSshKeyAssetProvider extends BaseEdsInstanceAssetProvider<E
         }
     }
 
-    // 从EdsAsset中查询用户
+    // 从 EdsAsset 中查询用户
     private List<SshKeyData> listSshKeyWithEdsUserAssets(
             ExternalDataSourceInstance<EdsConfigs.GitLab> instance,
             List<EdsAsset> edsUserAssets) throws GitLabApiException {

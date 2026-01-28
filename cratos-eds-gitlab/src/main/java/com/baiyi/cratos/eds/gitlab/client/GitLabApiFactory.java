@@ -21,21 +21,21 @@ public class GitLabApiFactory {
     private static final int CONNECT_TIMEOUT = 1000;
     private static final int READ_TIMEOUT = 5000;
 
-    public static GitLabApi buildGitLabApi(EdsConfigs.GitLab gitlab) {
-        assert gitlab != null;
-        final String version = Optional.of(gitlab)
+    public static GitLabApi buildGitLabApi(EdsConfigs.GitLab gitLab) {
+        assert gitLab != null;
+        final String version = Optional.of(gitLab)
                 .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getVersion)
                 .orElse("V4");
         GitLabApi.ApiVersion apiVersion = GitLabApi.ApiVersion.valueOf(version.toUpperCase());
-        GitLabApi gitLabApi = new GitLabApi(apiVersion, gitlab.getApi()
-                .getUrl(), gitlab.getCred()
+        GitLabApi gitLabApi = new GitLabApi(apiVersion, gitLab.getApi()
+                .getUrl(), gitLab.getCred()
                 .getToken());
-        int connectTimeout = Optional.of(gitlab)
+        int connectTimeout = Optional.of(gitLab)
                 .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getConnectTimeout)
                 .orElse(CONNECT_TIMEOUT);
-        int readTimeout = Optional.of(gitlab)
+        int readTimeout = Optional.of(gitLab)
                 .map(EdsConfigs.GitLab::getApi)
                 .map(EdsGitLabConfigModel.Api::getReadTimeout)
                 .orElse(READ_TIMEOUT);

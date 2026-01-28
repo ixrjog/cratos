@@ -32,7 +32,8 @@ public class GitLabUserFacade {
     @Retryable(retryFor = GitLabApiException.class, maxAttempts = 2, backoff = @Backoff(delay = 2000, multiplier = 1.5))
     public User createUser(EdsConfigs.GitLab gitlab, String username) throws GitLabApiException {
         com.baiyi.cratos.domain.generator.User localUser = userService.getByUsername(username);
-        User user = new User().withUsername(username)
+        User user = new User()
+                .withUsername(username)
                 .withName(localUser.getDisplayName())
                 .withEmail(localUser.getEmail())
                 // 跳过确认

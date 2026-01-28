@@ -15,8 +15,8 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class GitLabApiBuilder {
 
-    public static GitLabApi build(EdsConfigs.GitLab gitlab) {
-        return GitLabApiFactory.buildGitLabApi(gitlab);
+    public static GitLabApi build(EdsConfigs.GitLab gitLab) {
+        return GitLabApiFactory.buildGitLabApi(gitLab);
     }
 
 }
