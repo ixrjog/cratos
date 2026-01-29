@@ -18,4 +18,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/")
                 .setCachePeriod(3600); // 缓存1小时
     }
+
 }

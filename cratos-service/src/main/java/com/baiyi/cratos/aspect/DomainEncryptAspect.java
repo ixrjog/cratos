@@ -32,7 +32,6 @@ import java.util.Arrays;
 public class DomainEncryptAspect {
 
     private static final boolean ENCRYPT = true;
-
     private static final boolean ERASE = false;
 
     private final StringEncryptor stringEncryptor;

@@ -2,7 +2,7 @@ package com.baiyi.cratos.eds.core.holder;
 
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
+import com.baiyi.cratos.eds.core.version.BaseEdsInstanceVersionProvider;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class EdsInstanceVersionProviderHolder<C extends HasEdsConfig> {
     private ExternalDataSourceInstance<C> instance;
 
     @Schema(description = "Eds instance version provider")
-    private IEdsInstanceVersionProvider<C> provider;
+    private BaseEdsInstanceVersionProvider<C> provider;
 
     public String version() {
         return provider.getVersion(instance);

@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
+import com.baiyi.cratos.eds.core.version.BaseEdsInstanceVersionProvider;
 import com.baiyi.cratos.eds.jenkins.JenkinsVersion;
 import com.baiyi.cratos.eds.jenkins.sdk.server.JenkinsServer;
 import com.baiyi.cratos.eds.jenkins.sdk.server.JenkinsServerBuilder;
@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.JENKINS)
-public class EdsJenkinsInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsConfigs.Jenkins> {
+public class EdsJenkinsInstanceVersionProvider implements BaseEdsInstanceVersionProvider<EdsConfigs.Jenkins> {
 
     @Override
     public String getVersion(ExternalDataSourceInstance<EdsConfigs.Jenkins> instance) {

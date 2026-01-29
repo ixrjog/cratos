@@ -74,7 +74,7 @@ public class PostImportAssetProcessorFactory {
         if (CollectionUtils.isEmpty(processors)) {
             return;
         }
-        for (BasePostImportAssetProcessor processor : processors) {
+        processors.forEach(processor -> {
             try {
                 processor.process(hasBusiness.getBusinessId(), asset, context);
             } catch (Exception e) {
@@ -83,7 +83,7 @@ public class PostImportAssetProcessorFactory {
                                 .getSimpleName(), e
                 );
             }
-        }
+        });
     }
 
 }

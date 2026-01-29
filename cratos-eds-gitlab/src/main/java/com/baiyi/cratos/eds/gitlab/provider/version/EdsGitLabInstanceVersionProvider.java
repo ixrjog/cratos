@@ -5,7 +5,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
+import com.baiyi.cratos.eds.core.version.BaseEdsInstanceVersionProvider;
 import com.baiyi.cratos.eds.gitlab.repo.version.GitLabVersionRepo;
 import lombok.RequiredArgsConstructor;
 import org.gitlab4j.api.GitLabApiException;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.GITLAB)
-public class EdsGitLabInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsConfigs.GitLab> {
+public class EdsGitLabInstanceVersionProvider implements BaseEdsInstanceVersionProvider<EdsConfigs.GitLab> {
 
     @Override
     public String getVersion(ExternalDataSourceInstance<EdsConfigs.GitLab> instance) {

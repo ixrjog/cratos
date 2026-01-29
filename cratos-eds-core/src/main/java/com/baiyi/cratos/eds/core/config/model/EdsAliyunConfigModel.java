@@ -140,7 +140,6 @@ public class EdsAliyunConfigModel {
             return Joiner.on("@")
                     .join(username, domain);
         }
-
     }
 
 }

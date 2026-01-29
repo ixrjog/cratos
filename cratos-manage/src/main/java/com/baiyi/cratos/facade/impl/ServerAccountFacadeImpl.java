@@ -1,6 +1,5 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.common.util.IdentityUtils;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleBusiness;
@@ -8,9 +7,9 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.ServerAccount;
 import com.baiyi.cratos.domain.param.http.server.ServerAccountParam;
 import com.baiyi.cratos.domain.view.server.ServerAccountVO;
+import com.baiyi.cratos.enums.RemoteManagementProtocolEnum;
 import com.baiyi.cratos.facade.BusinessCredentialFacade;
 import com.baiyi.cratos.facade.server.ServerAccountFacade;
-import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.ServerAccountService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -31,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServerAccountFacadeImpl implements ServerAccountFacade {
 
     private final CredentialService credService;
-    private final BusinessCredentialService businessCredentialService;
     private final BusinessCredentialFacade businessCredentialFacade;
     private final ServerAccountService accountService;
     private final ServerAccountWrapper serverAccountWrapper;

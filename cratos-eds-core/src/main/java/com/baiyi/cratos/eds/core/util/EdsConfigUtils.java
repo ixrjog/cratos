@@ -26,7 +26,7 @@ public final class EdsConfigUtils {
      * @return
      */
     public static <C extends HasEdsConfig> C loadAs(String yaml, Class<C> targetClass) {
-        if (StringUtils.isEmpty(yaml)) {
+        if (!StringUtils.hasText(yaml)) {
             throw new EdsConfigException("The eds config file is empty.");
         }
         try {

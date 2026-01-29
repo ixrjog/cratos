@@ -7,7 +7,6 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.enums.InstanceHealthStatus;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.CratosInstance;
-import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.CratosInstanceService;
 import com.baiyi.cratos.service.TagService;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -83,17 +82,17 @@ public class CratosInstanceStartConfig implements CommandLineRunner {
                 .startTime(new Date())
                 .build();
         cratosInstanceService.add(instance);
-        // 打Env标签
-        Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
-        if (Objects.nonNull(envTag)) {
-            BusinessTag businessTag = BusinessTag.builder()
-                    .tagId(envTag.getId())
-                    .businessType(BusinessTypeEnum.CRATOS_INSTANCE.name())
-                    .businessId(instance.getId())
-                    .tagValue(env)
-                    .build();
-            businessTagService.add(businessTag);
-        }
+        // 打 Env 标签
+        Optional.ofNullable(tagService.getByTagKey(SysTagKeys.ENV))
+                .ifPresent(envTag -> {
+                    BusinessTag businessTag = BusinessTag.builder()
+                            .tagId(envTag.getId())
+                            .businessType(BusinessTypeEnum.CRATOS_INSTANCE.name())
+                            .businessId(instance.getId())
+                            .tagValue(env)
+                            .build();
+                    businessTagService.add(businessTag);
+                });
     }
 
     private String getCommit() {

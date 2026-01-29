@@ -43,7 +43,6 @@ public class EdsGcpConfigModel {
             }
             return ProjectName.of(getId()).toString();
         }
-
     }
 
 }

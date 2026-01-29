@@ -12,5 +12,4 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class EdsCratosConfigModel {
 
-
 }

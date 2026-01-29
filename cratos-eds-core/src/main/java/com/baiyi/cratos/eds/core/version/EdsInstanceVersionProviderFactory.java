@@ -20,9 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EdsInstanceVersionProviderFactory {
 
-    private static final Map<String, IEdsInstanceVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, BaseEdsInstanceVersionProvider<?>> CONTEXT = new ConcurrentHashMap<>();
 
-    public static <Config extends HasEdsConfig> void register(IEdsInstanceVersionProvider<Config> providerBean) {
+    public static <Config extends HasEdsConfig> void register(BaseEdsInstanceVersionProvider<Config> providerBean) {
         log.info("EdsInstanceVersionProviderFactory Registered: instanceType={}", providerBean.getInstanceType());
         CONTEXT.put(providerBean.getInstanceType(), providerBean);
     }
@@ -32,9 +32,9 @@ public class EdsInstanceVersionProviderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <Config extends HasEdsConfig> IEdsInstanceVersionProvider<Config> getVersionProvider(
+    public static <Config extends HasEdsConfig> BaseEdsInstanceVersionProvider<Config> getVersionProvider(
             String instanceType) {
-        return (IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
+        return (BaseEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType);
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +47,7 @@ public class EdsInstanceVersionProviderFactory {
         }
         return EdsInstanceVersionProviderHolder.<Config>builder()
                 .instance(instance)
-                .provider((IEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType))
+                .provider((BaseEdsInstanceVersionProvider<Config>) CONTEXT.get(instanceType))
                 .build();
     }
 

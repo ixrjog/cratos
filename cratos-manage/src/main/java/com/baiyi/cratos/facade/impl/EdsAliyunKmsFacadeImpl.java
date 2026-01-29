@@ -48,12 +48,10 @@ import java.util.Objects;
 public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
 
     private final EdsAssetService edsAssetService;
-    private final EdsAssetIndexService assetIndexService;
     private final TagService tagService;
     private final EdsFacade edsFacade;
     private final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
     private final EdsInstanceService edsInstanceService;
-    private final BusinessTagService businessTagService;
     private final BusinessTagFacade businessTagFacade;
 
     @Override
@@ -91,10 +89,8 @@ public class EdsAliyunKmsFacadeImpl implements EdsAliyunKmsFacade {
         List<AliyunKmsVO.Secret> secrets = Lists.newArrayList();
         Map<Integer, EdsInstanceVO.EdsInstance> instanceMap = Maps.newHashMap();
         Map<String, EdsAssetVO.Asset> kmsInstanceMap = Maps.newHashMap();
-
-
-        Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
-        Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
+//        Tag envTag = tagService.getByTagKey(SysTagKeys.ENV);
+//        Tag createdByTag = tagService.getByTagKey(SysTagKeys.CREATED_BY);
         assets.forEach(asset -> {
             // Eds Instance
             EdsInstanceVO.EdsInstance instance = instanceMap.computeIfAbsent(asset.getInstanceId(),

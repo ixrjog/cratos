@@ -4,7 +4,7 @@ import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
-import com.baiyi.cratos.eds.core.version.IEdsInstanceVersionProvider;
+import com.baiyi.cratos.eds.core.version.BaseEdsInstanceVersionProvider;
 import com.baiyi.cratos.eds.kubernetes.repo.version.KubernetesVersionRepo;
 import io.fabric8.kubernetes.client.VersionInfo;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES)
-public class EdsKubernetesInstanceVersionProvider implements IEdsInstanceVersionProvider<EdsConfigs.Kubernetes> {
+public class EdsKubernetesInstanceVersionProvider implements BaseEdsInstanceVersionProvider<EdsConfigs.Kubernetes> {
 
     private final KubernetesVersionRepo kubernetesVersionRepo;
 

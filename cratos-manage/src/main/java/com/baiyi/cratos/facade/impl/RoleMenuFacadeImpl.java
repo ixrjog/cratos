@@ -4,7 +4,6 @@ import com.baiyi.cratos.domain.generator.Menu;
 import com.baiyi.cratos.domain.view.menu.RoleMenuVO;
 import com.baiyi.cratos.facade.RoleMenuFacade;
 import com.baiyi.cratos.service.MenuService;
-import com.baiyi.cratos.service.RbacRoleMenuService;
 import com.baiyi.cratos.wrapper.RoleMenuWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class RoleMenuFacadeImpl implements RoleMenuFacade {
 
     private final MenuService menuService;
-    private final RbacRoleMenuService roleMenuService;
     private final RoleMenuWrapper menuWrapper;
 
     public RoleMenuVO.RoleMenu getRoleMenu(int roleId, String lang) {

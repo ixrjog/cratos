@@ -28,7 +28,6 @@ import java.util.List;
 public class CratosUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
-    private final JasyptPasswordEncoder cratosPasswordEncoder;
     private final CredentialFacade credentialFacade;
 
     @Override
