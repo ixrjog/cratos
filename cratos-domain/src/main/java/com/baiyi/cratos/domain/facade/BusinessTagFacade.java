@@ -36,4 +36,6 @@ public interface BusinessTagFacade {
 
     Map<String, String> getConfigMapData(BaseBusiness.HasBusiness hasBusiness);
 
+    List<BusinessTag> getCountryCodeBusinessTags();
+
 }

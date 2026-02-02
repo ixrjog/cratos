@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -97,6 +98,35 @@ public class EdsInstanceQueryHelper {
                             .tagId(tag.getId())
                             .build();
                     return businessTagService.getByUniqueKey(businessTagUniqueKey) != null;
+                })
+                .toList();
+    }
+
+    public List<EdsInstance> queryValidEdsInstance(EdsInstanceTypeEnum edsInstanceTypeEnum, String tagKey,
+                                                   String value) {
+        if (!StringUtils.hasText(value)) {
+            return queryValidEdsInstance(edsInstanceTypeEnum, tagKey);
+        }
+        List<EdsInstance> edsInstanceList = edsInstanceService.queryValidEdsInstanceByType(edsInstanceTypeEnum.name());
+        if (CollectionUtils.isEmpty(edsInstanceList)) {
+            return Collections.emptyList();
+        }
+        Tag uniqueKey = Tag.builder()
+                .tagKey(tagKey)
+                .build();
+        Tag tag = tagService.getByUniqueKey(uniqueKey);
+        if (tag == null) {
+            return Collections.emptyList();
+        }
+        return edsInstanceList.stream()
+                .filter(e -> {
+                    BusinessTag businessTagUniqueKey = BusinessTag.builder()
+                            .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                            .businessId(e.getId())
+                            .tagId(tag.getId())
+                            .build();
+                    BusinessTag businessTag = businessTagService.getByUniqueKey(businessTagUniqueKey);
+                    return businessTag != null && value.equalsIgnoreCase(businessTag.getTagValue());
                 })
                 .toList();
     }

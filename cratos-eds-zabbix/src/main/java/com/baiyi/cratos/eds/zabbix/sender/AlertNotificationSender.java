@@ -3,12 +3,9 @@ package com.baiyi.cratos.eds.zabbix.sender;
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
-import com.baiyi.cratos.domain.generator.EdsAsset;
-import com.baiyi.cratos.domain.generator.EdsConfig;
-import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.generator.NotificationTemplate;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
-import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
@@ -18,13 +15,16 @@ import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.zabbix.result.ZbxEventResult;
 import com.baiyi.cratos.eds.zabbix.util.ZbxAlertUtils;
+import com.baiyi.cratos.service.BusinessTagService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
+import com.baiyi.cratos.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,6 +47,8 @@ public class AlertNotificationSender {
     private final DingtalkService dingtalkService;
     private final NotificationTemplateService notificationTemplateService;
     private final EdsInstanceProviderHolderBuilder holderBuilder;
+    private final BusinessTagService businessTagService;
+    private final TagService tagService;
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -60,7 +62,10 @@ public class AlertNotificationSender {
             // 静默告警
             return;
         }
-        List<EdsInstance> edsInstanceList = queryDingtalkRobotInstances();
+        // 查询当前实例的标签
+        String zabbixAlertNotificationValue = getZabbixAlertNotificationValue(asset);
+        // 基于标签值来发送告警
+        List<EdsInstance> edsInstanceList = queryDingtalkRobotInstances(zabbixAlertNotificationValue);
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send alert notifications.");
             return;
@@ -83,9 +88,36 @@ public class AlertNotificationSender {
         }
     }
 
-    private List<EdsInstance> queryDingtalkRobotInstances() {
+    private String getZabbixAlertNotificationValue(EdsAsset asset) {
+        // 查询当前实例的标签
+        Tag tag = tagService.getByTagKey(SysTagKeys.ALERT_NOTIFICATION);
+        if (tag == null) {
+            return null;
+        }
+        BusinessTag uniqueKey = BusinessTag.builder()
+                .businessType(BusinessTypeEnum.EDS_INSTANCE.name())
+                .businessId(asset.getInstanceId())
+                .tagId(tag.getId())
+                .build();
+        BusinessTag businessTag = businessTagService.getByUniqueKey(uniqueKey);
+        if (businessTag == null) {
+            return null;
+        }
+        return businessTag.getTagValue();
+    }
+
+    /**
+     * 需要匹配标签的值
+     *
+     * @return
+     */
+    private List<EdsInstance> queryDingtalkRobotInstances(String value) {
+        if (!StringUtils.hasText(value)) {
+            return edsInstanceQueryHelper.queryValidEdsInstance(
+                    EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey());
+        }
         return edsInstanceQueryHelper.queryValidEdsInstance(
-                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey());
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.ALERT_NOTIFICATION.getKey(), value);
     }
 
     protected DingtalkRobotModel.Msg getMsg(EdsAsset asset) throws IOException {
@@ -106,8 +138,5 @@ public class AlertNotificationSender {
                 .build();
         return notificationTemplateService.getByUniqueKey(query);
     }
-
-
-
 
 }

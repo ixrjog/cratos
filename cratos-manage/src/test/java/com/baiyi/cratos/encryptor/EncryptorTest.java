@@ -43,7 +43,8 @@ public class EncryptorTest extends BaseUnit {
 
     @Test
     void encryptTest() {
-        EncryptDomain encryptDomain = EncryptDomain.builder().build();
+        EncryptDomain encryptDomain = EncryptDomain.builder()
+                .build();
         encryptDomainTest.doEncrypt(encryptDomain);
         log.info("After execution encryptDomain: {}", encryptDomain);
     }
@@ -54,7 +55,7 @@ public class EncryptorTest extends BaseUnit {
     }
 
     @Test
-    void decryptTest(){
+    void decryptTest() {
         log.error(stringEncryptor.decrypt(""));
     }
 

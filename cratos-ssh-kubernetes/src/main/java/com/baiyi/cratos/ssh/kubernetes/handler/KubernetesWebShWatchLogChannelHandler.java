@@ -100,7 +100,7 @@ public class KubernetesWebShWatchLogChannelHandler extends BaseKubernetesWebShCh
                 SshSessionInstanceTypeEnum.CONTAINER_LOG, auditPath);
         // 记录
         simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-        kubernetesRemoteInvokeHandler.invokeLogWatch(sessionId, sshSessionInstanceId, kubernetes, pod, LOG_LINES);
+        kubernetesRemoteInvokeHandler.handeLogWatch(sessionId, sshSessionInstanceId, kubernetes, pod, LOG_LINES);
     }
 
 }

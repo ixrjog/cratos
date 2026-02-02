@@ -17,7 +17,6 @@ import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTermin
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
-import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
@@ -155,7 +154,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     sendUserLoginContainerNotice(username, deployment, pod);
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
-                    kubernetesRemoteInvokeHandler.invokeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
+                    kubernetesRemoteInvokeHandler.handeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
                 });
     }
 
@@ -245,10 +244,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                         .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
                         .put("kubernetesClusterName", deployment.getKubernetesClusterName())
                         .put("podName", pod.getName())
-                        .put(
-                                "containerName", pod.getContainer()
-                                        .getName()
-                        )
+                        .put("containerName", pod.getContainer().getName())
                         .put("namespace", pod.getNamespace())
                         .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
                         .build()

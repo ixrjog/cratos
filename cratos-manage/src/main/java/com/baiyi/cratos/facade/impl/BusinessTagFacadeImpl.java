@@ -4,6 +4,7 @@ import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.BusinessException;
 import com.baiyi.cratos.domain.BaseBusiness;
 import com.baiyi.cratos.domain.YamlUtils;
+import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.generator.Tag;
@@ -71,8 +72,10 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
 
     private void saveBusinessTag(BaseService<?, ?> baseService, BusinessTag saveBusinessTag) {
         if (baseService.getById(saveBusinessTag.getBusinessId()) == null) {
-            throw new BusinessException("BusinessObject {} does not exist: businessType={}, businessId={}",
-                    saveBusinessTag.getBusinessType(), saveBusinessTag.getBusinessId());
+            throw new BusinessException(
+                    "BusinessObject {} does not exist: businessType={}, businessId={}",
+                    saveBusinessTag.getBusinessType(), saveBusinessTag.getBusinessId()
+            );
         }
         if (saveBusinessTag.getId() != null) {
             businessTagService.updateByPrimaryKey(saveBusinessTag);
@@ -188,9 +191,24 @@ public class BusinessTagFacadeImpl extends BaseSupportBusinessFacade<BusinessTag
         if (Objects.isNull(configMapBusinessTag)) {
             return Map.of();
         }
-        ConfigMapModel.ConfigMap configMap = YamlUtils.loadAs(configMapBusinessTag.getTagValue(),
-                ConfigMapModel.ConfigMap.class);
-        return configMap.getData();
+        return YamlUtils.loadAs(configMapBusinessTag.getTagValue(), ConfigMapModel.ConfigMap.class)
+                .getData();
+    }
+
+    @Override
+    public List<BusinessTag> getCountryCodeBusinessTags() {
+        Tag countryCodeTag = tagService.getByTagKey(SysTagKeys.COUNTRY_CODE);
+        if (countryCodeTag == null) {
+            return List.of();
+        }
+        List<BusinessTag> businessTags = businessTagService.queryByBusinessTypeAndTagId(
+                BusinessTypeEnum.EDS_ASSET.name(), countryCodeTag.getId());
+        if (CollectionUtils.isEmpty(businessTags)) {
+            return List.of();
+        }
+        return businessTags.stream()
+                .filter(e -> StringUtils.hasText(e.getTagValue()))
+                .toList();
     }
 
 }

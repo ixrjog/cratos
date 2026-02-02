@@ -1,10 +1,11 @@
 package com.baiyi.cratos.controller.http;
 
 import com.baiyi.cratos.common.HttpResult;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
+import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.view.tag.BusinessTagVO;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,14 +30,22 @@ public class BusinessTagController {
 
     @Operation(summary = "Query businessTag by business")
     @PostMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<BusinessTagVO.BusinessTag>> queryBusinessTagByBusiness(@RequestBody @Valid BusinessParam.GetByBusiness getByBusiness) {
+    public HttpResult<List<BusinessTagVO.BusinessTag>> queryBusinessTagByBusiness(
+            @RequestBody @Valid BusinessParam.GetByBusiness getByBusiness) {
         return HttpResult.of(businessTagFacade.getBusinessTagByBusiness(getByBusiness));
     }
 
     @Operation(summary = "Query businessTag value by tagValue")
     @PostMapping(value = "/query/by/value", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<List<String>> queryBusinessTagValue(@RequestBody @Valid BusinessTagParam.QueryByTag queryByValue) {
+    public HttpResult<List<String>> queryBusinessTagValue(
+            @RequestBody @Valid BusinessTagParam.QueryByTag queryByValue) {
         return HttpResult.of(businessTagFacade.queryBusinessTagValue(queryByValue));
+    }
+
+    @Operation(summary = "Get countryCode businessTags")
+    @GetMapping(value = "/country/code/get", produces = MediaType.APPLICATION_JSON_VALUE)
+    public HttpResult<List<BusinessTag>> getCountryCodeBusinessTags() {
+        return HttpResult.of(businessTagFacade.getCountryCodeBusinessTags());
     }
 
     @Operation(summary = "Save businessTag")
@@ -62,7 +71,8 @@ public class BusinessTagController {
 
     @Operation(summary = "Update businessTag")
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public HttpResult<Boolean> updateBusinessTag(@RequestBody @Valid BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
+    public HttpResult<Boolean> updateBusinessTag(
+            @RequestBody @Valid BusinessTagParam.UpdateBusinessTag updateBusinessTag) {
         // TODO
         return HttpResult.SUCCESS;
     }

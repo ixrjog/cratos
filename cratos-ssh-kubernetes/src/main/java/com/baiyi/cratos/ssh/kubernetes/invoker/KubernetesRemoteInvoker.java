@@ -28,8 +28,8 @@ public class KubernetesRemoteInvoker {
 
     private static final String NOT_AUDITED = null;
 
-    public void invokeLogWatch(String sessionId, String instanceId, EdsConfigs.Kubernetes kubernetes,
-                               ApplicationKubernetesParam.PodRequest pod, Integer lines) {
+    public void handeLogWatch(String sessionId, String instanceId, EdsConfigs.Kubernetes kubernetes,
+                              ApplicationKubernetesParam.PodRequest pod, Integer lines) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         LogWatch logWatch = kubernetesPodRepo.watchLog(kubernetes, pod.getNamespace(), pod.getName(), pod.getContainer()
                 .getName(), lines, out);
@@ -54,8 +54,8 @@ public class KubernetesRemoteInvoker {
         KubernetesSessionPool.addSession(kubernetesSession);
     }
 
-    public void invokeExecWatch(String sessionId, String instanceId, EdsConfigs.Kubernetes kubernetes,
-                                ApplicationKubernetesParam.PodRequest pod, String auditPath) {
+    public void handeExecWatch(String sessionId, String instanceId, EdsConfigs.Kubernetes kubernetes,
+                               ApplicationKubernetesParam.PodRequest pod, String auditPath) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ExecWatch execWatch = kubernetesPodRepo.exec(kubernetes, pod.getNamespace(), pod.getName(), pod.getContainer()
                 .getName(), KubernetesPodRepo.newListener(), out);
