@@ -100,6 +100,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
 
     @Value("${cratos.notification:NORMAL}")
     private String notification;
+
     @Value("${cratos.language:en-us}")
     protected String language;
 

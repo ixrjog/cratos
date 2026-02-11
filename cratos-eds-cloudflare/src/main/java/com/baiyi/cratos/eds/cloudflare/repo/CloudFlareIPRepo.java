@@ -12,7 +12,7 @@ import java.util.List;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CloudFlareIpsRepo {
+public class CloudFlareIPRepo {
 
     public static List<String> getIpsV4() {
         return CloudFlareServiceFactory.createIPsService()

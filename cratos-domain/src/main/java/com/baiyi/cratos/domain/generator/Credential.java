@@ -20,9 +20,9 @@ import java.util.Date;
 
 @Data
 @Builder
+@EncryptedDomain
 @AllArgsConstructor
 @NoArgsConstructor
-@EncryptedDomain
 public class Credential implements HasValid, HasExpiredTime, HasIntegerPrimaryKey, Serializable {
     @Serial
     private static final long serialVersionUID = -6785186972107510847L;

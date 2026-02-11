@@ -1,4 +1,4 @@
-package com.baiyi.cratos.service;
+package com.baiyi.cratos.service.acme;
 
 import com.baiyi.cratos.domain.generator.AcmeAccount;
 import com.baiyi.cratos.mapper.AcmeAccountMapper;

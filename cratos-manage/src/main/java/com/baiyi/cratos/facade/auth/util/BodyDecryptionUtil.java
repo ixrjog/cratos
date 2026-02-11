@@ -1,5 +1,7 @@
 package com.baiyi.cratos.facade.auth.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.Cipher;
@@ -18,6 +20,7 @@ import java.util.Base64;
  * @Date 2026/01/23
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BodyDecryptionUtil {
 
     private static final String RSA_ALGORITHM = "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
@@ -38,29 +41,32 @@ public class BodyDecryptionUtil {
     }
 
     private static byte[] decryptWithRSA(String encryptedKeyBase64, String privateKeyPem) throws Exception {
-        log.info("Encrypted key (Base64): {}", encryptedKeyBase64.substring(0, Math.min(50, encryptedKeyBase64.length())) + "...");
-        log.info("Private key PEM length: {}", privateKeyPem.length());
-        
-        byte[] encryptedKey = Base64.getDecoder().decode(encryptedKeyBase64);
-        log.info("Encrypted key bytes length: {}", encryptedKey.length);
-        
+        log.debug(
+                "Encrypted key (Base64): {}",
+                encryptedKeyBase64.substring(0, Math.min(50, encryptedKeyBase64.length())) + "..."
+        );
+        log.debug("Private key PEM length: {}", privateKeyPem.length());
+
+        byte[] encryptedKey = Base64.getDecoder()
+                .decode(encryptedKeyBase64);
+        log.debug("Encrypted key bytes length: {}", encryptedKey.length);
+
         PrivateKey privateKey = loadPrivateKey(privateKeyPem);
-        log.info("Private key algorithm: {}, format: {}", privateKey.getAlgorithm(), privateKey.getFormat());
-        
+        log.debug("Private key algorithm: {}, format: {}", privateKey.getAlgorithm(), privateKey.getFormat());
+
         // 使用标准的 RSA/ECB/OAEPPadding，然后手动指定参数
         Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPPadding");
-        
+
         // 创建 OAEP 参数规范：SHA-256 for hash, MGF1 with SHA-256
         java.security.spec.MGF1ParameterSpec mgf1Spec = new java.security.spec.MGF1ParameterSpec("SHA-256");
         javax.crypto.spec.OAEPParameterSpec oaepSpec = new javax.crypto.spec.OAEPParameterSpec(
-            "SHA-256", "MGF1", mgf1Spec, javax.crypto.spec.PSource.PSpecified.DEFAULT
-        );
-        
+                "SHA-256", "MGF1", mgf1Spec, javax.crypto.spec.PSource.PSpecified.DEFAULT);
+
         cipher.init(Cipher.DECRYPT_MODE, privateKey, oaepSpec);
-        
+
         try {
             byte[] result = cipher.doFinal(encryptedKey);
-            log.info("Decryption successful, AES key length: {}", result.length);
+            log.debug("Decryption successful, AES key length: {}", result.length);
             return result;
         } catch (Exception e) {
             log.error("RSA decryption failed. Encrypted key length: {}", encryptedKey.length);
@@ -73,8 +79,10 @@ public class BodyDecryptionUtil {
         if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid encrypted body format");
         }
-        byte[] iv = Base64.getDecoder().decode(parts[0]);
-        byte[] ciphertext = Base64.getDecoder().decode(parts[1]);
+        byte[] iv = Base64.getDecoder()
+                .decode(parts[0]);
+        byte[] ciphertext = Base64.getDecoder()
+                .decode(parts[1]);
         SecretKeySpec secretKey = new SecretKeySpec(aesKeyBytes, "AES");
         Cipher cipher = Cipher.getInstance(AES_ALGORITHM);
         GCMParameterSpec gcmSpec = new GCMParameterSpec(GCM_TAG_LENGTH, iv);
@@ -84,13 +92,14 @@ public class BodyDecryptionUtil {
     }
 
     private static PrivateKey loadPrivateKey(String privateKeyPem) throws Exception {
-        String privateKeyContent = privateKeyPem
-                .replace("-----BEGIN PRIVATE KEY-----", "")
+        String privateKeyContent = privateKeyPem.replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
-        byte[] keyBytes = Base64.getDecoder().decode(privateKeyContent);
+        byte[] keyBytes = Base64.getDecoder()
+                .decode(privateKeyContent);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePrivate(keySpec);
     }
+
 }

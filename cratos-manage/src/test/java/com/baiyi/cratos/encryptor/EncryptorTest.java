@@ -51,12 +51,12 @@ public class EncryptorTest extends BaseUnit {
 
     @Test
     void encryptPasswordTest() {
-        log.error(stringEncryptor.encrypt(""));
+        log.error(stringEncryptor.encrypt("https://callback-a-prod.palmpay.com"));
     }
 
     @Test
     void decryptTest() {
-        log.error(stringEncryptor.decrypt(""));
+        log.error(stringEncryptor.decrypt("nM5dGT70+lk67XzXtjXFyq8g/yQSP4KB"));
     }
 
 }

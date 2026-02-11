@@ -73,4 +73,6 @@ public interface ErrorCodeConstants {
 
     int TRAFFIC_ROUTE_ERROR = 63000;
 
+    int EDS_ACME_ERROR = 64000;
+
 }

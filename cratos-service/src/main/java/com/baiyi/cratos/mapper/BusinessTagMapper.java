@@ -4,10 +4,12 @@ import com.baiyi.cratos.domain.generator.BusinessTag;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
+@Repository
 public interface BusinessTagMapper extends Mapper<BusinessTag> {
 
     List<Integer> queryByTagIds(String businessType, @Param("tagIds") List<Integer> tagIds);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.AcmeOrderMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.AcmeOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="domain_id" jdbcType="INTEGER" property="domainId" />
+    <result column="certificate_id" jdbcType="INTEGER" property="certificateId" />
+    <result column="order_url" jdbcType="VARCHAR" property="orderUrl" />
+    <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="expires" jdbcType="TIMESTAMP" property="expires" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="domains" jdbcType="LONGVARCHAR" property="domains" />
+    <result column="domain_key_pair" jdbcType="LONGVARCHAR" property="domainKeyPair" />
+    <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
+  </resultMap>
+</mapper>

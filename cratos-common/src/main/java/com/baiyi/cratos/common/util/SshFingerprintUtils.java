@@ -19,24 +19,61 @@ public final class SshFingerprintUtils {
 
     public static String calcFingerprint(String privateKey, String publicKey) {
         String fingerprint = "-";
-        if (!org.springframework.util.StringUtils.hasText(publicKey)) {
+        
+        if (!StringUtils.hasText(publicKey)) {
             return fingerprint;
         }
-        if (publicKey.contains("ssh-")) {
-            publicKey = publicKey.substring(publicKey.indexOf("ssh-"));
-        } else if (publicKey.contains("ecdsa-")) {
-            publicKey = publicKey.substring(publicKey.indexOf("ecdsa-"));
-        }
+        
+        // 提取公钥部分（去除前面的注释）
+        publicKey = extractPublicKey(publicKey);
+        
         try {
-            KeyPair keyPair = KeyPair.load(new JSch(), StringUtils.hasText(privateKey) ? privateKey.getBytes() : null, publicKey.getBytes());
+            KeyPair keyPair = KeyPair.load(
+                new JSch(), 
+                StringUtils.hasText(privateKey) ? privateKey.getBytes() : null, 
+                publicKey.getBytes()
+            );
+            
             if (keyPair == null) {
-                throw new InvalidCredentialException("The SSH key(pair) incorrect.");
+                throw new InvalidCredentialException("The SSH key(pair) is incorrect.");
             }
-            fingerprint = keyPair.getFingerPrint();
+            
+            String fp = keyPair.getFingerPrint();
+            if (fp != null) {
+                fingerprint = fp;
+            }
         } catch (JSchException e) {
-            throw new InvalidCredentialException("The SSH key(pair) incorrect err: {}", e.getMessage());
+            throw new InvalidCredentialException(
+                "The SSH key(pair) is incorrect: " + e.getMessage()
+            );
         }
+        
         return fingerprint;
+    }
+    
+    /**
+     * 提取公钥内容，去除前面的注释或其他文本
+     */
+    private static String extractPublicKey(String publicKey) {
+        // 支持的公钥类型前缀
+        String[] keyPrefixes = {
+            "ssh-rsa",
+            "ssh-dss",
+            "ssh-ed25519",
+            "ecdsa-sha2-nistp256",
+            "ecdsa-sha2-nistp384",
+            "ecdsa-sha2-nistp521"
+        };
+        
+        for (String prefix : keyPrefixes) {
+            int index = publicKey.indexOf(prefix);
+            if (index >= 0) {
+                return publicKey.substring(index);
+            }
+        }
+        
+        // 如果没有找到已知前缀，返回原始内容
+        return publicKey;
     }
 
 }

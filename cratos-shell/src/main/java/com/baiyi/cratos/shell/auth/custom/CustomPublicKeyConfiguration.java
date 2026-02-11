@@ -11,7 +11,6 @@ import com.baiyi.cratos.service.BusinessCredentialService;
 import com.baiyi.cratos.service.CredentialService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.auth.SshShellPublicKeyAuthenticationProvider;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
@@ -25,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -66,21 +66,21 @@ public class CustomPublicKeyConfiguration {
                     .businessType(BusinessTypeEnum.USER.name())
                     .businessId(user.getId())
                     .build();
+
             List<BusinessCredential> businessCredentials = businessCredentialService.selectByBusiness(query);
             if (CollectionUtils.isEmpty(businessCredentials)) {
                 return false;
             }
 
-            List<Credential> credentials = Lists.newArrayList();
-            for (BusinessCredential businessCredential : businessCredentials) {
-                Credential cred = credentialService.getById(businessCredential.getCredentialId());
-                if (cred != null && cred.getPrivateCredential() && cred.getValid() && CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name()
-                        .equals(cred.getCredentialType())) {
-                    if (!ExpiredUtils.isExpired(cred.getExpiredTime())) {
-                        credentials.add(cred);
-                    }
-                }
-            }
+            List<Credential> credentials = businessCredentials.stream()
+                    .map(businessCredential -> credentialService.getById(businessCredential.getCredentialId()))
+                    .filter(Objects::nonNull)
+                    // PublicKey
+                    .filter(cred -> CredentialTypeEnum.SSH_USERNAME_WITH_PUBLIC_KEY.name()
+                            .equals(cred.getCredentialType()))
+                    .filter(cred -> cred.getPrivateCredential() && cred.getValid())
+                    .filter(cred -> !ExpiredUtils.isExpired(cred.getExpiredTime()))
+                    .toList();
 
             if (CollectionUtils.isEmpty(credentials)) {
                 return false;
@@ -94,8 +94,11 @@ public class CustomPublicKeyConfiguration {
                         fw.write(credential.getCredential() + "\n");
                     }
                     fw.flush();
-                    return new SshShellPublicKeyAuthenticationProvider(sshShellPubKeysTmpFile).authenticate(username,
-                            publicKey, serverSession);
+                    return new SshShellPublicKeyAuthenticationProvider(sshShellPubKeysTmpFile).authenticate(
+                            username,
+                            publicKey,
+                            serverSession
+                    );
                 } catch (Exception e) {
                     log.error("Error generating user {} public key", username);
                 } finally {

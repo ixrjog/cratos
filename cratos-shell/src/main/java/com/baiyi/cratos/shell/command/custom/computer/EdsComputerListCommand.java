@@ -56,7 +56,7 @@ import static com.baiyi.cratos.shell.command.custom.computer.EdsComputerListComm
 public class EdsComputerListCommand extends AbstractCommand {
 
     public static final String GROUP = "computer";
-    private static final String COMMAND_LIST = GROUP + "-list";
+    private static final String COMMAND_COMPUTER_LIST = GROUP + "-list";
     public static final String UNAUTHORIZED = Global.NONE;
     private final UserPermissionBusinessFacade userPermissionBusinessFacade;
     private final UserPermissionService userPermissionService;
@@ -87,7 +87,7 @@ public class EdsComputerListCommand extends AbstractCommand {
         this.proxyHostHolder = proxyHostHolder;
     }
 
-    @ShellMethod(key = COMMAND_LIST, value = "List computer asset")
+    @ShellMethod(key = {COMMAND_COMPUTER_LIST, "ls"}, value = "List computer asset")
     public void listComputer(@ShellOption(help = "Name", defaultValue = "") String name,
                              @ShellOption(help = "Group", defaultValue = "") String group,
                              @ShellOption(help = "Page", defaultValue = "1") int page) {

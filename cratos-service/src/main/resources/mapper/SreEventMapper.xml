@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baiyi.cratos.mapper.SreEventMapper">
+  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.SreEvent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="event_no" jdbcType="VARCHAR" property="eventNo" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="env" jdbcType="VARCHAR" property="env" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="action" jdbcType="VARCHAR" property="action" />
+    <result column="target" jdbcType="VARCHAR" property="target" />
+    <result column="severity" jdbcType="VARCHAR" property="severity" />
+    <result column="event_status" jdbcType="VARCHAR" property="eventStatus" />
+    <result column="event_time" jdbcType="TIMESTAMP" property="eventTime" />
+    <result column="module" jdbcType="VARCHAR" property="module" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="tag" jdbcType="LONGVARCHAR" property="tag" />
+    <result column="ext" jdbcType="LONGVARCHAR" property="ext" />
+    <result column="source_content" jdbcType="LONGVARCHAR" property="sourceContent" />
+    <result column="target_content" jdbcType="LONGVARCHAR" property="targetContent" />
+  </resultMap>
+</mapper>

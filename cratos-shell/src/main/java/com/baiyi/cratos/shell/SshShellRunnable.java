@@ -147,10 +147,12 @@ public class SshShellRunnable
                     authentication = (SshAuthentication) authenticationObject;
                 }
 
-                File historyFile = properties.getHistoryFile();
+                File historyFile;
                 if (!properties.isSharedHistory()) {
                     String user = authentication != null ? authentication.getName() : "unknown";
                     historyFile = new File(properties.getHistoryDirectory(), "sshShellHistory-" + user + ".log");
+                } else {
+                    historyFile = properties.getHistoryFile();
                 }
                 reader.setVariable(LineReader.HISTORY_FILE, historyFile.toPath());
 

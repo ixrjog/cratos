@@ -78,6 +78,7 @@ public enum EdsAssetTypeEnum {
     CLOUDFLARE_ZONE("Zone", 54),
     @CloudCertificate CLOUDFLARE_CERT("Certificate", 55),
     CLOUDFLARE_DNS_RECORD("DNS Record", 56),
+    CLOUDFLARE_IPV4("IPv4", 56),
 
     KUBERNETES_NAMESPACE("Namespace", 57),
     KUBERNETES_DEPLOYMENT("Deployment", 58),

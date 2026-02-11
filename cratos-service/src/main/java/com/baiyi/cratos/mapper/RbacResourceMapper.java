@@ -4,10 +4,12 @@ import com.baiyi.cratos.domain.generator.RbacResource;
 import com.baiyi.cratos.domain.param.http.rbac.RbacResourceParam;
 import com.baiyi.cratos.domain.param.http.rbac.RbacRoleResourceParam;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
+@Repository
 public interface RbacResourceMapper extends Mapper<RbacResource> {
 
     List<RbacResource> queryPageByParam(RbacResourceParam.ResourcePageQuery pageQuery);

@@ -1,4 +1,4 @@
-package com.baiyi.cratos.domain.model.sre;
+package com.baiyi.cratos.domain.param.http.sre;
 
 import lombok.*;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  * &#064;Version 1.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SreBridgeModel {
+public class SreBridgeParam {
 
     @Data
     @Builder

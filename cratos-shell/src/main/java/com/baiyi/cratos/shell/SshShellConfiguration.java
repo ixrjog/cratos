@@ -29,6 +29,7 @@ import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
@@ -44,6 +45,7 @@ import java.nio.file.Files;
 @Slf4j
 @Configuration
 @AllArgsConstructor
+@DependsOn("sshAuditProperties")
 public class SshShellConfiguration {
 
     private final SshShellProperties properties;

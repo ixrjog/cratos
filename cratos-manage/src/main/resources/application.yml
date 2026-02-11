@@ -176,6 +176,10 @@ socks:
     # 是否启用访问日志
     access-log-enabled: true
 
+sre:
+  bridge:
+    url: ENC(ozZ24f53s+ruag0QosCouwRknP7ACpvA2ifOZS46/EEvXoQpAdCaZstNjmtqXSR4)
+
 jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
