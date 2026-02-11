@@ -35,7 +35,7 @@ public class KeyManagementService {
                 .map(k -> {
                     String pem = new String(Base64.getDecoder().decode(k.getPrivateKey()));
                     keyCache.put(version, pem);
-                    log.info("Loaded private key for version: {}", version);
+                    log.debug("Loaded private key for version: {}", version);
                     return pem;
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Private key not found for version: " + version));
@@ -54,6 +54,7 @@ public class KeyManagementService {
      */
     public String getDefaultVersion() {
         return encryptionConfig.getKeys().isEmpty() ? "v1" 
-                : encryptionConfig.getKeys().get(0).getVersion();
+                : encryptionConfig.getKeys().getFirst().getVersion();
     }
+
 }
