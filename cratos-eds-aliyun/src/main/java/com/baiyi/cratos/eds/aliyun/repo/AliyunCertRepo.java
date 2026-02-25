@@ -3,7 +3,6 @@ package com.baiyi.cratos.eds.aliyun.repo;
 import com.aliyun.cas20200407.Client;
 import com.aliyun.cas20200407.models.*;
 import com.baiyi.cratos.eds.aliyun.client.AliyunOpenapiClient;
-import com.baiyi.cratos.eds.aliyun.client.common.AliyunClient;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.query.EdsRepoData;
 import com.baiyi.cratos.eds.core.query.EdsRepoPageQuery;
@@ -24,8 +23,6 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AliyunCertRepo {
-
-    private final AliyunClient aliyunClient;
 
     public List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> listUserCertOrder(
             EdsConfigs.Aliyun aliyun) throws Exception {
@@ -58,8 +55,7 @@ public class AliyunCertRepo {
         return userCertificateOrderList;
     }
 
-    public List<ListCertResponseBody.ListCertResponseBodyCertList> listCert(
-            EdsConfigs.Aliyun aliyun) throws Exception {
+    public List<ListCertResponseBody.ListCertResponseBodyCertList> listCert(EdsConfigs.Aliyun aliyun) throws Exception {
         ListCertRequest request = new ListCertRequest();
         long total = 0;
         long pageNo = 1;
@@ -88,8 +84,8 @@ public class AliyunCertRepo {
         return certList;
     }
 
-    public EdsRepoData<ListCertResponseBody.ListCertResponseBodyCertList> queryCertPage(
-            EdsConfigs.Aliyun aliyun, EdsRepoPageQuery edsRepoPageQuery) throws Exception {
+    public EdsRepoData<ListCertResponseBody.ListCertResponseBodyCertList> queryCertPage(EdsConfigs.Aliyun aliyun,
+                                                                                        EdsRepoPageQuery edsRepoPageQuery) throws Exception {
         ListCertRequest request = new ListCertRequest();
         request.setCurrentPage(edsRepoPageQuery.getPage());
         request.setShowSize(edsRepoPageQuery.getLength());
@@ -99,15 +95,26 @@ public class AliyunCertRepo {
                 .map(ListCertResponse::getBody)
                 .map(ListCertResponseBody::getCertList)
                 .orElse(Collections.emptyList());
-
         return EdsRepoData.<ListCertResponseBody.ListCertResponseBodyCertList>builder()
                 .nowPage(edsRepoPageQuery.getPage())
                 .totalNum(Optional.of(response)
-                        .map(ListCertResponse::getBody)
-                        .map(ListCertResponseBody::getTotalCount)
-                        .orElse(0L))
+                                  .map(ListCertResponse::getBody)
+                                  .map(ListCertResponseBody::getTotalCount)
+                                  .orElse(0L))
                 .data(results)
                 .build();
+    }
+
+    public String uploadUserCertificate(EdsConfigs.Aliyun aliyun, String name, String cert, String key) throws Exception {
+        UploadUserCertificateRequest request = new UploadUserCertificateRequest().setName(name)
+                .setCert(cert)
+                .setKey(key);
+        Client aliyunClient = AliyunOpenapiClient.createClient(aliyun);
+        UploadUserCertificateResponse response = aliyunClient.uploadUserCertificate(request);
+        return Optional.ofNullable(response)
+                .map(UploadUserCertificateResponse::getBody)
+                .map(UploadUserCertificateResponseBody::getRequestId)
+                .orElseThrow();
     }
 
 }

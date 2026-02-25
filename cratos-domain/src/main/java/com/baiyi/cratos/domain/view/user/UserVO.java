@@ -36,7 +36,7 @@ public class UserVO {
     @BusinessType(type = BusinessTypeEnum.USER)
     public static class User extends BaseVO implements BaseBusiness.IBusinessAnnotate,
             // Business
-            BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, RbacRoleVO.IRbacRoles, HasResourceCount, Serializable {
+            BusinessTagVO.HasBusinessTags, BusinessDocVO.HasBusinessDocs, RbacRoleVO.HasRbacRoles, HasResourceCount, Serializable {
 
         @Serial
         private static final long serialVersionUID = 7642003154901654181L;

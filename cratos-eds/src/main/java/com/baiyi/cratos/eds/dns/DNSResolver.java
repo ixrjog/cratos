@@ -1,6 +1,7 @@
 package com.baiyi.cratos.eds.dns;
 
 
+import com.baiyi.cratos.domain.HasZone;
 import com.baiyi.cratos.domain.generator.TrafficRoute;
 import com.baiyi.cratos.domain.model.DNS;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficRouteParam;
@@ -22,6 +23,14 @@ public interface DNSResolver extends EdsInstanceTypeOfAnnotate, InitializingBean
     void switchToRoute(TrafficRouteParam.SwitchRecordTarget switchRecordTarget);
 
     String getZoneId(TrafficRoute trafficRoute);
+
+    default String getZoneId(HasZone hasZone) {
+        return getZoneId(TrafficRoute.builder()
+                                 .domain(hasZone.getDomain())
+                                 .zoneId(hasZone.getZoneId())
+                                 .dnsResolverInstanceId(hasZone.getDnsResolverInstanceId())
+                                 .build());
+    }
 
     String generateConsoleURL(TrafficRoute trafficRoute);
 

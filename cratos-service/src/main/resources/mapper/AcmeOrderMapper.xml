@@ -16,6 +16,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="domains" jdbcType="LONGVARCHAR" property="domains" />
     <result column="domain_key_pair" jdbcType="LONGVARCHAR" property="domainKeyPair" />
+    <result column="dns_challenge_records" jdbcType="LONGVARCHAR" property="dnsChallengeRecords" />
     <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
   </resultMap>
 </mapper>

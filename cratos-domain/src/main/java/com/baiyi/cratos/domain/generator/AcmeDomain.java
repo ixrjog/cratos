@@ -1,6 +1,7 @@
 package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
+import com.baiyi.cratos.domain.HasZone;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "acme_domain")
-public class AcmeDomain implements HasValid, HasIntegerPrimaryKey, Serializable {
+public class AcmeDomain implements HasZone, HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial
     private static final long serialVersionUID = 4190655398744828901L;
     @Id
@@ -58,6 +59,12 @@ public class AcmeDomain implements HasValid, HasIntegerPrimaryKey, Serializable 
     private Integer accountId;
 
     private Boolean valid;
+
+    @Column(name = "dcv_type")
+    private String dcvType;
+
+    @Column(name = "dcv_delegation_target")
+    private String dcvDelegationTarget;
 
     /**
      * 创建时间

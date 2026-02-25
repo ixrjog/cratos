@@ -26,7 +26,7 @@ public class RbacRoleVO {
         void setRbacRole(Role rbacRole);
     }
 
-    public interface IRbacRoles {
+    public interface HasRbacRoles {
         String getUsername();
 
         void setRbacRoles(List<Role> rbacRoles);

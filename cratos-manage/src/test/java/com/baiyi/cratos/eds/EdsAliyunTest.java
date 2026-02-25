@@ -6,18 +6,17 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.aliyuncs.ram.model.v20150501.UpdateUserResponse;
 import com.baiyi.cratos.common.util.PhoneNumberUtils;
+import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.User;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunKmsRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunRamUserRepo;
-import com.baiyi.cratos.eds.aliyun.repo.AliyunTagRepo;
+import com.baiyi.cratos.eds.aliyun.repo.*;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.service.acme.AcmeCertificateService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.StringUtils;
@@ -34,6 +33,12 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
 
     @Resource
     private AliyunTagRepo aliyunTagRepo;
+
+    @Resource
+    private AliyunCertRepo aliyunCertRepo;
+
+    @Resource
+    private AcmeCertificateService acmeCertificateService;
 
     @Resource
     private EdsAssetService edsAssetService;
@@ -65,7 +70,6 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
         System.out.println(records);
     }
 
-
     @Test
     void test4() {
         EdsConfigs.Aliyun aliyun = getConfig(25);
@@ -81,31 +85,34 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
                     .assetLoadAs(asset.getOriginalModel());
             if (!StringUtils.hasText(ramUser.getMobilePhone())) {
                 System.out.println("用户手机号不存在: user=" + ramUser.getUserName());
-
                 User user = userService.getByUsername(asset.getAssetKey());
                 if (user == null) {
                     continue;
                 }
-
                 String phone = PhoneNumberUtils.convertPhoneNumber(user.getMobilePhone());
                 if (PhoneNumberUtils.isValidPhoneNumber(phone)) {
-
                     try {
                         UpdateUserResponse.User updateUser = aliyunRamUserRepo.updateUser(
                                 aliyun.getRegionId(), aliyun, ramUser.getUserName(), user.getEmail(), phone);
-
                         System.out.println(
                                 updateUser.getUserName() + "  " + updateUser.getMobilePhone() + "  " + updateUser.getEmail());
-
                     } catch (ClientException ce) {
                         ce.printStackTrace();
                     }
                 }
-
-
             }
 
         }
+    }
+
+    @Test
+    void test5() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(2);
+        AcmeCertificate acmeCertificate = acmeCertificateService.getById(1);
+        String cert = acmeCertificate.getCertificate() + "\n" + acmeCertificate.getCertificateChain();
+        String requestId = aliyunCertRepo.uploadUserCertificate(
+                aliyun, "test111", cert, acmeCertificate.getPrivateKey());
+        System.out.println(requestId);
     }
 
 }

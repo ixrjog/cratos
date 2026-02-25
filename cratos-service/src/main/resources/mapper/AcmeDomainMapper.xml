@@ -14,6 +14,8 @@
     <result column="dns_resolver_instance_id" jdbcType="INTEGER" property="dnsResolverInstanceId" />
     <result column="account_id" jdbcType="INTEGER" property="accountId" />
     <result column="valid" jdbcType="BIT" property="valid" />
+    <result column="dcv_type" jdbcType="VARCHAR" property="dcvType" />
+    <result column="dcv_delegation_target" jdbcType="VARCHAR" property="dcvDelegationTarget" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />

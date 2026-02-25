@@ -1,5 +1,6 @@
 package com.baiyi.cratos.domain.generator;
 
+import com.baiyi.cratos.domain.HasZone;
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
@@ -13,13 +14,13 @@ import java.util.Date;
 /**
  * 表名：traffic_route
  * 表注释：流量切换
-*/
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "traffic_route")
-public class TrafficRoute implements HasValid, HasIntegerPrimaryKey {
+public class TrafficRoute implements HasZone, HasValid, HasIntegerPrimaryKey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

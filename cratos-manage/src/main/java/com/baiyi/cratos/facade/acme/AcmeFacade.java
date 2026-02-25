@@ -1,6 +1,7 @@
 package com.baiyi.cratos.facade.acme;
 
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
+import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 
 /**
  * &#064;Author  baiyi
@@ -10,5 +11,9 @@ import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 public interface AcmeFacade {
 
     void createAcmeAccount(AcmeAccountParam.CreateAccount createAccount);
+
+    void addAcmeDomain(AcmeDomainParam.AddDomain addDomain);
+
+    void issueCertificate(int acmeDomainId) throws Exception;
 
 }

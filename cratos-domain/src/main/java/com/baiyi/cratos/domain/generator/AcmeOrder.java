@@ -2,7 +2,6 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
-import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -62,6 +61,9 @@ public class AcmeOrder implements HasIntegerPrimaryKey, Serializable {
      */
     private Date expires;
 
+    @Column(name = "dns_challenge_records")
+    private String dnsChallengeRecords;
+
     @Column(name = "create_time", insertable = false, updatable = false)
     private Date createTime;
 
@@ -74,10 +76,9 @@ public class AcmeOrder implements HasIntegerPrimaryKey, Serializable {
     private String domains;
 
     /**
-     * 域名密钥对(加密存储)
+     * 域名密钥对(PEM格式，建议数据库层加密)
      */
     @Column(name = "domain_key_pair")
-    @FieldEncrypt
     private String domainKeyPair;
 
     /**

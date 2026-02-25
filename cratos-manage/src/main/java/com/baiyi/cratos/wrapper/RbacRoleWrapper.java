@@ -31,7 +31,7 @@ import static com.baiyi.cratos.domain.enums.BusinessTypeEnum.USER;
 @Component
 @RequiredArgsConstructor
 @BusinessType(type = BusinessTypeEnum.RBAC_ROLE)
-public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, RbacRole> implements BaseBusinessWrapper<RbacRoleVO.IRbacRoles, RbacRoleVO.Role> {
+public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, RbacRole> implements BaseBusinessWrapper<RbacRoleVO.HasRbacRoles, RbacRoleVO.Role> {
 
     private final RbacRoleService rbacRoleService;
     private final RbacRoleResourceService rbacRoleResourceService;
@@ -59,11 +59,11 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
     }
 
     @Override
-    public void decorateBusiness(RbacRoleVO.IRbacRoles biz) {
-        if (StringUtils.isEmpty(biz.getUsername())) {
+    public void decorateBusiness(RbacRoleVO.HasRbacRoles hasRbacRoles) {
+        if (StringUtils.isEmpty(hasRbacRoles.getUsername())) {
             return;
         }
-        List<RbacRoleVO.Role> roles = rbacUserRoleService.queryByUsername(biz.getUsername())
+        List<RbacRoleVO.Role> roles = rbacUserRoleService.queryByUsername(hasRbacRoles.getUsername())
                 .stream()
                 .map(e -> {
                     RbacRole role = rbacRoleService.getById(e.getRoleId());
@@ -73,7 +73,7 @@ public class RbacRoleWrapper extends BaseDataTableConverter<RbacRoleVO.Role, Rba
                     return roleVO;
                 })
                 .toList();
-        biz.setRbacRoles(roles);
+        hasRbacRoles.setRbacRoles(roles);
     }
 
 }
