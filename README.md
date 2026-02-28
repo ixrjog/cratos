@@ -35,7 +35,7 @@ Start in sync with the world
 
 <img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/006.png" width="830"></img>
 
-#### Command Mode Asset Management
+#### Command mode asset management
 
 <img src="https://opscloud4-res.oss-cn-hangzhou.aliyuncs.com/github/cratos/def/007.jpg" width="830"></img>
 

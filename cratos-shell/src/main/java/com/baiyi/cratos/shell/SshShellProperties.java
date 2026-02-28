@@ -140,6 +140,9 @@ public class SshShellProperties {
         private CommandProperties computer = new CommandProperties();
 
         @NestedConfigurationProperty
+        private CommandProperties acme = new CommandProperties();
+
+        @NestedConfigurationProperty
         private CommandProperties asset = new CommandProperties();
 
         @NestedConfigurationProperty

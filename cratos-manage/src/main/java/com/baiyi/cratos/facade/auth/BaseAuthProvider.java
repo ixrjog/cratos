@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.auth;
 
-import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.AuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
@@ -34,7 +34,7 @@ import static com.baiyi.cratos.domain.ErrorEnum.NO_VALID_CREDENTIALS_AVAILABLE;
  */
 @Slf4j
 @AllArgsConstructor
-public abstract class BaseAuthProvider implements IAuthProvider, InitializingBean {
+public abstract class BaseAuthProvider implements AuthProvider, InitializingBean {
 
     private final UserTokenFacade userTokenFacade;
     private final UserService userService;

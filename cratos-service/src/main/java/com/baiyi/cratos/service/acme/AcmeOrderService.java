@@ -4,6 +4,8 @@ import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.mapper.AcmeOrderMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 
+import java.util.List;
+
 /**
  * &#064;Author  baiyi
  * &#064;Date  2026/2/10 17:39
@@ -12,5 +14,7 @@ import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 public interface AcmeOrderService extends BaseUniqueKeyService<AcmeOrder, AcmeOrderMapper> {
 
     AcmeOrder getByOrderUrl(String orderUrl);
+
+    List<AcmeOrder> queryByDomainId(int domainId, int length);
 
 }

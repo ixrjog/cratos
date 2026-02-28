@@ -120,7 +120,6 @@ public class AliyunDNSResolver extends BaseDNSResolver<EdsConfigs.Aliyun, Descri
             addNewRecord(context);
             return;
         }
-
         if (CollectionUtils.isEmpty(context.getMatchedRecordMap()
                                             .get(dnsRRType.name()))) {
             addNewRecord(context);

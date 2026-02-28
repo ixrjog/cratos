@@ -1,6 +1,6 @@
 package com.baiyi.cratos.shell.auth.custom;
 
-import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.AuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
@@ -52,7 +52,7 @@ public class CustomPasswordConfiguration {
                 return false;
             }
             try {
-                IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
+                AuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
                         .orElseThrow(() -> new AuthenticationException(
                                 AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
                 User user = Optional.ofNullable(userService.getByUsername(username))

@@ -44,7 +44,8 @@ public enum SysTagKeys {
     ALERT_NOTIFICATION("AlertNotification"),
     DNS_RESOLVER("DNSResolver"),
     DOMAIN("Domain"),
-    CERT_ABUSE("CertAbuse")
+    CERT_ABUSE("CertAbuse"),
+    ACME("ACME")
     ;
 
     private final String key;

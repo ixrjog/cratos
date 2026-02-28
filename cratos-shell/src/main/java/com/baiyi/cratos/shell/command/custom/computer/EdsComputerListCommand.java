@@ -151,7 +151,6 @@ public class EdsComputerListCommand extends AbstractCommand {
                 .totalNum(dataTable.getTotalNum())
                 .page(page)
                 .length(pageLength)
-                .lang(user.getLang())
                 .build();
         // 打印页脚/分页
         helper.print(pagination.toStr(), PromptColor.GREEN);

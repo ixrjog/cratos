@@ -1,7 +1,7 @@
 package com.baiyi.cratos.common.auth.factory;
 
 
-import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.AuthProvider;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,14 +19,14 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AuthProviderFactory {
 
-    private static final Map<String, IAuthProvider> CONTEXT = new ConcurrentHashMap<>();
+    private static final Map<String, AuthProvider> CONTEXT = new ConcurrentHashMap<>();
 
-    public static void register(IAuthProvider bean) {
+    public static void register(AuthProvider bean) {
         CONTEXT.put(bean.getName(), bean);
         log.debug("AuthProviderFactory Registered: {}", bean.getName());
     }
 
-    public static IAuthProvider getProvider(String name) {
+    public static AuthProvider getProvider(String name) {
         if (CONTEXT.containsKey(name)) {
             return CONTEXT.get(name);
         }

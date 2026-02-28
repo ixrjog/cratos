@@ -1,7 +1,9 @@
 package com.baiyi.cratos.eds.core.enums;
 
 import com.baiyi.cratos.domain.view.base.OptionsVO;
+import com.baiyi.cratos.eds.core.annotation.Acme;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 public enum EdsInstanceTypeEnum {
 
     CRATOS,
-    ALIYUN,
+    @Acme ALIYUN,
     AWS,
     HUAWEICLOUD,
     HUAWEICLOUD_STACK,
@@ -37,14 +39,31 @@ public enum EdsInstanceTypeEnum {
     ZABBIX,
     CRT;
 
-    public static OptionsVO.Options toOptions(){
-        List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values()).map(e -> OptionsVO.Option.builder()
-                .label(e.name())
-                .value(e.name())
-                .build()).collect(Collectors.toList());
+    public static OptionsVO.Options toOptions() {
+        List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values())
+                .map(e -> OptionsVO.Option.builder()
+                        .label(e.name())
+                        .value(e.name())
+                        .build())
+                .collect(Collectors.toList());
         return OptionsVO.Options.builder()
                 .options(optionList)
                 .build();
+    }
+
+    public static final List<EdsInstanceTypeEnum> ACME_TYPES = getAcmeTypes();
+
+    private static List<EdsInstanceTypeEnum> getAcmeTypes() {
+        return Arrays.stream(EdsInstanceTypeEnum.values())
+                .filter(assetType -> {
+                    try {
+                        Field field = EdsInstanceTypeEnum.class.getField(assetType.name());
+                        return field.isAnnotationPresent(Acme.class);
+                    } catch (NoSuchFieldException e) {
+                        return false;
+                    }
+                })
+                .toList();
     }
 
 }

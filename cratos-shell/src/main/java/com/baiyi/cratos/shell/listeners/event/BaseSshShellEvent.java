@@ -2,6 +2,7 @@ package com.baiyi.cratos.shell.listeners.event;
 
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.shell.context.AcmeContext;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.context.PodAssetContext;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
@@ -45,6 +46,7 @@ public abstract class BaseSshShellEvent implements ISshShellEvent, InitializingB
 
     protected void destroySessionData(SshShellEvent event) {
         ComputerAssetContext.remove();
+        AcmeContext.remove();
         PodAssetContext.remove();
         SshSessionIdMapper.remove(event.getSession()
                 .getServerSession()

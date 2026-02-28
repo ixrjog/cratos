@@ -1,4 +1,4 @@
-package com.baiyi.cratos.eds.acme;
+package com.baiyi.cratos.eds.acme.dns;
 
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import lombok.NoArgsConstructor;

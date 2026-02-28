@@ -2,10 +2,12 @@ package com.baiyi.cratos.eds.core.config;
 
 import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.eds.core.config.base.HasAcme;
 import com.baiyi.cratos.eds.core.config.base.HasDnsNameServers;
-import com.baiyi.cratos.eds.core.config.base.HasRegionsModel;
+import com.baiyi.cratos.eds.core.config.base.HasRegions;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.config.model.*;
+import com.baiyi.cratos.eds.core.config.model.common.EdsCommonConfigModel;
 import com.google.common.base.Joiner;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -30,7 +32,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Aliyun implements HasRegionsModel, HasEdsConfig {
+    public static class Aliyun implements HasRegions, HasAcme, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -50,6 +52,7 @@ public class EdsConfigs {
         private EdsAliyunConfigModel.KMS kms;
         private EdsAliyunConfigModel.DMS dms;
         private EdsAliyunConfigModel.DNS dns;
+        private EdsCommonConfigModel.ACME acme;
     }
 
     @Data
@@ -67,7 +70,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Aws implements HasRegionsModel, HasEdsConfig {
+    public static class Aws implements HasRegions, HasEdsConfig {
         private EdsAwsConfigModel.Cred cred;
         private String regionId;
         private Set<String> regionIds;
@@ -186,7 +189,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Hcs implements HasRegionsModel, HasEdsConfig {
+    public static class Hcs implements HasRegions, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -201,7 +204,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Hwc implements HasRegionsModel, HasEdsConfig {
+    public static class Hwc implements HasRegions, HasEdsConfig {
         private String version;
         // default
         private String regionId;

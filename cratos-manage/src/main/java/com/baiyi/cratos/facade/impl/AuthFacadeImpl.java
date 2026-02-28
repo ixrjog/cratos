@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.common.auth.IAuthProvider;
+import com.baiyi.cratos.common.auth.AuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
 import com.baiyi.cratos.domain.generator.User;
@@ -41,11 +41,16 @@ public class AuthFacadeImpl implements AuthFacade {
 
     @Override
     public LoginVO.Login login(LoginParam.Login loginParam) {
-        IAuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
+        AuthProvider authProvider = Optional.ofNullable(AuthProviderFactory.getProvider(provider))
                 .orElseThrow(() -> new AuthenticationException(
                         AUTHENTICATION_INVALID_IDENTITY_AUTHENTICATION_PROVIDER_CONFIGURATION));
         User user = Optional.ofNullable(userService.getByUsername(loginParam.getUsername()))
                 .orElseThrow(() -> new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD));
+        // 用户名大小写不匹配
+        if (!loginParam.getUsername()
+                .equals(user.getUsername())) {
+            throw new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD);
+        }
         // locked
         if (user.getLocked() != null && user.getLocked()) {
             throw new AuthenticationException(USER_IS_LOCKED);

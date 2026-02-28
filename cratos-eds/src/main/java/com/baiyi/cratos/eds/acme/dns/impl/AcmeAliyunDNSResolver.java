@@ -1,0 +1,110 @@
+package com.baiyi.cratos.eds.acme.dns.impl;
+
+import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
+import com.baiyi.cratos.domain.generator.AcmeDomain;
+import com.baiyi.cratos.eds.acme.dns.BaseAcmeDNSResolver;
+import com.baiyi.cratos.eds.aliyun.repo.AliyunDnsRepo;
+import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
+import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.dnsgoogle.enums.DnsRRType;
+import com.baiyi.cratos.service.EdsAssetService;
+import lombok.extern.slf4j.Slf4j;
+import org.shredzone.acme4j.Order;
+import org.shredzone.acme4j.challenge.Dns01Challenge;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * &#064;Author  baiyi
+ * &#064;Date  2026/2/12 14:32
+ * &#064;Version 1.0
+ */
+@Slf4j
+@Component
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
+public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun, DescribeDomainRecordsResponseBody.Record> {
+
+    public AcmeAliyunDNSResolver(EdsAssetService edsAssetService,
+                                 EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder) {
+        super(edsAssetService, edsInstanceProviderHolderBuilder);
+    }
+
+    @Override
+    public String getZoneId(AcmeDomain acmeDomain) {
+        // 阿里云 DNS 使用域名作为 Zone ID
+        return acmeDomain.getDomain();
+    }
+
+    @Override
+    public void deleteAcmeChallenge(AcmeDomain acmeDomain) {
+        // 获取 Aliyun 配置
+        EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
+        // 查询 DNS 记录
+        List<DescribeDomainRecordsResponseBody.Record> records = findMatchedRecord(
+                acmeDomain, AliyunDnsRepo.describeDomainRecords(
+                        config, acmeDomain.getDomain())
+        );
+        if (CollectionUtils.isEmpty(records)) {
+            return;
+        }
+        // 删除所有匹配的记录
+        for (DescribeDomainRecordsResponseBody.Record record : records) {
+            AliyunDnsRepo.deleteDomainRecord(config, record.getRecordId());
+            log.info("Deleted ACME challenge record: {}", record.getRr());
+        }
+    }
+
+    @Override
+    protected List<DescribeDomainRecordsResponseBody.Record> findMatchedRecord(AcmeDomain acmeDomain,
+                                                                               List<DescribeDomainRecordsResponseBody.Record> records) {
+        Set<String> acmeChallengeRecords = toDomains(acmeDomain).stream()
+                .map(e -> ACME_CHALLENGE_NAME + "." + e)
+                .collect(Collectors.toSet());
+        return records.stream()
+                .filter(record -> "TXT".equals(record.getType()) && acmeChallengeRecords.contains(
+                        buildFullRecordName(record)))
+                .toList();
+    }
+
+    private String buildFullRecordName(DescribeDomainRecordsResponseBody.Record record) {
+        return record.getRr() + "." + record.getDomainName();
+    }
+
+    @Override
+    public void addOrderChallengeRecords(AcmeDomain acmeDomain, Order order) {
+        // 获取 Aliyun 配置
+        EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
+        // 提取所有 DNS Challenge 的 digest 值
+        List<String> recordValues = order.getAuthorizations()
+                .stream()
+                .map(auth -> auth.findChallenge(Dns01Challenge.class))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Dns01Challenge::getDigest)
+                .toList();
+        if (recordValues.isEmpty()) {
+            return;
+        }
+        for (String recordValue : recordValues) {
+            AliyunDnsRepo.addDomainRecord(
+                    config, acmeDomain.getDomain(), ACME_CHALLENGE_NAME, DnsRRType.TXT.name(), recordValue, 600L);
+        }
+    }
+
+    @Override
+    protected void addDcvChallengeRecord(AcmeDomain acmeDomain, String dcvRecordValue) {
+        // 获取 Aliyun 配置
+        EdsConfigs.Aliyun config = getEdsConfig(acmeDomain);
+        AliyunDnsRepo.addDomainRecord(
+                config, acmeDomain.getDomain(), ACME_CHALLENGE_NAME, DnsRRType.CNAME.name(), dcvRecordValue, 600L);
+    }
+
+}

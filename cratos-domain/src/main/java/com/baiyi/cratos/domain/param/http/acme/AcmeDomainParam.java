@@ -2,8 +2,10 @@ package com.baiyi.cratos.domain.param.http.acme;
 
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.param.IToTarget;
+import com.baiyi.cratos.domain.param.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * &#064;Author  baiyi
@@ -30,6 +32,15 @@ public class AcmeDomainParam {
         private String dcvDelegationTarget;
         private Boolean valid;
         private String comment;
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Data
+    @SuperBuilder(toBuilder = true)
+    @NoArgsConstructor
+    @Schema
+    public static class DomainPageQuery extends PageParam {
+        private String queryName;
     }
 
 }

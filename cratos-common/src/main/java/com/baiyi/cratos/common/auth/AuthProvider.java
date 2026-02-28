@@ -9,7 +9,7 @@ import com.baiyi.cratos.domain.view.log.LoginVO;
  * @Date 2024/1/10 13:42
  * @Version 1.0
  */
-public interface IAuthProvider {
+public interface AuthProvider {
 
     String getName();
 

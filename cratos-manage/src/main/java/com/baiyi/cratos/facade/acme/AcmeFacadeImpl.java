@@ -1,24 +1,29 @@
-package com.baiyi.cratos.facade.acme.impl;
+package com.baiyi.cratos.facade.acme;
 
 import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
+import com.baiyi.cratos.common.util.ExpiredUtils;
 import com.baiyi.cratos.common.util.ValidationUtils;
+import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.domain.generator.*;
-import com.baiyi.cratos.domain.model.AcmeDNS;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
 import com.baiyi.cratos.domain.util.JSONUtils;
-import com.baiyi.cratos.eds.acme.AcmeDNSResolver;
-import com.baiyi.cratos.eds.acme.AcmeDNSResolverFactory;
+import com.baiyi.cratos.eds.acme.deploy.AcmeDeployer;
+import com.baiyi.cratos.eds.acme.deploy.AcmeDeployerFactory;
+import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolver;
+import com.baiyi.cratos.eds.acme.dns.AcmeDNSResolverFactory;
 import com.baiyi.cratos.eds.acme.enums.AcmeProviderEnum;
 import com.baiyi.cratos.eds.acme.manager.AcmeCertificateManager;
 import com.baiyi.cratos.eds.acme.manager.SecureAcmeAccountManager;
 import com.baiyi.cratos.eds.acme.model.AcmeModel;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
+import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.dns.DNSResolver;
 import com.baiyi.cratos.eds.dns.DNSResolverFactory;
-import com.baiyi.cratos.facade.acme.AcmeFacade;
 import com.baiyi.cratos.service.EdsInstanceService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.acme.AcmeAccountService;
@@ -34,11 +39,15 @@ import org.shredzone.acme4j.challenge.Dns01Challenge;
 import org.shredzone.acme4j.exception.AcmeException;
 import org.shredzone.acme4j.util.CSRBuilder;
 import org.shredzone.acme4j.util.KeyPairUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URL;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -61,6 +70,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
     private final AcmeDomainService acmeDomainService;
     private final AcmeOrderService acmeOrderService;
     private final AcmeCertificateService acmeCertificateService;
+    private final EdsInstanceQueryHelper edsInstanceQueryHelper;
 
     @Override
     @SetSessionUserToParam(desc = "set CreatedBy")
@@ -145,15 +155,36 @@ public class AcmeFacadeImpl implements AcmeFacade {
                     .orElseThrow(() -> new EdsAcmeException(
                             "DNS-01 challenge not found for domain: " + auth.getIdentifier()
                                     .getDomain()));
-            challenge.trigger();
+
+            // 检查状态，只有 PENDING 才能触发
+            if (challenge.getStatus() == Status.PENDING) {
+                challenge.trigger();
+            } else {
+                log.info("Challenge already triggered, current status: {}", challenge.getStatus());
+            }
+
             // 等待验证完成
             int attempts = 10;
-            while (challenge.getStatus() != Status.VALID && attempts-- > 0) {
+            while (challenge.getStatus() != Status.VALID && challenge.getStatus() != Status.INVALID && attempts-- > 0) {
                 Thread.sleep(3000);
                 challenge.fetch();
             }
+
+            if (challenge.getStatus() == Status.INVALID) {
+                String errorMsg = challenge.getError()
+                        .isPresent() ? challenge.getError()
+                        .toString() : "Unknown error";
+                log.error(
+                        "Challenge validation failed for domain: {}, error: {}", auth.getIdentifier()
+                                .getDomain(), errorMsg
+                );
+                updateAcmeOrderStatus(acmeOrder, Status.INVALID, errorMsg);
+                throw new EdsAcmeException("Challenge validation failed: " + errorMsg);
+            }
+
             if (challenge.getStatus() != Status.VALID) {
-                EdsAcmeException.runtime("Challenge failed: " + challenge.getStatus());
+                updateAcmeOrderStatus(acmeOrder, challenge.getStatus(), "");
+                throw new EdsAcmeException("Challenge failed with status: " + challenge.getStatus());
             }
             log.info(
                     "Challenge completed for domain: {}", auth.getIdentifier()
@@ -163,10 +194,16 @@ public class AcmeFacadeImpl implements AcmeFacade {
         // 更新 Order 状态
         order.fetch();
         if (order.getStatus() == Status.READY) {
-            acmeOrder.setOrderStatus(order.getStatus()
-                                             .name());
-            acmeOrderService.updateByPrimaryKey(acmeOrder);
+            updateAcmeOrderStatus(acmeOrder, order.getStatus(), "");
         }
+    }
+
+    private void updateAcmeOrderStatus(AcmeOrder acmeOrder, Status status, String errorMsg) {
+        acmeOrder.setOrderStatus(status.name());
+        if (StringUtils.hasText(errorMsg)) {
+            acmeOrder.setErrorMessage(errorMsg);
+        }
+        acmeOrderService.updateByPrimaryKey(acmeOrder);
     }
 
     public AcmeCertificate downloadCertificate(Order order, AcmeDomain acmeDomain,
@@ -204,25 +241,30 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
-    public void issueCertificate(int acmeDomainId) throws Exception {
-        AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
-        Order order = createOrderByAcmeDomain(acmeDomainId);
-        AcmeOrder acmeOrder = acmeOrderService.getByOrderUrl(order.getLocation()
-                                                                     .toString());
-        // 1. DNS 验证
-        EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(acmeDomain.getDnsResolverInstanceId());
-        AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
-                acmeDNSResolverInstance.getEdsType());
-        // 查询冲突的 ACME _acme-challenge记录，有则删除
-        AcmeDNS.AcmeChallengeRecord acmeChallengeRecord = acmeDNSResolver.getAcmeChallenge(acmeDomain);
-        if (!acmeChallengeRecord.isNoData()) {
-            acmeDNSResolver.deleteAcmeChallenge(acmeDomain);
+    public void resumeOrderIssuance(AcmeOrder acmeOrder) throws Exception {
+        if (!Status.PENDING.name()
+                .equals(acmeOrder.getOrderStatus())) {
+            // 只有 PENDING 状态才能执行
+            EdsAcmeException.runtime("订单状态不是 PENDING: " + acmeOrder.getOrderStatus());
         }
-        // 添加 DNS Challenge 记录
-        acmeDNSResolver.addOrderChallengeRecords(acmeDomain, order);
-        // 等待 DNS 传播
-        Thread.sleep(30000);
-        // 2. 触发验证
+        if (ExpiredUtils.isExpired(acmeOrder.getExpires())) {
+            EdsAcmeException.runtime("订单已经过期: " + acmeOrder.getExpires());
+        }
+        AcmeAccount acmeAccount = acmeAccountService.getById(acmeOrder.getAccountId());
+        KeyPair accountKeyPair;
+        try (StringReader sr = new StringReader(acmeAccount.getAccountKeyPair())) {
+            accountKeyPair = KeyPairUtils.readKeyPair(sr);
+        }
+        Session session = new Session(acmeAccount.getAcmeServer());
+        Login login = session.login(
+                URI.create(acmeAccount.getAccountUrl())
+                        .toURL(), accountKeyPair
+        );
+        URL orderUrl = URI.create(acmeOrder.getOrderUrl())
+                .toURL();
+        Order order = login.bindOrder(orderUrl);
+        order.fetch();
+        AcmeDomain acmeDomain = acmeDomainService.getById(acmeOrder.getDomainId());
         completeDnsChallenge(order, acmeOrder);
         // 3. 提交 CSR
         submitCsr(acmeDomain, acmeOrder, order);
@@ -242,6 +284,62 @@ public class AcmeFacadeImpl implements AcmeFacade {
         acmeOrder.setCertificateId(acmeCertificate.getId());
         acmeOrderService.updateByPrimaryKey(acmeOrder);
         log.info("Certificate issued successfully for domain: {}", acmeDomain.getDomain());
+        // deploy
+        autoDeployToEdsInstances(acmeCertificate);
+    }
+
+    @Async
+    @Override
+    public void asyncIssueCertificate(int acmeDomainId) {
+        try {
+            this.issueCertificate(acmeDomainId);
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Override
+    public void issueCertificate(int acmeDomainId) throws Exception {
+        AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
+        try {
+            Order order = createOrderByAcmeDomain(acmeDomainId);
+            AcmeOrder acmeOrder = acmeOrderService.getByOrderUrl(order.getLocation()
+                                                                         .toString());
+            // 1. DNS 验证
+            EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(acmeDomain.getDnsResolverInstanceId());
+            AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
+                    acmeDNSResolverInstance.getEdsType());
+            // 删除冲突的 ACME _acme-challenge记录
+            acmeDNSResolver.deleteAcmeChallenge(acmeDomain);
+            // 添加 DNS Challenge 记录
+            acmeDNSResolver.addOrderChallengeRecords(acmeDomain, order);
+            // 等待 DNS 传播
+            Thread.sleep(60000);
+            // 2. 触发验证
+            completeDnsChallenge(order, acmeOrder);
+            // 3. 提交 CSR
+            submitCsr(acmeDomain, acmeOrder, order);
+            // 4. 等待证书签发
+            int attempts = 10;
+            while (order.getStatus() != Status.VALID && attempts-- > 0) {
+                Thread.sleep(3000);
+                order.fetch();
+            }
+            if (order.getStatus() != Status.VALID) {
+                EdsAcmeException.runtime("Certificate issuance failed: " + order.getStatus());
+            }
+            // 5. 下载证书
+            AcmeCertificate acmeCertificate = downloadCertificate(order, acmeDomain, acmeOrder);
+            // 更新 Order 状态为 VALID
+            acmeOrder.setOrderStatus(Status.VALID.name());
+            acmeOrder.setCertificateId(acmeCertificate.getId());
+            acmeOrderService.updateByPrimaryKey(acmeOrder);
+            log.info("Certificate issued successfully for domain: {}", acmeDomain.getDomain());
+            // deploy
+            autoDeployToEdsInstances(acmeCertificate);
+        } finally {
+            // 恢复 DCV
+            recoverDcvDelegation(acmeDomain);
+        }
     }
 
     private Order createOrderByAcmeDomain(int acmeDomainId) throws Exception {
@@ -297,10 +395,38 @@ public class AcmeFacadeImpl implements AcmeFacade {
         return order;
     }
 
+    @Override
+    public void recoverDcvDelegation(AcmeDomain acmeDomain) {
+        EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(acmeDomain.getDnsResolverInstanceId());
+        AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
+                acmeDNSResolverInstance.getEdsType());
+        if (acmeDNSResolver != null) {
+            acmeDNSResolver.recoverDcvDelegation(acmeDomain);
+        }
+    }
+
     private Account getAccount(int acmeAccountId) throws Exception {
         AcmeAccount acmeAccount = acmeAccountService.getById(acmeAccountId);
         return SecureAcmeAccountManager.loadAccount(
                 BeanCopierUtils.copyProperties(acmeAccount, AcmeModel.Account.class));
+    }
+
+    @Override
+    public void autoDeployToEdsInstances(AcmeCertificate acmeCertificate) {
+        for (EdsInstanceTypeEnum acmeType : EdsInstanceTypeEnum.ACME_TYPES) {
+            List<EdsInstance> instances = edsInstanceQueryHelper.queryValidEdsInstance(
+                    acmeType, SysTagKeys.ACME.getKey());
+            for (EdsInstance instance : instances) {
+                AcmeDeployer acmeDeployer = AcmeDeployerFactory.getAcmeDeployer(instance.getEdsType());
+                if (acmeDeployer != null) {
+                    try {
+                        acmeDeployer.deployCert(instance, acmeCertificate);
+                    } catch (Exception ex) {
+                        log.error(ex.getMessage());
+                    }
+                }
+            }
+        }
     }
 
 }

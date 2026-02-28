@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baiyi.cratos.mapper.AcmeDomainMapper">
-  <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.AcmeDomain">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="domain_id" jdbcType="INTEGER" property="domainId" />
-    <result column="domain" jdbcType="VARCHAR" property="domain" />
-    <result column="domains" jdbcType="VARCHAR" property="domains" />
-    <result column="zone_id" jdbcType="VARCHAR" property="zoneId" />
-    <result column="dns_resolver_instance_id" jdbcType="INTEGER" property="dnsResolverInstanceId" />
-    <result column="account_id" jdbcType="INTEGER" property="accountId" />
-    <result column="valid" jdbcType="BIT" property="valid" />
-    <result column="dcv_type" jdbcType="VARCHAR" property="dcvType" />
-    <result column="dcv_delegation_target" jdbcType="VARCHAR" property="dcvDelegationTarget" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.baiyi.cratos.domain.generator.AcmeDomain">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="domain_id" jdbcType="INTEGER" property="domainId"/>
+        <result column="domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="domains" jdbcType="VARCHAR" property="domains"/>
+        <result column="zone_id" jdbcType="VARCHAR" property="zoneId"/>
+        <result column="dns_resolver_instance_id" jdbcType="INTEGER" property="dnsResolverInstanceId"/>
+        <result column="account_id" jdbcType="INTEGER" property="accountId"/>
+        <result column="valid" jdbcType="BIT" property="valid"/>
+        <result column="dcv_type" jdbcType="VARCHAR" property="dcvType"/>
+        <result column="dcv_delegation_target" jdbcType="VARCHAR" property="dcvDelegationTarget"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+
+    <select id="queryPageByParam"
+            parameterType="com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam$DomainPageQuery"
+            resultMap="BaseResultMap">
+        select * from acme_domain
+        <where>
+            <if test="queryName != null and queryName != ''">
+                and ( domain like "%" #{queryName} "%" or name like "%" #{queryName} "%" )
+                order by replace(domain, #{queryName}, '')
+            </if>
+        </where>
+    </select>
+
 </mapper>

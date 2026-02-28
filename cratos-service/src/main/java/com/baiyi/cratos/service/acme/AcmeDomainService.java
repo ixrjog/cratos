@@ -1,6 +1,8 @@
 package com.baiyi.cratos.service.acme;
 
+import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
+import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 import com.baiyi.cratos.mapper.AcmeDomainMapper;
 import com.baiyi.cratos.service.base.BaseUniqueKeyService;
 import com.baiyi.cratos.service.base.BaseValidService;
@@ -11,4 +13,7 @@ import com.baiyi.cratos.service.base.BaseValidService;
  * &#064;Version 1.0
  */
 public interface AcmeDomainService extends BaseValidService<AcmeDomain, AcmeDomainMapper>, BaseUniqueKeyService<AcmeDomain, AcmeDomainMapper> {
+
+    DataTable<AcmeDomain> queryAcmeDomainPage(AcmeDomainParam.DomainPageQuery pageQuery);
+
 }

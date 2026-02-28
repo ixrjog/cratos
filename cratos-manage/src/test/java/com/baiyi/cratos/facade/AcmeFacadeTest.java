@@ -2,12 +2,14 @@ package com.baiyi.cratos.facade;
 
 import com.baiyi.cratos.BaseUnit;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
+import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
 import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
 import com.baiyi.cratos.eds.acme.enums.AcmeProviderEnum;
-import com.baiyi.cratos.facade.acme.AcmeFacade;
+import com.baiyi.cratos.domain.facade.AcmeFacade;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
+import com.baiyi.cratos.service.acme.AcmeDomainService;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class AcmeFacadeTest extends BaseUnit {
 
     @Autowired
     private AcmeCertificateService acmeCertificateService;
+
+    @Autowired
+    private AcmeDomainService acmeDomainService;
 
     @Test
     void test1() {
@@ -54,7 +59,19 @@ public class AcmeFacadeTest extends BaseUnit {
 
     @Test
     void test3() throws Exception {
-        acmeFacade.issueCertificate(2);
+        acmeFacade.issueCertificate(4);
+    }
+
+    @Test
+    void test31() throws Exception {
+        AcmeOrder acmeOrder = acmeOrderService.getById(9);
+        acmeFacade.resumeOrderIssuance(acmeOrder);
+    }
+
+    @Test
+    void recoverDcvDelegationTest() throws Exception {
+        AcmeDomain acmeDomain = acmeDomainService.getById(1);
+        acmeFacade.recoverDcvDelegation(acmeDomain);
     }
 
     @Test
@@ -66,7 +83,7 @@ public class AcmeFacadeTest extends BaseUnit {
 
     @Test
     void test5() {
-        AcmeCertificate acmeCertificate =  acmeCertificateService.getById(2);
+        AcmeCertificate acmeCertificate = acmeCertificateService.getById(2);
 
         System.out.println("Certificate:");
 

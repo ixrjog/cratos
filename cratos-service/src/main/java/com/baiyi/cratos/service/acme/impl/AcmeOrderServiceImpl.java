@@ -4,12 +4,15 @@ import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.mapper.AcmeOrderMapper;
 import com.baiyi.cratos.service.acme.AcmeOrderService;
 import com.baiyi.cratos.service.base.BaseService;
+import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 import static com.baiyi.cratos.common.configuration.CachingConfiguration.RepositoryName.LONG_TERM;
 
@@ -44,6 +47,16 @@ public class AcmeOrderServiceImpl implements AcmeOrderService {
             return null;
         }
         return (AcmeOrder) ((BaseService<?, ?>) AopContext.currentProxy()).getById(acmeOrder.getId());
+    }
+
+    @Override
+    public List<AcmeOrder> queryByDomainId(int domainId, int length) {
+         PageHelper.startPage(1, length);
+        Example example = new Example(AcmeOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("domainId", domainId);
+        example.setOrderByClause("id DESC");
+        return acmeOrderMapper.selectByExample(example);
     }
 
 }
