@@ -116,17 +116,31 @@
     </appender>
 
     <!-- Syslog Appender -->
-    <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-        <syslogHost>wazuh.palmpaybd.com</syslogHost>
-        <port>514</port>
-        <facility>LOCAL0</facility>
-        <suffixPattern>[cratos] %msg</suffixPattern>
-    </appender>
-
-    <!-- 安全日志 Logger -->
-    <logger name="SECURITY" level="INFO" additivity="false">
-        <appender-ref ref="SYSLOG"/>
-    </logger>
+    <springProperty scope="context" name="syslogEnabled" source="syslog.enabled" defaultValue="false"/>
+    <springProperty scope="context" name="syslogHost" source="syslog.host" defaultValue="localhost"/>
+    <springProperty scope="context" name="syslogPort" source="syslog.port" defaultValue="514"/>
+    
+    <if condition='property("syslogEnabled").equals("true")'>
+        <then>
+            <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+                <syslogHost>${syslogHost}</syslogHost>
+                <port>${syslogPort}</port>
+                <facility>LOCAL0</facility>
+                <suffixPattern>[cratos] %msg</suffixPattern>
+            </appender>
+            
+            <!-- 安全日志 Logger -->
+            <logger name="SECURITY" level="INFO" additivity="false">
+                <appender-ref ref="SYSLOG"/>
+            </logger>
+        </then>
+        <else>
+            <!-- 安全日志 Logger (Syslog disabled) -->
+            <logger name="SECURITY" level="INFO" additivity="false">
+                <appender-ref ref="ASYNC_CONSOLE"/>
+            </logger>
+        </else>
+    </if>
 
     <!-- SSH 认证日志 Logger -->
     <logger name="com.baiyi.cratos.shell.auth.SshShellPasswordAuthenticationProvider" level="INFO" additivity="false">

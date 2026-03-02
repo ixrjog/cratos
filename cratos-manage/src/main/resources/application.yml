@@ -6,6 +6,11 @@ logging:
       console: ecs
       file: ecs
 
+syslog:
+  enabled: true
+  host: wazuh.palmpaybd.com
+  port: 514
+
 spring:
   application:
     name: cratos
