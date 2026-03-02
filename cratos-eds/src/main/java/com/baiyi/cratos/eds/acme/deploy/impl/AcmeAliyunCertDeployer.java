@@ -1,11 +1,8 @@
 package com.baiyi.cratos.eds.acme.deploy.impl;
 
-import com.baiyi.cratos.common.util.PasswordGenerator;
-import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.EdsInstance;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.acme.deploy.BaseAcmeDeployer;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -24,14 +21,14 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_DOMAIN)
-public class AcmeAliyunDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> {
+@EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_CERT)
+public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> {
 
     private final AliyunCertRepo aliyunCertRepo;
     private final AcmeDomainService acmeDomainService;
 
-    public AcmeAliyunDeployer(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
-                              AliyunCertRepo aliyunCertRepo, AcmeDomainService acmeDomainService) {
+    public AcmeAliyunCertDeployer(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
+                                  AliyunCertRepo aliyunCertRepo, AcmeDomainService acmeDomainService) {
         super(edsInstanceProviderHolderBuilder);
         this.aliyunCertRepo = aliyunCertRepo;
         this.acmeDomainService = acmeDomainService;
@@ -44,18 +41,16 @@ public class AcmeAliyunDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> {
         if (!findDomain(aliyun, acmeDomain.getDomain())) {
             return;
         }
-        String cert = acmeCertificate.getCertificate() + "\n" + acmeCertificate.getCertificateChain();
-        String certName = StringFormatter.arrayFormat(
-                CERT_NAME_TPL, PasswordGenerator.generateTicketNo(),
-                TimeUtils.parse(acmeCertificate.getNotAfter(), "yyyy-MM-dd")
-        );
+        String cert = mergeCertificatesAndCertificateChains(acmeCertificate);
+        String certName = generateCertName(acmeCertificate);
         try {
             aliyunCertRepo.uploadUserCertificate(aliyun, certName, cert, acmeCertificate.getPrivateKey());
             log.info(
                     "Upload certificate {} {} to {}", certName, acmeCertificate.getDomains(),
                     edsInstance.getInstanceName()
             );
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
         }
     }
 

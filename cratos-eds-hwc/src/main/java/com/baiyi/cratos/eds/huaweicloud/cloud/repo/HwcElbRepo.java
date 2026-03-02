@@ -5,10 +5,7 @@ import com.baiyi.cratos.eds.huaweicloud.cloud.client.HwcElbClientBuilder;
 import com.google.common.collect.Lists;
 import com.huaweicloud.sdk.core.exception.ServiceResponseException;
 import com.huaweicloud.sdk.elb.v3.ElbClient;
-import com.huaweicloud.sdk.elb.v3.model.CertificateInfo;
-import com.huaweicloud.sdk.elb.v3.model.ListCertificatesRequest;
-import com.huaweicloud.sdk.elb.v3.model.ListCertificatesResponse;
-import com.huaweicloud.sdk.elb.v3.model.PageInfo;
+import com.huaweicloud.sdk.elb.v3.model.*;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -49,6 +46,22 @@ public class HwcElbRepo {
             }
         }
         return certificatesList;
+    }
+
+    public static CertificateInfo createCertificate(String regionId, EdsConfigs.Hwc huaweicloud, String certName,
+                                                    String domain, String cert, String privateKey) {
+        ElbClient client = HwcElbClientBuilder.buildElbClient(regionId, huaweicloud);
+        CreateCertificateOption certificate = new CreateCertificateOption().withName(certName)
+                .withCertificate(cert)
+                .withDomain(domain)
+                .withPrivateKey(privateKey)
+                .withType(CreateCertificateOption.TypeEnum.SERVER);
+
+        CreateCertificateRequestBody body = new CreateCertificateRequestBody().withCertificate(certificate);
+        CreateCertificateRequest request = new CreateCertificateRequest().withBody(body);
+        return Optional.ofNullable(client.createCertificate(request))
+                .map(CreateCertificateResponse::getCertificate)
+                .orElse(null);
     }
 
 }

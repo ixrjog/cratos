@@ -69,7 +69,7 @@ public class AcmeAliyunDNSResolver extends BaseAcmeDNSResolver<EdsConfigs.Aliyun
                 .map(e -> ACME_CHALLENGE_NAME + "." + e)
                 .collect(Collectors.toSet());
         return records.stream()
-                .filter(record -> "TXT".equals(record.getType()) && acmeChallengeRecords.contains(
+                .filter(record -> isCnameOrTxtRecord(record.getType()) && acmeChallengeRecords.contains(
                         buildFullRecordName(record)))
                 .toList();
     }

@@ -1,6 +1,10 @@
 package com.baiyi.cratos.eds.acme.deploy;
 
+import com.baiyi.cratos.common.util.PasswordGenerator;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.base.HasAcme;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
 import com.baiyi.cratos.eds.core.config.model.common.EdsCommonConfigModel;
@@ -21,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public abstract class BaseAcmeDeployer<Config extends HasEdsConfig> implements AcmeDeployer {
 
-    public static final String CERT_NAME_TPL = "{}-expires-{}";
+    public static final String CERT_NAME_TPL = "{}-{}-expires-{}";
 
     protected final EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder;
 
@@ -39,6 +43,37 @@ public abstract class BaseAcmeDeployer<Config extends HasEdsConfig> implements A
                 .map(EdsCommonConfigModel.ACME::getDomains)
                 .orElse(List.of());
         return domains.contains("*") || domains.contains(domain);
+    }
+
+    protected String generateCertName(AcmeCertificate acmeCertificate) {
+        return StringFormatter.arrayFormat(
+                CERT_NAME_TPL, PasswordGenerator.generateTicketNo(), extractPrimaryDomain(acmeCertificate.getDomains()),
+                TimeUtils.parse(acmeCertificate.getNotAfter(), "yyyy-MM-dd")
+        );
+    }
+
+    protected String extractPrimaryDomain(String domains) {
+        if (domains == null || domains.isEmpty()) {
+            return domains;
+        }
+        String[] domainArray = domains.split(",");
+        // 单个域名直接返回
+        if (domainArray.length == 1) {
+            return domainArray[0].trim();
+        }
+        // 查找通配符域名
+        for (String domain : domainArray) {
+            String trimmed = domain.trim();
+            if (trimmed.startsWith("*.")) {
+                return trimmed;
+            }
+        }
+        // 返回第一个域名
+        return domainArray[0].trim();
+    }
+
+    protected String mergeCertificatesAndCertificateChains(AcmeCertificate acmeCertificate) {
+        return acmeCertificate.getCertificate() + "\n" + acmeCertificate.getCertificateChain();
     }
 
 }

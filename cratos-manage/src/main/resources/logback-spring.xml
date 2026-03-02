@@ -115,6 +115,19 @@
         </rollingPolicy>
     </appender>
 
+    <!-- Syslog Appender -->
+    <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>wazuh.palmpaybd.com</syslogHost>
+        <port>514</port>
+        <facility>LOCAL0</facility>
+        <suffixPattern>[cratos] %msg</suffixPattern>
+    </appender>
+
+    <!-- 安全日志 Logger -->
+    <logger name="SECURITY" level="INFO" additivity="false">
+        <appender-ref ref="SYSLOG"/>
+    </logger>
+
     <!-- SSH 认证日志 Logger -->
     <logger name="com.baiyi.cratos.shell.auth.SshShellPasswordAuthenticationProvider" level="INFO" additivity="false">
         <appender-ref ref="SSH_AUTH_FILE"/>

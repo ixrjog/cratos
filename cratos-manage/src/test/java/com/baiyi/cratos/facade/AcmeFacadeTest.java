@@ -75,6 +75,11 @@ public class AcmeFacadeTest extends BaseUnit {
     }
 
     @Test
+    void test33() {
+        acmeFacade.autoDeployToEdsInstances(9);
+    }
+
+    @Test
     void test4() {
 
         AcmeOrder acmeOrder = acmeOrderService.getById(1);

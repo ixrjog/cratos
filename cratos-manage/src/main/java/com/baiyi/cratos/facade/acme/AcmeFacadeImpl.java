@@ -226,7 +226,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
         X509Certificate x509Cert = chain.getFirst(); // 第一个是域名证书
         AcmeCertificate acmeCertificate = AcmeCertificate.builder()
                 .accountId(acmeDomain.getAccountId())
-                .domainId(acmeDomain.getDomainId())
+                .domainId(acmeDomain.getId())
                 .orderId(acmeOrder.getId())
                 .domains(acmeDomain.getDomains())
                 .certificate(certPem)
@@ -265,6 +265,9 @@ public class AcmeFacadeImpl implements AcmeFacade {
         Order order = login.bindOrder(orderUrl);
         order.fetch();
         AcmeDomain acmeDomain = acmeDomainService.getById(acmeOrder.getDomainId());
+        if (acmeDomain == null) {
+            EdsAcmeException.runtime("AcmeDomain not found for domainId: " + acmeOrder.getDomainId());
+        }
         completeDnsChallenge(order, acmeOrder);
         // 3. 提交 CSR
         submitCsr(acmeDomain, acmeOrder, order);
@@ -285,7 +288,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
         acmeOrderService.updateByPrimaryKey(acmeOrder);
         log.info("Certificate issued successfully for domain: {}", acmeDomain.getDomain());
         // deploy
-        autoDeployToEdsInstances(acmeCertificate);
+        autoDeployToEdsInstances(acmeCertificate.getId());
     }
 
     @Async
@@ -298,8 +301,11 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
-    public void issueCertificate(int acmeDomainId) throws Exception {
+    public void issueCertificate(int acmeDomainId)  {
         AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
+        if (acmeDomain == null) {
+            EdsAcmeException.runtime("AcmeDomain not found for domainId: " + acmeDomainId);
+        }
         try {
             Order order = createOrderByAcmeDomain(acmeDomainId);
             AcmeOrder acmeOrder = acmeOrderService.getByOrderUrl(order.getLocation()
@@ -335,7 +341,9 @@ public class AcmeFacadeImpl implements AcmeFacade {
             acmeOrderService.updateByPrimaryKey(acmeOrder);
             log.info("Certificate issued successfully for domain: {}", acmeDomain.getDomain());
             // deploy
-            autoDeployToEdsInstances(acmeCertificate);
+            autoDeployToEdsInstances(acmeCertificate.getId());
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
         } finally {
             // 恢复 DCV
             recoverDcvDelegation(acmeDomain);
@@ -412,21 +420,25 @@ public class AcmeFacadeImpl implements AcmeFacade {
     }
 
     @Override
-    public void autoDeployToEdsInstances(AcmeCertificate acmeCertificate) {
-        for (EdsInstanceTypeEnum acmeType : EdsInstanceTypeEnum.ACME_TYPES) {
-            List<EdsInstance> instances = edsInstanceQueryHelper.queryValidEdsInstance(
-                    acmeType, SysTagKeys.ACME.getKey());
-            for (EdsInstance instance : instances) {
-                AcmeDeployer acmeDeployer = AcmeDeployerFactory.getAcmeDeployer(instance.getEdsType());
-                if (acmeDeployer != null) {
-                    try {
-                        acmeDeployer.deployCert(instance, acmeCertificate);
-                    } catch (Exception ex) {
-                        log.error(ex.getMessage());
-                    }
-                }
-            }
+    public void autoDeployToEdsInstances(int acmeCertificateId) {
+        AcmeCertificate acmeCertificate = acmeCertificateService.getById(acmeCertificateId);
+        if (acmeCertificate == null) {
+            return;
         }
+
+        EdsInstanceTypeEnum.ACME_TYPES.stream()
+                .map(acmeType -> edsInstanceQueryHelper.queryValidEdsInstance(acmeType, SysTagKeys.ACME.getKey()))
+                .flatMap(Collection::stream)
+                .forEach(instance -> {
+                    AcmeDeployer acmeDeployer = AcmeDeployerFactory.getAcmeDeployer(instance.getEdsType());
+                    if (acmeDeployer != null) {
+                        try {
+                            acmeDeployer.deployCert(instance, acmeCertificate);
+                        } catch (Exception ex) {
+                            log.error(ex.getMessage());
+                        }
+                    }
+                });
     }
 
 }

@@ -4,8 +4,8 @@ import com.baiyi.cratos.domain.generator.EdsInstance;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.config.base.HasAcme;
 import com.baiyi.cratos.eds.core.config.base.HasDnsNameServers;
-import com.baiyi.cratos.eds.core.config.base.HasRegions;
 import com.baiyi.cratos.eds.core.config.base.HasEdsConfig;
+import com.baiyi.cratos.eds.core.config.base.HasRegions;
 import com.baiyi.cratos.eds.core.config.model.*;
 import com.baiyi.cratos.eds.core.config.model.common.EdsCommonConfigModel;
 import com.google.common.base.Joiner;
@@ -204,7 +204,7 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
-    public static class Hwc implements HasRegions, HasEdsConfig {
+    public static class Hwc implements HasRegions, HasAcme, HasEdsConfig {
         private String version;
         // default
         private String regionId;
@@ -214,6 +214,7 @@ public class EdsConfigs {
         private List<EdsHwcConfigModel.Project> projects;
         private EdsInstance edsInstance;
         private EdsHwcConfigModel.IAM iam;
+        private EdsCommonConfigModel.ACME acme;
     }
 
     @Data

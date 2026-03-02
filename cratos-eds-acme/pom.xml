@@ -30,7 +30,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
@@ -41,7 +40,6 @@
             <artifactId>bcpkix-jdk18on</artifactId>
             <version>1.78.1</version>
         </dependency>
-
         <!-- Source: https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j -->
         <!--        <dependency>-->
         <!--            <groupId>org.shredzone.acme4j</groupId>-->

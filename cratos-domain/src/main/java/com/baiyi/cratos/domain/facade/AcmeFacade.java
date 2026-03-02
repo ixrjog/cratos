@@ -1,6 +1,5 @@
 package com.baiyi.cratos.domain.facade;
 
-import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.AcmeOrder;
 import com.baiyi.cratos.domain.param.http.acme.AcmeAccountParam;
@@ -17,7 +16,7 @@ public interface AcmeFacade {
 
     void addAcmeDomain(AcmeDomainParam.AddDomain addDomain);
 
-    void issueCertificate(int acmeDomainId) throws Exception;
+    void issueCertificate(int acmeDomainId);
 
     void asyncIssueCertificate(int acmeDomainId);
 
@@ -25,6 +24,6 @@ public interface AcmeFacade {
 
     void recoverDcvDelegation(AcmeDomain acmeDomain);
 
-    void autoDeployToEdsInstances(AcmeCertificate acmeCertificate);
+    void autoDeployToEdsInstances(int acmeCertificateId);
 
 }
