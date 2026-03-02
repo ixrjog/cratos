@@ -3,6 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.auth.AuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
+import com.baiyi.cratos.common.util.SecurityLogger;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
@@ -63,6 +64,10 @@ public class AuthFacadeImpl implements AuthFacade {
                 .build();
         userService.updateByPrimaryKeySelective(loginUser);
         login.setUsername(loginParam.getUsername());
+        SecurityLogger.log(
+                SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_SUCCESS,
+                "User login Cratos"
+        );
         return login;
     }
 
@@ -72,7 +77,13 @@ public class AuthFacadeImpl implements AuthFacade {
                 .map(SecurityContext::getAuthentication)
                 .map(Principal::getName)
                 .filter(StringUtils::hasText)
-                .ifPresent(userTokenFacade::logout);
+                .ifPresent(username -> {
+                    userTokenFacade.logout(username);
+                    SecurityLogger.log(
+                            SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGOUT,
+                            "User logout Cratos"
+                    );
+                });
     }
 
 }

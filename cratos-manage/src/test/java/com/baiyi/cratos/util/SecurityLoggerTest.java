@@ -14,12 +14,8 @@ public class SecurityLoggerTest extends BaseUnit {
     @Test
     void logTest() {
         //     public static void log(String eventType, String user, String action, String resource) {
-
-
-        SecurityLogger.log("LOGIN", "baiyi", "login_success", "User login Cratos");
-
+        SecurityLogger.log(
+                SecurityLogger.EventType.LOGIN, "baiyi", SecurityLogger.Action.LOGIN_SUCCESS, "User login Cratos");
         SecurityLogger.log("LOGIN", "baiyi", "login_success", "User login Cratos SSH-Server");
-
-
     }
 }

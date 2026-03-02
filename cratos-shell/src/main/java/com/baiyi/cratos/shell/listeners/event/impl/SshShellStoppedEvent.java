@@ -1,11 +1,16 @@
 package com.baiyi.cratos.shell.listeners.event.impl;
 
+import com.baiyi.cratos.common.util.SecurityLogger;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.listeners.SshShellEvent;
 import com.baiyi.cratos.shell.listeners.SshShellEventType;
 import com.baiyi.cratos.shell.listeners.event.BaseSshShellEvent;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
+import org.apache.sshd.common.auth.UsernameHolder;
+import org.apache.sshd.server.channel.ServerChannel;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -26,6 +31,15 @@ public class SshShellStoppedEvent extends BaseSshShellEvent {
 
     @Override
     public void handle(SshShellEvent event) {
+        Optional.of(event)
+                .map(SshShellEvent::getSession)
+                .map(ServerChannel::getServerSession)
+                .map(UsernameHolder::getUsername)
+                .ifPresent(username -> SecurityLogger.log(
+                        SecurityLogger.EventType.LOGOUT, event.getSession()
+                                .getServerSession()
+                                .getUsername(), SecurityLogger.Action.LOGOUT, "User logoutCratos SSH-Server"
+                ));
         endSession(event);
         this.destroySessionData(event);
     }

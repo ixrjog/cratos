@@ -2,6 +2,7 @@ package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.SecurityLogger;
 import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.business.BusinessParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -21,7 +23,10 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.service.CredentialService;
+import com.baiyi.cratos.service.EdsConfigService;
+import com.baiyi.cratos.service.NotificationTemplateService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.*;
 import com.baiyi.cratos.shell.annotation.ClearScreen;
 import com.baiyi.cratos.shell.annotation.ShellAuthentication;
@@ -31,7 +36,6 @@ import com.baiyi.cratos.shell.command.custom.handler.TerminalSignalHandler;
 import com.baiyi.cratos.shell.context.ComputerAssetContext;
 import com.baiyi.cratos.shell.util.MyLineMarkdownUtils;
 import com.baiyi.cratos.shell.util.TerminalUtils;
-import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.core.auditor.ServerCommandAuditor;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
@@ -43,6 +47,7 @@ import com.baiyi.cratos.ssh.core.model.HostSystem;
 import com.baiyi.cratos.ssh.core.model.JSchSession;
 import com.baiyi.cratos.ssh.core.model.JSchSessionHolder;
 import com.baiyi.cratos.ssh.core.model.SshSessionIdMapper;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.sshd.common.SshException;
@@ -200,6 +205,13 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                             asset.getName()
                     );
                     sendUserLoginServerNotice(msg);
+                    SecurityLogger.log(
+                            SecurityLogger.EventType.LOGIN, helper.getSshSession()
+                                    .getUsername(), SecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
+                                    "SSH login to server {} ({}@{}) via Cratos SSH-Server", asset.getName(),
+                                    serverAccount.getUsername(), asset.getAssetKey()
+                            )
+                    );
                 } catch (IOException ignored) {
                 }
                 // open ssh
@@ -238,6 +250,13 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 }
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
                 serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
+                SecurityLogger.log(
+                        SecurityLogger.EventType.LOGOUT, helper.getSshSession()
+                                .getUsername(), SecurityLogger.Action.LOGOUT, StringFormatter.arrayFormat(
+                                "SSH logout to server {} ({}@{}) via Cratos SSH-Server", asset.getName(),
+                                serverAccount.getUsername(), asset.getAssetKey()
+                        )
+                );
             }
         } catch (SshException ex) {
             log.debug(ex.getMessage());

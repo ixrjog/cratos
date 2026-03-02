@@ -1,16 +1,17 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.SecurityLogger;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.*;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
-import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
 import com.baiyi.cratos.ssh.core.builder.SshSessionInstanceBuilder;
 import com.baiyi.cratos.ssh.core.config.SshAuditProperties;
@@ -19,6 +20,7 @@ import com.baiyi.cratos.ssh.core.enums.SshSessionInstanceTypeEnum;
 import com.baiyi.cratos.ssh.core.facade.SimpleSshSessionFacade;
 import com.baiyi.cratos.ssh.core.message.SshCrystalMessage;
 import com.baiyi.cratos.ssh.core.model.HostSystem;
+import com.baiyi.cratos.ssh.core.proxy.SshProxyHostHolder;
 import com.baiyi.cratos.ssh.crystal.access.ServerAccessControlFacade;
 import com.baiyi.cratos.ssh.crystal.annotation.MessageStates;
 import com.baiyi.cratos.ssh.crystal.handler.base.BaseSshCrystalOpenMessageHandler;
@@ -107,6 +109,13 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             openSshCrystal(sshSession, targetSystem, proxySystem);
             // 发送登录通知
             sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
+            // syslog
+            SecurityLogger.log(
+                    SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
+                            "SSH login to server {} ({}@{}) via Cratos Crystal", server.getName(),
+                            targetSystem.getLoginUsername(),server.getAssetKey()
+                    )
+            );
         } catch (Exception e) {
             sendHostSystemErrMsgToSession(
                     session, sshSession.getSessionId(), openMessage.getInstanceId(),

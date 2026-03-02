@@ -2,6 +2,7 @@ package com.baiyi.cratos.ssh.kubernetes.handler;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.SecurityLogger;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -14,6 +15,7 @@ import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.param.http.env.EnvParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.socket.kubernetes.KubernetesContainerTerminalParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.env.EnvVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -80,7 +82,8 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                                              EdsInstanceService edsInstanceService,
                                              SshAuditProperties sshAuditProperties, PodCommandAuditor podCommandAuditor,
                                              AccessControlFacade accessControlFacade,
-                                             ApplicationService applicationService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                             ApplicationService applicationService,
+                                             EdsInstanceQueryHelper edsInstanceQueryHelper,
                                              EdsConfigService edsConfigService, DingtalkService dingtalkService,
                                              NotificationTemplateService notificationTemplateService,
                                              UserService userService, EnvFacade envFacade) {
@@ -151,7 +154,17 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                             SshSessionInstanceTypeEnum.CONTAINER_SHELL,
                             auditPath
                     );
+                    // dingtalk
                     sendUserLoginContainerNotice(username, deployment, pod);
+                    // syslog
+                    SecurityLogger.log(
+                            SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGIN_SUCCESS,
+                            StringFormatter.arrayFormat(
+                                    "Login to kubernetes pod {} (cluster:{} namespace:{} deployment:{}) via Cratos Kubernetes",
+                                    pod.getName(), deployment.getKubernetesClusterName(), pod.getNamespace(),
+                                    deployment.getName()
+                            )
+                    );
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                     kubernetesRemoteInvokeHandler.handeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);
@@ -244,7 +257,10 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                         .put("loginUser", UserDisplayUtils.getDisplayName(loginUser))
                         .put("kubernetesClusterName", deployment.getKubernetesClusterName())
                         .put("podName", pod.getName())
-                        .put("containerName", pod.getContainer().getName())
+                        .put(
+                                "containerName", pod.getContainer()
+                                        .getName()
+                        )
                         .put("namespace", pod.getNamespace())
                         .put("loginTime", TimeUtils.parse(new Date(), Global.ISO8601))
                         .build()
@@ -255,9 +271,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
     @SuppressWarnings("unchecked")
     private void sendUserLoginContainerNotice(DingtalkRobotModel.Msg message) {
         List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
-                EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                SysTagKeys.INSPECTION_NOTIFICATION.getKey()
-        );
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;
