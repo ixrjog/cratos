@@ -93,12 +93,12 @@ public class SshShellConfiguration {
         server.setShellFactory(channelSession -> shellCommandFactory);
         server.setCommandFactory((channelSession, s) -> shellCommandFactory);
         // 排除有问题的后量子算法 sntrup761x25519-sha512
-        server.setKeyExchangeFactories(
-                org.apache.sshd.server.ServerBuilder.setUpDefaultKeyExchanges(false)
-                        .stream()
-                        .filter(f -> !f.getName().contains("sntrup"))
-                        .toList()
-        );
+//        server.setKeyExchangeFactories(
+//                org.apache.sshd.server.ServerBuilder.setUpDefaultKeyExchanges(false)
+//                        .stream()
+//                        .filter(f -> !f.getName().contains("sntrup"))
+//                        .toList()
+//        );
         return server;
     }
 
