@@ -132,8 +132,6 @@ public class AcmeFacadeImpl implements AcmeFacade {
         if (keyPairPem == null || keyPairPem.isEmpty()) {
             EdsAcmeException.runtime("Domain key pair is empty.");
         }
-        // log.info("Key pair PEM length: {}", keyPairPem.length());
-        // log.info("Key pair PEM preview: {}", keyPairPem.substring(0, Math.min(100, keyPairPem.length())));
         KeyPair domainKeyPair;
         try (StringReader sr = new StringReader(keyPairPem)) {
             domainKeyPair = KeyPairUtils.readKeyPair(sr);
@@ -148,8 +146,15 @@ public class AcmeFacadeImpl implements AcmeFacade {
         order.execute(csrb.getEncoded());
     }
 
+    /**
+     * 2. 触发验证
+     *
+     * @param order
+     * @param acmeOrder
+     * @throws AcmeException
+     * @throws InterruptedException
+     */
     public void completeDnsChallenge(Order order, AcmeOrder acmeOrder) throws AcmeException, InterruptedException {
-        // 2. 触发验证
         for (Authorization auth : order.getAuthorizations()) {
             Dns01Challenge challenge = (Dns01Challenge) auth.findChallenge(Dns01Challenge.TYPE)
                     .orElseThrow(() -> new EdsAcmeException(
@@ -296,12 +301,13 @@ public class AcmeFacadeImpl implements AcmeFacade {
     public void asyncIssueCertificate(int acmeDomainId) {
         try {
             this.issueCertificate(acmeDomainId);
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
         }
     }
 
     @Override
-    public void issueCertificate(int acmeDomainId)  {
+    public void issueCertificate(int acmeDomainId) {
         AcmeDomain acmeDomain = acmeDomainService.getById(acmeDomainId);
         if (acmeDomain == null) {
             EdsAcmeException.runtime("AcmeDomain not found for domainId: " + acmeDomainId);
@@ -318,7 +324,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
             acmeDNSResolver.deleteAcmeChallenge(acmeDomain);
             // 添加 DNS Challenge 记录
             acmeDNSResolver.addOrderChallengeRecords(acmeDomain, order);
-            // 等待 DNS 传播
+            // 等待 DNS 传播(1m)
             Thread.sleep(60000);
             // 2. 触发验证
             completeDnsChallenge(order, acmeOrder);
@@ -344,6 +350,10 @@ public class AcmeFacadeImpl implements AcmeFacade {
             autoDeployToEdsInstances(acmeCertificate.getId());
         } catch (Exception ex) {
             log.error(ex.getMessage());
+            if (ex instanceof InterruptedException) {
+                Thread.currentThread()
+                        .interrupt();
+            }
         } finally {
             // 恢复 DCV
             recoverDcvDelegation(acmeDomain);
@@ -425,7 +435,6 @@ public class AcmeFacadeImpl implements AcmeFacade {
         if (acmeCertificate == null) {
             return;
         }
-
         EdsInstanceTypeEnum.ACME_TYPES.stream()
                 .map(acmeType -> edsInstanceQueryHelper.queryValidEdsInstance(acmeType, SysTagKeys.ACME.getKey()))
                 .flatMap(Collection::stream)

@@ -2,7 +2,6 @@ package com.baiyi.cratos.domain.generator;
 
 import com.baiyi.cratos.domain.HasIntegerPrimaryKey;
 import com.baiyi.cratos.domain.annotation.EncryptedDomain;
-import com.baiyi.cratos.domain.annotation.FieldEncrypt;
 import com.baiyi.cratos.domain.generator.base.HasValid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,18 +14,18 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 表名：acme_certificate
- * 表注释：ACME证书表
+ * 表名：acme_certificate_deployment
+ * 表注释：ACME证书部署表
 */
 @Data
 @Builder
 @EncryptedDomain
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "acme_certificate")
-public class AcmeCertificate implements HasValid, HasIntegerPrimaryKey, Serializable {
+@Table(name = "acme_certificate_deployment")
+public class AcmeCertificateDeployment implements HasValid, HasIntegerPrimaryKey, Serializable {
     @Serial
-    private static final long serialVersionUID = -6235273906282746657L;
+    private static final long serialVersionUID = 6110694288529680722L;
     /**
      * 主键
      */
@@ -35,22 +34,36 @@ public class AcmeCertificate implements HasValid, HasIntegerPrimaryKey, Serializ
     private Integer id;
 
     /**
-     * ACME账户ID
+     * 外部数据源实例ID
      */
-    @Column(name = "account_id")
-    private Integer accountId;
+    @Column(name = "eds_instance_id")
+    private Integer edsInstanceId;
 
     /**
-     * 域名ID
+     * 外部数据源实例名称
      */
-    @Column(name = "domain_id")
-    private Integer domainId;
+    @Column(name = "eds_instance_name")
+    private String edsInstanceName;
 
     /**
-     * 订单ID
+     * 外部数据源证书ID
      */
-    @Column(name = "order_id")
-    private Integer orderId;
+    @Column(name = "eds_certificate_id")
+    private String edsCertificateId;
+
+    /**
+     * 外部数据源证书名称
+     */
+    @Column(name = "eds_certificate_name")
+    private String edsCertificateName;
+
+    /**
+     * ACME证书ID
+     */
+    @Column(name = "certificate_id")
+    private Integer certificateId;
+
+    private String domain;
 
     /**
      * 域名列表(逗号分隔)
@@ -70,17 +83,6 @@ public class AcmeCertificate implements HasValid, HasIntegerPrimaryKey, Serializ
     private Date notAfter;
 
     /**
-     * 证书序列号
-     */
-    @Column(name = "serial_number")
-    private String serialNumber;
-
-    /**
-     * 签发者
-     */
-    private String issuer;
-
-    /**
      * 是否有效
      */
     private Boolean valid;
@@ -97,21 +99,6 @@ public class AcmeCertificate implements HasValid, HasIntegerPrimaryKey, Serializ
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 证书内容(PEM格式)
-     */
-    private String certificate;
-
-    /**
-     * 完整证书链
-     */
-    @Column(name = "certificate_chain")
-    private String certificateChain;
-
-    /**
-     * 私钥(加密存储)
-     */
-    @Column(name = "private_key")
-    @FieldEncrypt
-    private String privateKey;
+    @Column(name = "deployment_details")
+    private String deploymentDetails;
 }

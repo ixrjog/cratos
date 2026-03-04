@@ -21,7 +21,6 @@ public class SecurityLogger {
 
     private static final Logger SECURITY = LoggerFactory.getLogger("SECURITY");
 
-
     public interface Action {
         String LOGIN_SUCCESS = "login_success";
         String LOGIN_FAILED = "login_failed";

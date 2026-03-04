@@ -50,10 +50,18 @@ public class AuthFacadeImpl implements AuthFacade {
         // 用户名大小写不匹配
         if (!loginParam.getUsername()
                 .equals(user.getUsername())) {
+            SecurityLogger.log(
+                    SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_FAILED,
+                    "User login failed Cratos"
+            );
             throw new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD);
         }
         // locked
         if (user.getLocked() != null && user.getLocked()) {
+            SecurityLogger.log(
+                    SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_FAILED,
+                    "User login failed Cratos"
+            );
             throw new AuthenticationException(USER_IS_LOCKED);
         }
         LoginVO.Login login = authProvider.login(loginParam, user);

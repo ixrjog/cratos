@@ -40,6 +40,11 @@
             <artifactId>bcpkix-jdk18on</artifactId>
             <version>1.78.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcutil-jdk18on</artifactId>
+            <version>1.78.1</version>
+        </dependency>
         <!-- Source: https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j -->
         <!--        <dependency>-->
         <!--            <groupId>org.shredzone.acme4j</groupId>-->

@@ -88,17 +88,20 @@ public class ResignationUsersInspection extends BaseInspection {
                         .email(StringUtils.hasText(e.getEmail()) ? e.getEmail() : "-")
                         .build())
                 .toList();
-        return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put(USERS_FIELD, users)
-                .build());
+        return BeetlUtil.renderTemplate(
+                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put(USERS_FIELD, users)
+                        .build()
+        );
     }
 
     private void printTable(List<User> resignedUsers) {
         try {
             PrettyTable resignedUserTable = PrettyTable.fieldNames(RESIGNATION_USER_TABLE_FIELD_NAME);
-            resignedUsers.forEach(
-                    user -> resignedUserTable.addRow(user.getUsername(), user.getName(), user.getDisplayName(),
-                            user.getEmail(), StringUtils.hasText(user.getMobilePhone()) ? user.getMobilePhone() : "-"));
+            resignedUsers.forEach(user -> resignedUserTable.addRow(
+                    user.getUsername(), user.getName(), user.getDisplayName(), user.getEmail(),
+                    StringUtils.hasText(user.getMobilePhone()) ? user.getMobilePhone() : "-"
+            ));
             log.info("Resigned users: \n{}", resignedUserTable);
         } catch (Exception ignored) {
         }
@@ -113,7 +116,9 @@ public class ResignationUsersInspection extends BaseInspection {
         excludeUserMap.putAll(queryExtUserMap());
         excludeUserMap.putAll(queryUserTypeMap());
         return userList.stream()
+                // 过滤无效用户
                 .filter(User::getValid)
+                // 过滤外部用户 & 系统用户(UserType)
                 .filter(user -> !excludeUserMap.containsKey(user.getUsername()))
                 .filter(user -> {
                     EdsIdentityParam.QueryDingtalkIdentityDetails queryDetails = EdsIdentityParam.QueryDingtalkIdentityDetails.builder()
@@ -123,14 +128,14 @@ public class ResignationUsersInspection extends BaseInspection {
                             queryDetails);
                     return CollectionUtils.isEmpty(dingtalkDetails.getDingtalkIdentities());
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Map<String, UserVO.User> queryExtUserMap() {
         // 所有外部用户
         UserExtParam.UserExtPageQuery pageQuery = UserExtParam.UserExtPageQuery.builder()
                 .page(1)
-                .length(1024)
+                .length(10000)
                 .build();
         DataTable<UserVO.User> table = userExtFacade.queryExtUserPage(pageQuery);
         return table.getData()
@@ -149,7 +154,7 @@ public class ResignationUsersInspection extends BaseInspection {
                 .build();
         UserParam.UserPageQuery pageQuery = UserParam.UserPageQuery.builder()
                 .page(1)
-                .length(1024)
+                .length(10000)
                 .queryByTag(queryByTag)
                 .build();
         DataTable<UserVO.User> table = userFacade.queryUserPage(pageQuery);

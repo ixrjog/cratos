@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @Version 1.0
  */
 @NoArgsConstructor(access = PRIVATE)
-public class AliyunOpenapiClient {
+public class AliyunCasClient {
 
     public static com.aliyun.cas20200407.Client createClient(EdsConfigs.Aliyun aliyun) throws Exception {
         com.aliyun.teaopenapi.models.Config config = new Config()

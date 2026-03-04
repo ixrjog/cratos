@@ -1,5 +1,7 @@
 package com.baiyi.cratos.eds;
 
+import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
+import com.aliyun.cas20200407.models.ListCloudResourcesResponseBody;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.GetSecretValueResponseBody;
 import com.aliyuncs.exceptions.ClientException;
@@ -9,6 +11,7 @@ import com.baiyi.cratos.common.util.PhoneNumberUtils;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.User;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.aliyun.repo.*;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
@@ -110,10 +113,59 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
         EdsConfigs.Aliyun aliyun = getConfig(2);
         AcmeCertificate acmeCertificate = acmeCertificateService.getById(1);
         String cert = acmeCertificate.getCertificate() + "\n" + acmeCertificate.getCertificateChain();
-        String requestId = aliyunCertRepo.uploadUserCertificate(
-                aliyun, "test111", cert, acmeCertificate.getPrivateKey());
-        System.out.println(requestId);
+        Long certId = aliyunCertRepo.uploadUserCertificate(aliyun, "test111", cert, acmeCertificate.getPrivateKey());
+        System.out.println(certId);
     }
+
+    @Test
+    void test6() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(2);
+        List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> result = aliyunCertRepo.listCloudResources(
+                aliyun, 21776764L);
+        System.out.println(result);
+    }
+
+
+    @Test
+    void test7() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(2);
+        ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList result = aliyunCertRepo.queryCertificateByName(
+                aliyun, "2026-12-31palmpay.app");
+        System.out.println(result);
+    }
+
+
+    @Test
+    void test8() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(2);
+        List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> result = aliyunCertRepo.listCertificates(
+                aliyun);
+        int sum = 0;
+        String x = "";
+
+        for (ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList cert : result) {
+            try {
+                Thread.sleep(2000);
+
+                List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> resources = aliyunCertRepo.listCloudResources(
+                        aliyun, Long.valueOf(cert.getCertificateId()));
+
+                x = x + "\n" + StringFormatter.arrayFormat(
+                        "{}({}) certId={}; resources: {}", cert.getCertificateName(),
+                        cert.getDomain() + "," + cert.getCommonName(), cert.getCertificateId(), resources.size()
+                );
+                sum = sum + resources.size();
+            } catch (Exception ex) {
+
+                ex.printStackTrace();
+                System.out.println(cert.getCertificateName());
+
+            }
+        }
+        System.out.println(x);
+        System.out.println(sum);
+    }
+
 
 }
 

@@ -48,6 +48,12 @@
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-workorder</artifactId>
         </dependency>
+        <!-- Janino for Logback conditional processing -->
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.1.12</version>
+        </dependency>
         <dependency>
             <groupId>com.baiyi.cratos</groupId>
             <artifactId>cratos-socks-server</artifactId>
@@ -136,6 +142,16 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>${start-class}</mainClass>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.bouncycastle</groupId>
+                            <artifactId>bcprov-jdk15on</artifactId>
+                        </exclude>
+                        <exclude>
+                            <groupId>org.bouncycastle</groupId>
+                            <artifactId>bcpkix-jdk15on</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>

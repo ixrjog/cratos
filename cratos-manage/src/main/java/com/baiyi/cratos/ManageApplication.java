@@ -34,6 +34,22 @@ public class ManageApplication {
 
     private static final Logger log = LoggerFactory.getLogger(ManageApplication.class);
 
+//    static {
+//        // 移除所有 BC Provider
+//        while (Security.getProvider("BC") != null) {
+//            Security.removeProvider("BC");
+//        }
+//        // 强制加载正确版本的 BouncyCastle
+//        Security.insertProviderAt(new BouncyCastleProvider(), 1);
+//
+//        String version = Security.getProvider("BC").getVersionStr();
+//        log.info("BouncyCastle Provider version: {}", version);
+//
+//        if (!version.startsWith("1.78")) {
+//            throw new RuntimeException("Wrong BouncyCastle version loaded: " + version + ", expected 1.78.x");
+//        }
+//    }
+
     public static void main(String[] args) {
         SpringApplication.run(ManageApplication.class, args);
         System.setProperty("AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT", "true");
