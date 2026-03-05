@@ -54,10 +54,15 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
         }
     }
 
+    /**
+     * https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listcertificates?spm=a2c4g.11186623.help-menu-28533.d_8_3_3_0_9.7ce7410dzUxqvV
+     * @param instance
+     * @param entity
+     * @return
+     */
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
                                          ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList entity) {
-        // https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listusercertificateorder?spm=a2c4g.11186623.0.0.7c9d4c27ACYKGJ
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
                 .assetIdOf(entity.getCertificateId())

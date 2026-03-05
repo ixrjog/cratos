@@ -12,18 +12,42 @@ import com.baiyi.cratos.domain.param.http.acme.AcmeDomainParam;
  */
 public interface AcmeFacade {
 
+    /**
+     * 创建 ACME 账户
+     * @param createAccount
+     */
     void createAcmeAccount(AcmeAccountParam.CreateAccount createAccount);
 
+    /**
+     * 新增 Domain
+     * @param addDomain
+     */
     void addAcmeDomain(AcmeDomainParam.AddDomain addDomain);
 
+    /**
+     * 申请证书
+     * @param acmeDomainId
+     */
     void issueCertificate(int acmeDomainId);
 
+    /**
+     * 异步申请证书
+     * @param acmeDomainId
+     */
     void asyncIssueCertificate(int acmeDomainId);
 
     void resumeOrderIssuance(AcmeOrder acmeOrder) throws Exception;
 
+    /**
+     * 恢复 DCV
+     * @param acmeDomain
+     */
     void recoverDcvDelegation(AcmeDomain acmeDomain);
 
+    /**
+     * 证书自动部署到云实例
+     * @param acmeCertificateId
+     */
     void autoDeployToEdsInstances(int acmeCertificateId);
 
 }
