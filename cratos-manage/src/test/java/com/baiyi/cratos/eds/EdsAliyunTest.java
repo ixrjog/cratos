@@ -134,6 +134,13 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
         System.out.println(result);
     }
 
+    @Test
+    void test77() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(39);
+        List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList>  result = aliyunCertRepo.listCertificates(
+                aliyun);
+        System.out.println(result);
+    }
 
     @Test
     void test8() throws Exception {
@@ -156,10 +163,8 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
                 );
                 sum = sum + resources.size();
             } catch (Exception ex) {
-
                 ex.printStackTrace();
                 System.out.println(cert.getCertificateName());
-
             }
         }
         System.out.println(x);

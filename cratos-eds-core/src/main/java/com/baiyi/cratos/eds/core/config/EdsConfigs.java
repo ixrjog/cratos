@@ -52,6 +52,7 @@ public class EdsConfigs {
         private EdsAliyunConfigModel.KMS kms;
         private EdsAliyunConfigModel.DMS dms;
         private EdsAliyunConfigModel.DNS dns;
+        private EdsAliyunConfigModel.CAS cas;
         private EdsCommonConfigModel.ACME acme;
     }
 

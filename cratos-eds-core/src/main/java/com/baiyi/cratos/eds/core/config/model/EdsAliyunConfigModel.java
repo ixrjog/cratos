@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class EdsAliyunConfigModel {
 
     public static final String DMS_ENDPOINT = "dms-enterprise.aliyuncs.com";
-    
+
     @Data
     @NoArgsConstructor
     @Schema
@@ -119,6 +119,14 @@ public class EdsAliyunConfigModel {
     @Schema
     public static class DNS implements HasDnsNameServers {
         private List<String> nameServers;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class CAS {
+        private String regionId;
     }
 
     @Data
