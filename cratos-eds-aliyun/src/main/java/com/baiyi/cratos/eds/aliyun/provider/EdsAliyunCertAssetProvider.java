@@ -20,6 +20,7 @@ import com.baiyi.cratos.service.EdsAssetService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * &#064;Author  baiyi
@@ -56,6 +57,7 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
 
     /**
      * https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listcertificates?spm=a2c4g.11186623.help-menu-28533.d_8_3_3_0_9.7ce7410dzUxqvV
+     *
      * @param instance
      * @param entity
      * @return
@@ -72,7 +74,10 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                 .statusOf(entity.getCertificateStatus())
                 .createdTimeOf(entity.getNotBefore())
                 .expiredTimeOf(entity.getNotAfter())
-                .descriptionOf( String.join(",", entity.getSubjectAlternativeNames()))
+                .descriptionOf(Optional.ofNullable(entity.getSubjectAlternativeNames())
+                                       .filter(list -> !list.isEmpty())
+                                       .map(list -> String.join(",", list))
+                                       .orElse(null))
                 .build();
     }
 

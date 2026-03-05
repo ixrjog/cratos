@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.business.wrapper.impl.cret;
 
-import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
+import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
 import com.baiyi.cratos.domain.annotation.BusinessType;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.generator.Certificate;
@@ -12,6 +12,8 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.service.BusinessAssetBoundService;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 /**
  * @Author baiyi
  * @Date 2024/3/13 13:45
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Component
 @BusinessType(type = BusinessTypeEnum.CERTIFICATE)
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_CERT)
-public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
+public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper<Certificate, ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> {
 
     public AliyunCertAssetToBusinessWrapper(BusinessAssetBoundService businessAssetBoundService) {
         super(businessAssetBoundService);
@@ -28,7 +30,7 @@ public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
 
     @Override
     protected Certificate toTarget(EdsAssetVO.Asset asset) {
-        ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList model = getAssetModel(asset);
+        ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList model = getAssetModel(asset);
         return Certificate.builder()
                 .certificateId(asset.getAssetId())
                 .name(asset.getName())
@@ -36,8 +38,8 @@ public class AliyunCertAssetToBusinessWrapper extends BaseAssetToBusinessWrapper
                 .certificateType(getAssetType())
                 .keyAlgorithm(model.getAlgorithm())
                 .valid(asset.getValid())
-                .notBefore(asset.getCreatedTime())
-                .notAfter(asset.getExpiredTime())
+                .notBefore(new Date(model.getNotBefore()))
+                .notAfter(new Date(model.getNotAfter()))
                 .build();
     }
 
