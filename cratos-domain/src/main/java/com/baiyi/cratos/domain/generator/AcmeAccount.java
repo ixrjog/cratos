@@ -76,4 +76,17 @@ public class AcmeAccount implements HasValid, HasIntegerPrimaryKey, Serializable
     @Column(name = "account_key_pair")
     @FieldEncrypt
     private String accountKeyPair;
+
+    /**
+     * EAB Key ID (External Account Binding)
+     */
+    @Column(name = "eab_kid")
+    private String eabKid;
+
+    /**
+     * EAB HMAC Key (加密存储)
+     */
+    @Column(name = "eab_hmac_key")
+    @FieldEncrypt
+    private String eabHmacKey;
 }

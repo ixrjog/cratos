@@ -32,30 +32,47 @@ public class SecureAcmeAccountManager {
      */
     public static AcmeModel.Account createAccount(String email,
                                                   AcmeProviderEnum acmeProvider) throws AcmeException, IOException {
+        return createAccount(email, acmeProvider, null, null);
+    }
+
+    /**
+     * 创建新的 ACME 账户（支持 EAB）
+     */
+    public static AcmeModel.Account createAccount(String email,
+                                                  AcmeProviderEnum acmeProvider,
+                                                  String eabKid,
+                                                  String eabHmacKey) throws AcmeException, IOException {
         log.info("Creating new ACME account for email: {}, provider: {}", email, acmeProvider.getProvider());
 
         // 1. 生成账户密钥对
         KeyPair accountKeyPair = KeyPairUtils.createKeyPair(2048);
 
         // 2. 获取 ACME Server URL
-
         String acmeServer = acmeProvider.getAcmeServer();
 
         // 3. 创建 ACME 账户
         Session session = new Session(acmeServer);
-        Account account = new AccountBuilder().addContact("mailto:" + email)
+        AccountBuilder accountBuilder = new AccountBuilder()
+                .addContact("mailto:" + email)
                 .agreeToTermsOfService()
-                .useKeyPair(accountKeyPair)
-                .create(session);
+                .useKeyPair(accountKeyPair);
+
+        // 4. 如果提供了 EAB 凭证，添加 EAB
+        if (eabKid != null && eabHmacKey != null) {
+            log.info("Using External Account Binding (EAB) for account creation");
+            accountBuilder.withKeyIdentifier(eabKid, eabHmacKey);
+        }
+
+        Account account = accountBuilder.create(session);
 
         log.info("ACME account created successfully, URL: {}", account.getLocation());
 
-        // 4. 转换密钥对为 PEM 字符串
+        // 5. 转换密钥对为 PEM 字符串
         StringWriter sw = new StringWriter();
         KeyPairUtils.writeKeyPair(accountKeyPair, sw);
         String keyPairPem = sw.toString();
 
-        // 5. 构建数据库对象
+        // 6. 构建数据库对象
         return AcmeModel.Account.builder()
                 .email(email)
                 .acmeProvider(acmeProvider.getProvider())
@@ -63,6 +80,8 @@ public class SecureAcmeAccountManager {
                                     .toString())
                 .acmeServer(acmeServer)
                 .accountKeyPair(keyPairPem)
+                .eabKid(eabKid)
+                .eabHmacKey(eabHmacKey)
                 .build();
     }
 

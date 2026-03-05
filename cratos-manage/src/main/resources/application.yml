@@ -189,6 +189,14 @@ jasypt:
   encryptor:
     algorithm: PBEWithMD5AndDES
     iv-generator-classname: 'org.jasypt.iv.NoIvGenerator'
+    # 性能优化
+    pool-size: 1
+    string-output-type: base64
+  # 跳过不需要加密的 PropertySource
+  property:
+    filter:
+      include-sources: application,applicationConfig
+      exclude-sources: systemProperties,systemEnvironment,random
 
 # 加密配置
 encryption:

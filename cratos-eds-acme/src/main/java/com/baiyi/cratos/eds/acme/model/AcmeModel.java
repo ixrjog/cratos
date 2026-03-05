@@ -27,6 +27,8 @@ public class AcmeModel {
         private String accountUrl;
         private String acmeServer;
         private String accountKeyPair;
+        private String eabKid;
+        private String eabHmacKey;
     }
 
 }

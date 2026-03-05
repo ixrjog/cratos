@@ -1,6 +1,6 @@
 package com.baiyi.cratos.eds.aliyun.provider;
 
-import com.aliyun.cas20200407.models.ListUserCertificateOrderResponseBody;
+import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.ALIYUN, assetTypeOf = EdsAssetTypeEnum.ALIYUN_CERT)
-public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> {
+public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<EdsConfigs.Aliyun, ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> {
 
     private final AliyunCertRepo aliyunCertRepo;
 
@@ -37,16 +37,18 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
                                       EdsAssetIndexFacade edsAssetIndexFacade,
                                       AssetToBusinessObjectUpdater updateBusinessFromAssetHandler,
                                       EdsInstanceProviderHolderBuilder holderBuilder, AliyunCertRepo aliyunCertRepo) {
-        super(edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
-                updateBusinessFromAssetHandler, holderBuilder);
+        super(
+                edsAssetService, simpleEdsFacade, credentialService, configCredTemplate, edsAssetIndexFacade,
+                updateBusinessFromAssetHandler, holderBuilder
+        );
         this.aliyunCertRepo = aliyunCertRepo;
     }
 
     @Override
-    protected List<ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList> listEntities(
+    protected List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> listEntities(
             ExternalDataSourceInstance<EdsConfigs.Aliyun> instance) throws EdsQueryEntitiesException {
         try {
-            return aliyunCertRepo.listUserCertOrder(instance.getConfig());
+            return aliyunCertRepo.listCertificates(instance.getConfig());
         } catch (Exception e) {
             throw new EdsQueryEntitiesException(e.getMessage());
         }
@@ -54,17 +56,18 @@ public class EdsAliyunCertAssetProvider extends BaseEdsInstanceAssetProvider<Eds
 
     @Override
     protected EdsAsset convertToEdsAsset(ExternalDataSourceInstance<EdsConfigs.Aliyun> instance,
-                                  ListUserCertificateOrderResponseBody.ListUserCertificateOrderResponseBodyCertificateOrderList entity) {
+                                         ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList entity) {
         // https://help.aliyun.com/zh/ssl-certificate/developer-reference/api-cas-2020-04-07-listusercertificateorder?spm=a2c4g.11186623.0.0.7c9d4c27ACYKGJ
         return newEdsAssetBuilder(instance, entity)
                 // 资源 ID
-                .assetIdOf(entity.getInstanceId())
+                .assetIdOf(entity.getCertificateId())
+                .assetKeyOf(entity.getCertIdentifier())
                 .nameOf(entity.getDomain())
-                .kindOf(entity.getCertType())
-                .statusOf(entity.getStatus())
-                .descriptionOf(entity.getSans())
-                .createdTimeOf(entity.getCertStartTime())
-                .expiredTimeOf(entity.getCertEndTime())
+                .kindOf(entity.getIssuer())
+                .statusOf(entity.getCertificateStatus())
+                .createdTimeOf(entity.getNotBefore())
+                .expiredTimeOf(entity.getNotAfter())
+                .descriptionOf( String.join(",", entity.getSubjectAlternativeNames()))
                 .build();
     }
 

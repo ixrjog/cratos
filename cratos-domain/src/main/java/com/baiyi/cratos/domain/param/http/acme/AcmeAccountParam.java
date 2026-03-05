@@ -26,6 +26,10 @@ public class AcmeAccountParam {
         private String email;
         @NotBlank
         private String acmeProvider;
+        @Schema(description = "EAB Key ID (External Account Binding)")
+        private String eabKid;
+        @Schema(description = "EAB HMAC Key")
+        private String eabHmacKey;
         @Null
         private String createdBy;
 

@@ -58,23 +58,26 @@ public class RbacAutoConfigInitializer implements CommandLineRunner {
             return;
         }
 
-        long startTime = System.currentTimeMillis();
-        log.info("Starting RBAC auto configuration...");
+        // 异步执行，不阻塞启动
+        new Thread(() -> {
+            long startTime = System.currentTimeMillis();
+            log.info("Starting RBAC auto configuration (async)...");
 
-        try {
-            ConfigurationResult result = initializeRbacResources();
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
+            try {
+                ConfigurationResult result = initializeRbacResources();
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
 
-            log.info(
-                    "RBAC auto configuration completed successfully. " + "Processed {} controllers, created {} groups, {} resources. " + "Total time: {}ms",
-                    result.getProcessedControllers(), result.getCreatedGroups(), result.getCreatedResources(),
-                    duration);
-        } catch (Exception e) {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            log.error("Failed to initialize RBAC auto configuration after {}ms", duration, e);
-        }
+                log.info(
+                        "RBAC auto configuration completed successfully. " + "Processed {} controllers, created {} groups, {} resources. " + "Total time: {}ms",
+                        result.getProcessedControllers(), result.getCreatedGroups(), result.getCreatedResources(),
+                        duration);
+            } catch (Exception e) {
+                long endTime = System.currentTimeMillis();
+                long duration = endTime - startTime;
+                log.error("Failed to initialize RBAC auto configuration after {}ms", duration, e);
+            }
+        }, "rbac-init").start();
     }
 
     /**

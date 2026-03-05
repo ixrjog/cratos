@@ -82,8 +82,19 @@ public class AcmeFacadeImpl implements AcmeFacade {
                 .filter(ValidationUtils::isEmail)
                 .orElseThrow(() -> new EdsAcmeException("Invalid email."));
         AcmeProviderEnum acmeProviderEnum = AcmeProviderEnum.getByProvider(createAccount.getAcmeProvider());
+        
+        // 检查 Buypass 已停止服务
+        if (acmeProviderEnum == AcmeProviderEnum.BUYPASS) {
+            throw new EdsAcmeException("Buypass has discontinued free certificate service. Please use Let's Encrypt or ZeroSSL instead.");
+        }
+        
         try {
-            AcmeModel.Account newAccount = SecureAcmeAccountManager.createAccount(email, acmeProviderEnum);
+            AcmeModel.Account newAccount = SecureAcmeAccountManager.createAccount(
+                    email, 
+                    acmeProviderEnum,
+                    createAccount.getEabKid(),
+                    createAccount.getEabHmacKey()
+            );
             AcmeAccount acmeAccount = AcmeAccount.builder()
                     .name(createAccount.getName())
                     .acmeServer(newAccount.getAcmeServer())
@@ -91,6 +102,8 @@ public class AcmeFacadeImpl implements AcmeFacade {
                     .acmeProvider(createAccount.getAcmeProvider())
                     .accountKeyPair(newAccount.getAccountKeyPair())
                     .email(email)
+                    .eabKid(newAccount.getEabKid())
+                    .eabHmacKey(newAccount.getEabHmacKey())
                     .valid(true)
                     .build();
             acmeAccountService.add(acmeAccount);

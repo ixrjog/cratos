@@ -22,7 +22,7 @@ cratos:
     provider: LDAP
   rbac:
     auto-configuration:
-      enabled: on
+      enabled: off  # 开发环境禁用，加快启动
   credential:
     # 高安全性密钥
     high-security: on
