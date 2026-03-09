@@ -13,7 +13,7 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.facade.inspection.model.DeploymentImageModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -41,7 +41,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  * &#064;Version 1.0
  */
 @Component
-public class AppDeploymentImageInspection extends BaseInspection {
+public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
 
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -51,10 +51,11 @@ public class AppDeploymentImageInspection extends BaseInspection {
     private static final String APPS_FIELD = "apps";
     private static final String[] FILTER_LIST = {"-1", "-2", "-3", "-4"};
 
-    public AppDeploymentImageInspection(NotificationTemplateService notificationTemplateService,
-                                        DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                        EdsConfigService edsConfigService, EdsAssetService edsAssetService,
-                                        EdsAssetIndexService edsAssetIndexService) {
+    public AppDeploymentImageInspectionTask(NotificationTemplateService notificationTemplateService,
+                                            DingtalkService dingtalkService,
+                                            EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                            EdsConfigService edsConfigService, EdsAssetService edsAssetService,
+                                            EdsAssetIndexService edsAssetIndexService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;
@@ -78,14 +79,18 @@ public class AppDeploymentImageInspection extends BaseInspection {
                         inspections.add(inspection);
                     }
                 });
-        return BeetlUtil.renderTemplate(notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
-                .put(APPS_FIELD, inspections)
-                .build());
+        return BeetlUtil.renderTemplate(
+                notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
+                        .put(APPS_FIELD, inspections)
+                        .build()
+        );
     }
 
     private Map<String, List<DeploymentImageModel.DeploymentImage>> getDeploymentImageMap(int instanceId) {
-        List<EdsAsset> edsAssets = edsAssetService.queryInstanceAssets(instanceId,
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+        List<EdsAsset> edsAssets = edsAssetService.queryInstanceAssets(
+                instanceId,
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
+        );
         if (CollectionUtils.isEmpty(edsAssets)) {
             return Maps.newHashMap();
         }
@@ -112,7 +117,7 @@ public class AppDeploymentImageInspection extends BaseInspection {
                         .appName(appName)
                         .deploymentName(e.getName())
                         .image(optionalContainer.get()
-                                .getImage())
+                                       .getImage())
                         .build();
                 if (deploymentImageMap.containsKey(appName)) {
                     deploymentImageMap.get(appName)
@@ -128,8 +133,10 @@ public class AppDeploymentImageInspection extends BaseInspection {
     }
 
     private Deployment getAssetModel(EdsAssetVO.Asset asset) {
-        return EdsInstanceProviderFactory.produceModel(EdsInstanceTypeEnum.KUBERNETES.name(),
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), asset);
+        return EdsInstanceProviderFactory.produceModel(
+                EdsInstanceTypeEnum.KUBERNETES.name(),
+                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), asset
+        );
     }
 
     private List<EdsAsset> filter(List<EdsAsset> edsAssets) {

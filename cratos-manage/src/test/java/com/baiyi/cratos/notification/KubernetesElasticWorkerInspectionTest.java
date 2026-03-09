@@ -1,7 +1,7 @@
 package com.baiyi.cratos.notification;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.facade.inspection.impl.KubernetesElasticWorkerInspection;
+import com.baiyi.cratos.facade.inspection.impl.KubernetesElasticWorkerInspectionTask;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class KubernetesElasticWorkerInspectionTest extends BaseUnit {
 
     @Resource
-    private KubernetesElasticWorkerInspection kubernetesElasticWorkerInspection;
+    private KubernetesElasticWorkerInspectionTask kubernetesElasticWorkerInspection;
 
     @Test
     void test() {

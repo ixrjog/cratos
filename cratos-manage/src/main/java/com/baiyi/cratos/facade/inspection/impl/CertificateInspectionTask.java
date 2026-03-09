@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.Certificate;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.service.CertificateService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -28,7 +28,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.CERTIFICATE
  */
 @Slf4j
 @Component
-public class CertificateInspection extends BaseInspection {
+public class CertificateInspectionTask extends BaseInspectionTask {
 
     private final CertificateService certificateService;
 
@@ -36,9 +36,9 @@ public class CertificateInspection extends BaseInspection {
     private static final String CERTIFICATES_FIELD = "certificates";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
-    public CertificateInspection(NotificationTemplateService notificationTemplateService,
-                                 DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                 EdsConfigService edsConfigService, CertificateService certificateService) {
+    public CertificateInspectionTask(NotificationTemplateService notificationTemplateService,
+                                     DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                     EdsConfigService edsConfigService, CertificateService certificateService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.certificateService = certificateService;
     }

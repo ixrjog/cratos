@@ -57,4 +57,59 @@ public class CloudFlareCert {
         private Date expiresOn;
     }
 
+    @Data
+    public static class CustomCertificate {
+        private String id;
+        @JsonProperty("zone_id")
+        private String zoneId;
+        @JsonProperty("bundle_method")
+        private String bundleMethod;
+        @JsonProperty("expires_on")
+        private String expiresOn;
+        @JsonProperty("geo_restrictions")
+        private GeoRestrictions geoRestrictions;
+        private List<String> hosts;
+        private String issuer;
+        @JsonProperty("keyless_server")
+        private KeylessServer keylessServer;
+        @JsonProperty("modified_on")
+        private String modifiedOn;
+        @JsonProperty("policy_restrictions")
+        private String policyRestrictions;
+        private Integer priority;
+        private String signature;
+        private String status;
+        @JsonProperty("uploaded_on")
+        private String uploadedOn;
+    }
+
+    @Data
+    public static class GeoRestrictions {
+        private String label;
+    }
+
+    @Data
+    public static class KeylessServer {
+        private String id;
+        @JsonProperty("created_on")
+        private String createdOn;
+        private Boolean enabled;
+        private String host;
+        @JsonProperty("modified_on")
+        private String modifiedOn;
+        private String name;
+        private List<String> permissions;
+        private Integer port;
+        private String status;
+        private Tunnel tunnel;
+    }
+
+    @Data
+    public static class Tunnel {
+        @JsonProperty("private_ip")
+        private String privateIp;
+        @JsonProperty("vnet_id")
+        private String vnetId;
+    }
+
 }

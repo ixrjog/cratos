@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.Domain;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.service.DomainService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -28,7 +28,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.DOMAIN_EXPI
  */
 @Slf4j
 @Component
-public class DomainInspection extends BaseInspection {
+public class DomainInspectionTask extends BaseInspectionTask {
 
     private final DomainService domainService;
 
@@ -36,9 +36,9 @@ public class DomainInspection extends BaseInspection {
     private static final String DOMAINS_FIELD = "domains";
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
-    public DomainInspection(NotificationTemplateService notificationTemplateService,
-                            DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                            EdsConfigService edsConfigService, DomainService domainService) {
+    public DomainInspectionTask(NotificationTemplateService notificationTemplateService,
+                                DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                EdsConfigService edsConfigService, DomainService domainService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.domainService = domainService;
     }

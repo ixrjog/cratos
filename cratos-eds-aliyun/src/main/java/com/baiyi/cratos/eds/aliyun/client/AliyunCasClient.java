@@ -28,13 +28,12 @@ public class AliyunCasClient {
                                         .getAccessKeyId())
                 .setAccessKeySecret(aliyun.getCred()
                                             .getAccessKeySecret());
+        // Endpoint 请参考 https://api.aliyun.com/product/cas
         if (casRegionId.equals("ap-southeast-1")) {
             config.endpoint = StringFormatter.format("cas.{}.aliyuncs.com", casRegionId);
         } else {
             config.endpoint = "cas.aliyuncs.com";
         }
-        // Endpoint 请参考 https://api.aliyun.com/product/cas
-
         return new com.aliyun.cas20200407.Client(config);
     }
 

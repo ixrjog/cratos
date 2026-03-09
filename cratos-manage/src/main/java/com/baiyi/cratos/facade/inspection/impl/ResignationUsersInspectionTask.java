@@ -20,7 +20,7 @@ import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.UserExtFacade;
 import com.baiyi.cratos.facade.UserFacade;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.facade.inspection.model.ResignedUserModel;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -47,7 +47,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.RESIGNATION
  */
 @Slf4j
 @Component
-public class ResignationUsersInspection extends BaseInspection {
+public class ResignationUsersInspectionTask extends BaseInspectionTask {
 
     private final UserService userService;
     private final UserExtFacade userExtFacade;
@@ -55,11 +55,11 @@ public class ResignationUsersInspection extends BaseInspection {
     private final EdsIdentityFacade edsIdentityFacade;
     private final TagService tagService;
 
-    public ResignationUsersInspection(NotificationTemplateService notificationTemplateService,
-                                      DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                      EdsConfigService edsConfigService, UserService userService,
-                                      UserExtFacade userExtFacade, UserFacade userFacade,
-                                      EdsIdentityFacade edsIdentityFacade, TagService tagService) {
+    public ResignationUsersInspectionTask(NotificationTemplateService notificationTemplateService,
+                                          DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                          EdsConfigService edsConfigService, UserService userService,
+                                          UserExtFacade userExtFacade, UserFacade userFacade,
+                                          EdsIdentityFacade edsIdentityFacade, TagService tagService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.userService = userService;
         this.userExtFacade = userExtFacade;

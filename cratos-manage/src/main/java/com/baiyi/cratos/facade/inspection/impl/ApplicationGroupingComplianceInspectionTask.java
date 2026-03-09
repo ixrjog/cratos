@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.report.model.AppGroupSpec;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.facade.inspection.model.ApplicationGroupingModel;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
@@ -39,7 +39,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  */
 @Slf4j
 //@Component
-public class ApplicationGroupingComplianceInspection extends BaseInspection {
+public class ApplicationGroupingComplianceInspectionTask extends BaseInspectionTask {
 
     private final EdsAssetService edsAssetService;
     private final EdsAssetIndexService edsAssetIndexService;
@@ -142,12 +142,12 @@ public class ApplicationGroupingComplianceInspection extends BaseInspection {
             palmpay-docs
             """;
 
-    public ApplicationGroupingComplianceInspection(NotificationTemplateService notificationTemplateService,
-                                                   DingtalkService dingtalkService,
-                                                   EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                                   EdsConfigService edsConfigService,
-                                                   EdsAssetService edsAssetService,
-                                                   EdsAssetIndexService edsAssetIndexService) {
+    public ApplicationGroupingComplianceInspectionTask(NotificationTemplateService notificationTemplateService,
+                                                       DingtalkService dingtalkService,
+                                                       EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                                       EdsConfigService edsConfigService,
+                                                       EdsAssetService edsAssetService,
+                                                       EdsAssetIndexService edsAssetIndexService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsAssetService = edsAssetService;
         this.edsAssetIndexService = edsAssetIndexService;

@@ -5,7 +5,7 @@ import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.eds.EdsIdentityParam;
 import com.baiyi.cratos.domain.view.eds.EdsIdentityVO;
 import com.baiyi.cratos.eds.core.facade.EdsIdentityFacade;
-import com.baiyi.cratos.facade.inspection.impl.ResignationUsersInspection;
+import com.baiyi.cratos.facade.inspection.impl.ResignationUsersInspectionTask;
 import com.baiyi.cratos.service.UserService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import org.springframework.util.CollectionUtils;
 public class ResignationUsersProcessorTest extends BaseUnit {
 
     @Resource
-    private ResignationUsersInspection resignationUsersInspection;
+    private ResignationUsersInspectionTask resignationUsersInspection;
     @Autowired
     private UserService userService;
     @Resource

@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.facade.inspection.model.KubernetesElasticWorkerModel;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.EdsConfigService;
@@ -28,7 +28,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.KUBERNETES_
  * &#064;Version 1.0
  */
 @Component
-public class KubernetesElasticWorkerInspection extends BaseInspection {
+public class KubernetesElasticWorkerInspectionTask extends BaseInspectionTask {
 
     private static final String WORKER_NAME_PREFIX = "ack-elastic-worker";
     private static final String WORKERS_FIELD = "workers";
@@ -36,10 +36,10 @@ public class KubernetesElasticWorkerInspection extends BaseInspection {
     private final EdsAssetService edsAssetService;
     private final EdsInstanceService edsInstanceService;
 
-    public KubernetesElasticWorkerInspection(NotificationTemplateService notificationTemplateService,
-                                             DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                             EdsConfigService edsConfigService, EdsInstanceService edsInstanceService,
-                                             EdsAssetService edsAssetService) {
+    public KubernetesElasticWorkerInspectionTask(NotificationTemplateService notificationTemplateService,
+                                                 DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                                 EdsConfigService edsConfigService, EdsInstanceService edsInstanceService,
+                                                 EdsAssetService edsAssetService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;

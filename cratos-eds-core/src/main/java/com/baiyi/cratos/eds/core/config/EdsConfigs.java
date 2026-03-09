@@ -59,6 +59,21 @@ public class EdsConfigs {
     @Data
     @NoArgsConstructor
     @Schema
+    public static class Ucloud implements HasRegions, HasAcme, HasEdsConfig {
+        private String version;
+        // default
+        private String regionId;
+        private String api;
+        private Set<String> regionIds;
+        @Schema(description = "凭据")
+        private EdsUcloudConfigModel.Cred cred;
+        private EdsInstance edsInstance;
+        private EdsCommonConfigModel.ACME acme;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @Schema
     public static class Alimail implements HasEdsConfig {
         private String version;
         @Schema(description = "凭据")

@@ -17,6 +17,7 @@ public enum EdsInstanceTypeEnum {
 
     CRATOS,
     @Acme ALIYUN,
+    UCLOUD,
     AWS,
     HUAWEICLOUD,
     HUAWEICLOUD_STACK,

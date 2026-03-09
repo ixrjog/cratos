@@ -2,36 +2,47 @@ package com.baiyi.cratos.eds;
 
 import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
 import com.aliyun.cas20200407.models.ListCloudResourcesResponseBody;
+import com.aliyun.oss.model.Bucket;
 import com.aliyun.sdk.service.alidns20150109.models.DescribeDomainRecordsResponseBody;
 import com.aliyun.sdk.service.kms20160120.models.GetSecretValueResponseBody;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.ram.model.v20150501.GetUserResponse;
 import com.aliyuncs.ram.model.v20150501.UpdateUserResponse;
+import com.baiyi.cratos.common.table.PrettyTable;
 import com.baiyi.cratos.common.util.PhoneNumberUtils;
 import com.baiyi.cratos.domain.generator.AcmeCertificate;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.util.StringFormatter;
+import com.baiyi.cratos.eds.aliyun.model.AliyunOss;
 import com.baiyi.cratos.eds.aliyun.repo.*;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
+import com.baiyi.cratos.eds.core.config.model.EdsAliyunConfigModel;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.acme.AcmeCertificateService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2025/7/25 13:38
  * &#064;Version 1.0
  */
+@Slf4j
 public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
 
     @Resource
@@ -137,7 +148,7 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
     @Test
     void test77() throws Exception {
         EdsConfigs.Aliyun aliyun = getConfig(39);
-        List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList>  result = aliyunCertRepo.listCertificates(
+        List<ListCertificatesResponseBody.ListCertificatesResponseBodyCertificateList> result = aliyunCertRepo.listCertificates(
                 aliyun);
         System.out.println(result);
     }
@@ -171,6 +182,74 @@ public class EdsAliyunTest extends BaseEdsTest<EdsConfigs.Aliyun> {
         System.out.println(sum);
     }
 
+    @Test
+    void test9() throws Exception {
+        EdsConfigs.Aliyun aliyun = getConfig(2);
+        String endpoint = Optional.ofNullable(aliyun.getOss())
+                .map(EdsAliyunConfigModel.OSS::getEndpoints)
+                .map(List::getFirst)
+                .orElse(null);
+
+        List<EdsAsset> ramUserAssets = edsAssetService.queryInstanceAssets(93, EdsAssetTypeEnum.ALIYUN_RAM_USER.name());
+        Map<String, EdsAsset> ramUserMap = ramUserAssets.stream()
+                .collect(Collectors.toMap(EdsAsset::getAssetId, Function.identity()));
+
+        String[] TABLE_HEADERS = {"RAM User", "RAM Name", "Endpoint", "Bucket Name", "Effect", "Resources", "Action"};
+        PrettyTable pt = PrettyTable.fieldNames(TABLE_HEADERS);
+        processBuckets(endpoint, aliyun, ramUserMap, pt);
+        System.out.println(pt);
+    }
+
+    private void processBuckets(String endpoint, EdsConfigs.Aliyun aliyun, Map<String, EdsAsset> ramUserMap,
+                                PrettyTable pt) {
+        List<Bucket> buckets = AliyunOssRepo.listBuckets(endpoint, aliyun);
+        buckets.stream()
+                .filter(Objects::nonNull)
+                .forEach(bucket -> processBucketPolicy(bucket, aliyun, ramUserMap, pt));
+    }
+
+    private void processBucketPolicy(Bucket bucket, EdsConfigs.Aliyun aliyun, Map<String, EdsAsset> ramUserMap,
+                                     PrettyTable pt) {
+        try {
+            String policy = AliyunOssRepo.getBucketPolicy(bucket.getExtranetEndpoint(), aliyun, bucket.getName());
+            AliyunOss.BucketPolicy bucketPolicy = new ObjectMapper().readValue(policy, AliyunOss.BucketPolicy.class);
+
+            Optional.ofNullable(bucketPolicy.getStatement())
+                    .orElse(List.of())
+                    .forEach(statement -> processStatement(statement, bucket, ramUserMap, pt));
+        } catch (Exception e) {
+            log.warn("Failed to process bucket policy: bucket={}, error={}", bucket.getName(), e.getMessage());
+        }
+    }
+
+    private void processStatement(AliyunOss.Statement statement, Bucket bucket, Map<String, EdsAsset> ramUserMap,
+                                  PrettyTable pt) {
+        statement.getPrincipal()
+                .forEach(ramUserId -> {
+                    EdsAsset edsAsset = ramUserMap.get(ramUserId);
+                    if (edsAsset == null) {
+                        log.warn("RAM user not found: ramUserId={}", ramUserId);
+                        return;
+                    }
+
+                    String ramUserName = edsAsset.getAssetKey();
+                    if (ramUserName.startsWith("ak-")) {
+                        return;
+                    }
+
+                    pt.addRow(
+                            ramUserName, edsAsset.getName(), bucket.getExtranetEndpoint(), bucket.getName(),
+                            statement.getEffect(), convertResources(statement), String.join(",", statement.getAction())
+                    );
+                });
+    }
+
+    public String convertResources(AliyunOss.Statement statement) {
+        return statement.getResource()
+                .stream()
+                .map(s -> s.replace("acs:oss:*:1859120988191686:", ""))
+                .collect(Collectors.joining(","));
+    }
 
 }
 

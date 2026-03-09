@@ -31,12 +31,12 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 @Slf4j
-public abstract class BaseInspection implements InspectionTask, InitializingBean {
+public abstract class BaseInspectionTask implements InspectionTask, InitializingBean {
 
     private final NotificationTemplateService notificationTemplateService;
     private final DingtalkService dingtalkService;
     protected final EdsInstanceQueryHelper edsInstanceQueryHelper;
-    private final EdsConfigService edsConfigService;
+    protected final EdsConfigService edsConfigService;
 
     @Value("${cratos.language:en-us}")
     protected String language;
@@ -44,8 +44,8 @@ public abstract class BaseInspection implements InspectionTask, InitializingBean
     @Value("${cratos.notification:NORMAL}")
     private String notification;
 
-    public BaseInspection(NotificationTemplateService notificationTemplateService, DingtalkService dingtalkService,
-                          EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService) {
+    public BaseInspectionTask(NotificationTemplateService notificationTemplateService, DingtalkService dingtalkService,
+                              EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService) {
         this.notificationTemplateService = notificationTemplateService;
         this.dingtalkService = dingtalkService;
         this.edsInstanceQueryHelper = edsInstanceQueryHelper;

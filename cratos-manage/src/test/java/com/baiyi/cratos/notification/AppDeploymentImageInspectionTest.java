@@ -1,7 +1,7 @@
 package com.baiyi.cratos.notification;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.facade.inspection.impl.AppDeploymentImageInspection;
+import com.baiyi.cratos.facade.inspection.impl.AppDeploymentImageInspectionTask;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class AppDeploymentImageInspectionTest extends BaseUnit {
 
     @Resource
-    private AppDeploymentImageInspection appDeploymentImageInspection;
+    private AppDeploymentImageInspectionTask appDeploymentImageInspection;
 
     @Test
     void test() {

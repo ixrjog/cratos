@@ -10,7 +10,7 @@ import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.facade.inspection.model.DeploymentInspectionModel;
 import com.baiyi.cratos.service.*;
 import com.google.api.client.util.Lists;
@@ -31,7 +31,7 @@ import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNE
  */
 @Slf4j
 @Component
-public class DeploymentGroupLabelInspection extends BaseInspection {
+public class DeploymentGroupLabelInspectionTask extends BaseInspectionTask {
 
     private final EdsInstanceService edsInstanceService;
     private final EdsAssetService edsAssetService;
@@ -42,11 +42,11 @@ public class DeploymentGroupLabelInspection extends BaseInspection {
     private static final String[] FILTER_LIST = {"prod:istio-ingressgateway", "prod:posp-nginx", "prod:config-server", "prod:config-server-nairabox", "prod:config-server-tecno"};
     private static final String DEPLOYMENTS_FIELD = "deployments";
 
-    public DeploymentGroupLabelInspection(NotificationTemplateService notificationTemplateService,
-                                          DingtalkService dingtalkService,
-                                          EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
-                                          EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
-                                          EdsAssetIndexService edsAssetIndexService) {
+    public DeploymentGroupLabelInspectionTask(NotificationTemplateService notificationTemplateService,
+                                              DingtalkService dingtalkService,
+                                              EdsInstanceQueryHelper edsInstanceQueryHelper, EdsConfigService edsConfigService,
+                                              EdsInstanceService edsInstanceService, EdsAssetService edsAssetService,
+                                              EdsAssetIndexService edsAssetIndexService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.edsInstanceService = edsInstanceService;
         this.edsAssetService = edsAssetService;

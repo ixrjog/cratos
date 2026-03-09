@@ -7,7 +7,7 @@ import com.baiyi.cratos.domain.generator.AssetMaturity;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
-import com.baiyi.cratos.facade.inspection.base.BaseInspection;
+import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
 import com.baiyi.cratos.service.AssetMaturityService;
 import com.baiyi.cratos.service.EdsConfigService;
 import com.baiyi.cratos.service.NotificationTemplateService;
@@ -28,7 +28,7 @@ import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.CUSTOM_ASSE
  */
 @Slf4j
 @Component
-public class AssetMaturityInspection extends BaseInspection {
+public class AssetMaturityInspectionTask extends BaseInspectionTask {
 
     private final AssetMaturityService assetMaturityService;
 
@@ -37,9 +37,9 @@ public class AssetMaturityInspection extends BaseInspection {
     private static final String EXPIRY_DAYS_FIELD = "expiryDays";
 
 
-    public AssetMaturityInspection(NotificationTemplateService notificationTemplateService,
-                                   DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
-                                   EdsConfigService edsConfigService, AssetMaturityService assetMaturityService) {
+    public AssetMaturityInspectionTask(NotificationTemplateService notificationTemplateService,
+                                       DingtalkService dingtalkService, EdsInstanceQueryHelper edsInstanceQueryHelper,
+                                       EdsConfigService edsConfigService, AssetMaturityService assetMaturityService) {
         super(notificationTemplateService, dingtalkService, edsInstanceQueryHelper, edsConfigService);
         this.assetMaturityService = assetMaturityService;
     }

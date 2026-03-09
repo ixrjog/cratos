@@ -1,7 +1,7 @@
 package com.baiyi.cratos.notification;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.facade.inspection.impl.ApplicationGroupingComplianceInspection;
+import com.baiyi.cratos.facade.inspection.impl.ApplicationGroupingComplianceInspectionTask;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class ApplicationGroupingComplianceInspectionTest extends BaseUnit {
 
     @Resource
-    private ApplicationGroupingComplianceInspection applicationGroupingComplianceInspection;
+    private ApplicationGroupingComplianceInspectionTask applicationGroupingComplianceInspection;
 
     @Test
     void test() {
