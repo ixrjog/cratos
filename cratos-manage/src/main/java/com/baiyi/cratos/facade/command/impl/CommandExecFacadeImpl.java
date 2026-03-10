@@ -284,7 +284,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         // SRE 事件总线 开始执行
         User user = userService.getByUsername(commandExec.getUsername());
         try {
-            SreBridgeUtils.publish(SreEventFormatter.format(
+            SreBridgeUtils.publish(SreEventFormatter.executeCommand(
                     user, holder.getInstance()
                             .getEdsInstance()
                             .getInstanceName(), namespace, commandExec.getCommand()
@@ -298,7 +298,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         );
         // SRE 事件总线 开始执行
         try {
-            SreBridgeUtils.publish(SreEventFormatter.format(
+            SreBridgeUtils.publish(SreEventFormatter.executeCommand(
                     user, holder.getInstance()
                             .getEdsInstance()
                             .getInstanceName(), namespace, commandExec.getCommand(), execContext.getSuccess(),

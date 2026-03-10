@@ -169,7 +169,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                             )
                     );
                     // SRE
-                    SreBridgeUtils.publish(SreEventFormatter.format(
+                    SreBridgeUtils.publish(SreEventFormatter.loginContainer(
                             user, SreEventFormatter.Action.LOGIN_CONTAINER, deployment.getKubernetesClusterName(),
                             pod.getNamespace(), deployment.getName(), pod.getName()
                     ));

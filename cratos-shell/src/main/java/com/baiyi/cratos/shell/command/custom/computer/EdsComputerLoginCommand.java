@@ -199,10 +199,6 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
             User user = userService.getByUsername(helper.getSshSession()
                                                           .getUsername());
-            String target = StringFormatter.arrayFormat(
-                    "{} ({}@{})", asset.getName(),
-                    serverAccount.getUsername(), asset.getAssetKey()
-            );
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 try {
@@ -212,7 +208,14 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     );
                     sendUserLoginServerNotice(msg);
                     SreBridgeUtils.publish(
-                            SreEventFormatter.format(user, SreEventFormatter.Action.LOGIN_SERVER, target));
+                            SreEventFormatter.loginServer(
+                                    user, SreEventFormatter.Action.LOGIN_SERVER, asset.getName(),
+                                    serverAccount.getUsername(), asset.getAssetKey()
+                            ));
+                    String target = StringFormatter.arrayFormat(
+                            "{} ({}@{})", asset.getName(),
+                            serverAccount.getUsername(), asset.getAssetKey()
+                    );
                     SiemSecurityLogger.log(
                             SiemSecurityLogger.EventType.LOGIN, helper.getSshSession()
                                     .getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS,
@@ -257,7 +260,10 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
                 serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
                 SreBridgeUtils.publish(
-                        SreEventFormatter.format(user, SreEventFormatter.Action.LOGOUT_SERVER, target));
+                        SreEventFormatter.loginServer(
+                                user, SreEventFormatter.Action.LOGOUT_SERVER, asset.getName(),
+                                serverAccount.getUsername(), asset.getAssetKey()
+                        ));
                 SiemSecurityLogger.log(
                         SiemSecurityLogger.EventType.LOGOUT, helper.getSshSession()
                                 .getUsername(), SiemSecurityLogger.Action.LOGOUT, StringFormatter.arrayFormat(
