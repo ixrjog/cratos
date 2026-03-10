@@ -329,4 +329,14 @@ public class EdsConfigs {
         private String url;
     }
 
+    @Data
+    @NoArgsConstructor
+    @Schema
+    public static class SreEventBridge implements HasEdsConfig {
+        private EdsInstance edsInstance;
+        private String name;
+        private String url;
+        private EdsSreEventBridgeConfigModel.Cred cred;
+    }
+
 }

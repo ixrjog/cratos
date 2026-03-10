@@ -1,7 +1,7 @@
 package com.baiyi.cratos.util;
 
 import com.baiyi.cratos.BaseUnit;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,8 +14,8 @@ public class SecurityLoggerTest extends BaseUnit {
     @Test
     void logTest() {
         //     public static void log(String eventType, String user, String action, String resource) {
-        SecurityLogger.log(
-                SecurityLogger.EventType.LOGIN, "baiyi", SecurityLogger.Action.LOGIN_SUCCESS, "User login Cratos");
-        SecurityLogger.log("LOGIN", "baiyi", "login_success", "User login Cratos SSH-Server");
+        SiemSecurityLogger.log(
+                SiemSecurityLogger.EventType.LOGIN, "baiyi", SiemSecurityLogger.Action.LOGIN_SUCCESS, "User login Cratos");
+        SiemSecurityLogger.log("LOGIN", "baiyi", "login_success", "User login Cratos SSH-Server");
     }
 }

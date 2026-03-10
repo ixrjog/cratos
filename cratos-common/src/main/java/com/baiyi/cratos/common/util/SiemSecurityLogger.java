@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SecurityLogger {
+public class SiemSecurityLogger {
 
     private static final Logger SECURITY = LoggerFactory.getLogger("SECURITY");
 

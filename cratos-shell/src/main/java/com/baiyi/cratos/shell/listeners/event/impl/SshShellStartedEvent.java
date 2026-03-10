@@ -1,7 +1,7 @@
 package com.baiyi.cratos.shell.listeners.event.impl;
 
 import com.baiyi.cratos.common.model.CratosHostHolder;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.domain.generator.SshSession;
 import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.shell.SshShellHelper;
@@ -49,10 +49,10 @@ public class SshShellStartedEvent extends BaseSshShellEvent {
                 .getUsername(), CratosHostHolder.get(), sc.getRemoteAddress(), SshSessionTypeEnum.SSH_SERVER);
         simpleSshSessionFacade.addSshSession(sshSession);
 
-        SecurityLogger.log(
-                SecurityLogger.EventType.LOGIN, event.getSession()
+        SiemSecurityLogger.log(
+                SiemSecurityLogger.EventType.LOGIN, event.getSession()
                         .getServerSession()
-                        .getUsername(), SecurityLogger.Action.LOGIN_SUCCESS,
+                        .getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS,
                 "User login Cratos SSH-Server"
         );
     }

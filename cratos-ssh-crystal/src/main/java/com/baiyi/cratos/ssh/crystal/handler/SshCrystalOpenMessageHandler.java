@@ -1,7 +1,7 @@
 package com.baiyi.cratos.ssh.crystal.handler;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.domain.SimpleBusiness;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
@@ -110,8 +110,8 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             // 发送登录通知
             sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
             // syslog
-            SecurityLogger.log(
-                    SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
+            SiemSecurityLogger.log(
+                    SiemSecurityLogger.EventType.LOGIN, username, SiemSecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
                             "SSH login to server {} ({}@{}) via Cratos Crystal", server.getName(),
                             targetSystem.getLoginUsername(),server.getAssetKey()
                     )

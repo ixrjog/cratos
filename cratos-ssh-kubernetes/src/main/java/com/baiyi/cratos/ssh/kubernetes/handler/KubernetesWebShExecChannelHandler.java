@@ -2,7 +2,7 @@ package com.baiyi.cratos.ssh.kubernetes.handler;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
@@ -23,6 +23,8 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.facade.AccessControlFacade;
@@ -144,6 +146,7 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
         if (edsInstance == null) {
             return;
         }
+        User user = userService.getByUsername(username);
         EdsConfigs.Kubernetes kubernetes = getKubernetes(kubernetesMap, edsInstance.getId());
         deployment.getPods()
                 .forEach(pod -> {
@@ -157,14 +160,19 @@ public class KubernetesWebShExecChannelHandler extends BaseKubernetesWebShChanne
                     // dingtalk
                     sendUserLoginContainerNotice(username, deployment, pod);
                     // syslog
-                    SecurityLogger.log(
-                            SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGIN_SUCCESS,
+                    SiemSecurityLogger.log(
+                            SiemSecurityLogger.EventType.LOGIN, username, SiemSecurityLogger.Action.LOGIN_SUCCESS,
                             StringFormatter.arrayFormat(
                                     "Login to kubernetes pod {} (cluster:{} namespace:{} deployment:{}) via Cratos Kubernetes",
                                     pod.getName(), deployment.getKubernetesClusterName(), pod.getNamespace(),
                                     deployment.getName()
                             )
                     );
+                    // SRE
+                    SreBridgeUtils.publish(SreEventFormatter.format(
+                            user, SreEventFormatter.Action.LOGIN_CONTAINER, deployment.getKubernetesClusterName(),
+                            pod.getNamespace(), deployment.getName(), pod.getName()
+                    ));
                     // 记录
                     simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                     kubernetesRemoteInvokeHandler.handeExecWatch(sessionId, instanceId, kubernetes, pod, auditPath);

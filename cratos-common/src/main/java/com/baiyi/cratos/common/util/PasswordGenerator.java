@@ -33,7 +33,7 @@ public class PasswordGenerator {
      *
      * @return
      */
-    public static String generateTicketNo() {
+    public static String generateNo() {
         return generatePassword(8, true, false, true, false);
     }
 

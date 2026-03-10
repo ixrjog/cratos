@@ -18,6 +18,8 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.exec.KubernetesPodExec;
 import com.baiyi.cratos.eds.kubernetes.exec.context.PodExecContext;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
@@ -82,8 +84,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         if (Objects.isNull(approverUser)) {
             CommandExecException.runtime("The approver {} does not exist.", commandExec.getApprovedBy());
         }
-        if (!businessTagFacade.containsTag(BusinessTypeEnum.USER.name(), approverUser.getId(),
-                SysTagKeys.COMMAND_EXEC_APPROVER.getKey())) {
+        if (!businessTagFacade.containsTag(
+                BusinessTypeEnum.USER.name(), approverUser.getId(),
+                SysTagKeys.COMMAND_EXEC_APPROVER.getKey()
+        )) {
             CommandExecException.runtime("The designated approver does not have approval qualifications.");
         }
         // 校验Eds Kubernetes
@@ -108,16 +112,16 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .id(edsInstance.getId())
                 .name(edsInstance.getInstanceName())
                 .namespace(addCommandExec.getExecTarget()
-                        .getNamespace())
+                                   .getNamespace())
                 .build();
         CommandExecModel.ExecTarget execTarget = CommandExecModel.ExecTarget.builder()
                 .instance(instance)
                 .useDefaultExecContainer(addCommandExec.getExecTarget()
-                        .isUseDefaultExecContainer())
+                                                 .isUseDefaultExecContainer())
                 .maxWaitingTime(Optional.of(addCommandExec)
-                        .map(CommandExecParam.AddCommandExec::getExecTarget)
-                        .map(CommandExecParam.ExecTarget::getMaxWaitingTime)
-                        .orElse(DEFAULT_MAX_WAITING_TIME))
+                                        .map(CommandExecParam.AddCommandExec::getExecTarget)
+                                        .map(CommandExecParam.ExecTarget::getMaxWaitingTime)
+                                        .orElse(DEFAULT_MAX_WAITING_TIME))
                 .build();
         commandExec.setExecTargetContent(execTarget.dump());
         commandExecService.add(commandExec);
@@ -160,8 +164,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     public void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec) {
         CommandExec commandExec = commandExecService.getById(approveCommandExec.getCommandExecId());
         if (Objects.isNull(commandExec)) {
-            CommandExecException.runtime("The commandExec id={} does not exist.",
-                    approveCommandExec.getCommandExecId());
+            CommandExecException.runtime(
+                    "The commandExec id={} does not exist.",
+                    approveCommandExec.getCommandExecId()
+            );
         }
         if (Boolean.TRUE.equals(commandExec.getCompleted())) {
             CommandExecException.runtime("The commandExec is completed.", approveCommandExec.getCommandExecId());
@@ -199,8 +205,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     private void autoCommandExec(CommandExec commandExec) {
-        List<CommandExecApproval> approvals = commandExecApprovalService.queryApprovals(commandExec.getId(),
-                        CommandExecApprovalTypeEnum.APPROVER.name())
+        List<CommandExecApproval> approvals = commandExecApprovalService.queryApprovals(
+                        commandExec.getId(),
+                        CommandExecApprovalTypeEnum.APPROVER.name()
+                )
                 .stream()
                 .filter(e -> !(Boolean.TRUE.equals(
                         e.getApprovalCompleted()) && CommandExecApprovalStatusEnum.AGREE.name()
@@ -218,8 +226,11 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "10s", lockAtLeastFor = "10s")
     public void doCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
         CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());
-        CommandExecVO.ApplicantInfo applicantInfo = commandExecWrapper.getApplicantInfo(commandExec.getId(),
-                commandExec.getUsername(), commandExec.getCompleted());
+        CommandExecVO.ApplicantInfo applicantInfo = commandExecWrapper.getApplicantInfo(
+                commandExec.getId(),
+                commandExec.getUsername(),
+                commandExec.getCompleted()
+        );
         if (!applicantInfo.isExecCommand()) {
             CommandExecException.runtime("Cannot execute command.");
         }
@@ -244,7 +255,8 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .getNamespace();
         EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, ?>) holderBuilder.newHolder(
                 execTarget.getInstance()
-                        .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+                        .getId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
+        );
         PodExecContext execContext = PodExecContext.builder()
                 .maxWaitingTime(maxWaitingTime)
                 .command(commandExec.getCommand())
@@ -252,8 +264,10 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
         EdsConfigs.Kubernetes kubernetes = holder.getInstance()
                 .getConfig();
         // 查询当前实例下打标签的资产
-        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(BusinessTypeEnum.EDS_ASSET.name(),
-                SysTagKeys.COMMAND_EXEC.getKey());
+        List<Integer> assetIds = businessTagFacade.queryByBusinessTypeAndTagKey(
+                BusinessTypeEnum.EDS_ASSET.name(),
+                SysTagKeys.COMMAND_EXEC.getKey()
+        );
         if (CollectionUtils.isEmpty(assetIds)) {
             CommandExecException.runtime("No available execution target.");
         }
@@ -267,8 +281,33 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .filter(KubeUtils::isReadyOf)
                 .findFirst()
                 .orElseThrow(() -> new CommandExecException("No available execution pods."));
-        kubernetesPodExec.exec(kubernetes, namespace, execPod.getMetadata()
-                .getName(), execContext, new CountDownLatch(1));
+        // SRE 事件总线 开始执行
+        User user = userService.getByUsername(commandExec.getUsername());
+        try {
+            SreBridgeUtils.publish(SreEventFormatter.format(
+                    user, holder.getInstance()
+                            .getEdsInstance()
+                            .getInstanceName(), namespace, commandExec.getCommand()
+            ));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        kubernetesPodExec.exec(
+                kubernetes, namespace, execPod.getMetadata()
+                        .getName(), execContext, new CountDownLatch(1)
+        );
+        // SRE 事件总线 开始执行
+        try {
+            SreBridgeUtils.publish(SreEventFormatter.format(
+                    user, holder.getInstance()
+                            .getEdsInstance()
+                            .getInstanceName(), namespace, commandExec.getCommand(), execContext.getSuccess(),
+                    execContext.getOutMsg(), execContext.getErrorMsg()
+            ));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        // 执行结束
         commandExec.setOutMsg(execContext.getOutMsg());
         commandExec.setErrorMsg(execContext.getErrorMsg());
         commandExec.setSuccess(execContext.getSuccess());
@@ -282,7 +321,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                 .map(edsAssetService::getById)
                 .filter(asset -> asset.getInstanceId()
                         .equals(execTarget.getInstance()
-                                .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
+                                        .getId()) && EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
                         .equals(asset.getAssetType()))
                 .findFirst()
                 .orElseThrow(() -> new CommandExecException("No available execution target."));

@@ -3,7 +3,7 @@ package com.baiyi.cratos.facade.impl;
 import com.baiyi.cratos.common.auth.AuthProvider;
 import com.baiyi.cratos.common.auth.factory.AuthProviderFactory;
 import com.baiyi.cratos.common.exception.auth.AuthenticationException;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.login.LoginParam;
 import com.baiyi.cratos.domain.view.log.LoginVO;
@@ -50,16 +50,16 @@ public class AuthFacadeImpl implements AuthFacade {
         // 用户名大小写不匹配
         if (!loginParam.getUsername()
                 .equals(user.getUsername())) {
-            SecurityLogger.log(
-                    SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_FAILED,
+            SiemSecurityLogger.log(
+                    SiemSecurityLogger.EventType.LOGIN, loginParam.getUsername(), SiemSecurityLogger.Action.LOGIN_FAILED,
                     "User login failed Cratos"
             );
             throw new AuthenticationException(INCORRECT_USERNAME_OR_PASSWORD);
         }
         // locked
         if (user.getLocked() != null && user.getLocked()) {
-            SecurityLogger.log(
-                    SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_FAILED,
+            SiemSecurityLogger.log(
+                    SiemSecurityLogger.EventType.LOGIN, loginParam.getUsername(), SiemSecurityLogger.Action.LOGIN_FAILED,
                     "User login failed Cratos"
             );
             throw new AuthenticationException(USER_IS_LOCKED);
@@ -72,8 +72,8 @@ public class AuthFacadeImpl implements AuthFacade {
                 .build();
         userService.updateByPrimaryKeySelective(loginUser);
         login.setUsername(loginParam.getUsername());
-        SecurityLogger.log(
-                SecurityLogger.EventType.LOGIN, loginParam.getUsername(), SecurityLogger.Action.LOGIN_SUCCESS,
+        SiemSecurityLogger.log(
+                SiemSecurityLogger.EventType.LOGIN, loginParam.getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS,
                 "User login Cratos"
         );
         return login;
@@ -87,8 +87,8 @@ public class AuthFacadeImpl implements AuthFacade {
                 .filter(StringUtils::hasText)
                 .ifPresent(username -> {
                     userTokenFacade.logout(username);
-                    SecurityLogger.log(
-                            SecurityLogger.EventType.LOGIN, username, SecurityLogger.Action.LOGOUT,
+                    SiemSecurityLogger.log(
+                            SiemSecurityLogger.EventType.LOGIN, username, SiemSecurityLogger.Action.LOGOUT,
                             "User logout Cratos"
                     );
                 });

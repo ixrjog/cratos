@@ -47,7 +47,6 @@ public class AliyunOssBucketPolicyInspectionTask extends BaseEdsInspectionTask<E
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Pattern RESOURCE_PREFIX_PATTERN = Pattern.compile("acs:oss:\\*:\\d+:");
-
     private static final String POLICIES_FIELD = "policies";
     private final EdsAssetService edsAssetService;
 

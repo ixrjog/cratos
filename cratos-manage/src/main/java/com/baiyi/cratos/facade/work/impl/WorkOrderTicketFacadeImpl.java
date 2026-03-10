@@ -74,7 +74,7 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
                         "Work order development in progress. Please wait for the work order to be completed.");
             }
         }
-        final String ticketNo = PasswordGenerator.generateTicketNo();
+        final String ticketNo = PasswordGenerator.generateNo();
         createTicket.setTicketNo(ticketNo);
         TicketEvent<WorkOrderTicketParam.CreateTicket> event = TicketEvent.of(createTicket);
         TicketInStateProcessorFactory.change(TicketState.CREATE, TicketStateChangeAction.CREATE, event);

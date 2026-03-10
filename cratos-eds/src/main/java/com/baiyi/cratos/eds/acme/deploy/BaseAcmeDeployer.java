@@ -47,7 +47,7 @@ public abstract class BaseAcmeDeployer<Config extends HasEdsConfig> implements A
 
     protected String generateCertName(AcmeCertificate acmeCertificate) {
         return StringFormatter.arrayFormat(
-                CERT_NAME_TPL, PasswordGenerator.generateTicketNo(), extractPrimaryDomain(acmeCertificate.getDomains()),
+                CERT_NAME_TPL, PasswordGenerator.generateNo(), extractPrimaryDomain(acmeCertificate.getDomains()),
                 TimeUtils.parse(acmeCertificate.getNotAfter(), "yyyy-MM-dd")
         );
     }

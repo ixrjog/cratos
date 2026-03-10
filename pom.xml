@@ -44,6 +44,7 @@
         <module>cratos-eds-crt</module>
         <module>cratos-eds-acme</module>
         <module>cratos-eds-ucloud</module>
+        <module>cratos-eds-sre</module>
     </modules>
 
     <properties>
@@ -337,6 +338,11 @@
             <dependency>
                 <groupId>com.baiyi.cratos</groupId>
                 <artifactId>cratos-socks-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baiyi.cratos</groupId>
+                <artifactId>cratos-eds-sre</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

@@ -38,7 +38,8 @@ public enum EdsInstanceTypeEnum {
     JENKINS,
     EAGLECLOUD_SASE,
     ZABBIX,
-    CRT;
+    CRT,
+    SRE_EVENTBRIDGE;
 
     public static OptionsVO.Options toOptions() {
         List<OptionsVO.Option> optionList = Arrays.stream(EdsInstanceTypeEnum.values())

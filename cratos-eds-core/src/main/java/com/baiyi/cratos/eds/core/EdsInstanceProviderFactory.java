@@ -35,8 +35,10 @@ public class EdsInstanceProviderFactory {
 
     public static <Config extends HasEdsConfig, Asset> void register(
             EdsInstanceAssetProvider<Config, Asset> providerBean) {
-        log.info("EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(),
-                providerBean.getAssetType());
+        log.info(
+                "EdsInstanceProviderFactory Registered: instanceType={}, assetType={}", providerBean.getInstanceType(),
+                providerBean.getAssetType()
+        );
         if (CONTEXT.containsKey(providerBean.getInstanceType())) {
             Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = CONTEXT.get(
                     providerBean.getInstanceType());
@@ -49,6 +51,9 @@ public class EdsInstanceProviderFactory {
     }
 
     public static <Asset> Asset produceModel(String instanceType, String assetType, EdsAssetVO.Asset asset) {
+        if (!EdsInstanceProviderFactory.CONTEXT.containsKey(instanceType)) {
+            throw new EdsConfigException("The eds instance type {} is incorrect.", instanceType);
+        }
         return (Asset) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .assetLoadAs(asset.getOriginalModel());
@@ -56,6 +61,9 @@ public class EdsInstanceProviderFactory {
 
     public static <Config extends HasEdsConfig> Config produceConfig(String instanceType, String assetType,
                                                                      EdsConfig edsConfig) {
+        if (!EdsInstanceProviderFactory.CONTEXT.containsKey(instanceType)) {
+            throw new EdsConfigException("The eds instance type {} is incorrect.", instanceType);
+        }
         return (Config) EdsInstanceProviderFactory.CONTEXT.get(instanceType)
                 .get(assetType)
                 .configLoadAs(edsConfig);
@@ -118,10 +126,12 @@ public class EdsInstanceProviderFactory {
         }
         Map<String, EdsInstanceAssetProvider<? extends HasEdsConfig, ?>> providerMap = CONTEXT.get(instanceType);
         if (!providerMap.containsKey(assetType)) {
-            EdsInstanceProviderException.runtime("No available provider: instanceType={}, assetType={}.", instanceType,
-                    assetType);
+            EdsInstanceProviderException.runtime(
+                    "No available provider: instanceType={}, assetType={}.", instanceType,
+                    assetType
+            );
         }
-        EdsInstanceAssetProvider<Config , Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) providerMap.get(
+        EdsInstanceAssetProvider<Config, Asset> provider = (EdsInstanceAssetProvider<Config, Asset>) providerMap.get(
                 assetType);
         return EdsInstanceProviderHolder.<Config, Asset>builder()
                 .instance(instance)

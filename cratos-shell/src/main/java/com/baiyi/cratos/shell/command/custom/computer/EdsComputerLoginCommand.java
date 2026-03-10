@@ -2,7 +2,7 @@ package com.baiyi.cratos.shell.command.custom.computer;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
 import com.baiyi.cratos.common.enums.SysTagKeys;
-import com.baiyi.cratos.common.util.SecurityLogger;
+import com.baiyi.cratos.common.util.SiemSecurityLogger;
 import com.baiyi.cratos.common.util.SshIdUtils;
 import com.baiyi.cratos.common.util.TimeUtils;
 import com.baiyi.cratos.common.util.UserDisplayUtils;
@@ -21,6 +21,8 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.model.DingtalkRobotModel;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.CredentialService;
@@ -195,22 +197,26 @@ public class EdsComputerLoginCommand extends AbstractCommand {
             TerminalSignalHandler watchTerminalSignalHandler = new TerminalSignalHandler(
                     sessionId, sshSessionInstanceId, terminal);
             Terminal.SignalHandler prevHandler = terminal.handle(Terminal.Signal.WINCH, watchTerminalSignalHandler);
+            User user = userService.getByUsername(helper.getSshSession()
+                                                          .getUsername());
+            String target = StringFormatter.arrayFormat(
+                    "{} ({}@{})", asset.getName(),
+                    serverAccount.getUsername(), asset.getAssetKey()
+            );
             try {
                 simpleSshSessionFacade.addSshSessionInstance(sshSessionInstance);
                 try {
-                    User user = userService.getByUsername(helper.getSshSession()
-                                                                  .getUsername());
                     DingtalkRobotModel.Msg msg = getMsg(
                             user, serverAccount.getUsername(), asset.getAssetKey(),
                             asset.getName()
                     );
                     sendUserLoginServerNotice(msg);
-                    SecurityLogger.log(
-                            SecurityLogger.EventType.LOGIN, helper.getSshSession()
-                                    .getUsername(), SecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
-                                    "SSH login to server {} ({}@{}) via Cratos SSH-Server", asset.getName(),
-                                    serverAccount.getUsername(), asset.getAssetKey()
-                            )
+                    SreBridgeUtils.publish(
+                            SreEventFormatter.format(user, SreEventFormatter.Action.LOGIN_SERVER, target));
+                    SiemSecurityLogger.log(
+                            SiemSecurityLogger.EventType.LOGIN, helper.getSshSession()
+                                    .getUsername(), SiemSecurityLogger.Action.LOGIN_SUCCESS,
+                            StringFormatter.format("SSH login to server {} via Cratos SSH-Server", target)
                     );
                 } catch (IOException ignored) {
                 }
@@ -250,9 +256,11 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 }
                 simpleSshSessionFacade.closeSshSessionInstance(sshSessionInstance);
                 serverCommandAuditor.asyncRecordCommand(sessionId, sshSessionInstanceId);
-                SecurityLogger.log(
-                        SecurityLogger.EventType.LOGOUT, helper.getSshSession()
-                                .getUsername(), SecurityLogger.Action.LOGOUT, StringFormatter.arrayFormat(
+                SreBridgeUtils.publish(
+                        SreEventFormatter.format(user, SreEventFormatter.Action.LOGOUT_SERVER, target));
+                SiemSecurityLogger.log(
+                        SiemSecurityLogger.EventType.LOGOUT, helper.getSshSession()
+                                .getUsername(), SiemSecurityLogger.Action.LOGOUT, StringFormatter.arrayFormat(
                                 "SSH logout to server {} ({}@{}) via Cratos SSH-Server", asset.getName(),
                                 serverAccount.getUsername(), asset.getAssetKey()
                         )
