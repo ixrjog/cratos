@@ -28,7 +28,9 @@ public class SreEventFormatter {
         LOGIN_CONTAINER("loginContainer"),
         EXECUTE_COMMAND("executeCommand"),
         CHANGE_INGRESS("changeIngress"),
-        REDEPLOY_DEPLOYMENT("redeployDeployment") ;
+        REDEPLOY_DEPLOYMENT("redeployDeployment"),
+        DELETE_POD("deletePod"),
+        ;
 
         private final String value;
 
@@ -37,7 +39,42 @@ public class SreEventFormatter {
         }
     }
 
+    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event deletePod(User user, String ticketNo,
+                                                                               String ticketId, String cluster,
+                                                                               String namespace, String deploymentName,
+                                                                               String podName) {
+        Map<String, String> ext = Map.ofEntries(entry("ticketNo", ticketNo), entry("ticketId", ticketId));
+        Map<String, String> targetContent = Map.ofEntries(
+                entry("cluster", cluster), entry("namespace", namespace),
+                entry("deployment", deploymentName), entry("pod", podName)
+        );
+        return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                .operator(user.getEmail())
+                .action(Action.DELETE_POD.value)
+                .description(StringFormatter.format(
+                        "Delete Kubernetes pod {} via Cratos Kubernetes Resources",
+                        deploymentName
+                ))
+                .target(podName)
+                .targetContent(targetContent)
+                .env(namespace)
+                .affection("")
+                .severity("low")
+                .status("executed")
+                .ext(ext)
+                .build();
+    }
 
+    /**
+     *
+     * @param user
+     * @param ticketNo
+     * @param ticketId
+     * @param cluster
+     * @param namespace
+     * @param deploymentName
+     * @return
+     */
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event redeployDeployment(User user, String ticketNo,
                                                                                         String ticketId, String cluster,
                                                                                         String namespace,
@@ -50,8 +87,10 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(Action.REDEPLOY_DEPLOYMENT.value)
-                .description(
-                        StringFormatter.format("Change Kubernetes Ingress rate limit configuration: {}", changeMessage))
+                .description(StringFormatter.format(
+                        "Redeploy Kubernetes deployment {} via Cratos Kubernetes Resources",
+                        deploymentName
+                ))
                 .target(deploymentName)
                 .targetContent(targetContent)
                 .env(namespace)
@@ -117,10 +156,12 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(action.getValue())
-                .description(StringFormatter.arrayFormat(
-                        "SSH {} to server {}({}@{}) via Cratos SSH-Server",
-                        action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount, serverIp
-                ))
+                .description(
+                        StringFormatter.arrayFormat(
+                                "SSH {} to server {}({}@{}) via Cratos SSH-Server",
+                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount,
+                                serverIp
+                        ))
                 .target(serverName)
                 .targetContent(targetContent)
                 .affection("")

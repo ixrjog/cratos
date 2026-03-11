@@ -24,6 +24,7 @@ import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
 import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
@@ -237,15 +238,36 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 Optional<String> optionalApplicationName = KubeUtils.findApplicationNameOf(pod);
                 if (optionalApplicationName.isPresent() && param.getApplicationName()
                         .equals(optionalApplicationName.get())) {
+                    final String cluster = Optional.of(holder)
+                            .map(EdsInstanceProviderHolder::getInstance)
+                            .map(ExternalDataSourceInstance::getEdsInstance)
+                            .map(EdsInstance::getInstanceName)
+                            .orElse("--");
+                    final String namespace = param.getNamespace();
+                    final String ticketNo = deleteToken.getTicketNo();
+                    final Integer ticketId = deleteToken.getTicketId();
+                    final String podName = param.getPodName();
                     // 匹配到应用名称
                     ApplicationDeploymentModel.DeleteDeploymentPod detail = ApplicationDeploymentModel.DeleteDeploymentPod.builder()
-                            .namespace(param.getNamespace())
-                            .podName(param.getPodName())
-                            .ticketNo(deleteToken.getTicketNo())
-                            .ticketId(deleteToken.getTicketId())
+                            .namespace(namespace)
+                            .podName(podName)
+                            .ticketNo(ticketNo)
+                            .ticketId(ticketId)
                             .asset(deploymentAsset)
                             .build();
                     try {
+                        // SRE
+                        try {
+                            User user = userService.getByUsername(SessionUtils.getUsername());
+                            final String deploymentName = resource.getName();
+                            SreBridgeUtils.publish(
+                                    SreEventFormatter.deletePod(
+                                            user, ticketNo, String.valueOf(ticketId), cluster, namespace,
+                                            deploymentName, podName
+                                    ));
+                        } catch (Exception e) {
+                            log.error(e.getMessage());
+                        }
                         kubernetesPodRepo.delete(
                                 holder.getInstance()
                                         .getConfig(), param.getNamespace(), param.getPodName()
@@ -298,11 +320,6 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                     .map(ExternalDataSourceInstance::getEdsInstance)
                     .map(EdsInstance::getInstanceName)
                     .orElse("--");
-
-
-            holder.getInstance()
-                    .getEdsInstance()
-                    .getInstanceName();
             final String namespace = param.getNamespace();
             final String ticketNo = deleteToken.getTicketNo();
             final Integer ticketId = deleteToken.getTicketId();
@@ -322,10 +339,11 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                     // SRE
                     try {
                         User user = userService.getByUsername(SessionUtils.getUsername());
-                        SreEventFormatter.redeployDeployment(
-                                user, ticketNo, String.valueOf(ticketId), cluster, namespace, deploymentName);
-
-
+                        SreBridgeUtils.publish(
+                                SreEventFormatter.redeployDeployment(
+                                        user, ticketNo, String.valueOf(ticketId), cluster,
+                                        namespace, deploymentName
+                                ));
                     } catch (Exception e) {
                         log.error(e.getMessage());
                     }
