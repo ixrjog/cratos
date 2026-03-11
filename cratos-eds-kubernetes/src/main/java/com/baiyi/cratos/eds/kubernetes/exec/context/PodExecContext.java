@@ -28,8 +28,18 @@ public class PodExecContext {
     @Schema(description = "Seconds.")
     private Long maxWaitingTime = 60L;
 
+    /**
+     * 转换为可执行的命令数组
+     * 将 Windows 换行符 (CRLF) 转换为 Unix 换行符 (LF)
+     * @return 命令数组
+     */
     public String[] toExec() {
-        return new String[]{"sh", "-c", command};
+        if (command == null || command.isEmpty()) {
+            return new String[]{"sh", "-c", ""};
+        }
+        // 统一换行符：CRLF -> LF, CR -> LF
+        String normalizedCommand = command.replace("\r\n", "\n").replace("\r", "\n");
+        return new String[]{"sh", "-c", normalizedCommand};
     }
 
     public String getOutMsg() {

@@ -29,7 +29,7 @@ public class SreEventFormatter {
         EXECUTE_COMMAND("executeCommand"),
         CHANGE_INGRESS("changeIngress"),
         REDEPLOY_DEPLOYMENT("redeployDeployment"),
-        DELETE_POD("deletePod"),
+        DELETE_POD("deletePod")
         ;
 
         private final String value;
@@ -146,7 +146,7 @@ public class SreEventFormatter {
      */
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event loginServer(User user, Action action,
                                                                                  String serverName, String loginAccount,
-                                                                                 String serverIp) {
+                                                                                 String serverIp, String module) {
         Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
         Map<String, String> targetContent = Map.ofEntries(
                 entry("serverName", serverName),
@@ -156,10 +156,12 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(action.getValue())
-                .description(StringFormatter.arrayFormat(
-                        "SSH {} to server {}({}@{}) via Cratos SSH-Server",
-                        action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount, serverIp
-                ))
+                .description(
+                        StringFormatter.arrayFormat(
+                                "SSH {} to server {}({}@{}) via Cratos {}",
+                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount,
+                                serverIp, module
+                        ))
                 .target(serverName)
                 .targetContent(targetContent)
                 .affection("")

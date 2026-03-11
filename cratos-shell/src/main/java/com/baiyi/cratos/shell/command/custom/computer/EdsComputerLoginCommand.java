@@ -210,7 +210,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                     SreBridgeUtils.publish(
                             SreEventFormatter.loginServer(
                                     user, SreEventFormatter.Action.LOGIN_SERVER, asset.getName(),
-                                    serverAccount.getUsername(), asset.getAssetKey()
+                                    serverAccount.getUsername(), asset.getAssetKey(), "SSH-Server"
                             ));
                     String target = StringFormatter.arrayFormat(
                             "{} ({}@{})", asset.getName(),
@@ -262,7 +262,7 @@ public class EdsComputerLoginCommand extends AbstractCommand {
                 SreBridgeUtils.publish(
                         SreEventFormatter.loginServer(
                                 user, SreEventFormatter.Action.LOGOUT_SERVER, asset.getName(),
-                                serverAccount.getUsername(), asset.getAssetKey()
+                                serverAccount.getUsername(), asset.getAssetKey(), "SSH-Server"
                         ));
                 SiemSecurityLogger.log(
                         SiemSecurityLogger.EventType.LOGOUT, helper.getSshSession()

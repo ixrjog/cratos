@@ -10,6 +10,7 @@ import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.access.AccessControlVO;
 import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.service.*;
 import com.baiyi.cratos.ssh.core.builder.HostSystemBuilder;
@@ -109,11 +110,23 @@ public class SshCrystalOpenMessageHandler extends BaseSshCrystalOpenMessageHandl
             openSshCrystal(sshSession, targetSystem, proxySystem);
             // 发送登录通知
             sendUserLoginServerNotice(username, server, targetSystem.getLoginUsername());
+            // SRE
+            final String serverName = server.getName();
+            final String loginAccount = targetSystem.getLoginUsername();
+            final String serverIp = server.getAssetKey();
+            try {
+                User user = userService.getByUsername(username);
+                SreEventFormatter.loginServer(
+                        user, SreEventFormatter.Action.LOGIN_SERVER, serverName, loginAccount, serverIp, "Crystal");
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
             // syslog
             SiemSecurityLogger.log(
-                    SiemSecurityLogger.EventType.LOGIN, username, SiemSecurityLogger.Action.LOGIN_SUCCESS, StringFormatter.arrayFormat(
-                            "SSH login to server {} ({}@{}) via Cratos Crystal", server.getName(),
-                            targetSystem.getLoginUsername(),server.getAssetKey()
+                    SiemSecurityLogger.EventType.LOGIN, username, SiemSecurityLogger.Action.LOGIN_SUCCESS,
+                    StringFormatter.arrayFormat(
+                            "SSH login to server {} ({}@{}) via Cratos Crystal", serverName,
+                            loginAccount, serverIp
                     )
             );
         } catch (Exception e) {
