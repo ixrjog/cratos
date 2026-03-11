@@ -287,7 +287,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
             SreBridgeUtils.publish(SreEventFormatter.executeCommand(
                     user, holder.getInstance()
                             .getEdsInstance()
-                            .getInstanceName(), namespace, commandExec.getCommand()
+                            .getInstanceName(), namespace, commandExec.getCommand(), commandExec.getApplyRemark()
             ));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -302,7 +302,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
                     user, holder.getInstance()
                             .getEdsInstance()
                             .getInstanceName(), namespace, commandExec.getCommand(), execContext.getSuccess(),
-                    execContext.getOutMsg(), execContext.getErrorMsg()
+                    execContext.getOutMsg(), execContext.getErrorMsg(), commandExec.getApplyRemark()
             ));
         } catch (Exception e) {
             log.error(e.getMessage(), e);

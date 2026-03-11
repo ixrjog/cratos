@@ -156,12 +156,10 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(action.getValue())
-                .description(
-                        StringFormatter.arrayFormat(
-                                "SSH {} to server {}({}@{}) via Cratos SSH-Server",
-                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount,
-                                serverIp
-                        ))
+                .description(StringFormatter.arrayFormat(
+                        "SSH {} to server {}({}@{}) via Cratos SSH-Server",
+                        action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount, serverIp
+                ))
                 .target(serverName)
                 .targetContent(targetContent)
                 .affection("")
@@ -217,11 +215,12 @@ public class SreEventFormatter {
      * @return
      */
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event executeCommand(User user, String cluster,
-                                                                                    String namespace, String command) {
+                                                                                    String namespace, String command,
+                                                                                    String remark) {
         String desensitizedCommand = RegexSensitiveDataMasker.maskSensitiveData(command);
         Map<String, String> ext = Map.ofEntries(
                 entry(EVENT_ID, PasswordGenerator.generateNo()), entry("masked", "true"), entry("phase", "started"),
-                entry("command", desensitizedCommand)
+                entry("command", desensitizedCommand), entry("remark", remark)
         );
         Map<String, String> targetContent = Map.ofEntries(entry("cluster", cluster), entry("namespace", namespace));
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
@@ -244,14 +243,14 @@ public class SreEventFormatter {
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event executeCommand(User user, String cluster,
                                                                                     String namespace, String command,
                                                                                     Boolean success, String outMsg,
-                                                                                    String errorMsg) {
+                                                                                    String errorMsg, String remark) {
         String desensitizedCommand = RegexSensitiveDataMasker.maskSensitiveData(command);
         String desensitizedOutMsg = RegexSensitiveDataMasker.maskSensitiveData(outMsg);
         String desensitizedErrorMsg = RegexSensitiveDataMasker.maskSensitiveData(errorMsg);
         Map<String, String> ext = Map.ofEntries(
                 entry(EVENT_ID, PasswordGenerator.generateNo()), entry("masked", "true"), entry("phase", "completed"),
                 entry("success", success.toString()), entry("command", desensitizedCommand),
-                entry("outMsg", desensitizedOutMsg), entry("errorMsg", desensitizedErrorMsg)
+                entry("outMsg", desensitizedOutMsg), entry("errorMsg", desensitizedErrorMsg), entry("remark", remark)
         );
         Map<String, String> targetContent = Map.ofEntries(entry("cluster", cluster), entry("namespace", namespace));
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
