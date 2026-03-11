@@ -64,8 +64,8 @@ public class SreBridgeModel {
         private String env = UNKNOWN;
         private String severity;
         private String affection;
-        private Map<String, String> sourceContent;
-        private Map<String, String> targetContent;
+        private String sourceContent;
+        private String targetContent;
         private Map<String, String> tag;
         private Map<String, String> ext;
         private String status;

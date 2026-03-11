@@ -18,7 +18,8 @@ public class SreBridgeFacade {
     public static SreBridgeModel.Result collectEvent(EdsConfigs.SreEventBridge sreEventBridge,
                                                      SreBridgeModel.Event event) {
         SreBridgeService sreBridgeService = SreBridgeServiceFactory.createSreBridgeService(sreEventBridge);
-        return sreBridgeService.collectEvent(event);
+        SreBridgeModel.Result result = sreBridgeService.collectEvent(event);
+        return result;
     }
 
 }

@@ -4,6 +4,8 @@ import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.util.StringFormatter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 
 import java.util.Map;
@@ -20,6 +22,19 @@ import static java.util.Map.entry;
 public class SreEventFormatter {
 
     public static final String EVENT_ID = "eventId";
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    private static String mapToJson(Map<String, String> map) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+        try {
+            return OBJECT_MAPPER.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
 
     @Getter
     public enum Action {
@@ -56,7 +71,7 @@ public class SreEventFormatter {
                         deploymentName
                 ))
                 .target(podName)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
@@ -92,7 +107,7 @@ public class SreEventFormatter {
                         deploymentName
                 ))
                 .target(deploymentName)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
@@ -124,8 +139,8 @@ public class SreEventFormatter {
                 .description(
                         StringFormatter.format("Change Kubernetes Ingress rate limit configuration: {}", changeMessage))
                 .target(ingressName)
-                .sourceContent(sourceContent)
-                .targetContent(targetContent)
+                .sourceContent(SreEventFormatter.mapToJson(sourceContent))
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
@@ -163,7 +178,7 @@ public class SreEventFormatter {
                                 serverIp, module
                         ))
                 .target(serverName)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .affection("")
                 .severity("low")
                 .status("executed")
@@ -198,7 +213,7 @@ public class SreEventFormatter {
                         cluster, namespace, deployment
                 ))
                 .target(pod)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
@@ -233,7 +248,7 @@ public class SreEventFormatter {
                         cluster, namespace
                 ))
                 .target(cluster)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
@@ -263,7 +278,7 @@ public class SreEventFormatter {
                         cluster, namespace
                 ))
                 .target(cluster)
-                .targetContent(targetContent)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .env(namespace)
                 .affection("")
                 .severity("low")
