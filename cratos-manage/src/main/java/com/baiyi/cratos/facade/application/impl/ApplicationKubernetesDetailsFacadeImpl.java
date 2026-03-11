@@ -7,9 +7,7 @@ import com.baiyi.cratos.converter.impl.ApplicationKubernetesDeploymentConverter;
 import com.baiyi.cratos.converter.impl.ApplicationKubernetesServiceConverter;
 import com.baiyi.cratos.domain.channel.HasTopic;
 import com.baiyi.cratos.domain.channel.MessageResponse;
-import com.baiyi.cratos.domain.generator.Application;
-import com.baiyi.cratos.domain.generator.ApplicationResource;
-import com.baiyi.cratos.domain.generator.EdsAsset;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.domain.model.ApplicationDeploymentModel;
 import com.baiyi.cratos.domain.param.http.application.ApplicationKubernetesParam;
 import com.baiyi.cratos.domain.param.http.work.WorkOrderTicketParam;
@@ -25,6 +23,8 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.repo.KubernetesPodRepo;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesDeploymentRepo;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
@@ -36,7 +36,10 @@ import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.application.ApplicationKubernetesDetailsFacade;
 import com.baiyi.cratos.facade.application.EdsArmsFacade;
 import com.baiyi.cratos.facade.work.WorkOrderTicketEntryFacade;
-import com.baiyi.cratos.service.*;
+import com.baiyi.cratos.service.ApplicationResourceService;
+import com.baiyi.cratos.service.ApplicationService;
+import com.baiyi.cratos.service.EdsAssetService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.workorder.holder.ApplicationDeletePodTokenHolder;
 import com.baiyi.cratos.workorder.holder.ApplicationRedeployTokenHolder;
 import com.baiyi.cratos.workorder.holder.token.ApplicationDeletePodToken;
@@ -83,6 +86,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     private final WorkOrderTicketEntryFacade workOrderTicketEntryFacade;
     private final EdsArmsFacade edsArmsFacade;
     private final KubernetesDeploymentRepo kubernetesDeploymentRepo;
+    private final UserService userService;
 
     @Override
     public MessageResponse<KubernetesVO.KubernetesDetails> queryKubernetesDetails(
@@ -98,30 +102,35 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             ApplicationKubernetesParam.QueryKubernetesDeploymentOptions queryKubernetesDeploymentOptions) {
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 queryKubernetesDeploymentOptions.getApplicationName(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
-                queryKubernetesDeploymentOptions.getNamespace());
+                queryKubernetesDeploymentOptions.getNamespace()
+        );
         if (CollectionUtils.isEmpty(resources)) {
             return NO_OPTIONS_AVAILABLE;
         }
         return OptionsVO.Options.builder()
                 .options(resources.stream()
-                        .map(e -> OptionsVO.Option.builder()
-                                .value(e.getName())
-                                .label(toKubernetesResourceName(e))
-                                .build())
-                        .sorted()
-                        .toList())
+                                 .map(e -> OptionsVO.Option.builder()
+                                         .value(e.getName())
+                                         .label(toKubernetesResourceName(e))
+                                         .build())
+                                 .sorted()
+                                 .toList())
                 .build();
     }
 
     private String toKubernetesResourceName(ApplicationResource resource) {
-        return StringFormatter.arrayFormat("{}:{}:{}", resource.getInstanceName(), resource.getNamespace(),
-                resource.getName());
+        return StringFormatter.arrayFormat(
+                "{}:{}:{}", resource.getInstanceName(), resource.getNamespace(),
+                resource.getName()
+        );
     }
 
     private KubernetesVO.Workloads makeWorkloads(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         List<KubernetesDeploymentVO.Deployment> deployments = deploymentConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
-                        param));
+                applicationResourceService.queryApplicationResource(
+                        EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(),
+                        param
+                ));
         return KubernetesVO.Workloads.builder()
                 .deployments(deployments)
                 .build();
@@ -129,8 +138,11 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
 
     private KubernetesVO.Network makeNetwork(ApplicationKubernetesParam.QueryKubernetesDetails param) {
         List<KubernetesServiceVO.Service> services = serviceConverter.toResourceVO(
-                applicationResourceService.queryApplicationResource(param.getApplicationName(),
-                        EdsAssetTypeEnum.KUBERNETES_SERVICE.name(), param.getNamespace()));
+                applicationResourceService.queryApplicationResource(
+                        param.getApplicationName(),
+                        EdsAssetTypeEnum.KUBERNETES_SERVICE.name(),
+                        param.getNamespace()
+                ));
         return KubernetesVO.Network.builder()
                 .services(services)
                 .build();
@@ -171,8 +183,7 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                 .stream()
                 .findFirst()
                 .map(instance -> {
-                    EdsConfigs.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(
-                            instance.getConfigId());
+                    EdsConfigs.Opscloud opscloud = edsOpscloudConfigLoader.getConfig(instance.getConfigId());
                     OcLeoParam.QueryBuildImageVersion queryParam = OcLeoParam.QueryBuildImageVersion.builder()
                             .image(queryKubernetesDeploymentImageVersion.getImage())
                             .build();
@@ -203,8 +214,10 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
-            KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
-                    param.getDeploymentName());
+            KubernetesResourceOperationException.runtime(
+                    "The deployment={} resource does not exist.",
+                    param.getDeploymentName()
+            );
         }
         resources.forEach(resource -> {
             EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
@@ -214,8 +227,10 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
             try {
-                Pod pod = kubernetesPodRepo.get(holder.getInstance()
-                        .getConfig(), param.getNamespace(), param.getPodName());
+                Pod pod = kubernetesPodRepo.get(
+                        holder.getInstance()
+                                .getConfig(), param.getNamespace(), param.getPodName()
+                );
                 if (Objects.isNull(pod)) {
                     return;
                 }
@@ -231,8 +246,10 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
                             .asset(deploymentAsset)
                             .build();
                     try {
-                        kubernetesPodRepo.delete(holder.getInstance()
-                                .getConfig(), param.getNamespace(), param.getPodName());
+                        kubernetesPodRepo.delete(
+                                holder.getInstance()
+                                        .getConfig(), param.getNamespace(), param.getPodName()
+                        );
                     } catch (Exception e) {
                         detail.setSuccess(false);
                         detail.setResult("Operation failed err: " + e.getMessage());
@@ -254,16 +271,20 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
     @SuppressWarnings("unchecked")
     public void redeployApplicationResourceKubernetesDeployment(
             ApplicationKubernetesParam.RedeployApplicationResourceKubernetesDeployment param) {
-        ApplicationRedeployToken.Token deleteToken = applicationRedeployTokenHolder.getToken(SessionUtils.getUsername(),
-                param.getApplicationName());
+        ApplicationRedeployToken.Token deleteToken = applicationRedeployTokenHolder.getToken(
+                SessionUtils.getUsername(),
+                param.getApplicationName()
+        );
         if (!deleteToken.getValid()) {
             KubernetesResourceOperationException.runtime("Unauthorized access");
         }
         List<ApplicationResource> resources = applicationResourceService.queryApplicationResource(
                 EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), param);
         if (CollectionUtils.isEmpty(resources)) {
-            KubernetesResourceOperationException.runtime("The deployment={} resource does not exist.",
-                    param.getDeploymentName());
+            KubernetesResourceOperationException.runtime(
+                    "The deployment={} resource does not exist.",
+                    param.getDeploymentName()
+            );
         }
         resources.forEach(resource -> {
             EdsAsset deploymentAsset = edsAssetService.getById(resource.getBusinessId());
@@ -272,19 +293,46 @@ public class ApplicationKubernetesDetailsFacadeImpl implements ApplicationKubern
             }
             EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment> holder = (EdsInstanceProviderHolder<EdsConfigs.Kubernetes, Deployment>) holderBuilder.newHolder(
                     deploymentAsset.getInstanceId(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
+            final String cluster = Optional.ofNullable(holder)
+                    .map(EdsInstanceProviderHolder::getInstance)
+                    .map(ExternalDataSourceInstance::getEdsInstance)
+                    .map(EdsInstance::getInstanceName)
+                    .orElse("--");
 
+
+            holder.getInstance()
+                    .getEdsInstance()
+                    .getInstanceName();
+            final String namespace = param.getNamespace();
+            final String ticketNo = deleteToken.getTicketNo();
+            final Integer ticketId = deleteToken.getTicketId();
             ApplicationDeploymentModel.RedeployDeployment detail = ApplicationDeploymentModel.RedeployDeployment.builder()
-                    .namespace(param.getNamespace())
-                    .ticketNo(deleteToken.getTicketNo())
-                    .ticketId(deleteToken.getTicketId())
+                    .namespace(namespace)
+                    .ticketNo(ticketNo)
+                    .ticketId(ticketId)
                     .asset(deploymentAsset)
                     .build();
             try {
-                Deployment deployment = kubernetesDeploymentRepo.get(holder.getInstance()
-                        .getConfig(), param.getNamespace(), resource.getName());
+                final String deploymentName = resource.getName();
+                Deployment deployment = kubernetesDeploymentRepo.get(
+                        holder.getInstance()
+                                .getConfig(), namespace, deploymentName
+                );
                 if (Objects.nonNull(deployment)) {
-                    kubernetesDeploymentRepo.redeploy(holder.getInstance()
-                            .getConfig(), deployment);
+                    // SRE
+                    try {
+                        User user = userService.getByUsername(SessionUtils.getUsername());
+                        SreEventFormatter.redeployDeployment(
+                                user, ticketNo, String.valueOf(ticketId), cluster, namespace, deploymentName);
+
+
+                    } catch (Exception e) {
+                        log.error(e.getMessage());
+                    }
+                    kubernetesDeploymentRepo.redeploy(
+                            holder.getInstance()
+                                    .getConfig(), deployment
+                    );
                 } else {
                     detail.setSuccess(false);
                     detail.setResult("Deployment does not exist");

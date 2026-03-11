@@ -26,7 +26,9 @@ public class SreEventFormatter {
         LOGIN_SERVER("loginServer"),
         LOGOUT_SERVER("logoutServer"),
         LOGIN_CONTAINER("loginContainer"),
-        EXECUTE_COMMAND("executeCommand");
+        EXECUTE_COMMAND("executeCommand"),
+        CHANGE_INGRESS("changeIngress"),
+        REDEPLOY_DEPLOYMENT("redeployDeployment") ;
 
         private final String value;
 
@@ -35,26 +37,24 @@ public class SreEventFormatter {
         }
     }
 
-    /**
-     * Login & Logout Server
-     *
-     * @param user
-     * @param action
-     * @param target
-     * @return
-     */
-    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event loginServer(User user, Action action,
-                                                                                 String target) {
-        Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
+
+    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event redeployDeployment(User user, String ticketNo,
+                                                                                        String ticketId, String cluster,
+                                                                                        String namespace,
+                                                                                        String deploymentName) {
+        Map<String, String> ext = Map.ofEntries(entry("ticketNo", ticketNo), entry("ticketId", ticketId));
+        Map<String, String> targetContent = Map.ofEntries(
+                entry("cluster", cluster), entry("namespace", namespace),
+                entry("deployment", deploymentName)
+        );
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
-                .action(action.getValue())
+                .action(Action.REDEPLOY_DEPLOYMENT.value)
                 .description(
-                        StringFormatter.arrayFormat(
-                                "SSH {} to server {} via Cratos SSH-Server",
-                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", target
-                        ))
-                .target(target)
+                        StringFormatter.format("Change Kubernetes Ingress rate limit configuration: {}", changeMessage))
+                .target(deploymentName)
+                .targetContent(targetContent)
+                .env(namespace)
                 .affection("")
                 .severity("low")
                 .status("executed")
@@ -62,11 +62,53 @@ public class SreEventFormatter {
                 .build();
     }
 
+    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event changeIngress(User user, String ingressName,
+                                                                                   String namespace,
+                                                                                   String loadBalancer, String rules,
+                                                                                   String sourceTrafficLimitQps,
+                                                                                   String targetTrafficLimitQps,
+                                                                                   String changeMessage) {
+        Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
+        Map<String, String> sourceContent = Map.ofEntries(
+                entry("ingressName", ingressName),
+                entry("loadBalancer", loadBalancer), entry("rules", rules),
+                entry("trafficLimitQps", sourceTrafficLimitQps)
+        );
+        Map<String, String> targetContent = Map.ofEntries(
+                entry("ingressName", ingressName),
+                entry("loadBalancer", loadBalancer), entry("rules", rules),
+                entry("trafficLimitQps", targetTrafficLimitQps)
+        );
+        return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                .operator(user.getEmail())
+                .action(Action.CHANGE_INGRESS.value)
+                .description(
+                        StringFormatter.format("Change Kubernetes Ingress rate limit configuration: {}", changeMessage))
+                .target(ingressName)
+                .sourceContent(sourceContent)
+                .targetContent(targetContent)
+                .env(namespace)
+                .affection("")
+                .severity("low")
+                .status("executed")
+                .ext(ext)
+                .build();
+    }
+
+    /**
+     * Login & Logout Server
+     *
+     * @param user
+     * @param action
+     * @param serverName
+     * @param loginAccount
+     * @param serverIp
+     * @return
+     */
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event loginServer(User user, Action action,
                                                                                  String serverName, String loginAccount,
                                                                                  String serverIp) {
         Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
-
         Map<String, String> targetContent = Map.ofEntries(
                 entry("serverName", serverName),
                 entry("loginAccount", loginAccount),
@@ -75,12 +117,10 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(action.getValue())
-                .description(
-                        StringFormatter.arrayFormat(
-                                "SSH {} to server {}({}@{}) via Cratos SSH-Server",
-                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount,
-                                serverIp
-                        ))
+                .description(StringFormatter.arrayFormat(
+                        "SSH {} to server {}({}@{}) via Cratos SSH-Server",
+                        action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount, serverIp
+                ))
                 .target(serverName)
                 .targetContent(targetContent)
                 .affection("")

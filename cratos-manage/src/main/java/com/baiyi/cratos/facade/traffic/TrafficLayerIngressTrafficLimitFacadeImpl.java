@@ -1,18 +1,20 @@
 package com.baiyi.cratos.facade.traffic;
 
 import com.baiyi.cratos.common.exception.TrafficLayerException;
-import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.SimpleCommited;
 import com.baiyi.cratos.domain.annotation.Committing;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
+import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
+import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.param.http.commit.CommitParam;
 import com.baiyi.cratos.domain.param.http.eds.EdsInstanceParam;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
 import com.baiyi.cratos.domain.param.http.traffic.TrafficIngressTrafficLimitParam;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
 import com.baiyi.cratos.domain.view.traffic.TrafficLayerIngressVO;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
@@ -20,23 +22,29 @@ import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolder;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.repo.template.KubernetesIngressRepo;
-import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.facade.EdsFacade;
 import com.baiyi.cratos.facade.TrafficLayerIngressTrafficLimitFacade;
 import com.baiyi.cratos.service.EdsAssetIndexService;
 import com.baiyi.cratos.service.EdsAssetService;
 import com.baiyi.cratos.service.TagService;
+import com.baiyi.cratos.service.UserService;
+import com.baiyi.cratos.wrapper.EdsAssetWrapper;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.networking.v1.Ingress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
 
@@ -60,6 +68,8 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     private final BusinessTagFacade businessTagFacade;
 
     private static final String TAG_KEY = "ingress.kubernetes.io/traffic-limit-qps";
+    private final EdsAssetWrapper edsAssetWrapper;
+    private final UserService userService;
 
     private BusinessTagParam.QueryByTag buildQueryByTag() {
         Tag tag = tagService.getByTagKey(TAG_KEY);
@@ -79,10 +89,12 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         assetPageQuery.setAssetType(EdsAssetTypeEnum.KUBERNETES_INGRESS.name());
         assetPageQuery.setQueryByTag(buildQueryByTag());
         DataTable<EdsAssetVO.Asset> table = edsFacade.queryEdsInstanceAssetPage(assetPageQuery);
-        return new DataTable<>(table.getData()
-                .stream()
-                .map(this::toIngressTrafficLimit)
-                .toList(), table.getTotalNum());
+        return new DataTable<>(
+                table.getData()
+                        .stream()
+                        .map(this::toIngressTrafficLimit)
+                        .toList(), table.getTotalNum()
+        );
     }
 
     private TrafficLayerIngressVO.IngressTrafficLimit toIngressTrafficLimit(EdsAssetVO.Asset asset) {
@@ -117,11 +129,15 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
     }
 
     private void setLoadBalancerUrl(TrafficLayerIngressVO.IngressTrafficLimit ingressTrafficLimit) {
-        List<EdsAsset> edsAssets = edsAssetService.queryAssetByParam(ingressTrafficLimit.getLoadBalancer()
-                .getValue(), EdsAssetTypeEnum.ALIYUN_ALB.name());
+        List<EdsAsset> edsAssets = edsAssetService.queryAssetByParam(
+                ingressTrafficLimit.getLoadBalancer()
+                        .getValue(), EdsAssetTypeEnum.ALIYUN_ALB.name()
+        );
         if (!CollectionUtils.isEmpty(edsAssets)) {
-            EdsAssetIndex edsAssetIndex = edsAssetIndexService.getByAssetIdAndName(edsAssets.getFirst()
-                    .getId(), ALIYUN_ALB_INSTANCE_URL);
+            EdsAssetIndex edsAssetIndex = edsAssetIndexService.getByAssetIdAndName(
+                    edsAssets.getFirst()
+                            .getId(), ALIYUN_ALB_INSTANCE_URL
+            );
             if (edsAssetIndex != null) {
                 ingressTrafficLimit.setLoadBalancerUrl(edsAssetIndex);
             }
@@ -174,6 +190,34 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         }
         // 设置
         setIngress(targetIngress, updateIngressTrafficLimit);
+        // SRE
+        try {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+            final String username = authentication.getName();
+            User user = userService.getByUsername(username);
+            EdsAssetVO.Asset asset = edsAssetWrapper.wrapToTarget(edsAsset);
+            TrafficLayerIngressVO.IngressTrafficLimit ingressTrafficLimit = toIngressTrafficLimit(asset);
+            String ingressName = asset.getName();
+            String changeMessage = updateIngressTrafficLimit.getCommit()
+                    .getMessage();
+            String sourceTrafficLimitQps = Optional.of(ingressTrafficLimit)
+                    .map(TrafficLayerIngressVO.IngressTrafficLimit::getTrafficLimitQps)
+                    .map(EdsAssetIndex::getValue)
+                    .orElse("UNLIMITED");
+            String targetTrafficLimitQps = updateIngressTrafficLimit.getLimitQps() == 0 ? "UNLIMITED" : String.valueOf(
+                    updateIngressTrafficLimit.getLimitQps());
+            SreBridgeUtils.publish(SreEventFormatter.changeIngress(
+                    user, ingressName, namespace, ingressTrafficLimit.getLoadBalancer()
+                            .getValue(), ingressTrafficLimit.getRules()
+                            .stream()
+                            .map(EdsAssetIndex::getName)
+                            .collect(Collectors.joining(",")), sourceTrafficLimitQps, targetTrafficLimitQps,
+                    changeMessage
+            ));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
         // 更新
         Ingress updatedIngress = kubernetesIngressRepo.update(kubernetes, targetIngress);
         // 导入并更新资产
@@ -181,10 +225,12 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
                 .importAsset(holder.getInstance(), updatedIngress);
         return SimpleCommited.builder()
                 .name(edsAsset.getName())
-                .commitContent(StringFormatter.arrayFormat("Update:\n{}\n->\nqps={}", ingressStr,
-                        updateIngressTrafficLimit.getLimitQps()))
+                .commitContent(StringFormatter.arrayFormat(
+                        "Update:\n{}\n->\nqps={}", ingressStr,
+                        updateIngressTrafficLimit.getLimitQps()
+                ))
                 .commitMessage(updateIngressTrafficLimit.getCommit()
-                        .getMessage())
+                                       .getMessage())
                 .build();
     }
 
@@ -193,7 +239,7 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         boolean isOffline = updateIngressTrafficLimit.getLimitQps() == 0;
         // 校验qps
         if (CollectionUtils.isEmpty(targetIngress.getMetadata()
-                .getAnnotations())) {
+                                            .getAnnotations())) {
             if (isOffline) {
                 TrafficLayerException.runtime("Invalid changes, configuration has not changed.");
             }
@@ -207,8 +253,10 @@ public class TrafficLayerIngressTrafficLimitFacadeImpl implements TrafficLayerIn
         } else {
             targetIngress.getMetadata()
                     .getAnnotations()
-                    .put("alb.ingress.kubernetes.io/traffic-limit-qps",
-                            String.valueOf(updateIngressTrafficLimit.getLimitQps()));
+                    .put(
+                            "alb.ingress.kubernetes.io/traffic-limit-qps",
+                            String.valueOf(updateIngressTrafficLimit.getLimitQps())
+                    );
         }
     }
 
