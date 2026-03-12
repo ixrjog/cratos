@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.application.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.facade.RbacUserRoleFacade;
@@ -113,7 +113,7 @@ public class ApplicationResourceFacadeImpl implements ApplicationResourceFacade 
     }
 
     @Override
-    @SetSessionUserToParam
+    @InjectSessionUser
     public OptionsVO.Options getMyApplicationResourceNamespaceOptions(
             ApplicationParam.GetMyApplicationResourceNamespaceOptions getMyApplicationResourceNamespaceOptions) {
         // Ops

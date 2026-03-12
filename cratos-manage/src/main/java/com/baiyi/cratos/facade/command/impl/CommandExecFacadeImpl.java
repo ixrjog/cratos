@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.command.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.constants.SchedulerLockNameConstants;
 import com.baiyi.cratos.common.enums.CommandExecApprovalStatusEnum;
 import com.baiyi.cratos.common.enums.CommandExecApprovalTypeEnum;
@@ -75,7 +75,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     @Override
-    @SetSessionUserToParam(desc = "Set ApplyUser to CommandExecParam")
+    @InjectSessionUser(field = "applyUser")
     @Transactional(rollbackFor = CommandExecException.class)
     public void addCommandExec(CommandExecParam.AddCommandExec addCommandExec) {
         CommandExec commandExec = addCommandExec.toTarget();
@@ -160,7 +160,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     @Override
-    @SetSessionUserToParam
+    @InjectSessionUser
     public void approveCommandExec(CommandExecParam.ApproveCommandExec approveCommandExec) {
         CommandExec commandExec = commandExecService.getById(approveCommandExec.getCommandExecId());
         if (Objects.isNull(commandExec)) {
@@ -222,7 +222,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     @Override
-    @SetSessionUserToParam
+    @InjectSessionUser
     @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "10s", lockAtLeastFor = "10s")
     public void doCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
         CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());
@@ -238,7 +238,7 @@ public class CommandExecFacadeImpl implements CommandExecFacade {
     }
 
     @Override
-    @SetSessionUserToParam
+    @InjectSessionUser
     @SchedulerLock(name = SchedulerLockNameConstants.DO_COMMAND_EXEC, lockAtMostFor = "10s", lockAtLeastFor = "10s")
     public void adminDoCommandExec(CommandExecParam.DoCommandExec doCommandExec) {
         CommandExec commandExec = commandExecService.getById(doCommandExec.getCommandExecId());

@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.annotation.PreVerifyPermissionsFromParam;
 import com.baiyi.cratos.common.enums.AccessLevel;
 import com.baiyi.cratos.common.exception.RobotException;
@@ -96,7 +96,7 @@ public class RobotFacadeImpl implements RobotFacade {
      * @param addRobot
      */
     @Override
-    @SetSessionUserToParam(desc = "set CreatedBy")
+    @InjectSessionUser(field = "createdBy")
     @PreVerifyPermissionsFromParam(ofUsername = "#addRobot.createdBy", accessLevel = AccessLevel.OPS)
     public RobotVO.RobotToken addRobot(RobotParam.AddRobot addRobot) {
         Robot robot = addRobot.toTarget();
@@ -124,7 +124,7 @@ public class RobotFacadeImpl implements RobotFacade {
      * @return
      */
     @Override
-    @SetSessionUserToParam(desc = "set CreatedBy")
+    @InjectSessionUser(field = "createdBy")
     public RobotVO.RobotToken applyRobot(RobotParam.ApplyRobot applyRobot) {
         Robot robot = applyRobot.toTarget();
         robot.setToken(IdentityUtils.randomUUID());
@@ -137,7 +137,7 @@ public class RobotFacadeImpl implements RobotFacade {
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set OperatingBy")
+    @InjectSessionUser(field = "set OperatingBy")
     @PreVerifyPermissionsFromParam(ofUsername = "#revokeRobot.operatingBy", accessLevel = AccessLevel.OPS)
     public void revokeRobot(RobotParam.RevokeRobot revokeRobot) {
         Robot robot = robotService.getById(revokeRobot.getId());

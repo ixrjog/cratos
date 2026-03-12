@@ -1,6 +1,6 @@
 package com.baiyi.cratos.aspect;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.domain.HasSessionUser;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -26,12 +26,12 @@ import java.util.Objects;
 @Order(Integer.MAX_VALUE - 1)
 public class SetSessionUserToParamAspect {
 
-    @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.SetSessionUserToParam)")
+    @Pointcut(value = "@annotation(com.baiyi.cratos.annotation.InjectSessionUser)")
     public void annotationPoint() {
     }
 
     @Before(value = "@annotation(setSessionUserToParam)")
-    public void beforeAdvice(JoinPoint joinPoint, SetSessionUserToParam setSessionUserToParam) {
+    public void beforeAdvice(JoinPoint joinPoint, InjectSessionUser setSessionUserToParam) {
         Arrays.stream(joinPoint.getArgs())
                 .filter(arg -> arg instanceof HasSessionUser)
                 .map(arg -> (HasSessionUser) arg)

@@ -1,7 +1,7 @@
 package com.baiyi.cratos.facade.kubernetes.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.exception.KubernetesResourceTemplateException;
 import com.baiyi.cratos.common.kubernetes.KubernetesResourceTemplateCustom;
 import com.baiyi.cratos.common.util.IdentityUtils;
@@ -157,7 +157,7 @@ public class KubernetesResourceTemplateFacadeImpl implements KubernetesResourceT
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set CreatedBy")
+    @InjectSessionUser(field = "createdBy")
     public void createResourceByTemplate(
             KubernetesResourceTemplateParam.CreateResourceByTemplate createResourceByTemplate) {
         if (!IdentityUtils.hasIdentity(createResourceByTemplate.getTemplateId())) {

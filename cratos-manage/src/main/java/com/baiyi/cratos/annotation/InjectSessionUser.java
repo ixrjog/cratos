@@ -11,8 +11,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface SetSessionUserToParam {
+public @interface InjectSessionUser {
 
-    String desc() default "";
+    String field() default "";
 
 }

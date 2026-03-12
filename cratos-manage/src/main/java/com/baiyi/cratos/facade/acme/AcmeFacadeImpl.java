@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.acme;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.common.exception.TrafficRouteException;
@@ -73,7 +73,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
     private final EdsInstanceQueryHelper edsInstanceQueryHelper;
 
     @Override
-    @SetSessionUserToParam(desc = "set CreatedBy")
+    @InjectSessionUser(field = "createdBy")
     public void createAcmeAccount(AcmeAccountParam.CreateAccount createAccount) {
         String email = ValidationUtils.isEmail(
                 createAccount.getEmail()) ? createAccount.getEmail() : Optional.ofNullable(

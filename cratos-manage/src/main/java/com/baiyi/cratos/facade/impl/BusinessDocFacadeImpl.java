@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.enums.DocumentTypeEnum;
 import com.baiyi.cratos.common.util.MarkdownUtils;
 import com.baiyi.cratos.domain.generator.BusinessDocument;
@@ -57,7 +57,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set Author")
+    @InjectSessionUser(field = "author")
     public void addBusinessDoc(BusinessDocParam.AddBusinessDoc addBusinessDoc) {
         BusinessDocument businessDocument = addBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());
@@ -66,7 +66,7 @@ public class BusinessDocFacadeImpl extends BaseSupportBusinessFacade<BusinessDoc
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set LastEditor")
+    @InjectSessionUser(field = "lastEditor")
     public void updateBusinessDoc(BusinessDocParam.UpdateBusinessDoc updateBusinessDoc) {
         BusinessDocument businessDocument = updateBusinessDoc.toTarget();
         DocumentTypeEnum.verifyValueOf(businessDocument.getDocumentType());

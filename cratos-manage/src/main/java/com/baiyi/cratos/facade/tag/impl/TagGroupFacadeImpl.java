@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.tag.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.enums.SysTagKeys;
 import com.baiyi.cratos.domain.DataTable;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
@@ -66,7 +66,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set query username")
+    @InjectSessionUser
     public OptionsVO.Options getMyGroupOptions(TagGroupParam.GetMyGroupOptions getMyGroupOptions) {
         UserPermissionParam.QueryAllBusinessUserPermissionDetails queryAllBusinessUserPermissionDetails = UserPermissionParam.QueryAllBusinessUserPermissionDetails.builder()
                 .username(getMyGroupOptions.getUsername())
@@ -124,7 +124,7 @@ public class TagGroupFacadeImpl implements TagGroupFacade {
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set query username")
+    @InjectSessionUser(field = "set query username")
     public DataTable<EdsAssetVO.Asset> queryMyGroupAssetPage(TagGroupParam.MyGroupAssetPageQuery pageQuery) {
         EdsAssetQuery.UserPermissionPageQueryParam queryParam = EdsAssetQuery.UserPermissionPageQueryParam.builder()
                 .username(pageQuery.getUsername())

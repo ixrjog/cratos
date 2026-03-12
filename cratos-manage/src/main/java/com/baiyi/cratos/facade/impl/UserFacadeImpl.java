@@ -2,7 +2,7 @@ package com.baiyi.cratos.facade.impl;
 
 import com.baiyi.cratos.annotation.PageQueryByTag;
 import com.baiyi.cratos.annotation.PostImportProcessor;
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.common.configuration.CratosConfiguration;
 import com.baiyi.cratos.common.configuration.model.CratosModel;
 import com.baiyi.cratos.common.enums.CredentialTypeEnum;
@@ -279,7 +279,7 @@ public class UserFacadeImpl implements UserFacade {
     }
 
     @Override
-    @SetSessionUserToParam(desc = "set Author")
+    @InjectSessionUser(field = "author")
     public void addMySshKey(UserParam.AddMySshKey addMySshKey) {
         this.addSshKey(UserParam.AddSshKey.builder()
                                .username(addMySshKey.getUsername())

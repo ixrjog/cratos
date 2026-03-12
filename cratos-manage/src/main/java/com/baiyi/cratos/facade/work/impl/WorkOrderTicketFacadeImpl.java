@@ -1,6 +1,6 @@
 package com.baiyi.cratos.facade.work.impl;
 
-import com.baiyi.cratos.annotation.SetSessionUserToParam;
+import com.baiyi.cratos.annotation.InjectSessionUser;
 import com.baiyi.cratos.annotation.UserTokenAuth;
 import com.baiyi.cratos.common.HttpResult;
 import com.baiyi.cratos.common.enums.AccessLevel;
@@ -51,7 +51,7 @@ public class WorkOrderTicketFacadeImpl implements WorkOrderTicketFacade {
     private final WorkOrderTicketSubscriberFacade workOrderTicketSubscriberFacade;
 
     @Override
-    @SetSessionUserToParam(desc = "set Username")
+    @InjectSessionUser
     public DataTable<WorkOrderTicketVO.Ticket> queryMyTicketPage(WorkOrderTicketParam.MyTicketPageQuery pageQuery) {
         DataTable<WorkOrderTicket> table = workOrderTicketService.queryPageByParam(pageQuery);
         return workOrderTicketWrapper.wrapToTarget(table);
