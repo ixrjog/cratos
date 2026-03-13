@@ -101,8 +101,10 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
             String env = "prod";
             Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
             Map<String, String> targetContent = Map.ofEntries(
-                    entry("appName", imageInspection.getAppName()),
-                    entry("deployments", JSONUtils.writeValueAsString(imageInspection.getDeploymentImages()))
+                    entry("appName", imageInspection.getAppName()), entry(
+                            "deployments", JSONUtils.writeValueAsString(
+                                    imageInspection.getDeploymentImages())
+                    )
             );
             com.baiyi.cratos.domain.model.SreBridgeModel.Event event = com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                     .operator(OPERATOR)
@@ -116,6 +118,7 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
                     .affection("")
                     .severity("low")
                     .status("executed")
+                    .type(SreEventFormatter.Type.INSPECTION.getValue())
                     .env(env)
                     .ext(ext)
                     .build();

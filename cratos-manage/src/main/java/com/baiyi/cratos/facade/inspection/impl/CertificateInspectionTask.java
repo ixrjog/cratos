@@ -86,6 +86,7 @@ public class CertificateInspectionTask extends BaseInspectionTask {
                     ))
                     .target(certificate.getName())
                     .targetContent(SreEventFormatter.mapToJson(targetContent))
+                    .type(SreEventFormatter.Type.INSPECTION.getValue())
                     .affection("")
                     .severity("low")
                     .status("executed")

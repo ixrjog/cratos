@@ -85,6 +85,7 @@ public class DomainInspectionTask extends BaseInspectionTask {
                     ))
                     .target(domain.getName())
                     .targetContent(SreEventFormatter.mapToJson(targetContent))
+                    .type(SreEventFormatter.Type.INSPECTION.getValue())
                     .affection("")
                     .severity("low")
                     .status("executed")

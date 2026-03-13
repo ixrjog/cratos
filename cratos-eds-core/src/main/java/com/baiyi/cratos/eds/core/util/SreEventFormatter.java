@@ -43,6 +43,7 @@ public class SreEventFormatter {
     @Getter
     public enum Type {
         CHANGE("change"),
+        INSPECTION("inspection"),
         ALERT("alert");
 
         private final String value;
