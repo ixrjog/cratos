@@ -66,8 +66,8 @@ public class SreBridgeModel {
         private String affection;
         private String sourceContent;
         private String targetContent;
-        // default = change
-        private String type;
+        @Builder.Default
+        private String type = "change";
         private Map<String, String> tag;
         private Map<String, String> ext;
         private String status;

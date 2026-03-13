@@ -61,6 +61,7 @@ public class EdsSreBridgeEventAssetProvider extends BaseEdsInstanceAssetProvider
         String eventId = ext.containsKey(EVENT_ID) ? ext.get(EVENT_ID) : PasswordGenerator.generateNo();
         return newEdsAssetBuilder(instance, entity).assetIdOf(eventId)
                 .nameOf(entity.getAction())
+                .kindOf(entity.getType())
                 .createdTimeOf(entity.getTime())
                 .descriptionOf(entity.getDescription())
                 .build();
