@@ -19,8 +19,6 @@ public class SreBridgeModel {
 
     public static final String UNKNOWN = "UNKNOWN";
 
-    public static final String OPERATOR = "OPERATOR";
-
     @Data
     @Builder
     @NoArgsConstructor
