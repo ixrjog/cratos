@@ -2,10 +2,8 @@ package com.baiyi.cratos.eds.acme.deploy.impl;
 
 import com.aliyun.cas20200407.models.ListCertificatesResponseBody;
 import com.aliyun.cas20200407.models.ListCloudResourcesResponseBody;
-import com.baiyi.cratos.domain.generator.AcmeCertificate;
-import com.baiyi.cratos.domain.generator.AcmeCertificateDeployment;
-import com.baiyi.cratos.domain.generator.AcmeDomain;
-import com.baiyi.cratos.domain.generator.EdsInstance;
+import com.baiyi.cratos.common.util.SessionUtils;
+import com.baiyi.cratos.domain.generator.*;
 import com.baiyi.cratos.eds.acme.deploy.BaseAcmeDeployer;
 import com.baiyi.cratos.eds.aliyun.repo.AliyunCertRepo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -13,7 +11,10 @@ import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.service.EdsInstanceService;
+import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.acme.AcmeCertificateDeploymentService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +37,18 @@ public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> 
     private final AcmeDomainService acmeDomainService;
     private final AcmeCertificateDeploymentService acmeCertificateDeploymentService;
     private final EdsInstanceService edsInstanceService;
+    private final UserService userService;
 
     public AcmeAliyunCertDeployer(EdsInstanceProviderHolderBuilder edsInstanceProviderHolderBuilder,
                                   AliyunCertRepo aliyunCertRepo, AcmeDomainService acmeDomainService,
                                   AcmeCertificateDeploymentService acmeCertificateDeploymentService,
-                                  EdsInstanceService edsInstanceService) {
+                                  EdsInstanceService edsInstanceService, UserService userService) {
         super(edsInstanceProviderHolderBuilder);
         this.aliyunCertRepo = aliyunCertRepo;
         this.acmeDomainService = acmeDomainService;
         this.acmeCertificateDeploymentService = acmeCertificateDeploymentService;
         this.edsInstanceService = edsInstanceService;
+        this.userService = userService;
     }
 
     @Override
@@ -77,13 +80,24 @@ public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> 
                     .valid(true)
                     .build();
             acmeCertificateDeploymentService.add(deployment);
+            try {
+                String username = SessionUtils.getUsername();
+                User user = userService.getByUsername(username);
+                SreBridgeUtils.publish(SreEventFormatter.uploadCertificate(
+                        user, certName, String.valueOf(certId), edsInstance.getInstanceName(), null,
+                        acmeDomain.getDomain(), acmeCertificate.getDomains(), acmeCertificate.getNotAfter(),
+                        acmeCertificate.getNotBefore()
+                ));
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
     }
 
-    public List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> listCloudResourcesByCertName(int acmeCertificateDeploymentId,
-                                                                                        String certificateName) {
+    public List<ListCloudResourcesResponseBody.ListCloudResourcesResponseBodyData> listCloudResourcesByCertName(
+            int acmeCertificateDeploymentId, String certificateName) {
         AcmeCertificateDeployment deployment = acmeCertificateDeploymentService.getById(acmeCertificateDeploymentId);
         EdsInstance edsInstance = edsInstanceService.getById(deployment.getEdsInstanceId());
         EdsConfigs.Aliyun aliyun = getEdsConfig(edsInstance);
@@ -96,7 +110,7 @@ public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> 
                         .orElse(List.of());
             }
         } catch (Exception ex) {
-          log.error(ex.getMessage());
+            log.error(ex.getMessage());
         }
         return List.of();
     }

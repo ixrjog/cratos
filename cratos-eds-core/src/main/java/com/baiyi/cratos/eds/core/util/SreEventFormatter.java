@@ -2,12 +2,16 @@ package com.baiyi.cratos.eds.core.util;
 
 import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.RegexSensitiveDataMasker;
+import com.baiyi.cratos.common.util.TimeUtils;
+import com.baiyi.cratos.domain.constant.Global;
 import com.baiyi.cratos.domain.generator.User;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.Map;
 
 import static com.baiyi.cratos.eds.core.util.SreEventFormatter.Action.EXECUTE_COMMAND;
@@ -25,7 +29,7 @@ public class SreEventFormatter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private static String mapToJson(Map<String, String> map) {
+    public static String mapToJson(Map<String, String> map) {
         if (map == null || map.isEmpty()) {
             return null;
         }
@@ -37,6 +41,18 @@ public class SreEventFormatter {
     }
 
     @Getter
+    public enum Type {
+        CHANGE("change"),
+        ALERT("alert");
+
+        private final String value;
+
+        Type(String value) {
+            this.value = value;
+        }
+    }
+
+    @Getter
     public enum Action {
         LOGIN_SERVER("loginServer"),
         LOGOUT_SERVER("logoutServer"),
@@ -44,14 +60,47 @@ public class SreEventFormatter {
         EXECUTE_COMMAND("executeCommand"),
         CHANGE_INGRESS("changeIngress"),
         REDEPLOY_DEPLOYMENT("redeployDeployment"),
-        DELETE_POD("deletePod")
-        ;
+        DELETE_POD("deletePod"),
+        UPLOAD_CERTIFICATE("uploadCertificate"),
+        INSPECT_DOMAIN("inspectDomain"),
+        INSPECT_CERTIFICATE("inspectCertificate"),
+        INSPECT_IMAGE("inspectImage"),
+        TRIGGER_EVENT("triggerEvent");
 
         private final String value;
 
         Action(String value) {
             this.value = value;
         }
+    }
+
+    public static com.baiyi.cratos.domain.model.SreBridgeModel.Event uploadCertificate(User user, String certName,
+                                                                                       String cloudCertId,
+                                                                                       String cloudName, String region,
+                                                                                       String domain, String domains,
+                                                                                       Date notAfter, Date notBefore) {
+        Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
+        Map<String, String> targetContent = Map.ofEntries(
+                entry("certificateName", certName), entry("cloudName", cloudName),
+                entry("region", StringUtils.hasText(region) ? region : "default"), entry("cloudCertId", cloudCertId),
+                entry("domain", domain), entry("domains", domains),
+                entry("notAfter", TimeUtils.parse(notAfter, Global.ISO8601)),
+                entry("notBefore", TimeUtils.parse(notBefore, Global.ISO8601))
+        );
+        return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                .operator(user.getEmail())
+                .action(Action.UPLOAD_CERTIFICATE.value)
+                .description(StringFormatter.arrayFormat(
+                        "Upload SSL certificate {} to cloud provider {}", certName,
+                        certName
+                ))
+                .target(certName)
+                .targetContent(SreEventFormatter.mapToJson(targetContent))
+                .affection("")
+                .severity("low")
+                .status("executed")
+                .ext(ext)
+                .build();
     }
 
     public static com.baiyi.cratos.domain.model.SreBridgeModel.Event deletePod(User user, String ticketNo,
@@ -171,12 +220,11 @@ public class SreEventFormatter {
         return com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
                 .operator(user.getEmail())
                 .action(action.getValue())
-                .description(
-                        StringFormatter.arrayFormat(
-                                "SSH {} to server {}({}@{}) via Cratos {}",
-                                action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount,
-                                serverIp, module
-                        ))
+                .description(StringFormatter.arrayFormat(
+                        "SSH {} to server {}({}@{}) via Cratos {}",
+                        action.equals(Action.LOGIN_SERVER) ? "login" : "logout", serverName, loginAccount, serverIp,
+                        module
+                ))
                 .target(serverName)
                 .targetContent(SreEventFormatter.mapToJson(targetContent))
                 .affection("")

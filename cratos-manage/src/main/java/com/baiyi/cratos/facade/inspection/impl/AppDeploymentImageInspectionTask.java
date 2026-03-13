@@ -1,16 +1,21 @@
 package com.baiyi.cratos.facade.inspection.impl;
 
 import com.baiyi.cratos.common.builder.SimpleMapBuilder;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.common.util.beetl.BeetlUtil;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.NotificationTemplate;
 import com.baiyi.cratos.domain.util.BeanCopierUtils;
+import com.baiyi.cratos.domain.util.JSONUtils;
+import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.domain.view.eds.EdsAssetVO;
-import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.EdsInstanceProviderFactory;
+import com.baiyi.cratos.eds.core.EdsInstanceQueryHelper;
 import com.baiyi.cratos.eds.core.enums.EdsAssetTypeEnum;
 import com.baiyi.cratos.eds.core.enums.EdsInstanceTypeEnum;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.dingtalk.service.DingtalkService;
 import com.baiyi.cratos.eds.kubernetes.util.KubeUtils;
 import com.baiyi.cratos.facade.inspection.base.BaseInspectionTask;
@@ -23,6 +28,7 @@ import com.google.api.client.util.Lists;
 import com.google.common.collect.Maps;
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.apps.Deployment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -34,12 +40,15 @@ import java.util.Optional;
 
 import static com.baiyi.cratos.common.enums.NotificationTemplateKeys.APPLICATION_DEPLOYMENT_IMAGE_COMPLIANCE_INSPECTION_NOTIFICATION;
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.KUBERNETES_REPLICAS;
+import static com.baiyi.cratos.eds.core.util.SreEventFormatter.EVENT_ID;
+import static java.util.Map.entry;
 
 /**
  * &#064;Author  baiyi
  * &#064;Date  2024/8/26 17:22
  * &#064;Version 1.0
  */
+@Slf4j
 @Component
 public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
 
@@ -79,6 +88,7 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
                         inspections.add(inspection);
                     }
                 });
+        inspections.forEach(this::publish);
         return BeetlUtil.renderTemplate(
                 notificationTemplate.getContent(), SimpleMapBuilder.newBuilder()
                         .put(APPS_FIELD, inspections)
@@ -86,11 +96,38 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
         );
     }
 
+    private void publish(DeploymentImageModel.DeploymentImageInspection imageInspection) {
+        try {
+            String env = "prod";
+            Map<String, String> ext = Map.of(EVENT_ID, PasswordGenerator.generateNo());
+            Map<String, String> targetContent = Map.ofEntries(
+                    entry("appName", imageInspection.getAppName()),
+                    entry("deployments", JSONUtils.writeValueAsString(imageInspection.getDeploymentImages()))
+            );
+            com.baiyi.cratos.domain.model.SreBridgeModel.Event event = com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                    .operator(OPERATOR)
+                    .action(SreEventFormatter.Action.INSPECT_IMAGE.getValue())
+                    .description(StringFormatter.arrayFormat(
+                            "Inspection detected version inconsistency across groups in application {}",
+                            imageInspection.getAppName()
+                    ))
+                    .target(imageInspection.getAppName())
+                    .targetContent(SreEventFormatter.mapToJson(targetContent))
+                    .affection("")
+                    .severity("low")
+                    .status("executed")
+                    .env(env)
+                    .ext(ext)
+                    .build();
+            SreBridgeUtils.publish(event);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     private Map<String, List<DeploymentImageModel.DeploymentImage>> getDeploymentImageMap(int instanceId) {
         List<EdsAsset> edsAssets = edsAssetService.queryInstanceAssets(
-                instanceId,
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name()
-        );
+                instanceId, EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name());
         if (CollectionUtils.isEmpty(edsAssets)) {
             return Maps.newHashMap();
         }
@@ -134,9 +171,7 @@ public class AppDeploymentImageInspectionTask extends BaseInspectionTask {
 
     private Deployment getAssetModel(EdsAssetVO.Asset asset) {
         return EdsInstanceProviderFactory.produceModel(
-                EdsInstanceTypeEnum.KUBERNETES.name(),
-                EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), asset
-        );
+                EdsInstanceTypeEnum.KUBERNETES.name(), EdsAssetTypeEnum.KUBERNETES_DEPLOYMENT.name(), asset);
     }
 
     private List<EdsAsset> filter(List<EdsAsset> edsAssets) {

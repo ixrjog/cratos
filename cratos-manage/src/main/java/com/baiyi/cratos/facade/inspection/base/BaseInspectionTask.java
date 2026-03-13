@@ -38,6 +38,8 @@ public abstract class BaseInspectionTask implements InspectionTask, Initializing
     protected final EdsInstanceQueryHelper edsInstanceQueryHelper;
     protected final EdsConfigService edsConfigService;
 
+    public static final String OPERATOR = "SystemTask";
+
     @Value("${cratos.language:en-us}")
     protected String language;
 
@@ -68,9 +70,7 @@ public abstract class BaseInspectionTask implements InspectionTask, Initializing
 
     protected void send() {
         List<EdsInstance> edsInstanceList = edsInstanceQueryHelper.queryValidEdsInstance(
-                EdsInstanceTypeEnum.DINGTALK_ROBOT,
-                SysTagKeys.INSPECTION_NOTIFICATION.getKey()
-        );
+                EdsInstanceTypeEnum.DINGTALK_ROBOT, SysTagKeys.INSPECTION_NOTIFICATION.getKey());
         if (CollectionUtils.isEmpty(edsInstanceList)) {
             log.warn("No available robots to send inspection notifications.");
             return;

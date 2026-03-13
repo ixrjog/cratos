@@ -19,6 +19,8 @@ public class SreBridgeModel {
 
     public static final String UNKNOWN = "UNKNOWN";
 
+    public static final String OPERATOR = "OPERATOR";
+
     @Data
     @Builder
     @NoArgsConstructor
@@ -66,6 +68,8 @@ public class SreBridgeModel {
         private String affection;
         private String sourceContent;
         private String targetContent;
+        // default = change
+        private String type;
         private Map<String, String> tag;
         private Map<String, String> ext;
         private String status;
