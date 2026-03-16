@@ -84,8 +84,7 @@ public class AcmeFacadeImpl implements AcmeFacade {
         AcmeProviderEnum acmeProviderEnum = AcmeProviderEnum.getByProvider(createAccount.getAcmeProvider());
         try {
             AcmeModel.Account newAccount = SecureAcmeAccountManager.createAccount(
-                    email, 
-                    acmeProviderEnum,
+                    email, acmeProviderEnum,
                     createAccount.getEabKid(),
                     createAccount.getEabHmacKey()
             );
@@ -327,21 +326,26 @@ public class AcmeFacadeImpl implements AcmeFacade {
             EdsInstance acmeDNSResolverInstance = edsInstanceService.getById(acmeDomain.getDnsResolverInstanceId());
             AcmeDNSResolver acmeDNSResolver = AcmeDNSResolverFactory.getAcmeDNSResolver(
                     acmeDNSResolverInstance.getEdsType());
-            // 删除冲突的 ACME _acme-challenge记录
-            acmeDNSResolver.deleteAcmeChallenge(acmeDomain);
-            // 添加 DNS Challenge 记录
-            acmeDNSResolver.addOrderChallengeRecords(acmeDomain, order);
-            // 等待 DNS 传播(1m)
-            Thread.sleep(60000);
-            // 2. 触发验证
-            completeDnsChallenge(order, acmeOrder);
-            // 3. 提交 CSR
-            submitCsr(acmeDomain, acmeOrder, order);
-            // 4. 等待证书签发
-            int attempts = 10;
-            while (order.getStatus() != Status.VALID && attempts-- > 0) {
-                Thread.sleep(3000);
-                order.fetch();
+            try {
+                // 删除冲突的 ACME _acme-challenge记录
+                acmeDNSResolver.deleteAcmeChallenge(acmeDomain, order);
+                // 添加 DNS Challenge 记录
+                acmeDNSResolver.addOrderChallengeRecords(acmeDomain, order);
+                // 等待 DNS 传播(1m)
+                Thread.sleep(60000);
+                // 2. 触发验证
+                completeDnsChallenge(order, acmeOrder);
+                // 3. 提交 CSR
+                submitCsr(acmeDomain, acmeOrder, order);
+                // 4. 等待证书签发
+                int attempts = 10;
+                while (order.getStatus() != Status.VALID && attempts-- > 0) {
+                    Thread.sleep(3000);
+                    order.fetch();
+                }
+            } finally {
+                // 删除 ACME DNS01 解析
+                acmeDNSResolver.deleteAcmeChallenge(acmeDomain, order);
             }
             if (order.getStatus() != Status.VALID) {
                 EdsAcmeException.runtime("Certificate issuance failed: " + order.getStatus());

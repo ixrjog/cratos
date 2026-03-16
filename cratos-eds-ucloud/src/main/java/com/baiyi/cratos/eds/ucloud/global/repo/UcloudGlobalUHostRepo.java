@@ -6,6 +6,8 @@ import cn.ucloud.uhost.models.DescribeUHostInstanceResponse;
 import com.baiyi.cratos.eds.core.config.EdsConfigs;
 import com.baiyi.cratos.eds.ucloud.global.client.UcloudUHostClient;
 import com.google.common.collect.Lists;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -19,6 +21,7 @@ import java.util.Optional;
  * &#064;Version 1.0
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UcloudGlobalUHostRepo {
 
     public static List<DescribeUHostInstanceResponse.UHostInstanceSet> describeUHostInstance(String regionId,

@@ -5,6 +5,7 @@ import com.baiyi.cratos.common.exception.EdsAcmeException;
 import com.baiyi.cratos.domain.generator.AcmeDomain;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.eds.acme.dns.BaseAcmeDNSResolver;
+import com.baiyi.cratos.eds.acme.model.AcmeDnsRecord;
 import com.baiyi.cratos.eds.aws.repo.AwsRoute53Repo;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
 import com.baiyi.cratos.eds.core.annotation.ToFQDN;
@@ -40,7 +41,7 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
     }
 
     @Override
-    public void deleteAcmeChallenge(AcmeDomain acmeDomain) {
+    public void deleteAcmeChallenge(AcmeDomain acmeDomain,Order order) {
         // 获取托管区域
         final String hostedZoneId = getZoneId(acmeDomain);
         if (!StringUtils.hasText(hostedZoneId)) {
@@ -48,9 +49,11 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
         }
         // 获取 AWS 配置
         EdsConfigs.Aws config = getEdsConfig(acmeDomain);
+        // ACME 记录
+        List<AcmeDnsRecord> acmeDnsRecords = getAcmeDnsRecords(order);
         // 查询 DNS 记录
         List<ResourceRecordSet> resourceRecordSets = findMatchedRecord(
-                acmeDomain, AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId));
+                acmeDnsRecords, AwsRoute53Repo.listResourceRecordSets(config, hostedZoneId));
         if (CollectionUtils.isEmpty(resourceRecordSets)) {
             // 无记录
             return;
@@ -112,10 +115,10 @@ public class AcmeAwsRoute53Resolver extends BaseAcmeDNSResolver<EdsConfigs.Aws, 
     }
 
     @Override
-    protected List<ResourceRecordSet> findMatchedRecord(AcmeDomain acmeDomain,
+    protected List<ResourceRecordSet> findMatchedRecord(List<AcmeDnsRecord> acmeDnsRecords,
                                                         List<ResourceRecordSet> resourceRecordSets) {
-        Set<String> acmeChallengeRecords = toDomains(acmeDomain).stream()
-                .map(e -> toFQDN(ACME_CHALLENGE_NAME + "." + e))
+        Set<String> acmeChallengeRecords =acmeDnsRecords.stream()
+                .map(e -> toFQDN(e.getRecordName() + "." + e.getDomain()))
                 .collect(Collectors.toSet());
         return resourceRecordSets.stream()
                 .filter(record -> isCnameOrTxtRecord(record.getType()) && acmeChallengeRecords.contains(record.getName()))

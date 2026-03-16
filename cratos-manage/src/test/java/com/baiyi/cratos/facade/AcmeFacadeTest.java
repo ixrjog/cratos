@@ -59,7 +59,7 @@ public class AcmeFacadeTest extends BaseUnit {
 
     @Test
     void test3() throws Exception {
-        acmeFacade.issueCertificate(4);
+        acmeFacade.issueCertificate(6);
     }
 
     @Test

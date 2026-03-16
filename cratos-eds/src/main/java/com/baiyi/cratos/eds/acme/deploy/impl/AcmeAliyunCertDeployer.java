@@ -18,6 +18,7 @@ import com.baiyi.cratos.service.UserService;
 import com.baiyi.cratos.service.acme.AcmeCertificateDeploymentService;
 import com.baiyi.cratos.service.acme.AcmeDomainService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -59,7 +60,8 @@ public class AcmeAliyunCertDeployer extends BaseAcmeDeployer<EdsConfigs.Aliyun> 
             return;
         }
         String cert = mergeCertificatesAndCertificateChains(acmeCertificate);
-        String certName = generateCertName(acmeCertificate);
+        // 阿里云证书名称最大支持63个字符
+        String certName = StringUtils.truncate(generateCertName(acmeCertificate), 63);
         try {
             log.info(
                     "Upload certificate {} {} to {}", certName, acmeCertificate.getDomains(),

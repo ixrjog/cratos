@@ -77,6 +77,7 @@ public class AliyunDnsRepo {
                     .map(AddDomainRecordResponseBody::getRequestId)
                     .orElseThrow();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to add DNS record", e);
         }
     }

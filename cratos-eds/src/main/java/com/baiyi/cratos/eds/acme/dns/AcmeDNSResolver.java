@@ -17,7 +17,7 @@ public interface AcmeDNSResolver extends EdsInstanceTypeOfAnnotate, Initializing
 
     String getZoneId(AcmeDomain acmeDomain);
 
-    void deleteAcmeChallenge(AcmeDomain acmeDomain);
+    void deleteAcmeChallenge(AcmeDomain acmeDomain, Order order);
 
     void addOrderChallengeRecords(AcmeDomain acmeDomain, Order order);
 

@@ -1,12 +1,14 @@
 package com.baiyi.cratos.eds.kubernetes.provider.asset;
 
 import com.baiyi.cratos.common.enums.SysTagKeys;
+import com.baiyi.cratos.common.util.PasswordGenerator;
 import com.baiyi.cratos.domain.enums.BusinessTypeEnum;
 import com.baiyi.cratos.domain.facade.BusinessTagFacade;
 import com.baiyi.cratos.domain.generator.EdsAsset;
 import com.baiyi.cratos.domain.generator.EdsAssetIndex;
 import com.baiyi.cratos.domain.generator.Tag;
 import com.baiyi.cratos.domain.param.http.tag.BusinessTagParam;
+import com.baiyi.cratos.domain.util.JSONUtils;
 import com.baiyi.cratos.domain.util.StringFormatter;
 import com.baiyi.cratos.eds.core.AssetToBusinessObjectUpdater;
 import com.baiyi.cratos.eds.core.annotation.EdsInstanceAssetType;
@@ -18,6 +20,8 @@ import com.baiyi.cratos.eds.core.facade.EdsAssetIndexFacade;
 import com.baiyi.cratos.eds.core.holder.EdsInstanceProviderHolderBuilder;
 import com.baiyi.cratos.eds.core.support.ExternalDataSourceInstance;
 import com.baiyi.cratos.eds.core.util.ConfigCredTemplate;
+import com.baiyi.cratos.eds.core.util.SreBridgeUtils;
+import com.baiyi.cratos.eds.core.util.SreEventFormatter;
 import com.baiyi.cratos.eds.kubernetes.enums.KubernetesProvidersEnum;
 import com.baiyi.cratos.eds.kubernetes.model.AckIngressConditionsModel;
 import com.baiyi.cratos.eds.kubernetes.model.EksIngressConditionsModel;
@@ -32,6 +36,7 @@ import com.baiyi.cratos.service.TagService;
 import com.google.common.collect.Lists;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.api.model.networking.v1.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -40,15 +45,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.baiyi.cratos.eds.core.constants.EdsAssetIndexConstants.*;
+import static com.baiyi.cratos.eds.core.util.SreEventFormatter.EVENT_ID;
+import static java.util.Map.entry;
 
 /**
  * @Author baiyi
  * @Date 2024/3/28 11:29
  * @Version 1.0
  */
+@Slf4j
 @Component
 @EdsInstanceAssetType(instanceTypeOf = EdsInstanceTypeEnum.KUBERNETES, assetTypeOf = EdsAssetTypeEnum.KUBERNETES_INGRESS)
 public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetProvider<Ingress> {
@@ -213,6 +222,53 @@ public class EdsKubernetesIngressAssetProvider extends BaseEdsKubernetesAssetPro
                     }
                 });
         return asset;
+    }
+
+    @Override
+    protected void afterAssetCreated(EdsAsset asset) {
+        // SRE
+        try {
+            Map<String, EdsAssetIndex> indexMap = edsAssetIndexFacade.queryAssetIndexById(asset.getId())
+                    .stream()
+                    .collect(Collectors.toMap(EdsAssetIndex::getName, Function.identity(), (old, newVal) -> newVal));
+            List<String> rules = indexMap.values()
+                    .stream()
+                    .filter(index -> index.getName()
+                            .contains("->"))
+                    .map(e -> StringFormatter.arrayFormat("{} (service: {})", e.getName(), e.getValue()))
+                    .toList();
+            // Ingress ingress = assetLoadAs(asset.getOriginalModel());
+            String namespace = getOrDefault(indexMap, KUBERNETES_NAMESPACE);
+            String loadBalancerIngressHostname = getOrDefault(indexMap, KUBERNETES_INGRESS_LB_INGRESS_HOSTNAME);
+            Map<String, String> targetContent = Map.ofEntries(
+                    entry("loadBalancerIngressHostname", loadBalancerIngressHostname),
+                    entry("rules", JSONUtils.writeValueAsString(rules))
+            );
+            Map<String, String> ext = Map.ofEntries(entry(EVENT_ID, PasswordGenerator.generateNo()));
+            SreBridgeUtils.publish(com.baiyi.cratos.domain.model.SreBridgeModel.Event.builder()
+                                           .operator("SystemTask")
+                                           .action(SreEventFormatter.Action.CHANGE_INGRESS.getValue())
+                                           .description("Add Kubernetes Ingress routing rule")
+                                           .target(asset.getName())
+                                           .targetContent(SreEventFormatter.mapToJson(targetContent))
+                                           .env(namespace)
+                                           .affection("")
+                                           .severity("low")
+                                           .status("executed")
+                                           .type(SreEventFormatter.Type.CHANGE.getValue())
+                                           .ext(ext)
+                                           .build());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private String getOrDefault(Map<String, EdsAssetIndex> indexMap, String key) {
+        if (indexMap.containsKey(key)) {
+            return indexMap.get(key)
+                    .getValue();
+        }
+        return "--";
     }
 
 }
